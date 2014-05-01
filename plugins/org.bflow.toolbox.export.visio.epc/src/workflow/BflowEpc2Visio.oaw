@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<workflow>
+	
+	<!--overwrite-->
+	<property name="epcMetamodelPackage" value="" />
+	<property name="bflowMetamodelPackage" value="" />
+	<property name="notationMetamodelPackage" value=""/>
+	
+	<property name="epcModelFile" value="" />
+	
+	<property name="visioEmfMetamodelFile" value=""/>
+	
+	<property name="visioStencilFile" value="" />
+	<property name="visioModelTargetFile" value="" />
+	
+	
+	
+	<property name="src-gen" value="src-gen" />
+	
+	<!-- set up EMF for standalone execution -->
+	<bean class="org.eclipse.emf.mwe.utils.StandaloneSetup" >
+		<platformUri value=".."/>
+		<registerGeneratedEPackage value="${epcMetamodelPackage}" />
+		<registerGeneratedEPackage value="${bflowMetamodelPackage}" />
+		<registerGeneratedEPackage value="${notationMetamodelPackage}" />
+		
+	</bean>
+
+	<!-- load model and store it in slot 'model' -->
+	<component id="EPCReader" class="org.eclipse.xtend.typesystem.emf.XmiReader">
+		<firstElementOnly value="false"/>
+		<metaModelPackage value="${epcMetamodelPackage}"/>
+		<modelFile value="${epcModelFile}" />
+		<outputSlot value="epcModel" />
+	</component>
+	
+	<!-- Invoking the transformation -->
+	<component class="org.eclipse.xtend.XtendComponent" skipOnErrors="false">
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelPackage value="${epcMetamodelPackage}" /> 
+		</metaModel>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelPackage value="${bflowMetamodelPackage}" /> 
+		</metaModel>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${visioEmfMetamodelFile}" /> 
+		</metaModel>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelPackage value="${notationMetamodelPackage}" /> 
+		</metaModel>
+		<invoke value="visioEpcExportTemplate::extension::transform(epcModel)" />
+		<outputSlot value="out" />
+	</component>
+	
+	<!--
+	<component class="org.openarchitectureware.emf.XmiWriter">
+		<inputSlot value="out"/>
+		<modelFile value="src/metamodel/output.xmi"/>
+	</component> 
+	-->
+
+	<component class="org.infai.m3b.visio.emf.oaw.VisioModelWriter">
+  		<visioStencilFilePath value="${visioStencilFile}"/>
+  		<visioModelFilePath value="${visioModelTargetFile}"/>
+  		<modelInputSlot value="out"/>
+	</component>
+
+</workflow>

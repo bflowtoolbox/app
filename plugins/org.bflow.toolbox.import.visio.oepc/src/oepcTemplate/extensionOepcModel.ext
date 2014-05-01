@@ -1,0 +1,77 @@
+/*
+ * @Author Christian Boehme
+ */
+
+extension org::eclipse::xtend::util::stdlib::io;
+//create Oepc Model
+//---------------------------------------------------------------
+
+create oepc::OEPC createOepcModel(visiomodel::EVisioPage p):
+	init("/src/model/metamodel.ecore") ->
+	this.elements.addAll(p.visioContainedShapes.javaSelectCorrectShapes("oEPK").getNodes().createElement()) ->
+	this.connections.addAll(p.visioContainedShapes.javaSelectCorrectShapes("oEPK").getFlows().createElement());
+	
+List[visiomodel::EVisioShape] getNodes(List[visiomodel::EVisioShape] l):
+	l.select(e|e.metaType != visiomodel::oEPK::Informationsfluss && e.metaType != visiomodel::oEPK::Kontrollfluss);
+
+List[visiomodel::EVisioShape] getFlows(List[visiomodel::EVisioShape] l):
+	l.select(e|e.metaType == visiomodel::oEPK::Informationsfluss || e.metaType == visiomodel::oEPK::Kontrollfluss);
+
+	
+create oepc::Event createElement(visiomodel::EVisioShape shape):
+	info("Warning: Shape " + shape.visioName + " " + shape.visioText + " not transformed, element not in default stencil-package");
+
+//Event
+create oepc::Event createElement(visiomodel::oEPK::Ereignis shape):
+	this.setName(shape.visioText);
+	
+//Connectors
+create oepc::XORConnector createElement(visiomodel::oEPK::XOR shape):
+	this.setName(shape.visioText);
+
+create oepc::ANDConnector createElement(visiomodel::oEPK::AND shape):
+	this.setName(shape.visioText);
+	
+create oepc::ORConnector createElement(visiomodel::oEPK::OR shape):
+	this.setName(shape.visioText);
+
+//IT-System
+create oepc::ITSystem createElement(visiomodel::oEPK::IT_System shape):
+	this.setName(shape.visioText);
+
+create oepc::OrganisationUnit createElement(visiomodel::oEPK::Organisationseinheit shape):
+	this.setName(shape.visioText);
+	
+//Business Object
+create oepc::BusinessObject createElement(visiomodel::oEPK::Geschaeftsobjekt shape):
+	this.setName(shape.visioText)->
+	//info(shape.visio_containedShapes.selectFirst(e|e.visio_masterShapeName == "Sheet.9").visio_text.split("\n").get(1));
+	this.attributes.addAll(shape.visioContainedShapes.selectFirst(e|e.visioMasterShapeName == "Sheet.9").visioText.split("\n").select(e|e.length != 0).createBA()) ->
+	this.methods.addAll(shape.visioContainedShapes.selectFirst(e|e.visioMasterShapeName == "Sheet.8").visioText.split("\n").select(e|e.length != 0).createBM());
+	 
+create oepc::BusinessAttribute createBA(String attName):
+	if (attName.startsWith("-")) then (this.setName(attName.replaceFirst("-","")))
+	else this.setName(attName);
+	
+create oepc::BusinessMethod createBM(String methName):
+	if (methName.startsWith("-")) then (this.setName(methName.replaceFirst("-","")))
+	else this.setName(methName);
+
+
+//Edges
+create oepc::ControlFlowEdge createElement(visiomodel::oEPK::Kontrollfluss conn):
+	//Annahme, dass erstes Element Ursprung der Kante
+	this.setFrom(conn.visioSourceShape.createElement()) ->
+	this.setTo(conn.visioTargetShape.createElement());
+	
+
+create oepc::InformationEdge createElement(visiomodel::oEPK::Informationsfluss conn):
+	this.setFrom(conn.visioSourceShape.createElement()) ->
+	this.setTo(conn.visioTargetShape.createElement());
+	
+
+Void init(String s):
+	JAVA oepcTemplate.Helper.init(java.lang.String);
+
+List javaSelectCorrectShapes(List l, String packagename):
+	JAVA oepcTemplate.Helper.selectCorrectShapes(java.util.List, java.lang.String);

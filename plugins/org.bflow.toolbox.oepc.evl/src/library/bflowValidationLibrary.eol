@@ -1,0 +1,28 @@
+operation BflowSymbol hasName() : Boolean {
+	return (self.name.isDefined() 
+		and self.name.length() > 0);
+}
+
+operation Element isSplit() : Boolean {
+	return (self.out.size > 1);
+}
+
+operation Element isJoin() : Boolean {
+	return (self.In.size > 1);
+}
+
+operation Element isConnector() : Boolean {
+	return self.isKindOf(IConnector);
+}
+
+operation Element aSucc() : Element {
+	var aCon := self.out.first();
+	if (aCon.isDefined()) {return aCon.to;}
+}
+
+operation Element isHidden() : Boolean 
+{
+	//var validator := new Native('org.bflow.toolbox.epc.diagram.validation.LayoutValidator');
+	//return validator.run(self);
+	return true;
+}

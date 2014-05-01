@@ -1,0 +1,172 @@
+import '../library/bflowValidationLibrary.eol';
+import 'epcValidationLibrary.eol';
+
+pre
+{
+	var prefRequester := new Native('org.bflow.toolbox.check.PreferencesRequester'); 
+}
+
+-- Elements must have names.
+context BflowSymbol {
+	
+	critique HasName {
+	
+		guard : self.isKindOf(IBflowElement)
+		check : self.hasName() or not prefRequester.shallCheck('EPCEpsilonSymbolRule1')
+		message : prefRequester.getErrorMessage('EPCEpsilonSymbolRule1', self.eClass().name)
+	
+		fix {
+			title : 'Standardnamen vergeben'
+			do {
+				self.name := 'Element';
+			}
+		}
+		
+		fix 
+		{
+			title : 'Prüfregel ausschalten'
+			do { 
+					prefRequester.setRuleEnabled('EPCEpsilonSymbolRule1', false); 
+					prefRequester.invokeValidation();	
+				}
+		}
+	}
+}
+
+-- Elements needn't to cover other elements
+
+context BflowSymbol
+{
+	constraint IsHidden 
+	{
+		guard: self.isKindOf(IBflowElement)
+		check: self.isHidden()
+		message: 'Element ' + self.name+ ' ist verdeckt.'
+	}
+}
+
+-- An connector should only be an split or an join.
+context Element {
+	
+	constraint JoinOrSplit {
+	
+		guard : self.isConnector() --and self.out.size <> 1 and self."in".size <> 1
+		check : not (self.isSplit() and self.isJoin() ) or not prefRequester.shallCheck('EPCEpsilonElementRule1')
+		message :  prefRequester.getErrorMessage('EPCEpsilonElementRule1', self.eClass().name)  
+	
+		fix {
+			title : self.eClass().name + ' splitten'
+			do { 
+				var con := self.newInstance();
+				var cfe := new Arc;
+				for (epc : Epc in Epc.allInstances()) {
+					if (epc.elements.includes(self)) {
+						epc.elements.add(con);
+						epc.connections.add(cfe);
+					}
+				}
+				for (ocf : Connection in self.out) {
+					ocf.setFrom(con);
+				}
+				cfe.setFrom(self);
+				cfe.setTo(con);	
+			}
+		}
+		
+		fix 
+		{
+			title : 'Prüfregel ausschalten'
+			do 
+			{ 
+				prefRequester.setRuleEnabled('EPCEpsilonElementRule1', false);
+				prefRequester.invokeValidation();
+		    }
+		}
+	}
+}
+
+
+-- Redundant connectors, with only one incomming and outgoing controlflow 
+-- can be deleted.
+
+context Element {
+	
+	constraint RedundantConnector {
+	
+		guard : self.isConnector()  
+		check : not (self.out.size = 1 and self.In.size = 1) or not prefRequester.shallCheck('EPCEpsilonElementRule2')
+		message : prefRequester.getErrorMessage('EPCEpsilonElementRule2', self.eClass().name)  
+	
+		fix {
+			title : self.eClass().name + ' entfernen'
+			do { 
+				var newArc := new Arc;
+				var epc : Epc := self.eContainer();
+				var incommingArc := self.In.first();
+				var outgoingArc := self.out.first();
+				var from := incommingArc.from;
+				var to := outgoingArc.to;
+				
+				newArc.from := from;
+				newArc.to := to;
+
+				epc.elements.remove(self);
+				epc.connections.add(newArc);
+				epc.connections.remove(incommingArc);
+				epc.connections.remove(outgoingArc);
+			}
+		}
+		
+		fix
+		{
+			title: 'Prüfregel ausschalten'
+			do 
+			{ 
+				prefRequester.setRuleEnabled('EPCEpsilonElementRule2', false);
+				prefRequester.invokeValidation();
+			}
+		}
+	}
+}
+
+
+
+-- an Event followed by an OR/XOR needs a Function between  
+context Element {
+	
+	constraint HasFunction {
+	
+		guard : self.isKindOf(Event) and self.out.size > 0
+		check : not (self.aSucc().isDecisionConnector() and self.aSucc().isSplit()) or not prefRequester.shallCheck('EPCEpsilonElementRule3')
+		message : prefRequester.getErrorMessage('EPCEpsilonElementRule3', self.aSucc().eClass().name)
+	
+		fix {
+			title : 'Funktion nach ' + self.eClass().name + ' einfügen'
+			do {
+				var f := new Function;
+				var epc : Epc := self.eContainer();
+				var outgoingArcs := self.out;
+				var nextConnector := outgoingArcs.first().to;
+				var newArc := new Arc;
+				
+				newArc.from := f;
+				newArc.to := nextConnector;
+				for(arc in outgoingArcs){
+					arc.to := f;
+				}
+				epc.connections.add(newArc);
+				epc.elements.add(f);
+			}
+		}
+		
+		fix
+		{
+			title: 'Prüfregel ausschalten'
+			do 
+			{ 
+				prefRequester.setRuleEnabled('EPCEpsilonElementRule3', false);
+				prefRequester.invokeValidation();
+			}
+		}		
+	}
+}

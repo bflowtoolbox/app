@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+     <extension
+           point="org.eclipse.xtend.typesystem.emf.checks">
+        <metaModel
+              nsURI="org.bflow.toolbox.epc"
+              override="false">
+           <checkFile
+                 path="src/check/epcSyntax">
+              <referencedMetaModel
+                    nsURI="org.bflow.toolbox.bflow">
+              </referencedMetaModel>
+           </checkFile>
+           <checkFile
+                 path="src/check/epcDeadlocks">
+              <referencedMetaModel
+                    nsURI="org.bflow.toolbox.bflow">
+              </referencedMetaModel>
+           </checkFile>
+        </metaModel>
+     </extension>
+     <extension
+           point="org.eclipse.xtend.typesystem.emf.checks">
+        <metaModel
+              nsURI="org.bflow.toolbox.oepc"
+              override="false">
+           <checkFile
+                 path="src/check/oepcSyntax">
+              <referencedMetaModel
+                    nsURI="org.bflow.toolbox.bflow">
+              </referencedMetaModel>
+           </checkFile>
+           <checkFile
+                 path="src/check/oepcDeadlocks">
+              <referencedMetaModel
+                    nsURI="org.bflow.toolbox.bflow">
+              </referencedMetaModel>
+           </checkFile>
+        </metaModel>
+     </extension>
+
+</plugin>

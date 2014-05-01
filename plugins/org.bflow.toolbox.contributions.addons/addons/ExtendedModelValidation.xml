@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="ExtendedModelValidation">
+	<display>
+		<default>Extended Model Validation</default>
+		<de>Erweiterte Modellprüfung</de>
+	</display>
+	<description>
+		<default>Transforms a diagram into a prolog program to do a deeper analysis.
+		Afterwards the results are shown within the problems view.
+		</default>
+		<de>Wandelt ein Diagramm in eine Prolog-Faktenbasis und führt tiefergehende Modellanalysen durch.
+		Anschließend werden die Analyseergebnisse in der Problems-View angezeigt.
+		</de>
+	</description>
+	<components>
+		<component
+			class="org.bflow.toolbox.hive.addons.components.DiagramExportComponent"
+			params="Prolog Facts" />
+		<component class="org.bflow.toolbox.hive.addons.components.PrologRunComponent"
+			tool="SWI-Prolog"
+			params="-pl:bflow.epc2009 -p:$SETUP" />
+		<component
+			class="org.bflow.toolbox.hive.addons.components.ShellAnalysisComponent"
+			params="" />
+		<component
+			class="org.bflow.toolbox.hive.addons.components.ProblemsViewGeneratorComponent"
+			params="" />
+	</components>
+</protocol>

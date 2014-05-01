@@ -1,0 +1,5 @@
+<workflow>
+
+	<component class="workflow.components.BflowCheck"/>
+
+</workflow>

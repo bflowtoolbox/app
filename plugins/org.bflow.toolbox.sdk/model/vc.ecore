@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="vc"
+    nsURI="org.bflow.toolbox.vc" nsPrefix="vc">
+  <eClassifiers xsi:type="ecore:EClass" name="ValueChain" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Subdiagram" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueChain2" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Subdiagram" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TechnicalTerm" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Cluster" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Product" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PredecessorConnection" eSuperTypes="bflow.ecore#//Connection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessSuperiority" eSuperTypes="bflow.ecore#//Connection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Vc">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="ecore:EClass bflow.ecore#//Element" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+        eType="ecore:EClass bflow.ecore#//Connection" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation" eSuperTypes="bflow.ecore#//Connection"/>
+</ecore:EPackage>

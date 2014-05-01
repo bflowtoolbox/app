@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language value="de">
+	<rule>
+		<id>OEPCSyntaxEventRule1</id>
+		<name>EventRule1</name>
+		<message>Ereignis $value hat mehr als einen eingehenden Kontrollfluss. Eingehende Kontrollfluesse ueber Konnektoren synchronisieren.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Ereignis mehr als einen eingehenden Kontrollfluss hat.</description>
+		<image>/images/EPCSyntaxEventRule2.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxEventRule2</id>
+		<name>EventRule2</name>
+		<message>Ereignis $value hat mehr als einen ausgehenden Kontrollfluss. Ausgehende Kontrollfluesse ueber Konnektoren synchronisieren.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Ereignis mehr als einen ausgehenden Kontrollfluss hat.</description>
+		<image>/images/EPCSyntaxEventRule3.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule1</id>
+		<name>BusinessObjectRule1</name>
+		<message>Geschäftsobjekt $value hat keinen ausgehenden Kontrollfluss.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Geschäftsobjekt einen ausgehenden Kontrollfluss hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule2</id>
+		<name>BusinessObjectRule2</name>
+		<message>Geschäftsobjekt $value hat mehr als einen ausgehenden Kontrollfluss. Ausgehende Kontrollfluesse ueber Konnektoren synchronisieren.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Geschäftsobjekt mehr als einen ausgehenden Kontrollfluss hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule3</id>
+		<name>BusinessObjectRule3</name>
+		<message>Geschäftsobjekt $value hat keinen eingehenden Kontrollfluss.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Geschäftsobjekt einen eingehenden Kontrollfluss hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule4</id>
+		<name>BusinessObjectRule4</name>
+		<message>Geschäftsobjekt $value hat mehr als einen eingehenden Kontrollfluss. Eingehende Kontrollfluesse ueber Konnektoren synchronisieren.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Geschäftsobjekt mehr als einen eingehenden Kontrollfluss hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule5</id>
+		<name>BusinessObjectRule5</name>
+		<message>Geschäftsobjekt $value hat kein assoziiertes IT-System.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Geschäftsobjekt ein assoziiertes IT-System hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule6</id>
+		<name>BusinessObjectRule6</name>
+		<message>Geschäftsobjekt $value hat keine assoziierte Organisationseinheit.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Geschäftsobjekt eine assoziierte Organisationseinheit hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule7</id>
+		<name>BusinessObjectRule7</name>
+		<message>Geschäftsobjekt $value enthaelt keine Attribute.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Geschäftsobjekt Attribute hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule8</id>
+		<name>BusinessObjectRule8</name>
+		<message>Geschäftsobjekt $value enthaelt keine Methoden.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Geschäftsobjekt Methoden hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxOepcRule1</id>
+		<name>OepcRule1</name>
+		<message>oEPK muss mindestens ein Geschäftsobjekt enthalten.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das oEPK mindestens ein Geschäftsobjekt enthält.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule1</id>
+		<name>ElementRule1</name>
+		<message>Konnektor hat mehrere ein- und ausgehende Kontrollfluesse.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Element mehrere ein- und ausgehende Kontrollflüsse hat.</description>
+		<image>/images/EPCEpsilonElementRule1.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule2</id>
+		<name>ElementRule2</name>
+		<message>Konnektor hat keinen eingehenden Kontrollfluss.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Element einen eingehenden Kontrollfluß hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule3</id>
+		<name>ElementRule3</name>
+		<message>Konnektor hat keinen ausgehenden Kontrollfluss.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Element einen ausgehenden Kontrollfluß hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule4</id>
+		<name>ElementRule4</name>
+		<message>Konnektor hat eingehende Informationsflüsse.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Element eingehende Informationsflüsse hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule5</id>
+		<name>ElementRule5</name>
+		<message>Konnektor hat ausgehende Informationsflüsse.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Element ausgehende Informationsflüsse hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule6</id>
+		<name>ElementRule6</name>
+		<message>Element hat keinen Namen.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Element einen Namen hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessAttributeRule1</id>
+		<name>BusinessAttributeRule1</name>
+		<message>Geschäftsattribut hat keinen Namen.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob das Geschäftsattribut einen Namen hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessMethodRule1</id>
+		<name>BusinessMethodRule1</name>
+		<message>Geschäftsmethode hat keinen Namen.</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob die Geschäftsmethode einen Namen hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCEpsilonSymbolRule1</id>
+		<name>SymbolRule1</name>
+		<message>$value hat keinen Namen</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob ein Element einen Namen hat.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCEpsilonElementRule1</id>
+		<name>ElementRule1</name>
+		<message>$value sollte ein Join oder ein Split sein</message>
+		<class>Syntax (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob ein Element ein Join oder Split ist.</description>
+		<image>/images/EPCEpsilonElementRule1.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule1</id>
+		<name>ElementRule1</name>
+		<message>UND-Join kann Verklemmungen verursachen</message>
+		<class>Kontrollfluss (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob ein UND-Join eine Verklemmung verursacht.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule2</id>
+		<name>ElementRule2</name>
+		<message>Konfligierender Konnektor (mit XOR-Split)</message>
+		<class>Kontrollfluss (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob ein konfligierender Konnektor mit XOR-Split vorliegt.</description>
+		<image>/images/EPCCFlowElementRule2.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule3</id>
+		<name>ElementRule3</name>
+		<message>Konfligierender Konnektor (mit ODER-Split)</message>
+		<class>Kontrollfluss (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob ein konfligierender Konnektor mit ODER-Split vorliegt.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule4</id>
+		<name>ElementRule4</name>
+		<message>Konfligierender Konnektor (mit UND-Split)</message>
+		<class>Kontrollfluss (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob ein konfligierender Konnektor mit UND-Split vorliegt.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule5</id>
+		<name>ElementRule5</name>
+		<message>Konfligierender Konnektor (mit XOR-Split)</message>
+		<class>Kontrollfluss (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob ein konfligierender Konnektor mit XOR-Split vorliegt.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule6</id>
+		<name>ElementRule6</name>
+		<message>Konfligierender Konnektor (mit ODER-Split)</message>
+		<class>Kontrollfluss (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob ein konfligierender Konnektor mit ODER-Split vorliegt.</description>
+		<image>/images/EPCCFlowElementRule5.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule7</id>
+		<name>ElementRule7</name>
+		<message>Konfligierender Konnektor (mit UND-Split)</message>
+		<class>Kontrollfluss (oEPK)</class>
+		<diagram>oepc</diagram>
+		<description>Prüft, ob ein konfligierender Konnektor mit UND-Split vorliegt.</description>
+		<image>/images/and_to_xor.jpeg</image>
+		<default>true</default>
+	</rule>
+</language>

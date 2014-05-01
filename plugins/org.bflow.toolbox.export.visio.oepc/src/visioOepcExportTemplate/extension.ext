@@ -1,0 +1,128 @@
+//author: Heiko Kern, Christian Boehme
+import visiomodel;
+import visiomodel::oEPK;
+
+extension org::eclipse::xtend::util::stdlib::io;
+
+//Main
+visiomodel::EVisioDocument transform(List[emf::EObject] list):
+	list.selectFirst(e|e.metaType == oepc::OEPC).transform(list.selectFirst(e|e.metaType == notation::Diagram));
+
+//Foo	
+Void transform(emf::EObject model, emf::EObject diagram):
+	model;
+
+//Document	
+create visiomodel::EVisioDocument transform(oepc::OEPC oepcModel, notation::Diagram oepcDiagram):
+	this.visioPages.add(oepcModel.createVisioPage(oepcDiagram));
+	
+//Page
+create visiomodel::EVisioPage createVisioPage(oepc::OEPC oepcModel, notation::Diagram oepcDiagram):
+	this.visioContainedShapes.addAll(oepcModel.elements.createVisioShape(oepcDiagram)) ->
+	this.visioContainedShapes.addAll(oepcModel.connections.createVisioConnection(oepcDiagram));
+
+//Foo	
+create visiomodel::oEPK::Ereignis createVisioShape(bflow::Element bflowElement, notation::Diagram oepcDiagram):
+	info("not transformed: " + bflowElement.metaType);
+
+//Ereignis
+create visiomodel::oEPK::Ereignis createVisioShape(oepc::Event oepcEvent, notation::Diagram oepcDiagram):
+	this.setVisioText(oepcEvent.name) ->
+	this.setVisioShapeSheet(oepcEvent.createVisioShapeSheet(oepcDiagram));
+	
+//Geschaeftsobjekt
+create visiomodel::oEPK::Geschaeftsobjekt createVisioShape(oepc::BusinessObject oepcBO, notation::Diagram oepcDiagram):
+	this.setVisioMasterShapeName("Rechteck") ->
+	this.setVisioText(oepcBO.name + "\n\n"+
+			oepcBO.methods.name.toString("\n") + "\n\n" +
+			oepcBO.attributes.name.toString("\n")) ->
+	this.setVisioShapeSheet(oepcBO.createVisioShapeSheet(oepcDiagram));
+
+	
+//IT-System
+create visiomodel::oEPK::IT_System createVisioShape(oepc::ITSystem oepcITSystem, notation::Diagram oepcDiagram):
+	this.setVisioText(oepcITSystem.name) ->
+	this.setVisioShapeSheet(oepcITSystem.createVisioShapeSheet(oepcDiagram));
+
+//Organisationseinheit
+create visiomodel::oEPK::Organisationseinheit createVisioShape(oepc::OrganisationUnit oepcUnit, notation::Diagram oepcDiagram):
+	this.setVisioText(oepcUnit.name) ->
+	this.setVisioShapeSheet(oepcUnit.createVisioShapeSheet(oepcDiagram));
+
+//AND
+create visiomodel::oEPK::AND createVisioShape(oepc::ANDConnector element, notation::Diagram diag):
+	this.setVisioShapeSheet(element.createVisioShapeSheet(diag));
+	
+//OR
+create visiomodel::oEPK::OR createVisioShape(oepc::ORConnector element, notation::Diagram diag):
+	this.setVisioShapeSheet(element.createVisioShapeSheet(diag));
+	
+//XOR
+create visiomodel::oEPK::XOR createVisioShape(oepc::XORConnector element, notation::Diagram diag):
+	this.setVisioShapeSheet(element.createVisioShapeSheet(diag));
+
+//Foo
+create visiomodel::oEPK::Kontrollfluss createVisioConnection(bflow::Connection element, notation::Diagram diag):
+	info("not transformed: " + element.metaType);
+
+//ControlFlow
+create visiomodel::oEPK::Kontrollfluss createVisioConnection(oepc::ControlFlowEdge element, notation::Diagram diag):
+	this.setVisioSourceShape(element.from.createVisioShape(diag))->
+	this.setVisioTargetShape(element.to.createVisioShape(diag));
+
+//InformationFlow
+create visiomodel::oEPK::Informationsfluss createVisioConnection(oepc::InformationEdge element, notation::Diagram diag):
+	this.setVisioSourceShape(element.from.createVisioShape(diag))->
+	this.setVisioTargetShape(element.to.createVisioShape(diag));
+
+//VisioShapeSheet
+create visiomodel::EVisioShapeSheet createVisioShapeSheet(bflow::Element e, notation::Diagram diag):
+	this.visioSections.add(createVisSectionObject(e, diag));
+
+//VisioSection
+create visiomodel::EVisioSection createVisSectionObject(bflow::Element e, notation::Diagram diag):
+	this.setVisioName("visSectionObject") ->
+	this.visioRows.add(createVisioRow(e, javaGetBounds(e, diag)));
+	
+//VisioRow
+create visiomodel::EVisioRow createVisioRow(bflow::Element e, notation::Bounds bounds):
+	this.setVisioName("1") ->
+	this.visioCells.add(createVisioCellPinX(e, bounds.x)) ->
+	this.visioCells.add(createVisioCellPinY(e, bounds.y)) ->
+	this.visioCells.add(createVisioCellHeight(e, bounds.height)) ->
+	this.visioCells.add(createVisioCellWidth(e, bounds.width));
+
+//VisioCell	
+create visiomodel::EVisioCell createVisioCellPinX(bflow::Element e, Integer value):
+	this.setVisioName("PinX") ->
+	this.setVisioValue((2+value/125).toString());
+
+//VisioCell	
+create visiomodel::EVisioCell createVisioCellPinY(bflow::Element e, Integer value):
+	this.setVisioName("PinY") ->
+	//value.info()->
+	this.setVisioValue((8-value/110).toString());
+
+//VisioCell	
+create visiomodel::EVisioCell createVisioCellHeight(bflow::Element e, Integer value):
+	this.setVisioName("Height") ->
+	//value.info()->
+	if (value != -1) then
+	this.setVisioValue(value.inchConversion().toString());
+
+//VisioCell
+create visiomodel::EVisioCell createVisioCellWidth(bflow::Element e, Integer value):
+	this.setVisioName("Width") ->
+	//value.info()->
+	if (value != -1) then
+	this.setVisioValue(value.inchConversion().toString());
+
+	
+//------------------------------
+//Java Helper
+
+notation::Bounds javaGetBounds(bflow::Element e, notation::Diagram d):
+	JAVA visioOepcExportTemplate.Helper.getPersistedChildren(org.eclipse.emf.ecore.EObject,org.eclipse.gmf.runtime.notation.Diagram);
+
+Real inchConversion(Integer value):
+	JAVA visioOepcExportTemplate.Helper.inchConversion(java.lang.Integer);	

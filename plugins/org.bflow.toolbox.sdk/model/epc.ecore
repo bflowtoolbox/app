@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="epc"
+    nsURI="org.bflow.toolbox.epc" nsPrefix="epc">
+  <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Function" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Subdiagram" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessInterface" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Subdiagram" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Application" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IEBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Participant" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IEBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AND" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IConnector"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OR" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IConnector"/>
+  <eClassifiers xsi:type="ecore:EClass" name="XOR" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IConnector"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Arc" eSuperTypes="bflow.ecore#//Connection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation" eSuperTypes="bflow.ecore#//Connection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Position" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="File" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CardFile" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Cluster" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InternalPerson" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExternalPerson" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PersonType" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TechnicalTerm" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Document" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Product" eSuperTypes="bflow.ecore#//Element bflow.ecore#//IBflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InformationArc" eSuperTypes="bflow.ecore#//Connection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Epc">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="ecore:EClass bflow.ecore#//Element" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+        eType="ecore:EClass bflow.ecore#//Connection" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

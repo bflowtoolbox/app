@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+	<!-- Defining menu item in the main menu to import an ARIS model -->
+	
+	<!--
+		Defining an ImportWizard to import an ARIS model per right click ->
+		import
+	-->
+	<extension point="org.eclipse.ui.importWizards">
+		<wizard name="VISIO oEPC" icon="icons/sample.gif"
+			category="org.bflow.toolbox.import.visio" class="org.bflow.toolbox.imports.visio.oepc.wizard.VisioImportWizard"
+			id="org.bflow.toolbox.visio.import.oepc">
+			<description> Import a Visio oEPC and transform it to Bflow-oEPC. 
+			</description>
+		</wizard>
+	</extension>
+</plugin>

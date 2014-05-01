@@ -1,0 +1,61 @@
+import epc;
+import bflow;
+
+extension check::epcNavigation;
+extension check::javaInteraction;
+
+// Ein- und ausgehende Kanten von Ereignissen
+context epc::Event if(shallCheck("EPCSyntaxEventRule1"))
+	ERROR getErrorMessage("EPCSyntaxEventRule1", this.name) :
+	!(this.outgoingControlFlows().isEmpty && this.incomingControlFlows().isEmpty);
+
+context epc::Event if(shallCheck("EPCSyntaxEventRule2"))
+	ERROR getErrorMessage("EPCSyntaxEventRule2", this.name) :
+	this.incomingControlFlows().size < 2;
+
+context epc::Event if(shallCheck("EPCSyntaxEventRule3"))
+	ERROR getErrorMessage("EPCSyntaxEventRule3", this.name) :
+	this.outgoingControlFlows().size < 2;
+	
+context epc::Event if(shallCheck("EPCSyntaxEventRule4"))
+	ERROR getErrorMessage("EPCSyntaxEventRule4", this.name) :
+	!(this.outgoingControlFlows().to.contains(this));
+	
+// Ein- und ausgehende Kanten von Funktionen
+
+context epc::Function if(shallCheck("EPCSyntaxFunctionRule1"))
+	ERROR getErrorMessage("EPCSyntaxFunctionRule1", this.name) :
+	!this.outgoingControlFlows().isEmpty;
+	
+context epc::Function if(shallCheck("EPCSyntaxFunctionRule2"))
+	ERROR getErrorMessage("EPCSyntaxFunctionRule2", this.name) :
+	this.outgoingControlFlows().size < 2;
+
+context epc::Function if(shallCheck("EPCSyntaxFunctionRule3"))
+	ERROR getErrorMessage("EPCSyntaxFunctionRule3", this.name) :
+	!this.incomingControlFlows().isEmpty;
+
+context epc::Function if(shallCheck("EPCSyntaxFunctionRule4"))
+	ERROR getErrorMessage("EPCSyntaxFunctionRule4", this.name) :
+	this.incomingControlFlows().size < 2;
+	
+// Es passiert gelegentlich aus Versehen, dass man eine Kante von einem Element zu sich selbst zeichnet:
+
+context epc::Function if(shallCheck("EPCSyntaxFunctionRule5"))
+	ERROR getErrorMessage("EPCSyntaxFunctionRule5", this.name) : 
+	!(this.outgoingControlFlows().to.contains(this));
+
+// Ein- und ausgehende Kanten von Konnektoren
+// (siehe auch Epsilon-Tests in org.bflow.toolbox.oepc.evl)
+
+context bflow::Element if (this.isConnector() && shallCheck("EPCSyntaxElementRule1"))
+	ERROR getErrorMessage("EPCSyntaxElementRule1", "") :
+	!this.incomingControlFlows().isEmpty;
+
+context bflow::Element if (this.isConnector() && shallCheck("EPCSyntaxElementRule2"))
+	ERROR getErrorMessage("EPCSyntaxElementRule2", "") :
+	!this.outgoingControlFlows().isEmpty; 
+
+context bflow::Element if (this.isConnector() && shallCheck("EPCSyntaxElementRule3"))
+	ERROR getErrorMessage("EPCSyntaxElementRule3", "") :
+	!(this.outgoingControlFlows().to.contains(this));

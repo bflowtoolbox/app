@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmftool:ToolRegistry xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gmftool="http://www.eclipse.org/gmf/2005/ToolDefinition">
+  <palette
+      title="epkPalette">
+    <tools
+        xsi:type="gmftool:ToolGroup"
+        title="Symbols"
+        collapsible="true">
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Event"
+          description="Create new Event">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/event.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Function"
+          description="Create new Function">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/function.gif"/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Application"
+          description="Create new Application">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/application.gif"/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Process Interface"
+          description="Create new Process Interface">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/processinterface.gif"/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="TechnicalTerm"
+          description="Create new TechnicalTerm">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/technicalterm.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Participant"
+          description="Create new Participant">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/participant.gif"/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Group"
+          description="Create new Group">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/group.gif"/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Location"
+          description="Create new Location">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/location.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Position"
+          description="Create new Position">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/position.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="File"
+          description="Create new File">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/file.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Document"
+          description="Create new Document">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/document.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="CardFile"
+          description="Create new CardFile">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/cardfile.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Cluster"
+          description="Create new Cluster">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/cluster.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="InternalPerson"
+          description="Create new Internal Person">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/intperson.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="ExternalPerson"
+          description="Create new External Person">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/extperson.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="PersonType"
+          description="Create new PersonType">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/persontype.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Product"
+          description="Create new Product">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/product.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Objective"
+          description="Create new Objective">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/objective.gif"
+            bundle=""/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+    </tools>
+    <tools
+        xsi:type="gmftool:ToolGroup"
+        title="Connectors">
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="AND"
+          description="Create new AND-Connector">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/and.gif"/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="OR"
+          description="Create new OR-Connector">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/or.gif"/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="XOR"
+          description="Create new XOR-Connector">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/xor.gif"/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+    </tools>
+    <tools
+        xsi:type="gmftool:ToolGroup"
+        title="Connections">
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Control Flow Arc"
+          description="Create new Control Flow Arc">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/arc.gif"/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Information Flow Arc"
+          description="Create new Information Flow Arc">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/infarc.gif"/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Relation"
+          description="Create new Relation">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/relation.gif"/>
+        <largeIcon
+            xsi:type="gmftool:DefaultImage"/>
+      </tools>
+    </tools>
+  </palette>
+</gmftool:ToolRegistry>

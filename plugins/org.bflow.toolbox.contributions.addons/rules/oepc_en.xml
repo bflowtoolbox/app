@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language value="de">
+	<rule>
+		<id>OEPCSyntaxEventRule1</id>
+		<name>EventRule1</name>
+		<message>Event $value has more than one incoming arc. Use a connector to synchronize the flow of control before the event!</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports an event which has more than one incoming arc.</description>
+		<image>/images/EPCSyntaxEventRule2.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxEventRule2</id>
+		<name>EventRule2</name>
+		<message>Event $value has more than one outgoing arc. Use a connector to split the flow of control after the event!</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports an event which has more than one outgoing arc.</description>
+		<image>/images/EPCSyntaxEventRule3.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule1</id>
+		<name>BusinessObjectRule1</name>
+		<message>Business object $value has no outgoing control flow.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a business object which has no outgoing control flow.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule2</id>
+		<name>BusinessObjectRule2</name>
+		<message>Business object $value has more than one outgoing arc. Use a connector to split the flow of control after the business object!</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a business object which has more than one outgoing arc.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule3</id>
+		<name>BusinessObjectRule3</name>
+		<message>Business object $value has no incoming control flow.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a business object which has no incoming control flow.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule4</id>
+		<name>BusinessObjectRule4</name>
+		<message>Business object $value has more than one incoming arc. Use a connector to synchronize the flow of control before the business object!</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a business object which has more than one incoming arc.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule5</id>
+		<name>BusinessObjectRule5</name>
+		<message>Business object $value has no associated IT system.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a business object which has no associated IT system.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule6</id>
+		<name>BusinessObjectRule6</name>
+		<message>Business object $value has no associated organizational unit.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a business object which has no associated organizational unit.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule7</id>
+		<name>BusinessObjectRule7</name>
+		<message>Business object $value does not contain any attribute.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a business object which does not contain any attribute.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessObjectRule8</id>
+		<name>BusinessObjectRule8</name>
+		<message>Business object $value does not contain any method.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a business object which does not contain any method.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxOepcRule1</id>
+		<name>OepcRule1</name>
+		<message>The oEPC model must contain at least one business object.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports an oEPC model that does not contain any business object.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule1</id>
+		<name>ElementRule1</name>
+		<message>$value should be either join or split.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a connector being a join as well as a split.</description>
+		<image>/images/EPCEpsilonElementRule1.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule2</id>
+		<name>ElementRule2</name>
+		<message>The connector does not have an incoming control flow.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a connector which does not have an incoming control flow.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule3</id>
+		<name>ElementRule3</name>
+		<message>The connector does not have an outgoing control flow.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a connector which does not have an outgoing control flow.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule4</id>
+		<name>ElementRule4</name>
+		<message>The connector has incoming information flow (which is not allowed).</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a connector which has incoming information flow.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule5</id>
+		<name>ElementRule5</name>
+		<message>The connector has outgoing information flow (which is not allowed).</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a connector which has outgoing information flow.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxElementRule6</id>
+		<name>ElementRule6</name>
+		<message>Element does not have a name.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports an unnamed element.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessAttributeRule1</id>
+		<name>BusinessAttributeRule1</name>
+		<message>Business attribute does not have a name.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports an unnamed business attribute.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCSyntaxBusinessMethodRule1</id>
+		<name>BusinessMethodRule1</name>
+		<message>Business method does not have a name.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports an unnamed business method.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCEpsilonSymbolRule1</id>
+		<name>SymbolRule1</name>
+		<message>$value does not have a name</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports an unnamed element.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule1</id>
+		<name>ElementRule1</name>
+		<message>The control flow can deadlock at the AND-join</message>
+		<class>Control Flow Correctness (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a situation where the control flow can deadlock at the AND-join.</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule2</id>
+		<name>ElementRule2</name>
+		<message>The combination XOR-split -> AND-join is not allowed!</message>
+		<class>Control Flow Correctness (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a combination XOR-split -> AND-join which can lead to a situation where the AND-join cannot be processed (deadlock)</description>
+		<image>/images/EPCCFlowElementRule2.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule3</id>
+		<name>ElementRule3</name>
+		<message>The combination OR-split -> AND-join is not allowed!</message>
+		<class>Control Flow Correctness (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a combination OR-split -> AND-join which can lead to a situation where the AND-join cannot be processed (deadlock)</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule4</id>
+		<name>ElementRule4</name>
+		<message>Consider to replace the OR-join by an AND-join.</message>
+		<class>Control Flow Correctness (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports an OR-join that should be replaced by an AND-join which describes the intended behaviour more accurately..</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule5</id>
+		<name>ElementRule5</name>
+		<message>Consider to replace the OR-join by an XOR-join.</message>
+		<class>Control Flow Correctness (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports an OR-join that should be replaced by an XOR-join which describes the intended behaviour more accurately..</description>
+		<image></image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule6</id>
+		<name>ElementRule6</name>
+		<message>The combination OR-split -> XOR-join is not allowed!</message>
+		<class>Control Flow Correctness (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a combination OR-split -> XOR-join which can lead to a situation where more than one incoming flows reach the XOR join (lack of synchronization)</description>
+		<image>/images/EPCCFlowElementRule5.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCCFlowElementRule7</id>
+		<name>ElementRule7</name>
+		<message>The combination AND-split -> XOR-join is not allowed!</message>
+		<class>Control Flow Correctness (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a combination AND-split -> XOR-join which can lead to a situation where more than one incoming flows reach the XOR join (lack of synchronization). If the notification level is WARNING only, this does not necessarily have to signalize an error.</description>
+		<image>/images/and_to_xor.jpeg</image>
+		<default>true</default>
+	</rule>
+	<rule>
+		<id>OEPCEpsilonElementRule1</id>
+		<name>ElementRule1</name>
+		<message>$value should be either a join or a split.</message>
+		<class>Syntax (oEPC)</class>
+		<diagram>oepc</diagram>
+		<description>Reports a connector being a join as well as a split.</description>
+		<image>/images/EPCEpsilonElementRule1.jpeg</image>
+		<default>true</default>
+	</rule>
+</language>

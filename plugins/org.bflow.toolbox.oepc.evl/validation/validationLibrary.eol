@@ -1,0 +1,26 @@
+operation BflowSymbol hasName() : Boolean {
+	return (self.name.isDefined() 
+		and self.name.length() > 0);
+}
+
+operation Element isSplit() : Boolean {
+	return (self.out.size > 1);
+}
+
+operation Element isJoin() : Boolean {
+	return (self.In.size > 1);
+}
+
+-- Returns true, if the element is an XOR or an OR
+operation Element isEventRequestedElement() : Boolean {
+	return (self.isKindOf(XOR) or self.isKindOf(OR));
+}
+
+
+operation Element needsFunction() : Boolean {
+	return (self.out -> select(arc | arc.to.isEventRequestedElement()).isEmpty());
+}
+
+operation IConnector needsEvent() : Boolean {
+	return (self.out -> select(arc | not arc.to.isKindOf(Event)).isEmpty());
+}

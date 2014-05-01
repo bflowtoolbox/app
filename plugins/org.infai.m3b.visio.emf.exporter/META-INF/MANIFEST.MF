@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Export-Package: org.infai.m3b.visio.emf.exporter
+Require-Bundle: org.eclipse.emf.ecore.xmi;bundle-version="2.4.1",org.i
+ nfai.m3b.visio.emf;bundle-version="1.2.0";visibility:=reexport,org.ec
+ lipse.core.runtime;bundle-version="3.4.0"
+Bundle-Vendor: InfAI
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.2.0.201011261125
+Bundle-Name: Export Plug-in
+Bundle-Activator: org.infai.m3b.visio.emf.exporter.Activator
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.infai.m3b.visio.emf.exporter
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+	<!-- Defining an popup menu to change the text alignment -->
+	<extension point="org.eclipse.ui.popupMenus">
+		<objectContribution adaptable="false" id="textAlignment"
+			objectClass="org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart">
+			<menu id="textAlignment.menu" label="Text Alignment" path="viewGroup">
+				<separator name="group1" />
+			</menu>
+			<action class="org.bflow.toolbox.extensions.actions.TextAlignmentAction"
+				enablesFor="*" icon="icons/alignleft.gif" id="textAlignment.left"
+				label="Left" menubarPath="textAlignment.menu/group1" state="false"
+				style="push">
+			</action>
+			<action class="org.bflow.toolbox.extensions.actions.TextAlignmentAction"
+				enablesFor="*" icon="icons/aligncenter.gif" id="textAlignment.center"
+				label="Center" menubarPath="textAlignment.menu/group1" state="false"
+				style="push">
+			</action>
+			<action class="org.bflow.toolbox.extensions.actions.TextAlignmentAction"
+				enablesFor="*" icon="icons/alignright.gif" id="textAlignment.right"
+				label="Right" menubarPath="textAlignment.menu/group1" state="false"
+				style="push">
+			</action>
+		</objectContribution>
+	</extension>
+
+	<!--
+		Defining popup menu to switch between black-and-white and the original
+		color
+	-->
+	<extension point="org.eclipse.ui.popupMenus">
+		<objectContribution adaptable="false" id="editpart.style"
+			objectClass="org.bflow.toolbox.extensions.edit.parts.ColorChangeable">
+			<menu id="editpart.style.menu" label="Style" path="formatMenu">
+				<separator name="group1" />
+			</menu>
+			<action class="org.bflow.toolbox.extensions.colorschemes.actions.StyleBlackWhiteAction"
+				enablesFor="*" id="editpart.style.blackwhite" label="Black-White"
+				menubarPath="editpart.style.menu/group1" state="false" style="push">
+			</action>
+			<action
+				class="org.bflow.toolbox.extensions.colorschemes.actions.StyleOriginalColorAction"
+				enablesFor="*" id="editpart.style.original" label="Original Color"
+				menubarPath="editpart.style.menu/group1" state="false" style="push">
+			</action>
+   <action
+         class="org.bflow.toolbox.extensions.colorschemes.actions.StylePresentationColorAction"
+         id="editpart.style.presentation"
+         label="Presentation Color"
+         menubarPath="editpart.style.menu/group1"
+         state="false"
+         style="push">
+   </action>
+		</objectContribution>
+	</extension>
+
+
+
+	<extension point="org.eclipse.ui.popupMenus">
+		<objectContribution adaptable="false" id="editor.style"
+			objectClass="org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart">
+			<menu id="bflow.style.menu" label="Style" path="viewGroup">
+				<separator name="group1" />
+			</menu>
+			<action class="org.bflow.toolbox.extensions.colorschemes.actions.StyleDiagramAction"
+				enablesFor="1" id="IGlobalColorSchema=bw" label="Black-White"
+				menubarPath="bflow.style.menu/group1">
+			</action>
+			<action class="org.bflow.toolbox.extensions.colorschemes.actions.StyleDiagramAction"
+				enablesFor="1" id="IGlobalColorSchema=o" label="Original Color"
+				menubarPath="bflow.style.menu/group1">
+			</action>
+   <action
+         class="org.bflow.toolbox.extensions.colorschemes.actions.StyleDiagramAction"
+         enablesFor="1"
+         id="IGlobalColorSchema=p"
+         label="Presentation Color"
+         menubarPath="bflow.style.menu/group1">
+   </action>
+		</objectContribution>
+	</extension>
+	
+	
+	<extension point="org.eclipse.ui.popupMenus">
+		<objectContribution adaptable="false" id="bflow.make.same.size"
+			objectClass="org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart">
+			<action class="org.bflow.toolbox.extensions.actions.MakeSameSizeAction"
+				enablesFor="1" id="bflow.same.size.action" label="%LblMakeSameSize"
+				menubarPath="viewGroup">
+			</action>
+		</objectContribution>
+	</extension>
+	
+	
+	<extension point="org.eclipse.ui.popupMenus">
+		<objectContribution adaptable="false" id="bflow.diagram.page.size"
+			objectClass="org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart">
+     <menu
+           id="bflow.diagram.page.setup.menu"
+           label="%MenuPageSetup"
+           path="viewGroup">
+     </menu>
+			<action class="org.bflow.toolbox.extensions.actions.DiagramPageSetupAction"
+				enablesFor="1" id="bflow.diagram.page.size.action" label="%LblPageSetup"
+				menubarPath="bflow.diagram.page.setup.menu/group1">
+			</action>
+   <action
+         class="org.bflow.toolbox.extensions.actions.DiagramPagePackAction"
+         enablesFor="1"
+         id="bflow.diagram.page.setup.pack"
+         label="%LblPack"
+         menubarPath="bflow.diagram.page.setup.menu/group1">
+   </action>
+		</objectContribution>
+	</extension>
+ <extension
+       point="org.eclipse.ui.preferencePages">
+    <page
+          class="org.bflow.toolbox.extensions.diagram.preferences.BflowMainPreferencesPage"
+          id="org.bflow.toolbox.epc.diagram.bflowMainPage"
+          name="Bflow">
+    </page>
+ </extension>
+	
+	
+
+</plugin>

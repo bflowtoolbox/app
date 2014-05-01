@@ -1,0 +1,132 @@
+//author: Heiko Kern, Christian Boehme
+
+extension org::eclipse::xtend::util::stdlib::io;
+
+//Main
+visiomodel::EVisioDocument transform(List[emf::EObject] list):
+	list.selectFirst(e|e.metaType == epc::Epc).transform(list.selectFirst(e|e.metaType == notation::Diagram));
+
+//Foo	
+Void transform(emf::EObject model, emf::EObject diagram):
+	model;
+
+//Document	
+create visiomodel::EVisioDocument transform(epc::Epc epcModel, notation::Diagram epcDiagram):
+	this.visioPages.add(epcModel.createVisioPage(epcDiagram));
+	
+//Page
+create visiomodel::EVisioPage createVisioPage(epc::Epc epcModel, notation::Diagram epcDiagram):
+	this.visioContainedShapes.addAll(epcModel.elements.selectCorrectOnes().createVisioShape(epcDiagram)) ->
+ 	this.visioContainedShapes.addAll(epcModel.connections.createVisioConnection(epcDiagram));
+
+List[bflow::Element] selectCorrectOnes(List[bflow::Element] elements):
+	elements.select(e|
+		e.metaType == epc::Event ||
+		e.metaType == epc::Function ||
+		e.metaType == epc::Participant ||
+		e.metaType == epc::Document ||
+		e.metaType == epc::ProcessInterface ||
+		e.metaType == epc::AND ||
+		e.metaType == epc::OR ||
+		e.metaType == epc::XOR);
+
+//Foo	
+create visiomodel::EPC_Diagramm_Shapes::Ereignis createVisioShape(bflow::Element bflowElement, notation::Diagram epcDiagram):
+	info("not transformed: " + bflowElement.metaType);
+
+//Ereignis
+create visiomodel::EPC_Diagramm_Shapes::Ereignis createVisioShape(epc::Event element, notation::Diagram epcDiagram):
+	this.setVisioText(element.name) ->
+	this.setVisioShapeSheet(element.createVisioShapeSheet(epcDiagram));
+
+//Funktion
+create visiomodel::EPC_Diagramm_Shapes::Funktion createVisioShape(epc::Function element, notation::Diagram epcDiagram):
+	this.setVisioText(element.name) ->
+	this.setVisioShapeSheet(element.createVisioShapeSheet(epcDiagram));
+
+
+//Organisationseinheit
+create visiomodel::EPC_Diagramm_Shapes::Organisationseinheit createVisioShape(epc::Participant element, notation::Diagram epcDiagram):
+	this.setVisioText(element.name) ->
+	this.setVisioShapeSheet(element.createVisioShapeSheet(epcDiagram));
+
+//Informationen Material
+create visiomodel::EPC_Diagramm_Shapes::Informationen_Material createVisioShape(epc::Document element, notation::Diagram epcDiagram):
+	this.setVisioText(element.name) ->
+	this.setVisioShapeSheet(element.createVisioShapeSheet(epcDiagram));
+
+//Prozesspfad
+create visiomodel::EPC_Diagramm_Shapes::Prozesspfad createVisioShape(epc::ProcessInterface element, notation::Diagram epcDiagram):
+	this.setVisioText(element.name) ->
+	this.setVisioShapeSheet(element.createVisioShapeSheet(epcDiagram));
+
+//AND
+create visiomodel::EPC_Diagramm_Shapes::AND createVisioShape(epc::AND element, notation::Diagram diag):
+	this.setVisioShapeSheet(element.createVisioShapeSheet(diag));
+	
+//OR
+create visiomodel::EPC_Diagramm_Shapes::OR createVisioShape(epc::OR element, notation::Diagram diag):
+	this.setVisioShapeSheet(element.createVisioShapeSheet(diag));
+	
+//XOR
+create visiomodel::EPC_Diagramm_Shapes::XOR createVisioShape(epc::XOR element, notation::Diagram diag):
+	this.setVisioShapeSheet(element.createVisioShapeSheet(diag));
+
+
+//Dynamischer Verbinder
+create visiomodel::EPC_Diagramm_Shapes::Dynamischer_Verbinder createVisioConnection(bflow::Connection element, notation::Diagram diag):
+	this.setVisioSourceShape(element.from.createVisioShape(diag))->
+	this.setVisioTargetShape(element.to.createVisioShape(diag));
+
+
+//VisioShapeSheet
+create visiomodel::EVisioShapeSheet createVisioShapeSheet(bflow::Element e, notation::Diagram diag):
+	this.visioSections.add(createVisSectionObject(e, diag));
+
+//VisioSection
+create visiomodel::EVisioSection createVisSectionObject(bflow::Element e, notation::Diagram diag):
+	this.setVisioName("visSectionObject") ->
+	this.visioRows.add(createVisioRow(e, javaGetBounds(e, diag)));
+	
+//VisioRow
+create visiomodel::EVisioRow createVisioRow(bflow::Element e, notation::Bounds bounds):
+	this.setVisioName("1") ->
+	this.visioCells.add(createVisioCellPinX(e, bounds.x)) ->
+	this.visioCells.add(createVisioCellPinY(e, bounds.y)) ->
+	this.visioCells.add(createVisioCellHeight(e, bounds.height)) ->
+	this.visioCells.add(createVisioCellWidth(e, bounds.width));
+
+//VisioCell	
+create visiomodel::EVisioCell createVisioCellPinX(bflow::Element e, Integer value):
+	this.setVisioName("PinX") ->
+	this.setVisioValue((2+value/125).toString());
+
+//VisioCell	
+create visiomodel::EVisioCell createVisioCellPinY(bflow::Element e, Integer value):
+	this.setVisioName("PinY") ->
+	//value.info()->
+	this.setVisioValue((8-value/110).toString());
+
+//VisioCell	
+create visiomodel::EVisioCell createVisioCellHeight(bflow::Element e, Integer value):
+	this.setVisioName("Height") ->
+	//value.info()->
+	if (value != -1) then
+	this.setVisioValue(value.inchConversion().toString());
+
+//VisioCell
+create visiomodel::EVisioCell createVisioCellWidth(bflow::Element e, Integer value):
+	this.setVisioName("Width") ->
+	//value.info()->
+	if (value != -1) then
+	this.setVisioValue(value.inchConversion().toString());
+
+	
+//------------------------------
+//Java Helper
+
+notation::Bounds javaGetBounds(bflow::Element e, notation::Diagram d):
+	JAVA visioEpcExportTemplate.Helper.getPersistedChildren(org.eclipse.emf.ecore.EObject,org.eclipse.gmf.runtime.notation.Diagram);
+
+Real inchConversion(Integer value):
+	JAVA visioEpcExportTemplate.Helper.inchConversion(java.lang.Integer);	

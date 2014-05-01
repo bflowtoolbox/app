@@ -1,0 +1,7 @@
+public interchange 'Java program for jbpt' (java) <> epc {
+
+description: 'Transforms the EPC into a Java program using the jbpt library (https://code.google.com/p/jbpt/)'
+
+@script: '/exportscripts/files/jbpt.vt', insertAttributes=true
+
+}

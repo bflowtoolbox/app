@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<importdescription>
+	<config>
+		<name>Agilian XML</name>
+		<fileextension>xml</fileextension>
+		<description>Imports an EPC model that has been created with Agilian (Traditional XML Structure)</description>
+		<callstack>
+			<script>
+				<file>/importscripts/files/agilian.xslt</file>	
+			</script>
+			<script>
+				<file>/importscripts/files/epml2epc-teil1.xslt</file>	
+			</script>
+			<script>
+				<file>/importscripts/files/epml2epc-teil2.xslt</file>
+				<param Description="true"/>
+			</script>
+		</callstack>
+	</config> 
+</importdescription>

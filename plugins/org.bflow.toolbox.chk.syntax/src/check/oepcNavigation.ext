@@ -1,0 +1,142 @@
+import bflow;
+import oepc;
+
+// Check extensions to validate file
+//==================================
+
+
+Boolean hasName(bflow::Element element) :
+	element.name != null && element.name.length > 0;
+	
+	
+Boolean hasName(oepc::BusinessObjectElement element):
+	element.name != null && element.name.length > 0;	
+	
+	
+Boolean hasITSystem(oepc::BusinessObject element):
+	element.oepc().ITSystems().outgoingInformationFlows().to.contains(element) ||
+	element.oepc().ITSystems().incomingInformationFlows().from.contains(element);
+	
+	
+Boolean hasOrganisationUnit(bflow::Element element):
+	element.oepc().organisationUnits().outgoingInformationFlows().to.contains(element) ||
+	element.oepc().organisationUnits().incomingInformationFlows().from.contains(element);
+	
+
+Boolean hasAttribute(oepc::BusinessObject element):
+	element.attributes().size > 0;
+	
+
+Boolean hasMethod(oepc::BusinessObject element):
+	element.methods().size > 0;
+
+
+// type checks
+//============
+
+
+cached Boolean isEvent(bflow::Element element):
+	oepc::Event.isAssignableFrom(element.metaType);
+	
+	
+cached Boolean isITSystem(bflow::Element element):
+	oepc::ITSystem.isAssignableFrom(element.metaType);
+	
+
+cached Boolean isOrganisationUnit(bflow::Element element):
+	oepc::OrganisationUnit.isAssignableFrom(element.metaType);
+
+
+cached Boolean isXorConnector(bflow::Element element):
+	oepc::XORConnector.isAssignableFrom(element.metaType);
+	
+
+cached Boolean isAndConnector(bflow::Element element):
+	oepc::ANDConnector.isAssignableFrom(element.metaType);
+	
+	
+cached Boolean isOrConnector(bflow::Element element):
+	oepc::ORConnector.isAssignableFrom(element.metaType);
+
+
+cached Boolean isConnector(bflow::Element element):
+	bflow::IConnector.isAssignableFrom(element.metaType);
+	
+	
+cached Boolean isBusinessObject(bflow::Element element):
+	oepc::BusinessObject.isAssignableFrom(element.metaType);
+	
+	
+// sets 
+//=====	
+	
+cached Collection[oepc::ControlFlowEdge] incomingControlFlows(bflow::Element element) :
+	element.in.typeSelect(oepc::ControlFlowEdge);
+	
+	
+cached Collection[oepc::InformationEdge] incomingInformationFlows(bflow::Element element) :
+	element.in.typeSelect(oepc::InformationEdge);
+
+
+cached Collection[oepc::ControlFlowEdge] outgoingControlFlows(bflow::Element element) :
+	element.out.typeSelect(oepc::ControlFlowEdge);
+	
+	
+cached Collection[oepc::InformationEdge] outgoingInformationFlows(bflow::Element element) :
+	element.out.typeSelect(oepc::InformationEdge);
+	
+	
+cached List[oepc::ITSystem] ITSystems(oepc::OEPC oepc):
+	oepc.elements.typeSelect(oepc::ITSystem);
+	
+	
+cached List[oepc::OrganisationUnit] organisationUnits(oepc::OEPC oepc):
+	oepc.elements.typeSelect(oepc::OrganisationUnit);	
+	
+	
+cached List[oepc::BusinessAttribute] attributes(oepc::BusinessObject element):
+	element.attributes;
+	
+	
+cached List[oepc::BusinessMethod] methods(oepc::BusinessObject element):
+	element.methods;
+		
+// helpers
+//========	
+	
+cached oepc::OEPC oepc(bflow::Element element):
+	element.eContainer;
+	
+	
+cached Boolean isJoin(bflow::Element element) :
+	element.isConnector() && element.incomingControlFlows().size > 1;
+	
+	
+cached Boolean isSplit(bflow::Element element) :
+	element.isConnector() && element.outgoingControlFlows().size > 1;
+	
+	
+cached Boolean isAndJoin(bflow::Element element) :
+	element.isAndConnector() && element.isJoin();
+	
+	
+cached Boolean isAndSplit(bflow::Element element) :
+	element.isAndConnector() && element.isSplit();
+	
+	
+cached Boolean isXorJoin(bflow::Element element) :
+	element.isXorConnector() && element.isJoin();
+	
+	
+cached Boolean isXorSplit(bflow::Element element) :
+	element.isXorConnector() && element.isSplit();
+	
+	
+cached Boolean isOrJoin(bflow::Element element) :
+	element.isOrConnector() && element.isJoin();
+	
+	
+cached Boolean isOrSplit(bflow::Element element) :
+	element.isOrConnector() && element.isSplit();
+
+

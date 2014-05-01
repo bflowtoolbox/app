@@ -1,0 +1,154 @@
+import oepc;
+import bflow;
+
+extension check::oepcNavigation reexport;
+
+//********************************************
+// preceeding and succeeding arcs and elements
+//********************************************
+
+cached Set[bflow::Element] parents(bflow::Element element) :
+	element.incomingControlFlows().from.toSet();
+	
+cached Set[bflow::Element] children(bflow::Element element) :
+	element.outgoingControlFlows().to.toSet();
+
+//********************************************
+// transitive element predecessors and successors
+//********************************************
+
+cached Set[oepc::ControlFlowEdge] preceedingArcs(bflow::Element element) :
+	element.preceedingArcs({}.toSet());
+
+/*
+Set[epc::Arc] preceedingArcs(bflow::Element element, Set[bflow::Element] processed) :
+	element.incomingControlFlows().union(
+		element.parents().without(processed)
+			.preceedingArcs(processed.union(element.parents())));
+*/
+			
+create Set[oepc::ControlFlowEdge] preceedingArcs(bflow::Element e, Set[bflow::Element] borders) :
+	if (!e.incomingControlFlows().isEmpty) then (
+		addAll(e.incomingControlFlows()) ->
+		addAll(e.incomingControlFlows().from.without(borders).preceedingArcs(borders))
+	);
+
+/*Set[epc::Arc] preceedingArcs(epc::Arc arc, Set[epc::Arc] processed) :
+	arc.from.incomingControlFlows().without(processed).union(
+		arc.from.incomingControlFlows().without(processed)
+			.preceedingArcs(processed.union(arc.from.incomingControlFlows())));
+*/
+
+create Set[oepc::ControlFlowEdge] preceedingArcs(oepc::ControlFlowEdge arc, Set[oepc::ControlFlowEdge] borders) :
+	if (!arc.from.incomingControlFlows().isEmpty) then (
+		addAll(arc.from.incomingControlFlows()) ->
+		addAll(arc.from.incomingControlFlows().without(borders).preceedingArcs(borders))
+	); 
+
+cached Set[oepc::ControlFlowEdge] succeedingArcs(bflow::Element element) :
+	element.succeedingArcs({}.toSet());
+
+/*
+Set[epc::Arc] succeedingArcs(bflow::Element element, Set[bflow::Element] processed) :
+	element.outgoingControlFlows().union(
+		element.children().without(processed)
+			.succeedingArcs(processed.union(element.children())));
+*/
+
+create Set[oepc::ControlFlowEdge] succeedingArcs(bflow::Element e, Set[bflow::Element] borders) :
+	if (!e.outgoingControlFlows().isEmpty) then (
+		addAll(e.outgoingControlFlows()) ->
+		addAll(e.outgoingControlFlows().to.without(borders).succeedingArcs(borders))
+	);
+	
+
+
+/*
+Set[epc::Arc] succeedingArcs(epc::Arc arc, Set[epc::Arc] processed) :
+	arc.to.outgoingControlFlows().without(processed).union(
+		arc.to.outgoingControlFlows().without(processed)
+			.succeedingArcs(processed.union(arc.to.outgoingControlFlows())));
+*/
+			
+create Set[oepc::ControlFlowEdge] succeedingArcs(oepc::ControlFlowEdge arc, Set[oepc::ControlFlowEdge] borders) :
+	if (!arc.from.outgoingControlFlows().isEmpty) then (
+		addAll(arc.from.outgoingControlFlows()) ->
+		addAll(arc.from.outgoingControlFlows().without(borders).succeedingArcs(borders))
+	); 
+			
+cached Set[bflow::Element] precessors(bflow::Element element) :
+	element.preceedingArcs().from.toSet();
+
+cached Set[bflow::Element] precessors(bflow::Element element, Set[bflow::Element] borders) :
+	element.preceedingArcs(borders).from.toSet();
+
+cached Set[bflow::Element] successors(bflow::Element element) :
+	element.succeedingArcs().to.toSet();
+
+cached Set[bflow::Element] successors(bflow::Element element, Set[bflow::Element] borders) :
+	element.succeedingArcs(borders).to.toSet();
+	
+cached Boolean isConnectedTo(bflow::Element source, bflow::Element target) :
+	source.successors({target}.toSet()).contains(target);
+
+cached Boolean isNotConnectedTo(bflow::Element source, bflow::Element target) :
+	! source.isConnectedTo(target);
+
+//********************************************
+// Matches
+//********************************************
+
+cached Boolean matches(bflow::Element split, bflow::Element join) :
+	split != join
+	&& split.children().select(c|c == join || c.isConnectedTo(join)).size > 1
+	&& split.joinOutsBetween(join).notExists(a| a.separates(split, join));
+
+cached Boolean separates(oepc::ControlFlowEdge arc, bflow::Element source, bflow::Element target) :
+	source.arcsBetween(target)
+		.remove(arc)
+		.without(arc.from.preceedingArcs({source}.toSet()))
+		.without(arc.to.succeedingArcs({target}.toSet()))
+		.isEmpty;
+		
+cached Set[bflow::Element] elementsBetween(bflow::Element source, bflow::Element target) :
+	source.successors({target}.toSet()).intersect(target.precessors({source}.toSet()));
+	
+cached Set[bflow::Element] joinsBetween(bflow::Element source, bflow::Element target) :
+	source.elementsBetween(target)
+		.select(s|s.isJoin());
+		
+cached Set[oepc::ControlFlowEdge] arcsBetween(bflow::Element source, bflow::Element target) :
+	source.succeedingArcs({target}.toSet()).intersect(target.preceedingArcs({source}.toSet()));
+	
+cached Set[oepc::ControlFlowEdge] joinOutsBetween(bflow::Element source, bflow::Element target) :
+	source.arcsBetween(target).select(a|a.from.isJoin());
+	
+cached Boolean hasSese(bflow::Element source, bflow::Element target) :
+	source.succeedingArcs({target}.toSet()) == target.preceedingArcs({source}.toSet()); 
+	
+cached Boolean seseMatches(bflow::Element source, bflow::Element target) :
+	source.hasSese(target)
+	&& source.matches(target);
+	
+//********************************************
+// sese fragments based on start and end events
+//********************************************
+
+cached Set[bflow::Element] startEvents(oepc::OEPC epc) :
+	epc.elements.typeSelect(oepc::Event).select(e|e.incomingControlFlows().isEmpty);
+	
+cached Set[bflow::Element] endEvents(oepc::OEPC epc) :
+	epc.elements.typeSelect(oepc::Event).select(e|e.outgoingControlFlows().isEmpty);
+	
+cached Boolean seseFragment(oepc::ControlFlowEdge sourceArc, oepc::ControlFlowEdge targetArc) :
+	sourceArc.succeedingArcs({targetArc}.toSet()) 
+		== targetArc.preceedingArcs({sourceArc}.toSet())
+	&& !sourceArc.succeedingArcs({targetArc}.toSet()).isEmpty;
+
+cached Boolean matchesUnstructuredFragment(oepc::ControlFlowEdge arc) :
+	! arc.succeedingArcs({}.toSet()).select(e|
+		oepc::XORConnector.isInstance(e.from)
+		&& oepc::XORConnector.isInstance(arc.to) 
+		&& arc.seseFragment(e)
+		&& arc.to.successors({e.from}.toSet()).select(con|con.isAndConnector() || con.isOrConnector()).isEmpty
+		).isEmpty;

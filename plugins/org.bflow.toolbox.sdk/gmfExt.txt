@@ -1,0 +1,162 @@
+Routing Style
+=============
+
+*.view.factories -> [MyConnection]ViewFactory.java
+
+	protected void decorateView(View containerView, View view, IAdaptable semanticAdapter, String semanticHint, int index,
+			boolean persisted){
+	if()...
+	super.decorate...
+	
+	// set routing style
+	NotationPackage NOTATION = NotationPackage.eINSTANCE;
+	EClass routingStyle = NOTATION.getRoutingStyle();
+	RoutingStyle routing = (RoutingStyle) view.getStyle(routingStyle);
+	if (routing == null) {
+		routing = (RoutingStyle) view.createStyle(routingStyle);
+	}
+	routing.setRouting(Routing.RECTILINEAR_LITERAL || Routing.MANUAL_LITERAL || Routing.TREE_LITERAL );		
+				
+	}
+	
+	Although set other constraints link jumping, smoothness... .
+	
+	
+Fixed Anchor
+============
+
+*.edit.parts
+	
+	Any EditParts super class is ShapeNodeEditPart. To fix an anchor the EditPart must override methods from their super class.
+	
+	public ConnectionAnchor getSourceConnectionAnchor(ConnectionEditPart arg0){}
+	public ConnectionAnchor getSourceConnectionAnchor(Request request) {}
+	public ConnectionAnchor getTargetConnectionAnchor(ConnectionEditPart arg0) {}
+	public ConnectionAnchor getTargetConnectionAnchor(Request request) {}
+	
+	To set the anchor, all mehtods must return an implementation of CenteredAnchor. In this case see
+	*.edit.parts.TopBottomLeftRightAnchor.java to set the anchor central.
+	In OEPC see *.edit.parts.extensions.OepcNodeEditPart.java. All EditParts should now inherit from this class to fix the anchor.
+	
+	
+	
+Label position/textWrap
+=======================
+
+*.edit.parts
+	
+	Each EditPart, which defines an label, has an 
+		private void createContents() {}
+	method to initialize the WrappingLabel. In this mehtod you can set the position and textWrap with:
+			fFigure[MyNodeName][feature]Figure.setAlignment(PositionConstants.CENTER || PositionConstants.EAST || ...);
+			fFigure[MyNodeName][feature]Figure.setTextWrap(true);
+			fFigure[MyNodeName][feature]Figure.setTextJustification(PositionConstants.CENTER || ...);
+			
+	Note, this works not with an XYLayout.
+			
+			
+Label container/layout
+======================
+
+	E.g. you want your label central in your node, because of lines in your polygon, use an overrided Stacklayout.
+	*.edit.parts.MyEditPart.java#createContents()
+	add follwing to add your label in an rectangle central.
+	
+	StackLayout layoutEventPolygonFigure0 = new StackLayout() {
+				@Override
+				public void layout(IFigure figure) {
+					// TODO Auto-generated method stub
+					Rectangle r = new Rectangle(figure.getBounds().x + 15,
+							figure.getBounds().y,
+							figure.getBounds().width - 30,
+							figure.getBounds().height);
+					List children = figure.getChildren();
+					IFigure child;
+					for (int i = 0; i < children.size(); i++) {
+						child = (IFigure) children.get(i);
+						child.setBounds(r);
+					}
+				}
+			};
+	eventPolygonFigure0.setLayoutManager(layoutEventPolygonFigure0);
+	
+	And replace older layout with this.
+	
+	
+Insets between compartment borders and attributes/methods
+=========================================================
+
+	See *.edit.parts BusinessObjectBusinessObjectAttributeCompartmentEditPart#refreshChildren().
+	This method will be called if modifications on one attribute/method are taken. Set new MarginBorder
+	for each containing child.
+	
+	
+Remove popupPredefinedItem
+==========================
+
+	Go in youre plugin.xml and create a new extension called 
+		org.eclipse.gmf.runtime.common.ui.services.action.contributionItemProviders.
+	For example, if you want to remove the edit menu and the arrowTypeMenu:
+		<contributionItemProvider checkPluginLoaded="false"
+
+			class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramContributionItemProvider">
+			<Priority name="Low">
+			</Priority>
+			<popupContribution
+				class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramContextMenuProvider">
+				
+				<!-- basic menu, remove by the given id -->
+				<popupPredefinedItem id="editMenu" remove="true"/>
+				<!-- sub menu, enter the path to -->
+				<popupPredefinedItem id="arrowTypeMenu" path="/formatMenu/" remove="true"/>			
+	
+			</popupContribution>
+		</contributionItemProvider>
+
+		<!--
+		fontColorLineGroup
+		fontDialogAction
+		fillColorContributionItem
+		lineColorContributionItem
+		lineTypeMenu
+		lineWidthMenu
+		arrowTypeMenu
+		routerMenu
+		formatGroup
+		selectMenu
+		arrangeMenu
+		alignMenu
+		textAlignmentMenu
+		
+		fontColorLineGroup
+		fontDialogAction
+		fillColorContributionItem
+		lineColorContributionItem
+		lineTypeMenu
+		lineWidthMenu
+		arrowTypeMenu
+		routerMenu
+		formatGroup
+		selectMenu
+		arrangeMenu
+		alignMenu
+		textAlignmentMenu
+		zorderMenu
+		sizeGroup
+		autoSizeAction
+		makeSameSizeMenu
+		filterGroup
+		filtersMenu
+		viewGroup
+		viewMenu
+		zoomContributionItem
+		copyAppearanceGroup
+		copyAppearancePropertiesAction
+		navigateGroup
+		additionsGroup
+		validationGroup
+		validateAction
+		-->
+	
+	
+			

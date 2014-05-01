@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.bflow.toolbox.vc.model/src"
+    editDirectory="/org.bflow.toolbox.vc.edit/src" editorDirectory="/org.bflow.toolbox.vc.editor/src"
+    modelPluginID="org.bflow.toolbox.vc.model" modelName="Vc" editPluginClass="org.bflow.toolbox.vc.provider.VcEditPlugin"
+    editorPluginClass="org.bflow.toolbox.vc.presentation.VcEditorPlugin" testsDirectory="/org.bflow.toolbox.vc.tests/src"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
+    providerRootExtendsClass="" editPluginID="org.bflow.toolbox.vc.edit" editorPluginID="org.bflow.toolbox.vc.editor"
+    testsPluginID="org.bflow.toolbox.vc.tests" usedGenPackages="bflow.genmodel#//bflow">
+  <foreignModel>vc.ecore</foreignModel>
+  <genPackages prefix="Vc" basePackage="org.bflow.toolbox" disposableProviderFactory="true"
+      ecorePackage="vc.ecore#/">
+    <genClasses ecoreClass="vc.ecore#//ValueChain">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute vc.ecore#//ValueChain/Subdiagram"/>
+    </genClasses>
+    <genClasses ecoreClass="vc.ecore#//ValueChain2">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute vc.ecore#//ValueChain2/Subdiagram"/>
+    </genClasses>
+    <genClasses ecoreClass="vc.ecore#//TechnicalTerm"/>
+    <genClasses ecoreClass="vc.ecore#//Cluster"/>
+    <genClasses ecoreClass="vc.ecore#//Objective"/>
+    <genClasses ecoreClass="vc.ecore#//Product"/>
+    <genClasses ecoreClass="vc.ecore#//PredecessorConnection"/>
+    <genClasses ecoreClass="vc.ecore#//ProcessSuperiority"/>
+    <genClasses ecoreClass="vc.ecore#//Vc">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Vc/elements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Vc/connections"/>
+    </genClasses>
+    <genClasses ecoreClass="vc.ecore#//Relation"/>
+  </genPackages>
+</genmodel:GenModel>

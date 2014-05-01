@@ -1,0 +1,9 @@
+public interchange 'Prolog Facts' (pl|plx) <> epc, oepc {
+
+description: 'Exports a bflow* diagram as Prolog facts.'
+
+@script: '/exportscripts/files/epc2epml-teil1.xslt'
+@script: '/exportscripts/files/epc2epml-teil2.xslt', insertAttributes=true, factor=4.0, defaultSize=40, defaultName='non'
+@script: '/exportscripts/files/epml2prolog.xslt'
+
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>
+        <property name="hibernate.connection.url">jdbc:derby:data;create=true</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
+        <property name="hibernate.connection.user">defaultUser</property>
+        <property name="hibernate.connection.password">defaultPAss</property>      
+        <property name="hibernate.hbm2ddl.auto">update</property>   
+        
+		<property name="hibernate.default_schema">bflow_application</property>
+		
+		<!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>        
+ 
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+ 
+        <!-- Disable the second-level cache -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+ 
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+	
+    </session-factory>
+</hibernate-configuration>

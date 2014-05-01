@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <wizard
+            category="org.bflow.toolbox.import.visio"
+            class="org.bflow.toolbox.imports.visio.epc.wizard.VisioImportWizard"
+            icon="icons/sample.gif"
+            id="org.bflow.toolbox.visio.import.epc"
+            name="VISIO EPC">
+         <description>
+            Import a Visio EPC and transform it to Bflow-EPC.
+         </description>
+      </wizard>
+   </extension>
+
+</plugin>

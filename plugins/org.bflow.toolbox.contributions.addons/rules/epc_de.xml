@@ -1,0 +1,733 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<language value="de">
+	<rule>
+		<id>EPCEpsilonSymbolRule1</id>
+		<name>SymbolRule1</name>
+		<message>$value hat keinen Namen</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Funktionen oder Ereignisse ohne Namen</description>
+		<image>/images/EPCEpsilonSymbolRule1.jpeg</image>
+		<default>true</default>
+		<type>epsilon</type>
+	</rule>
+	<rule>
+		<id>EPCEpsilonElementRule1</id>
+		<name>ElementRule1</name>
+		<message>$value sollte entweder ein Join oder ein Split sein</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Konnektoren, die sowohl Split als auch Join sind</description>
+		<image>/images/EPCEpsilonElementRule1.jpeg</image>
+		<default>true</default>
+		<type>epsilon</type>
+	</rule>
+	<rule>
+		<id>EPCEpsilonElementRule2</id>
+		<name>ElementRule2</name>
+		<message>$value ist unnoetig</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Konnektoren mit genau einem Eingang und genau einem Ausgang</description>
+		<image>/images/EPCEpsilonElementRule2.jpeg</image>
+		<default>true</default>
+		<type>epsilon</type>
+	</rule>
+	<rule>
+		<id>EPCEpsilonElementRule3</id>
+		<name>ElementRule3</name>
+		<message>Nach einem Ereignis sollte kein $value-Split folgen.</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Ereignisse, auf die ein (x)or-Split folgt</description>
+		<image>/images/EPCEpsilonElementRule3.jpeg</image>
+		<default>true</default>
+		<type>epsilon</type>
+	</rule>
+
+	<rule>
+		<id>EPCSyntaxEventRule1</id>
+		<name>EventRule1</name>
+		<message>Das Ereignis $value hat weder eingehenden noch ausgehenden Kontrollfluss.</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Ereignis ohne ein- bzw ausgehenden Kontrollfluss</description>
+		<image>/images/EPCSyntaxEventRule1.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxEventRule2</id>
+		<name>EventRule2</name>
+		<message>Ereignis $value hat mehr als einen eingehenden Kontrollfluss. Eingehende Kontrollfluesse ueber Konnektoren synchronisieren!</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Ereignis mit mehr als einem eingehenden Kontrollfluss</description>
+		<image>/images/EPCSyntaxEventRule2.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxEventRule3</id>
+		<name>EventRule3</name>
+		<message>Ereignis $value hat mehr als einen ausgehenden Kontrollfluss. Ausgehende Kontrollfluesse ueber Konnektoren synchronisieren!</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Ereignis mit mehr als einem ausgehenden Kontrollfluss</description>
+		<image>/images/EPCSyntaxEventRule3.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxEventRule4</id>
+		<name>EventRule4</name>
+		<message>Das Ereignis $value ist durch eine Kante mit sich selbst verbunden.</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Ereignis, das mit sich selbst verbunden ist</description>
+		<image>/images/EPCSyntaxEventRule4.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxFunctionRule1</id>
+		<name>FunctionRule1</name>
+		<message>Funktion $value hat keinen ausgehenden Kontrollfluss.</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Funktion ohne ausgehenden Kontrollfluss</description>
+		<image>/images/EPCSyntaxFunctionRule1.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxFunctionRule2</id>
+		<name>FunctionRule2</name>
+		<message>Funktion $value hat mehr als einen ausgehenden Kontrollfluss. Ausgehende Kontrollfluesse ueber Konnektoren synchronisieren!</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Funktion mit mehr als einem ausgehenden Kontrollfluss</description>
+		<image>/images/EPCSyntaxFunctionRule2.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxFunctionRule3</id>
+		<name>FunctionRule3</name>
+		<message>Funktion $value hat keinen eingehenden Kontrollfluss.</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Funktion ohne eingehenden Kontrollfluss</description>
+		<image>/images/EPCSyntaxFunctionRule3.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxFunctionRule4</id>
+		<name>FunctionRule4</name>
+		<message>Funktion $value hat mehr als einen eingehenden Kontrollfluss. Eingehende Kontrollfluesse ueber Konnektoren synchronisieren!</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Funktion mit mehr als einem eingehenden Kontrollfluss</description>
+		<image>/images/EPCSyntaxFunctionRule4.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxFunctionRule5</id>
+		<name>FunctionRule5</name>
+		<message>Die Funktion $value ist durch eine Kante mit sich selbst verbunden.</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Funktion, die mit sich selbst verbunden ist</description>
+		<image>/images/EPCSyntaxFunctionRule5.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxElementRule1</id>
+		<name>ElementRule1</name>
+		<message>Konnektor hat keinen eingehenden Kontrollfluss.</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Konnektor ohne eingehenden Kontrollfluss</description>
+		<image>/images/EPCSyntaxElementRule1.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxElementRule2</id>
+		<name>ElementRule2</name>
+		<message>Konnektor hat keinen ausgehenden Kontrollfluss.</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Konnektor ohne ausgehenden Kontrollfluss</description>
+		<image>/images/EPCSyntaxElementRule2.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxElementRule3</id>
+		<name>ElementRule3</name>
+		<message>Der Konnektor ist durch eine Kante mit sich selbst verbunden.</message>
+		<class>Syntax (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet Konnektor, der mit sich selbst verbunden ist</description>
+		<image>/images/EPCSyntaxElementRule3.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCCFlowElementRule1</id>
+		<name>ElementRule1</name>
+		<message>Eine Eingangskante am AND-Join wird evtl. wegen eines davorliegenden (X)OR-Splits nicht erreicht</message>
+		<class>Kontrollfluss (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet AND-Join, bei dem es wegen eines davorliegenden (X)OR-Splits möglich ist, dass der Kontrollfluss nicht alle Eingänge des AND-Joins erreicht. Dies kann, muss aber kein Modellierungsfehler sein.</description>
+		<image>/images/EPCCFlowElementRule1.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>						
+	<rule>
+		<id>EPCCFlowElementRule2</id>
+		<name>ElementRule2</name>
+		<message>Kombination XOR-Split -> AND-Join ist nicht erlaubt!</message>
+		<class>Kontrollfluss (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet eine Kombination zwischen XOR-Split und AND-Join, die dazu führt, dass der Kontrollfluss nicht alle Eingänge des AND-Joins erreicht.</description>
+		<image>/images/EPCCFlowElementRule2.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCCFlowElementRule3</id>
+		<name>ElementRule3</name>
+		<message>Kombination OR-Split -> AND-Join ist nicht erlaubt!</message>
+		<class>Kontrollfluss (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet eine Kombination zwischen OR-Split und AND-Join, die dazu führt, dass der Kontrollfluss nicht alle Eingänge des AND-Joins erreicht.</description>
+		<image>/images/EPCCFlowElementRule3.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCCFlowElementRule4</id>
+		<name>ElementRule4</name>
+		<message>Kombination AND-Split -> XOR-Join ist nicht erlaubt!</message>
+		<class>Kontrollfluss (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet eine Kombination zwischen AND-Split und XOR-Join, die zu dem Fehler führt, dass mehr als ein Eingang des XOR-Joins erreicht wird.</description>
+		<image>/images/EPCCFlowElementRule4.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>	
+	<rule>
+		<id>EPCCFlowElementRule5</id>
+		<name>ElementRule5</name>
+		<message>Kombination OR-Split -> XOR-Join ist nicht erlaubt!</message>
+		<class>Kontrollfluss (EPK)</class>
+		<diagram>epc</diagram>
+		<description>Meldet eine Kombination zwischen OR-Split und XOR-Join, die zu dem Fehler führt, dass mehr als ein Eingang des XOR-Joins erreicht werden kann.</description>
+		<image>/images/EPCCFlowElementRule5.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>syntax2</id>
+		<name>syntax2</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet ein Modell, das nicht zusammenhängend ist.</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax4</id>
+		<name>syntax4</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet, wenn zwischen zwei Elementen mehr als ein Pfeil existiert.</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax5</id>
+		<name>syntax5</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet Modelle ohne Ereignis, ohne Funktion oder ohne Kontrollflusspfeil.</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax6</id>
+		<name>syntax6</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet Funktionen, die nicht genau einen eingehenden und genau einen ausgehenden Kontrollflusspfeil haben.</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax7</id>
+		<name>syntax7</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet Ereignisse mit mehr als einem ein- oder ausgehenden Kontrollflusspfeil</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax8</id>
+		<name>syntax8</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet Konnektoren, die sowohl mind. zwei eingehende als auch mind. zwei ausgehende Kontrollflusspfeile haben.</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax9</id>
+		<name>syntax9</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet Zyklen, die nur aus Konnektoren bestehen</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax10</id>
+		<name>syntax10</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet Ereignisse, die von einem weiteren Ereignis gefolgt werden.</description>
+		<image></image>
+		<default>false</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax11</id>
+		<name>syntax11</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet Funktionen, die von einer weiteren Funktion gefolgt werden.</description>
+		<image></image>
+		<default>false</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax12</id>
+		<name>syntax12</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet Ereignisse, die von einem (X)OR-Konnektor gefolgt werden.</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax13</id>
+		<name>syntax13</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet das Fehlen eines Start- oder Endereignisses.</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax14</id>
+		<name>syntax14</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet Modellelemente, die nicht von einem Startereignis aus erreicht werden können.</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax15</id>
+		<name>syntax15</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Meldet Modellelemente, von denen aus man kein Endereignis erreichen kann.</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_to_xor</id>
+		<name>and_to_xor</name>
+		<message>AND- bzw. OR-Split ist kombiniert mit XOR-Join</message>
+		<class>Erweiterte Modellprüfung (EPK)/Kontrollflussfehler</class>
+		<diagram>epc</diagram>
+		<description>Meldet eine Kombination zwischen AND- oder OR-Split und XOR-Join, die zu dem Fehler führt, dass mehr als ein Eingang des XOR-Joins erreicht wird. Falls nur eine WARNUNG angezeigt wird, muss nicht unbedingt ein Fehler vorliegen.
+			</description>
+		<image>/images/and_to_xor.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>xor_to_and</id>
+		<name>xor_to_and</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Kontrollflussfehler</class>
+		<diagram>epc</diagram>
+		<description>Meldet eine Kombination zwischen (X)OR-Split und AND-Join, die zu dem Fehler führt, dass nicht alle Eingänge des AND-Joins erreicht werden.
+			</description>
+		<image>/images/xor_to_and.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_to_and_upstream_entry_xor</id>
+		<name>and_to_and_upstream_entry_xor</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Kontrollflussfehler</class>
+		<diagram>epc</diagram>
+		<description>Meldet einen unerlaubten Einsprung in einen AND-Kontrollblock, der zu einem Fehler führt</description>
+		<image>/images/and_to_and_upstream_entry_xor.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_to_and_downstream_entry</id>
+		<name>and_to_and_downstream_entry</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Kontrollflussfehler</class>
+		<diagram>epc</diagram>
+		<description>Meldet einen unerlaubten Einsprung beim wiederholten Durchlaufen eines AND-Kontrollblocks, der zu einem Fehler führt</description>
+		<image>/images/and_to_and_downstream_entry.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>loop_exit_and</id>
+		<name>loop_exit_and</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Kontrollflussfehler</class>
+		<diagram>epc</diagram>
+		<description>Meldet einen Konnektor, der eine Schleife abschließt, jedoch nicht vom Typ XOR ist</description>
+		<image>/images/loop_exit_and.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>loop_entry_and</id>
+		<name>loop_entry_and</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Kontrollflussfehler</class>
+		<diagram>epc</diagram>
+		<description>Meldet einen Konnektor, der eine Schleife beginnt, jedoch nicht vom Typ XOR ist</description>
+		<image>/images/loop_entry_and.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_might_not_get_control</id>
+		<name>and_might_not_get_control</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Kontrollflussfehler</class>
+		<diagram>epc</diagram>
+		<description>An einem AND-Join kommen ggf. nicht an allen Eingängen Kontrollflüsse an, da zuvor ein (X)OR-Split den Kontrollfluss in eine andere Richtung lenken kann.</description>
+		<image>/images/and_might_not_get_control.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_to_or</id>
+		<name>and_to_or</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Ersetzbare OR-Konnektoren</class>
+		<diagram>epc</diagram>
+		<description>Meldet einen OR-Join, der durch einen die Situation besser beschreibenden AND- bzw. XOR-Join ersetzt werden kann
+			</description>
+		<image>/images/and_to_or.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>loop_entry_or</id>
+		<name>loop_entry_or</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Ersetzbare OR-Konnektoren</class>
+		<diagram>epc</diagram>
+		<description>Meldet einen OR-Join, der eine Schleife beginnt. Dieser sollte durch einen XOR-Join ersetzt werden.</description>
+		<image>/images/loop_entry_or.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>delta_warning</id>
+		<name>delta_warning</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Ersetzbare OR-Konnektoren</class>
+		<diagram>epc</diagram>
+		<description>Meldet einen OR-Split, der durch einen XOR-Split ersetzt werden sollte.</description>
+		<image>/images/delta_warning.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>partial_redo</id>
+		<name>partial_redo</name>
+		<message>Prüfen Sie die Einsprünge in diesen AND-Kontrollblock. Kann es wirklich eintreten, dass ein Pfad (aber nicht alle) zu wiederholen ist?</message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellierungstil</class>
+		<diagram>epc</diagram>
+		<description>Bei der wiederholten Ausführung des Kontrollblocks werden nur einige der ursprünglich durchgeführten Aktionen erneut ausgeführt. Dies ist oft ein Zeichen für inhaltliche Modellierungsfehler.</description>
+		<image>/images/partial_redo.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>or_starts_optional_execution</id>
+		<name>or_starts_optional_execution</name>
+		<message>Der OR-Split sollte durch XOR ersetzt werden, um deutlich zu machen, dass die Ausführung optional erfolgt.</message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellierungstil</class>
+		<diagram>epc</diagram>
+		<description>Alternative "Etwas ausführen oder nichts tun" wird von Paar aus OR Split/OR-Join (statt XOR) gebildet.</description>
+		<image>/images/or_starts_optional_execution.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_starts_optional_execution</id>
+		<name>and_starts_optional_execution</name>
+		<message>Ein von diesem AND-Split ausgehender Pfeil ist nutzlos.</message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellierungstil</class>
+		<diagram>epc</diagram>
+		<description>Ausführen eines "leeren" Pfades parallel zu anderen Aktionen: Der leere Kontrollflusspfeil ist nutzlos.</description>
+		<image>/images/and_starts_optional_execution.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_to_and_upstream_entry_or</id>
+		<name>and_to_and_upstream_entry_or</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellierungstil</class>
+		<diagram>epc</diagram>
+		<description>In einen AND-Kontrollblock gibt es einen Einsprung vom Typ OR, direkt davor liegt ein (nutzloses) Startereignis.</description>
+		<image>/images/and_to_and_upstream_entry_or.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>startevents_blockieren_nach_split</id>
+		<name>startevents_blockieren_nach_split</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellierungstil</class>
+		<diagram>epc</diagram>
+		<description>Deutet darauf hin, dass an den Startereignissen ein beabsichtigter Deadlock modelliert wurde.</description>
+		<image>/images/startevents_blockieren_nach_split.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>startevents_andjoin</id>
+		<name>startevents_andjoin</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellierungstil</class>
+		<diagram>epc</diagram>
+		<description>Deutet darauf hin, dass an den Startereignissen ein beabsichtigter Deadlock modelliert wurde.</description>
+		<image>/images/startevents_andjoin.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>nothing_to_do</id>
+		<name>nothing_to_do</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellierungstil</class>
+		<diagram>epc</diagram>
+		<description>Es ist möglich, von einem Startereignis aus ein Endereignis zu erreichen, ohne je eine Funktion auszuführen.</description>
+		<image>/images/nothing_to_do.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>flows_block_at_join</id>
+		<name>flows_block_at_join</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellierungstil</class>
+		<diagram>epc</diagram>
+		<description>Wegen tief im Modell stehenden Startereignissen ist nicht sofort erkennbar, welche Kombinationen von Startereignissen erlaubt sind.</description>
+		<image>/images/flows_block_at_join.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>xor_without_consequences</id>
+		<name>xor_without_consequences</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellierungstil</class>
+		<diagram>epc</diagram>
+		<description>In einem Block zwischen XOR-Split und XOR-Join stehen nur Ereignisse. Es wird nirgends darauf reagiert, welches der Ereignisse nun eintritt.</description>
+		<image>/images/xor_without_consequences.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>trivialereignis</id>
+		<name>trivialereignis</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Deutsche Beschriftung</class>
+		<diagram>epc</diagram>
+		<description>Meldet "triviale" Beschriftungen von Ereignissen wie "ok" oder "fertig"</description>
+		<image>/images/trivialereignis.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>xandnotx</id>
+		<name>xandnotx</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Deutsche Beschriftung</class>
+		<diagram>epc</diagram>
+		<description>Meldet, wenn vor oder nach einem AND- oder OR-Konnektor Ereignisse stehen, die sich gegenseitig ausschliessen.</description>
+		<image>/images/xandnotx.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>xxorx</id>
+		<name>xxorx</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Deutsche Beschriftung</class>
+		<diagram>epc</diagram>
+		<description>Meldet, wenn vor bzw. nach einem Konnektor zwei logisch identische Ereignisse stehen. Dann lässt sich das Modell häufig durch Zusammengassen dieser Ereignisse vereinfachen.</description>
+		<image>/images/xxorx.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>tertium_non_datur</id>
+		<name>tertium_non_datur</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Deutsche Beschriftung</class>
+		<diagram>epc</diagram>
+		<description>Meldet, wenn vor oder nach einem XOR-Konnektor ein Ereignis, seine Negation und noch ein weiteres Ereignis steht. Da von den beiden erstgenannten Ereignissen stets eines eintritt, ist die Berechtigung des dritten Ereignisses fraglich.</description>
+		<image>/images/tertium_non_datur.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>greaterlessandnoequal</id>
+		<name>greaterlessandnoequal</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Deutsche Beschriftung</class>
+		<diagram>epc</diagram>
+		<description>Meldet, wenn Ereignisse die Kombination "a größer b"/"a kleiner b" beschreiben. Es ist möglich, dass der Fall "a=b" vergessen wurde.</description>
+		<image>/images/greaterlessandnoequal.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>contradicting_startevents</id>
+		<name>contradicting_startevents</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Deutsche Beschriftung</class>
+		<diagram>epc</diagram>
+		<description>Meldet, wenn durch einen AND-Join verlangt wird, dass zwei Startereignisse eintreten, die sich widersprechen</description>
+		<image>/images/contradicting_startevents.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>contradicting_endevents</id>
+		<name>contradicting_endevents</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Deutsche Beschriftung</class>
+		<diagram>epc</diagram>
+		<description>Meldet, wenn ein AND-Split dazu führt, dass zwei Endereignisse eintreten, die sich widersprechen</description>
+		<image>/images/contradicting_endevents.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>not_xor_after_yesno_question</id>
+		<name>not_xor_after_yesno_question</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Deutsche Beschriftung</class>
+		<diagram>epc</diagram>
+		<description>Meldet, wenn nach einer Entscheidungsfrage ("ja/nein-Frage") kein XOR-Split steht (sondern ein AND- bzw. OR-Split)</description>
+		<image>/images/not_xor_after_yesno_question.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>metric_number_of_nodes</id>
+		<name>metric_number_of_nodes</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellmetriken</class>
+		<diagram>epc</diagram>
+		<description>Zahl der Knoten im Modell</description>
+		<image>/images/metric_number_of_nodes.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>metric_number_of_functions</id>
+		<name>metric_number_of_functions</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellmetriken</class>
+		<diagram>epc</diagram>
+		<description>Zahl der Funktionen im Modell</description>
+		<image>/images/metric_number_of_functions.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>metric_number_of_events</id>
+		<name>metric_number_of_events</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellmetriken</class>
+		<diagram>epc</diagram>
+		<description>Zahl der Ereignisse im Modell</description>
+		<image>/images/metric_number_of_events.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>metric_number_of_startevents</id>
+		<name>metric_number_of_startevents</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellmetriken</class>
+		<diagram>epc</diagram>
+		<description>Zahl der Startereignisse im Modell</description>
+		<image>/images/metric_number_of_startevents.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>metric_well_structured</id>
+		<name>metric_well_structured</name>
+		<message></message>
+		<class>Erweiterte Modellprüfung (EPK)/Modellmetriken</class>
+		<diagram>epc</diagram>
+		<description>Untersucht, ob die Kontrollflussblöcke wohlstrukturiert (sauber verschachtelt) sind.</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+</language>

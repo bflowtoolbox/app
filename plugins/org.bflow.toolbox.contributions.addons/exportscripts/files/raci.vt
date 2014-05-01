@@ -1,0 +1,72 @@
+#set($list_of_orgunits = {})
+#set($list_of_functions = {})
+## Build a list of all orgunits and a list of all functions:
+#foreach($shape in $shapes) 
+#if($shape.type == "org.bflow.toolbox.epc.Participant" || $shape.type == "org.bflow.toolbox.epc.Position" || $shape.type =="org.bflow.toolbox.epc.Group" || $shape.type == "org.bflow.toolbox.epc.Location" || $shape.type == "org.bflow.toolbox.epc.InternalPerson" || $shape.type == "org.bflow.toolbox.epc.PersonType" || $shape.type == "org.bflow.toolbox.epc.ExternalPerson" )
+#set($exist = "false")
+#foreach($orgunit in $list_of_orgunits) 
+#if($orgunit == $shape.name)
+#set($exist = "true")
+#end
+#end	
+#if($exist == "false")
+#set($dummy = $list_of_orgunits.put("$shape.id","$shape.name"))
+#end
+#end
+#if($shape.type == "org.bflow.toolbox.epc.Function")
+#foreach($xxx in $shape.attributes.keySet())
+#set($exist = "false")
+#foreach($attribute in $list_of_functions) 
+#if($attribute == $xxx)
+#set($exist = "true")
+#end
+#end	
+#if($exist == "false")
+#set($dummy = $list_of_functions.put($xxx,$xxx))
+#end
+#end
+#end
+#end
+#set($column_headings = "")
+#foreach($element in $list_of_orgunits)
+#set( $element =  $element.replaceAll(";", " ") ) 
+#set($column_headings = $column_headings + ";" + $element)
+#end
+#foreach($element in $list_of_functions)
+#set($column_headings = $column_headings + ";" + $element)
+#end
+#set( $column_headings =  $column_headings.replaceAll("\n", " ") ) 
+#set( $column_headings =  $column_headings.replaceAll("\r", " ") ) 
+## Print the first line containing the column headings:
+$column_headings
+## Now construct the next lines:
+#foreach($shape in $shapes)
+#if($shape.type == "org.bflow.toolbox.epc.Function")
+#set($line = $shape.name.replaceAll(";", " "))
+#foreach($orgunit in $list_of_orgunits)
+#set($line = $line + ";")
+#foreach($edge in $edges)
+#if($edge.source.id == $shape.id)
+#if($edge.target.name == $orgunit)
+#foreach($sss in $edge.attributes.keySet())
+#if($sss == "raci")
+#set($line = $line + $edge.attributes[$sss].replaceAll(";", " "))
+#end
+#end
+#end
+#end
+#end
+#end	
+#foreach($orgunit in $list_of_functions)
+#set($line = $line + ";")
+#foreach($attr in $shape.attributes.keySet())
+#if($orgunit == $attr)
+#set($line = $line + $shape.attributes[$orgunit].replaceAll(";", " "))
+#end
+#end
+#end
+#set( $line=  $line.replaceAll("\n", " ") ) 
+#set( $line=  $line.replaceAll("\r", " ") ) 
+$line
+#end
+#end

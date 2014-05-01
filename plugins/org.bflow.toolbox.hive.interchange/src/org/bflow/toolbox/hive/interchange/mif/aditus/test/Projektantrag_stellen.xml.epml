@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<epml:epml xmlns:epml="http://www.epml.de" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.epml.de EPML_111_draft.XSD">
+   <coordinates xOrigin="leftToRight" yOrigin="topToBottom"/>
+   <definitions>
+      <definition defId="1"/>
+      <definition defId="2"/>
+      <definition defId="3"/>
+      <definition defId="4"/>
+      <definition defId="5"/>
+      <definition defId="6"/>
+      <definition defId="7"/>
+      <definition defId="8"/>
+      <definition defId="9"/>
+      <definition defId="10"/>
+      <definition defId="11"/>
+      <definition defId="12"/>
+   </definitions>
+   <attributeTypes>
+      <attributeType typeId="GUID"/>
+      <attributeType typeId="OT"/>
+      <attributeType typeId="ST"/>
+      <attributeType typeId="AT_CREATOR"/>
+      <attributeType typeId="AT_CREAT_TIME_STMP"/>
+      <attributeType typeId="AT_NAME_LGINDEP"/>
+      <attributeType typeId="AT_LAST_CHNG_2"/>
+      <attributeType typeId="AT_LUSER"/>
+      <attributeType typeId="AT_TEMPLATE"/>
+   </attributeTypes>
+   <directory name="Root">
+      <epc epcId="1" name="Projektantrag stellen">
+         <attribute typeRef="AT_LUSER" value="system"/>
+         <attribute typeRef="AT_CREAT_TIME_STMP" value="09:22:19.000;05/04/2009"/>
+         <attribute typeRef="AT_LAST_CHNG_2" value="08:02:08.000;05/05/2009"/>
+         <attribute typeRef="AT_TEMPLATE" value="2ed57d10-68c8-11d7-5d85-000bcd25c95f;0"/>
+         <attribute typeRef="AT_CREATOR" value="system"/>
+         <attribute typeRef="GUID" value="e2076227-e94b-450b-8382-de35a4f502ab"/>
+         <event id="1" defRef="9">
+            <name>Projektantrag eingereicht</name>
+            <description>Projektantrag eingereicht</description>
+            <graphics>
+               <position x="644" y="1803" width="312" height="195"/>
+            </graphics>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:27:13.000;05/04/2009"/>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="AT_LAST_CHNG_2" value="09:27:24.000;05/04/2009"/>
+            <attribute typeRef="GUID" value="6b403afb-f921-4df0-8e29-55c346874641"/>
+            <attribute typeRef="OT" value="OT_EVT"/>
+            <attribute typeRef="ST" value="ST_EV"/>
+         </event>
+         <function id="2" defRef="1">
+            <name>Projektantrag prüfen  / unterzeichnen</name>
+            <description>Projektantrag prüfen  / unterzeichnen</description>
+            <graphics>
+               <position x="845" y="1354" width="311" height="193"/>
+            </graphics>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="AT_LAST_CHNG_2" value="08:01:41.000;05/05/2009"/>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:25:39.000;05/04/2009"/>
+            <attribute typeRef="GUID" value="ec01a863-b1f2-47c6-a35d-b92ebe8d9c39"/>
+            <attribute typeRef="OT" value="OT_FUNC"/>
+            <attribute typeRef="ST" value="ST_FUNC"/>
+         </function>
+         <arc id="14">
+            <flow source="2" target="4"/>
+            <graphics>
+               <position x="1000" y="1547"/>
+               <position x="1000" y="1650"/>
+            </graphics>
+            <attribute typeRef="GUID" value="842844f5-c1ea-47ee-a9d1-25004755dece"/>
+            <attribute typeRef="OT" value="CT_LEADS_TO_1"/>
+         </arc>
+         <event id="3" defRef="4">
+            <name>Projektantrag eingereicht</name>
+            <description>Projektantrag eingereicht</description>
+            <graphics>
+               <position x="194" y="1803" width="312" height="195"/>
+            </graphics>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="AT_LAST_CHNG_2" value="09:26:44.000;05/04/2009"/>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:26:37.000;05/04/2009"/>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="GUID" value="8f599532-1f25-4f38-b46c-b4a5c0298d87"/>
+            <attribute typeRef="OT" value="OT_EVT"/>
+            <attribute typeRef="ST" value="ST_EV"/>
+         </event>
+         <xor id="4" defRef="10">
+            <name>XOR-Regel</name>
+            <description>XOR-Regel</description>
+            <graphics>
+               <position x="950" y="1650" width="100" height="100"/>
+            </graphics>
+            <attribute typeRef="AT_LAST_CHNG_2" value="09:27:02.000;05/04/2009"/>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:27:02.000;05/04/2009"/>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="GUID" value="e6de395e-c465-4104-94d0-d119caf38fc9"/>
+            <attribute typeRef="OT" value="OT_RULE"/>
+            <attribute typeRef="ST" value="ST_OPR_XOR_1"/>
+         </xor>
+         <arc id="15">
+            <flow source="4" target="1"/>
+            <graphics>
+               <position x="950" y="1700"/>
+               <position x="800" y="1700"/>
+               <position x="800" y="1803"/>
+            </graphics>
+            <attribute typeRef="GUID" value="ef1a5e6f-728b-4fcd-b447-435b9ac47cc8"/>
+            <attribute typeRef="OT" value="CT_LEADS_TO_2"/>
+         </arc>
+         <arc id="16">
+            <flow source="4" target="11"/>
+            <graphics>
+               <position x="1050" y="1700"/>
+               <position x="1250" y="1700"/>
+               <position x="1250" y="1803"/>
+            </graphics>
+            <attribute typeRef="GUID" value="2cd38f37-4930-41d7-9e4c-ab84eb2fc915"/>
+            <attribute typeRef="OT" value="CT_LEADS_TO_2"/>
+         </arc>
+         <xor id="5" defRef="7">
+            <name>XOR-Regel</name>
+            <description>XOR-Regel</description>
+            <graphics>
+               <position x="550" y="900" width="100" height="100"/>
+            </graphics>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="AT_LAST_CHNG_2" value="09:23:58.000;05/04/2009"/>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:23:58.000;05/04/2009"/>
+            <attribute typeRef="GUID" value="2347d7b1-72f0-4d97-8a1c-8b0a13bd60d8"/>
+            <attribute typeRef="OT" value="OT_RULE"/>
+            <attribute typeRef="ST" value="ST_OPR_XOR_1"/>
+         </xor>
+         <arc id="17">
+            <flow source="5" target="12"/>
+            <graphics>
+               <position x="650" y="950"/>
+               <position x="1000" y="950"/>
+               <position x="1000" y="1053"/>
+            </graphics>
+            <attribute typeRef="GUID" value="dd97ab2b-a5fc-4d0b-928e-737e0b7f28bb"/>
+            <attribute typeRef="OT" value="CT_LEADS_TO_2"/>
+         </arc>
+         <arc id="18">
+            <flow source="5" target="6"/>
+            <graphics>
+               <position x="550" y="950"/>
+               <position x="350" y="950"/>
+               <position x="350" y="1053"/>
+            </graphics>
+            <attribute typeRef="GUID" value="879ef195-c56f-4cbe-a13d-95a33e842971"/>
+            <attribute typeRef="OT" value="CT_LEADS_TO_2"/>
+         </arc>
+         <event id="6" defRef="11">
+            <name>Auftragswert &lt; xxx €</name>
+            <description>Auftragswert &lt; xxx €</description>
+            <graphics>
+               <position x="194" y="1053" width="312" height="195"/>
+            </graphics>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:24:17.000;05/04/2009"/>
+            <attribute typeRef="AT_LAST_CHNG_2" value="09:24:30.000;05/04/2009"/>
+            <attribute typeRef="GUID" value="220388c4-bf1d-4a47-9fa1-849c08dddd84"/>
+            <attribute typeRef="OT" value="OT_EVT"/>
+            <attribute typeRef="ST" value="ST_EV"/>
+         </event>
+         <arc id="19">
+            <flow source="6" target="10"/>
+            <graphics>
+               <position x="350" y="1248"/>
+               <position x="350" y="1354"/>
+            </graphics>
+            <attribute typeRef="GUID" value="e9357f80-ad26-437d-98f0-4de55fac51c8"/>
+            <attribute typeRef="OT" value="CT_ACTIV_1"/>
+         </arc>
+         <function id="7" defRef="3">
+            <name>Projektantrag prüfen / unterzeichnen</name>
+            <description>Projektantrag prüfen / unterzeichnen</description>
+            <graphics>
+               <position x="445" y="604" width="311" height="193"/>
+            </graphics>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="AT_LAST_CHNG_2" value="09:23:45.000;05/04/2009"/>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:23:31.000;05/04/2009"/>
+            <attribute typeRef="GUID" value="290659ef-410a-4388-9ab4-2d7d924b98df"/>
+            <attribute typeRef="OT" value="OT_FUNC"/>
+            <attribute typeRef="ST" value="ST_FUNC"/>
+         </function>
+         <arc id="20">
+            <flow source="7" target="5"/>
+            <graphics>
+               <position x="600" y="797"/>
+               <position x="600" y="900"/>
+            </graphics>
+            <attribute typeRef="GUID" value="b71b107d-3d39-415c-b4a5-f8d40436a09c"/>
+            <attribute typeRef="OT" value="CT_LEADS_TO_1"/>
+         </arc>
+         <event id="8" defRef="8">
+            <name>Projektantrag ist zu stellen</name>
+            <description>Projektantrag ist zu stellen</description>
+            <graphics>
+               <position x="444" y="3" width="312" height="195"/>
+            </graphics>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:22:45.000;05/04/2009"/>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="AT_LAST_CHNG_2" value="09:22:57.000;05/04/2009"/>
+            <attribute typeRef="GUID" value="057163f9-c036-4dc0-be31-bdb5c82c9e00"/>
+            <attribute typeRef="OT" value="OT_EVT"/>
+            <attribute typeRef="ST" value="ST_EV"/>
+         </event>
+         <arc id="21">
+            <flow source="8" target="9"/>
+            <graphics>
+               <position x="600" y="198"/>
+               <position x="600" y="304"/>
+            </graphics>
+            <attribute typeRef="GUID" value="48fa5d4b-4cdf-4abf-9b2e-d5f383e713c5"/>
+            <attribute typeRef="OT" value="CT_ACTIV_1"/>
+         </arc>
+         <function id="9" defRef="2">
+            <name>Auftragswert prüfen / unterzeichnen</name>
+            <description>Auftragswert prüfen / unterzeichnen</description>
+            <graphics>
+               <position x="445" y="304" width="311" height="193"/>
+            </graphics>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="AT_LAST_CHNG_2" value="09:23:14.000;05/04/2009"/>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:23:03.000;05/04/2009"/>
+            <attribute typeRef="GUID" value="d728c46f-995f-45d6-aeaf-6545126c5bea"/>
+            <attribute typeRef="OT" value="OT_FUNC"/>
+            <attribute typeRef="ST" value="ST_FUNC"/>
+         </function>
+         <arc id="22">
+            <flow source="9" target="7"/>
+            <graphics>
+               <position x="600" y="497"/>
+               <position x="600" y="604"/>
+            </graphics>
+            <attribute typeRef="GUID" value="a0168064-173c-4a62-974e-cc029d2d4a36"/>
+            <attribute typeRef="OT" value="CT_IS_PREDEC_OF_1"/>
+         </arc>
+         <function id="10" defRef="6">
+            <name>Projekteintrag einreichen</name>
+            <description>Projekteintrag einreichen</description>
+            <graphics>
+               <position x="195" y="1354" width="311" height="193"/>
+            </graphics>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="AT_LAST_CHNG_2" value="09:25:08.000;05/04/2009"/>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:24:57.000;05/04/2009"/>
+            <attribute typeRef="GUID" value="1063d48a-023a-4e86-8389-813aa416c5ad"/>
+            <attribute typeRef="OT" value="OT_FUNC"/>
+            <attribute typeRef="ST" value="ST_FUNC"/>
+         </function>
+         <arc id="23">
+            <flow source="10" target="3"/>
+            <graphics>
+               <position x="350" y="1547"/>
+               <position x="350" y="1803"/>
+            </graphics>
+            <attribute typeRef="GUID" value="aed58128-3798-4b99-be69-506deaa7dc6d"/>
+            <attribute typeRef="OT" value="CT_CRT_1"/>
+         </arc>
+         <event id="11" defRef="12">
+            <name>Projektantrag nicht eingereicht</name>
+            <description>Projektantrag nicht eingereicht</description>
+            <graphics>
+               <position x="1094" y="1803" width="312" height="195"/>
+            </graphics>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:27:52.000;05/04/2009"/>
+            <attribute typeRef="AT_LAST_CHNG_2" value="09:28:10.000;05/04/2009"/>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="GUID" value="2fa9f261-d72e-44d9-96dd-3952548a5fea"/>
+            <attribute typeRef="OT" value="OT_EVT"/>
+            <attribute typeRef="ST" value="ST_EV"/>
+         </event>
+         <event id="12" defRef="5">
+            <name>Auftragswert &gt; xxx €</name>
+            <description>Auftragswert &gt; xxx €</description>
+            <graphics>
+               <position x="844" y="1053" width="312" height="195"/>
+            </graphics>
+            <attribute typeRef="AT_CREATOR" value="system"/>
+            <attribute typeRef="AT_LUSER" value="system"/>
+            <attribute typeRef="AT_LAST_CHNG_2" value="09:24:48.000;05/04/2009"/>
+            <attribute typeRef="AT_CREAT_TIME_STMP" value="09:24:39.000;05/04/2009"/>
+            <attribute typeRef="GUID" value="a7006d30-c197-404e-9930-c097ce211928"/>
+            <attribute typeRef="OT" value="OT_EVT"/>
+            <attribute typeRef="ST" value="ST_EV"/>
+         </event>
+         <arc id="24">
+            <flow source="12" target="2"/>
+            <graphics>
+               <position x="1000" y="1248"/>
+               <position x="1000" y="1354"/>
+            </graphics>
+            <attribute typeRef="GUID" value="e9f83c34-0bf6-44db-8363-2b1a62d4d7fd"/>
+            <attribute typeRef="OT" value="CT_ACTIV_1"/>
+         </arc>
+      </epc>
+   </directory>
+</epml:epml>

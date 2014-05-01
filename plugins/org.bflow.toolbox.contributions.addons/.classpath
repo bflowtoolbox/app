@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="lib" path="libs/commons-lang-2.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-beanutils-1.8.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-beanutils-bean-collections-1.8.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-beanutils-core-1.8.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ezmorph-1.0.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/json-lib-2.4-jdk15.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/xom-1.2.10.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,18 @@
+
+-- Returns a new instance of the connectors eClass 
+operation IConnector newInstance() : IConnector {
+	if(self.isTypeOf(XOR)){
+		return new XOR;
+	}
+	else if(self.isTypeOf(AND)){
+		return new AND;
+	}
+	else{
+		return new OR;
+	}
+}
+
+-- Returns true, if the element is an XOR or an OR
+operation Element isDecisionConnector() : Boolean {
+	return (self.isKindOf(XOR) or self.isKindOf(OR));
+}

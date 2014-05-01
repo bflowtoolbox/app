@@ -1,0 +1,73 @@
+import bflow;
+import epc;
+
+Boolean hasName(bflow::Element element) :
+	element.name != null && element.name.length > 0;
+
+//*********************
+// meta model interface
+//*********************
+
+cached epc::Epc epc(bflow::Element element) :
+	((epc::Epc) element.eContainer);
+
+cached List[epc::Arc] arcs(epc::Epc epc): 
+	epc.connections.typeSelect(epc::Arc);
+
+
+//***********************
+// simplified type checks
+//***********************
+
+cached Boolean isFunction(bflow::Element element) :
+	epc::Function.isInstance(element);
+
+cached Boolean isEvent(bflow::Element element) :
+	epc::Event.isInstance(element);
+	
+cached Boolean isConnector(bflow::Element element) :
+	bflow::IConnector.isInstance(element);
+	
+cached Boolean isAnd(bflow::Element element) :
+	epc::AND.isInstance(element);
+
+cached Boolean isXor(bflow::Element element) :
+	epc::XOR.isInstance(element);
+
+cached Boolean isOr(bflow::Element element) :
+	epc::OR.isInstance(element);
+
+
+//*****************************************
+// incoming and outgoingg control flow edges
+//*****************************************
+
+cached Collection[epc::Arc] incomingControlFlows(bflow::Element element) :
+	element.in.typeSelect(epc::Arc);
+
+cached Collection[epc::Arc] outgoingControlFlows(bflow::Element element) :
+	element.out.typeSelect(epc::Arc);
+	
+cached Boolean isJoin(bflow::Element element) :
+	element.isConnector() && element.incomingControlFlows().size > 1;
+	
+cached Boolean isSplit(bflow::Element element) :
+	element.isConnector() && element.outgoingControlFlows().size > 1;
+	
+cached Boolean isAndJoin(bflow::Element element) :
+	element.isAnd() && element.isJoin();
+	
+cached Boolean isAndSplit(bflow::Element element) :
+	element.isAnd() && element.isSplit();
+	
+cached Boolean isXorJoin(bflow::Element element) :
+	element.isXor() && element.isJoin();
+	
+cached Boolean isXorSplit(bflow::Element element) :
+	element.isXor() && element.isSplit();
+	
+cached Boolean isOrJoin(bflow::Element element) :
+	element.isOr() && element.isJoin();
+	
+cached Boolean isOrSplit(bflow::Element element) :
+	element.isOr() && element.isSplit();

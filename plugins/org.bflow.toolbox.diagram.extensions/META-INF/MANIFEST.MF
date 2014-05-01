@@ -1,0 +1,37 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Version: 1.3.0.qualifier
+Bundle-SymbolicName: org.bflow.toolbox.diagram.extensions;singleton:=true
+Bundle-Name: Bflow Diagram Extensions
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.gmf.runtime.notation;bundle-version="1.1.0",
+ org.eclipse.gmf.runtime.diagram.core;bundle-version="1.1.0",
+ org.eclipse.gmf.runtime.diagram.ui;bundle-version="1.1.0",
+ org.eclipse.core.resources,
+ org.eclipse.ui.ide;bundle-version="3.7.0",
+ org.bflow.toolbox.hive.libs;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ClassPath: .
+Import-Package: com.ibm.icu.text,
+ org.bflow.toolbox.check
+Bundle-Vendor: Bflow Dev Team
+Bundle-Localization: OSGI-INF/l10n/bundle
+Export-Package: org.bflow.toolbox.extensions.actions,
+ org.bflow.toolbox.extensions.colorschemes,
+ org.bflow.toolbox.extensions.colorschemes.actions,
+ org.bflow.toolbox.extensions.colorschemes.commands,
+ org.bflow.toolbox.extensions.commands,
+ org.bflow.toolbox.extensions.configurator,
+ org.bflow.toolbox.extensions.diagram.preferences,
+ org.bflow.toolbox.extensions.edit.parts,
+ org.bflow.toolbox.extensions.figures,
+ org.bflow.toolbox.extensions.helpers,
+ org.bflow.toolbox.extensions.internationalisation,
+ org.bflow.toolbox.extensions.mitamm,
+ org.bflow.toolbox.extensions.properties,
+ org.bflow.toolbox.extensions.trackers,
+ org.bflow.toolbox.extensions.view.factories,
+ org.bflow.toolbox.extensions.wizards
+Bundle-Activator: org.bflow.toolbox.extensions.internal.PluginActivator

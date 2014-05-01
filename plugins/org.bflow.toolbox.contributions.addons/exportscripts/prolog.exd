@@ -1,0 +1,7 @@
+public interchange 'Prolog Facts' (pl) <> epc {
+
+description: 'Exports an bflow* EPC diagram as Prolog Facts.'
+
+@script: '/exportscripts/files/prolog.vt', insertAttributes=true
+
+}

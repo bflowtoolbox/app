@@ -1,0 +1,20 @@
+import oepc;
+import bflow;
+
+/*
+ * @Author Christian Boehme
+ */
+
+extension org::eclipse::xtend::util::stdlib::io;
+extension oepcTemplate::extensionDiagram;
+extension oepcTemplate::extensionOepcModel;
+
+//create a BFlow oepc for each page in the document
+Void transform(visiomodel::EVisioDocument d, String targetPath):
+	d.visioPages.createBflowOepc(targetPath);
+
+Void createBflowOepc(visiomodel::EVisioPage page, String targetPath):
+	writeToFile(page.createDiagram(), page.visioName, targetPath, "oepc");
+
+Void writeToFile(notation::Diagram d, String fileName, String targetPath, String ext) :
+	JAVA oepcTemplate.Helper.writeToFile(org.eclipse.gmf.runtime.notation.Diagram, java.lang.String, java.lang.String, java.lang.String);

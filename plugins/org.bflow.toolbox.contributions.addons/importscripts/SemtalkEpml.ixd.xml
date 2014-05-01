@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<importdescription>
+	<config>
+		<name>Semtalk EPML</name>
+		<fileextension>epml</fileextension>
+		<description>Imports an EPC model that has been created with Semtalk.</description>
+		<callstack>
+			<script>
+				<file>/importscripts/files/epml2epc-teil1.xslt</file>	
+			</script>
+			<script>
+				<file>/importscripts/files/epml2epc-teil2.xslt</file>
+				<param Description="true"/>
+			</script>
+			<script>
+				<file>/importscripts/files/epml-und-epc-resize.xslt</file>
+				<param Multiplikator="0.5" Streckung="0.33" MultiKonnektor="0.5" />	
+			</script>
+		</callstack>
+	</config> 
+</importdescription>

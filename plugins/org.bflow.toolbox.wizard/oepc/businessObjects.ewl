@@ -1,0 +1,86 @@
+wizard AddAttributes {
+	guard : self.isKindOf(BusinessObject)
+	title : 'Existierende Geschäftsattribute hinzufügen'
+	do {
+		var attributeNames := BusinessAttribute.allInstances().collect(a : BusinessAttribute| a.name).asSet()
+			.reject(attributeName : String| 
+				self.attributes.exists(a : BusinessAttribute| attributeName = a.name));
+		var choices := UserInput.chooseMany('Attribute auswählen',attributeNames);
+		for (name in choices) {
+			var ba : BusinessAttribute;
+			ba := new BusinessAttribute;
+			ba.name := name;
+			self.attributes.add(ba);
+		}
+	}
+}
+
+-- wizard SortAttributes {
+-- 	guard : self.isKindOf(BusinessObject)
+-- 	title : 'Geschäftsattribute sortieren'
+-- 	do {
+-- 		var sortedNames := self.attributes
+-- 			.sortBy(a : BusinessAttribute| a.name.toLowerCase())
+-- 				.collect(a : BusinessAttribute| a.name);
+-- 		var i : Integer := 0;
+-- 		for (a in self.attributes) {
+-- 			a.name := sortedNames.at(i);
+-- 			i := i+1;
+-- 		}
+-- 	}
+-- }
+
+wizard AddMethods {
+	guard : self.isKindOf(BusinessObject)
+	title : 'Existierende Geschäftsmethoden hinzufügen'
+	do {
+		var methodNames := BusinessMethod.allInstances().collect(m : BusinessMethod| m.name).asSet()
+			.reject(methodName : String | 
+				self.methods.exists(m : BusinessMethod| methodName = m.name));
+		var choices := UserInput.chooseMany('Methoden auswählen',methodNames);
+		for (name in choices) {
+			var bm : BusinessMethod;
+			bm := new BusinessMethod;
+			bm.name := name;
+			self.methods.add(bm);
+		}
+	}
+}
+
+wizard RenameAttributes {
+	guard : self.isKindOf(OEPC)
+	title : 'Geschäftsattribute umbenennen'
+	do {
+		var attributeNames := BusinessAttribute.allInstances().collect(a : BusinessAttribute| a.name).asSet();
+		var choices := UserInput.chooseMany('Attribute auswählen',attributeNames);
+		if (choices.size() > 0) {
+			var newName := UserInput.prompt('Neuer Name für ' + choices.asString().subString(9));
+			if (newName.length() > 0) {
+				for (name in choices) {
+					for (businessAttribute in BusinessAttribute.allInstances().select(a : BusinessAttribute| a.name = name)) {
+						businessAttribute.name := newName;
+					}
+				}
+			}
+		}
+	}
+}
+
+wizard RenameMethods {
+	guard : self.isKindOf(OEPC)
+	title : 'Geschäftsmethoden umbenennen'
+	do {
+		var methodNames := BusinessMethod.allInstances().collect(m : BusinessMethod| m.name).asSet();
+		var choices := UserInput.chooseMany('Methoden auswählen',methodNames);
+		if (choices.size() > 0) {
+			var newName := UserInput.prompt('Neuer Name für ' + choices.asString().subString(9));
+			if (newName.length() > 0) {
+				for (name in choices) {
+					for (businessMethod in BusinessMethod.allInstances().select(m : BusinessMethod| m.name = name)) {
+						businessMethod.name := newName;
+					}
+				}
+			}
+		}
+	}
+}

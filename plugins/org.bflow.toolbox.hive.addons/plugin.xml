@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.bflow.toolbox.addons.component" name="Modelling Add-ons Component" schema="schema/org.bflow.toolbox.addons.component.exsd"/>
+   <extension-point id="org.bflow.toolbox.addons.prologaddition" name="Modelling Add-ons Prolog programm" schema="schema/org.bflow.toolbox.addons.prologaddition.exsd"/>
+   <extension-point id="org.bflow.toolbox.addons.protocol" name="Modelling Add-ons Protocol" schema="schema/org.bflow.toolbox.addons.protocol.exsd"/>
+   <extension-point id="org.bflow.toolbox.addons.rule" name="Add-ons Validation Rule" schema="schema/org.bflow.toolbox.addons.rule.exsd"/>
+   <extension-point id="org.bflow.toolbox.hive.addons.preferencePageContainer" name="Modeling Add-ons preference page container" schema="schema/org.bflow.toolbox.hive.addons.preferencePageContainer.exsd"/>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.bflow.toolbox.hive.addons.preferences.MainPage"
+            id="org.bflow.toolbox.addons.preferences.MainPage"
+            name="Modeling Toolbox">
+      </page>
+      <page
+            category="org.bflow.toolbox.addons.preferences.MainPage"
+            class="org.bflow.toolbox.hive.addons.preferences.InstalledToolsPage"
+            id="org.bflow.toolbox.addons.preferences.Tools"
+            name="Tools">
+      </page>
+      <page
+            category="org.bflow.toolbox.addons.preferences.MainPage"
+            class="org.bflow.toolbox.hive.addons.preferences.InstalledProtocolsPage"
+            id="org.bflow.toolbox.addons.preferences.Protocols"
+            name="Add-ons">
+      </page>
+      <page
+            category="org.bflow.toolbox.addons.preferences.MainPage"
+            class="org.bflow.toolbox.hive.addons.preferences.ValidationPage"
+            id="org.bflow.toolbox.addons.preferences.validation"
+            name="Validation">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <dynamic
+               class="org.bflow.toolbox.hive.addons.providers.MenuContributionProvider"
+               id="org.bflow.toolbox.addons.dynamic1">
+         </dynamic>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.gmf.runtime.common.ui.services.markerNavigationProviders">
+      <MarkerNavigationProvider
+            class="org.bflow.toolbox.hive.addons.providers.DiagramMarkerNavigationProvider">
+         <Priority
+               name="Low">
+         </Priority>
+         <MarkerType
+               name="org.bflow.toolbox.mitamm.marker">
+         </MarkerType>
+      </MarkerNavigationProvider>
+   </extension>
+   <extension
+         point="org.eclipse.gmf.runtime.diagram.ui.decoratorProviders">
+      <decoratorProvider
+            class="org.bflow.toolbox.hive.addons.providers.AddonDiagramDecorationProvider">
+         <Priority
+               name="Low">
+         </Priority>
+         <context
+               decoratorTargets="PRIMARY_VIEW">
+         </context>
+         <object
+               class="org.eclipse.gmf.runtime.diagram.ui.editparts.IPrimaryEditPart(org.eclipse.gmf.runtime.diagram.ui)"
+               id="PRIMARY_VIEW">
+         </object>
+      </decoratorProvider>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.addons.component">
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.AttributeAdjustComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.ConsoleDisplayComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.DiagramExportComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.FileAnalysisComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.FileRecordComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.ProblemsViewGeneratorComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.PrologRunComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.ShellAnalysisComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.ShellRecordComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.ToolAdapterComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.ToolRunComponent">
+      </Component>
+   </extension>
+   <extension
+         id="org.bflow.toolbox.mitamm.marker"
+         name="Modeling Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.bflow.toolbox.epc.diagram.diagnostic">
+      </super>
+   </extension>
+
+</plugin>

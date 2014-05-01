@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="bflow"
+    nsURI="org.bflow.toolbox.bflow" nsPrefix="bflow">
+  <eClassifiers xsi:type="ecore:EClass" name="BflowSymbol" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//BflowSymbol">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//Element"
+        eOpposite="#//Element/out"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//Element"
+        eOpposite="#//Element/in"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true" eSuperTypes="#//BflowSymbol">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="in" upperBound="-1" eType="#//Connection"
+        eOpposite="#//Connection/to"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="out" upperBound="-1" eType="#//Connection"
+        eOpposite="#//Connection/from"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IConnector" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IBflowElement" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IEBflowElement" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Bflow">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//Element" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+        eType="#//Connection" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

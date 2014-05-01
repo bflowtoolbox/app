@@ -1,0 +1,17 @@
+import visio; 
+
+/*
+ * @Author Christian Boehme
+ */
+
+extension org::eclipse::xtend::util::stdlib::io;
+extension epcTemplate::visioEPCTransformationDiagram;
+
+Void transform(visiomodel::EVisioDocument d, String targetPath):
+	d.visioPages.createBflowEpc(targetPath);
+
+Void createBflowEpc(visiomodel::EVisioPage page, String targetPath):
+	writeToFile(page.createDiagram(), page.visioName, targetPath, "epc");
+
+Void writeToFile(notation::Diagram d, String fileName, String targetPath, String ext) :
+	JAVA epcTemplate.Helper.writeToFile(org.eclipse.gmf.runtime.notation.Diagram, java.lang.String, java.lang.String, java.lang.String);

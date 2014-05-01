@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<workflow>
+
+	<!-- Author Christian Boehme -->
+
+	<!-- properties -->
+	<property name="notationMetamodelPackage" value="org.eclipse.gmf.runtime.notation.NotationPackage"/>
+	
+	<!-- reads a visio File and stores it into a model slot -->
+	<component class="org.infai.m3b.visio.emf.oaw.VisioModelReader" searchRegisteredStencils="false">
+		<visioModelFilePath value="${visioFilePath}"/>
+		<modelOutputSlot value="model"/>
+	</component>
+	
+	<!-- invokes the transformation -->
+	<component class="org.eclipse.xtend.XtendComponent" skipOnErrors="false">
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${visioMetaModelFile}"/>
+		</metaModel>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${epcMetamodelFile}"/>
+		</metaModel>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${bflowMetamodelFile}"/>
+		</metaModel>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelPackage value="${notationMetamodelPackage}"/>
+		</metaModel>
+		
+		<invoke value="epcTemplate::visioEPCTransformation::transform(model , '${targetPath}' )"/>
+		
+	</component>
+</workflow>

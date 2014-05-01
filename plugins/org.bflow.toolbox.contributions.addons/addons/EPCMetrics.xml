@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="EPCMetrics">
+	<display>
+		<default>EPC metrics</default>
+		<de>EPC Metrik</de>
+	</display>
+	<description>
+		<default>Tool to calculate metrics for epcs.</default>
+		<de>Werkzeug zur Berechnung von Komplexitätsmetriken für ereignisgesteuerte Prozessketten.</de>
+	</description>
+	<components>
+		<component
+			class="org.bflow.toolbox.hive.addons.components.DiagramExportComponent"
+			params="EPCTools EPML-Datei" />
+		<component class="org.bflow.toolbox.hive.addons.components.ToolRunComponent"
+			tool=""
+			params="EPC-Metrics" />
+		<component
+			class="org.bflow.toolbox.hive.addons.components.ToolAdapterComponent"
+			params="shell to file" />
+		<component class="org.bflow.toolbox.hive.addons.components.ToolRunComponent"
+			tool=""
+			params="EPC-Metrics-Adapter" />
+		<component
+			class="org.bflow.toolbox.hive.addons.components.ShellAnalysisComponent"
+			params="" />
+		<component
+			class="org.bflow.toolbox.hive.addons.components.ProblemsViewGeneratorComponent"
+			params="" />
+	</components>
+</protocol>

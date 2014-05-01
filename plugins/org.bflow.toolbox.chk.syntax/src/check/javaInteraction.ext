@@ -1,0 +1,5 @@
+// Author: Arian Storch
+// version: 18.09.2009
+
+Boolean shallCheck(String ruleId) : JAVA org.bflow.toolbox.check.PreferencesRequester.shallCheck(java.lang.String);
+String getErrorMessage(String ruleId, String value) : JAVA org.bflow.toolbox.check.PreferencesRequester.getErrorMessage(java.lang.String, java.lang.String);

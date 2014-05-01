@@ -1,0 +1,59 @@
+#set($IDGenerator = 0)##generates and stores IDs for new objects
+#set($classmap = {})##stores the ID and name of the class
+#set($mapAttributeConnection = {})##stores the relationship between the attribute and the connection
+#set($mapClassConnection = {})##stores the relationship between the class and the connection
+<?xml version="1.0" encoding="iso-8859-1"?>
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/2.0.0/UML">
+<uml:Model xmi:id="_VzDWQLihEeKaB5foK-13bA" name="model">
+#foreach($shape in $shapes) 
+#if($shape.type == "oepc.BusinessObject") 
+	<packagedElement xmi:type="uml:Class" xmi:id="$shape.id" name="$shape.name">
+#set($arr = [])
+#foreach($attr in $shape.BusinessAttributes)
+#set($doubleAttribute = "false")
+#foreach($el in $arr)
+#if($el == $attr.name)
+#set($doubleAttribute = "true")
+#end
+#end
+#if($doubleAttribute == "false") 
+#set($dummy = $arr.add($attr.name))
+#set($id = $IDGenerator)
+#set($inlist = "false")
+#foreach($key in $classmap.keySet())
+#if($classmap[$key] == $attr.name)
+#set($inlist = "true")
+#set($id = $key)
+#end
+#end
+#if($inlist == "false") 
+#set($dummy = $classmap.put("$id", "$attr.name"))
+#set($IDGenerator = $IDGenerator + 1)
+#end
+#set($IDGenerator = $IDGenerator + 1)
+#set($associationID = $IDGenerator)
+#set($IDGenerator = $IDGenerator + 1)
+		<ownedAttribute xmi:id="$IDGenerator" name="$attr.name" visibility="public" type="$id" association="$associationID"/>
+#set($dummy = $mapAttributeConnection.put("$associationID","$shape.id"))
+#set($dummy = $mapClassConnection.put("$associationID","$IDGenerator"))
+#set($IDGenerator = $IDGenerator + 1)
+#end
+#end
+#foreach($method in $shape.BusinessMethods)
+		<ownedOperation xmi:id="$IDGenerator" name="$method.name"/>
+#set($IDGenerator = $IDGenerator + 1)
+#end
+	</packagedElement>
+	#end
+#end
+#foreach($key in $classmap.keySet())
+	<packagedElement xmi:type="uml:Class" xmi:id="$key" name="$classmap[$key]"/>
+#end
+#foreach($key in $mapClassConnection.keySet())
+	<packagedElement xmi:type="uml:Association" xmi:id="$key" name="" memberEnd="$IDGenerator $mapClassConnection[$key]">
+		<ownedEnd xmi:id="$IDGenerator" name="" type="$mapAttributeConnection[$key]" association="$key"/>
+	</packagedElement>
+#set($IDGenerator = $IDGenerator + 1)
+#end
+</uml:Model>
+</xmi:XMI>

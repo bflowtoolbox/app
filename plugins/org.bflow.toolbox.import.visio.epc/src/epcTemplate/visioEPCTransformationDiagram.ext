@@ -1,0 +1,204 @@
+import bflow;
+
+/*
+ * @Author Christian Boehme
+ */
+
+extension org::eclipse::xtend::util::stdlib::io;
+extension epcTemplate::visioEPCTransformationModel;
+
+create notation::Diagram createDiagram(visiomodel::EVisioPage page):
+	this.setMeasurementUnit(notation::MeasurementUnit::Pixel) ->
+	this.styles.add(createDiagramStyle()) ->
+	this.setType("Epc") ->
+	this.setName(page.visioName) ->
+	this.javaSetElement(page.createEpcModel()) ->
+	this.createElements(page);
+	
+
+create notation::DiagramStyle createDiagramStyle():
+	this.setDescription("IGlobalColorSchema=o");
+	
+//Diagram Elements
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+	
+
+Void createElements(notation::Diagram d, visiomodel::EVisioPage page):
+	d.javaAddPersistedChildren(page.visioContainedShapes.javaSelectCorrectShapes("epk_vsd").getCorrectShapes().getNodes().createDiagramElement()) ->
+	d.javaAddPersistedEdges(page.visioContainedShapes.javaSelectCorrectShapes("epk_vsd").getCorrectShapes().getInfoFlows().createNotationInfoFlow()) ->
+	d.javaAddPersistedEdges(page.visioContainedShapes.javaSelectCorrectShapes("epk_vsd").getCorrectShapes().getControlFlows().createNotationControlFlow());
+
+
+create notation::Node createDiagramElement(visiomodel::EVisioShape shape):
+	null;
+	
+
+//Event
+create notation::Node createDiagramElement(visiomodel::epk_vsd::Ereignis shape):
+	this.setType("2006") ->
+	this.javaSetElement(shape.createElement()) ->
+	this.javaAddPersistedChild(shape.createSubNode("5004")) ->
+	this.setStyles(shape.nodeStylesEvent()) ->
+	this.setLayoutConstraint(createLayoutConstraintBounds(shape));
+	
+create List[notation::Style] nodeStylesEvent(visiomodel::EVisioShape shape):
+	add(shape.createShapeStyle("Segoe UI", 16253176, 0)) ->
+	add(shape.createTextStyle(notation::TextAlignment::Center));
+
+//-----------------------------------------------------------------------------
+
+//Function
+create notation::Node createDiagramElement(visiomodel::epk_vsd::Funktion shape):
+	this.setType("2007") ->
+	this.javaSetElement(shape.createElement()) ->
+	this.javaAddPersistedChild(shape.createSubNode("5005")) ->
+	this.setStyles(shape.nodeStylesFunction()) ->
+	this.setLayoutConstraint(createLayoutConstraintBounds(shape));
+	
+create List[notation::Style] nodeStylesFunction(visiomodel::EVisioShape shape):
+	add(shape.createShapeStyle("Segoe UI", 63488, 0)) ->
+	add(shape.createTextStyle(notation::TextAlignment::Center));
+	
+//Process Interface
+create notation::Node createDiagramElement(visiomodel::epk_vsd::Prozesspfad shape):
+	this.setType("2005") ->
+	this.javaSetElement(shape.createElement()) ->
+	this.javaAddPersistedChild(shape.createSubNode("5003")) ->
+	this.setStyles(shape.nodeStylesProcInt()) ->
+	this.setLayoutConstraint(createLayoutConstraintBounds(shape));
+	
+create List[notation::Style] nodeStylesProcInt(visiomodel::EVisioShape shape):
+	add(shape.createShapeStyle("Segoe UI", 0)) ->
+	add(shape.createTextStyle(notation::TextAlignment::Center));
+
+//Organisation Unit
+create notation::Node createDiagramElement(visiomodel::epk_vsd::Organisationseinheit shape):
+	this.setType("2002") ->
+	this.javaSetElement(shape.createElement()) ->
+	this.javaAddPersistedChild(shape.createSubNode("5001")) ->
+	this.setStyles(shape.nodeStylesOrgUnit()) ->
+	this.setLayoutConstraint(createLayoutConstraintBounds(shape));
+	
+create List[notation::Style] nodeStylesOrgUnit(visiomodel::EVisioShape shape):
+	add(shape.createShapeStyle("Segoe UI",65535, 0)) ->
+	add(shape.createTextStyle(notation::TextAlignment::Center));
+	
+//Document
+create notation::Node createDiagramElement(visiomodel::epk_vsd::Informationen_Material shape):
+	this.setType("2018") ->
+	this.javaSetElement(shape.createElement()) ->
+	this.javaAddPersistedChild(shape.createSubNode("5015")) ->
+	this.setStyles(shape.nodeStylesDoc()) ->
+	this.setLayoutConstraint(createLayoutConstraintBounds(shape));
+	
+create List[notation::Style] nodeStylesDoc(visiomodel::EVisioShape shape):
+	add(shape.createShapeStyle("Segoe UI", 0)) ->
+	add(shape.createTextStyle(notation::TextAlignment::Center));
+
+//Connectors
+create notation::Node createDiagramElement(visiomodel::epk_vsd::XOR shape):
+	this.setStyles(shape.nodeStylesConnector()) ->
+	this.setType("2008") ->
+	this.javaSetElement(shape.createElement()) ->
+	this.setLayoutConstraint(createLayoutConstraintBounds(shape));
+	
+create notation::Node createDiagramElement(visiomodel::epk_vsd::AND shape):
+	this.setStyles(shape.nodeStylesConnector()) ->
+	this.setType("2003") ->
+	this.javaSetElement(shape.createElement()) ->
+	this.setLayoutConstraint(createLayoutConstraintBounds(shape));
+	
+create notation::Node createDiagramElement(visiomodel::epk_vsd::OR shape):
+	this.setStyles(shape.nodeStylesConnector()) ->
+	this.setType("2001") ->
+	this.javaSetElement(shape.createElement()) ->
+	this.setLayoutConstraint(createLayoutConstraintBounds(shape));
+	
+create List[notation::Style] nodeStylesConnector(visiomodel::EVisioShape shape):
+	add(shape.createShapeStyleConnector("Segoe UI", 0));
+	
+create notation::ShapeStyle createShapeStyleConnector(visiomodel::EVisioShape shape, String font, int lineColor):
+	this.setFontName(font) ->
+	this.setLineColor(lineColor);
+//-----------------------------------------------------------------------------
+
+//Edges
+create notation::Edge createNotationInfoFlow(visiomodel::epk_vsd::Dynamischer_Verbinder conn):
+	this.setType("4003") ->
+	this.javaSetElement(conn.createInfoConn()) ->
+	 this.javaSetSource(conn.visioSourceShape.createDiagramElement()) ->
+	 this.javaSetTarget(conn.visioTargetShape.createDiagramElement()) ->
+	this.setStyles(edgeStyles(this)) ->
+	this.setBendpoints(createBendpoints(this, conn));
+	
+create notation::Edge createNotationControlFlow(visiomodel::epk_vsd::Dynamischer_Verbinder conn):
+	this.setType("4001") ->
+	this.javaSetElement(conn.createArc()) ->
+	 this.javaSetSource(conn.visioSourceShape.createDiagramElement()) ->
+	 this.javaSetTarget(conn.visioTargetShape.createDiagramElement()) ->
+	this.setStyles(edgeStyles(this)) ->
+	this.setBendpoints(createBendpoints(this, conn));
+	
+create List[notation::Style] edgeStyles(notation::Edge e):
+	this.add(createFontStyle(e)) ->
+	this.add(createRoutingStyle(e)) ->
+	this.add(createShapeStyleEdge(e));
+
+create notation::RoutingStyle createRoutingStyle(notation::Edge e):
+	this.setRouting(notation::Routing::Rectilinear);
+	
+create notation::FontStyle createFontStyle(notation::Edge e):
+	this.setFontName("Segoe UI");
+	
+create notation::ShapeStyle createShapeStyleEdge(notation::Edge e):
+	this.setLineColor(0);
+
+create notation::RelativeBendpoints createBendpoints(notation::Edge e, visiomodel::epk_vsd::Dynamischer_Verbinder conn):
+	this;
+	
+//-----------------------------------------------------------------------------	
+create notation::Node createSubNode(visiomodel::EVisioShape shape, String s) :
+	this.setType(s);
+
+create notation::ShapeStyle createShapeStyle(visiomodel::EVisioShape shape, String font, int fillColor, int lineColor):
+	this.setFontName(font) ->
+	this.setFillColor(fillColor) ->
+	this.setLineColor(lineColor);
+	
+create notation::ShapeStyle createShapeStyle(visiomodel::EVisioShape shape, String font, int lineColor):
+	this.setFontName(font) ->
+	this.setLineColor(lineColor);
+	
+create notation::TextStyle createTextStyle(visiomodel::EVisioShape shape, notation::TextAlignment align):
+	this.setTextAlignment(align);
+
+
+create notation::Bounds createLayoutConstraintBounds(visiomodel::EVisioShape shape):
+	this.setX(shape.visioShapeSheet.visioSections.selectFirst(e|e.visioName == "visSectionObject").visioRows.selectFirst(e|e.visioName == "1").visioCells.selectFirst(e|e.visioName == "PinX").visioValue.javaGetCoordinateFromString("x")) ->
+	this.setY(shape.visioShapeSheet.visioSections.selectFirst(e|e.visioName == "visSectionObject").visioRows.selectFirst(e|e.visioName == "1").visioCells.selectFirst(e|e.visioName == "PinY").visioValue.javaGetCoordinateFromString("y"));
+
+//---------------------------------
+Void javaSetElement(notation::View d, emf::EObject o):
+	JAVA epcTemplate.Helper.setElement(org.eclipse.gmf.runtime.notation.View, org.eclipse.emf.ecore.EObject);
+	
+Void javaAddPersistedChild(notation::View v, notation::Node n):
+	JAVA epcTemplate.Helper.addPersistedChild(org.eclipse.gmf.runtime.notation.View, org.eclipse.gmf.runtime.notation.Node);
+
+Void javaAddPersistedChildren(notation::View d, Collection n):
+	JAVA epcTemplate.Helper.addPersistedChildren(org.eclipse.gmf.runtime.notation.View, java.util.Collection);
+
+Void javaAddPersistedEdges(notation::Diagram d, Collection n):
+	JAVA epcTemplate.Helper.addPersistedEdges(org.eclipse.gmf.runtime.notation.Diagram, java.util.Collection);
+
+Integer javaCastRealToInteger(double i):
+	JAVA epcTemplate.Helper.castRealToInteger(java.lang.Double);
+	
+Void javaSetSource(notation::Edge e , notation::View v):
+	JAVA epcTemplate.Helper.edgeSetSource(org.eclipse.gmf.runtime.notation.Edge, org.eclipse.gmf.runtime.notation.View);
+	
+Void javaSetTarget(notation::Edge e, notation::View v):
+	JAVA epcTemplate.Helper.edgeSetTarget(org.eclipse.gmf.runtime.notation.Edge, org.eclipse.gmf.runtime.notation.View);
+
+Integer javaGetCoordinateFromString(String s, String coord):
+	JAVA epcTemplate.Helper.getCoordinateFromString(java.lang.String, java.lang.String);

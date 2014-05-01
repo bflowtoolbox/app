@@ -1,0 +1,7 @@
+public interchange 'BPM Academic Initiative' (json) <> epc {
+
+description: 'Imports a model that has been provided by the BPM Academic Initiative.'
+
+@script: '/importscripts/files/bai.ads'
+
+}

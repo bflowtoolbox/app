@@ -1,0 +1,88 @@
+package org.jbpt.test.graph;
+
+import org.jbpt.algo.graph.GraphAlgorithms;
+import org.jbpt.pm.*;
+import org.jbpt.pm.epc.*;
+
+public class EPC{
+
+	public static void main(String[] args)  {
+
+	Epc epc = new Epc();
+	GraphAlgorithms<ControlFlow<FlowNode>, FlowNode> ga = new GraphAlgorithms<ControlFlow<FlowNode>, FlowNode>();	
+
+
+	// Create Events:
+#foreach( $shape in $shapes )
+#set( $type = $shape.Type.split("\.")[4].toLowerCase() )
+#if($type == "event")
+#set( $id =  $shape.Id.replace("-", "_") )
+#set( $label =  $shape.Name.replace('"', '\"') ) 
+#set( $label =  $label.replaceAll("\n", " ") ) 
+#set( $label =  $label.replaceAll("\r", " ") ) 
+	Event event_$id = new Event("$label");
+#end
+#end	
+
+	// Create Functions:
+#foreach( $shape in $shapes )
+#set( $type = $shape.Type.split("\.")[4].toLowerCase() )
+#if($type == "function")
+#set( $id =  $shape.Id.replace("-", "_") )
+#set( $label =  $shape.Name.replace('"', '\"') ) 
+#set( $label =  $label.replaceAll("\n", " ") ) 
+#set( $label =  $label.replaceAll("\r", " ") ) 
+	Function function_$id = new Function("$label");
+#end
+#end
+
+	// Create Process Interfaces:
+#foreach( $shape in $shapes )
+#set( $type = $shape.Type.split("\.")[4].toLowerCase() )
+#if($type == "processinterface")
+#set( $id =  $shape.Id.replace("-", "_") )
+#set( $label =  $shape.Name.replace('"', '\"') ) 
+#set( $label =  $label.replaceAll("\n", " ") ) 
+#set( $label =  $label.replaceAll("\r", " ") ) 
+	ProcessInterface processinterface_$id = new ProcessInterface("$label");
+#end
+#end
+
+
+	// Create XOR Connectors:
+#foreach( $shape in $shapes )
+#set( $type = $shape.Type.split("\.")[4].toLowerCase() )
+#if($type == "xor")
+	Gateway xor_$shape.Id = new XorConnector();
+#end
+#end
+
+	// Create OR Connectors:
+#foreach( $shape in $shapes )
+#set( $type = $shape.Type.split("\.")[4].toLowerCase() )
+#if($type == "or")
+	Gateway or_$shape.Id = new OrConnector();
+#end
+#end
+
+	// Create AND Connectors:
+#foreach( $shape in $shapes )
+#set( $type = $shape.Type.split("\.")[4].toLowerCase() )
+#if($type == "and")
+	Gateway and_$shape.Id = new AndConnector();
+#end
+#end
+
+	// Add control flow edges
+#foreach( $edge in $edges )
+#set( $typesource = $edge.Source.Type.split("\.")[4].toLowerCase() )
+#set( $typetarget = $edge.Target.Type.split("\.")[4].toLowerCase() )
+#set( $sourceid =  $edge.Source.Id.replace("-", "_") )
+#set( $targetid =  $edge.Target.Id.replace("-", "_") )
+	epc.addControlFlow(${typesource}_$sourceid, ${typetarget}_$targetid);
+#end
+
+	// Now you can use methods on the ga object such as (ga.isConnected(epc))
+
+	}
+}

@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Export-Package: org.infai.m3b.visio.emf.importer,org.infai.m3b.visio.e
+ mf.importer.job
+Require-Bundle: org.infai.m3b.visio.emf;bundle-version="1.2.0";visibil
+ ity:=reexport,org.eclipse.core.runtime;bundle-version="3.4.0",org.ecl
+ ipse.emf.ecore
+Bundle-Vendor: InfAI
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.2.0.201011261125
+Bundle-Name: Visio-EMF-Bridge (Transformation) Plug-in
+Bundle-Activator: org.infai.m3b.visio.emf.importer.Activator
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.infai.m3b.visio.emf.importer
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+

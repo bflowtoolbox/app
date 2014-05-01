@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Export-Package: org.infai.m3b.visio.emf.oaw
+Require-Bundle: org.infai.m3b.visio.emf.importer;bundle-version="1.2.0";visibility:=reexport,
+ org.infai.m3b.visio.emf.exporter;bundle-version="1.2.0";visibility:=reexport,
+ org.eclipse.xtend;bundle-version="0.7.2",
+ org.eclipse.xtend.typesystem.emf;bundle-version="0.7.2",
+ org.eclipse.ant.core;bundle-version="3.2.101",
+ org.eclipse.core.runtime;bundle-version="3.5.0"
+Bundle-Vendor: InfAI
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Bundle-Version: 1.2.0.201011261125
+Bundle-Name: Oaw Plug-in
+Bundle-Activator: org.infai.m3b.visio.emf.oaw.Activator
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.infai.m3b.visio.emf.oaw;singleton:=true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+

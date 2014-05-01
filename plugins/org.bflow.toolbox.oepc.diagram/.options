@@ -1,0 +1,7 @@
+# Tracing options for the org.bflow.toolbox.oepc.diagram plug-in
+
+# Common issues
+org.bflow.toolbox.oepc.diagram/debug=false
+
+# Visual IDs
+org.bflow.toolbox.oepc.diagram/debug/visualID=false

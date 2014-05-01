@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<workflow>
+
+	<!-- Author Christian Boehme -->
+
+	<!-- Properties -->
+	<property name="notationMetamodelPackage" value="org.eclipse.gmf.runtime.notation.NotationPackage"/>
+	
+
+	<!-- VisioReader -->
+	<component class="org.infai.m3b.visio.emf.oaw.VisioModelReader">
+	
+	</component>
+	
+	
+	<!-- Invoking transformation -->
+	<component class="org.eclipse.xtend.XtendComponent" skipOnErrors="false">
+			
+		<invoke value="template::template::transform(model)"/>
+		
+	</component>
+	
+</workflow>

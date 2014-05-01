@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="visiomodel"
+    nsURI="http://infai.org/visio2emf/" nsPrefix="visio">
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioIdElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visioID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioNamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visioName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioDocument" eSuperTypes="//EVisioNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visioPages" upperBound="-1"
+        eType="ecore:EClass //EVisioPage"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioPage" eSuperTypes="//EVisioShape"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioShape" abstract="true" eSuperTypes="//EVisioIdElement //EVisioNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visioSpatialContainedShapes"
+        upperBound="-1" eType="ecore:EClass //EVisioShape"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visioContainedShapes" upperBound="-1"
+        eType="ecore:EClass //EVisioShape"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visioAttributes" upperBound="-1"
+        eType="ecore:EClass //EVisioAttribute"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visioText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visioShapeSheet" lowerBound="1"
+        eType="ecore:EClass //EVisioShapeSheet"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visioMasterShapeID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visioMasterShapeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioShapeWithoutMaster" eSuperTypes="//EVisioShape"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioAttribute" eSuperTypes="//EVisioNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visioValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioConnectionShape" eSuperTypes="//EVisioShape">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visioSourceShape" eType="ecore:EClass //EVisioShape"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visioTargetShape" eType="ecore:EClass //EVisioShape"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioShapeSheet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visioSections" upperBound="-1"
+        eType="ecore:EClass //EVisioSection"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioSection" eSuperTypes="//EVisioNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visioRows" upperBound="-1"
+        eType="ecore:EClass //EVisioRow"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioRow" eSuperTypes="//EVisioNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visioCells" upperBound="-1"
+        eType="ecore:EClass //EVisioCell"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EVisioCell" eSuperTypes="//EVisioNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visioValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visioFormula" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visioUnit" eType="ecore:EEnum //EVisioeVisioUnit"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EVisioeVisioUnit">
+    <eLiterals name="viseVisioUnitString" value="231"/>
+    <eLiterals name="visAngleUnit" value="80"/>
+    <eLiterals name="visAcre" value="36"/>
+    <eLiterals name="visCentimeters" value="69"/>
+    <eLiterals name="visCicerosAndDidots" value="52"/>
+    <eLiterals name="visCiceros" value="54"/>
+    <eLiterals name="visCurrency" value="111"/>
+    <eLiterals name="visDate" value="40"/>
+    <eLiterals name="visDegreeMinSec" value="82"/>
+    <eLiterals name="visDegrees" value="81"/>
+    <eLiterals name="visDidots" value="53"/>
+    <eLiterals name="visDrawingeVisioUnit" value="64"/>
+    <eLiterals name="visDurationeVisioUnit" value="42"/>
+    <eLiterals name="visElapsedDay" value="44"/>
+    <eLiterals name="visElapsedHour" value="45"/>
+    <eLiterals name="visElapsedMin" value="46"/>
+    <eLiterals name="visElapsedSec" value="47"/>
+    <eLiterals name="visElapsedWeek" value="43"/>
+    <eLiterals name="visFeetAndInches" value="67"/>
+    <eLiterals name="visFeet" value="66"/>
+    <eLiterals name="visHectare" value="37"/>
+    <eLiterals name="visInches" value="65"/>
+    <eLiterals name="visInchFrac" value="73"/>
+    <eLiterals name="visKilometers" value="72"/>
+    <eLiterals name="visMeters" value="71"/>
+    <eLiterals name="visMileFrac" value="74"/>
+    <eLiterals name="visMiles" value="68"/>
+    <eLiterals name="visMillimeters" value="70"/>
+    <eLiterals name="visMin" value="84"/>
+    <eLiterals name="visNautMiles" value="76"/>
+    <eLiterals name="visNoCast" value="252"/>
+    <eLiterals name="visNumber" value="32"/>
+    <eLiterals name="visPageUnit" value="63"/>
+    <eLiterals name="visPercent" value="33"/>
+    <eLiterals name="visPicasAndPoints" value="49"/>
+    <eLiterals name="visPicas" value="51"/>
+    <eLiterals name="visPoints" value="50"/>
+    <eLiterals name="visRadians" value="83"/>
+    <eLiterals name="visSec" value="85"/>
+    <eLiterals name="visTypeUnit" value="48"/>
+    <eLiterals name="viseVisioUnitColor" value="251"/>
+    <eLiterals name="viseVisioUnitGUID" value="95"/>
+    <eLiterals name="viseVisioUnitInval" value="255"/>
+    <eLiterals name="viseVisioUnitNURBS" value="138"/>
+    <eLiterals name="viseVisioUnitPoint" value="225"/>
+    <eLiterals name="viseVisioUnitPolyline" value="139"/>
+    <eLiterals name="visYards" value="75"/>
+  </eClassifiers>
+  <eSubpackages name="EPC_Diagramm_Shapes" nsURI="http://infai.org/visio2emf/EPC_Diagramm_Shapes"
+      nsPrefix="EPC_Diagramm_Shapes">
+    <eAnnotations source="visio">
+      <details key="title" value="EPC-Diagramm-Shapes"/>
+      <details key="name" value="EPC_M_visio2003.VSS"/>
+      <details key="path" value="D:\USB_Backup\Documents\visio\EPC_M_visio2003.VSS"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Ereignis" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4BE4-0000-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="Ereignis"/>
+        <details key="nameU" value="Event"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Funktion" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4C12-0002-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="Funktion"/>
+        <details key="nameU" value="Function"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Prozesspfad" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4C61-0003-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="Prozesspfad"/>
+        <details key="nameU" value="Process path"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="XOR" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4C8F-0004-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="XOR"/>
+        <details key="nameU" value="XOR"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OR" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4CBE-0005-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="OR"/>
+        <details key="nameU" value="OR"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AND" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4CED-0006-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="AND"/>
+        <details key="nameU" value="AND"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Organisationseinheit" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4D1C-0007-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="Organisationseinheit"/>
+        <details key="nameU" value="Organizational unit"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Informationen_Material" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4D4B-0008-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="Informationen/Material"/>
+        <details key="nameU" value="Information/ Material"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Hauptprozess" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4D7A-0009-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="Hauptprozess"/>
+        <details key="nameU" value="Main process"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Komponente" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4DA9-000A-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="Komponente"/>
+        <details key="nameU" value="Component"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Unternehmensbereich" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4DD8-000B-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="Unternehmensbereich"/>
+        <details key="nameU" value="Enterprise area"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Prozessgruppe" eSuperTypes="//EVisioShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF4E06-000C-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="Prozessgruppe"/>
+        <details key="nameU" value="Process group"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Dynamischer_Verbinder" eSuperTypes="//EVisioConnectionShape">
+      <eAnnotations source="visio">
+        <details key="UID" value="{1FBF53D3-000D-0000-8E40-00608CF305B2}"/>
+        <details key="name" value="Dynamischer Verbinder"/>
+        <details key="nameU" value="Dynamic connector"/>
+      </eAnnotations>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

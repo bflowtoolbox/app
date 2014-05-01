@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.bflow.toolbox.addons.protocol">
+      <Protocol
+            File="addons/ExtendedModelValidation.xml"
+            ID="bflow.extendedmodelvalidation">
+      </Protocol>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.addons.prologaddition">
+      <Prolog_Addition
+            File="prolog addition/epc2009.pl"
+            ID="bflow.epc2009"
+            Name="Extended model validation">
+      </Prolog_Addition>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.addons.rule">
+      <Rule
+            Abbr="de_DE"
+            File="rules/epc_de.xml">
+      </Rule>
+      <Rule
+            Abbr="en_US"
+            File="rules/epc_en.xml">
+      </Rule>
+      <Rule
+            Abbr="de_DE"
+            File="rules/oepc_de.xml">
+      </Rule>
+      <Rule
+            Abbr="en_US"
+            File="rules/oepc_en.xml">
+      </Rule>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.interchange.exportscript">
+      <Exportscript
+            File="exportscripts/ArisAml.exd.xml"
+            Name="ArisAML">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/RACI.exd"
+            Name="CSV/RACI (MIF)">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/EpcToolsEpml.exd.xml"
+            Name="EpcToolsEPML">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/jbpt.exd"
+            Name="jbpt (MIF) (Exportscript)">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/OryxEpml.exd.xml"
+            Name="OryxEPML">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/OryxRdf.exd.xml"
+            Name="OryxRDF">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/prolog.exd"
+            Name="Prolog (MIF)">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/SemtalkEpml.exd.xml"
+            Name="SemtalkEPML">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/Oepc2UMLClassDiagram.exd"
+            Name="UML Class Diagram (MIF)">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/yawl.exd.xml"
+            Name="YAWL">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/qapi.exd"
+            Name="Label Extractor"
+            public="true">
+      </Exportscript>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.interchange.importscript">
+      <Importscript
+            File="importscripts/bai.ixd"
+            Listener="org.bflow.toolbox.contributions.addons.BAIInterchangeListener"
+            Name="BPM Academic Initiative">
+      </Importscript>
+      <Importscript
+            File="importscripts/Agilian.ixd.xml"
+            Name="Agilian XML (XSLT)">
+      </Importscript>
+      <Importscript
+            File="importscripts/ArisAML.ixd"
+            Listener="org.bflow.toolbox.contributions.addons.ArisAMLInterchangeListener"
+            Name="ARIS AML (MIF)">
+      </Importscript>
+      <Importscript
+            File="importscripts/ArisAML7.ixd"
+            Listener="org.bflow.toolbox.contributions.addons.ArisAMLInterchangeListener"
+            Name="ARIS AML 7 (MIF)">
+      </Importscript>
+      <Importscript
+            File="importscripts/Dia.ixd.xml"
+            Name="dia XML (XSLT)">
+      </Importscript>
+      <Importscript
+            File="importscripts/EPCToolsEpml.ixd"
+            Name="EPC Tools EMPL (MIF)">
+      </Importscript>
+      <Importscript
+            File="importscripts/OryxEpml.ixd.xml"
+            Name="Oryx EPML (XSLT)">
+      </Importscript>
+      <Importscript
+            File="importscripts/OryxRdf.ixd.xml"
+            Name="Oryx RDF (XSLT)">
+      </Importscript>
+      <Importscript
+            File="importscripts/SemtalkEpml.ixd.xml"
+            Name="Semtalk EPML (XSLT)">
+      </Importscript>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.addons.component">
+      <Component
+            Class="org.bflow.toolbox.contributions.addons.HTMLViewComponent">
+      </Component>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.modelnavigator.iconprovider">
+      <provider
+            class="org.bflow.toolbox.epc.diagram.providers.EpcIconProvider">
+      </provider>
+      <provider
+            class="oepc.diagram.providers.OepcIconProvider">
+      </provider>
+      <provider
+            class="org.bflow.toolbox.vc.diagram.providers.VcIconProvider">
+      </provider>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.modelnavigator.nameprovider">
+      <provider
+            class="org.bflow.toolbox.contributions.addons.ModelNavigatorNameProvider">
+      </provider>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.attributes.attributeadjustprocessor">
+      <AttributeAdjustProcessor
+            Processor="org.bflow.toolbox.contributions.addons.EpcAttributeAdjustProcessor">
+      </AttributeAdjustProcessor>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.interchange.propertyProvider">
+      <ProviderDefinition
+            Name="oEPCPropertyValueProvider"
+            ProviderImpl="org.bflow.toolbox.contributions.addons.OEPCPropertyValueProvider">
+      </ProviderDefinition>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.interchange.modelbuilder">
+      <Builder
+            DiagramType="epc"
+            ModelBuilderImpl="org.bflow.toolbox.contributions.addons.EPCModelBuilderAttendant"
+            Name="EpcModelBuilderAttendant">
+      </Builder>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.hive.addons.preferencePageContainer">
+      <id
+            pageId="org.bflow.toolbox.epc.diagram.bflowMainPage">
+      </id>
+   </extension>
+
+</plugin>

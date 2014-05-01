@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.gmf.runtime.common.ui.services.action.contributionItemProviders">
+      <contributionItemProvider
+            checkPluginLoaded="false"
+            class="org.bflow.toolbox.hive.actions.providers.DiagramContributionProvider">
+         <Priority
+               name="Low">
+         </Priority>
+         <partContribution
+               class="org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart"
+               id="epc.diagram.part.BflowEpcDiagramEditorID">
+            <partAction
+                  global="false"
+                  id="bflow.best.size.action"
+                  menubarPath="/diagramMenu/sizeGroup">
+            </partAction>
+         </partContribution>
+      </contributionItemProvider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="bflow.popup.contributions.size"
+            objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart">
+         <action
+               class="org.bflow.toolbox.hive.actions.BestSizeAction"
+               id="bflow.best.size"
+               label="%action.label"
+               menubarPath="viewGroup">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

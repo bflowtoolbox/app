@@ -1,0 +1,6 @@
+import ecore;
+
+extension org::eclipse::xtend::util::stdlib::io;
+
+Void transform(EObject e):
+	info(e);

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.bflow.toolbox.attributes.attributeadjustprocessor" name="AttributeAdjustProcessor" schema="schema/org.bflow.toolbox.attributes.attributeadjustprocessor.exsd"/>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.bflow.toolbox.attributes.category"
+            class="org.bflow.toolbox.hive.attributes.AttributeViewPart"
+            icon="platform:/plugin/org.eclipse.ui.views/icons/full/eview16/prop_ps.gif"
+            id="org.bflow.toolbox.attributes.view"
+            name="Attribute View"
+            restorable="true">
+      </view>
+      <category
+            id="org.bflow.toolbox.attributes.category"
+            name="Modeling Toolbox">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.emf.transaction.listeners">
+      <listener
+            class="org.bflow.toolbox.hive.attributes.AttributeFile">
+      </listener>
+   </extension>
+
+</plugin>

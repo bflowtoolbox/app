@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            category="org.bflow.toolbox.export.visio"
+            class="org.bflow.toolbox.export.visio.oepc.wizard.OecpExportWizard"
+            icon="icons/sample.gif"
+            id="org.bflow.toolbox.export.visio.oepc"
+            name="VISIO oEPC">
+         <description>
+            Export an Oepc model as a Visio document
+         </description>
+      </wizard>
+   </extension>
+
+</plugin>

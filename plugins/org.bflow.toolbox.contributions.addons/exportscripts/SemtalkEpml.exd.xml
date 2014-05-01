@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exportdescription>
+	<config>
+		<name>Semtalk EPML</name>
+		<fileextension>epml</fileextension>
+		<description>Exports a bflow* EPC diagram to Semtalk EPML.</description>
+		<diagram>epc</diagram>
+		<callstack>
+			<script>
+				<file>/exportscripts/files/epc2epml-teil1.xslt</file>	
+			</script>
+			<script>
+				<file>/exportscripts/files/epc2epml-teil2.xslt</file>
+			</script>
+			<script>
+				<file>/exportscripts/files/epml-und-epc-resize.xslt</file>
+				<param Multiplikator="2" Streckung="3" MultiKonnektor="1.0"/>
+			</script>
+		</callstack>
+	</config> 
+</exportdescription>

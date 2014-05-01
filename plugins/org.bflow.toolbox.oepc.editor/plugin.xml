@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+	
+	<!--
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="oepc.presentation.OepcModelWizardID"
+            name="%_UI_OepcModelWizard_label"
+            class="oepc.presentation.OepcModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/OepcModelFile.gif">
+         <description>%_UI_OepcModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+   -->
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="oepc.presentation.OepcEditorID"
+            name="%_UI_OepcEditor_label"
+            icon="icons/full/obj16/OepcModelFile.gif"
+            extensions="oepc"
+            class="oepc.presentation.OepcEditor"
+            contributorClass="oepc.presentation.OepcActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

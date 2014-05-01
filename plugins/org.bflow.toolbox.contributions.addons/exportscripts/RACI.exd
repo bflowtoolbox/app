@@ -1,0 +1,8 @@
+public interchange 'CSV (Attributes as Matrix)' (csv) <> epc {
+
+description: 'Generates a CSV file with RACI attributes and user-defined attributes (can be opened for example by MS Excel)'
+
+@script: '/exportscripts/files/raci.vt', insertAttributes=true
+
+
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<importdescription>
+	<config>
+		<name>Oryx EPML</name>
+		<fileextension>epml;xml</fileextension>
+		<description>Imports an EPC model that has been created with Oryx.</description>
+		<callstack>
+			<script>
+				<file>/importscripts/files/epml2epc-teil1.xslt</file>	
+			</script>
+			<script>
+				<file>/importscripts/files/epml2epc-teil2.xslt</file>
+				<param Description="true"/>
+			</script>
+			<script>
+				<file>/importscripts/files/epml-und-epc-resize.xslt</file>
+				<param Multiplikator="0.33" Streckung="0.33" MultiKonnektor="0.33" />	
+			</script>
+		</callstack>
+	</config> 
+</importdescription>

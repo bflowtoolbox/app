@@ -1,0 +1,39 @@
+import oepc;
+import bflow;
+
+extension check::oepcGraphNavigation;
+extension check::javaInteraction;
+
+context bflow::Element if( this.isAndJoin() && shallCheck("OEPCCFlowElementRule1") )
+	ERROR getErrorMessage("OEPCCFlowElementRule1", "") :
+	this.precessors().notExists(S|
+		(S.isXorSplit() || S.isOrSplit())
+		&& S.children().exists(SSucc|
+			SSucc != this && SSucc.isNotConnectedTo(this))
+		&& this.parents().exists(JPred|
+			JPred != S && S.isNotConnectedTo(JPred))
+	);
+	
+context bflow::Element if( this.isAndJoin() && shallCheck("OEPCCFlowElementRule2") )
+	ERROR getErrorMessage("OEPCCFlowElementRule2", "") :
+	this.precessors().notExists(s| s.isXorSplit() && s.seseMatches(this));
+	
+context bflow::Element if( this.isAndJoin() && shallCheck("OEPCCFlowElementRule3") )
+	ERROR getErrorMessage("OEPCCFlowElementRule3", "") :
+	this.precessors().notExists(s| s.isOrSplit() && s.seseMatches(this));
+
+context bflow::Element if( this.isOrJoin() && shallCheck("OEPCCFlowElementRule4") )
+	WARNING getErrorMessage("OEPCCFlowElementRule4", "") :
+	this.precessors().notExists(s| s.isAndSplit() && s.seseMatches(this));
+	
+context bflow::Element if( this.isOrJoin() && shallCheck("OEPCCFlowElementRule5") )
+	WARNING getErrorMessage("OEPCCFlowElementRule5", "") :
+	this.precessors().notExists(s| s.isXorSplit() && s.seseMatches(this));
+
+context bflow::Element if( this.isXorJoin() && shallCheck("OEPCCFlowElementRule6") )
+	ERROR getErrorMessage("OEPCCFlowElementRule6", "") :
+	this.precessors().notExists(s| s.isOrSplit() && s.seseMatches(this));
+	
+context bflow::Element if( this.isXorJoin() && shallCheck("OEPCCFlowElementRule7") )
+	ERROR getErrorMessage("OEPCCFlowElementRule7", "") :
+	this.precessors().notExists(s| s.isAndSplit() && s.seseMatches(this));

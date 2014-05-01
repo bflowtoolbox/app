@@ -1,0 +1,8 @@
+#Sun Aug 17 18:51:54 CEST 2008
+eclipse.preferences.version=1
+gmf_dashboard/domainGenerationModel=platform\:/resource/org.bflow.toolbox/model/vc.genmodel
+gmf_dashboard/domainModel=platform\:/resource/org.bflow.toolbox/model/vc.ecore
+gmf_dashboard/generationModel=platform\:/resource/org.bflow.toolbox/model/My.gmfgen
+gmf_dashboard/graphicalDefinitionModel=platform\:/resource/org.bflow.toolbox/model/vc.gmfgraph
+gmf_dashboard/mappingModel=platform\:/resource/org.bflow.toolbox/model/My.gmfmap
+gmf_dashboard/toolingDefinitionModel=platform\:/resource/org.bflow.toolbox/model/vc.gmftool

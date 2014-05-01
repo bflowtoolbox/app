@@ -1,0 +1,47 @@
+<workflow>
+
+	<property file="workflow.properties"/>
+	
+	
+	<!-- Register Bflow and Epc metamodel -->
+	<!-- @author Joerg Hartmann -->
+	<bean class="org.eclipse.mwe.emf.StandaloneSetup">
+		<registerGeneratedEPackage  value="${notationMetamodelPackage}" />
+		<platformUri value="${platformUri}"/>
+		<registerEcoreFile value="${bflowMetamodelFile}"/>
+		<registerEcoreFile value="${epcMetamodelFile}"/>
+	</bean>
+	
+	
+	<!-- Reading bflow model -->
+	<!-- @author Joerg Hartmann -->
+	<component id="BflowReader" class="org.openarchitectureware.emf.XmiReader">
+		<modelFile value="${bflowModelFile}" />
+		<outputSlot value="bflowSlot" />
+		<firstElementOnly value="true" />
+	</component>
+	
+	
+	<!-- Validate the model -->
+	<!-- @author Joerg Hartmann -->
+	<component class="org.openarchitectureware.check.CheckComponent" abortOnError="false">
+		<metaModel class="org.openarchitectureware.type.emf.EmfMetaModel">
+			<metaModelFile value="${epcMetamodelFile}" />
+		</metaModel>
+		<metaModel class="org.openarchitectureware.type.emf.EmfMetaModel">
+			<metaModelFile value="${bflowMetamodelFile}" />
+		</metaModel>
+		<checkFile value="check::epcDeadlocks"/>
+		<checkFile value="check::epcsyntax"  />
+		<expression value="bflowSlot.eAllContents"/>
+	</component>
+		
+		
+	<!-- Writing validation result to file -->
+	<!-- @author Joerg Hartmann -->	
+	<component class="workflow.components.IssueWriter">		
+		<currentPath value="${currentPath}"/>
+		<fileName value="${fileName}"/>	
+	</component>	
+	
+</workflow>

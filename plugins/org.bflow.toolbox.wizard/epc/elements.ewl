@@ -1,0 +1,69 @@
+-- replaces an arc with a new element connected to the predesessor and the successor of the arc   
+-- @author Stefan Kuehne
+wizard AddElementToArc {
+	guard : self.isKindOf(Arc)
+	title : 'Add an element'
+	do {
+		-- choose a type
+		var types := controlFlowTypes();
+		var typeName := UserInput.choose('Choose type: ',types.collect(e : Any| e.name));
+		var type := types.select(e : Any| e.name = typeName).first();
+
+		-- add an element of this type
+		if (type.isDefined()) {
+			var newElement := type.createInstance();
+			var newArc := new Arc;
+			self.eContainer().elements.add(newElement);
+			self.eContainer().connections.add(newArc);
+			newArc.to := self.to;
+			newArc.from := newElement;
+			self.to := newElement;
+		}
+	}
+}
+
+-- replaces an element with an element of another type   
+-- @author Stefan Kuehne
+wizard ReplaceElement {
+	guard : controlFlowTypes().exists(t : Any | self.isKindOf(t))
+	title : 'replace element'
+	do {
+		-- choose a type	
+		var types := controlFlowTypes();
+		types := types.reject(t : Any | self.isKindOf(t));		
+		var typeName := UserInput.choose('Choose type: ',types.collect(e : Any| e.name));
+		var type := types.select(e : Any| e.name = typeName).first();
+
+		-- replace the element with a new instance of the chosen type
+		if (type.isDefined()) {
+			var newElement := type.createInstance();
+			self.eContainer().elements.add(newElement);
+
+			-- redirect incoming arcs			
+			var arcs := Arc.allInstances().select(a : Arc| a.to = self);
+			for (a in arcs) {
+				a.to := newElement;
+			}
+
+			-- redirect outgoing arcs			
+			arcs := Arc.allInstances().select(a : Arc| a.from = self);
+			for (a in arcs) {
+				a.from := newElement;
+			}
+			newElement.eContainer().elements.remove(self);
+		}				
+	}
+}
+
+-- returns a list of control flow types
+-- @author Stefan Kuehne
+operation controlFlowTypes() : Sequence {
+	var types := new Sequence;
+	types.add(Function);
+	types.add(Event);
+	types.add(ProcessInterface);
+	types.add(AND);
+	types.add(OR);
+	types.add(XOR);
+	return types;
+}

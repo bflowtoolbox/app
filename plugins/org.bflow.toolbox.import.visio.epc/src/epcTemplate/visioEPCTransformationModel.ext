@@ -1,0 +1,116 @@
+/*
+ * @Author Christian Boehme
+ */
+ 
+extension org::eclipse::xtend::util::stdlib::io;
+
+create epc::Epc createEpcModel(visiomodel::EVisioPage p):
+	init("/src/model/visio_epc_2007_metamodel.ecore", "2007") ->
+	init("/src/model/visio_epc_2003_metamodel.ecore", "2003") ->	
+	this.elements.addAll(p.visioContainedShapes.javaSelectCorrectShapes("epk_vsd").getCorrectShapes().getNodes().createElement()) ->
+	this.connections.addAll(p.visioContainedShapes.javaSelectCorrectShapes("epk_vsd").getCorrectShapes().getInfoFlows().createInfoConn())->
+	this.connections.addAll(p.visioContainedShapes.javaSelectCorrectShapes("epk_vsd").getCorrectShapes().getControlFlows().createArc());
+
+List[visiomodel::EVisioShape] getCorrectShapes(List[visiomodel::EVisioShape] l):
+	l.select(e|
+	e.metaType == visiomodel::epk_vsd::Organisationseinheit ||
+	e.metaType == visiomodel::epk_vsd::Informationen_Material ||
+	e.metaType == visiomodel::epk_vsd::Prozesspfad ||
+	e.metaType == visiomodel::epk_vsd::Ereignis ||
+	e.metaType == visiomodel::epk_vsd::Funktion ||
+	e.metaType == visiomodel::epk_vsd::Dynamischer_Verbinder ||
+	e.metaType == visiomodel::epk_vsd::AND ||
+	e.metaType == visiomodel::epk_vsd::OR ||
+	e.metaType == visiomodel::epk_vsd::XOR 
+	);
+
+List[visiomodel::EVisioShape] getNodes(List[visiomodel::EVisioShape] l):
+	l.select(e|e.metaType != visiomodel::epk_vsd::Dynamischer_Verbinder);
+
+
+List[visiomodel::epk_vsd::Dynamischer_Verbinder] getInfoFlows(List[visiomodel::EVisioShape] l):
+	((List[visiomodel::epk_vsd::Dynamischer_Verbinder])l.select(e|e.metaType == visiomodel::epk_vsd::Dynamischer_Verbinder))
+	.select(e|
+	//analysieren, ob InformationFlow
+	e.visioSourceShape.metaType == visiomodel::epk_vsd::Organisationseinheit ||
+	e.visioSourceShape.metaType == visiomodel::epk_vsd::Informationen_Material ||
+	e.visioSourceShape.metaType == visiomodel::epk_vsd::Prozesspfad ||
+	e.visioTargetShape.metaType == visiomodel::epk_vsd::Organisationseinheit ||
+	e.visioTargetShape.metaType == visiomodel::epk_vsd::Informationen_Material ||
+	e.visioTargetShape.metaType == visiomodel::epk_vsd::Prozesspfad 
+	);
+	
+
+List[visiomodel::epk_vsd::Dynamischer_Verbinder] getControlFlows(List[visiomodel::EVisioShape] l):
+	((List[visiomodel::epk_vsd::Dynamischer_Verbinder])l.select(e|e.metaType == visiomodel::epk_vsd::Dynamischer_Verbinder))
+	.select(e|
+	e.visioSourceShape.metaType != visiomodel::epk_vsd::Organisationseinheit &&
+	e.visioSourceShape.metaType != visiomodel::epk_vsd::Informationen_Material &&
+	e.visioSourceShape.metaType != visiomodel::epk_vsd::Prozesspfad &&
+	e.visioTargetShape.metaType != visiomodel::epk_vsd::Organisationseinheit &&
+	e.visioTargetShape.metaType != visiomodel::epk_vsd::Informationen_Material &&
+	e.visioTargetShape.metaType != visiomodel::epk_vsd::Prozesspfad
+	);
+	
+create epc::Event createElement(visiomodel::EVisioShape shape):
+	info("not transformed: " + shape + " " + shape.metaType);
+	
+create epc::Event createElement(visiomodel::epk_vsd::Ereignis shape):
+	this.setName(shape.visioText);
+
+create epc::Function createElement(visiomodel::epk_vsd::Funktion shape):	
+	this.setName(shape.visioText);
+
+create epc::AND createElement(visiomodel::epk_vsd::AND shape):
+	this;
+	
+create epc::OR createElement(visiomodel::epk_vsd::OR shape):
+	this;
+
+create epc::XOR createElement(visiomodel::epk_vsd::XOR shape):
+	this;
+	
+//Organisationseinheit -> Organisation Unit	
+create epc::Participant createElement(visiomodel::epk_vsd::Organisationseinheit shape):
+	this.setName(shape.visioText);
+
+//ProzessPfad -> ProcessInterface
+create epc::ProcessInterface createElement(visiomodel::epk_vsd::Prozesspfad shape):
+	this.setName(shape.visioText);
+
+//Informationen_Material -> Dokument
+create epc::Document createElement(visiomodel::epk_vsd::Informationen_Material shape):
+	this.setName(shape.visioText); 
+
+/*
+create epc::Document createElement(visio::epk_vsd::Hauptprozess shape):
+	this.setName(shape.name);
+
+//Komponente -> Cluster
+create epc::Cluster createElement(visio::epk_vsd::Komponente shape):
+	this.setName(shape.name);
+
+//Unternehmensbereich -> Personentype
+create epc::PersonType createElement(visio::epk_vsd::Unternehmensbereich shape):
+	this.setName(shape.name);
+
+//Prozessgruppe -> Gruppe
+create epc::Group createElement(visio::epk_vsd::Prozessgruppe shape):
+	this.setName(shape.name); 
+*/
+
+
+create epc::Arc createArc(visiomodel::epk_vsd::Dynamischer_Verbinder shape):
+	 this.setFrom(shape.visioSourceShape.createElement()) ->
+	 this.setTo(shape.visioTargetShape.createElement());
+	 
+create epc::InformationArc createInfoConn(visiomodel::epk_vsd::Dynamischer_Verbinder shape):
+	this.setFrom(shape.visioSourceShape.createElement()) ->
+	this.setTo(shape.visioTargetShape.createElement());
+	
+
+Void init(String s, String visioVersion):
+	JAVA epcTemplate.Helper.init(java.lang.String, java.lang.String);
+
+List javaSelectCorrectShapes(List l, String s):
+	JAVA epcTemplate.Helper.selectCorrectShapes(java.util.List, java.lang.String);

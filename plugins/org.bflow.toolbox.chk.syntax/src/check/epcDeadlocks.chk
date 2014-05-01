@@ -1,0 +1,37 @@
+import epc;
+import bflow;
+
+extension check::epcGraphNavigation;
+extension check::javaInteraction;
+
+context bflow::Element if (this.isAndJoin() && shallCheck("EPCCFlowElementRule1"))
+	ERROR getErrorMessage("EPCCFlowElementRule1", "") :
+	this.precessors().notExists(S| 
+		(S.isXorSplit() || S.isOrSplit())
+		&& S.children().exists(SSucc|
+			SSucc != this && SSucc.isNotConnectedTo(this))
+		&& this.parents().exists(JPred|
+			JPred != S && S.isNotConnectedTo(JPred))
+	);
+
+context bflow::Element if (this.isAndJoin() && shallCheck("EPCCFlowElementRule2"))
+	ERROR getErrorMessage("EPCCFlowElementRule2", "") :
+	this.precessors().notExists(s| s.isXorSplit() && s.seseMatches(this));
+	
+context bflow::Element if (this.isAndJoin() && shallCheck("EPCCFlowElementRule3"))
+	ERROR getErrorMessage("EPCCFlowElementRule3", "") :
+	this.precessors().notExists(s| s.isOrSplit() && s.seseMatches(this));
+	
+context bflow::Element if (this.isXorJoin() && shallCheck("EPCCFlowElementRule4"))
+	ERROR getErrorMessage("EPCCFlowElementRule4", "") :
+	this.precessors().notExists(s| s.isAndSplit() && s.matches(this));
+
+context bflow::Element if (this.isXorJoin() && shallCheck("EPCCFlowElementRule5"))
+	ERROR getErrorMessage("EPCCFlowElementRule5", "") :
+	this.precessors().notExists(s| s.isOrSplit() && s.matches(this));
+	
+// context bflow::Element if( this.isXorSplit() && shallCheck("EPCCFlowElementRule6"))
+//	ERROR getErrorMessage("EPCCFlowElementRule6", "") :
+//	! this.precessors().exists(s| s.isAndSplit()
+//		&& this.successors().exists(j|j.isAndJoin() && s.seseFragmentWithUpstreamExit(j,this) && s.matches(j))
+//		);

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<importdescription>
+	<config>
+		<name>dia XML</name>
+		<fileextension>xml;dia</fileextension>
+		<description>Imports an EPC model that has been created with dia (using edpc shapes from http://dia-installer.de/shapes/edpc/index.html.de)</description>
+		<callstack>
+			<script>
+				<file>/importscripts/files/dia2epml.xslt</file>
+			</script>
+            <script>
+				<file>/importscripts/files/epml2epc-teil1.xslt</file>
+			</script>
+			<script>
+				<file>/importscripts/files/epml2epc-teil2.xslt</file>
+				<param Description="false"/>
+			</script>
+			<script>
+				<file>/importscripts/files/epml-und-epc-resize.xslt</file>
+				<param Multiplikator="1" Streckung="1" MultiKonnektor="1" />	
+			</script>
+		</callstack>
+	</config> 
+</importdescription>

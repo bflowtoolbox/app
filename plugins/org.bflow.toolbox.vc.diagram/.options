@@ -1,0 +1,7 @@
+# Tracing options for the org.bflow.toolbox.vc.diagram plug-in
+
+# Common issues
+org.bflow.toolbox.vc.diagram/debug=false
+
+# Visual IDs
+org.bflow.toolbox.vc.diagram/debug/visualID=false

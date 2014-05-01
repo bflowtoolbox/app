@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.bflow.toolbox.interchange.exportscript" name="Add-ons export script" schema="schema/org.bflow.toolbox.interchange.exportscript.exsd"/>
+   <extension-point id="org.bflow.toolbox.interchange.importscript" name="Add-ons import script" schema="schema/org.bflow.toolbox.interchange.importscript.exsd"/>
+   <extension-point id="org.bflow.toolbox.interchange.propertyProvider" name="Interchange property provider" schema="schema/org.bflow.toolbox.interchange.propertyProvider.exsd"/>
+   <extension-point id="org.bflow.toolbox.interchange.modelbuilder" name="Interchange model builder" schema="schema/org.bflow.toolbox.interchange.modelbuilder.exsd"/>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            id="org.bflow.toolbox.export.category.modellingtoolbox"
+            name="Modeling Toolbox">
+      </category>
+      <wizard
+            category="org.bflow.toolbox.export.category.modellingtoolbox"
+            class="org.bflow.toolbox.hive.interchange.wizard.MIFExportWizard"
+            icon="icons/Import-export-32.png"
+            id="org.bflow.toolbox.interchange.MIFExportWizard"
+            name="Multi-target export">
+         <description>
+            Exports the diagram to several types.
+         </description>
+      </wizard>
+      <wizard
+            category="org.bflow.toolbox.export.category.modellingtoolbox"
+            class="org.bflow.toolbox.hive.interchange.wizard.ImageExportWizard"
+            icon="icons/Jpeg-Image-32.png"
+            id="org.bflow.toolbox.interchange.imageExportWizard"
+            name="Export as image">
+         <description>
+            Exports the diagram as an image.
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.bflow.toolbox.import.category.modellingtoolbox"
+            name="Modeling Toolbox">
+      </category>
+      <wizard
+            category="org.bflow.toolbox.import.category.modellingtoolbox"
+            class="org.bflow.toolbox.hive.interchange.wizard.MIFImportWizard"
+            icon="icons/Import-export-32.png"
+            id="org.bflow.toolbox.interchange.MIFImportWizard"
+            name="Multi-source import">
+         <description>
+            Imports a diagram from several types.
+         </description>
+      </wizard>
+   </extension>
+
+</plugin>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.bflow.toolbox.modelnavigator.iconprovider" name="Model Navigator Icon Provider" schema="schema/org.bflow.toolbox.modelnavigator.iconprovider.exsd"/>
+   <extension-point id="org.bflow.toolbox.modelnavigator.nameprovider" name="Model Navigator Name Provider" schema="schema/org.bflow.toolbox.modelnavigator.nameprovider.exsd"/>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            category="org.bflow.toolbox.attributes.category"
+            class="org.bflow.toolbox.hive.modelnavigator.ModelNavigatorView"
+            icon="icons/Pencil-App-16.png"
+            id="org.bflow.toolbox.views.navigation"
+            name="Model Navigator"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>

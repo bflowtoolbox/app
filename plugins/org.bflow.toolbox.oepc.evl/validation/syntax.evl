@@ -1,0 +1,72 @@
+import './validationLibrary.eol';
+
+pre
+{
+	var prefRequester := new Native('org.bflow.toolbox.check.PreferencesRequester');
+}
+
+context BflowSymbol {
+	
+	critique HasName {
+	
+		guard : (self.isTypeOf(Event) or self.isTypeOf(BusinessObject))
+		check : self.hasName() or not prefRequester.shallCheck('OEPCEpsilonSymbolRule1')
+		message : prefRequester.getErrorMessage('OEPCEpsilonSymbolRule1', self.eClass().name)
+		fix {
+			title : 'Standardnamen vergeben'
+			do {
+				self.name := 'Element';
+			}
+		}
+		
+		fix
+		{
+			title : 'Prüfregel ausschalten'
+			do 
+			{ 
+				prefRequester.setRuleEnabled('OEPCEpsilonSymbolRule1', false); 
+				prefRequester.invokeValidation();	
+			}
+		}
+	}
+}
+
+context Element {
+	
+	constraint JoinOrSplit {
+	
+		guard : self.isKindOf(IConnector)
+		check : (self.isSplit() xor self.isJoin()) or not prefRequester.shallCheck('OEPCEpsilonElementRule1')
+		message : prefRequester.getErrorMessage('OEPCEpsilonElementRule1', self.eClass().name)  
+	
+		fix {
+			title : self.eClass().name + ' splitten'
+			do { 
+				var con := new XORConnector;
+				var cfe := new ControlFlowEdge;
+				for (epc : OEPC in OEPC.allInstances()) {
+					if (epc.elements.includes(self)) {
+						epc.elements.add(con);
+						epc.connections.add(cfe);
+					}
+				}
+				for (ocf : Connection in self.out) {
+					ocf.setFrom(con);
+				}
+				cfe.setFrom(self);
+				cfe.setTo(con);
+								
+			}
+		}
+		
+		fix
+		{
+			title: 'Prüfregel ausschalten'
+			do 
+			{ 
+				prefRequester.setRuleEnabled('OEPCEpsilonElementRule1', false);
+				prefRequester.invokeValidation();
+		    }
+		}
+	}
+}

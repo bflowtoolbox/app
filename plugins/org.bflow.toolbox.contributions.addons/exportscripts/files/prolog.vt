@@ -1,0 +1,54 @@
+:- dynamic arc/2.
+:- dynamic and/1.
+:- dynamic or/1.
+:- dynamic xor/1.
+:- dynamic event/1.
+:- dynamic function/1.
+:- dynamic region/1.
+
+#set( $items = {})
+
+#foreach( $shape in $shapes)
+	#set( $type = $shape.Type.split("\.")[4].toLowerCase() )
+	#set( $j = $foreach.count)
+	#set( $id = "i_$j")
+	#set( $label =  $shape.Name.replace('"', ' ') ) 
+	#set( $label =  $label.replaceAll("'", " ") ) 
+	#set( $label =  $label.replaceAll("\n", " ") ) 
+	#set( $label =  $label.replaceAll("\r", " ") ) 
+	#if($type == "event" || $type == "function" || $type == "region")
+		#set( $items[$shape] = $id ) 
+		$type($id).
+		elementname($id,'$label').
+		bflow_id($id,'$shape.Id').
+		
+		#foreach( $key in $shape.Attributes.keySet() )
+		#set( $keyname =  $key.replace('"', ' ') ) 
+		#set( $keyname =  $keyname.replaceAll("'", " ") ) 
+		#set( $keyvalue =  $shape.Attributes.get($key) )
+		#set( $keyvalue =  $keyvalue.replace('"', ' ') ) 
+		#set( $keyvalue =  $keyvalue.replaceAll("'", " ") ) 
+		attribute('$shape.Id', '$keyname', '$keyvalue').
+		#end
+
+	#end
+	#if($type == "and" || $type == "or" || $type == "xor")
+		#set( $items[$shape] = $id ) 
+		$type($id).
+		bflow_id($id,'$shape.Id'). 
+	#end
+	shape($id, $shape.X, $shape.Y, $shape.Width, $shape.Height).
+#end
+
+#foreach( $edge in $edges )
+	#set( $type = $edge.Type.split("\.")[4].toLowerCase() )
+	#set( $sourceShape = $edge.Source )
+	#set( $targetShape = $edge.Target )
+	#set( $src = $items[$sourceShape] )
+	#set( $tgt = $items[$targetShape] )
+	#if($type == "arc")
+		arc($src,$tgt).
+		bflow_id($src,$tgt,'$edge.Id').
+		edge($id, 0, 0, 0, 0).
+	#end
+#end

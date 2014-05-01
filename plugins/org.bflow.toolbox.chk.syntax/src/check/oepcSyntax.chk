@@ -1,0 +1,96 @@
+import oepc;
+import bflow;
+
+extension check::oepcNavigation;
+extension check::javaInteraction;
+	
+// Events should have no more than one incoming and one outgoing arc.
+
+context oepc::Event if(shallCheck("OEPCSyntaxEventRule1"))
+	ERROR getErrorMessage("OEPCSyntaxEventRule1", this.name) :
+	this.incomingControlFlows().size < 2;
+
+context oepc::Event if(shallCheck("OEPCSyntaxEventRule2"))
+	ERROR getErrorMessage("OEPCSyntaxEventRule2", this.name) :
+	this.outgoingControlFlows().size < 2;
+	
+// Business objects should have exactly one incoming and exactly one outgoing arc.
+
+context oepc::BusinessObject if(shallCheck("OEPCSyntaxBusinessObjectRule1"))
+	ERROR getErrorMessage("OEPCSyntaxBusinessObjectRule1", this.name) :
+	!this.outgoingControlFlows().isEmpty;
+
+context oepc::BusinessObject if(shallCheck("OEPCSyntaxBusinessObjectRule2"))
+	ERROR getErrorMessage("OEPCSyntaxBusinessObjectRule2", this.name) :
+	this.outgoingControlFlows().size < 2;
+
+context oepc::BusinessObject if(shallCheck("OEPCSyntaxBusinessObjectRule3"))
+	ERROR getErrorMessage("OEPCSyntaxBusinessObjectRule3", this.name) :
+	!this.incomingControlFlows().isEmpty;
+
+context oepc::BusinessObject if(shallCheck("OEPCSyntaxBusinessObjectRule4"))
+	ERROR getErrorMessage("OEPCSyntaxBusinessObjectRule4", this.name) :
+	this.incomingControlFlows().size < 2;
+	
+// BusinessObjects should have an ITSystem and an OrganisationUnit
+
+context oepc::BusinessObject if(shallCheck("OEPCSyntaxBusinessObjectRule5"))
+	ERROR getErrorMessage("OEPCSyntaxBusinessObjectRule5", this.name) :
+	this.hasITSystem();
+
+context oepc::BusinessObject if(shallCheck("OEPCSyntaxBusinessObjectRule6"))
+	ERROR getErrorMessage("OEPCSyntaxBusinessObjectRule6", this.name) :
+	this.hasOrganisationUnit();
+	
+//BusinessObjects should have attributes or methods
+
+context oepc::BusinessObject if(shallCheck("OEPCSyntaxBusinessObjectRule7"))
+	WARNING getErrorMessage("OEPCSyntaxBusinessObjectRule7", this.name) :
+	this.hasAttribute();
+	
+context oepc::BusinessObject if(shallCheck("OEPCSyntaxBusinessObjectRule8"))
+	WARNING getErrorMessage("OEPCSyntaxBusinessObjectRule8", this.name) :
+	this.hasMethod();
+	
+context oepc::OEPC if(shallCheck("OEPCSyntaxOepcRule1"))
+	ERROR getErrorMessage("OEPCSyntaxOepcRule1", "") :
+	!this.elements.typeSelect(BusinessObject).isEmpty; 
+	
+// Connectors should have either >1 incoming and 1 outgoing control flow arcs or 1 incoming and >1 outgoing control flow arcs.
+
+
+context bflow::Element if (this.isConnector() && shallCheck("OEPCSyntaxElementRule1"))
+	WARNING getErrorMessage("OEPCSyntaxElementRule1", "") :
+	!(this.isJoin() && this.isSplit());
+
+context bflow::Element if (this.isConnector() && shallCheck("OEPCSyntaxElementRule2"))
+	ERROR getErrorMessage("OEPCSyntaxElementRule2", "") :
+	!this.incomingControlFlows().isEmpty;
+
+context bflow::Element if (this.isConnector() && shallCheck("OEPCSyntaxElementRule3"))
+	ERROR getErrorMessage("OEPCSyntaxElementRule3", "") :
+	!this.outgoingControlFlows().isEmpty;
+	
+// Connectors should not have an informationflow
+
+context bflow::Element if (this.isConnector() && shallCheck("OEPCSyntaxElementRule4"))
+	WARNING getErrorMessage("OEPCSyntaxElementRule4", "") :
+	this.incomingInformationFlows().isEmpty;
+	
+context bflow::Element if (this.isConnector() && shallCheck("OEPCSyntaxElementRule5"))
+	WARNING getErrorMessage("OEPCSyntaxElementRule5", "") :
+	this.outgoingInformationFlows().isEmpty;
+	
+context bflow::Element if (!this.isConnector() && shallCheck("OEPCSyntaxElementRule6"))
+	WARNING getErrorMessage("OEPCSyntaxElementRule6", "") :
+	this.hasName();
+	
+//BusinessElements must have name
+
+context oepc::BusinessAttribute if(shallCheck("OEPCSyntaxBusinessAttributeRule1"))
+	WARNING getErrorMessage("OEPCSyntaxBusinessAttributeRule1", "") :
+	this.hasName();
+	
+context oepc::BusinessMethod if(shallCheck("OEPCSyntaxBusinessMethodRule1"))
+	WARNING getErrorMessage("OEPCSyntaxBusinessMethodRule1", "") :
+	this.hasName();

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmftool:ToolRegistry xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gmftool="http://www.eclipse.org/gmf/2005/ToolDefinition">
+  <palette
+      title="bflowPalette">
+    <tools
+        xsi:type="gmftool:ToolGroup"
+        title="Symbols">
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="ValueChain (Variant 1)"
+          description="Create new ValueChain (Variant 1)">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/valuechain.gif"
+            bundle=""/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="ValueChain (Variant 2)"
+          description="Create new ValueChain (Variant 2)">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/valuechain2.gif"
+            bundle=""/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="TechnicalTerm"
+          description="Create new TechnicalTerm">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/technicalterm.gif"
+            bundle=""/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Cluster"
+          description="Create new Cluster">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/cluster.gif"
+            bundle=""/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Objective"
+          description="Create new Objective">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/objective.gif"
+            bundle=""/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Product"
+          description="Create new Product">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/product.gif"
+            bundle=""/>
+      </tools>
+    </tools>
+    <tools
+        xsi:type="gmftool:ToolGroup"
+        title="Connections"
+        description="">
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="is Predecessor of"
+          description="Create new is-Predecessor-of-Connection">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/ispred.gif"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="is process-oriented superior"
+          description="Create new is-process-oriented-superior-Connection">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/superior.gif"
+            bundle=""/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Relation"
+          description="Create new Relation">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="images/relation.gif"
+            bundle=""/>
+      </tools>
+    </tools>
+  </palette>
+</gmftool:ToolRegistry>

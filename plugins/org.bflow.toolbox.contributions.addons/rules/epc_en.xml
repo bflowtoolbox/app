@@ -1,0 +1,734 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<language value="eng">
+	<rule>
+		<id>EPCEpsilonSymbolRule1</id>
+		<name>SymbolRule1</name>
+		<message>$value has no name.</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a function or event with no name</description>
+		<image>/images/EPCEpsilonSymbolRule1.jpeg</image>
+		<default>true</default>
+		<type>epsilon</type>
+	</rule>
+	<rule>
+		<id>EPCEpsilonElementRule1</id>
+		<name>ElementRule1</name>
+		<message>$value should be either join or split.</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a connector being a join as well as a split</description>
+		<image>/images/EPCEpsilonElementRule1.jpeg</image>
+		<default>true</default>
+		<type>epsilon</type>
+	</rule>
+	<rule>
+		<id>EPCEpsilonElementRule2</id>
+		<name>ElementRule2</name>
+		<message>$value isn't necessary.</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports connectors with exactly one in- and output</description>
+		<image>/images/EPCEpsilonElementRule2.jpeg</image>
+		<default>true</default>
+		<type>epsilon</type>
+	</rule>
+	<rule>
+		<id>EPCEpsilonElementRule3</id>
+		<name>ElementRule3</name>
+		<message>An event should not be followed by an $value-split.</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports an event that is followed by an (x)or-split</description>
+		<image>/images/EPCEpsilonElementRule3.jpeg</image>
+		<default>true</default>
+		<type>epsilon</type>
+	</rule>
+
+	<rule>
+		<id>EPCSyntaxEventRule1</id>
+		<name>EventRule1</name>
+		<message>The event $value has no incoming and no outgoing arc</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports an event that has no incoming and no outgoing arc</description>
+		<image>/images/EPCSyntaxEventRule1.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxEventRule2</id>
+		<name>EventRule2</name>
+		<message>Event $value has more than one incoming arc. Use a connector to synchronize the flow of control before the event!</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports an event which has more than one incoming arc</description>
+		<image>/images/EPCSyntaxEventRule2.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxEventRule3</id>
+		<name>EventRule3</name>
+		<message>Event $value has more than one outgoing arc. Use a connector to split the flow of control after the event!</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports an event which has more than one outgoing arc</description>
+		<image>/images/EPCSyntaxEventRule3.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxEventRule4</id>
+		<name>EventRule4</name>
+		<message>The event $value has an (useless) arc to itself.</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports an event that has an (useless) arc to itself</description>
+		<image>/images/EPCSyntaxEventRule4.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxFunctionRule1</id>
+		<name>FunctionRule1</name>
+		<message>Function $value has no outgoing arc.</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a function that has no outgoing arc</description>
+		<image>/images/EPCSyntaxFunctionRule1.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxFunctionRule2</id>
+		<name>FunctionRule2</name>
+		<message>Function $value has more than one outgoing arc. Use a connector to split the flow of control after the function!</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a function which has more than one outgoing arc</description>
+		<image>/images/EPCSyntaxFunctionRule2.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxFunctionRule3</id>
+		<name>FunctionRule3</name>
+		<message>Function $value has no incoming arc.</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a function without incoming arc</description>
+		<image>/images/EPCSyntaxFunctionRule3.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxFunctionRule4</id>
+		<name>FunctionRule4</name>
+		<message>Function $value has more than one incoming arc. Use a connector to synchronize the flow of control before the function!</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a function which has more than one incoming arc</description>
+		<image>/images/EPCSyntaxFunctionRule4.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxFunctionRule5</id>
+		<name>FunctionRule5</name>
+		<message>The function $value has an (useless) arc to itself.</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a function that has an (useless) arc to itself</description>
+		<image>/images/EPCSyntaxFunctionRule5.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxElementRule1</id>
+		<name>ElementRule1</name>
+		<message>The connector has no incoming arc.</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a connector without incoming arc</description>
+		<image>/images/EPCSyntaxElementRule1.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxElementRule2</id>
+		<name>ElementRule2</name>
+		<message>Connector has no outgoing arc.</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a connector without outgoing arc</description>
+		<image>/images/EPCSyntaxElementRule2.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCSyntaxElementRule3</id>
+		<name>ElementRule3</name>
+		<message>The connector $value has an (useless) arc to itself.</message>
+		<class>Syntax (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a connector that has an (useless) arc to itself</description>
+		<image>/images/EPCSyntaxElementRule3.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCCFlowElementRule1</id>
+		<name>ElementRule1</name>
+		<message>Because of an (X)-OR split before the AND-join, the control flow might not reach all incoming arcs of the AND-join.</message>
+		<class>Control Flow Correctness (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a situation where it can happen that the control flow does not reach all incoming arcs of an AND-join. (NOTE: In some cases, this does not have to be a modeling error.)</description>
+		<image>/images/EPCCFlowElementRule1.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>						
+	<rule>
+		<id>EPCCFlowElementRule2</id>
+		<name>ElementRule2</name>
+		<message>The combination XOR-split -> AND-join is not allowed!</message>
+		<class>Control Flow Correctness (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a combination XOR-split -> AND-join which can lead to a situation where the AND-join cannot be processed (deadlock)</description>
+		<image>/images/EPCCFlowElementRule2.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCCFlowElementRule3</id>
+		<name>ElementRule3</name>
+		<message>The combination OR-split -> AND-join is not allowed!</message>
+		<class>Control Flow Correctness (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a combination XOR-split -> AND-join which can lead to a situation where the AND-join cannot be processed (deadlock)</description>
+		<image>/images/EPCCFlowElementRule3.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>EPCCFlowElementRule4</id>
+		<name>ElementRule4</name>
+		<message>The combination AND-split -> XOR-join is not allowed!</message>
+		<class>Control Flow Correctness (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a combination AND-split -> XOR-join which can lead to a situation where more than one incoming flows reach the XOR join (lack of synchronization)</description>
+		<image>/images/EPCCFlowElementRule4.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>	
+	<rule>
+		<id>EPCCFlowElementRule5</id>
+		<name>ElementRule5</name>
+		<message>The combination OR-split -> XOR-join is not allowed!</message>
+		<class>Control Flow Correctness (EPC)</class>
+		<diagram>epc</diagram>
+		<description>Reports a combination OR-split -> XOR-join which can lead to a situation where more than one incoming flows reach the XOR join (lack of synchronization)</description>
+		<image>/images/EPCCFlowElementRule5.jpeg</image>
+		<default>true</default>
+		<type>check</type>
+	</rule>
+	<rule>
+		<id>syntax2</id>
+		<name>syntax2</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports a model that is not a coherent graph</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax4</id>
+		<name>syntax4</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports model elements between which there is more than one arc</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax5</id>
+		<name>syntax5</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports a model without an event, without a function or without an arc</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax6</id>
+		<name>syntax6</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports a function that has no outgoing arc or more than one outgoing or incoming arc</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax7</id>
+		<name>syntax7</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports an event that has more than one outgoing or more than one incoming arc</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax8</id>
+		<name>syntax8</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports a connector being a join as well as a split</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax9</id>
+		<name>syntax9</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports cycles containing connectors only</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax10</id>
+		<name>syntax10</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports events which are followed by another event</description>
+		<image></image>
+		<default>false</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax11</id>
+		<name>syntax11</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports functions which are followed by another function</description>
+		<image></image>
+		<default>false</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax12</id>
+		<name>syntax12</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports events which are followed by an X(OR)-split</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax13</id>
+		<name>syntax13</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports models without start event or without end event</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax14</id>
+		<name>syntax14</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports elements that cannot be reached from a start event</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>syntax15</id>
+		<name>syntax15</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Syntax</class>
+		<diagram>epc</diagram>
+		<description>Reports elements from which no end event can be reached</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_to_xor</id>
+		<name>and_to_xor</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Control Flow Correctness</class>
+		<diagram>epc</diagram>
+		<description>Reports a combination AND/OR-split -> XOR-join which can lead to a situation where more than one incoming flows reach the XOR join (lack of synchronization). If the notification level is WARNING only, this does not necessarily have to signalize an error.
+			</description>
+		<image>/images/and_to_xor.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>xor_to_and</id>
+		<name>xor_to_and</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Control Flow Correctness</class>
+		<diagram>epc</diagram>
+		<description>Reports a combination XOR-split -> AND-join which can lead to a situation where the AND-join cannot be processed (deadlock)
+			</description>
+		<image>/images/xor_to_and.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_to_and_upstream_entry_xor</id>
+		<name>and_to_and_upstream_entry_xor</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Control Flow Correctness</class>
+		<diagram>epc</diagram>
+		<description>Reports an entry into an AND-control block that leads to an error</description>
+		<image>/images/and_to_and_upstream_entry_xor.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_to_and_downstream_entry</id>
+		<name>and_to_and_downstream_entry</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Control Flow Correctness</class>
+		<diagram>epc</diagram>
+		<description>Reports an entry into an AND-control block that leads to an error</description>
+		<image>/images/and_to_and_downstream_entry.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>loop_exit_and</id>
+		<name>loop_exit_and</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Control Flow Correctness</class>
+		<diagram>epc</diagram>
+		<description>Reports a loop exit that has not the type XOR</description>
+		<image>/images/loop_exit_and.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>loop_entry_and</id>
+		<name>loop_entry_and</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Control Flow Correctness</class>
+		<diagram>epc</diagram>
+		<description>Reports a loop entry that has not the type XOR.</description>
+		<image>/images/loop_entry_and.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_might_not_get_control</id>
+		<name>and_might_not_get_control</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Control Flow Correctness</class>
+		<diagram>epc</diagram>
+		<description>Reports a situation where it can happen that the control flow does not reach all incoming arcs of an AND-join. (NOTE: In some cases, this does not have to be a modeling error.)</description>
+		<image>/images/and_might_not_get_control.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_to_or</id>
+		<name>and_to_or</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Replacable OR-Connectors</class>
+		<diagram>epc</diagram>
+		<description>Reports an OR-join that should be replaced by an AND- or XOR-join which describes the intended behaviour more accurately.
+			</description>
+		<image>/images/and_to_or.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>loop_entry_or</id>
+		<name>loop_entry_or</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Replacable OR-Connectors</class>
+		<diagram>epc</diagram>
+		<description>Reports an OR-join that is a loop entry. It should be replaced by an XOR join.</description>
+		<image>/images/loop_entry_or.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>delta_warning</id>
+		<name>delta_warning</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Replacable OR-Connectors</class>
+		<diagram>epc</diagram>
+		<description>Reports an OR-split that should be replaced by an XOR-split which describes the intended behaviour more accurately</description>
+		<image>/images/delta_warning.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>partial_redo</id>
+		<name>partial_redo</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Style</class>
+		<diagram>epc</diagram>
+		<description>Not all of the parallel flows of the AND-control block have to be repeated if it comes to a second execution.
+		This can be a sign for a (pragmatic) modeling error.</description>
+		<image>/images/partial_redo.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>or_starts_optional_execution</id>
+		<name>or_starts_optional_execution</name>
+		<message>.</message>
+		<class>Extended Model Validation (EPC)/Style</class>
+		<diagram>epc</diagram>
+		<description>The alternative "do something or skip it" is modeled by using a pair OR-split --> OR-join. Using the combination XOR-split --> XOR join would be more appropriate!</description>
+		<image>/images/or_starts_optional_execution.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_starts_optional_execution</id>
+		<name>and_starts_optional_execution</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Style</class>
+		<diagram>epc</diagram>
+		<description>An "empty" arc is executed in parallel to other steps. The "empty" arc is useless!</description>
+		<image>/images/and_starts_optional_execution.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>and_to_and_upstream_entry_or</id>
+		<name>and_to_and_upstream_entry_or</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Style</class>
+		<diagram>epc</diagram>
+		<description>An AND-control block has an OR-entry. The start event before this OR-entry is useless.</description>
+		<image>/images/and_to_and_upstream_entry_or.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>startevents_blockieren_nach_split</id>
+		<name>startevents_blockieren_nach_split</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Style</class>
+		<diagram>epc</diagram>
+		<description>Looks like one of the AND-joins following to this split is expected to block. This might be the intended meaning of the model, but it is recommended to consider another way of modeling the situation.</description>
+		<image>/images/startevents_blockieren_nach_split.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>startevents_andjoin</id>
+		<name>startevents_andjoin</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Style</class>
+		<diagram>epc</diagram>
+		<description>If this start event does not occur, the succeeding and-join blocks. This might be the intended meaning of the model, but it is recommended to consider another way of modeling the situation.</description>
+		<image>/images/startevents_andjoin.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>nothing_to_do</id>
+		<name>nothing_to_do</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Style</class>
+		<diagram>epc</diagram>
+		<description>An end event can be reached without ever executing a function.</description>
+		<image>/images/nothing_to_do.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>flows_block_at_join</id>
+		<name>flows_block_at_join</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Style</class>
+		<diagram>epc</diagram>
+		<description>As the start events are not located at the beginning of the model, it could be difficult to see whether this join will work or which combinations of start events are allowed.</description>
+		<image>/images/flows_block_at_join.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>xor_without_consequences</id>
+		<name>xor_without_consequences</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Style</class>
+		<diagram>epc</diagram>
+		<description>No reaction on the events after an XOR-split is modeled. (NOTE: This does not have to be a modeling error if the events are used mainly for documentation purposes and do not require a reaction).</description>
+		<image>/images/xor_without_consequences.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>trivialereignis</id>
+		<name>trivialereignis</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Textual Labels</class>
+		<diagram>epc</diagram>
+		<description>"Trivial" events like "OK" or "Done"</description>
+		<image>/images/trivialereignis.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>xandnotx</id>
+		<name>xandnotx</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Textual Labels</class>
+		<diagram>epc</diagram>
+		<description>Before or after an OR/AND-connector, there are two events that contradict each other. However, the meaning of AND / OR is that these events are allowed to occur together.</description>
+		<image>/images/xandnotx.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>xxorx</id>
+		<name>xxorx</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Textual Labels</class>
+		<diagram>epc</diagram>
+		<description>Identical events are placed before or after a connector. Often, it is advisable to merge these connectors.</description>
+		<image>/images/xxorx.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>tertium_non_datur</id>
+		<name>tertium_non_datur</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Textual Labels</class>
+		<diagram>epc</diagram>
+		<description>Before or after an XOR-connector, an event, its negation and one more event is modeled. Because one of the first two events always occurs, the purpose of the third event can be questionable.</description>
+		<image>/images/tertium_non_datur.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>greaterlessandnoequal</id>
+		<name>greaterlessandnoequal</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Textual Labels</class>
+		<diagram>epc</diagram>
+		<description>Two events describe situations like "a less than b" and "a greater than b". Maybe the case "a equals b" has been forgotten.</description>
+		<image>/images/greaterlessandnoequal.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>contradicting_startevents</id>
+		<name>contradicting_startevents</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Textual Labels</class>
+		<diagram>epc</diagram>
+		<description>Because of an AND-join (which assumes that control flow reaches all its incoming arcs), it is required two start events that contradict each other have to occur.</description>
+		<image>/images/contradicting_startevents.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>contradicting_endevents</id>
+		<name>contradicting_endevents</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Textual Labels</class>
+		<diagram>epc</diagram>
+		<description>Because of an AND-split, two end events that contradict each other have to occur.</description>
+		<image>/images/contradicting_endevents.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>not_xor_after_yesno_question</id>
+		<name>not_xor_after_yesno_question</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Textual Labels</class>
+		<diagram>epc</diagram>
+		<description>After a yes/no-question, there is no XOR-split but an AND- or OR-split.</description>
+		<image>/images/not_xor_after_yesno_question.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>metric_number_of_nodes</id>
+		<name>metric_number_of_nodes</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Metrics</class>
+		<diagram>epc</diagram>
+		<description>Number of nodes in the Model</description>
+		<image>/images/metric_number_of_nodes.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>metric_number_of_functions</id>
+		<name>metric_number_of_functions</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Metrics</class>
+		<diagram>epc</diagram>
+		<description>Number of functions in the Model</description>
+		<image>/images/metric_number_of_functions.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>metric_number_of_events</id>
+		<name>metric_number_of_events</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Metrics</class>
+		<diagram>epc</diagram>
+		<description>Number of events in the Model</description>
+		<image>/images/metric_number_of_events.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>metric_number_of_startevents</id>
+		<name>metric_number_of_startevents</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Metrics</class>
+		<diagram>epc</diagram>
+		<description>Number of start events in the Model</description>
+		<image>/images/metric_number_of_startevents.jpeg</image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>metric_well_structured</id>
+		<name>metric_well_structured</name>
+		<message></message>
+		<class>Extended Model Validation (EPC)/Metrics</class>
+		<diagram>epc</diagram>
+		<description>Checks whether the EPC is well-structured.</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+</language>
