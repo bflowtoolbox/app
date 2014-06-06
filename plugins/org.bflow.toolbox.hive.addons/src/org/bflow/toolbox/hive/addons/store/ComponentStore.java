@@ -5,27 +5,57 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 
 /**
  * Defines a store that lists all available protocol components.
  * 
- * @author Arian Storch
+ * @author Arian Storch<arian.storch@bflow.org>
  * @since 25/09/10
- * @version 05/03/13
+ * @version 06/06/14
  */
 public class ComponentStore {
+	
+	private static ComponentStore fInstance;
+	
+	/**
+	 * Returns the singleton instance of the Component Store. 
+	 * @return The singleton instance.
+	 */
+	public static ComponentStore getInstance() {
+		return fInstance != null ? fInstance : (fInstance = new ComponentStore());
+	}
+	
 	
 	/**
 	 * static collection instance
 	 */
-	private static List<IComponent> depository = new ArrayList<IComponent>();
+	private List<IComponent> depository = new ArrayList<IComponent>();
 
+	/**
+	 * Private constructor. Initializes the component store.
+	 */
+	private ComponentStore() {
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID_ADDON_COMPONENT);
+
+		for (IConfigurationElement element : config) {
+			try {
+				IComponent component = (IComponent) element.createExecutableExtension("Class");
+				register(component);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	/**
 	 * Returns an alphabetic sorted list of all installed and available protocol components.<p/>
 	 * Note: The list only contains the simple class names.
 	 * @return list
 	 */
-	public static List<String> getInstalledComponents() {
+	public List<String> getInstalledComponents() {
 		ArrayList<String> list = new ArrayList<String>();
 		
 		for(IComponent comp:depository)
@@ -39,7 +69,7 @@ public class ComponentStore {
 	 * 
 	 * @return list
 	 */
-	public static List<String> getUserfriendlyComponentNames() {
+	public List<String> getUserfriendlyComponentNames() {
 
 		List<IComponent> depositoryCollection = depository;
 		String list[] = new String[depositoryCollection.size()];
@@ -50,18 +80,16 @@ public class ComponentStore {
 		}
 		
 		Arrays.sort(list);		
-		
 		return Arrays.asList(list);
 	}
 	
 	/**
 	 * Identifies a name with a IComponent implementation and does it return.
 	 * @param name name to find
-	 * @param userfriendly set true if the name is userfriedly
+	 * @param userfriendly set true if the name is user-friendly
 	 * @return component implementation or null
 	 */
-	public static IComponent identify(String name, boolean userfriendly) {
-		
+	public IComponent identify(String name, boolean userfriendly) {
 		for(IComponent comp:depository)
 			if(userfriendly) {
 				if(comp.getDisplayName().equalsIgnoreCase(name))
@@ -78,7 +106,12 @@ public class ComponentStore {
 	 * Registers the component in the store.
 	 * @param component component to register
 	 */
-	public static void register(IComponent component) {
+	public void register(IComponent component) {
 		depository.add(component);
 	}
+	
+	/**
+	 * Extension point id for add-ons components.
+	 */
+	public static final String EXTENSION_ID_ADDON_COMPONENT = "org.bflow.toolbox.addons.component";
 }

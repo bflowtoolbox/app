@@ -28,7 +28,7 @@ import org.dom4j.io.XMLWriter;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 17/04/10
- * @version 13/09/13
+ * @version 06/06/14
  */
 public class ProtocolDescriptor {
 	public boolean storable;
@@ -248,7 +248,7 @@ public class ProtocolDescriptor {
 					String clazz = component.attributeValue("class");					
 					String params = component.attributeValue("params");
 					
-					IComponent iComp = ComponentStore.identify(clazz, false);
+					IComponent iComp = ComponentStore.getInstance().identify(clazz, false);
 					iComp = iComp.getClass().newInstance();
 										
 					prot.setComponentParam(iComp, params);

@@ -47,7 +47,7 @@ import org.eclipse.swt.widgets.Text;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 03/12/12
- * @version 13/09/13
+ * @version 06/06/14
  * 
  */
 public class AddonEditDialog extends Dialog {
@@ -431,7 +431,7 @@ public class AddonEditDialog extends Dialog {
 		public ComponentNameEditingSupport(ColumnViewer viewer) {
 			super(viewer);
 
-			cBoxValues = ComponentStore.getUserfriendlyComponentNames();
+			cBoxValues = ComponentStore.getInstance().getUserfriendlyComponentNames();
 			int size = cBoxValues.size();
 
 			this.editor = new ComboBoxCellEditor(((TableViewer) viewer)
@@ -476,7 +476,7 @@ public class AddonEditDialog extends Dialog {
 
 			String compName = this.cBoxValues.get(index);
 
-			IComponent nu = ComponentStore.identify(compName, true);
+			IComponent nu = ComponentStore.getInstance().identify(compName, true);
 
 			if (nu.getDisplayName().equalsIgnoreCase(old.getDisplayName()))
 				return;

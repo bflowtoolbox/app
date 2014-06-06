@@ -8,7 +8,6 @@ import java.util.Vector;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.store.AddonStore;
 import org.bflow.toolbox.hive.addons.store.ComponentStore;
 import org.bflow.toolbox.hive.addons.store.PrologAdditionStore;
@@ -43,7 +42,7 @@ import org.osgi.service.prefs.Preferences;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 06/03/11
- * @version 17/12/13
+ * @version 06/06/14
  */
 public class AddonPlugin extends AbstractUIPlugin {
 
@@ -68,8 +67,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 	/**
 	 * @generated
 	 */
-	public static final PreferencesHint DIAGRAM_PREFERENCES_HINT = new PreferencesHint(
-			PLUGIN_ID);
+	public static final PreferencesHint DIAGRAM_PREFERENCES_HINT = new PreferencesHint(PLUGIN_ID);
 
 	/**
 	 * Constructor.
@@ -304,14 +302,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 	 * @throws CoreException
 	 */
 	private void generateComponentRegistry() throws CoreException {
-		IConfigurationElement[] config = Platform.getExtensionRegistry()
-				.getConfigurationElementsFor(EXTENSION_ID_ADDON_COMPONENT);
-
-		for (IConfigurationElement element : config) {
-			IComponent component = (IComponent) element
-					.createExecutableExtension("Class");
-			ComponentStore.register(component);
-		}
+		ComponentStore.getInstance();
 	}
 
 	/**
@@ -321,8 +312,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 	 * @throws IOException
 	 */
 	private void generatePrologAdditionRegistry() throws NullPointerException {
-		IConfigurationElement[] config = Platform.getExtensionRegistry()
-				.getConfigurationElementsFor(EXTENSION_ID_ADDON_PROLOGADDITION);
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID_ADDON_PROLOGADDITION);
 
 		for (IConfigurationElement element : config) {
 			IContributor con = element.getContributor();
@@ -397,11 +387,6 @@ public class AddonPlugin extends AbstractUIPlugin {
 			appNode.add(hiveChild);
 		}
 	}
-
-	/**
-	 * Extension point id for add-ons components.
-	 */
-	public static final String EXTENSION_ID_ADDON_COMPONENT = "org.bflow.toolbox.addons.component";
 
 	/**
 	 * Extension point id for add-ons prolog additions.
