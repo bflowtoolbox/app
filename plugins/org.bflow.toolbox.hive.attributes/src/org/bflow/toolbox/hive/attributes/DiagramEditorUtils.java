@@ -16,10 +16,10 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.figures.BorderedNodeFigure;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.PolylineConnectionEx;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
 import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
+import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -30,9 +30,9 @@ import org.eclipse.ui.PlatformUI;
 /**
  * Provides some useful methods to manipulate a diagram and its elements.
  * 
- * @author Arian Storch
+ * @author Arian Storch<arian.storch@bflow.org>
  * @since 08/06/11
- * @version 28/07/12
+ * @version 06/06/14
  * 
  */
 public class DiagramEditorUtils {
@@ -92,14 +92,11 @@ public class DiagramEditorUtils {
 	 * @param location
 	 *            new location
 	 */
-	public static void setElementLocation(ShapeNodeEditPart editpart,
-			Point location) {
-		SetBoundsCommand command = new SetBoundsCommand(editpart
-				.getEditingDomain(), "Element relocate", new EObjectAdapter(
-				(View) editpart.getModel()), location);
+	public static void setElementLocation(ShapeNodeEditPart editpart, Point location) {
+		SetBoundsCommand command = new SetBoundsCommand(editpart.getEditingDomain(), 
+				"Element relocate", new EObjectAdapter((View) editpart.getModel()), location);
 
-		editpart.getDiagramEditDomain().getDiagramCommandStack().execute(
-				new ICommandProxy(command));
+		editpart.getDiagramEditDomain().getDiagramCommandStack().execute(new ICommandProxy(command));
 	}
 
 	/**
@@ -112,15 +109,11 @@ public class DiagramEditorUtils {
 	 * @param y
 	 *            value to move the element along the ordinate
 	 */
-	public static void moveElementLocation(ShapeNodeEditPart editpart, int x,
-			int y) {
+	public static void moveElementLocation(ShapeNodeEditPart editpart, int x, int y) {
 		IFigure fig = editpart.getFigure();
-		BorderedNodeFigure bnf = (BorderedNodeFigure) fig;
-
-		Point old = bnf.getLocation();
-
+		NodeFigure nodeFigure = (NodeFigure) fig;
+		Point old = nodeFigure.getLocation();
 		Point location = new Point(old.x + x, old.y + y);
-
 		setElementLocation(editpart, location);
 	}
 	
@@ -408,8 +401,7 @@ public class DiagramEditorUtils {
 								.parseInt(strSplit[0]), Integer
 								.parseInt(strSplit[1]));
 
-						DiagramEditorUtils.setElementLocation(snEditPart,
-								location);
+						DiagramEditorUtils.setElementLocation(snEditPart, location);
 					}
 
 					return;
