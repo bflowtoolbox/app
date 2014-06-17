@@ -35,7 +35,7 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle.
  * 
  * @since 2011
- * @version 09/09/13
+ * @version 17/06/14
  */
 @SuppressWarnings("deprecation")
 public class AddonsInterchangePlugin extends AbstractUIPlugin {
@@ -341,7 +341,7 @@ public class AddonsInterchangePlugin extends AbstractUIPlugin {
 			}
 			
 			if(descriptor != null)
-				ImportDescriptorStore.register(descriptor);
+				ImportDescriptorStore.register(descriptor, bundle);
 		}
 	}
 	
