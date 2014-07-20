@@ -49,6 +49,7 @@
       <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</windows>
    </vm>
 
+
    <plugins>
       <plugin id="com.google.inject"/>
       <plugin id="com.ibm.icu"/>
@@ -101,6 +102,7 @@
       <plugin id="org.bflow.toolbox.oepc.editor"/>
       <plugin id="org.bflow.toolbox.oepc.evl"/>
       <plugin id="org.bflow.toolbox.persistence"/>
+      <plugin id="org.bflow.toolbox.product"/>
       <plugin id="org.bflow.toolbox.vc.diagram"/>
       <plugin id="org.bflow.toolbox.vc.edit"/>
       <plugin id="org.bflow.toolbox.vc.model"/>

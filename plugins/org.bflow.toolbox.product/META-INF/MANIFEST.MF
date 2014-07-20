@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Bflow Product
+Bundle-SymbolicName: org.bflow.toolbox.product
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: bflow dev team
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
