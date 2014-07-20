@@ -24,10 +24,10 @@
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.bflow.toolbox/icons/bee16a.png" i32="/org.bflow.toolbox/icons/bee32.png" i48="/org.bflow.toolbox/icons/bee48.png" i64="/org.bflow.toolbox/icons/bee64.png" i128="/org.bflow.toolbox/icons/bee128.png"/>
+   <windowImages i16="/org.bflow.toolbox.product/icons/bee16a.png" i32="/org.bflow.toolbox.product/icons/bee32.png" i48="/org.bflow.toolbox.product/icons/bee48.png" i64="/org.bflow.toolbox.product/icons/bee64.png" i128="/org.bflow.toolbox.product/icons/bee128.png"/>
 
    <splash
-      location="org.bflow.toolbox"
+      location="org.bflow.toolbox.product"
       startupProgressRect="0,280,455,15"
       startupMessageRect="7,220,441,20"
       startupForegroundColor="C8D5EA" />
@@ -35,14 +35,15 @@
       <solaris/>
       <win useIco="false">
          <bmp
-            winSmallHigh="/org.bflow.toolbox/icons/bee16_32bit.bmp"
-            winSmallLow="/org.bflow.toolbox/icons/bee16_8bit.bmp"
-            winMediumHigh="/org.bflow.toolbox/icons/bee32_32bit.bmp"
-            winMediumLow="/org.bflow.toolbox/icons/bee32_8bit.bmp"
-            winLargeHigh="/org.bflow.toolbox/icons/bee48_32bit.bmp"
-            winLargeLow="/org.bflow.toolbox/icons/bee48_8bit.bmp"/>
+            winSmallHigh="/org.bflow.toolbox.product/icons/bee16_32bit.bmp"
+            winSmallLow="/org.bflow.toolbox.product/icons/bee16_8bit.bmp"
+            winMediumHigh="/org.bflow.toolbox.product/icons/bee32_32bit.bmp"
+            winMediumLow="/org.bflow.toolbox.product/icons/bee32_8bit.bmp"
+            winLargeHigh="/org.bflow.toolbox.product/icons/bee48_32bit.bmp"
+            winLargeLow="/org.bflow.toolbox.product/icons/bee48_8bit.bmp"/>
       </win>
    </launcher>
+
 
    <vm>
       <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</windows>
@@ -100,7 +101,6 @@
       <plugin id="org.bflow.toolbox.oepc.editor"/>
       <plugin id="org.bflow.toolbox.oepc.evl"/>
       <plugin id="org.bflow.toolbox.persistence"/>
-      <plugin id="org.bflow.toolbox.sdk"/>
       <plugin id="org.bflow.toolbox.vc.diagram"/>
       <plugin id="org.bflow.toolbox.vc.edit"/>
       <plugin id="org.bflow.toolbox.vc.model"/>

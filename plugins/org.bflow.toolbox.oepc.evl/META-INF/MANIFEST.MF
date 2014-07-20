@@ -7,6 +7,5 @@ Bundle-Vendor: Bflow Dev Team
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.ui.ide;bundle-version="3.4.1",
  org.eclipse.epsilon.evl.emf.validation;bundle-version="0.9.0",
- org.bflow.toolbox.sdk;bundle-version="1.2.0",
  org.bflow.toolbox.bflow.edit;bundle-version="1.1.0",
  org.bflow.toolbox.bflow.model;bundle-version="1.1.0"
