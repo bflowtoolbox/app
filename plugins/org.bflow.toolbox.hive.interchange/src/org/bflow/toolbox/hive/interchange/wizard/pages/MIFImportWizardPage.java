@@ -250,7 +250,7 @@ public class MIFImportWizardPage extends WizardPage
 				textFieldDescription.setText(selectedImportDescription.getDescription().replaceAll("//", "\r\n")); //$NON-NLS-1$ //$NON-NLS-2$
 			}});
 		
-		cbImportDescriptions.setVisibleItemCount(10);
+		cbImportDescriptions.setVisibleItemCount(20);
 	}
 		
 	/**

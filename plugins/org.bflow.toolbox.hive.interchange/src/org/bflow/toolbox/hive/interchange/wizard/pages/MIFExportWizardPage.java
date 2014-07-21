@@ -182,7 +182,7 @@ public class MIFExportWizardPage extends WizardPage {
 			}
 		});
 
-		cbExportTypes.setVisibleItemCount(10);
+		cbExportTypes.setVisibleItemCount(20);
 	}
 
 	/**
