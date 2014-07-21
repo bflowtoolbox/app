@@ -122,9 +122,10 @@ public class DiagramExportComponent implements IDiagramExportComponent {
 			
 			String targetFileName = FilenameUtils.getBaseName(source.getAbsolutePath());
 			String targetFileExtension = xDescription.getFileExtensions()[0];
-			String targetPathName = String.format("%s\\%s.%s", 
+			String targetPathName = String.format("%s"+ File.separator +"%s.%s", 
 					targetFolder.getAbsolutePath(), targetFileName, targetFileExtension);
 			target = new File(targetPathName);
+
 			
 			// Legacy code
 //			xDescription.run(source, target, false, false);
@@ -156,7 +157,7 @@ public class DiagramExportComponent implements IDiagramExportComponent {
 		
 		if (inputSource.getClass() != File.class)
 			throw new ComponentException(
-					"input source has not exspected format");
+					"input source has not expected format");
 
 		source = (File) inputSource;
 	}
@@ -166,7 +167,7 @@ public class DiagramExportComponent implements IDiagramExportComponent {
 	 */
 	@Override
 	public Object transformOutput() throws ComponentException {
-		return target;
+	return target;
 	}
 
 	/* (non-Javadoc)
