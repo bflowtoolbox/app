@@ -973,8 +973,10 @@
 				<xsl:attribute name="width"><xsl:value-of select="$width"/></xsl:attribute>
 				<!-- fuer die Zukunft falls epc aufstockt-->
 				<xsl:if test="layoutConstraint/@width!=''">
-					<xsl:attribute name="height"><xsl:value-of select="layoutConstraint/@height"/></xsl:attribute>
 					<xsl:attribute name="width"><xsl:value-of select="layoutConstraint/@width"/></xsl:attribute>
+				</xsl:if>
+				<xsl:if test="layoutConstraint/@height!=''">
+					<xsl:attribute name="height"><xsl:value-of select="layoutConstraint/@height"/></xsl:attribute>
 				</xsl:if>
 			</xsl:for-each>	
 			</position>
