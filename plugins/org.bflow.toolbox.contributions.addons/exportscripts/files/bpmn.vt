@@ -1,0 +1,225 @@
+@preprocess
+<?xml version="1.0" encoding="UTF-8"?>~nl
+<!DOCTYPE bpmn2:definitions>~nl
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="_29goIOieEeOf3_4kWKHTGA" targetNamespace="http://bflow.org/bpmn">~nl
+
+~nl
+~t<bpmn2:process id="Process_1" isExecutable="false">~nl
+
+##----- find right margin (this is necessary for rotating the model) -----~nl
+#set( $rightmax = 0 )
+#foreach( $shape in $shapes )## walk through all shapes to find the most right one ~nl
+	#if( $rightmax < ($shape.X+$shape.Width) )
+		#set( $rightmax = ($shape.X+$shape.Width) )
+	#end
+#end
+
+#set( $shapesMap = {})## map to store and modify shapes, also for indexed access ~nl
+#set( $edgesMap = {})## map to store and modify edges, also for indexed access ~nl
+
+##----- store all edges in edge map, add in some extra information -----~nl
+#foreach($edge in $edges)
+	#set( $edgeDetails = {"epc" : $edge, "hidden" : false, "Name" : "" })
+	#set( $dummy = $edgesMap.put("$edge.Id", $edgeDetails) )
+#end
+
+##----- store all shapes in shapes map, add in some extra information, modify position and size -----~nl
+#foreach( $shape in $shapes )
+	##----- data structure for shape data -----~nl
+	##note: bpmnDetails contains modified positions!!!~nl
+	#set( $newY = ( $rightmax - ($shape.X + ($shape.Width / 2)) ) )## this is the vertical center of the shape ~nl
+	#set( $newX = ( $shape.Y * 1.5 ) ) ## model is stretched in x direction ~nl
+	#set( $bpmnDetails = {"Height" : $shape.Height, "Width" : $shape.Width, "X" : $newX, "Y" : $newY })
+	#set( $shapeDetails = {"epc" : $shape, "bpmn" : $bpmnDetails, "hidden" : false })
+	#set( $dummy = $shapesMap.put("$shape.Id", $shapeDetails) )
+	## hint: use $shapesMap.get("$shape.Id").* to access the map by id ~nl
+	
+	##----- fetch shape type information -----~nl
+	#set( $type = $shape.Type.split("\.")[4].toLowerCase() )
+	#set( $dummy = $shapeDetails.put("type", $type ) )
+	
+	##----- fetch incoming and outgoing edges -----~nl
+	#set( $incoming = [] )
+	#set( $outgoing = [] )
+	#foreach( $edge in $edges )
+		#if($shape.Id == $edge.Source.Id)
+			#set( $dummy = $outgoing.add($edge.Id) )
+		#end
+		#if($shape.Id == $edge.Target.Id)
+			#set( $dummy = $incoming.add($edge.Id) )
+		#end
+	#end
+	#set( $dummy = $shapesMap.get("$shape.Id").put("incoming", $incoming) )
+	#set( $dummy = $shapesMap.get("$shape.Id").put("outgoing", $outgoing) )
+	
+	##----- process events, tasks and connectors -----~nl
+	##----- set (bpmn) element types ~nl
+	#if($type == "event")
+		#set( $dummy = $shapesMap.get("$shape.Id").bpmn.put("type", "intermediateCatchEvent") )
+		#if($outgoing == [])
+			#set( $dummy = $shapesMap.get("$shape.Id").bpmn.put("type", "endEvent") )
+		#end
+		#if($incoming == [])
+			#set( $dummy = $shapesMap.get("$shape.Id").bpmn.put("type", "startEvent") )
+		#end
+	#elseif($type == "function")
+		#set( $dummy = $shapesMap.get("$shape.Id").bpmn.put("type", "task") )
+	#elseif($type == "and")
+		#set( $dummy = $shapesMap.get("$shape.Id").bpmn.put("type", "parallelGateway") )
+	#elseif($type == "or")
+		#set( $dummy = $shapesMap.get("$shape.Id").bpmn.put("type", "inclusiveGateway") )
+	#elseif($type == "xor")
+		#set( $dummy = $shapesMap.get("$shape.Id").bpmn.put("type", "exclusiveGateway") )
+	#else
+		##ignore unknown shapetypes~nl
+		#set( $dummy = $shapesMap.get("$shape.Id").bpmn.put("type", "") )
+		#set( $dummy = $shapesMap.get("$shape.Id").put("hidden", true) )
+		#foreach( $id in $shapesMap.get("$shape.Id").get("incoming") )
+			#set( $dummy = $edgesMap.get("$id").put("hidden", true) )
+			## remove outgoing edge from source element ~nl
+			#set( $dummy = $shapesMap.get($edgesMap.get($id).epc.Source.Id).outgoing.remove($id) )
+		#end
+		#foreach( $id in $shapesMap.get("$shape.Id").get("outgoing") )
+			#set( $dummy = $edgesMap.get("$id").put("hidden", true) )
+			##remove incoming edge from target element ~nl
+			#set( $dummy = $shapesMap.get($edgesMap.get("$id").epc.Target.Id).incoming.remove("$id") )
+		#end
+	#end
+	
+	##----- modify size and positions ~nl
+	#if($type == "event")
+		#set( $shapesMap.get("$shape.Id").bpmn.Width = 36 )
+		#set( $shapesMap.get("$shape.Id").bpmn.Height = 36 )
+	#elseif($type == "and" || $type == "or" || $type == "xor")
+		#set( $shapesMap.get("$shape.Id").bpmn.Width = 50 )
+		#set( $shapesMap.get("$shape.Id").bpmn.Height = 50 )
+	#else
+		## do nothing ~nl
+	#end
+	## note: Y is the centre line of the current element -> move element by a half of the elements height ~nl
+	#set( $shapesMap.get("$shape.Id").bpmn.Y = $shapesMap.get("$shape.Id").bpmn.Y - ($shapesMap.get("$shape.Id").bpmn.Height/2) )
+#end
+
+##----- replace unnecessary intermediateCatchEvents by labeled edges -----~nl
+#foreach( $shape in $shapesMap )
+	#if($shape.bpmn.type == "intermediateCatchEvent")
+		
+		#set( $isReplaceable = true )
+		#foreach( $id in $shape.get("incoming") )
+			#if($shapesMap.get($edgesMap.get($id).epc.Source.Id).bpmn.type != "exclusiveGateway" && 
+				$shapesMap.get($edgesMap.get($id).epc.Source.Id).bpmn.type != "inclusiveGateway")
+				#set( $isReplaceable = false )
+			#end
+		#end
+
+		#if($isReplaceable)
+			#set( $dummy = $shape.put("hidden", true) )
+			#foreach( $id in $shape.get("incoming") )
+				#set( $dummy = $edgesMap.get("$id").put("hidden", true) )
+				## remove outgoing edge from source element ~nl
+				#set( $dummy = $shapesMap.get($edgesMap.get($id).epc.Source.Id).outgoing.remove($id) )
+			#end
+			#foreach( $id in $shape.get("outgoing") )
+				#set( $dummy = $edgesMap.get("$id").put("hidden", true) )
+				##remove incoming edge from target element ~nl
+				#set( $dummy = $shapesMap.get($edgesMap.get("$id").epc.Target.Id).incoming.remove("$id") )
+			#end
+
+			## add in an edge for replacement ~nl
+			#foreach( $idIn in $shape.get("incoming") )
+				#foreach( $idOut in $shape.get("outgoing") )
+					#set( $replaceEdge = {"Id" : "replace$shape.epc.Id", "Source" : $shapesMap.get($edgesMap.get($idIn).epc.Source.Id).epc, "Target" : $shapesMap.get($edgesMap.get($idOut).epc.Target.Id).epc })
+					#set( $edgeDetails = {"epc" : $replaceEdge, "hidden" : false, "Name" : "$shape.epc.Name" })
+					#set( $dummy = $edgesMap.put("$replaceEdge.Id", $edgeDetails) )
+					## add the new edge as incoming resp. outgoing edge in the source and target shapes ~nl
+					#set( $dummy = $shapesMap.get($edgesMap.get($idIn).epc.Source.Id).outgoing.add("$replaceEdge.Id") )
+					#set( $dummy = $shapesMap.get($edgesMap.get($idOut).epc.Target.Id).incoming.add("$replaceEdge.Id") )
+				#end
+			#end
+		#end
+	#end
+#end
+
+##----- output shape elements -----~nl
+#foreach( $shape in $shapesMap )
+	#if($shape.hidden==false && $shape.bpmn.type != "")
+		~t~t<bpmn2:$shape.bpmn.type id="$shape.epc.Id" name="$esc.xml($shape.epc.Name)">~nl
+		#foreach( $id in $shape.get("incoming") )
+			~t~t~t<bpmn2:incoming>$id</bpmn2:incoming>~nl
+		#end
+		#foreach( $id in $shape.get("outgoing") )
+			~t~t~t<bpmn2:outgoing>$id</bpmn2:outgoing>~nl
+		#end
+		~t~t</bpmn2:$shape.bpmn.type>~nl
+	#end
+#end
+
+##----- output edge elements -----~nl
+#foreach($edge in $edgesMap)
+	#if($edge.hidden==false)
+		~t~t<bpmn2:sequenceFlow id="$edge.epc.Id" name="$edge.Name" sourceRef="$edge.epc.Source.Id" targetRef="$edge.epc.Target.Id"/>~nl
+	#end
+#end
+~t</bpmn2:process>~nl
+
+
+
+##----- output graphical representation -----~nl
+~t<bpmndi:BPMNDiagram id="BPMNDiagram_1">~nl
+~t~t<bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">~nl
+
+##----- output shape elements -----~nl
+#foreach( $shape in $shapesMap )
+	#if($shape.hidden==false && $shape.bpmn.type != "")
+		~t~t~t<bpmndi:BPMNShape id="_BPMNShape_$shape.epc.Id" bpmnElement="$shape.epc.Id">~nl
+		~t~t~t~t<dc:Bounds height="$shape.bpmn.Height" width="$shape.bpmn.Width" x="$shape.bpmn.X" y="$shape.bpmn.Y"/>~nl
+		~t~t~t</bpmndi:BPMNShape>~nl
+	#end
+#end
+
+##----- output edge elements -----~nl
+#set( $loops = 0 ) ## counter for the Y-positions for intermediate way points in loops~nl
+#foreach( $edge in $edgesMap )
+	#if($edge.hidden==false)
+		## calculate and add way points ~nl
+		#set( $waypoints = [] )
+		
+		## source points ~nl
+		#set( $wpSrcX = $shapesMap.get("$edge.epc.Source.Id").bpmn.X + $shapesMap.get("$edge.epc.Source.Id").bpmn.Width )
+		#set( $wpSrcY = $shapesMap.get("$edge.epc.Source.Id").bpmn.Y + $shapesMap.get("$edge.epc.Source.Id").bpmn.Height / 2 )
+		
+		## target points ~nl
+		#set( $wpDstX = $shapesMap.get("$edge.epc.Target.Id").bpmn.X )
+		#set( $wpDstY = $shapesMap.get("$edge.epc.Target.Id").bpmn.Y + $shapesMap.get("$edge.epc.Target.Id").bpmn.Height / 2 )
+		
+		## add way points ~nl
+		#set( $dummy = $waypoints.add( { "X" : $wpSrcX, "Y" : $wpSrcY } ) )
+		#if($wpSrcX < $wpDstX) ## simple edges ~nl
+			## X-positions for intermediate points ~nl
+			#set( $wpCtrX = ($wpSrcX+$wpDstX)/2 )
+			## intermediate points ~nl
+			#set( $dummy = $waypoints.add( { "X" : $wpCtrX, "Y" : $wpSrcY } ) )
+			#set( $dummy = $waypoints.add( { "X" : $wpCtrX, "Y" : $wpDstY } ) )
+		#else ## loop edges ~nl
+			## X-positions for intermediate points~nl
+			#set( $wpCtr1X = ( $wpSrcX + 10 ) )
+			#set( $wpCtr2Y = ( $rightmax + 20 + ( 15 * $loops ) ) )
+			#set( $loops = ( $loops + 1 ) )
+			## intermediate points ~nl
+			#set( $dummy = $waypoints.add( { "X" : $wpCtr1X, "Y" : $wpSrcY } ) )
+			#set( $dummy = $waypoints.add( { "X" : $wpCtr1X, "Y" : $wpCtr2Y } ) )
+			#set( $dummy = $waypoints.add( { "X" : $wpDstX, "Y" : $wpCtr2Y } ) )		
+		#end
+		#set( $dummy = $waypoints.add( { "X" : $wpDstX, "Y" : $wpDstY } ) )
+		## output way points ~nl
+		~t~t<bpmndi:BPMNEdge id="BPMNEdge_$edge.epc.Id" bpmnElement="$edge.epc.Id" sourceElement="_BPMNShape_$edge.epc.Source.Id" targetElement="_BPMNShape_$edge.epc.Target.Id">~nl
+		#foreach( $waypoint in $waypoints )
+			~t~t~t<di:waypoint xsi:type="dc:Point" x="$waypoint.X" y="$waypoint.Y"/>~nl
+		#end			
+		~t~t</bpmndi:BPMNEdge>~nl
+	#end
+#end
+
+~t~t</bpmndi:BPMNPlane>~nl
+~t</bpmndi:BPMNDiagram>~nl
+</bpmn2:definitions>

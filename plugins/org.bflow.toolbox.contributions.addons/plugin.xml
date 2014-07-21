@@ -36,10 +36,15 @@
       </Rule>
    </extension>
    <extension
+         id="exportscripts/bpmn.exd"
          point="org.bflow.toolbox.interchange.exportscript">
       <Exportscript
             File="exportscripts/ArisAml.exd.xml"
             Name="ArisAML">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/bpmn.exd"
+            Name="BPMN (MIF)">
       </Exportscript>
       <Exportscript
             File="exportscripts/RACI.exd"
