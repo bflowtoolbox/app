@@ -121,9 +121,9 @@ public class DiagramExportComponent implements IDiagramExportComponent {
 			InterchangeProcessService.processExport(source, targetFolder, processor, xDescription);
 			
 			String targetFileName = FilenameUtils.getBaseName(source.getAbsolutePath());
-			String targetFileExtension = xDescription.getFileExtensions()[0];
-			String targetPathName = String.format("%s"+ File.separator +"%s.%s", 
-					targetFolder.getAbsolutePath(), targetFileName, targetFileExtension);
+			String targetFileExtension = xDescription.getFileExtensions()[0]; 
+			String targetPathName = String.format("%s%s%s.%s", 
+					targetFolder.getAbsolutePath(), File.pathSeparator, targetFileName, targetFileExtension);
 			target = new File(targetPathName);
 
 			
