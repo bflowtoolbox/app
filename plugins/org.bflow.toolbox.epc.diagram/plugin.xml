@@ -141,7 +141,7 @@
                definitionId="org.bflow.toolbox.epc.diagram.showModelWizard"
                icon="icons/wizard_16.png"
                id="org.bflow.toolbox.diagram.extensions.ModelWizardAction"
-               label="Model wizard..."
+               label="Model Wizard..."
                menubarPath="model.processing.epc.menu">
          </action>
       </objectContribution>
