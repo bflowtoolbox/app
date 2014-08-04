@@ -3,8 +3,9 @@
 	#set( $type = $shape.Type.split("\.")[4].toLowerCase() )
 	#if($type == "event" || $type == "function")
 		#set( $id = $shape.Id )
+		#set( $shapeName = $shape.Name.replaceAll("\'", "~") )
 		#set( $outs = {} )
-		'$id'={label:'$shape.Name' type:'$type'
+		'$id'={label:'$shapeName' type:'$type'
 		## Check if there are outs~nl
 		#foreach( $edge in $edges )
  			#set($srcNode = $edge.Source)
