@@ -1,5 +1,6 @@
 package org.bflow.toolbox.hive.addons.preferences.dialogs;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bflow.toolbox.hive.nls.NLUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -19,23 +20,21 @@ import org.eclipse.swt.widgets.Text;
 /**
  * Defines an InputDialog for registering an external tool.
  * 
- * @author Arian Storch
+ * @author Arian Storch<arian.storch@bflow.org>
  * @since 17/04/10
- * @version 28/07/12
+ * @version 06/08/14
  */
 public class EditToolDialog extends Dialog {	
+	
 	private String input[] = new String[3];
-	
 	private boolean inputChanged = false;
-	
-	private boolean changable = true;
+	private boolean changeable = true;
 	
 	/**
 	 * Constructor.
 	 * @param parent parent shell
 	 */
-	public EditToolDialog(Shell parent) 
-	{
+	public EditToolDialog(Shell parent) {
 		super(parent, SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM);
 		this.setText(NLUtil.getMessage("EditToolDialog#msg1"));
 	}
@@ -44,8 +43,7 @@ public class EditToolDialog extends Dialog {
 	 * Creates the content of this dialog.
 	 * @param composite composite
 	 */
-	protected void createContents(final Composite composite)
-	{				
+	protected void createContents(final Composite composite) {				
 		composite.setLayout(new GridLayout(2, true));
 				
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -58,10 +56,10 @@ public class EditToolDialog extends Dialog {
 		lblName.setLayoutData(gridData);
 		
 		final Text txtName = new Text(composite, SWT.BORDER);
-		txtName.setText("");
+		txtName.setText(StringUtils.EMPTY);
 		txtName.setLayoutData(gridData);
 		
-		if(!changable)
+		if(!changeable)
 			txtName.setEditable(false);
 		
 		Label lblPath = new Label(composite, SWT.NONE);
@@ -69,32 +67,27 @@ public class EditToolDialog extends Dialog {
 		lblPath.setLayoutData(gridData);
 		
 		final Text txtPath = new Text(composite, SWT.BORDER);
-		txtPath.setText("");
+		txtPath.setText(StringUtils.EMPTY);
 		txtPath.setLayoutData(gridData);
 		
 		Button btnSelect = new Button(composite, SWT.PUSH);
 		btnSelect.setText(NLUtil.getMessage("EditToolDialog#msg4"));
-		btnSelect.addSelectionListener(new SelectionListener()
-		{
+		btnSelect.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) 
-			{
+			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
 			}
 
 			@Override
-			public void widgetSelected(SelectionEvent e) 
-			{
+			public void widgetSelected(SelectionEvent e) {
 				FileDialog fDlg = new FileDialog(composite.getShell(), SWT.OPEN);
 				
 				if(txtName.getText().equalsIgnoreCase("SWI-Prolog"))
 					fDlg.setFilterExtensions(new String[] {"plcon.*", "*.*"});
 					
-				if(fDlg.open() != null)
-				{
+				if(fDlg.open() != null) {
 					String toolPath = fDlg.getFilterPath()+System.getProperty("file.separator")+fDlg.getFileName();
-					
 					txtPath.setText(toolPath);						
 				}
 				
@@ -105,10 +98,10 @@ public class EditToolDialog extends Dialog {
 		lblParam.setLayoutData(gridData);
 		
 		final Text txtParam = new Text(composite, SWT.BORDER);
-		txtParam.setText("");
+		txtParam.setText(StringUtils.EMPTY);
 		txtParam.setLayoutData(gridData);
 		
-		if(!changable)
+		if(!changeable)
 			txtParam.setEditable(false);
 		
 		Composite panel = new Composite(composite, SWT.NONE);
@@ -125,8 +118,7 @@ public class EditToolDialog extends Dialog {
 		btnOK.setText("OK");
 		btnOK.setLayoutData(btnGridData);
 		
-		btnOK.addSelectionListener(new SelectionAdapter() 
-		{
+		btnOK.addSelectionListener(new SelectionAdapter()  {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				input = new String[] {txtName.getText(), txtPath.getText(), txtParam.getText()};
@@ -139,22 +131,19 @@ public class EditToolDialog extends Dialog {
 		btnCancel.setText(NLUtil.getMessage("EditToolDialog#msg6"));
 		btnCancel.setLayoutData(btnGridData);
 		
-		btnCancel.addSelectionListener(new SelectionAdapter() 
-		{
+		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) 
-			{
+			public void widgetSelected(SelectionEvent e) {
 				input = null;
 				composite.getShell().close();
 			}
-			});
+		});
 		
 		btnOK.setSize(btnCancel.getSize());
 		
 		composite.getShell().setDefaultButton(btnOK);
 		
-		if(inputChanged)
-		{
+		if (inputChanged) {
 			txtName.setText(input[0]);
 			txtPath.setText(input[1]);
 			txtParam.setText(input[2]);			
@@ -165,8 +154,7 @@ public class EditToolDialog extends Dialog {
 	 * Opens the dialog.
 	 * @return Returns the inserted values or null if the user cancelled the dialog.
 	 */
-	public String[] open()
-	{
+	public String[] open() {
 		Shell shell = new Shell(this.getParent(), this.getStyle());
 		shell.setText(this.getText());
 		createContents(shell);
@@ -187,8 +175,7 @@ public class EditToolDialog extends Dialog {
 	 * Sets a default input state.
 	 * @param input input values
 	 */
-	public void setInput(String input[])
-	{
+	public void setInput(String input[]) {
 		inputChanged = true;
 		this.input = input; 
 	}
@@ -197,8 +184,7 @@ public class EditToolDialog extends Dialog {
 	 * Sets the editable state of some input values.
 	 * @param b true or false
 	 */
-	public void setChangable(boolean b)
-	{
-		this.changable = b;
+	public void setChangeable(boolean b) {
+		this.changeable = b;
 	}
 }

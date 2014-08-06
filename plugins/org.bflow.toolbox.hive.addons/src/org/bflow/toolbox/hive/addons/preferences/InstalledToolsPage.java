@@ -21,14 +21,13 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 /**
- * Defines the preference page for the mitamm installed tools page.
+ * Implements a preference page used by the Add-on installed tools page.
  * 
- * @author Arian Storch
+ * @author Arian Storch<arian.storch@bflow.org>
  * @since 13/04/10
- * @version 24/09/10
+ * @version 06/08/14
  */
-public class InstalledToolsPage extends
-		FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class InstalledToolsPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	
 	private static InstalledToolsPage instance;
 	
@@ -39,12 +38,9 @@ public class InstalledToolsPage extends
 		instance = this;
 	}
 	
-	
-
 	@Override
 	public boolean performOk() {
 		performApply();
-
 		return true;
 	}
 
@@ -68,15 +64,13 @@ public class InstalledToolsPage extends
 		composite.setLayout(new GridLayout(1, false));
 
 		Label lblText = new Label(composite, SWT.NONE);
-		lblText.setText(NLUtil
-				.getMessage("MitammPreferencesInstalledToolsPage#msg1"));
+		lblText.setText(NLUtil.getMessage("MitammPreferencesInstalledToolsPage#msg1"));
 
 		Composite panel = new Composite(composite, SWT.NONE);
 		panel.setLayout(new GridLayout(3, false));
 
 		Button btnAdd = new Button(panel, SWT.NONE);
-		btnAdd.setText(NLUtil
-				.getMessage("MitammPreferencesInstalledToolsPage#msg2"));
+		btnAdd.setText(NLUtil.getMessage("MitammPreferencesInstalledToolsPage#msg2"));
 
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 
@@ -100,8 +94,7 @@ public class InstalledToolsPage extends
 		});
 
 		Button btnRemove = new Button(panel, SWT.NONE);
-		btnRemove.setText(NLUtil
-				.getMessage("MitammPreferencesInstalledToolsPage#msg3"));
+		btnRemove.setText(NLUtil.getMessage("MitammPreferencesInstalledToolsPage#msg3"));
 
 		btnRemove.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -116,25 +109,22 @@ public class InstalledToolsPage extends
 		});
 
 		Button btnEdit = new Button(panel, SWT.NONE);
-		btnEdit.setText(NLUtil
-				.getMessage("MitammPreferencesInstalledToolsPage#msg4"));
+		btnEdit.setText(NLUtil.getMessage("MitammPreferencesInstalledToolsPage#msg4"));
 		btnEdit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int sel = table.getSelectionIndex();
 
 				if (sel > -1) {
-					EditToolDialog eDlg = new EditToolDialog(composite
-							.getShell());
+					EditToolDialog eDlg = new EditToolDialog(composite.getShell());
 
-					eDlg.setChangable(isEditable(sel));
+					eDlg.setChangeable(isEditable(sel));
 
 					TableItem item = table.getItem(sel);
 
 					String oldName = item.getText(0);
 
-					eDlg.setInput(new String[] { item.getText(0),
-							item.getText(1), item.getText(2) });
+					eDlg.setInput(new String[] { item.getText(0), item.getText(1), item.getText(2) });
 
 					String value[] = null;
 
@@ -142,8 +132,7 @@ public class InstalledToolsPage extends
 						item.setText(value);
 
 						ToolStore.removeTool(oldName);
-						ToolStore.installTool(new ToolDescriptor(value[0],
-								value[1], value[2]));
+						ToolStore.installTool(new ToolDescriptor(value[0], value[1], value[2]));
 					}
 				}
 
