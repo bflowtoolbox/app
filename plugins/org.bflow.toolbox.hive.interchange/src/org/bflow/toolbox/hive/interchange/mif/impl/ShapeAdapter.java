@@ -9,6 +9,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
+import org.eclipse.gmf.runtime.notation.Shape;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -16,7 +17,7 @@ import org.eclipse.swt.graphics.Image;
  * 
  * @author Arian Storch
  * @since 01/10/12
- * @version 02/05/13
+ * @version 02/09/14
  */
 public class ShapeAdapter implements IShape {
 	
@@ -49,6 +50,12 @@ public class ShapeAdapter implements IShape {
 		super();
 		this.graphicalEditPart = editPart;
 		this.eObject = graphicalEditPart.resolveSemanticElement();
+		
+		// EditParts provided by GMF don't ever have semantic elements
+		if (this.eObject == null) {
+			this.eObject = (EObject) editPart.getModel();
+		}
+		
 		this.figure = graphicalEditPart.getFigure();
 		this.attributeMap = (attributes == null ? new HashMap<String, String>() : attributes);
 		this.propertyProvider = propertyProvider;
@@ -86,6 +93,13 @@ public class ShapeAdapter implements IShape {
 	@Override
 	public String getName() {
 		String name = EMFCoreUtil.getName(eObject);
+		
+		// If the eObject is a raw GMF shape then we use the description 
+		if (eObject instanceof Shape) {
+			Shape shape = (Shape) eObject;
+			name = shape.getDescription();
+		}
+		
 		return name;
 	}
 
@@ -132,6 +146,12 @@ public class ShapeAdapter implements IShape {
 	public Object getType() {
 		// this is a string at the moment but can change it the future
 		Object obj = eObject.eClass().getInstanceTypeName(); 
+		
+		// If the eObject is a raw GMF shape then we add the concrete type
+		if (eObject instanceof Shape) {
+			obj = ((String)obj).concat(String.format("+%s", ((Shape) eObject).getType()));
+		}
+		
 		return obj;
 	}
 	
