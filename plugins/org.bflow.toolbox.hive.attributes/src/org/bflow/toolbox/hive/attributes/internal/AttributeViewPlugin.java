@@ -71,7 +71,7 @@ public class AttributeViewPlugin extends AbstractUIPlugin {
 		
 		// If the InterchangePlugin is installed than register an AttributeProvider
 		try {
-			if (Class.forName("org.bflow.toolbox.interchange.mif.core.AttributeProviderRegistry") != null) {
+			if (Class.forName("org.bflow.toolbox.hive.interchange.mif.core.AttributeProviderRegistry") != null) {
 				interchangeAttributeProvider = new InterchangeAttributeProvider();
 			}
 		} catch (ClassNotFoundException ex) {
