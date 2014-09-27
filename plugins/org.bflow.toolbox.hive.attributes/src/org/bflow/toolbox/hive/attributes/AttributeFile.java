@@ -25,8 +25,8 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
  * model id.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 24/04/10
- * @version 30/12/13
+ * @since 24.04.2010
+ * @version 27.09.2014
  * 
  */
 public class AttributeFile {
@@ -58,22 +58,21 @@ public class AttributeFile {
 	 * Loads the attribute file.
 	 */
 	public void load() {	
-		if(loaded)
-			return ;
+		if (loaded) return;
 		
 		EObject semanticElement = diagramEditPart.resolveSemanticElement();
 		
 		Resource resource = semanticElement.eResource();
 		this.resource = resource;
 		
-		for(EObject eobj:resource.getContents()) {
-			if(eobj.eClass() == addonEClass) {
+		for (EObject eobj:resource.getContents()) {
+			if (eobj.eClass() == addonEClass) {
 				EObject addonAttributes = eobj;
 				
 				@SuppressWarnings("rawtypes")
 				List list = (List) addonAttributes.eGet(addon_attributes);
 				
-				for(Object attrObj:list) {
+				for (Object attrObj:list) {
 					EObject attribute = (EObject)attrObj;
 					
 					String id = (String) attribute.eGet(attributeId);
@@ -116,10 +115,10 @@ public class AttributeFile {
 		
 		final EObject addonAttributes = addonFactory.create(addonEClass);
 		
-		for(String id:attributes.keySet()) {
+		for (String id:attributes.keySet()) {
 			HashMap<String, String> map = attributes.get(id);
 			
-			for(String name:map.keySet()) {
+			for (String name:map.keySet()) {
 				EObject attribute = addonFactory.create(attributeEClass);
 				attribute.eSet(attributeId, id);
 				attribute.eSet(attributeName, name);
@@ -195,11 +194,22 @@ public class AttributeFile {
 	 *            name of the attribute
 	 */
 	public void remove(String id, String attribute) {
-		if (!attributes.containsKey(id))
-			return;
+		if (!attributes.containsKey(id)) return;
 
 		attributes.get(id).remove(attribute);
-
+		dirty = true;
+	}
+	
+	/**
+	 * Removes all attributes from the model element.
+	 * 
+	 * @param id
+	 *            Model element id
+	 */
+	public void removeAll(String id) {
+		if (!attributes.containsKey(id)) return;
+		
+		attributes.remove(id);
 		dirty = true;
 	}
 
@@ -272,6 +282,21 @@ public class AttributeFile {
 
 		return vAttr;
 	}
+	
+	/**
+	 * Returns a collection of all attribute names of the model element with the
+	 * given id. If the model element is unknown NULL will be returned. If the
+	 * collection is empty the model element doensn't have attributes.
+	 * 
+	 * @param id
+	 *            Model element id
+	 * @return Collection of attribute names or NULL
+	 */
+	public Set<String> getAllAttributes(String id) {
+		HashMap<String, String> elementAttributes = attributes.get(id);
+		if (elementAttributes == null) return null;
+		return elementAttributes.keySet();
+	}
 
 	/**
 	 * Returns a set with all model element ids that got attributes.
@@ -306,8 +331,7 @@ public class AttributeFile {
 		
 		@Override
 		public void execute() {	
-			if(resource == null)
-				return ;
+			if (resource == null) return;
 			
 			resource.getContents().add(addonAttributes);
 			try {
