@@ -1723,20 +1723,9 @@ equality_included(C,NameE1,NameE2) :-   	((split(C),arc(C,E3))
 						elementname(E3,NameE3),
 						trinity(NameE3,NameE1,NameE2).
 
-% X wird von Y gefolgt (direkt oder über einige Splits)
-% Muss auch für syntaktisch falsche Modelle (mit einem nur aus Konnektoren bestehenden Zyklus) funktionieren!
-successor_via_splits(X,Y) :- arc(X,Y),X\==Y.
-successor_via_splits(X,Y) :- arc(X,C),split(C),not(path_containing_connectors_only(X,X,_)),successor_via_splits(C,Y).
-
-% X wird von Y gefolgt (direkt oder über einige Joins)
-% Muss auch für syntaktisch falsche Modelle (mit einem nur aus Konnektoren bestehenden Zyklus) funktionieren!
-successor_via_joins(X,Y) :- arc(X,Y),X\==Y.
-successor_via_joins(X,Y) :- arc(X,C),join(C),not(path_containing_connectors_only(X,X,_)),successor_via_joins(C,Y).
-
-
 split_and_two_events(C,Type,E1,E2,NameE1,NameE2) :-
 			split(C),type(C,Type),
-			successor_via_splits(C,E1),successor_via_splits(C,E2),
+			arc(C,E1),arc(C,E2),
 			event(E1),event(E2),
 			E1 @< E2,
 			elementname(E1,NameE1),
@@ -1745,7 +1734,7 @@ split_and_two_events(C,Type,E1,E2,NameE1,NameE2) :-
 
 join_and_two_events(C,Type,E1,E2,NameE1,NameE2) :-
 			join(C),type(C,Type),
-			successor_via_joins(E1,C),successor_via_joins(E2,C),
+			arc(E1,C),arc(E2,C),
 			event(E1),event(E2),
 			E1 @< E2,
 			elementname(E1,NameE1),
