@@ -556,7 +556,7 @@ property11(X,Y) :- function(X),successor(X,Y),function(Y),
 
 
 % Property 12 - If an event is followed by one or more connectors, none of these connectors is an XOR-split or OR-split
-property12(X) :- event(X),successor(X,Y) , ( clause(or(Y),true) ; clause(xor(Y),true)),type(Y,Type),
+property12(X) :- event(X),successor(X,Y) , ( xorsplit(Y) ; orsplit(Y)),type(Y,Type),
 		compose_message(de,Message,
 		['Einem Ereignis darf kein ',
 		Type,
@@ -1457,7 +1457,7 @@ tertium_non_datur :- tocheck(tertium_non_datur),
 	(
 	 (SplitOrJoin==split, VorOderNach = ' nach dem XOR-Split')
 	;
-	 (SplitOrJoin==join, VorOderNach = ' vor dem OR-Join')
+	 (SplitOrJoin==join, VorOderNach = ' vor dem XOR-Join')
 	),
 	compose_message(de,Message,
 	['Tritt wirklich genau eines der folgenden Ereignisse',
@@ -1684,7 +1684,6 @@ restricted_proposition(X) :- restriction(R),sub_string(X,_,_,_,R).
 
 yesno_question(X) :- sub_string(X,_,_,_,', ob ').
 yesno_question(X) :- sub_string(X,_,_,0,'?'),
-		%	starts_yesno_question(W),sub_string(X,0,_,_,W)
 		     not((starts_constituent_question(W),sub_string(X,0,_,_,W))),
 		     not((in_constituent_questiontion(V),sub_string(X,_,_,_,V))).
 starts_constituent_question('warum').
@@ -1804,7 +1803,7 @@ equivalent(A,B) :- canonical([A,true],[ANF,AIsSame]),
 		 )
 		)
 		;
-		% Fall 2: Normalform-Strings sind gleich, aber Negation durch IsSame ausgedrückt
+		% Fall 2: Normalform-Strings sind gleich, keine Negation
 		(
 		ANF==BNF,AIsSame==BIsSame
 		)
@@ -1961,6 +1960,10 @@ synonym(' auf die pruefung ',' nf_pruefungsobjekt ').
 synonym(' des reviews ',' nf_pruefungsobjekt ').
 synonym(' eines reviews ',' nf_pruefungsobjekt ').
 synonym(' zum review ',' nf_pruefungsobjekt ').
+synonym(' der validierung ',' nf_pruefungsobjekt ').
+synonym(' einer validierung ',' nf_pruefungsobjekt ').
+synonym(' zur validierung ',' nf_pruefungsobjekt ').
+synonym(' auf die validierung ',' nf_pruefungsobjekt ').
 
 synonym(' anfragen ',' nf_anfrage ').
 synonym(' abfragen ',' nf_anfrage ').
@@ -2024,6 +2027,9 @@ synonym(' angenommen ',' nf_erlaubnis ').
 synonym(' annahme ',' nf_erlaubnis ').
 synonym(' annehmen ',' nf_erlaubnis ').
 synonym(' anzunehmen ',' nf_erlaubnis ').
+synonym(' stattgeben ',' nf_erlaubnis ').
+synonym(' stattgegeben ',' nf_erlaubnis ').
+synonym(' stattzugeben ',' nf_zu_erlauben ').
 synonym(' erfuellt ',' nf_erfuellt ').
 synonym(' gegeben ',' nf_erfuellt ').
 synonym(' gewaehrleistet ',' nf_erfuellt ').
@@ -2074,6 +2080,14 @@ synonym(' gingen ein ', ' nf_eingetroffen ').
 synonym(' datenumschluesselung ',' nf_konvertierung ').
 synonym(' datenkonvertierung ',' nf_konvertierung ').
 synonym(' konvertierung ',' nf_konvertierung ').
+synonym(' beginnen ',' nf_beginnen ').
+synonym(' beginnt ',' nf_beginnen ').
+synonym(' starten ',' nf_beginnen ').
+synonym(' startet ',' nf_beginnen ').
+synonym(' beenden ',' nf_beenden ').
+synonym(' beendet ',' nf_beenden ').
+synonym(' durchfuehren ',' nf_durchfuehren ').
+synonym(' ausfuehren ',' nf_durchfuehren ').
 synonym(' schon ',' bereits ').
 synonym(' gleich ',' nf_eq ').
 synonym('=',' nf_eq ').
@@ -2085,9 +2099,20 @@ synonym(' uebereinstimmend',' gleich'). % kein Leerzeichen am Ende, muss nach de
 synonym(' pruefung ',' nf_pruefung ').
 synonym(' review ',' nf_pruefung ').
 synonym(' ueberpruefung ',' nf_pruefung ').
+synonym(' validierung ',' nf_pruefung ').
+synonym(' verifizierung ',' nf_pruefung ').
+synonym(' verifikation ',' nf_pruefung ').
 synonym(' pruefen ',' nf_pruefung ').
 synonym(' ueberpruefen ',' nf_pruefung ').
 synonym(' nachpruefen ',' nf_pruefung ').
+synonym(' validieren ',' nf_pruefung ').
+synonym(' verifizieren ',' nf_pruefung ').
+synonym(' fristgemaess ',' nf_fristgemaess ').
+synonym(' rechtzeitig ',' nf_fristgemaess ').
+synonym(' fristgerecht ',' nf_fristgemaess ').
+synonym(' puenktlich',' nf_fristgemaess ').
+synonym(' termingemaess',' nf_fristgemaess ').
+synonym(' termingerecht ',' nf_fristgemaess ').
 synonym(' ok ',' nf_ok ').
 synonym(' o k ',' nf_ok ').
 synonym(' in ordnung ',' nf_ok ').
@@ -2192,11 +2217,13 @@ synonym(' ermessensspielraum ',' nf_ermessensspielraum ').
 synonym(' entscheidungsspielraum ',' nf_ermessensspielraum ').
 synonym(' unter dem vorbehalt ',' nf_eventuell ').
 synonym(' unter vorbehalt ',' nf_eventuell ').
+synonym(' nur nf_teilweise ',' nf_teilweise '). % wird auch benötigt für restriction/1
 synonym(' eingeschraenkt',' nf_teilweise ').
+synonym(' mit auflagen ',' nf_teilweise ').
+synonym(' unter auflagen ',' nf_teilweise ').
+synonym(' mit einschraenkungen ',' nf_teilweise ').
 synonym(' unter einschraenkungen ',' nf_teilweise ').
-synonym(' unter der einschraenkung ',' nf_teilweise ').
-synonym(' mit der einschraenkung ',' nf_teilweise ').
-synonym(' zum teil ',' nf_teilweise '). % wird auch benötigt für restriction/1
+synonym(' zum teil ',' nf_teilweise ').
 synonym(' teilweises ',' nf_teilweise ').  % Verzicht auf Leerzeichen würde hier zu Endlosschleife führen, Reihenfolge beachten
 synonym(' teilweisen ',' nf_teilweise ').
 synonym(' teilweisem ',' nf_teilweise ').
@@ -2239,6 +2266,7 @@ antonym(' zu verbieten ',' nf_zu_erlauben ').
 antonym(' verboten ',' nf_erlaubnis ').
 antonym(' verbieten ',' nf_erlaubnis ').
 antonym(' verbiete ',' nf_erlaubnis ').
+antonym(' ablehnen ',' nf_erlaubnis ').
 antonym(' abzulehnen ',' nf_zu_erlauben ').
 antonym(' abgelehnt ',' nf_erlaubnis ').
 antonym(' abgelehnt ',' nf_erlaubnis ').
@@ -2289,6 +2317,10 @@ antonym(' abgebrochen',' fortgesetzt').
 antonym(' gesperrt ',' freigegeben').
 antonym(' konsistent',' inkonsistent'). % kein Leerzeichen am Ende
 antonym(' direkt',' indirekt'). % kein Leerzeichen am Ende
+antonym(' verspaetet',' nf_fristgemaess'). % kein Leerzeichen am Ende
+antonym(' nachtraeglich',' nf_fristgemaess'). % kein Leerzeichen am Ende
+antonym(' verzoegert',' nf_fristgemaess'). % kein Leerzeichen am Ende
+antonym(' unpuenktlich',' nf_fristgemaess'). % kein Leerzeichen am Ende
 antonym(' defekt',' nf_ok'). % kein Leerzeichen am Ende
 antonym(' fehlerhaft',' nf_ok'). % kein Leerzeichen am Ende
 antonym(' mit fehlern ',' nf_ok ').
@@ -2300,6 +2332,12 @@ antonym(' ungenau',' nf_ok').  % kein Leerzeichen am Ende
 antonym(' inkorrekt',' nf_ok'). % kein Leerzeichen am Ende
 antonym(' komplett ',' nf_teilweise ').
 antonym(' vollstaendig ',' nf_teilweise ').
+antonym(' in vollem umfang ',' nf_teilweise ').
+antonym(' in vollem umfange ',' nf_teilweise ').
+antonym(' zu 100 Prozent ',' nf_teilweise ').
+antonym(' zu 100% ',' nf_teilweise ').
+antonym(' zu 100 % ',' nf_teilweise ').
+antonym(' gaenzlich ',' nf_teilweise ').
 antonym(' verschieden',' gleich'). % kein Leerzeichen am Ende und nicht sofort zu nf_eq (gleicher...)
 antonym(' voneinander abweichend',' gleich'). % kein Leerzeichen am Ende und nicht sofort zu nf_eq (gleicher...)
 antonym(' unterschiedlich',' gleich'). % kein Leerzeichen am Ende und nicht sofort zu nf_eq (gleicher...)
