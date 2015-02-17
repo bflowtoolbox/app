@@ -567,17 +567,6 @@
 		<type>prolog</type>
 	</rule>
 	<rule>
-		<id>flows_block_at_join</id>
-		<name>flows_block_at_join</name>
-		<message></message>
-		<class>Extended Model Validation (EPC)/Style</class>
-		<diagram>epc</diagram>
-		<description>As the start events are not located at the beginning of the model, it could be difficult to see whether this join will work or which combinations of start events are allowed.</description>
-		<image>/images/flows_block_at_join.jpeg</image>
-		<default>true</default>
-		<type>prolog</type>
-	</rule>
-	<rule>
 		<id>xor_without_consequences</id>
 		<name>xor_without_consequences</name>
 		<message></message>

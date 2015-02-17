@@ -300,7 +300,7 @@ multiple_startevents_before_join(J) :- join(J),arc(S,J),sub_atom(S,_,_,_,merged_
 % Zwischen den vorangehenden Startevents und dem Join liegen noch weitere Knoten:
 multiple_startevents_before_join(J) :- join(J),startevent(S1),path(S1,J,Path),
 			list_to_ord_set(Path,Path1),
-			startevent(S2),S1\=S2,
+			startevent(S2),S1@<S2,
 			secondpath(S2,J,Path2,Path1),Path \== Path2. % Path1 \== Path2 behandelt den Fall arc(S[1-2],J).
 
 
@@ -1034,41 +1034,6 @@ nothing_to_do(Start,End) :- tocheck(nothing_to_do),
 			message('WARNING',End,Message,'nothing_to_do').
 
 
-
-%-----------------------------------------------------------------------------------------------------------
-% [Y] flows_block_at_join
-% Startereignisse stehen nicht zu Beginn des Modells
-% Wegen "tief" im Modell stehenden Startereignissen ist nicht sofort erkennbar, welche Kombinationen von
-% Startereignissen erlaubt sind
-%-----------------------------------------------------------------------------------------------------------
-flows_block_at_join(Join) :- tocheck(flows_block_at_join),
-			multiple_startevents_before_join(Join),
-			compose_message(de,Message,
-			['Da die Startereignisse nicht am Beginn der EPK stehen, ist es schwer zu erkennen, ob dieser Join immer entsprechend seiner Logik erreicht wird.'
-			]),
-			compose_message(en,Message,
-			['As the start events are not located at the beginning of the model, it could be difficult to see whether this join will work.'
-			]),
-			message('WARNING',Join,Message,'flows_block_at_join'),!.
-
-
-
-flows_block_at_join(Join) :- tocheck(flows_block_at_join),
-			join(Join),startevent(S1),path(S1,Join,Path),
-			list_to_ord_set(Path,Path1),
-			startevent(S2),S1\=S2,
-			secondpath(S2,Join,Path2,Path1),Path \== Path2,
-			% TODO: Einziges Element aus Path2, dass von S1 erreicht werden kann, ist Join
-			% und umgekehrt.
-			compose_message(de,Message,
-			['Da die Startereignisse nicht am Beginn der EPK stehen, ist es schwer zu erkennen, ob dieser Join immer entsprechend seiner Logik erreicht wird.'
-			]),
-			compose_message(en,Message,
-			['As the start events are not located at the beginning of the model, it could be difficult to see whether this join will work.'
-			]),
-			message('WARNING',Join,Message,'flows_block_at_join'),!.
-
-
 %-----------------------------------------------------------------------------------------------------------
 % [S] ancestor_mismatch
 % Modellierungsstil: Zwei Joins J1 und J2 haben zwei gemeinsame Vorfahren S1 und S2,
@@ -1104,7 +1069,6 @@ xor_without_consequences :- tocheck(xor_without_consequences),
 	arc(E1,J),xorjoin(J),
 	arc(S,E2),event(E2),E1 @< E2,
 	arc(E2,J),
-	arc(F1,S),function(F1),arc(J,F2),function(F2),
 	findall(X1,arc(S,X1),Li1), delete(Li1,J,Li1_),sort(Li1_,Split_out),
 	findall(X2,arc(X2,J),Li2),delete(Li2,S,Li2_),sort(Li2_,Join_in),
         Split_out == Join_in,
@@ -1133,7 +1097,6 @@ analyze :- vprintln('###5###'),useless_arc(_,_).
 analyze :- vprintln('###6###'),style_error_startevents.
 analyze :- vprintln('###7###'),join(J1),join(J2),J1 @< J2,style_ancestor_mismatch(J1,J2).
 analyze :- vprintln('###8###'),delta_warning.
-analyze :- vprintln('###9###'),(xorjoin(Join);andjoin(Join)),flows_block_at_join(Join).
 
 %===========================================================================================================
 % REDUKTIONSREGELN
@@ -1723,20 +1686,37 @@ equality_included(C,NameE1,NameE2) :-   	((split(C),arc(C,E3))
 						elementname(E3,NameE3),
 						trinity(NameE3,NameE1,NameE2).
 
+% Ein Split führt zu zwei Ereignissen, und es ist der den Ereignissen "nächste" Split mit dieser Eigenschaft.
 split_and_two_events(C,Type,E1,E2,NameE1,NameE2) :-
 			split(C),type(C,Type),
-			arc(C,E1),arc(C,E2),
-			event(E1),event(E2),
+			successor_via_splits(C,E1),event(E1),
+			successor_via_splits(C,E2),event(E2),
 			E1 @< E2,
+			not((
+				split(MoreDominatingSplit),
+				MoreDominatingSplit\==C,
+				successor_via_splits(MoreDominatingSplit,E1),
+				successor_via_splits(MoreDominatingSplit,E2),
+				every_path_from_a_to_b_must_pass_c(C,E1,MoreDominatingSplit),
+				every_path_from_a_to_b_must_pass_c(C,E2,MoreDominatingSplit)
+				)),
 			elementname(E1,NameE1),
 			elementname(E2,NameE2).
 
-
+% Analog für Joins:
 join_and_two_events(C,Type,E1,E2,NameE1,NameE2) :-
 			join(C),type(C,Type),
-			arc(E1,C),arc(E2,C),
-			event(E1),event(E2),
+			successor_via_joins(E1,C),event(E1),
+			successor_via_joins(E2,C),event(E2),
 			E1 @< E2,
+			not((
+				split(MoreDominatingJoin),
+				MoreDominatingJoin\==C,
+				successor_via_splits(MoreDominatingJoin,E1),
+				successor_via_splits(MoreDominatingJoin,E2),
+				every_path_from_a_to_b_must_pass_c(E1,MoreDominatingJoin,C),
+				every_path_from_a_to_b_must_pass_c(E2,MoreDominatingJoin,C)
+				)),
 			elementname(E1,NameE1),
 			elementname(E2,NameE2).
 
