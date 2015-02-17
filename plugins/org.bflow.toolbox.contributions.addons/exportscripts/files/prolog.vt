@@ -16,7 +16,7 @@
 	#set( $label =  $label.replaceAll("'", " ") ) 
 	#set( $label =  $label.replaceAll("\n", " ") ) 
 	#set( $label =  $label.replaceAll("\r", " ") ) 
-	#if($type == "event" || $type == "function" || $type == "region")
+	#if($type == "event" || $type == "function" || $type == "processinterface")
 		#set( $items[$shape] = $id ) 
 		$type($id).
 		elementname($id,'$label').
