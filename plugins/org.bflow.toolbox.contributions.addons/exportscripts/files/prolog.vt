@@ -15,9 +15,12 @@
 	#set( $label =  $shape.Name.replace('"', ' ') ) 
 	#set( $label =  $label.replaceAll("'", " ") ) 
 	#set( $label =  $label.replaceAll("\n", " ") ) 
-	#set( $label =  $label.replaceAll("\r", " ") ) 
+	#set( $label =  $label.replaceAll("\r", " ") )
+
+	#set( $items[$shape] = $id )
+
 	#if($type == "event" || $type == "function" || $type == "processinterface")
-		#set( $items[$shape] = $id ) 
+		 
 		$type($id).
 		elementname($id,'$label').
 		bflow_id($id,'$shape.Id').
@@ -33,7 +36,6 @@
 
 	#end
 	#if($type == "and" || $type == "or" || $type == "xor")
-		#set( $items[$shape] = $id ) 
 		$type($id).
 		bflow_id($id,'$shape.Id'). 
 	#end
