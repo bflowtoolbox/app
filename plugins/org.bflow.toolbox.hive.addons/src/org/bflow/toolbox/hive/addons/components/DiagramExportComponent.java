@@ -123,7 +123,7 @@ public class DiagramExportComponent implements IDiagramExportComponent {
 			String targetFileName = FilenameUtils.getBaseName(source.getAbsolutePath());
 			String targetFileExtension = xDescription.getFileExtensions()[0]; 
 			String targetPathName = String.format("%s%s%s.%s", 
-					targetFolder.getAbsolutePath(), File.pathSeparator, targetFileName, targetFileExtension);
+					targetFolder.getAbsolutePath(), File.separator, targetFileName, targetFileExtension);
 			target = new File(targetPathName);
 
 			
