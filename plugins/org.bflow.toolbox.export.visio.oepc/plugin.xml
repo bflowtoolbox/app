@@ -10,7 +10,7 @@
             id="org.bflow.toolbox.export.visio.oepc"
             name="VISIO oEPC">
          <description>
-            Export an Oepc model as a Visio document
+            Export an oEPC diagram as a Visio document
          </description>
       </wizard>
    </extension>

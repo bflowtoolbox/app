@@ -18,7 +18,7 @@
             id="org.bflow.toolbox.interchange.MIFExportWizard"
             name="Multi-target export">
          <description>
-            Exports the diagram to several types.
+            Export the diagram to several formats.
          </description>
       </wizard>
       <wizard
@@ -28,7 +28,7 @@
             id="org.bflow.toolbox.interchange.imageExportWizard"
             name="Export as image">
          <description>
-            Exports the diagram as an image.
+            Export the diagram as an image.
          </description>
       </wizard>
    </extension>
@@ -45,7 +45,7 @@
             id="org.bflow.toolbox.interchange.MIFImportWizard"
             name="Multi-source import">
          <description>
-            Imports a diagram from several types.
+            Import a diagram from several formats.
          </description>
       </wizard>
    </extension>
