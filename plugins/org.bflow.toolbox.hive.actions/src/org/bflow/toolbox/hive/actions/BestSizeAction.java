@@ -13,13 +13,14 @@ import org.bflow.toolbox.hive.nls.NLSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gmf.runtime.diagram.ui.actions.DiagramAction;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
-import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
+import org.eclipse.gmf.runtime.draw2d.ui.text.TextFlowEx;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -39,6 +40,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  * @since 16.08.13
  * @version 22.08.13
  * 			26.02.15 Added support of figures consisting of multiple children, for instance note
+ * 			27.02.15 Using TextFlowEx instead of WrappingLabel to set bounds
  * 			
  *
  */
@@ -178,7 +180,7 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 		List<?> children = figure.getChildren();
 		
 		// Go down the path until the figure is an instance of wrapping label
-		if (children != null && !children.isEmpty() && !(figure instanceof WrappingLabel)) {
+		if (children != null && !children.isEmpty() && !(figure instanceof TextFlowEx)) { // ISSUE: TextFlowEx or WrappingLabel?
 			// Some elements own more than one child, for instance a note
 			// So calculate the optimized size of all children and use the maximum
 			Dimension maxDimension = new Dimension(0, 0);
@@ -191,10 +193,11 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 		}
 		
 		// Only figures with text are interesting
-		if (!(figure instanceof WrappingLabel)) return figure.getParent().getPreferredSize();
+		if (!(figure instanceof TextFlowEx)) return figure.getParent().getPreferredSize(); // ISSUE: TextFlowEx or WrappingLabel?
 		
 		// Get the text to display and the text bounds
-		WrappingLabel label = (WrappingLabel)figure;
+		TextFlowEx label = (TextFlowEx)figure; // ISSUE: TextFlowEx or WrappingLabel?
+		
 		String text = label.getText();		
 		// Rectangle textBounds = label.getTextBounds();
 		
@@ -224,6 +227,9 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 		
 		optimizedSize.width = (int) width + 50;
 		optimizedSize.height = (int) height + 10;
+		
+		// ISSUE: Normally the bounds are set by BestSizeCommand
+		label.setBounds(new Rectangle(0,0, optimizedSize.width, optimizedSize.height));
 		
 		return optimizedSize;
 	}

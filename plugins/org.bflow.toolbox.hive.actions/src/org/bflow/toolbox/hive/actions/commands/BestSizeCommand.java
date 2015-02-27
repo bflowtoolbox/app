@@ -21,12 +21,13 @@ import org.eclipse.gmf.runtime.notation.Node;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
-
 /**
- * Implements an undoable command to set an automatically calculated size for elements.
+ * Implements an undoable command to set an automatically calculated size for
+ * elements.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 16/08/13
+ * @since 16.08.13
+ * @version 27.02.15
  */
 public class BestSizeCommand extends Command {
 
@@ -111,8 +112,20 @@ public class BestSizeCommand extends Command {
 						iEditPartDimHistoryMap.put(shape, new Dimension(bounds.getWidth(), bounds.getHeight()));
 						
 						// Set new values
+						// Note that there are additional settings made by BestSizeAction
 						bounds.setWidth(dim.width);
 						bounds.setHeight(dim.height);
+						
+						// Calculate the delta - Alternative approach						
+//						Dimension currentDimension = new Dimension(bounds.getWidth(), bounds.getHeight());
+//						Dimension deltaDimension = dim.getShrinked(currentDimension);
+//						
+//						ChangeBoundsRequest cbr = new ChangeBoundsRequest("resize");
+//						cbr.setEditParts(shape);
+//						cbr.setSizeDelta(deltaDimension);
+//						cbr.setCenteredResize(true);
+//						cbr.setConstrainedResize(true);
+//						shape.getCommand(cbr).execute();
 					}
 					return CommandResult.newOKCommandResult();
 				}
