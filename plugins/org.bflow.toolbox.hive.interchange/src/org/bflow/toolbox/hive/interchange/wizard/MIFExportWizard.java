@@ -24,19 +24,19 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IExportWizard;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.ResourceUtil;
 
 /**
  * Implements a wizard for exporting diagrams using the MIF.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 14/08/09
- * @version 28/12/13
+ * @since 14.08.09
+ * @version 28.12.13
+ * 			27.02.15 Re-worked dirty check
  * 
  */
 public class MIFExportWizard extends Wizard implements IExportWizard {
@@ -132,55 +132,73 @@ public class MIFExportWizard extends Wizard implements IExportWizard {
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle(NLSupport.MIFExportWizard_WindowTitleText);
-
-		if (selection != null && !selection.isEmpty()) {
-			this.selection = selection;
-
-			Object obj = selection.getFirstElement();
-
-			if (!(obj instanceof IFile)) {
-				if (obj instanceof EditPart) {
-					IEditorPart activeEditor = PlatformUI.getWorkbench()
-							.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-
-					if (activeEditor != null) {
-						if (activeEditor.isDirty())
-							if (MessageDialog.openQuestion(activeEditor.getSite().getShell(), 
-									NLSupport.MIFExportWizard_QuestionDialogTitle,
-									NLSupport.MIFExportWizard_QuestionDialogText))
-								activeEditor.getSite().getPage().saveEditor(activeEditor, false);
-							else
-								return;
-
-						IEditorInput input = activeEditor.getEditorInput();
-						if (input instanceof IFileEditorInput) {
-							final IFile resource = ((IFileEditorInput) input).getFile();
-							this.selection = new StructuredSelection(resource);
-						}
-					}
-
-				} else {
-					MessageDialog.openInformation(workbench.getDisplay().getActiveShell(), 
-							NLSupport.MIFExportWizard_InformationDialogTitle, 
-							NLSupport.MIFExportWizard_InformationDialogText);
-
-					return;
-				}
-
-			}
-
-			// if(!workbench.saveAllEditors(true))
-			// return ;
-
-			exportWizardPage = new MIFExportWizardPage(this.selection);
-			String diagramEditorFileExtension = resolveDiagramEditorFileExtension(this.selection);
-			List<IInterchangeDescriptor> matchingExportDescriptions = 
-				resolveAvailableExportDescriptors(diagramEditorFileExtension);
-			
-			exportWizardPage.setExportDescriptions(matchingExportDescriptions);
-
-			this.addPage(exportWizardPage);
+		if (selection == null || selection.isEmpty()) return;
+		
+		this.selection = selection;
+		Object selectedObject = selection.getFirstElement();
+		
+		// If an object within the editor is selected, resolve the underlying file
+		if (selectedObject instanceof EditPart) {
+			IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+			selectedObject = activeEditor.getEditorInput();
 		}
+
+//			if (!(obj instanceof IFile)) {
+//				if (obj instanceof EditPart) {
+//					
+//
+//					if (activeEditor != null) {
+//						if (activeEditor.isDirty())
+//							if (MessageDialog.openQuestion(activeEditor.getSite().getShell(), 
+//									NLSupport.MIFExportWizard_QuestionDialogTitle,
+//									NLSupport.MIFExportWizard_QuestionDialogText))
+//								activeEditor.getSite().getPage().saveEditor(activeEditor, false);
+//							else
+//								return;
+//
+//						IEditorInput input = activeEditor.getEditorInput();
+//						if (input instanceof IFileEditorInput) {
+//							final IFile resource = ((IFileEditorInput) input).getFile();
+//							this.selection = new StructuredSelection(resource);
+//						}
+//					}
+//
+//				} else {
+//					MessageDialog.openInformation(workbench.getDisplay().getActiveShell(), 
+//							NLSupport.MIFExportWizard_InformationDialogTitle, 
+//							NLSupport.MIFExportWizard_InformationDialogText);
+//
+//					return;
+//				}
+//			}
+			
+		// Look up the editor that is used to edit this file
+		// If there is any and it's dirty, ask the user how to proceed
+		IFile resourceFile = ResourceUtil.getFile(selectedObject);
+		this.selection = new StructuredSelection(resourceFile);
+		IEditorPart editorPart = ResourceUtil.findEditor(workbench.getActiveWorkbenchWindow().getActivePage(), resourceFile);
+		if (editorPart != null) {
+			if (editorPart.isDirty()) {
+				if (MessageDialog.openQuestion(editorPart.getSite().getShell(), 
+						NLSupport.MIFExportWizard_QuestionDialogTitle,
+						NLSupport.MIFExportWizard_QuestionDialogText))
+					editorPart.getSite().getPage().saveEditor(editorPart, false);
+				else
+					return;
+			}
+		}
+
+		// If there is at least one dirty editor ask the user 
+		// Problem: Dialog will appear even if the selected model to export isn't opened 
+		// if (!workbench.saveAllEditors(true)) return;
+
+		exportWizardPage = new MIFExportWizardPage(this.selection);
+		String diagramEditorFileExtension = resolveDiagramEditorFileExtension(this.selection);
+		List<IInterchangeDescriptor> matchingExportDescriptions = resolveAvailableExportDescriptors(diagramEditorFileExtension);
+		
+		exportWizardPage.setExportDescriptions(matchingExportDescriptions);
+
+		this.addPage(exportWizardPage);
 	}
 
 	/**
