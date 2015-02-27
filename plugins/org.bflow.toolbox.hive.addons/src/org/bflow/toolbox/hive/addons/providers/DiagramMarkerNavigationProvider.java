@@ -128,24 +128,16 @@ public class DiagramMarkerNavigationProvider extends
 	}
 
 	@Override
-	public IMarker addMarker(IFile file, String elementId, String location,
-			String message, int statusSeverity) {
+	public IMarker addMarker(IFile file, String elementId, String location, String message, int statusSeverity) {
 		IMarker marker = null;
-//		IMarker problem = null;
-		try {
-			marker = file.createMarker(MARKER_TYPE);			
-//			problem = file.createMarker(IMarker.PROBLEM);			
 
-			marker.setAttribute(IMarker.MESSAGE, message);
-//			problem.setAttribute(IMarker.MESSAGE, message);
-			
+		try {
+			marker = file.createMarker(MARKER_TYPE);						
+
+			marker.setAttribute(IMarker.MESSAGE, message);			
 			marker.setAttribute(IMarker.LOCATION, location);
-//			problem.setAttribute(IMarker.LOCATION, location);
-			
-			marker.setAttribute(
-					org.eclipse.gmf.runtime.common.ui.resources.IMarker.ELEMENT_ID,	elementId);
-//			problem.setAttribute(
-//					org.eclipse.gmf.runtime.common.ui.resources.IMarker.ELEMENT_ID,	elementId);
+			marker.setAttribute(org.eclipse.gmf.runtime.common.ui.resources.IMarker.ELEMENT_ID,	elementId);
+
 
 			int markerSeverity = IMarker.SEVERITY_INFO;
 			if (statusSeverity == IStatus.WARNING) {
@@ -154,12 +146,9 @@ public class DiagramMarkerNavigationProvider extends
 				markerSeverity = IMarker.SEVERITY_ERROR;
 			}
 
-			marker.setAttribute(IMarker.SEVERITY, markerSeverity);
-//			problem.setAttribute(IMarker.SEVERITY, markerSeverity);
-			
+			marker.setAttribute(IMarker.SEVERITY, markerSeverity);			
 		} catch (Exception e) {
-			AddonPlugin.getInstance().logError(
-					"Failed to create validation marker", e); //$NON-NLS-1$
+			AddonPlugin.getInstance().logError("Failed to create validation marker", e); //$NON-NLS-1$
 		}
 		
 		return marker;

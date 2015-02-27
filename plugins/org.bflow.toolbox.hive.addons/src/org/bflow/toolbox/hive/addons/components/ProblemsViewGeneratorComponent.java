@@ -26,8 +26,7 @@ import org.eclipse.core.resources.IMarker;
  * @since 12/10/09
  * @version 07/04/13
  */
-public class ProblemsViewGeneratorComponent implements
-		IProblemsViewGeneratorComponent {
+public class ProblemsViewGeneratorComponent implements IProblemsViewGeneratorComponent {
 	
 	/**
 	 * Collection of messages

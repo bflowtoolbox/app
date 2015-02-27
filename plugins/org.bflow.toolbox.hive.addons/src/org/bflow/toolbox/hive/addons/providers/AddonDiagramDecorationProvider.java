@@ -76,10 +76,8 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 
 	@Override
 	public void createDecorators(IDecoratorTarget decoratorTarget) {
-		EditPart editPart = (EditPart) decoratorTarget
-				.getAdapter(EditPart.class);
-		if (editPart instanceof GraphicalEditPart
-				|| editPart instanceof AbstractConnectionEditPart) {
+		EditPart editPart = (EditPart) decoratorTarget.getAdapter(EditPart.class);
+		if (editPart instanceof GraphicalEditPart || editPart instanceof AbstractConnectionEditPart) {
 			Object model = editPart.getModel();
 			if ((model instanceof View)) {
 				View view = (View) model;
@@ -90,7 +88,9 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 			EditDomain ed = editPart.getViewer().getEditDomain();
 			if (!(ed instanceof DiagramEditDomain)) {
 				return;
-			}/*
+			}
+			
+			/*
 			 * if (((DiagramEditDomain) ed).getEditorPart() instanceof
 			 * EpcDiagramEditor) { decoratorTarget.installDecorator(KEY, new
 			 * StatusDecorator( decoratorTarget)); }
@@ -119,8 +119,7 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 	 * @generated
 	 */
 	private static void refreshDecorators(String viewId, Diagram diagram) {
-		final List decorators = viewId != null ? (List) allDecorators
-				.get(viewId) : null;
+		final List decorators = viewId != null ? (List) allDecorators.get(viewId) : null;
 		if (decorators == null || decorators.isEmpty() || diagram == null) {
 			return;
 		}
@@ -133,17 +132,14 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 							new Runnable() {
 
 								public void run() {
-									for (Iterator it = decorators.iterator(); it
-											.hasNext();) {
-										IDecorator decorator = (IDecorator) it
-												.next();
+									for (Iterator it = decorators.iterator(); it.hasNext();) {
+										IDecorator decorator = (IDecorator) it.next();
 										decorator.refresh();
 									}
 								}
 							});
 				} catch (Exception e) {
-					AddonPlugin.getInstance().logError(
-							"Decorator refresh failure", e); //$NON-NLS-1$
+					AddonPlugin.getInstance().logError("Decorator refresh failure", e); //$NON-NLS-1$
 				}
 			}
 		});
@@ -165,20 +161,16 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 		public StatusDecorator(IDecoratorTarget decoratorTarget) {
 			super(decoratorTarget);
 			try {
-				final View view = (View) getDecoratorTarget().getAdapter(
-						View.class);
+				final View view = (View) getDecoratorTarget().getAdapter(View.class);
 				TransactionUtil.getEditingDomain(view).runExclusive(
 						new Runnable() {
 
 							public void run() {
-								StatusDecorator.this.viewId = view != null ? ViewUtil
-										.getIdStr(view)
-										: null;
+								StatusDecorator.this.viewId = view != null ? ViewUtil.getIdStr(view) : null;
 							}
 						});
 			} catch (Exception e) {
-				AddonPlugin.getInstance().logError(
-						"ViewID access failure", e); //$NON-NLS-1$		
+				AddonPlugin.getInstance().logError("ViewID access failure", e); //$NON-NLS-1$		
 			}
 		}
 
@@ -191,8 +183,7 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 			if (view == null || view.eResource() == null) {
 				return;
 			}
-			EditPart editPart = (EditPart) getDecoratorTarget().getAdapter(
-					EditPart.class);
+			EditPart editPart = (EditPart) getDecoratorTarget().getAdapter(EditPart.class);
 			if (editPart == null || editPart.getViewer() == null) {
 				return;
 			}
@@ -204,18 +195,15 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 			}
 			int severity = IMarker.SEVERITY_INFO;
 			IMarker foundMarker = null;
-			IResource resource = WorkspaceSynchronizer
-					.getFile(view.eResource());
+			IResource resource = WorkspaceSynchronizer.getFile(view.eResource());
 			if (resource == null || !resource.exists()) {
 				return;
 			}
 			IMarker[] markers = null;
 			try {
-				markers = resource.findMarkers(MARKER_TYPE, true,
-						IResource.DEPTH_INFINITE);
+				markers = resource.findMarkers(MARKER_TYPE, true, IResource.DEPTH_INFINITE);
 			} catch (CoreException e) {
-				AddonPlugin.getInstance().logError(
-						"Validation markers refresh failure", e); //$NON-NLS-1$
+				AddonPlugin.getInstance().logError("Validation markers refresh failure", e); //$NON-NLS-1$
 			}
 			if (markers == null || markers.length == 0) {
 				return;
@@ -223,18 +211,13 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 			Label toolTip = null;
 			for (int i = 0; i < markers.length; i++) {
 				IMarker marker = markers[i];
-				String attribute = marker
-						.getAttribute(
-								org.eclipse.gmf.runtime.common.ui.resources.IMarker.ELEMENT_ID,
-								""); //$NON-NLS-1$
+				String attribute = marker.getAttribute(org.eclipse.gmf.runtime.common.ui.resources.IMarker.ELEMENT_ID,	""); //$NON-NLS-1$
 				if (attribute.equals(elementId)) {
-					int nextSeverity = marker.getAttribute(IMarker.SEVERITY,
-							IMarker.SEVERITY_INFO);
+					int nextSeverity = marker.getAttribute(IMarker.SEVERITY, IMarker.SEVERITY_INFO);
 					Image nextImage = getImage(nextSeverity);
 					if (foundMarker == null) {
 						foundMarker = marker;
-						toolTip = new Label(marker.getAttribute(
-								IMarker.MESSAGE, ""), //$NON-NLS-1$
+						toolTip = new Label(marker.getAttribute(IMarker.MESSAGE, ""), //$NON-NLS-1$
 								nextImage);
 					} else {
 						if (toolTip.getChildren().isEmpty()) {
@@ -245,12 +228,10 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 							comositeLabel.add(toolTip);
 							toolTip = comositeLabel;
 						}
-						toolTip.add(new Label(marker.getAttribute(
-								IMarker.MESSAGE, ""), //$NON-NLS-1$
+						toolTip.add(new Label(marker.getAttribute(IMarker.MESSAGE, ""), //$NON-NLS-1$
 								nextImage));
 					}
-					severity = (nextSeverity > severity) ? nextSeverity
-							: severity;
+					severity = (nextSeverity > severity) ? nextSeverity : severity;
 				}
 			}
 			if (foundMarker == null) {

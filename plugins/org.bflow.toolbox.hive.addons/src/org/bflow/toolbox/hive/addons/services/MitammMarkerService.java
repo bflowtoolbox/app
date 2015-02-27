@@ -34,10 +34,9 @@ public class MitammMarkerService
 	 * @param statusSeverity severity
 	 * @return Marker
 	 */
-	public static IMarker addMarker(IFile file, String elementId,
-			String location, String message, int statusSeverity)
+	public static IMarker addMarker(IFile file, String elementId, String location, String message, int statusSeverity)
 	{
-		if(markerProvider != null)
+		if (markerProvider != null)
 			return markerProvider.addMarker(file, elementId, location, message, statusSeverity);
 		else
 			return null;
