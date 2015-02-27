@@ -71,6 +71,8 @@ public class NLSupport extends NLS {
 	public static String MIFExportWizardPage_ButtonBrowseText;
 	public static String MIFExportWizardPage_Description;
 	public static String MIFExportWizardPage_DialogMessage;
+	public static String MIFExportWizardPage_Error_PathDoesntExist;
+	public static String MIFExportWizardPage_Error_PathIsntFolder;
 	public static String MIFExportWizardPage_LabelDescriptionText;
 	public static String MIFExportWizardPage_LabelSelectDiagramText;
 	public static String MIFExportWizardPage_LabelSelectExportTypeText;
