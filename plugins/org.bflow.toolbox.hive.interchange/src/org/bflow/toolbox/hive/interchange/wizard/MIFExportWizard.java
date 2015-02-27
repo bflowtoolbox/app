@@ -71,6 +71,9 @@ public class MIFExportWizard extends Wizard implements IExportWizard {
 			return false;
 		}
 
+		// Tell the wizard page that the will wizard will now perform its finish method
+		exportWizardPage.onWizardPerformsFinish();
+		
 		Object selFiles[] = selection.toArray();
 
 		try {

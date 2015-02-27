@@ -10,6 +10,7 @@ import org.bflow.toolbox.hive.nls.NLSupport;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -143,7 +144,8 @@ public class MIFExportWizardPage extends WizardPage {
 			}
 		});
 
-		this.setControl(composite);
+		applyPreferencesSettings();
+		setControl(composite);
 	}
 	
 	/**
@@ -191,6 +193,34 @@ public class MIFExportWizardPage extends WizardPage {
 		
 		textFieldTargetFile.setText(selectedFolder);
 		checkExportFolder(selectedFolder);
+	}
+	
+	/**
+	 * Proofs if there are preference settings that can be applied to the
+	 * controls.
+	 */
+	private void applyPreferencesSettings() {
+		IDialogSettings dialogSettings = getDialogSettings().getSection(KEY_SECTION_NAME);
+		if (dialogSettings == null) return;
+		
+		String selectedFolder = dialogSettings.get(KEY_SELECTED_FOLDER);
+		if (selectedFolder == null) return;
+		
+		textFieldTargetFile.setText(selectedFolder);
+	}
+	
+	/**
+	 * Tells this wizard page that the wizard is now performing his finish
+	 * method.
+	 */
+	public void onWizardPerformsFinish() {
+		// Store preferences settings
+		IDialogSettings dialogSettings = getDialogSettings().getSection(KEY_SECTION_NAME);
+		if (dialogSettings == null)
+			dialogSettings = getDialogSettings().addNewSection(KEY_SECTION_NAME);
+		
+		String valueFolder = textFieldTargetFile.getText();		
+		dialogSettings.put(KEY_SELECTED_FOLDER, valueFolder);
 	}
 
 	/**
@@ -252,4 +282,6 @@ public class MIFExportWizardPage extends WizardPage {
 		return selectedExportDescription;
 	}
 
+	private static final String KEY_SECTION_NAME 	= "key.bflow.toolbox.addonsinterchange.exportwizard.section.name"; //$NON-NLS-1$
+	private static final String KEY_SELECTED_FOLDER = "key.bflow.toolbox.addonsinterchange.exportwizard.selected.folder"; //$NON-NLS-1$
 }
