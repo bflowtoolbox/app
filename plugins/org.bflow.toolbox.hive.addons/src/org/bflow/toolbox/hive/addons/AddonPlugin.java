@@ -3,6 +3,7 @@ package org.bflow.toolbox.hive.addons;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -42,7 +43,7 @@ import org.osgi.service.prefs.Preferences;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 06/03/11
- * @version 06/06/14
+ * @version 23/01/15
  */
 public class AddonPlugin extends AbstractUIPlugin {
 
@@ -172,20 +173,24 @@ public class AddonPlugin extends AbstractUIPlugin {
 	 *            resource that is connected with the markers
 	 */
 	public void deleteMarker(String id, IFile resource) {
-		Vector<IMarker> indizes = new Vector<IMarker>();
-
-		if (createdMarkers.get(id) == null)
-			return;
+		if (createdMarkers.get(id) == null) return;
+		ArrayList<IMarker> indizes = new ArrayList<IMarker>();
+		
+		/* 23.01.2015 - Arian Storch:
+		 * Since Eclipse Luna the behaviour of the Problems View has changed. From then there is 
+		 * no need to delete the markers at this point.
+		 */
+		boolean deleteMarkers = false;
 
 		for (IMarker marker : createdMarkers.get(id))
 			try {
-				if (marker.getResource().getLocation().toString().equals(
-						resource.getLocation().toString())) {
-					marker.delete();
+				if (marker.getResource().getLocation().toString().equals(resource.getLocation().toString())) {
+					if (deleteMarkers) 
+						marker.delete();
 					indizes.add(marker);
 				}
 			} catch (CoreException e) {
-				e.printStackTrace();
+				logError("Error on deleting markers", e);
 			}
 
 		for (IMarker marker : indizes)
@@ -200,9 +205,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 	 */
 	public static ProgressMonitorDialog getProgressMonitorDialog() {
 		if (prgrMonitorDlg == null) {
-			prgrMonitorDlg = new ProgressMonitorDialog(PlatformUI
-					.getWorkbench().getActiveWorkbenchWindow().getShell());
-			
+			prgrMonitorDlg = new ProgressMonitorDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
 			prgrMonitorDlg.setCancelable(false);
 		}		
 
@@ -215,10 +218,8 @@ public class AddonPlugin extends AbstractUIPlugin {
 	private void createConsole() {
 		this.console = new IOConsole("Add-on Console", null);
 
-		ConsolePlugin.getDefault().getConsoleManager().addConsoles(
-				new IConsole[] { this.console });
-		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(
-				this.console);
+		ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[] { this.console });
+		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(this.console);
 	}
 
 	/**
@@ -272,9 +273,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 		if (message == null && throwable != null) {
 			message = throwable.getMessage();
 		}
-		getLog().log(
-				new Status(IStatus.INFO, AddonPlugin.PLUGIN_ID, IStatus.OK,
-						message, throwable));
+		getLog().log(new Status(IStatus.INFO, AddonPlugin.PLUGIN_ID, IStatus.OK, message, throwable));
 		debug(message, throwable);
 	}
 
