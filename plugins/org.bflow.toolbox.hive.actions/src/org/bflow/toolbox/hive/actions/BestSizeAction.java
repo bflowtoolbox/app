@@ -36,8 +36,10 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  * Implements an action to provide the best size function.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 16/08/13
- * @version 22/08/13
+ * @since 16.08.13
+ * @version 22.08.13
+ * 			26.02.15 Added support of figures consisting of multiple children, for instance note
+ * 			
  *
  */
 public class BestSizeAction extends DiagramAction implements IObjectActionDelegate {
@@ -91,11 +93,12 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 
 	
 	/**
-	 * The selection has changed.
-	 * This method will get the diagram edit part.
+	 * The selection has changed. This method will get the diagram edit part.
 	 *
-	 * @param action the action
-	 * @param selection the selection
+	 * @param action
+	 *            the action
+	 * @param selection
+	 *            the selection
 	 */
 	public void selectionChanged(IAction action, ISelection selection) {
 		IStructuredSelection iSelection = (IStructuredSelection) selection;
@@ -134,8 +137,10 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 	/**
 	 * Sets the enability of the action.
 	 *
-	 * @param action the action
-	 * @param targetPart the target part
+	 * @param action
+	 *            the action
+	 * @param targetPart
+	 *            the target part
 	 */
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		action.setEnabled(selectClasses().size() > 0);
@@ -165,19 +170,28 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 	/**
 	 * Returns an optimized size for the given figure.
 	 * 
-	 * @param figure The figure to optimize
+	 * @param figure
+	 *            The figure to optimize
 	 * @return Dimension for the optimized size of the figure
 	 */
 	private Dimension getOptimizedSize(IFigure figure) {
 		List<?> children = figure.getChildren();
 		
 		// Go down the path until the figure is an instance of wrapping label
-		if(children != null && !children.isEmpty() && !(figure instanceof WrappingLabel))
-			return getOptimizedSize((IFigure) children.get(0));
+		if (children != null && !children.isEmpty() && !(figure instanceof WrappingLabel)) {
+			// Some elements own more than one child, for instance a note
+			// So calculate the optimized size of all children and use the maximum
+			Dimension maxDimension = new Dimension(0, 0);
+			for (Iterator<?> it = children.iterator(); it.hasNext();) {
+				IFigure childFigure = (IFigure) it.next();
+				Dimension childDimension = getOptimizedSize(childFigure);
+				maxDimension = (childDimension.getArea() > maxDimension.getArea() ? childDimension : maxDimension);
+			}
+			return maxDimension;
+		}
 		
 		// Only figures with text are interesting
-		if(!(figure instanceof WrappingLabel))
-			return figure.getParent().getPreferredSize();
+		if (!(figure instanceof WrappingLabel)) return figure.getParent().getPreferredSize();
 		
 		// Get the text to display and the text bounds
 		WrappingLabel label = (WrappingLabel)figure;
