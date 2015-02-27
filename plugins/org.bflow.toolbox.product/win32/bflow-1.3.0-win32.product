@@ -15,13 +15,16 @@
 
    <launcherArgs>
       <programArgs>-perspective org.bflow.toolbox.perspectives.BflowPerspective
--nl de_DE</programArgs>
+-nl de_DE
+      </programArgs>
       <vmArgs>-Dosgi.requiredJavaVersion=1.5
 -Xms128m
 -Xmx512m
 -XX:PermSize=128M  
--XX:MaxPermSize=512m</vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+-XX:MaxPermSize=512m
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="/org.bflow.toolbox.product/icons/bee16a.png" i32="/org.bflow.toolbox.product/icons/bee32.png" i48="/org.bflow.toolbox.product/icons/bee48.png" i64="/org.bflow.toolbox.product/icons/bee64.png" i128="/org.bflow.toolbox.product/icons/bee128.png"/>
@@ -44,11 +47,9 @@
       </win>
    </launcher>
 
-
    <vm>
-      <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</windows>
+      <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</windows>
    </vm>
-
 
    <plugins>
       <plugin id="com.google.inject"/>
