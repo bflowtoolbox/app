@@ -89,6 +89,8 @@ public class MenuContributionProvider extends ContributionItem implements
 	
 	@Override
 	public void dispose() {
+		AddonStore.removeStoreListener(this);
+		ToolStore.removeStoreListener(this);
 		IWorkbenchWindow wnd = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		wnd.removePageListener(internalPageListener);
 		super.dispose();
@@ -151,14 +153,15 @@ public class MenuContributionProvider extends ContributionItem implements
 
 	@Override
 	public void protocolAdded(final ProtocolDescriptor pd) {
+		if (!canOperate()) return;
 		addMenuItem(pd);
 	}
 
 	@Override
 	public void protocolRemoved(ProtocolDescriptor pd) {
+		if (!canOperate()) return;
 		for (MenuItem item : addonMenu.getItems()) {
-			if (item.getText().equalsIgnoreCase(
-					((Standardprotocol) pd.getProtocol()).getName())) {
+			if (item.getText().equalsIgnoreCase(((Standardprotocol) pd.getProtocol()).getName())) {
 				protocolDescriptor2MenuItemMap.remove(pd);
 				item.dispose();
 				return;
@@ -168,14 +171,27 @@ public class MenuContributionProvider extends ContributionItem implements
 
 	@Override
 	public void storeUpdate() {
-		if(addonMenu.isDisposed()) return;
+		if (!canOperate()) return;
 		
 		for (MenuItem item : addonMenu.getItems()) {
-			if(item.isDisposed()) continue;
+			if (item.isDisposed()) continue;
 			ProtocolDescriptor pd = (ProtocolDescriptor) item.getData();
 
 			item.setEnabled(pd.isValid());
 		}
+	}
+	
+	/**
+	 * Returns TRUE if this instance is still alive and provides contributions
+	 * to main menu. Otherwise it returns FALSE and invokes dispose() before!
+	 * 
+	 * @return TRUE if this instance is still alive
+	 */
+	private boolean canOperate() {
+		boolean isAlive = !addonMenu.isDisposed();
+		if (isAlive) return true;
+		dispose();
+		return false;
 	}
 	
 	

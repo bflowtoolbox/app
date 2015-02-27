@@ -21,9 +21,9 @@ import org.dom4j.io.XMLWriter;
 /**
  * Defines a store that contains all installed add-ons.
  * 
- * @author Arian Storch
- * @since 17/04/10
- * @version 17/11/12
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 17.04.10
+ * @version 17.11.12
  */
 public class AddonStore {
 
@@ -52,8 +52,7 @@ public class AddonStore {
 			Document xmlDocument = reader.read(Key.KEY_PROTOCOLSTORE_FILE);
 			Element root = xmlDocument.getRootElement();
 
-			for (Iterator<?> it = root.elementIterator("protocol"); it
-					.hasNext();) {
+			for (Iterator<?> it = root.elementIterator("protocol"); it.hasNext();) {
 				Element prot = (Element) it.next();
 
 				String id = prot.attributeValue("id");
