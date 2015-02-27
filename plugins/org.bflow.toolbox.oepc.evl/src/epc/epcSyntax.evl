@@ -136,7 +136,7 @@ context Element {
 	
 	constraint HasFunction {
 	
-		guard : self.isKindOf(Event) and self.out.size > 0
+		guard : self.isKindOf(Event) and self.out.size > 0 and self.aSucc() <> null
 		check : not (self.aSucc().isDecisionConnector() and self.aSucc().isSplit()) or not prefRequester.shallCheck('EPCEpsilonElementRule3')
 		message : prefRequester.getErrorMessage('EPCEpsilonElementRule3', self.aSucc().eClass().name)
 	

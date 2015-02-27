@@ -11,8 +11,3 @@ operation IConnector newInstance() : IConnector {
 		return new OR;
 	}
 }
-
--- Returns true, if the element is an XOR or an OR
-operation Element isDecisionConnector() : Boolean {
-	return (self.isKindOf(XOR) or self.isKindOf(OR));
-}

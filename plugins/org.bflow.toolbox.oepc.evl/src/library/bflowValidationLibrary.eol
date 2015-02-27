@@ -15,13 +15,18 @@ operation Element isConnector() : Boolean {
 	return self.isKindOf(IConnector);
 }
 
+-- Returns true, if the element is an XOR or an OR
+operation Element isDecisionConnector() : Boolean {
+	return (self.isKindOf(XOR) or self.isKindOf(OR));
+}
+
 operation Element aSucc() : Element {
 	var aCon := self.out.first();
 	if (aCon.isDefined()) {return aCon.to;}
+	return null;
 }
 
-operation Element isHidden() : Boolean 
-{
+operation Element isHidden() : Boolean {
 	//var validator := new Native('org.bflow.toolbox.epc.diagram.validation.LayoutValidator');
 	//return validator.run(self);
 	return true;
