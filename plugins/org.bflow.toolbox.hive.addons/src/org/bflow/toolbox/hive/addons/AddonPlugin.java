@@ -42,8 +42,9 @@ import org.osgi.service.prefs.Preferences;
  * The activator class controls the plug-in life cycle.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 06/03/11
- * @version 23/01/15
+ * @since 06.03.11
+ * @version 23.01.15
+ * 			28.02.15
  */
 public class AddonPlugin extends AbstractUIPlugin {
 
@@ -73,8 +74,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 	/**
 	 * Constructor.
 	 */
-	public AddonPlugin() {
-	}
+	public AddonPlugin() { }
 
 	/*
 	 * (non-Javadoc)
@@ -84,8 +84,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
-		PreferencesHint.registerPreferenceStore(DIAGRAM_PREFERENCES_HINT, this
-				.getPreferenceStore());
+		PreferencesHint.registerPreferenceStore(DIAGRAM_PREFERENCES_HINT, this.getPreferenceStore());
 		
 		preferencesStore = InstanceScope.INSTANCE.getNode(PLUGIN_ID);
 
@@ -232,11 +231,10 @@ public class AddonPlugin extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Requests to focus the mitamm console.
+	 * Requests to focus the add-on console.
 	 */
 	public void requestConsoleFocus() {
-		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(
-				this.console);
+		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(this.console);
 	}
 
 	/**
@@ -253,9 +251,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 		if (error == null && throwable != null) {
 			error = throwable.getMessage();
 		}
-		getLog().log(
-				new Status(IStatus.ERROR, AddonPlugin.PLUGIN_ID, IStatus.OK,
-						error, throwable));
+		getLog().log(new Status(IStatus.ERROR, AddonPlugin.PLUGIN_ID, IStatus.OK, error, throwable));
 		debug(error, throwable);
 	}
 

@@ -45,12 +45,12 @@ import org.eclipse.ui.services.IServiceLocator;
  * valid protocols to the add-on menu.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 17/04/10
- * @version 30/12/13
+ * @since 17.04.10
+ * @version 30.12.13
+ * 			27.02.15 Added more reliable dispose checks 
  * 
  */
-public class MenuContributionProvider extends ContributionItem implements
-		IWorkbenchContribution, ProtocolStoreListener, ToolStoreListener {
+public class MenuContributionProvider extends ContributionItem implements IWorkbenchContribution, ProtocolStoreListener, ToolStoreListener {
 
 	private Menu addonMenu;
 	private MenuItem menuContainer;
@@ -206,14 +206,14 @@ public class MenuContributionProvider extends ContributionItem implements
 		IEditorPart activeEditor = page.getActiveEditor();
 		boolean enabled = activeEditor != null && (activeEditor instanceof DiagramEditor);
 		
-		if(!menuContainer.isDisposed())
+		if (!menuContainer.isDisposed())
 			menuContainer.setEnabled(enabled);
 		
 		// Check menu items separately
-		if(enabled) {
+		if (enabled) {
 			String extension = getDiagramEditorFileExtension(activeEditor);
 			
-			if(extension != null && !extension.isEmpty()) {
+			if (extension != null && !extension.isEmpty()) {
 				for(ProtocolDescriptor protocolDescriptor:protocolDescriptor2MenuItemMap.keySet()) {
 					Protocol protocol = protocolDescriptor.getProtocol();
 					boolean isEnabled = protocol.isValid() && protocol.isApplicableFor(extension);
@@ -231,9 +231,7 @@ public class MenuContributionProvider extends ContributionItem implements
 	 * @return the diagram editor file extension or null
 	 */
 	private String getDiagramEditorFileExtension(IEditorPart editorPart) {
-		if(editorPart == null || editorPart.getEditorInput() == null) {
-			return null;
-		}
+		if (editorPart == null || editorPart.getEditorInput() == null) return null;
 
 		String name = editorPart.getEditorInput().getName();
 		String splits[] = name.split("\\."); //$NON-NLS-1$
@@ -249,9 +247,7 @@ public class MenuContributionProvider extends ContributionItem implements
 	 */
 	private void executeAddon(ProtocolDescriptor protocolDescriptor) {
 		// Delete all markers
-		DiagramMarkerNavigationProvider.getInstance().deleteMarkers(
-				ResourcesPlugin.getWorkspace().getRoot(),
-				IResource.DEPTH_INFINITE);
+		DiagramMarkerNavigationProvider.getInstance().deleteMarkers(ResourcesPlugin.getWorkspace().getRoot(), IResource.DEPTH_INFINITE);
 
 		try {
 			Protocol chain = protocolDescriptor.getProtocol();
@@ -275,37 +271,31 @@ public class MenuContributionProvider extends ContributionItem implements
 
 			if (activeEditor != null) {
 				if (activeEditor.isDirty())
-					if (MessageDialog.openQuestion(activeEditor
-							.getSite().getShell(), 
+					if (MessageDialog.openQuestion(activeEditor.getSite().getShell(), 
 							NLSupport.MenuContributionProvider_QuestionDialogTitle, 
 							NLSupport.MenuContributionProvider_QuestionDialogText))
-						activeEditor.getSite().getPage().saveEditor(
-								activeEditor, false);
+						activeEditor.getSite().getPage().saveEditor(activeEditor, false);
 					else
 						return;
 
 				IEditorInput input = activeEditor.getEditorInput();
 				if (input instanceof IFileEditorInput) {
-					IFile resource = ((IFileEditorInput) input)
-							.getFile();
-
+					IFile resource = ((IFileEditorInput) input).getFile();
 					chain.setSource(resource.getLocation().toFile());
-
-					AddonPlugin.getProgressMonitorDialog().run(true,
-							true, new ProtocolProgressDialog(chain));
+					AddonPlugin.getProgressMonitorDialog().run(true, true, new ProtocolProgressDialog(chain));
 				}
 			}
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			AddonPlugin.getInstance().logError("Error on executing add-on", ex);
 		}
 	}
 	
 	/**
 	 * Implements {@link IPartListener2} to listen to workbench page changes.
 	 * 
-	 * @author Arian Storch
-	 * @since 06/09/12
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 06.09.12
 	 *
 	 */
 	private class InternalPageListener implements IPageListener {
@@ -332,16 +322,14 @@ public class MenuContributionProvider extends ContributionItem implements
 	/**
 	 * Implements {@link IPartListener2} to listen to workbench part changes.
 	 * 
-	 * @author Arian Storch
-	 * @since 06/09/12
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 06.09.12
 	 *
 	 */
 	private class InternalPartListener implements IPartListener2 {
 
 		@Override
-		public void partActivated(IWorkbenchPartReference partRef) {
-
-		}
+		public void partActivated(IWorkbenchPartReference partRef) { }
 
 		@Override
 		public void partBroughtToTop(IWorkbenchPartReference partRef) {
@@ -350,33 +338,30 @@ public class MenuContributionProvider extends ContributionItem implements
 
 		@Override
 		public void partClosed(IWorkbenchPartReference partRef) {	
-			if(partRef.getPart(false) instanceof DiagramEditor) {
+			if (partRef.getPart(false) instanceof DiagramEditor) {
 				checkAndApplyMenuState(partRef.getPage());
 			}
 		}
 
 		@Override
-		public void partDeactivated(IWorkbenchPartReference partRef) {	
-		}
+		public void partDeactivated(IWorkbenchPartReference partRef) { }
 
 		@Override
-		public void partHidden(IWorkbenchPartReference partRef) {			
-		}
+		public void partHidden(IWorkbenchPartReference partRef) { }
 
 		@Override
-		public void partInputChanged(IWorkbenchPartReference partRef) {	
-		}
+		public void partInputChanged(IWorkbenchPartReference partRef) {	}
 
 		@Override
 		public void partOpened(IWorkbenchPartReference partRef) {
-			if(partRef.getPart(false) instanceof DiagramEditor) {
+			if (partRef.getPart(false) instanceof DiagramEditor) {
 				checkAndApplyMenuState(partRef.getPage());
 			}
 		}
 
 		@Override
 		public void partVisible(IWorkbenchPartReference partRef) {
-			if(partRef.getPart(false) instanceof DiagramEditor) {
+			if (partRef.getPart(false) instanceof DiagramEditor) {
 				checkAndApplyMenuState(partRef.getPage());
 			}
 		}	
