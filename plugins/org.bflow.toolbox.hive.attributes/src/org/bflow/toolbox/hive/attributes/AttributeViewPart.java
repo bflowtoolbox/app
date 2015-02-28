@@ -55,6 +55,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
@@ -70,8 +71,9 @@ import org.eclipse.ui.part.ViewPart;
  * Implements the view part to support the add-ons attribute view.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 20/04/10
- * @version 30/12/13
+ * @since 20.04.10
+ * @version 30.12.13
+ * 			28.02.15 Added part listener to fix various (de)activate issues
  */
 @SuppressWarnings("restriction")
 public class AttributeViewPart extends ViewPart implements ISelectionListener, IAttributeFileRegistryListener {
@@ -96,12 +98,6 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	private boolean sortByName = true;
 	private boolean sortASC = false;
 
-	/**
-	 * Constructor.
-	 */
-	public AttributeViewPart() {
-	}
-
 	@Override
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
@@ -119,14 +115,13 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 		 */
 		attrFile = AttributeFileRegistry.getInstance().getActiveAttributeFile();
 	}
-
+	
 	@Override
 	public void dispose() {
-		super.dispose();
-		instance = null;
 		AttributeFileRegistry.getInstance().removeRegistryListener(this);
-		
 		getSite().getPage().removeSelectionListener(this);
+		instance = null;
+		super.dispose();
 	}
 
 	@Override
@@ -168,7 +163,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.keyCode == 13) { // means return
-					OnButtonAddClick();
+					onButtonAddClick();
 				}
 			}
 		});
@@ -185,7 +180,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				OnButtonAddClick();
+				onButtonAddClick();
 			}
 		});
 
@@ -676,7 +671,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 		// Save new attribute value
 		attrFile.add(id, name, (value.isEmpty() ? " " : value)); //$NON-NLS-1$
 
-		if(diagramEditor instanceof IAttributableDocumentEditor) {
+		if (diagramEditor instanceof IAttributableDocumentEditor) {
 			((IAttributableDocumentEditor) diagramEditor).firePropertyChanged();
 		}
 
@@ -687,17 +682,34 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	public void setFocus() {
 	}
 
+	/**
+	 * Deactivates the usage of the view by disabling and clearing the controls.
+	 */
+	private void deactivateView() {
+		viewer.setItemCount(0);
+		setUpControls(false);
+	}
+	
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		// Check if the active editor is a diagram editor. If not deactivate the view
+		IEditorPart editorPart = part.getSite().getPage().getActiveEditor();
+		if (!(editorPart instanceof DiagramDocumentEditor)) {
+			deactivateView();
+			return;
+		} 
 		
+		// Check if the part which is affected by the selection is a diagram editor. If not deactivate the view.
+		if (!(part instanceof DiagramDocumentEditor)) {
+			// deactivateView();
+			return;
+		}
+		
+		// Now we are sure that the selection occurred within the current opened editor
 		selectedEditPart = null;
-		
-		boolean isAssignable = (part instanceof DiagramDocumentEditor && 
-								selection instanceof IStructuredSelection);
-		
-		if(!isAssignable) {
-			viewer.setItemCount(0);
-			setUpControls(false);
+		boolean isAssignable = (selection instanceof IStructuredSelection);
+		if (!isAssignable) {
+			deactivateView();
 			return ;
 		}
 		
@@ -709,10 +721,9 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 		
 		setUpControls(isAssignable);
 		
-		if(isAssignable) {
+		if (isAssignable) {
 			selectedEditPart = (IGraphicalEditPart) selectedObject;
-			if(selectedObject instanceof ShapeNodeEditPart ||
-					selectedObject instanceof ConnectionNodeEditPart) {
+			if (selectedObject instanceof ShapeNodeEditPart || selectedObject instanceof ConnectionNodeEditPart) {
 				btnAddAll.setEnabled(true);
 				btnDelAll.setEnabled(true);
 			}
@@ -747,19 +758,18 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	/**
 	 * Sets up the enabled state of the controls.
 	 * 
-	 * @param b
+	 * @param value
 	 *            true or false
 	 */
-	private void setUpControls(boolean b) {
-		if (txtName == null)
-			return;
+	private void setUpControls(boolean value) {
+		if (txtName == null) return;
 
-		txtName.setEnabled(b);
-		txtValue.setEnabled(b);
-		attributeTable.setEnabled(b);
-		btnAdd.setEnabled(b);
-		btnDel.setEnabled(b);
-		btnAddProject.setEnabled(b);
+		txtName.setEnabled(value);
+		txtValue.setEnabled(value);
+		attributeTable.setEnabled(value);
+		btnAdd.setEnabled(value);
+		btnDel.setEnabled(value);
+		btnAddProject.setEnabled(value);
 		btnAddAll.setEnabled(false);
 		btnDelAll.setEnabled(false);
 	}
@@ -773,8 +783,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	 */
 	private IFile getActiveResource(IWorkbenchPart part) {
 		if (part instanceof DiagramDocumentEditor) {
-			IEditorInput input = ((DiagramDocumentEditor) part)
-					.getEditorInput();
+			IEditorInput input = ((DiagramDocumentEditor) part).getEditorInput();
 
 			if (input instanceof IFileEditorInput)
 				return ((IFileEditorInput) input).getFile();
@@ -799,13 +808,12 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	 */
 	public static AttributeViewPart getInstance() {
 		if (instance == null) {
-			IWorkbenchWindow wnd = PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow();
-			IWorkbenchPage pge = wnd.getActivePage();
+			IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 
-			if (pge != null) {
+			if (workbenchPage != null) {
 				try {
-					pge.showView(VIEW_ID);
+					workbenchPage.showView(VIEW_ID);
 				} catch (PartInitException e) {
 					AttributeViewPlugin.logError(e.getMessage(), e);
 				}
@@ -832,13 +840,9 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	/**
 	 * Handles the click on the add button.
 	 */
-	private void OnButtonAddClick() {
-		if (selectedEditPart == null) {
-			return;
-		}
-
-		if (txtName.getText().trim().isEmpty())
-			return;
+	private void onButtonAddClick() {
+		if (selectedEditPart == null) return;
+		if (txtName.getText().trim().isEmpty()) return;
 		
 		EObject eObj = EMFUtility.getEObject(selectedEditPart);
 
@@ -846,13 +850,13 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 		String name = txtName.getText();
 		String value = txtValue.getText();
 
-		attrFile.add(id, name, (value.isEmpty() ? " " : value)); //$NON-NLS-1$
+		attrFile.add(id, name, (value.isEmpty() ? StringUtils.EMPTY : value)); //$NON-NLS-1$
 
 		txtName.setText(StringUtils.EMPTY);
 		txtValue.setText(StringUtils.EMPTY);
 		txtName.setFocus();
 
-		if(diagramEditor instanceof IAttributableDocumentEditor) {
+		if (diagramEditor instanceof IAttributableDocumentEditor) {
 			((IAttributableDocumentEditor) diagramEditor).firePropertyChanged();
 		}
 
@@ -877,7 +881,6 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 		 */
 		public MyColumnViewerEditor(ColumnViewer viewer) {
 			super(viewer);
-
 			this.editor = new TextCellEditor(((TableViewer) viewer).getTable());
 		}
 
@@ -894,7 +897,6 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 		@Override
 		protected Object getValue(Object element) {
 			ValuePair pair = (ValuePair) element;
-
 			return pair.getValue();
 		}
 
@@ -955,7 +957,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	private class TableViewerKeyListener extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if(e.keyCode != SWT.DEL) {
+			if (e.keyCode != SWT.DEL) {
 				return;
 			}
 			
@@ -1051,14 +1053,14 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 			ValuePair p1 = (ValuePair)e1;
 			ValuePair p2 = (ValuePair)e2;
 			
-			if(sortByName) {
-				if(!sortASC) {
+			if (sortByName) {
+				if (!sortASC) {
 					return p1.name.compareToIgnoreCase(p2.name);
 				} else {
 					return p2.name.compareToIgnoreCase(p1.name);
 				}
 			} else {
-				if(!sortASC) {
+				if (!sortASC) {
 					return p1.value.compareToIgnoreCase(p2.value);
 				} else {
 					return p2.value.compareToIgnoreCase(p1.value);
