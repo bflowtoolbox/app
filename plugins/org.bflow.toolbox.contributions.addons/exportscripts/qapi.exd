@@ -1,7 +1,0 @@
-public interchange 'Qapi' (txt) <> epc {
-
-description: 'Creates a text file which contains all labels of the model in Qapi format.'
-
-@script: '/exportscripts/files/qapi.vt'
-
-}

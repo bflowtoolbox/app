@@ -82,11 +82,6 @@
             File="exportscripts/yawl.exd.xml"
             Name="YAWL">
       </Exportscript>
-      <Exportscript
-            File="exportscripts/qapi.exd"
-            Name="Label Extractor"
-            public="true">
-      </Exportscript>
    </extension>
    <extension
          point="org.bflow.toolbox.interchange.importscript">
