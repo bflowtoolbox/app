@@ -20,22 +20,22 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 /**
  * Defines a static attribute provider that handles default model attributes.
- * @author Arian Storch
- * @since 19/06/10
- * @version 02/07/12
+ * 
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 19.06.10
+ * @version 02.07.12
  */
-public class DefaultAttributeProvider 
-{
+public class DefaultAttributeProvider {
+	
 	private static boolean init = false;
 	private static Vector<AttributeHeader> attributes = new Vector<AttributeHeader>();
 	
 	private static final File CONFIG_FILE = ResourcesPlugin.getWorkspace().getRoot().getLocation().append("/.attribute/defaults.xml").toFile();
 	
 	/**
-	 * Inits the provider and loads it contents.
+	 * Initializes the provider and loads it contents.
 	 */
-	private static void init()
-	{
+	private static void init() {
 		SAXReader reader = new SAXReader();
 		
 		try
@@ -56,9 +56,7 @@ public class DefaultAttributeProvider
 				attributes.add(new DefaultAttributeProvider().new AttributeHeader(name, value, project,
 																diagram, type));
 			}
-		}
-		catch(DocumentException ex)
-		{
+		} catch(DocumentException ex) {
 			
 		}
 		
@@ -68,16 +66,14 @@ public class DefaultAttributeProvider
 	/**
 	 * Updates and saves the provider contents.
 	 */
-	private static void update()
-	{
-		if(!init)
+	private static void update() {
+		if (!init)
 			init();
 		
 		Document doc = DocumentHelper.createDocument();
 		Element root = doc.addElement("defaults");
 		
-		for(AttributeHeader header:attributes)
-		{
+		for(AttributeHeader header:attributes) {
 			Element el = root.addElement("attributeHeader");
 			
 			el.addAttribute("project", (header.getProject() == null ? "NULL" : header.getProject()));
@@ -87,12 +83,10 @@ public class DefaultAttributeProvider
 			el.addAttribute("value", header.getValue());
 		}
 		
-		try
-		{
+		try {
 			OutputFormat format = OutputFormat.createPrettyPrint();
 			
-			if(!CONFIG_FILE.exists())
-			{
+			if(!CONFIG_FILE.exists()) {
 				CONFIG_FILE.getParentFile().mkdirs();
 				CONFIG_FILE.createNewFile();
 			}
@@ -101,111 +95,117 @@ public class DefaultAttributeProvider
 			
 			writer.write(doc);
 			writer.close();
-		}
-		catch(IOException ex)
-		{
+		} catch(IOException ex) {
 			AttributeViewPlugin.logError(ex.getMessage(), ex);
 		}
 	}
 	
 	/**
-	 * Returns a list of {@link Attribute}s specified by the project name and type.
-	 * @param project name of the project
-	 * @param type "event", "function" or "model"
+	 * Returns a list of {@link Attribute}s specified by the project name and
+	 * type.
+	 * 
+	 * @param project
+	 *            name of the project
+	 * @param type
+	 *            "event", "function" or "model"
 	 * @return list of {@link Attribute}s
 	 */
-	public static List<Attribute> getAttributesByProject(String project, String type)
-	{
+	public static List<Attribute> getAttributesByProject(String project, String type) {
 		if(!init)
 			init();
 		
 		Vector<Attribute> request = new Vector<Attribute>();
 		
-		for(AttributeHeader header:attributes)
-			if(header.getProject() != null &&
-					header.getProject().equalsIgnoreCase(project))
-				if(header.getType().equalsIgnoreCase(type))
-				request.add(header);
+		for (AttributeHeader header:attributes)
+			if (header.getProject() != null && header.getProject().equalsIgnoreCase(project))
+				if (header.getType().equalsIgnoreCase(type))
+					request.add(header);
 		
 		return request;
 	}
 	
 	/**
-	 * Returns a list of {@link Attribute}s specified by the diagram name and type.
-	 * @param diagram name of the diagram
-	 * @param type "event", "function" or "model"
+	 * Returns a list of {@link Attribute}s specified by the diagram name and
+	 * type.
+	 * 
+	 * @param diagram
+	 *            name of the diagram
+	 * @param type
+	 *            "event", "function" or "model"
 	 * @return list of {@link Attribute}s
 	 */
-	public static List<Attribute> getAttributesByDiagram(String diagram, String type)
-	{
-		if(!init)
+	public static List<Attribute> getAttributesByDiagram(String diagram, String type) {
+		if (!init)
 			init();
 		
 		Vector<Attribute> request = new Vector<Attribute>();
 		
-		for(AttributeHeader header:attributes)
-			if(header.getDiagram() != null &&
-					header.getDiagram().equalsIgnoreCase(diagram))
-				if(header.getType().equalsIgnoreCase(type))
-				request.add(header);
+		for (AttributeHeader header:attributes)
+			if (header.getDiagram() != null && header.getDiagram().equalsIgnoreCase(diagram))
+				if (header.getType().equalsIgnoreCase(type))
+					request.add(header);
 		
 		return request;
 	}
 	
 	/**
-	 * Adds a new {@link Attribute} to the defaults.	
-	 * @param diagram name of the diagram
-	 * @param name name of the attribute
-	 * @param value value
-	 * @param type "event", "function" or "model"
+	 * Adds a new {@link Attribute} to the defaults.
+	 * 
+	 * @param diagram
+	 *            name of the diagram
+	 * @param name
+	 *            name of the attribute
+	 * @param value
+	 *            value
+	 * @param type
+	 *            "event", "function" or "model"
 	 */
-	public static void addAttributeForDiagram(String diagram, String name, String value, String type)
-	{
-		if(!init)
+	public static void addAttributeForDiagram(String diagram, String name, String value, String type) {
+		if (!init)
 			init();
 		
-		attributes.add(
-				new DefaultAttributeProvider().new AttributeHeader(name, value, 
-						null, diagram, type));
-		
+		attributes.add(new DefaultAttributeProvider().new AttributeHeader(name, value, null, diagram, type));
 		update();
 	}
 		
 	/**
 	 * Adds a new {@link Attribute} to the defaults.
-	 * @param project name of the project
-	 * @param name name of the attribute
-	 * @param value value
-	 * @param type "event", "function" or "model"
+	 * 
+	 * @param project
+	 *            name of the project
+	 * @param name
+	 *            name of the attribute
+	 * @param value
+	 *            value
+	 * @param type
+	 *            "event", "function" or "model"
 	 */
-	public static void addAttributeForProject(String project, String name, String value, String type)
-	{
+	public static void addAttributeForProject(String project, String name, String value, String type) {
 		if(!init)
 			init();
 		
-		attributes.add(
-				new DefaultAttributeProvider().new AttributeHeader(name, value, 
-						project, null, type));
-		
+		attributes.add(new DefaultAttributeProvider().new AttributeHeader(name, value, project, null, type));
 		update();
 	}
 	
 	/**
 	 * Removes an {@link Attribute} from the defaults.
-	 * @param diagram name of the diagram
-	 * @param name name of the attribute
-	 * @param type "event", "function" or "model"
+	 * 
+	 * @param diagram
+	 *            name of the diagram
+	 * @param name
+	 *            name of the attribute
+	 * @param type
+	 *            "event", "function" or "model"
 	 */
-	public static void removeAttributeForDiagram(String diagram, String name, String type)
-	{
-		if(!init)
+	public static void removeAttributeForDiagram(String diagram, String name, String type) {
+		if (!init)
 			init();
 		
-		for(AttributeHeader header:attributes)
-			if(header.getDiagram() != null && header.getDiagram().equalsIgnoreCase(diagram))
-				if(header.getName().equalsIgnoreCase(name))
-					if(header.getType().equalsIgnoreCase(type))
-					{
+		for (AttributeHeader header:attributes)
+			if (header.getDiagram() != null && header.getDiagram().equalsIgnoreCase(diagram))
+				if (header.getName().equalsIgnoreCase(name))
+					if(header.getType().equalsIgnoreCase(type)) {
 						attributes.remove(header);
 						break;
 					}
@@ -215,11 +215,11 @@ public class DefaultAttributeProvider
 	
 	/**
 	 * Defines an attribute.
-	 * @author Arian Storch
-	 * @since 19/06/10
+	 * 
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 19.06.10
 	 */
-	public class Attribute
-	{
+	public class Attribute {
 		private String name;
 		private String value;
 		
@@ -252,28 +252,33 @@ public class DefaultAttributeProvider
 	}
 	
 	/**
-	 * Defines a header of an {@link Attribute} for internal handling. It's not intended to be used
-	 * outside the {@link DefaultAttributeProvider}.
-	 * @author Arian Storch
-	 * @since 19/06/10
+	 * Defines a header of an {@link Attribute} for internal handling. It's not
+	 * intended to be used outside the {@link DefaultAttributeProvider}.
+	 * 
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 19.06.10
 	 *
 	 */
-	public class AttributeHeader extends Attribute
-	{
+	public class AttributeHeader extends Attribute {
 		private String project;
 		private String diagram;
 		private String type;
 		
 		/**
 		 * Default constructor.
-		 * @param name name of the attribute
-		 * @param value value
-		 * @param project project name or null
-		 * @param diagram diagram of null
-		 * @param type "event", "function" or "model"
+		 * 
+		 * @param name
+		 *            name of the attribute
+		 * @param value
+		 *            value
+		 * @param project
+		 *            project name or null
+		 * @param diagram
+		 *            diagram of null
+		 * @param type
+		 *            "event", "function" or "model"
 		 */
-		public AttributeHeader(String name, String value, String project, String diagram,
-				String type) {
+		public AttributeHeader(String name, String value, String project, String diagram, String type) {
 			super(name, value);
 			this.project = project;
 			this.diagram = diagram;

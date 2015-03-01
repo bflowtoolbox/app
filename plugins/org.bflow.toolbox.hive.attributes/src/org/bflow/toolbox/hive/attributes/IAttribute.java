@@ -1,14 +1,13 @@
 package org.bflow.toolbox.hive.attributes;
 
 /**
- * Defines an attribute interface for handling attributes within the protocol. 
- * @author Arian Storch
- * @since 14/06/10
+ * Defines an attribute interface for handling attributes within the protocol.
+ * 
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 14.06.10
  *
  */
-public interface IAttribute 
-{
-	
+public interface IAttribute {
 	/**
 	 * Returns true if this attribute shall affect other attributes of the same type. 
 	 * @return true or false
