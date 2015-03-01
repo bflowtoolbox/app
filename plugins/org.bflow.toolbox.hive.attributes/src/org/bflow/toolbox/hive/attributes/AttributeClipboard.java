@@ -120,7 +120,14 @@ public class AttributeClipboard {
 		
 		for (Iterator<ClipboardContentItem> it = clipboardContent.contentItems.iterator(); it.hasNext();) {
 			ClipboardContentItem item = it.next();
-			String pattern = String.format("_%s", item.ElementName);
+			String originItemName = item.ElementName;
+			
+			// ISSUE: Copy of copied elements
+			if (originItemName.startsWith(CopyNamePrefix)) {
+				originItemName = originItemName.substring(CopyNamePrefix.length() + 2); // Remove prefix and its number
+			}
+			
+			String pattern = String.format("_%s", originItemName);
 			boolean isCopy = eObjName.endsWith(pattern);
 			if (isCopy) return item;
 		}
