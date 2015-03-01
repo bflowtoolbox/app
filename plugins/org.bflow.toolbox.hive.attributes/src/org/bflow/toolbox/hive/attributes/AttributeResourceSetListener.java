@@ -1,6 +1,9 @@
 package org.bflow.toolbox.hive.attributes;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bflow.toolbox.hive.attributes.DefaultAttributeProvider.Attribute;
 import org.eclipse.core.runtime.Assert;
@@ -20,6 +23,7 @@ import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 22.06.2011
  * @version 27.09.2014
+ * 			01.03.2015 Added copy and paste support for attributes
  *
  */
 public class AttributeResourceSetListener implements ResourceSetListener {
@@ -130,6 +134,14 @@ public class AttributeResourceSetListener implements ResourceSetListener {
 				
 				for (Attribute attr: DefaultAttributeProvider.getAttributesByProject(projectName, clName)) {
 					file.add(proxyId, attr.getName(), attr.getValue());
+				}
+				
+				if (AttributeClipboard.Instance.isCopy(obj)) {
+					Map<String, String> attributes = AttributeClipboard.Instance.getOriginAttributes(obj);
+					for (Iterator<Entry<String, String>> it = attributes.entrySet().iterator(); it.hasNext();) {
+						Entry<String, String> entry = it.next();
+						file.add(proxyId, entry.getKey(), entry.getValue());
+					}
 				}
 			}
 			
