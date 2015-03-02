@@ -1685,6 +1685,17 @@ equality_included(C,NameE1,NameE2) :-   	((split(C),arc(C,E3))
 					       (join(C),arc(E3,C))),
 						elementname(E3,NameE3),
 						trinity(NameE3,NameE1,NameE2).
+						
+% X wird von Y gefolgt (direkt oder über einige Splits)
+% Muss auch für syntaktisch falsche Modelle (mit einem nur aus Konnektoren bestehenden Zyklus) funktionieren!
+successor_via_splits(X,Y) :- arc(X,Y),X\==Y.
+successor_via_splits(X,Y) :- arc(X,C),split(C),not(path_containing_connectors_only(X,X,_)),successor_via_splits(C,Y).
+
+% X wird von Y gefolgt (direkt oder über einige Joins)
+% Muss auch für syntaktisch falsche Modelle (mit einem nur aus Konnektoren bestehenden Zyklus) funktionieren!
+successor_via_joins(X,Y) :- arc(X,Y),X\==Y.
+successor_via_joins(X,Y) :- arc(X,C),join(C),not(path_containing_connectors_only(X,X,_)),successor_via_joins(C,Y).
+
 
 % Ein Split führt zu zwei Ereignissen, und es ist der den Ereignissen "nächste" Split mit dieser Eigenschaft.
 split_and_two_events(C,Type,E1,E2,NameE1,NameE2) :-
