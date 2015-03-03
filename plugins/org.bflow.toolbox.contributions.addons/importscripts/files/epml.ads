@@ -3,7 +3,7 @@
 # Define the model informations
 model = {
 id = $//epc/@epcId$
-name = $//epc/@name$
+name = $//epc/@name$ | ''
 attributes = $//epc/attribute/@typeRef$ => $//epc/attribute/@value$
 }
 
@@ -11,7 +11,7 @@ attributes = $//epc/attribute/@typeRef$ => $//epc/attribute/@value$
 shapes = $//epc/event$ {
 id = $@id$
 type = 'org.bflow.toolbox.epc.diagram.Event_2006'
-name = $name/text()$
+name = $name/text()$ | ''
 width  = $graphics/position/@width$ | 64
 height = $graphics/position/@height$ | 64
 x = $graphics/position/@x$ | 0
@@ -22,7 +22,7 @@ y = $graphics/position/@y$ | 0
 shapes = $//epc/function$ {
 id = $@id$
 type = 'org.bflow.toolbox.epc.diagram.Function_2007'
-name = $name/text()$
+name = $name/text()$ | ''
 width  = $graphics/position/@width$ | 64
 height = $graphics/position/@height$ | 64
 x = $graphics/position/@x$ | 0
