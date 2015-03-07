@@ -3,20 +3,27 @@ package org.bflow.toolbox.hive.attributes;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bflow.toolbox.hive.attributes.utils.EMFUtility;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * Provides a clipboard that handles the attributes of graphical edit parts.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 01.03.2015
+ * @version 07.03.2015 Added support of connections between shapes
  *
  */
 public class AttributeClipboard {
@@ -116,8 +123,30 @@ public class AttributeClipboard {
 		if (isEmpty()) return null;
 		
 		String eObjName = EMFCoreUtil.getName(eObject);
+		
+		// Maybe it's a connection
+		if (StringUtils.isEmpty(eObjName)) {
+			// Resolve the corresponding view parts
+			String proxyId = EMFCoreUtil.getProxyID(eObject);
+			IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+			DiagramDocumentEditor diagramEditor = (DiagramDocumentEditor) workbenchPart;
+			@SuppressWarnings("unchecked")
+			List<ConnectionNodeEditPart> connectionElements = diagramEditor.getDiagramGraphicalViewer().findEditPartsForElement(proxyId, ConnectionNodeEditPart.class);
+			
+			// If there is at least one element it's a connector
+			if (!connectionElements.isEmpty()) {
+				// Adjust name to match
+				ConnectionNodeEditPart connection = connectionElements.get(0);
+				String semanticName = getSemanticName(connection); 
+				semanticName = semanticName.replaceAll("Copy_\\d_", StringUtils.EMPTY); // Remove copy prefix
+				
+				eObjName = String.format("Copy_1_%s", semanticName);
+			}
+		}
+		
 		if (!eObjName.startsWith(CopyNamePrefix)) return null;
 		
+		// Look up origin items within the clipboard content
 		for (Iterator<ClipboardContentItem> it = clipboardContent.contentItems.iterator(); it.hasNext();) {
 			ClipboardContentItem item = it.next();
 			String originItemName = item.ElementName;
@@ -183,15 +212,29 @@ public class AttributeClipboard {
 		if (attributes == null)
 			attributes = new HashMap<>();
 		
+		// Handling connections
+		if (editPart instanceof ConnectionNodeEditPart) {
+			ConnectionNodeEditPart connection = (ConnectionNodeEditPart)editPart;
+			
+			// Apply custom name to identify them after pasting
+			name = getSemanticName(connection);
+		}
+		
 		return buildClipboardContentItem(eObj, id, name, attributes);
 	}
 	
 	/**
-	 * Creates an instance of {@link ClipboardContentItem} using the given parameters.
-	 * @param eObject EObject
-	 * @param elementId Element id
-	 * @param elementName Element name
-	 * @param elementAttributes Element attributes
+	 * Creates an instance of {@link ClipboardContentItem} using the given
+	 * parameters.
+	 * 
+	 * @param eObject
+	 *            EObject
+	 * @param elementId
+	 *            Element id
+	 * @param elementName
+	 *            Element name
+	 * @param elementAttributes
+	 *            Element attributes
 	 * @return Instance of {@link ClipboardContentItem}
 	 */
 	private ClipboardContentItem buildClipboardContentItem(EObject eObject, String elementId, String elementName, Map<String, String> elementAttributes) {
@@ -200,6 +243,47 @@ public class AttributeClipboard {
 		
 		ClipboardContentItem item = new ClipboardContentItem(eObject, elementId, elementName, elementAttributes);
 		return item;
+	}
+	
+	/**
+	 * Returns a semantic name of the given connection edit part. This custom
+	 * name helps to identify which edit part is source and target of this
+	 * connection.
+	 * 
+	 * @param connection
+	 *            Connection to derive from a semantic name
+	 * @return String; never NULL or empty
+	 */
+	private String getSemanticName(ConnectionNodeEditPart connection) {
+		String srcName = getElementName(connection.getSource());
+		String tgtName = getElementName(connection.getTarget());
+		
+		String semanticName = String.format("{%s->%s}", srcName, tgtName);
+		return semanticName;
+	}
+	
+	/**
+	 * Returns the name of the model element that defines the given edit part.
+	 * 
+	 * @param editPart
+	 *            Edit part whose model element name to look up
+	 * @return String. May be NULL or empty
+	 */
+	private String getElementName(EditPart editPart) {
+		return getElementName((IGraphicalEditPart)editPart);
+	}
+	
+	/**
+	 * Returns the name of the model element that defines the given edit part.
+	 * 
+	 * @param editPart
+	 *            Edit part whose model element name to look up
+	 * @return String. May be NULL or empty
+	 */
+	private String getElementName(IGraphicalEditPart editPart) {
+		EObject element = EMFUtility.getEObject(editPart);
+		String elementName = EMFCoreUtil.getName(element);
+		return elementName;
 	}
 	
 	/**
