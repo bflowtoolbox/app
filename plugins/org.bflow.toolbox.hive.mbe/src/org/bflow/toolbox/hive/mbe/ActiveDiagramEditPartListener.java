@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -114,7 +115,7 @@ public class ActiveDiagramEditPartListener implements EditPartListener {
 	public void selectedStateChanged(EditPart editpart) { }
 	
 	
-	private static final Pattern CopyPrefixPattern = Pattern.compile("Copy_\\d_");
+	private static final Pattern CopyPrefixPattern = Pattern.compile(getLocalisedCopyPrefixPattern());
 	
 	/**
 	 * Checks if the given edit part has a name that indicates that it has been
@@ -148,5 +149,17 @@ public class ActiveDiagramEditPartListener implements EditPartListener {
 		};
 		
 		transactionalEditingDomain.getCommandStack().execute(recordingCommand);
+	}
+	
+	/**
+	 * Returns the copy prefix pattern derived from the platform natural
+	 * language setting.
+	 * 
+	 * @return String
+	 */
+	private static String getLocalisedCopyPrefixPattern() {
+		String platformNL = Platform.getNL();
+		if (platformNL.toLowerCase().startsWith("de".toLowerCase())) return "Kopieren_\\d_";
+		return "Copy_\\d_"; // default
 	}
 }

@@ -28,7 +28,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public class AttributeClipboard {
 	
-	private static final String CopyNamePrefix = "Copy_";
+	private static final String CopyNamePrefix = "Copy_"; // TODO Change to platform NL (see ActiveDiagramEditPartListener)
 	
 	public static AttributeClipboard Instance = new AttributeClipboard();
 	
