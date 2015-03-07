@@ -9,6 +9,7 @@ import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartListener;
+import org.eclipse.gef.RootEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
@@ -40,6 +41,37 @@ public class ActiveDiagramEditPartListener implements EditPartListener {
 	 */
 	public void addedToDiagramEditPart(DiagramEditPart diagramEditPart) {
 		currentOperatedDiagramEditPart = diagramEditPart;
+		
+		final ActiveDiagramEditPartListener _self = this;
+		
+		/* If the user saves the diagram, the diagram edit part will 
+		 * be removed and disposed. However, the diagram edit part is the only 
+		 * child of the root edit part. So, if the diagram edit part 
+		 * changes, it will be removed and added as the first child 
+		 * of the root edit part. In this case we will have to re-register 
+		 * the current listener.
+		 */
+		RootEditPart root = currentOperatedDiagramEditPart.getRoot();
+		root.addEditPartListener(new EditPartListener.Stub() {
+			@Override
+			public void childAdded(EditPart child, int index) {
+				DiagramEditPart diagramEditPart = (DiagramEditPart) child;
+				diagramEditPart.addEditPartListener(_self);
+				currentOperatedDiagramEditPart = diagramEditPart;
+			}
+			
+			/* (non-Javadoc)
+			 * @see org.eclipse.gef.EditPartListener.Stub#removingChild(org.eclipse.gef.EditPart, int)
+			 */
+			@Override
+			public void removingChild(EditPart child, int index) {
+				DiagramEditPart diagramEditPart = (DiagramEditPart) child;
+				diagramEditPart.removeEditPartListener(_self);
+				currentOperatedDiagramEditPart = null;
+			}
+		});
+		
+		// TODO Unregister root part listener
 	}
 
 	/* (non-Javadoc)
@@ -61,7 +93,7 @@ public class ActiveDiagramEditPartListener implements EditPartListener {
 	 * @see org.eclipse.gef.EditPartListener#partActivated(org.eclipse.gef.EditPart)
 	 */
 	@Override
-	public void partActivated(EditPart editpart) { }
+	public void partActivated(EditPart editpart) {	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.EditPartListener#partDeactivated(org.eclipse.gef.EditPart)
