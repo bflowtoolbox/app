@@ -145,7 +145,14 @@ public class AttributeClipboard {
 			}
 		}
 		
-		if (!eObjName.startsWith(CopyNamePrefix)) return null;
+		// Check the prefix
+		if (!eObjName.startsWith(CopyNamePrefix)) {
+			/* Due to MBE features (see ActiveDiagramEditPartListener) the prefix can 
+			 * be removed before this check is executed. So we have to add a special 
+			 * prefix that matches the criteria here.
+			 */
+			eObjName = String.format("Copy_0_%s", eObjName);
+		}
 		
 		// Look up origin items within the clipboard content
 		for (Iterator<ClipboardContentItem> it = clipboardContent.contentItems.iterator(); it.hasNext();) {
