@@ -27,9 +27,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
  * this delete method on a single edit part, it will automatically connect the
  * remaining edit parts if there are some. And this does much more.
  * 
- * @author Arian Storch
- * @since 12/07/10
- * @version 15/07/11
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 12.07.10
+ * @version 15.07.11
  * 
  */
 public class IntelligentDeleter {
@@ -425,18 +425,13 @@ public class IntelligentDeleter {
 	 * @param policy semantic edit policy
 	 * @return true or false
 	 */
-	public static boolean isAvailable(EObject arc,
-			EpcBaseItemSemanticEditPolicy policy) {
-		IStructuredSelection selection = (IStructuredSelection) epcDiagramEditor
-				.getEditorSite().getSelectionProvider().getSelection();
-
-		if (selection.size() > 1)
-			return false;
+	public static boolean isAvailable(EObject arc, EpcBaseItemSemanticEditPolicy policy) {
+		IStructuredSelection selection = (IStructuredSelection) epcDiagramEditor.getEditorSite().getSelectionProvider().getSelection();
+		if (selection.size() > 1) return false;
 
 		if (policy instanceof ArcItemSemanticEditPolicy)
 			if (selection.getFirstElement() instanceof ArcEditPart) {
-				if (((ArcEditPart) selection.getFirstElement())
-						.resolveSemanticElement().equals(arc)) 
+				if (((ArcEditPart) selection.getFirstElement()).resolveSemanticElement().equals(arc)) 
 					return true;
 				} else
 					return false;
@@ -497,10 +492,8 @@ public class IntelligentDeleter {
 		return replacedEditParts.containsKey(part);
 	}
 
-	private static boolean isDirectConnection(ColoredNodeEditPart split,
-			ColoredNodeEditPart join, int n) {
-		if (split.getSourceConnections().size() < n)
-			return false;
+	private static boolean isDirectConnection(ColoredNodeEditPart split, ColoredNodeEditPart join, int n) {
+		if (split.getSourceConnections().size() < n) return false;
 
 		ArcEditPart arc = (ArcEditPart) split.getSourceConnections().get(n);
 
@@ -513,8 +506,7 @@ public class IntelligentDeleter {
 		return false;
 	}
 
-	private static boolean hasAlreadyDirectConnection(
-			ColoredNodeEditPart split, ColoredNodeEditPart join) {
+	private static boolean hasAlreadyDirectConnection(ColoredNodeEditPart split, ColoredNodeEditPart join) {
 		for (int i = 0; i < split.getSourceConnections().size(); i++)
 			if (isDirectConnection(split, join, i))
 				return true;

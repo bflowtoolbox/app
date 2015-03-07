@@ -111,8 +111,8 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
 		// Handle files that are not within the workspace
-		if(getDocumentProvider() == null) {
-			if(input instanceof FileStoreEditorInput) {
+		if (getDocumentProvider() == null) {
+			if (input instanceof FileStoreEditorInput) {
 				FileStoreEditorInput fileStoreEditorInput = (FileStoreEditorInput)input;
 				try {
 					IFile file = EFSUtil.importExternalFile(fileStoreEditorInput);
@@ -135,14 +135,13 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 		} catch (CoreException x) {
 			String fileName = ""; //$NON-NLS-1$
 			
-			if(input != null)
+			if (input != null)
 				fileName = input.getName();
 			
 			String title = NLSupport.EpcDiagramEditor_ErrorOnOpening;// EditorMessages.Editor_error_setinput_title;
 			String msg = String.format(NLSupport.EpcDiagramEditor_FileDoesNotExistAnymore, fileName);  // EditorMessages.Editor_error_setinput_message;
 			Shell shell= getSite().getShell();
-			ErrorDialog.openError(
-					shell, title, null, new Status(IStatus.ERROR, "org.bflow.toolbox.epc.diagram", msg, x)); //$NON-NLS-1$
+			ErrorDialog.openError(shell, title, null, new Status(IStatus.ERROR, "org.bflow.toolbox.epc.diagram", msg, x)); //$NON-NLS-1$
 		}
 	}
 
@@ -159,10 +158,10 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 		
 		AttributeViewPart attributeView = AttributeViewPart.getInstance();
 		
-		if(attributeView != null) {
+		if (attributeView != null) {
 			AttributeFile attrFile = attributeView.getAttributeFile();
 			
-			if(attrFile != null) {
+			if (attrFile != null) {
 				dirtyAttributes = attrFile.isDirty();
 			}
 		}		
@@ -270,13 +269,11 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 	}
 
 	@Override
-	protected void performSave(boolean overwrite,
-			IProgressMonitor progressMonitor) {
+	protected void performSave(boolean overwrite, IProgressMonitor progressMonitor) {
 
 		if (AttributeViewPart.getInstance() != null)
 			if (AttributeViewPart.getInstance().getAttributeFile() != null)
-				if (AttributeViewPart.getInstance().getAttributeFile()
-						.isDirty())
+				if (AttributeViewPart.getInstance().getAttributeFile().isDirty())
 					AttributeViewPart.getInstance().getAttributeFile().save();
 
 		super.performSave(overwrite, progressMonitor);
@@ -288,16 +285,13 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 	protected void performSaveAs(IProgressMonitor progressMonitor) {
 		if (AttributeViewPart.getInstance() != null)
 			if (AttributeViewPart.getInstance().getAttributeFile() != null)
-				if (AttributeViewPart.getInstance().getAttributeFile()
-						.isDirty())
+				if (AttributeViewPart.getInstance().getAttributeFile().isDirty())
 					AttributeViewPart.getInstance().getAttributeFile().save();
 
 		Shell shell = getSite().getShell();
 		IEditorInput input = getEditorInput();
 		SaveAsDialog dialog = new SaveAsDialog(shell);
-		IFile original = input instanceof IFileEditorInput ? ((IFileEditorInput) input)
-				.getFile()
-				: null;
+		IFile original = input instanceof IFileEditorInput ? ((IFileEditorInput) input).getFile() : null;
 		if (original != null) {
 			dialog.setOriginalFile(original);
 		}
