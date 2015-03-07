@@ -129,6 +129,7 @@ public class AttributeClipboard {
 			// Resolve the corresponding view parts
 			String proxyId = EMFCoreUtil.getProxyID(eObject);
 			IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+			if (!(workbenchPart instanceof DiagramDocumentEditor)) return null;
 			DiagramDocumentEditor diagramEditor = (DiagramDocumentEditor) workbenchPart;
 			@SuppressWarnings("unchecked")
 			List<ConnectionNodeEditPart> connectionElements = diagramEditor.getDiagramGraphicalViewer().findEditPartsForElement(proxyId, ConnectionNodeEditPart.class);
