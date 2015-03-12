@@ -126,12 +126,6 @@
       </Importscript>
    </extension>
    <extension
-         point="org.bflow.toolbox.addons.component">
-      <Component
-            Class="org.bflow.toolbox.contributions.addons.HTMLViewComponent">
-      </Component>
-   </extension>
-   <extension
          point="org.bflow.toolbox.modelnavigator.iconprovider">
       <provider
             class="org.bflow.toolbox.epc.diagram.providers.EpcIconProvider">

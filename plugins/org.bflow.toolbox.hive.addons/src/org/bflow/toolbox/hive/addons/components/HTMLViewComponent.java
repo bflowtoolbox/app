@@ -1,8 +1,8 @@
-package org.bflow.toolbox.contributions.addons;
+package org.bflow.toolbox.hive.addons.components;
 
 import java.net.URL;
 
-import org.bflow.toolbox.hive.addons.components.ToolRunComponent;
+import org.bflow.toolbox.hive.addons.AddonPlugin;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.protocols.Standardprotocol;
@@ -16,8 +16,8 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
  * Implements {@link IComponent} to provide the possibility to open HTML-Files
  * within the Eclipse instance.
  * 
- * @since 12/08/12
- * 
+ * @since 12.08.12
+ * @version 12.03.15 Moved to hive add-ons package
  */
 public class HTMLViewComponent implements IComponent {
 
@@ -26,6 +26,9 @@ public class HTMLViewComponent implements IComponent {
 	private boolean finished;
 	private String pathToHtml;
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#init()
+	 */
 	@Override
 	public void init() {
 		finished = false;
@@ -34,15 +37,16 @@ public class HTMLViewComponent implements IComponent {
 		try {
 			browser = support.createBrowser("viewer");
 		} catch (PartInitException e) {
-			e.printStackTrace();
+			AddonPlugin.getInstance().logError("Error on creating browser instance", e);
 		}
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#transformInput(java.lang.Object)
+	 */
 	@Override
-	public void transformInput(Object inputSource) throws ComponentException {
-
-	}
+	public void transformInput(Object inputSource) throws ComponentException { }
 
 	@Override
 	public void invoke() throws ComponentException {
@@ -57,65 +61,92 @@ public class HTMLViewComponent implements IComponent {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#transformOutput()
+	 */
 	@Override
 	public Object transformOutput() throws ComponentException {
 		return pathToHtml;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#finish()
+	 */
 	@Override
 	public void finish() {
 		finished = true;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#hasFinished()
+	 */
 	@Override
 	public boolean hasFinished() {
 		return finished;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#getDescription(java.lang.String)
+	 */
 	@Override
 	public String getDescription(String abbreviation) {
-		if (abbreviation.equalsIgnoreCase("de")) {
-			String str = "Oeffnet eine HTML Seite in einem Browser.";
-
-			return str;
+		if (abbreviation.startsWith("de")) {
+			return "Oeffnet eine HTML Seite in einem Browser.";
 		}
-
-		String str = "Opens a Html file in a browser.";
-
-		return str;
+		return "Opens a Html file in a browser.";
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#getDisplayName()
+	 */
 	@Override
 	public String getDisplayName() {
 		return "HTML View";
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#isValid()
+	 */
 	@Override
 	public boolean isValid() {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#hasParams()
+	 */
 	@Override
 	public boolean hasParams() {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#setParams(java.lang.String)
+	 */
 	@Override
 	public void setParams(String param) {
 		pathToHtml = param;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#canLinkWith(org.bflow.toolbox.hive.addons.core.model.IComponent)
+	 */
 	@Override
 	public boolean canLinkWith(IComponent component) {
-
 		if (component instanceof ToolRunComponent)
 			return true;
 
 		return false;
 	}
 
+	/**
+	 * Returns the OS dependent full qualified path of the given file as string.
+	 * 
+	 * @param file
+	 *            File to resolve its path
+	 * @return OS dependent full qualified path
+	 */
 	private String getWorkspacePath(IFile file) {
 		return file.getProject().getLocation().toOSString();
 	}
-
 }
