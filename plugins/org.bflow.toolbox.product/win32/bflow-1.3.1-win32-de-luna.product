@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="%productName" uid="org.bflow.toolbox.application" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="1.3.0" useFeatures="false" includeLaunchers="true">
+<product name="%productName" uid="org.bflow.toolbox.application" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="1.3.1" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="eclipse_lg.png"/>
@@ -14,7 +14,7 @@
    </configIni>
 
    <launcherArgs>
-      <programArgs>-perspective org.bflow.toolbox.perspectives.BflowPerspective
+      <programArgs>-perspective org.bflow.toolbox.application.perspective
 -nl de_DE
       </programArgs>
       <vmArgs>-Dosgi.requiredJavaVersion=1.7
@@ -47,11 +47,9 @@
       </win>
    </launcher>
 
-
    <vm>
       <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</windows>
    </vm>
-
 
    <plugins>
       <plugin id="com.google.guava"/>
