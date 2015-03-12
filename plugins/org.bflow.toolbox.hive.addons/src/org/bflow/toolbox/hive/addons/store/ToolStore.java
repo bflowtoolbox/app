@@ -22,8 +22,9 @@ import org.dom4j.io.XMLWriter;
  * Provides a store to manage installed add-on tools. 
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 17/04/10
- * @version 13/09/13
+ * @since 17.04.10
+ * @version 13.09.13
+ * 			12.03.15 Added method hasTool
  */
 public class ToolStore {
 	/**
@@ -136,6 +137,23 @@ public class ToolStore {
 			init();
 
 		return installedTools;
+	}
+	
+	/**
+	 * Returns TRUE if there is any tool that has the same name as the given
+	 * one. The comparison is not case-sensitive.
+	 * 
+	 * @param name
+	 *            Name to proof
+	 * @return TRUE or FALSE
+	 */
+	public static boolean hasTool(String name) {
+		List<ToolDescriptor> tools = getInstalledTools();
+		for (int i = -1; ++i != tools.size();) {
+			ToolDescriptor td = tools.get(i);
+			if (td.getName().equalsIgnoreCase(name)) return true;
+		}
+		return false;
 	}
 
 	/**

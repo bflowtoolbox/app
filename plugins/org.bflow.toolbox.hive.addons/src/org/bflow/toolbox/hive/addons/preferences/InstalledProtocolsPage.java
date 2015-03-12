@@ -47,8 +47,9 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  * Defines the preferences page for the installed add-ons.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 13/04/10
- * @version 23/08/13
+ * @since 13.04.10
+ * @version 23.08.13
+ * 			12.03.15 Added check of ToolStore.hasTool()
  */
 public class InstalledProtocolsPage extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
@@ -277,8 +278,8 @@ public class InstalledProtocolsPage extends FieldEditorPreferencePage implements
 							String name = el.attributeValue("name"); //$NON-NLS-1$
 							String param = el.attributeValue("param"); //$NON-NLS-1$
 
-							ToolDescriptor td = new ToolDescriptor(name, StringUtils.EMPTY, //$NON-NLS-1$
-									param);
+							ToolDescriptor td = new ToolDescriptor(name, StringUtils.EMPTY, param);
+							if (ToolStore.hasTool(name)) continue;
 							ToolStore.installTool(td);
 
 							InstalledToolsPage prefPage = InstalledToolsPage.getInstance();

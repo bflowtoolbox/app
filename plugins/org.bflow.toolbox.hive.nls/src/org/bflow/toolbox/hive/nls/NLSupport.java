@@ -39,6 +39,15 @@ public class NLSupport extends NLS {
 	public static String AttributeViewPart_MenuItemOpenFileText;
 	public static String BestSizeAction_Name;
 	public static String BestSizeAction_Tooltip;
+	public static String EditToolDialog_Button_Cancel;
+	public static String EditToolDialog_Button_Ok;
+	public static String EditToolDialog_Button_Select;
+	public static String EditToolDialog_Dialog_Description;
+	public static String EditToolDialog_Label_Name;
+	public static String EditToolDialog_Label_Param;
+	public static String EditToolDialog_Label_Path;
+	public static String EditToolDialog_Message_Error_DialogTitle;
+	public static String EditToolDialog_Message_Error_ToolExists;
 	public static String ImageExportWizardPage_Description;
 	public static String ImageExportWizardPage_LblLine1;
 	public static String ImageExportWizardPage_LblLine2;

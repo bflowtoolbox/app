@@ -24,8 +24,9 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  * Implements a preference page used by the Add-on installed tools page.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 13/04/10
- * @version 06/08/14
+ * @since 13.04.10
+ * @version 06.08.14
+ * 			12.03.15 Added usage of ToolStore.hasTool() by introducing editMode flag
  */
 public class InstalledToolsPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	
@@ -38,25 +39,40 @@ public class InstalledToolsPage extends FieldEditorPreferencePage implements IWo
 		instance = this;
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#performOk()
+	 */
 	@Override
 	public boolean performOk() {
 		performApply();
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.preference.PreferencePage#performApply()
+	 */
 	@Override
 	protected void performApply() {
 		ToolStore.save();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
+	 */
 	@Override
 	protected void createFieldEditors() {
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 */
 	@Override
 	public void init(IWorkbench workbench) {
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createContents(org.eclipse.swt.widgets.Composite)
+	 */
 	@Override
 	protected Control createContents(Composite parent) {
 		final Composite composite = new Composite(parent, SWT.WRAP);
@@ -84,8 +100,7 @@ public class InstalledToolsPage extends FieldEditorPreferencePage implements IWo
 					TableItem item = new TableItem(table, SWT.NONE);
 					item.setText(new String[] { value[0], value[1], value[2] });
 
-					ToolDescriptor td = new ToolDescriptor(value[0], value[1],
-							value[2]);
+					ToolDescriptor td = new ToolDescriptor(value[0], value[1], value[2]);
 					ToolStore.installTool(td);
 					item.setData(td);
 				}
@@ -116,19 +131,17 @@ public class InstalledToolsPage extends FieldEditorPreferencePage implements IWo
 				int sel = table.getSelectionIndex();
 
 				if (sel > -1) {
-					EditToolDialog eDlg = new EditToolDialog(composite.getShell());
-
-					eDlg.setChangeable(isEditable(sel));
+					EditToolDialog dialog = new EditToolDialog(composite.getShell());
+					dialog.setChangeable(isEditable(sel));
 
 					TableItem item = table.getItem(sel);
 
 					String oldName = item.getText(0);
-
-					eDlg.setInput(new String[] { item.getText(0), item.getText(1), item.getText(2) });
+					dialog.setInput(new String[] { item.getText(0), item.getText(1), item.getText(2) });
 
 					String value[] = null;
 
-					if ((value = eDlg.open()) != null) {
+					if ((value = dialog.open()) != null) {
 						item.setText(value);
 
 						ToolStore.removeTool(oldName);
