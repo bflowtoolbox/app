@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.core.model.Protocol;
@@ -40,9 +41,9 @@ import org.eclipse.core.resources.IFile;
  * used to replace the "$file" parameter.
  * </p>
  * 
- * @author Arian Storch
- * @since 25/04/10
- * @version 25/05/13
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 25.04.10
+ * @version 25.05.13
  * 
  */
 public class ToolRunComponent implements IToolRunComponent {
@@ -87,14 +88,12 @@ public class ToolRunComponent implements IToolRunComponent {
 	 */
 	@Override
 	public String getDescription(String abbreviation) {
-		if (abbreviation.equalsIgnoreCase("de")) {
+		if (abbreviation.startsWith("de")) {
 			String str = "Startet ein externes Programm und überwacht dessen Ausgabe nach Meldungen, die für bflow* bestimmt sind.";
-
 			return str;
 		}
 
 		String str = "Starts an external program and logs its output.";
-
 		return str;
 	}
 
@@ -155,23 +154,17 @@ public class ToolRunComponent implements IToolRunComponent {
 			List<String> splitParams = splitToParams(processedParams);
 			
 			// Adjusting parameters
-			for(int i = 0; i < splitParams.size(); i++) {
+			for (int i = 0; i < splitParams.size(); i++) {
 				String splitParam = splitParams.get(i);
 				
-				splitParam = replaceParameter(splitParam, 
-						"$source", srcFile.getAbsolutePath());
-				splitParam = replaceParameter(splitParam, 
-						"$wsSource", getWSSource(source));
-				splitParam = replaceParameter(splitParam, 
-						"$project",	getWorkspacePath(source));
-				splitParam = replaceParameter(splitParam, 
-						"$addon_temp", tmpPath.getAbsolutePath());
-				splitParam = replaceParameter(splitParam, 
-						"$install_dir", FilenameUtils.getFullPath(tool.getPath()), false);
-				splitParam = replaceParameter(splitParam, 
-						"$name", FilenameUtils.getName(srcFile.getAbsolutePath()));
+				splitParam = replaceParameter(splitParam, "$source", srcFile.getAbsolutePath());
+				splitParam = replaceParameter(splitParam, "$wsSource", getWSSource(source));
+				splitParam = replaceParameter(splitParam, "$project",	getWorkspacePath(source));
+				splitParam = replaceParameter(splitParam, "$addon_temp", tmpPath.getAbsolutePath());
+				splitParam = replaceParameter(splitParam, "$install_dir", FilenameUtils.getFullPath(tool.getPath()), false);
+				splitParam = replaceParameter(splitParam, "$name", FilenameUtils.getName(srcFile.getAbsolutePath()));
 				
-				if(!splitParam.trim().isEmpty()) {
+				if (!splitParam.trim().isEmpty()) {
 					processArgs.add(splitParam);
 				}
 			}
@@ -185,11 +178,9 @@ public class ToolRunComponent implements IToolRunComponent {
 				Process process = processBuilder.start();
 				process.waitFor();				
 				
-				BufferedReader br = new BufferedReader(new InputStreamReader(process
-						.getInputStream()));
+				BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-				BufferedReader errReader = new BufferedReader(
-						new InputStreamReader(process.getErrorStream()));
+				BufferedReader errReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 
 				// The protocol must wait until the process has been terminated
 				boolean running = true;
@@ -203,8 +194,7 @@ public class ToolRunComponent implements IToolRunComponent {
 						if (exitValue < 0) {
 							readInputStream(errReader);
 							running = false;
-							throw new ComponentException(
-									"Process did not end properly! " +
+							throw new ComponentException("Process did not end properly! " +
 									"Look into the log file for futher informations.");
 						}
 
@@ -262,8 +252,7 @@ public class ToolRunComponent implements IToolRunComponent {
 
 			File f = TemporaryFileServer.getFileReference(param);
 
-			command = command.replace(param, (f == null ? "" : f
-					.getAbsolutePath()));
+			command = command.replace(param, (f == null ? StringUtils.EMPTY : f.getAbsolutePath()));
 			v++;
 		}
 
@@ -302,12 +291,8 @@ public class ToolRunComponent implements IToolRunComponent {
 	 */
 	@Override
 	public void transformInput(Object inputSource) throws ComponentException {
-		if (inputSource == null)
-			throw new ComponentException("Quelle ist null");
-
-		if (inputSource.getClass() != File.class)
-			throw new ComponentException(
-					"input source has not exspected format!");
+		if (inputSource == null) throw new ComponentException("inputSource is NULL");
+		if (inputSource.getClass() != File.class) throw new ComponentException("inputSource has not expected format!");
 
 		srcFile = (File) inputSource;
 	}
@@ -317,9 +302,7 @@ public class ToolRunComponent implements IToolRunComponent {
 	 */
 	@Override
 	public Object transformOutput() throws ComponentException {
-		if (collectingConsoleMessages)
-			return shellStream;
-
+		if (collectingConsoleMessages) return shellStream;
 		return tgtFile;
 	}
 
@@ -346,11 +329,8 @@ public class ToolRunComponent implements IToolRunComponent {
 		if (tool != null && tool.getPath() != null && !tool.getPath().isEmpty()) {
 			String path = tool.getPath();
 			
-			File file = new File(path);
-			
-			if(file.exists()) {
-				return true;
-			}
+			File file = new File(path);			
+			if (file.exists()) return true;
 		}
 
 		return false;
@@ -369,12 +349,8 @@ public class ToolRunComponent implements IToolRunComponent {
 	 */
 	@Override
 	public boolean canLinkWith(IComponent component) {
-		if (component instanceof DiagramExportComponent)
-			return true;
-
-		if (component instanceof ToolAdapterComponent)
-			return true;
-
+		if (component instanceof DiagramExportComponent) return true;
+		if (component instanceof ToolAdapterComponent) return true;
 		return false;
 	}
 
@@ -432,11 +408,8 @@ public class ToolRunComponent implements IToolRunComponent {
 	 *            the quote when true the value will be quoted
 	 * @return the new line
 	 */
-	private String replaceParameter(String line, String param, String value,
-			boolean quote) {
-		String repl = String.format(
-				(quote ? ParamLineQuote : ParamLineUnquote), value);
-
+	private String replaceParameter(String line, String param, String value, boolean quote) {
+		String repl = String.format((quote ? ParamLineQuote : ParamLineUnquote), value);
 		return line.replace(param, repl);
 	}
 
