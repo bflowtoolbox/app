@@ -37,6 +37,7 @@ import org.eclipse.ui.ide.ResourceUtil;
  * @since 14.08.09
  * @version 28.12.13
  * 			27.02.15 Re-worked dirty check
+ * 			12.03.15 Fixed bug of handling multiple selection
  * 
  */
 public class MIFExportWizard extends Wizard implements IExportWizard {
@@ -101,13 +102,12 @@ public class MIFExportWizard extends Wizard implements IExportWizard {
 		getContainer().run(false, false, new IRunnableWithProgress() {
 			
 			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException,
-					InterruptedException {
+			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				monitor.beginTask(NLSupport.MIFExportWizard_ProgressDialogText, IProgressMonitor.UNKNOWN);
 				
 				for (int i = 0; i < selFiles.length; i++) {
 					// Process event queue
-					while(Display.getCurrent().readAndDispatch());
+					while (Display.getCurrent().readAndDispatch());
 					
 					IFile sFile = (IFile) selFiles[i];
 					
@@ -129,64 +129,46 @@ public class MIFExportWizard extends Wizard implements IExportWizard {
 		});
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IWorkbenchWizard#init(org.eclipse.ui.IWorkbench, org.eclipse.jface.viewers.IStructuredSelection)
+	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle(NLSupport.MIFExportWizard_WindowTitleText);
 		if (selection == null || selection.isEmpty()) return;
 		
 		this.selection = selection;
-		Object selectedObject = selection.getFirstElement();
+		Object[] selectedItems = this.selection.toArray();
 		
-		// If an object within the editor is selected, resolve the underlying file
-		if (selectedObject instanceof EditPart) {
-			IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-			selectedObject = activeEditor.getEditorInput();
-		}
-
-//			if (!(obj instanceof IFile)) {
-//				if (obj instanceof EditPart) {
-//					
-//
-//					if (activeEditor != null) {
-//						if (activeEditor.isDirty())
-//							if (MessageDialog.openQuestion(activeEditor.getSite().getShell(), 
-//									NLSupport.MIFExportWizard_QuestionDialogTitle,
-//									NLSupport.MIFExportWizard_QuestionDialogText))
-//								activeEditor.getSite().getPage().saveEditor(activeEditor, false);
-//							else
-//								return;
-//
-//						IEditorInput input = activeEditor.getEditorInput();
-//						if (input instanceof IFileEditorInput) {
-//							final IFile resource = ((IFileEditorInput) input).getFile();
-//							this.selection = new StructuredSelection(resource);
-//						}
-//					}
-//
-//				} else {
-//					MessageDialog.openInformation(workbench.getDisplay().getActiveShell(), 
-//							NLSupport.MIFExportWizard_InformationDialogTitle, 
-//							NLSupport.MIFExportWizard_InformationDialogText);
-//
-//					return;
-//				}
-//			}
+		for (int i = -1; ++i != selectedItems.length;) {
+			Object selectedObject = selectedItems[i];
 			
-		// Look up the editor that is used to edit this file
-		// If there is any and it's dirty, ask the user how to proceed
-		IFile resourceFile = ResourceUtil.getFile(selectedObject);
-		this.selection = new StructuredSelection(resourceFile);
-		IEditorPart editorPart = ResourceUtil.findEditor(workbench.getActiveWorkbenchWindow().getActivePage(), resourceFile);
-		if (editorPart != null) {
-			if (editorPart.isDirty()) {
-				if (MessageDialog.openQuestion(editorPart.getSite().getShell(), 
-						NLSupport.MIFExportWizard_QuestionDialogTitle,
-						NLSupport.MIFExportWizard_QuestionDialogText))
-					editorPart.getSite().getPage().saveEditor(editorPart, false);
-				else
-					return;
+			// If an object within the editor is selected, resolve the underlying file
+			if (selectedObject instanceof EditPart) {
+				IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+				selectedObject = activeEditor.getEditorInput();
 			}
+			
+			// Look up the editor that is used to edit this file
+			// If there is any and it's dirty, ask the user how to proceed
+			IFile resourceFile = ResourceUtil.getFile(selectedObject);
+			IEditorPart editorPart = ResourceUtil.findEditor(workbench.getActiveWorkbenchWindow().getActivePage(), resourceFile);
+			if (editorPart != null) {
+				if (editorPart.isDirty()) {
+					if (MessageDialog.openQuestion(editorPart.getSite().getShell(), 
+							NLSupport.MIFExportWizard_QuestionDialogTitle,
+							NLSupport.MIFExportWizard_QuestionDialogText))
+						editorPart.getSite().getPage().saveEditor(editorPart, false);
+					else
+						return;
+				}
+			}
+			
+			// Replace the object by the resolved resource file
+			selectedItems[i] = resourceFile;
 		}
+		
+		this.selection = new StructuredSelection(selectedItems);
 
 		// If there is at least one dirty editor ask the user 
 		// Problem: Dialog will appear even if the selected model to export isn't opened 
@@ -218,9 +200,7 @@ public class MIFExportWizard extends Wizard implements IExportWizard {
 	 * @return the diagram editor file extension or null
 	 */
 	private String resolveDiagramEditorFileExtension(IStructuredSelection selection) {
-		if(selection.isEmpty()) {
-			return null;
-		}
+		if (selection.isEmpty()) return null;
 		
 		IFile file = (IFile)selection.getFirstElement();
 		String fExtension = file.getFileExtension();
