@@ -25,7 +25,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -47,8 +46,9 @@ import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
  * This class implements the import wizard page.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 17/08/09
- * @version 14/12/13
+ * @since 17.08.09
+ * @version 14.12.13
+ * 			12.03.15 Changed representation of of a multiple file selection
  *
  */
 public class MIFImportWizardPage extends WizardPage 
@@ -63,6 +63,7 @@ public class MIFImportWizardPage extends WizardPage
 	private Button chkArrangeAll, chkPackPage, chkAutoSize;
 	
 	private String basicPath;
+	private String sourceFileString;
 	
 	private IWorkbench iWorkbench = null;
 	private IStructuredSelection iSelection;
@@ -125,8 +126,7 @@ public class MIFImportWizardPage extends WizardPage
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e)  {
-				if(selectedImportDescription == null)
-					return ;
+				if (selectedImportDescription == null) return;
 								
 				FileDialog fd = new FileDialog(composite.getShell(), SWT.OPEN | SWT.MULTI);
 				
@@ -140,26 +140,37 @@ public class MIFImportWizardPage extends WizardPage
 				fd.setFilterExtensions(ext.toArray(new String[ext.size()]));
 				             
 	            String ret = fd.open();
-	            
-	            if(ret == null)
-	            	return ;
+	            if (ret == null) return;
 	            
 	            String files[] = fd.getFileNames();
 	            basicPath = fd.getFilterPath();
 				
-				if(files.length > 1)
-				{
-					String filelist = ""; //$NON-NLS-1$
+	            boolean isEditable = true;
+	            
+				if (files.length > 1) {					
+					sourceFileString = StringUtils.join(files, "; "); //$NON-NLS-1$
 					
-					for(int i = 0; i < files.length-1; i++)
-						filelist += ""+files[i]+"; "; //$NON-NLS-1$ //$NON-NLS-2$
+					final int Limit = 3000;
 					
-					filelist += files[files.length-1];
-					textFieldFile.setText(filelist);
-				}
-				else
+					String textString = sourceFileString;
+					if (textString.length() > Limit) {
+						textString = sourceFileString.substring(0, Limit);
+						textString = String.format("%s...", textString); //$NON-NLS-1$
+						isEditable = false;
+					}
+					
+					if (files.length > 10) {
+						String textFormat = NLSupport.MIFImportWizardPage_Text_ManyFilesSelected;
+						textString = String.format(textFormat, files.length);
+						isEditable = false;
+					}
+					
+					textFieldFile.setText(textString);
+				} else {
 					textFieldFile.setText(files[0]);
+				}
 				
+				textFieldFile.setEditable(isEditable);							
 			}});
 		
 		Label lblTargetDir = new Label(composite, SWT.NONE);
@@ -178,34 +189,22 @@ public class MIFImportWizardPage extends WizardPage
 		Button btnBrowseTarget = new Button(composite, SWT.NONE);
 		btnBrowseTarget.setText(NLSupport.MIFImportWizardPage_BtnTgtDir);  //$NON-NLS-2$
 		
-		btnBrowseTarget.addSelectionListener(new SelectionListener() {
-
+		btnBrowseTarget.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {				
-			}
-
-			@Override
-			public void widgetSelected(SelectionEvent e) 
-			{
+			public void widgetSelected(SelectionEvent e) {
 				IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
 				
-				ContainerSelectionDialog dlg = new ContainerSelectionDialog(getShell(), 
-						wsRoot, true, null);
+				ContainerSelectionDialog dlg = new ContainerSelectionDialog(getShell(), wsRoot, true, null);
+				if (dlg.open() == ContainerSelectionDialog.CANCEL) return ;
 				
-				if(dlg.open() == ContainerSelectionDialog.CANCEL)
-					return ;
-				
-				Object selections[] = dlg.getResult();
-				
-				if(selections.length == 0)
-					return ;
+				Object selections[] = dlg.getResult();				
+				if (selections.length == 0) return;
 				
 				IPath selPath = (IPath) selections[0];
 				IPath target = wsRoot.getLocation().append(selPath);
 				String osFile = target.toFile().getAbsolutePath();
 				
 				textFieldTarget.setText(osFile);
-				
 			}});
 		
 		// Options Area
@@ -232,34 +231,37 @@ public class MIFImportWizardPage extends WizardPage
 		setControl(composite);
 	}
 	
-	private void prepareComboBox()
-	{
-		for(IInterchangeDescriptor impDesc:importDescriptions)
+	private void prepareComboBox() {
+		for (IInterchangeDescriptor impDesc:importDescriptions)
 			cbImportDescriptions.add(""+impDesc.getName()+" (*."+impDesc.getFileExtensions()[0]+")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
-		cbImportDescriptions.addSelectionListener(new SelectionListener() {
-
+		cbImportDescriptions.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {				
-			}
-
-			@Override
-			public void widgetSelected(SelectionEvent e) 
-			{
+			public void widgetSelected(SelectionEvent e) {
 				selectedImportDescription = importDescriptions.get(cbImportDescriptions.getSelectionIndex());
 				textFieldDescription.setText(selectedImportDescription.getDescription().replaceAll("//", "\r\n")); //$NON-NLS-1$ //$NON-NLS-2$
 			}});
 		
 		cbImportDescriptions.setVisibleItemCount(20);
 	}
-		
+	
 	/**
-	 * Returns the text field that contains the name of the selected file.
+	 * Returns a string that contains all selected file names separated by an
+	 * semicolon.
 	 * 
-	 * @return Text field with name of the selected file
+	 * @return String with semicolon separated file names
 	 */
-	public Text getTextFieldFile() {
-		return textFieldFile;
+	public String getSourceFileString() {
+		return sourceFileString;
+	}
+	
+	/**
+	 * Returns a string that contains the target path.
+	 * 
+	 * @return String describing the target path
+	 */
+	public String getTargetFileString() {
+		return textFieldTarget.getText();
 	}
 	
 	/**
@@ -269,15 +271,6 @@ public class MIFImportWizardPage extends WizardPage
 	 */
 	public IInterchangeDescriptor getSelectedImportDescription() {
 		return selectedImportDescription;
-	}
-	
-	/**
-	 * Returns the text field that contains the target path
-	 * 
-	 * @return Text field containing target path
-	 */
-	public Text getTextFieldTarget() {
-		return textFieldTarget;
 	}
 	
 	/**
@@ -298,13 +291,13 @@ public class MIFImportWizardPage extends WizardPage
 	public EnumSet<EImportOption> getImportOptions() {
 		EnumSet<EImportOption> importOptions = EnumSet.noneOf(EImportOption.class);
 		
-		if(chkArrangeAll.getSelection())
+		if (chkArrangeAll.getSelection())
 			importOptions.add(EImportOption.ArrangeAll);
 		
-		if(chkPackPage.getSelection())
+		if (chkPackPage.getSelection())
 			importOptions.add(EImportOption.PackPage);
 		
-		if(chkAutoSize.getSelection())
+		if (chkAutoSize.getSelection())
 			importOptions.add(EImportOption.AutoSize);
 		
 		return importOptions;
@@ -324,7 +317,7 @@ public class MIFImportWizardPage extends WizardPage
 		 */
 		fileExtensions = new String[importDescriptions.size()];
 		
-		for(int i = 0; i < fileExtensions.length; i++)
+		for (int i = 0; i < fileExtensions.length; i++)
 			fileExtensions[i] = "*."+importDescriptions.get(i).getFileExtensions()[0]; //$NON-NLS-1$
 	}
 	
@@ -364,12 +357,12 @@ public class MIFImportWizardPage extends WizardPage
 
 			// Update controls that are affected by the pre-selection
 			cbImportDescriptions.select(selectedImport);
-			if(selectedImport < importDescriptions.size())
+			if (selectedImport < importDescriptions.size())
 				selectedImportDescription = importDescriptions.get(selectedImport);
-			if(selectedImportDescription != null)
+			if (selectedImportDescription != null)
 				textFieldDescription.setText(selectedImportDescription.getDescription());
 			
-			if(selectedFolder != null)
+			if (selectedFolder != null)
 				pathFile = selectedFolder;
 			
 			// Set options
@@ -379,7 +372,7 @@ public class MIFImportWizardPage extends WizardPage
 		}
 		
 		// Open create project dialog
-		if(projects.length == 0) {
+		if (projects.length == 0) {
 			IWorkbenchWizard wizard = new BasicNewProjectResourceWizard();
 			wizard.init(iWorkbench, iSelection);
 			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
@@ -388,27 +381,27 @@ public class MIFImportWizardPage extends WizardPage
 		}
 		
 		// Select the one per default
-		if(projects.length == 1) {
+		if (projects.length == 1) {
 			pathFile = projects[0].getLocation().toFile().getAbsolutePath();
 		}
 		
 		// If there are more projects try to use the selected one
-		if(projects.length > 1) {
+		if (projects.length > 1) {
 			ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 					.getSelectionService().getSelection(IPageLayout.ID_PROJECT_EXPLORER);
 			
-			if(selection instanceof TreeSelection) {
+			if (selection instanceof TreeSelection) {
 				ITreeSelection treeSelection = (ITreeSelection) selection;
 				Object selectedObject = treeSelection.getFirstElement();
 				
 				// If a file has been selected resolve the project of it
-				if(selectedObject instanceof IFile) {
+				if (selectedObject instanceof IFile) {
 					IFile file = (IFile) selectedObject;
 					selectedObject = file.getProject();
 				}
 				
 				// Resolve the project file path
-				if(selectedObject instanceof IProject) {
+				if (selectedObject instanceof IProject) {
 					IProject proj = (IProject) selectedObject;
 					pathFile = proj.getLocation().toFile().getAbsolutePath();
 				}
@@ -416,7 +409,7 @@ public class MIFImportWizardPage extends WizardPage
 		}
 		
 		// Check if the path really exists
-		if(!new File(pathFile).exists())
+		if (!new File(pathFile).exists())
 			pathFile = StringUtils.EMPTY;
 		
 		textFieldTarget.setText(pathFile);
@@ -428,7 +421,7 @@ public class MIFImportWizardPage extends WizardPage
 	public void onWizardPerformsFinish() {
 		// Store preferences settings
 		IDialogSettings dialogSettings = getDialogSettings().getSection(KEY_SECTION_NAME);
-		if(dialogSettings == null)
+		if (dialogSettings == null)
 			dialogSettings = getDialogSettings().addNewSection(KEY_SECTION_NAME);
 		
 		String valueFolder = textFieldTarget.getText();

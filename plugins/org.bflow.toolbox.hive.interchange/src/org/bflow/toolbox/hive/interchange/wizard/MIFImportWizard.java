@@ -65,8 +65,8 @@ public class MIFImportWizard extends Wizard implements IImportWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		String sourceFile = importWizardPage.getTextFieldFile().getText();
-		String targetFile = importWizardPage.getTextFieldTarget().getText();
+		String sourceFile = importWizardPage.getSourceFileString();
+		String targetFile = importWizardPage.getTargetFileString();
 		IInterchangeDescriptor importDescriptor = importWizardPage.getSelectedImportDescription();
 
 		if (importDescriptor == null) {

@@ -105,6 +105,7 @@ public class NLSupport extends NLS {
 	public static String MIFImportWizardPage_LblTgtDir;
 	public static String MIFImportWizardPage_Options;
 	public static String MIFImportWizardPage_PackPage;
+	public static String MIFImportWizardPage_Text_ManyFilesSelected;
 	public static String MIFImportWizardPage_Title;
 	public static String ValidationPage_ButtonDescriptionText;
 	public static String ValidationPage_ButtonEditText;
