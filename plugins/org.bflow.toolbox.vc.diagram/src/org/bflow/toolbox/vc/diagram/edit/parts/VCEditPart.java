@@ -1,32 +1,22 @@
 package org.bflow.toolbox.vc.diagram.edit.parts;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import org.bflow.toolbox.vc.diagram.edit.commands.VcCreateShortcutDecorationsCommand;
+import org.bflow.toolbox.epc.extensions.edit.parts.LiveValidatedDiagramEditPart;
 import org.bflow.toolbox.vc.diagram.edit.policies.MyXYLayoutEditPolicy;
 import org.bflow.toolbox.vc.diagram.edit.policies.VCCanonicalEditPolicy;
 import org.bflow.toolbox.vc.diagram.edit.policies.VCItemSemanticEditPolicy;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
-import org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DiagramDragDropEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.ResizableShapeEditPolicy;
-import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequest;
-import org.eclipse.gmf.runtime.diagram.ui.requests.DropObjectsRequest;
-import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
-import org.eclipse.gmf.runtime.notation.Node;
 import org.eclipse.gmf.runtime.notation.View;
 
 /**
- * @generated
+ * @generated NOT
+ * 
+ * @version 21.03.2015 Class now extends LiveValidatedDiagramEditPart
  */
-public class VCEditPart extends DiagramEditPart {
+public class VCEditPart extends LiveValidatedDiagramEditPart {
 
 	/**
 	 * @generated
@@ -50,10 +40,8 @@ public class VCEditPart extends DiagramEditPart {
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
-		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
-				new VCItemSemanticEditPolicy());
-		installEditPolicy(EditPolicyRoles.CANONICAL_ROLE,
-				new VCCanonicalEditPolicy());
+		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE, new VCItemSemanticEditPolicy());
+		installEditPolicy(EditPolicyRoles.CANONICAL_ROLE, new VCCanonicalEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.POPUPBAR_ROLE);
 	}
