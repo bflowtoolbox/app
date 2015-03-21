@@ -2,11 +2,11 @@ package org.bflow.toolbox.extensions.wizards;
 
 import java.text.ParseException;
 
+import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint;
-import org.eclipse.gmf.runtime.diagram.ui.internal.dialogs.PageSetupControlType;
-import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IDiagramPreferenceSupport;
+import org.eclipse.gmf.runtime.diagram.ui.internal.dialogs.PageSetupControlType;
 import org.eclipse.gmf.runtime.diagram.ui.internal.pagesetup.DefaultValues;
 import org.eclipse.gmf.runtime.diagram.ui.internal.pagesetup.ILabels;
 import org.eclipse.gmf.runtime.diagram.ui.internal.pagesetup.PageInfoHelper;
@@ -16,8 +16,8 @@ import org.eclipse.gmf.runtime.diagram.ui.internal.properties.WorkspaceViewerPro
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramGraphicalViewer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -31,7 +31,8 @@ import com.ibm.icu.text.NumberFormat;
  * An <code>WizardPage</code> to enter the new diagram size.
  * @author Joerg Hartmann
  * @since 0.0.7
- * @version 22/08/13 modified by Arian Storch<arian.storch@bflow.org>
+ * @version 22.08.13 modified by Arian Storch<arian.storch@bflow.org>
+ * 			20.03.15 Modified initial/default page size
  */
 @SuppressWarnings("restriction")
 public class DiagramPageSetupWizardPage extends WizardPage {
@@ -87,8 +88,7 @@ public class DiagramPageSetupWizardPage extends WizardPage {
 	 * @param parent
 	 */
 	public void createControl(Composite parent) {
-		Group group = PageSetupWidgetFactory.createGroupPaperSize(parent,
-				ILabels.LABEL_TITLE_GROUP_PAPER_SIZE);
+		Group group = PageSetupWidgetFactory.createGroupPaperSize(parent, ILabels.LABEL_TITLE_GROUP_PAPER_SIZE);
 		
 		PageSetupWidgetFactory.createLabel(group, ILabels.LABEL_PAGE_SIZE);
 
@@ -102,33 +102,19 @@ public class DiagramPageSetupWizardPage extends WizardPage {
 		fTextHeight = PageSetupWidgetFactory.createTextHeight(group);
 
 		int index = fComboSize.getSelectionIndex();
-		fTextHeight.setText(fNumberFormat.format(fConvertor
-				.convertInchesToMilim(PageSetupPageType.pages[index]
-						.getHeight())));
-		fTextWidth.setText(fNumberFormat
-				.format(fConvertor
-						.convertInchesToMilim(PageSetupPageType.pages[index]
-								.getWidth())));
+		fTextHeight.setText(fNumberFormat.format(fConvertor.convertInchesToMilim(PageSetupPageType.pages[index].getHeight())));
+		fTextWidth.setText(fNumberFormat.format(fConvertor.convertInchesToMilim(PageSetupPageType.pages[index].getWidth())));
 
-		fComboSize.addSelectionListener(new SelectionListener() {
-
+		fComboSize.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-
 				int index = fComboSize.getSelectionIndex();
-
-				fTextHeight.setText(fNumberFormat.format(fConvertor
-						.convertInchesToMilim(PageSetupPageType.pages[index]
-								.getHeight())));
-				fTextWidth.setText(fNumberFormat.format(fConvertor
-						.convertInchesToMilim(PageSetupPageType.pages[index]
-								.getWidth())));
-			}
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-
+				fTextHeight.setText(fNumberFormat.format(fConvertor.convertInchesToMilim(PageSetupPageType.pages[index].getHeight())));
+				fTextWidth.setText(fNumberFormat.format(fConvertor.convertInchesToMilim(PageSetupPageType.pages[index].getWidth())));
 			}
 		});
 
+		
+		
 		setControl(group);
 	}
 
@@ -157,30 +143,22 @@ public class DiagramPageSetupWizardPage extends WizardPage {
 	 * @return
 	 */
 	private IPreferenceStore getPreferenceStoreForPageSetup() {
+		try {
+			IPreferenceStore workspaceStore = ((DiagramGraphicalViewer) BflowDiagramEditPart
+												.getCurrentViewer().getRoot().getViewer())
+												.getWorkspaceViewerPreferenceStore();
 
-		try{
-			IPreferenceStore workspaceStore = 
-				((DiagramGraphicalViewer) BflowDiagramEditPart
-					.getCurrentViewer().getRoot().getViewer())
-					.getWorkspaceViewerPreferenceStore();
-
-			if (workspaceStore
-					.getBoolean(WorkspaceViewerProperties.PREF_USE_DIAGRAM_SETTINGS)) {
+			if (workspaceStore.getBoolean(WorkspaceViewerProperties.PREF_USE_DIAGRAM_SETTINGS)) {
 				return workspaceStore;
-			} else if (BflowDiagramEditPart.getCurrentViewer().getRoot() 
-					instanceof IDiagramPreferenceSupport) {
-				return (IPreferenceStore) 
-					((IDiagramPreferenceSupport) BflowDiagramEditPart
-						.getCurrentViewer().getRoot()).getPreferencesHint()
-						.getPreferenceStore();
+			} else if (BflowDiagramEditPart.getCurrentViewer().getRoot() instanceof IDiagramPreferenceSupport) {
+				return (IPreferenceStore) ((IDiagramPreferenceSupport) BflowDiagramEditPart
+												.getCurrentViewer().getRoot()).getPreferencesHint()
+												.getPreferenceStore();
 			}
-		}
-		catch(NullPointerException npe){
-			
+		} catch (NullPointerException npe) {
 		}
 		
-		return (IPreferenceStore) PreferencesHint.USE_DEFAULTS
-				.getPreferenceStore();
+		return (IPreferenceStore) PreferencesHint.USE_DEFAULTS.getPreferenceStore();
 	}
 	
 	
@@ -189,11 +167,9 @@ public class DiagramPageSetupWizardPage extends WizardPage {
 	 * <code>IPreferenceStore</code>.
 	 * @return
 	 */
-	public IPreferenceStore save(){
-		saveText(PageSetupControlType.TEXT_PAGE_HEIGHT, 
-				WorkspaceViewerProperties.PREF_PAGE_HEIGHT);
-		saveText(PageSetupControlType.TEXT_PAGE_WIDTH, 
-				WorkspaceViewerProperties.PREF_PAGE_WIDTH);
+	public IPreferenceStore save() {
+		saveText(PageSetupControlType.TEXT_PAGE_HEIGHT,	WorkspaceViewerProperties.PREF_PAGE_HEIGHT);
+		saveText(PageSetupControlType.TEXT_PAGE_WIDTH, WorkspaceViewerProperties.PREF_PAGE_WIDTH);
 		return preferences;
 	}
 	
@@ -204,23 +180,26 @@ public class DiagramPageSetupWizardPage extends WizardPage {
 	public void applySetup(){
 		IPreferenceStore preferences = save();
 		BflowDiagramEditPart diagramEditPart = null;
-		try{
+		try {
 			diagramEditPart = BflowDiagramEditPart.getCurrentViewer();
-		}
-		catch(Exception e){
+		} catch(Exception e) {
 			return;
 		}	
 		
-		if(diagramEditPart != null){
-			final Point size = PageInfoHelper.getPageSize(preferences,
-					diagramEditPart.getMapMode());
+		if (diagramEditPart != null) {
+			Point size = PageInfoHelper.getPageSize(preferences, diagramEditPart.getMapMode());
 			
-			diagramEditPart.getDiagramFormLayer().getFormHelper().setMinimumSize(
-					size.x, size.y);
+			int minSizeX = size.x;
+			int minSizeY = size.y;
+			
+			// View shall be 3 times greater than page size
+			minSizeX *= 3;
+			minSizeY *= 3;
+			
+			diagramEditPart.getDiagramFormLayer().getFormHelper().setMinimumSize(minSizeX, minSizeY);
 			
 		}
 	}
-	
 	
 	/**
 	 * Saves the text self.
@@ -230,7 +209,6 @@ public class DiagramPageSetupWizardPage extends WizardPage {
 	private void saveText(PageSetupControlType controlType, String key) {
 		preferences.setValue(key, fConvertor.convertToInches(controlType));
 	}
-
 	
 	/**
 	 * Converts values from inches to millimeters.
