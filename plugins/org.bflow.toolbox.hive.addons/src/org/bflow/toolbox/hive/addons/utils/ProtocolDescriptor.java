@@ -192,7 +192,7 @@ public class ProtocolDescriptor {
 	}
 	
 	private void parseDescription() {
-		if(file != null) {
+		if (file != null) {
 			SAXReader reader = new SAXReader();
 			
 			try {
@@ -214,13 +214,13 @@ public class ProtocolDescriptor {
 				
 				String name = displayMap.get(NLUtil.getActiveLanguageAbbreviation());
 				
-				if(name == null)
+				if (name == null)
 					name = displayMap.get("default");
 				
 				// description
 				Element description = root.element("description");
 				
-				for(Iterator<?> it = description.elementIterator(); it.hasNext();) {
+				for (Iterator<?> it = description.elementIterator(); it.hasNext();) {
 					Element el = (Element) it.next();
 					
 					String elName = el.getName();
@@ -231,7 +231,7 @@ public class ProtocolDescriptor {
 				
 				String descTxt = descriptionMap.get(NLUtil.getActiveLanguageAbbreviation());
 				
-				if(descTxt == null)
+				if (descTxt == null)
 					descTxt = descriptionMap.get("default");
 												
 				// protocol
@@ -242,7 +242,7 @@ public class ProtocolDescriptor {
 								
 				// components
 				Element components = root.element("components");
-				for(Iterator<?> it = components.elementIterator("component"); it.hasNext(); ) {
+				for (Iterator<?> it = components.elementIterator("component"); it.hasNext(); ) {
 					Element component = (Element)it.next();
 					
 					String clazz = component.attributeValue("class");					
@@ -272,7 +272,7 @@ public class ProtocolDescriptor {
 		
 		Element display = protocol.addElement("display");
 		
-		for(Iterator<Entry<String, String>> it = displayMap.entrySet().iterator(); it.hasNext(); ) {
+		for (Iterator<Entry<String, String>> it = displayMap.entrySet().iterator(); it.hasNext(); ) {
 			Entry<String, String> entry = it.next();
 			
 			Element el = display.addElement(entry.getKey());
@@ -281,7 +281,7 @@ public class ProtocolDescriptor {
 		
 		Element description = protocol.addElement("description");
 		
-		for(Iterator<Entry<String, String>> it = descriptionMap.entrySet().iterator(); it.hasNext();) {
+		for (Iterator<Entry<String, String>> it = descriptionMap.entrySet().iterator(); it.hasNext();) {
 			Entry<String, String> entry = it.next();
 			
 			Element el = description.addElement(entry.getKey());
@@ -290,13 +290,13 @@ public class ProtocolDescriptor {
 		
 		Element components = protocol.addElement("components");
 		
-		for(IComponent comp:this.getProtocol().getComponents()) {
+		for (IComponent comp:this.getProtocol().getComponents()) {
 			Element component = components.addElement("component");
 			
 			String clazzName = comp.getClass().getName();
 			String param = this.protocol.getComponentParam(comp);
 			
-			if(param == null )
+			if (param == null )
 				param = StringUtils.EMPTY;
 			
 			component.addAttribute("class", clazzName);
@@ -307,7 +307,7 @@ public class ProtocolDescriptor {
 			OutputFormat format = OutputFormat.createPrettyPrint();
 			format.setEncoding("ISO-8859-15");
 			
-			if(!file.exists()) {
+			if (!file.exists()) {
 				file.getParentFile().mkdirs();
 				file.createNewFile();
 			}
@@ -327,8 +327,7 @@ public class ProtocolDescriptor {
 	 * @return true or false
 	 */
 	public boolean isValid() {
-		if(protocol != null && protocol.isValid())
-			return true;		
+		if (protocol != null && protocol.isValid())	return true;		
 		return false;
 	}
 }

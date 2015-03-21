@@ -303,11 +303,11 @@ public abstract class Protocol implements Runnable {
 	}
 
 	/**
-	 * Removes the param associated with the component.
+	 * Removes the parameter associated with the component.
 	 * 
 	 * @param component
 	 *            component
-	 * @return the remove param string
+	 * @return the remove parameter string
 	 */
 	public String removeComponentParam(IComponent component) {
 		return paramList.remove(component);
@@ -323,11 +323,8 @@ public abstract class Protocol implements Runnable {
 	public void start() throws ProtocolException {
 		init();
 
-		if (components.size() == 0)
-			throw new ComponentException("First link hasn't been set.");
-
-		if (source == null)
-			throw new ProtocolException("Protocol source is null");
+		if (components.size() == 0) throw new ComponentException("First link hasn't been set.");
+		if (source == null) throw new ProtocolException("Protocol source is null");
 
 		if (thread) {
 			this.instance = new Thread(this);

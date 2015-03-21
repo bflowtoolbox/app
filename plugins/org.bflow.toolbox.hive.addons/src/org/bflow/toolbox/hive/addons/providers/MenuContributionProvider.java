@@ -214,7 +214,7 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 			String extension = getDiagramEditorFileExtension(activeEditor);
 			
 			if (extension != null && !extension.isEmpty()) {
-				for(ProtocolDescriptor protocolDescriptor:protocolDescriptor2MenuItemMap.keySet()) {
+				for (ProtocolDescriptor protocolDescriptor:protocolDescriptor2MenuItemMap.keySet()) {
 					Protocol protocol = protocolDescriptor.getProtocol();
 					boolean isEnabled = protocol.isValid() && protocol.isApplicableFor(extension);
 					protocolDescriptor2MenuItemMap.get(protocolDescriptor).setEnabled(isEnabled);	
