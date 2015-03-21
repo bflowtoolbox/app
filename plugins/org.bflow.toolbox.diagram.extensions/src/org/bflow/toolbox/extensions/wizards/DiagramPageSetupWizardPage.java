@@ -173,11 +173,13 @@ public class DiagramPageSetupWizardPage extends WizardPage {
 		return preferences;
 	}
 	
-	
 	/**
 	 * Applies the entered values.
+	 * 
+	 * @param widthViewScale Viewer width scaling factor
+	 * @param heightViewScale Viewer height scaling factor
 	 */
-	public void applySetup(){
+	public void applySetup(int widthViewScale, int heightViewScale) {
 		IPreferenceStore preferences = save();
 		BflowDiagramEditPart diagramEditPart = null;
 		try {
@@ -193,12 +195,18 @@ public class DiagramPageSetupWizardPage extends WizardPage {
 			int minSizeY = size.y;
 			
 			// View shall be 3 times greater than page size
-			minSizeX *= 3;
-			minSizeY *= 3;
+			minSizeX *= widthViewScale;
+			minSizeY *= heightViewScale;
 			
 			diagramEditPart.getDiagramFormLayer().getFormHelper().setMinimumSize(minSizeX, minSizeY);
-			
 		}
+	}
+	
+	/**
+	 * Applies the entered values.
+	 */
+	public void applySetup() {
+		applySetup(3, 3);
 	}
 	
 	/**

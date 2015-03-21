@@ -156,7 +156,7 @@ public class EpcCreationWizard extends Wizard implements INewWizard {
 			return false;
 		}
 		
-		pageSetupWizardPage.applySetup();		
+		pageSetupWizardPage.applySetup(3, 5);		
 		
 		return diagram != null;
 	}
