@@ -29,9 +29,10 @@ import org.eclipse.jface.dialogs.MessageDialog;
  * Provides a default implementation of a {@link Protocol}.
  * This should cover most of the common requirements for add-ons.
  * 
- * @author Arian Storch
- * @since 24/04/10
- * @version 05/08/13
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 24.04.10
+ * @version 05.08.13
+ * 			15.03.15 Modified initialization and validation behaviour
  * 
  */
 public class Standardprotocol extends Protocol {
@@ -111,8 +112,7 @@ public class Standardprotocol extends Protocol {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void handleReturn(Object object) {
-		if (object == null)
-			return;
+		if (object == null) return;
 
 		if ((object instanceof Vector) && !((Vector<?>) object).isEmpty()) {
 			if (((Vector<?>) object).firstElement() instanceof IMarker) {
@@ -127,16 +127,13 @@ public class Standardprotocol extends Protocol {
 	 */
 	@Override
 	protected void init() {
-
 		Standardprotocol.setLogger(Logger.getLogger(this.getName()));
-
-		Standardprotocol.getLogger().addAppender(
-				new ConsoleAppender(new PatternLayout()));
+		Standardprotocol.getLogger().addAppender(new ConsoleAppender(new PatternLayout()));
 		
 		try {
 			Standardprotocol.getLogger().addAppender(new FileAppender(new PatternLayout(), Key.KEY_MITAMM_LOG_FILE.getAbsolutePath(), false));
 		} catch (IOException e) {
-			e.printStackTrace();
+			AddonPlugin.getInstance().logError("Error on initializing Standardprotocol", e);
 		}
 
 		Vector<IComponent> locComp = new Vector<IComponent>();
@@ -151,8 +148,7 @@ public class Standardprotocol extends Protocol {
 			}
 
 			if (component instanceof EPCMetricsEvaluationComponent) {
-				component = new EPCMetricsEvaluationComponent((IFile) this
-						.getSource());
+				component = new EPCMetricsEvaluationComponent((IFile) this.getSource());
 			}
 			
 			if (component instanceof AttributeAdjustComponent) {
@@ -161,14 +157,6 @@ public class Standardprotocol extends Protocol {
 
 			if (component.hasParams()) {
 				String compParam = this.getComponentParam(component);
-
-				if (compParam == null || compParam.equalsIgnoreCase("")) {
-					MessageDialog.openConfirm(null, "Fehler",
-							"Ihr Protokoll ist nicht korrekt eingerichtet!");
-					wellConfigurated = false;
-					return;
-				}
-
 				component.setParams(compParam);
 			}
 
@@ -191,8 +179,7 @@ public class Standardprotocol extends Protocol {
 	 */
 	@Override
 	public void setSource(Object source) {
-		this.source = ResourcesPlugin.getWorkspace().getRoot()
-				.findFilesForLocationURI(((File) source).toURI())[0];
+		this.source = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(((File) source).toURI())[0];
 		super.setSource(source);
 	}
 
@@ -209,13 +196,11 @@ public class Standardprotocol extends Protocol {
 	 */
 	@Override
 	public void run() {
-		if (!wellConfigurated)
-			return;
-		else {
-			running = this;
-			super.run();
-			running = null;
-		}
+		if (!wellConfigurated) return;
+		
+		running = this;
+		super.run();
+		running = null;
 	}
 	
 	/**
@@ -232,19 +217,15 @@ public class Standardprotocol extends Protocol {
 	 */
 	@Override
 	public boolean isValid() {
-		if (getComponents().size() > 0) {
-			init();
-			
-			for (IComponent compontent : getComponents()) {
-				if (!compontent.isValid()) {
-					return false;
-				}
-			}
-			
-			return true;
-		}
+		if (getComponents().size() == 0) return false;
+
+		init();
 		
-		return false;
+		for (IComponent compontent : getComponents()) {
+			if (!compontent.isValid()) return false;
+		}
+				
+		return true;
 	}
 
 	/* (non-Javadoc)
@@ -253,33 +234,30 @@ public class Standardprotocol extends Protocol {
 	@Override
 	public boolean isApplicableFor(String diagramEditorFileExtension) {		
 		// Iterate over all associated components
-		for(IComponent component:getComponents()) {
+		for (IComponent component:getComponents()) {
 			
 			// Only instances of IDiagramExportComponents are important
-			if(component instanceof IDiagramExportComponent) {
+			if (component instanceof IDiagramExportComponent) {
 				IDiagramExportComponent dec = (IDiagramExportComponent)component;
 				IInterchangeDescriptor exd = dec.getExportDescription();
 				
 				// The interchange descriptor has been removed
-				if(exd == null)
-					return false;
+				if (exd == null) return false;
 				
 				// Are the diagram editor file extensions matching?
 				String applicableDiagramEditorTypes[] = exd.getApplicableDiagramEditorTypes();
 				
 				boolean doesMatch = false;
 				
-				for(int i = 0; i < applicableDiagramEditorTypes.length; i++) {
+				for (int i = 0; i < applicableDiagramEditorTypes.length; i++) {
 					String applicableEditorType = applicableDiagramEditorTypes[i];
-					if(applicableEditorType.equalsIgnoreCase(diagramEditorFileExtension)) {
+					if (applicableEditorType.equalsIgnoreCase(diagramEditorFileExtension)) {
 						doesMatch = true;
 						break;
 					}
 				}
 				
-				if(!doesMatch) {
-					return false;
-				}
+				if (!doesMatch) return false;
 				
 				// A protocol can only contain one export component, so we're finished here
 				break;

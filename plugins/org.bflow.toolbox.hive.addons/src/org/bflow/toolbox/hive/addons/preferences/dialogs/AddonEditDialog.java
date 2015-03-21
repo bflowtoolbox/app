@@ -46,8 +46,9 @@ import org.eclipse.swt.widgets.Text;
  * Provides a dialog for creating or editing add-ons.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 03/12/12
- * @version 06/06/14
+ * @since 03.12.12
+ * @version 06.06.14
+ * 			15.03.15 Validate each selected component
  * 
  */
 public class AddonEditDialog extends Dialog {
@@ -82,6 +83,9 @@ public class AddonEditDialog extends Dialog {
 		this.editMode = editMode;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
+	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
@@ -100,8 +104,7 @@ public class AddonEditDialog extends Dialog {
 		gridData.widthHint = 200;
 		txtName.setLayoutData(gridData);
 
-		txtName.setText(((Standardprotocol) addonDescriptor.getProtocol())
-				.getName());
+		txtName.setText(((Standardprotocol) addonDescriptor.getProtocol()).getName());
 
 		// Description
 		Label lblDescription = new Label(composite, SWT.NONE);
@@ -115,7 +118,7 @@ public class AddonEditDialog extends Dialog {
 		txtDescription.setLayoutData(gridData);
 
 		String strDescription = addonDescriptor.getDescriptionText(NLSupport.getActiveLanguage());
-		if(strDescription == null)
+		if (strDescription == null)
 			strDescription = StringUtils.EMPTY;
 		
 		txtDescription.setText(strDescription);
@@ -132,8 +135,7 @@ public class AddonEditDialog extends Dialog {
 		tableData.widthHint = 650;
 		table.setLayoutData(tableData);
 
-		TableViewerColumn compNameViewer = new TableViewerColumn(viewer,
-				SWT.NONE);
+		TableViewerColumn compNameViewer = new TableViewerColumn(viewer, SWT.NONE);
 		compNameViewer.getColumn().setText(NLSupport.AddonEditDialog_TableHeaderComponent);
 		compNameViewer.getColumn().setWidth(250);
 		compNameViewer.setLabelProvider(new ComponentNameLabelProvider());
@@ -159,18 +161,23 @@ public class AddonEditDialog extends Dialog {
 		createButton(btnPanel, REMOVE_CODE, NLSupport.AddonEditDialog_BtnRemove, false);
 
 		// Separator
-		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL)
-				.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL).setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
 		return container;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.Dialog#create()
+	 */
 	@Override
 	public void create() {
 		super.create();
 		this.getShell().setText(NLSupport.AddonEditDialog_DialogTitle);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.Dialog#okPressed()
+	 */
 	@Override
 	protected void okPressed() {
 		((Standardprotocol) addonDescriptor.getProtocol()).setName(txtName.getText());
@@ -181,6 +188,9 @@ public class AddonEditDialog extends Dialog {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.Dialog#cancelPressed()
+	 */
 	@Override
 	protected void cancelPressed() {
 		super.cancelPressed();
@@ -205,6 +215,9 @@ public class AddonEditDialog extends Dialog {
 		addonDescriptor.getProtocol().removeComponentParam(comp);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.Dialog#buttonPressed(int)
+	 */
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if (buttonId == ADD_CODE) {
@@ -229,46 +242,40 @@ public class AddonEditDialog extends Dialog {
 		String addonName = ((Standardprotocol) addonDescriptor.getProtocol()).getName();
 
 		if (addonName == null || addonName.trim().isEmpty()) {
-			MessageDialog.openError(getShell(), NLSupport.AddonEditDialog_ErrorDialogTitle,
-					NLSupport.AddonEditDialog_ErrorDialogTextName);
+			MessageDialog.openError(getShell(), NLSupport.AddonEditDialog_ErrorDialogTitle,	NLSupport.AddonEditDialog_ErrorDialogTextName);
 			return false;
 		}
 
 		if (AddonStore.hasAddon(addonName) && !editMode) {
-			MessageDialog.openError(getShell(), NLSupport.AddonEditDialog_ErrorDialogTitle,
-							NLSupport.AddonEditDialog_ErrorDialogTextAlreadyInstalled);
+			MessageDialog.openError(getShell(), NLSupport.AddonEditDialog_ErrorDialogTitle,	NLSupport.AddonEditDialog_ErrorDialogTextAlreadyInstalled);
 			return false;
 		}
 
 		int viewerSize = viewer.getTable().getItemCount();
 
 		if (viewerSize == 0) {
-			MessageDialog.openError(getShell(), NLSupport.AddonEditDialog_ErrorDialogTitle,
-					NLSupport.AddonEditDialog_ErrorDialogTextMissingComponent);
+			MessageDialog.openError(getShell(), NLSupport.AddonEditDialog_ErrorDialogTitle,	NLSupport.AddonEditDialog_ErrorDialogTextMissingComponent);
 			return false;
 		}
 
 		if (viewerSize == 1) {
 			IComponent comp = (IComponent) viewer.getElementAt(0);
-			if (!isValidComponent(comp)) {
-				return false;
-			}
+			if (!isValidComponent(comp)) return false;
 		}
 
-		for (int i = 1; i < viewerSize; i++) {
+		for (int i = -1; ++i < viewerSize;) {
 			IComponent comp = (IComponent) viewer.getElementAt(i);
+			
+			if (!isValidComponent(comp)) return false;
+			if (i == 0) continue;
+			
 			IComponent prev = (IComponent) viewer.getElementAt(i - 1);
 
 			if (!comp.canLinkWith(prev)) {
-				String message = String.format(NLSupport.AddonEditDialog_ChainErrorText,
-						comp.getDisplayName(), prev.getDisplayName());
+				String message = String.format(NLSupport.AddonEditDialog_ChainErrorText, comp.getDisplayName(), prev.getDisplayName());
 				MessageDialog.openError(getShell(), NLSupport.AddonEditDialog_ErrorDialogTitle, message);
 				return false;
-			}
-
-			if (!isValidComponent(comp)) {
-				return false;
-			}
+			}			
 		}
 
 		return true;
@@ -286,17 +293,14 @@ public class AddonEditDialog extends Dialog {
 			String param = addonDescriptor.getProtocol().getComponentParam(component);
 
 			if (StringUtils.isBlank(param)) {
-				String message = String.format(NLSupport.AddonEditDialog_ChainComponentNeedsParams,
-						component.getDisplayName());
+				String message = String.format(NLSupport.AddonEditDialog_ChainComponentNeedsParams,	component.getDisplayName());
 				MessageDialog.openError(getShell(), NLSupport.AddonEditDialog_ErrorDialogTitle, message);
 				return false;
 			}
 		}
 
 		if (component instanceof NullComponent) {
-			MessageDialog.openError(getShell(), NLSupport.AddonEditDialog_ErrorDialogTitle,
-					NLSupport.AddonEditDialog_ErrorDialogTextMissingComponent);
-
+			MessageDialog.openError(getShell(), NLSupport.AddonEditDialog_ErrorDialogTitle, NLSupport.AddonEditDialog_ErrorDialogTextMissingComponent);
 			return false;
 		}
 
@@ -319,8 +323,7 @@ public class AddonEditDialog extends Dialog {
 
 		@Override
 		public String getToolTipText(Object element) {
-			return ((IComponent) element).getDescription(NLUtil
-					.getActiveLanguageAbbreviation());
+			return ((IComponent) element).getDescription(NLUtil.getActiveLanguageAbbreviation());
 		}
 	}
 
@@ -337,14 +340,12 @@ public class AddonEditDialog extends Dialog {
 		public String getText(Object element) {
 			IComponent comp = (IComponent) element;
 
-			if (comp instanceof NullComponent)
-				return null;
+			if (comp instanceof NullComponent) return null;
 
-			String param = ((Standardprotocol) addonDescriptor.getProtocol())
-					.getComponentParam(comp);
+			String param = ((Standardprotocol) addonDescriptor.getProtocol()).getComponentParam(comp);
 
 			if (param == null)
-				param = ""; //$NON-NLS-1$
+				param = StringUtils.EMPTY; //$NON-NLS-1$
 
 			return param;
 		}
