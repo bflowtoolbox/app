@@ -45,7 +45,6 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 	 */
 	private Vector<IGlobalColorSchema> installedSchemas;
 
-	
 	/**
 	 * The figure for this edit part.
 	 */

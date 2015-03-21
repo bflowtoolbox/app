@@ -84,8 +84,7 @@ public class OepcCreationWizard extends Wizard implements INewWizard {
 	/**
 	 * @generated
 	 */
-	public void setOpenNewlyCreatedDiagramEditor(
-			boolean openNewlyCreatedDiagramEditor) {
+	public void setOpenNewlyCreatedDiagramEditor(boolean openNewlyCreatedDiagramEditor) {
 		this.openNewlyCreatedDiagramEditor = openNewlyCreatedDiagramEditor;
 	}
 
@@ -96,8 +95,7 @@ public class OepcCreationWizard extends Wizard implements INewWizard {
 		this.workbench = workbench;
 		this.selection = selection;
 		setWindowTitle(Messages.OepcCreationWizardTitle);
-		setDefaultPageImageDescriptor(OepcDiagramEditorPlugin
-				.getBundledImageDescriptor("icons/wizban/NewOepcWizard.gif")); //$NON-NLS-1$
+		setDefaultPageImageDescriptor(OepcDiagramEditorPlugin.getBundledImageDescriptor("icons/wizban/NewOepcWizard.gif")); //$NON-NLS-1$
 		setNeedsProgressMonitor(true);
 	}
 
@@ -105,12 +103,9 @@ public class OepcCreationWizard extends Wizard implements INewWizard {
 	 * @generated NOT
 	 */
 	public void addPages() {
-		diagramModelFilePage = new OepcCreationWizardPage(
-				"DiagramModelFile", getWorkbench(), getSelection(), "oepc"); //$NON-NLS-1$ //$NON-NLS-2$
-		diagramModelFilePage
-				.setTitle(Messages.OepcCreationWizard_DiagramModelFilePageTitle);
-		diagramModelFilePage
-				.setDescription(Messages.OepcCreationWizard_DiagramModelFilePageDescription);
+		diagramModelFilePage = new OepcCreationWizardPage("DiagramModelFile", getWorkbench(), getSelection(), "oepc"); //$NON-NLS-1$ //$NON-NLS-2$
+		diagramModelFilePage.setTitle(Messages.OepcCreationWizard_DiagramModelFilePageTitle);
+		diagramModelFilePage.setDescription(Messages.OepcCreationWizard_DiagramModelFilePageDescription);
 		addPage(diagramModelFilePage);
 		
 		pageSetupWizardPage = new DiagramPageSetupWizardPage();
