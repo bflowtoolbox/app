@@ -2,6 +2,7 @@ package org.bflow.toolbox.vc.diagram.part;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.bflow.toolbox.extensions.wizards.DiagramPageSetupWizardPage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -34,6 +35,12 @@ public class VcCreationWizard extends Wizard implements INewWizard {
 	 * @generated
 	 */
 	protected VcCreationWizardPage diagramModelFilePage;
+	
+	/**
+	 * The <code>DiagramPageSetupWizardPage</code> to set the diagram size.
+	 * @generated NOT
+	 */
+	private DiagramPageSetupWizardPage pageSetupWizardPage;
 
 	/**
 	 * @generated
@@ -76,8 +83,7 @@ public class VcCreationWizard extends Wizard implements INewWizard {
 	/**
 	 * @generated
 	 */
-	public void setOpenNewlyCreatedDiagramEditor(
-			boolean openNewlyCreatedDiagramEditor) {
+	public void setOpenNewlyCreatedDiagramEditor(boolean openNewlyCreatedDiagramEditor) {
 		this.openNewlyCreatedDiagramEditor = openNewlyCreatedDiagramEditor;
 	}
 
@@ -88,22 +94,21 @@ public class VcCreationWizard extends Wizard implements INewWizard {
 		this.workbench = workbench;
 		this.selection = selection;
 		setWindowTitle(Messages.VcCreationWizardTitle);
-		setDefaultPageImageDescriptor(VcDiagramEditorPlugin
-				.getBundledImageDescriptor("icons/wizban/NewVcWizard.gif")); //$NON-NLS-1$
+		setDefaultPageImageDescriptor(VcDiagramEditorPlugin.getBundledImageDescriptor("icons/wizban/NewVcWizard.gif")); //$NON-NLS-1$
 		setNeedsProgressMonitor(true);
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	public void addPages() {
-		diagramModelFilePage = new VcCreationWizardPage(
-				"DiagramModelFile", getWorkbench(), getSelection(), "vc"); //$NON-NLS-1$ //$NON-NLS-2$
-		diagramModelFilePage
-				.setTitle(Messages.VcCreationWizard_DiagramModelFilePageTitle);
-		diagramModelFilePage
-				.setDescription(Messages.VcCreationWizard_DiagramModelFilePageDescription);
+		diagramModelFilePage = new VcCreationWizardPage("DiagramModelFile", getWorkbench(), getSelection(), "vc"); //$NON-NLS-1$ //$NON-NLS-2$
+		diagramModelFilePage.setTitle(Messages.VcCreationWizard_DiagramModelFilePageTitle);
+		diagramModelFilePage.setDescription(Messages.VcCreationWizard_DiagramModelFilePageDescription);
 		addPage(diagramModelFilePage);
+		
+		pageSetupWizardPage = new DiagramPageSetupWizardPage();
+		addPage(pageSetupWizardPage);
 	}
 
 	/**
@@ -142,6 +147,9 @@ public class VcCreationWizard extends Wizard implements INewWizard {
 			}
 			return false;
 		}
+		
+		pageSetupWizardPage.applySetup();
+		
 		return diagram != null;
 	}
 }
