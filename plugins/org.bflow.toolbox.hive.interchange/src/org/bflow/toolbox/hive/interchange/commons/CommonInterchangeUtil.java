@@ -23,12 +23,14 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.part.MultiPageEditorPart;
 
 /**
  * Provides various methods that are used in different contexts. 
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 11/08/13
+ * @since 11.08.13
+ * @version 27.03.15 Added support of MultiPageEditorPart
  */
 @SuppressWarnings("restriction")
 public class CommonInterchangeUtil {
@@ -105,11 +107,17 @@ public class CommonInterchangeUtil {
 		} catch (PartInitException e) {
 			return null;
 		}
-
+		
+		// Handling MultiPageEditorPart
+		if (editorPart instanceof MultiPageEditorPart) {
+			MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart)editorPart;
+			editorPart = (IEditorPart) multiPageEditorPart.getSelectedPage();
+		}		
+		
 		DiagramEditor diagramEditor = (DiagramEditor) editorPart;
 		DiagramEditPart diagramEditPart = diagramEditor.getDiagramEditPart();
 		return diagramEditPart;
-	}
+	}	
 	
 	/**
 	 * Saves the given diagram edit part within the given file.
