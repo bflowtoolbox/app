@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.bflow.toolbox.hive.gmfBridge.adapterFactory" name="GMF edit part adapter factory" schema="schema/org.bflow.toolbox.hive.gmfBridge.adapterFactory.exsd"/>
+
+</plugin>
