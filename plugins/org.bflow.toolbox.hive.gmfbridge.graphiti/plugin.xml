@@ -4,7 +4,7 @@
    <extension
          point="org.bflow.toolbox.hive.gmfBridge.adapterFactory">
       <factory
-            class="org.bflow.toolbox.hive.gmfbridge.graphiti.internal.GraphitiGmfEditPartAdapterFactory">
+            class="org.bflow.toolbox.hive.gmfbridge.graphiti.GraphitiGmfEditPartAdapterFactory">
       </factory>
    </extension>
 

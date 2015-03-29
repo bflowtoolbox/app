@@ -115,19 +115,15 @@ public class ModelDigger {
 		IEdge[] edges = new IEdge[listEdges.size()];
 
 		for (int i = 0; i < edges.length; i++) {
-			ConnectionEditPart connectionEditPart = (ConnectionEditPart) listEdges
-					.get(i);
+			ConnectionEditPart connectionEditPart = (ConnectionEditPart) listEdges.get(i);
 
-			String id = EMFCoreUtil.getProxyID(connectionEditPart
-					.resolveSemanticElement());
-			Map<String, String> attributes = resolveAttributesFor(id,
-					diagramEditPart, providers);
+			String id = EMFCoreUtil.getProxyID(connectionEditPart.resolveSemanticElement());
+			Map<String, String> attributes = resolveAttributesFor(id, diagramEditPart, providers);
 			IShape[] associatedShapes = findShapes(connectionEditPart, shapes);
 			IShape sourceShape = associatedShapes[0];
 			IShape targetShape = associatedShapes[1];
 			IInterchangePropertyProvider propertyProviderHub = PropertyProviderHub.getInstance(propertyProviders);
-			edges[i] = new EdgeAdapter(connectionEditPart, sourceShape,
-					targetShape, attributes, propertyProviderHub);
+			edges[i] = new EdgeAdapter(connectionEditPart, sourceShape,	targetShape, attributes, propertyProviderHub);
 		}
 
 		return edges;

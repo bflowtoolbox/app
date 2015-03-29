@@ -1,8 +1,7 @@
-package org.bflow.toolbox.hive.gmfbridge.graphiti.internal;
+package org.bflow.toolbox.hive.gmfbridge.graphiti;
 
 import org.bflow.toolbox.hive.gmfbridge.IGmfEditPartAdapterFactory;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
+import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.DiagramEditorAdapter;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.ui.IEditorPart;
 
@@ -31,28 +30,5 @@ public class GraphitiGmfEditPartAdapterFactory implements IGmfEditPartAdapterFac
 	@Override
 	public DiagramEditor getAdapter(IEditorPart editorPart) {
 		return new DiagramEditorAdapter((org.eclipse.graphiti.ui.editor.DiagramEditor) editorPart);
-	}
-
-	class DiagramEditorAdapter extends DiagramEditor {
-		
-		org.eclipse.graphiti.ui.editor.DiagramEditor fGraphitiDiagramEditor;
-		
-		public DiagramEditorAdapter(org.eclipse.graphiti.ui.editor.DiagramEditor graphitiEditor) {
-			fGraphitiDiagramEditor = graphitiEditor;
-		}
-		
-		/* (non-Javadoc)
-		 * @see org.eclipse.ui.part.EditorPart#doSave(org.eclipse.core.runtime.IProgressMonitor)
-		 */
-		@Override
-		public void doSave(IProgressMonitor monitor) {
-			throw new RuntimeException("#AS not implemented yet");
-		}
-		
-		@Override
-		public DiagramEditPart getDiagramEditPart() {
-			// TODO Auto-generated method stub
-			return super.getDiagramEditPart();
-		}
 	}
 }

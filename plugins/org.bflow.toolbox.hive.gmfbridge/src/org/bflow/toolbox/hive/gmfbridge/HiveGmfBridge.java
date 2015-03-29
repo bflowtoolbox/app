@@ -48,13 +48,14 @@ public class HiveGmfBridge {
 	 * Resolves all via extension point registered adapter factories.
 	 */
 	static private void resolveRegisteredAdapterFactories() {
+		fAdapterFactories.clear();
 		IConfigurationElement[] configurationElements = Platform.getExtensionRegistry().getConfigurationElementsFor(ExtensionPointId);
 		
 		for (int i = -1; ++i != configurationElements.length;) {
 			IConfigurationElement element = configurationElements[i];
 			try {
-				Object foo = element.createExecutableExtension("class");
-				IGmfEditPartAdapterFactory factory = (IGmfEditPartAdapterFactory) foo;
+				Object factoryInstance = element.createExecutableExtension("class");
+				IGmfEditPartAdapterFactory factory = (IGmfEditPartAdapterFactory) factoryInstance;
 				fAdapterFactories.add(factory);
 			} catch (CoreException e) {
 				e.printStackTrace();
