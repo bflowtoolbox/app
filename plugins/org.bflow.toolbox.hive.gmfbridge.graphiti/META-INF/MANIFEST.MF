@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Hive GMF bridge for Graphiti
+Bundle-SymbolicName: org.bflow.toolbox.hive.gmfbridge.graphiti;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.bflow.toolbox.hive.gmfbridge.graphiti.internal.Activator
+Bundle-Vendor: bflow* dev team
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.graphiti;bundle-version="0.10.2",
+ org.bflow.toolbox.hive.gmfbridge;bundle-version="1.0.0",
+ org.eclipse.gmf.runtime.diagram.ui,
+ org.eclipse.graphiti.ui;bundle-version="0.10.2"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
