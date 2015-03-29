@@ -46,8 +46,8 @@ import org.eclipse.ui.part.ViewPart;
 /**
  * Provides a view part that helps to navigate through a diagram model.
  * 
- * @author Arian Storch
- * @since 26/07/12
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 26.07.12
  *
  */
 public class ModelNavigatorView extends ViewPart {
@@ -82,19 +82,27 @@ public class ModelNavigatorView extends ViewPart {
 	public ModelNavigatorView() {
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite)
+	 */
 	@Override
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
 		site.getPage().addSelectionListener(diagramSelectionListener);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.WorkbenchPart#dispose()
+	 */
 	@Override
 	public void dispose() {
 		getSite().getPage().removeSelectionListener(diagramSelectionListener);
-		
 		super.dispose();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
+	 */
 	@Override
 	public void createPartControl(Composite parent) {
 		createViewActions();
@@ -140,17 +148,19 @@ public class ModelNavigatorView extends ViewPart {
 	
 	/**
 	 * Depending on the given source the view mode of the navigator is changed
-	 * from 2 columns (only neighbor) to 4 columns (neighbor and neighbor) and back.
+	 * from 2 columns (only neighbor) to 4 columns (neighbor and neighbor) and
+	 * back.
 	 * 
-	 * @param source Action that triggered this call
+	 * @param source
+	 *            Action that triggered this call
 	 */
 	private void changeNavigatorViewMode(Action source) {
 		int colWidthEdge = 0;
 		int colWidthShape = 0;
 		
 		// Setting mode to reduced
-		if(source == actionSetReduced) {
-			if(!actionSetReduced.isChecked()) {
+		if (source == actionSetReduced) {
+			if (!actionSetReduced.isChecked()) {
 				actionSetReduced.setChecked(true);
 			}
 			
@@ -161,8 +171,8 @@ public class ModelNavigatorView extends ViewPart {
 		}
 		
 		// Setting mode to extended
-		if(source == actionSetExtended) {
-			if(!actionSetExtended.isChecked()) {
+		if (source == actionSetExtended) {
+			if (!actionSetExtended.isChecked()) {
 				actionSetExtended.setChecked(true);
 			}
 			
@@ -188,10 +198,10 @@ public class ModelNavigatorView extends ViewPart {
 			public ImageDescriptor getImageDescriptor() {
 				InputStream is = ModelNavigatorView.class.getResourceAsStream("/icons/reduced_16.png");
 				
-				if(is != null) {
+				if (is != null) {
 					Image img = new Image(Display.getCurrent(), is);
 					
-					if(img != null) {
+					if (img != null) {
 						return ImageDescriptor.createFromImage(img);
 					}
 				}
@@ -219,10 +229,10 @@ public class ModelNavigatorView extends ViewPart {
 			public ImageDescriptor getImageDescriptor() {
 				InputStream is = ModelNavigatorView.class.getResourceAsStream("/icons/extended_16.png");
 				
-				if(is != null) {
+				if (is != null) {
 					Image img = new Image(Display.getCurrent(), is);
 					
-					if(img != null) {
+					if (img != null) {
 						return ImageDescriptor.createFromImage(img);
 					}
 				}
@@ -284,7 +294,7 @@ public class ModelNavigatorView extends ViewPart {
 	private IGraphicalEditPart resolveGraphicalEditPart(TableViewer tableViewer, int x, int y) {
 		int column = resolveClickedColumn(tableViewer, x);
 		
-		if(column == -1) { // x wasn't valid 
+		if (column == -1) { // x wasn't valid 
 			return null;
 		}
 		
@@ -292,7 +302,7 @@ public class ModelNavigatorView extends ViewPart {
 		
 		Object element = tableViewer.getElementAt(row);
 		
-		if(element == null) {
+		if (element == null) {
 			return null;
 		}
 		
@@ -300,7 +310,7 @@ public class ModelNavigatorView extends ViewPart {
 		
 		IGraphicalEditPart editPart = null;
 		
-		if(tableViewer == tableViewerOutgoing) {
+		if (tableViewer == tableViewerOutgoing) {
 			editPart  = (column == 1 ? flTblRow.getEditPart1() : flTblRow.getEditPart2());
 		} else {
 			editPart  = (column == 0 ? flTblRow.getEditPart2() : flTblRow.getEditPart1());
@@ -334,11 +344,11 @@ public class ModelNavigatorView extends ViewPart {
 		TableColumn columns[] = tableViewer.getTable().getColumns();
 		int lastColumnEnd = 0;
 		
-		for(int i = 0; i < columns.length; i++) {
+		for (int i = 0; i < columns.length; i++) {
 			TableColumn column = columns[i];
 			int columnEnd = lastColumnEnd + column.getWidth();
 			
-			if(x > lastColumnEnd && x < columnEnd) {
+			if (x > lastColumnEnd && x < columnEnd) {
 				return i;
 			}
 			
@@ -385,7 +395,7 @@ public class ModelNavigatorView extends ViewPart {
 	private FlowGraph createFlowGraph(List<?> me2some, FlowGraphDirection direction, int deep) {
 		FlowGraph flowGraph = new FlowGraph();
 		
-		for(Object edge2other : me2some) {			
+		for (Object edge2other : me2some) {			
 			ConnectionNodeEditPart edgeEditPart = (ConnectionNodeEditPart)edge2other;
 			
 			// Get an image for the edge
@@ -410,7 +420,7 @@ public class ModelNavigatorView extends ViewPart {
 						targetEditPart.getSourceConnections() :
 							targetEditPart.getTargetConnections());
 			
-			if(!futherConnections.isEmpty() && deep > 1) {
+			if (!futherConnections.isEmpty() && deep > 1) {
 				FlowGraph futherFlowGraph = createFlowGraph(futherConnections, direction, deep - 1);
 				flowGraphItem.setNext(futherFlowGraph);
 			}
@@ -450,7 +460,7 @@ public class ModelNavigatorView extends ViewPart {
 		// Resolve the icon of element type
 		Image image = null;
 		
-		if(iconProvider != null) {
+		if (iconProvider != null) {
 			image = iconProvider.getIcon(elementType, 0);
 		}
 		
@@ -469,12 +479,11 @@ public class ModelNavigatorView extends ViewPart {
 	private String resolveNameFromNameProvider(IGraphicalEditPart graphicalEditPart) {
 		String name = EMFCoreUtil.getQualifiedName(graphicalEditPart.resolveSemanticElement(), false);
 		
-		if(name != null && !name.isEmpty()) {
+		if (name != null && !name.isEmpty()) {
 			return name;
 		}
 		
 		INameProvider nameProvider = AddonModelNavigatorPlugin.getInstance().getNameProvider(graphicalEditPart);
-		
 		return (nameProvider == null ? EMPTY : nameProvider.getName(graphicalEditPart));
 	}
 
@@ -484,11 +493,12 @@ public class ModelNavigatorView extends ViewPart {
 	}
 
 	/**
-	 * Implements the {@link ISelectionListener} to listen to selection change events on the diagram editor.
+	 * Implements the {@link ISelectionListener} to listen to selection change
+	 * events on the diagram editor.
 	 * 
-	 * @author Arian Storch
-	 * @since 26/07/12
-	 *
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 26.07.12
+	 * 
 	 */
 	private class DiagramSelectionListener implements ISelectionListener {
 		
@@ -496,10 +506,8 @@ public class ModelNavigatorView extends ViewPart {
 
 		@Override
 		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-			
 			// looking for diagram document editors
-			boolean isAssignable = (part instanceof DiagramDocumentEditor && 
-					selection instanceof IStructuredSelection);
+			boolean isAssignable = (part instanceof DiagramDocumentEditor && selection instanceof IStructuredSelection);
 			
 			IStructuredSelection structSelection = (IStructuredSelection)selection;
 			
@@ -507,9 +515,8 @@ public class ModelNavigatorView extends ViewPart {
 			isAssignable &= !structSelection.isEmpty();
 			
 			// disable table and finish
-			if(!isAssignable) {
+			if (!isAssignable) {
 				container.setEnabled(false);
-				
 				return;
 			}
 			
@@ -526,8 +533,8 @@ public class ModelNavigatorView extends ViewPart {
 	 * Implements an {@link ITableLabelProvider} to provide the label of the
 	 * model navigator table viewer.
 	 * 
-	 * @author Arian Storch
-	 * @since 02/08/12
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 02.08.12
 	 * 
 	 */
 	private class NavigatorTableLabelProvider implements ITableLabelProvider {
@@ -597,41 +604,24 @@ public class ModelNavigatorView extends ViewPart {
 			FlowGraphTableRow row = (FlowGraphTableRow)element;
 			
 			if (direction == FlowGraphDirection.OUTGOING) {
-
-				if (columnIndex == 1) {
-					return row.getName1();
-				}
-
-				if (columnIndex == 3) {
-					return row.getName2();
-				}
+				if (columnIndex == 1) return row.getName1();
+				if (columnIndex == 3) return row.getName2();
 				
 			}
 			
 			if (direction == FlowGraphDirection.INCOMING) {
-
-				if (columnIndex == 2) {
-					return row.getName1();
-				}
-
-				if (columnIndex == 0) {
-					return row.getName2();
-				}
-				
+				if (columnIndex == 2) return row.getName1();
+				if (columnIndex == 0) return row.getName2();
 			}
 			
 			return null;
 		}
 
 		@Override
-		public void addListener(ILabelProviderListener listener) {
-			
-		}
+		public void addListener(ILabelProviderListener listener) { }
 
 		@Override
-		public void dispose() {
-			
-		}
+		public void dispose() { }
 
 		@Override
 		public boolean isLabelProperty(Object element, String property) {
@@ -639,8 +629,7 @@ public class ModelNavigatorView extends ViewPart {
 		}
 
 		@Override
-		public void removeListener(ILabelProviderListener listener) {			
-		}
+		public void removeListener(ILabelProviderListener listener) { }
 		
 	}
 	
@@ -648,8 +637,8 @@ public class ModelNavigatorView extends ViewPart {
 	 * Implements a {@link MouseAdapter} to be notified when a mouse double
 	 * click occurs on the model navigator table viewer.
 	 * 
-	 * @author Arian Storch
-	 * @since 03/08/12
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 03.08.12
 	 * 
 	 */
 	private class TableViewerMouseListener extends MouseAdapter {
@@ -684,30 +673,24 @@ public class ModelNavigatorView extends ViewPart {
 	 * {@link FlowGraph} into {@link FlowGraphTableRow} that is used by the
 	 * model navigator table viewer.
 	 * 
-	 * @author Arian Storch
-	 * @since 03/08/12
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 03.08.12
 	 * 
 	 */
 	private class LinkGraphTableContentProvider implements IStructuredContentProvider {
 
 		@Override
-		public void dispose() {
-		}
+		public void dispose() { }
 
 		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {			
-		}
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {	}
 
 		@Override
 		public Object[] getElements(Object inputElement) {
 			FlowGraph graph = (FlowGraph)inputElement;
 			
 			FlowGraphTableRow rows[] = graph.toFlowGraphTableRows();
-			
-			if(rows == null) {
-				return new FlowGraphTableRow[0];
-			}
-			
+			if (rows == null) return new FlowGraphTableRow[0];
 			return rows;
 		}
 		
