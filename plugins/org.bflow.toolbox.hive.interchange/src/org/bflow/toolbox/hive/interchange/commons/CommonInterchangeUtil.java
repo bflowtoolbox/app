@@ -2,6 +2,7 @@ package org.bflow.toolbox.hive.interchange.commons;
 
 import java.io.File;
 
+import org.bflow.toolbox.hive.gmfbridge.HiveGmfBridge;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -114,7 +115,7 @@ public class CommonInterchangeUtil {
 			editorPart = (IEditorPart) multiPageEditorPart.getSelectedPage();
 		}		
 		
-		DiagramEditor diagramEditor = (DiagramEditor) editorPart;
+		DiagramEditor diagramEditor = HiveGmfBridge.adapt(editorPart);
 		DiagramEditPart diagramEditPart = diagramEditor.getDiagramEditPart();
 		return diagramEditPart;
 	}	
