@@ -10,6 +10,7 @@ import org.bflow.toolbox.hive.addons.components.ToolAdapterComponent;
 import org.bflow.toolbox.hive.addons.components.ToolRunComponent;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
+import org.bflow.toolbox.hive.addons.core.model.Protocol;
 import org.bflow.toolbox.hive.addons.protocols.Standardprotocol;
 import org.bflow.toolbox.hive.addons.store.AddonStore;
 import org.bflow.toolbox.hive.addons.store.ComponentStore;
@@ -49,6 +50,7 @@ import org.eclipse.swt.widgets.Text;
  * @since 03.12.12
  * @version 06.06.14
  * 			15.03.15 Validate each selected component
+ * 			04.04.15 Handle issue that viewer has other object references that component list
  * 
  */
 public class AddonEditDialog extends Dialog {
@@ -206,13 +208,32 @@ public class AddonEditDialog extends Dialog {
 	/**
 	 * Will be invoked when the remove button has been pressed.
 	 */
-	private void handleRemovePressed() {
-		StructuredSelection selection = (StructuredSelection) viewer.getSelection();
-		IComponent comp = (IComponent) selection.getFirstElement();
-
-		viewer.remove(comp);
-		addonDescriptor.getProtocol().getComponents().remove(comp);
-		addonDescriptor.getProtocol().removeComponentParam(comp);
+	private void handleRemovePressed() {		
+		int selectedItemIndex = viewer.getTable().getSelectionIndex();
+		IComponent selectedComponent = getSelectedComponent();
+		
+		// Remove table item
+		viewer.getTable().remove(selectedItemIndex);
+		
+		// Remote component and its parameter
+		Protocol protocol = addonDescriptor.getProtocol();		
+		List<IComponent> components = protocol.getComponents();
+		components.remove(selectedComponent);
+		protocol.removeComponentParam(selectedComponent);
+	}
+	
+	/**
+	 * Returns the selected component from the protocol component collection.
+	 * 
+	 * @return Component or NULL
+	 */
+	private IComponent getSelectedComponent() {
+		int selectedItemIndex = viewer.getTable().getSelectionIndex();
+		if (selectedItemIndex == -1) return null;
+		Protocol protocol = addonDescriptor.getProtocol();		
+		List<IComponent> components = protocol.getComponents();
+		IComponent component = components.get(selectedItemIndex);
+		return component;
 	}
 
 	/* (non-Javadoc)
@@ -310,8 +331,8 @@ public class AddonEditDialog extends Dialog {
 	/**
 	 * Defines a ColumnLabelProvider for displaying {@link IComponent} names.
 	 * 
-	 * @author Arian Storch
-	 * @since 25/09/10
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 25.09.10
 	 */
 	protected class ComponentNameLabelProvider extends ColumnLabelProvider {
 
@@ -330,8 +351,8 @@ public class AddonEditDialog extends Dialog {
 	/**
 	 * Defines a ColumnLabelProvider for displaying {@link IComponent} params.
 	 * 
-	 * @author Arian Storch
-	 * @version 25/09/10
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @version 25.09.10
 	 * 
 	 */
 	protected class ComponentParamsLabelProvider extends ColumnLabelProvider {
@@ -354,8 +375,8 @@ public class AddonEditDialog extends Dialog {
 	/**
 	 * Dummy {@link IComponent} implementation for the table.
 	 * 
-	 * @author Arian Storch
-	 * @since 28/09/10
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 28.09.10
 	 */
 	private class NullComponent implements IComponent {
 
@@ -421,8 +442,8 @@ public class AddonEditDialog extends Dialog {
 	/**
 	 * Implements a editing support for the component name.
 	 * 
-	 * @author Arian Storch
-	 * @since 25/09/10
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 25.09.10
 	 */
 	protected class ComponentNameEditingSupport extends EditingSupport {
 
@@ -464,27 +485,21 @@ public class AddonEditDialog extends Dialog {
 		protected void setValue(Object element, Object value) {
 			IComponent old = (IComponent) element;
 
-			int protIndex = addonDescriptor.getProtocol().getComponents()
-					.indexOf(old);
+			int protIndex = addonDescriptor.getProtocol().getComponents().indexOf(old);
 
 			int index = (Integer) value;
+			if (index == -1) return;
 
-			if (index == -1)
-				return;
-
-			int selIndex = ((TableViewer) viewer).getTable()
-					.getSelectionIndex();
+			int selIndex = ((TableViewer) viewer).getTable().getSelectionIndex();
 
 			String compName = this.cBoxValues.get(index);
 
 			IComponent nu = ComponentStore.getInstance().identify(compName, true);
 
-			if (nu.getDisplayName().equalsIgnoreCase(old.getDisplayName()))
-				return;
+			if (nu.getDisplayName().equalsIgnoreCase(old.getDisplayName()))	return;
 
 			if (protIndex != -1) { // existing component is going to be replaced
-				addonDescriptor.getProtocol().getComponents()
-						.set(protIndex, nu);
+				addonDescriptor.getProtocol().getComponents().set(protIndex, nu);
 			} else { // new component is created and added
 				try {
 					nu = nu.getClass().newInstance();
@@ -496,7 +511,6 @@ public class AddonEditDialog extends Dialog {
 
 			((TableViewer) viewer).replace(nu, selIndex);
 			((TableViewer) viewer).refresh(nu);
-
 		}
 	}
 
