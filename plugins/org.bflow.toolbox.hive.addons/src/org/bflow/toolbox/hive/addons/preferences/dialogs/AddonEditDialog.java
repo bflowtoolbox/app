@@ -23,13 +23,13 @@ import org.bflow.toolbox.hive.nls.NLSupport;
 import org.bflow.toolbox.hive.nls.NLUtil;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -127,6 +127,7 @@ public class AddonEditDialog extends Dialog {
 
 		// Table viewer
 		viewer = new TableViewer(composite, SWT.FULL_SELECTION | SWT.BORDER);
+		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		Table table = viewer.getTable();
 
 		table.setLinesVisible(true);
@@ -151,9 +152,7 @@ public class AddonEditDialog extends Dialog {
 		compParamsViewer.setEditingSupport(new ComponentParamEditingSupport(viewer));
 
 		// Fill the table content
-		for (IComponent comp : addonDescriptor.getProtocol().getComponents()) {
-			viewer.add(comp);
-		}
+		viewer.setInput(addonDescriptor.getProtocol().getComponents());
 
 		// Button pane
 		Composite btnPanel = new Composite(composite, SWT.NONE);
@@ -232,6 +231,7 @@ public class AddonEditDialog extends Dialog {
 		if (selectedItemIndex == -1) return null;
 		Protocol protocol = addonDescriptor.getProtocol();		
 		List<IComponent> components = protocol.getComponents();
+		if (components.size() <= selectedItemIndex) return null;
 		IComponent component = components.get(selectedItemIndex);
 		return component;
 	}
@@ -483,20 +483,23 @@ public class AddonEditDialog extends Dialog {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			IComponent old = (IComponent) element;
+			IComponent old = (IComponent) element; // this references to cBoxValues instances
+			old = getSelectedComponent(); // this references to the "real" instances
 
-			int protIndex = addonDescriptor.getProtocol().getComponents().indexOf(old);
+			int protIndex = -1;
+			if (old != null) {
+				protIndex = addonDescriptor.getProtocol().getComponents().indexOf(old);
+			}
 
 			int index = (Integer) value;
 			if (index == -1) return;
-
-			int selIndex = ((TableViewer) viewer).getTable().getSelectionIndex();
 
 			String compName = this.cBoxValues.get(index);
 
 			IComponent nu = ComponentStore.getInstance().identify(compName, true);
 
-			if (nu.getDisplayName().equalsIgnoreCase(old.getDisplayName()))	return;
+			if (old != null && nu.getDisplayName().equalsIgnoreCase(old.getDisplayName()))
+				return;
 
 			if (protIndex != -1) { // existing component is going to be replaced
 				addonDescriptor.getProtocol().getComponents().set(protIndex, nu);
@@ -509,8 +512,7 @@ public class AddonEditDialog extends Dialog {
 				}
 			}
 
-			((TableViewer) viewer).replace(nu, selIndex);
-			((TableViewer) viewer).refresh(nu);
+			viewer.refresh();
 		}
 	}
 
