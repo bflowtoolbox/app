@@ -9,6 +9,7 @@ import org.bflow.toolbox.hive.modelnavigator.model.FlowGraphDirection;
 import org.bflow.toolbox.hive.modelnavigator.model.FlowGraphItem;
 import org.bflow.toolbox.hive.modelnavigator.model.FlowGraphTableRow;
 import org.bflow.toolbox.hive.modelnavigator.utils.GMFUtility;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gmf.runtime.common.ui.services.icon.IIconProvider;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
@@ -506,23 +507,20 @@ public class ModelNavigatorView extends ViewPart {
 
 		@Override
 		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-			// looking for diagram document editors
-			boolean isAssignable = (part instanceof DiagramDocumentEditor && selection instanceof IStructuredSelection);
+			container.setEnabled(false);
+
+			// looking for selections within graphical editors
+			if (!(part instanceof GraphicalEditor)) return;
+			if (!(selection instanceof IStructuredSelection)) return;
 			
-			IStructuredSelection structSelection = (IStructuredSelection)selection;
-			
-			// selection mustn't be empty
-			isAssignable &= !structSelection.isEmpty();
-			
-			// disable table and finish
-			if (!isAssignable) {
-				container.setEnabled(false);
-				return;
-			}
+			// Selection must not be empty
+			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+			if (structuredSelection.isEmpty()) return;
+
 			
 			container.setEnabled(true);
 			
-			Object selectedObject = structSelection.getFirstElement();
+			Object selectedObject = structuredSelection.getFirstElement();
 			IGraphicalEditPart grfEditPart = (IGraphicalEditPart) selectedObject;
 			
 			handleSelectionChanged(tableViewer, grfEditPart);
