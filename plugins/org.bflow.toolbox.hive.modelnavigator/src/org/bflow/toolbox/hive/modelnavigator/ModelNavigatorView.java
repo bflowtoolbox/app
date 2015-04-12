@@ -3,6 +3,7 @@ package org.bflow.toolbox.hive.modelnavigator;
 import java.io.InputStream;
 import java.util.List;
 
+import org.bflow.toolbox.hive.gmfbridge.HiveGmfBridge;
 import org.bflow.toolbox.hive.modelnavigator.internal.AddonModelNavigatorPlugin;
 import org.bflow.toolbox.hive.modelnavigator.model.FlowGraph;
 import org.bflow.toolbox.hive.modelnavigator.model.FlowGraphDirection;
@@ -13,7 +14,6 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gmf.runtime.common.ui.services.icon.IIconProvider;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
 import org.eclipse.gmf.runtime.emf.type.core.ElementTypeRegistry;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
@@ -38,10 +38,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -505,22 +507,35 @@ public class ModelNavigatorView extends ViewPart {
 		
 		public TableViewer tableViewer = null;
 
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui.IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
+		 */
 		@Override
 		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 			container.setEnabled(false);
 
+			// Handle multi page editor
+			if (!(part instanceof IEditorPart)) return;
+			IEditorPart editorPart = (IEditorPart)part;
+			
+			if (editorPart instanceof MultiPageEditorPart) {
+				MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart) editorPart;
+				editorPart = (IEditorPart) multiPageEditorPart.getSelectedPage();
+			}
+			
 			// looking for selections within graphical editors
-			if (!(part instanceof GraphicalEditor)) return;
+			if (!(editorPart instanceof GraphicalEditor)) return;
 			if (!(selection instanceof IStructuredSelection)) return;
 			
 			// Selection must not be empty
 			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
 			if (structuredSelection.isEmpty()) return;
 
-			
+			Object[] originSelectedObjects = structuredSelection.toArray();
+			Object[] adaptedSelectedObject = HiveGmfBridge.adaptSelection(originSelectedObjects);
 			container.setEnabled(true);
 			
-			Object selectedObject = structuredSelection.getFirstElement();
+			Object selectedObject = adaptedSelectedObject[0];
 			IGraphicalEditPart grfEditPart = (IGraphicalEditPart) selectedObject;
 			
 			handleSelectionChanged(tableViewer, grfEditPart);

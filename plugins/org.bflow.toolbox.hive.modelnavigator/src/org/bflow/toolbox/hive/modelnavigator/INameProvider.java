@@ -7,8 +7,8 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
  * to contribute an extension to the "nameProvider" extension point.  Name provider is responsible
  * for retrieving a name for a specified element.
  * 
- * @author Arian Storch
- * @since 01/08/12
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 01.08.12
  */
 public interface INameProvider {
 	
