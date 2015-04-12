@@ -21,8 +21,8 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  * 
- * @author Arian Storch
- * @version 10/02/13
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @version 10.02.13
  */
 public class AttributeViewPlugin extends AbstractUIPlugin {
 
@@ -86,7 +86,7 @@ public class AttributeViewPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		
-		if(interchangeAttributeProvider != null) {
+		if (interchangeAttributeProvider != null) {
 			interchangeAttributeProvider.dispose();
 			interchangeAttributeProvider = null;
 		}
@@ -104,24 +104,23 @@ public class AttributeViewPlugin extends AbstractUIPlugin {
 	}
 	
 	/**
-	 * Registers all by extension point defined instances of {@link IAttributeAdjustProcessor}
-	 * and makes them available for the attribute adjust processing.
+	 * Registers all by extension point defined instances of
+	 * {@link IAttributeAdjustProcessor} and makes them available for the
+	 * attribute adjust processing.
 	 * 
 	 * @throws CoreException
 	 */
 	private void registerAttributeAdjustProcessors() throws CoreException {
-		IConfigurationElement[] config = Platform.getExtensionRegistry()
-		.getConfigurationElementsFor(EXTENSION_POINT_ID_ATTRIBUTE_ADJUST_PROCESSOR);
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_POINT_ID_ATTRIBUTE_ADJUST_PROCESSOR);
 
 		for (IConfigurationElement element : config) {
-			IAttributeAdjustProcessor processor = (IAttributeAdjustProcessor) element
-					.createExecutableExtension("Processor");
+			IAttributeAdjustProcessor processor = (IAttributeAdjustProcessor) element.createExecutableExtension("Processor");
 			AttributeAdjustProcessorRegistry.AddProcessor(processor);
 		}
 	}
 	
 	/**
-	 * Registers dynamic emf objects that are used by the add-on plugin.
+	 * Registers dynamic EMF objects that are used by the add-on plug-in.
 	 */
 	private void registerDynamicEMF() {
 		EcoreFactory theCoreFactory = EcoreFactory.eINSTANCE;
@@ -138,12 +137,10 @@ public class AttributeViewPlugin extends AbstractUIPlugin {
 		addonEPackage.setNsPrefix("addon");
 		addonEPackage.setNsURI("http://org.bflow.addon");
 
-		EReference addonAttributes_attributes = theCoreFactory
-				.createEReference();
+		EReference addonAttributes_attributes = theCoreFactory.createEReference();
 		addonAttributes_attributes.setName("attributes");
 		addonAttributes_attributes.setEType(attrEClass);
-		addonAttributes_attributes
-				.setUpperBound(EStructuralFeature.UNBOUNDED_MULTIPLICITY);
+		addonAttributes_attributes.setUpperBound(EStructuralFeature.UNBOUNDED_MULTIPLICITY);
 		addonAttributes_attributes.setContainment(true);
 
 		// erzeugen der attribute
@@ -185,41 +182,46 @@ public class AttributeViewPlugin extends AbstractUIPlugin {
 	
 	/**
 	 * Logs an error message with a stack trace if the error level is enabled.
-	 * @param message message to log
-	 * @param ex exception that is used for the stack trace
+	 * 
+	 * @param message
+	 *            message to log
+	 * @param ex
+	 *            exception that is used for the stack trace
 	 */
 	public static void logError(String message, Exception ex) {
-		if(logger.isErrorEnabled()) {
-			logger.error(message, ex);
-		}
+		if (!logger.isErrorEnabled()) return;
+		logger.error(message, ex);	
 	}
 	
 	/**
 	 * Logs a debug message if the debug level is enabled.
-	 * @param message message to log
+	 * 
+	 * @param message
+	 *            message to log
 	 */
 	public static void logDebug(String message) {
-		if(logger.isDebugEnabled()) {
-			logger.debug(message);
-		}
+		if (!logger.isDebugEnabled()) return;
+		logger.debug(message);
 	}
 	
 	/**
 	 * Logs an error message if the error level is enabled.
-	 * @param message message to log
+	 * 
+	 * @param message
+	 *            message to log
 	 */
 	public static void logError(String message) {
 		logError(message, null);
 	}
-	
+
 	/**
 	 * Logs an info message if the info level is enabled.
-	 * @param message message to log
+	 * 
+	 * @param message
+	 *            message to log
 	 */
 	public static void logInfo(String message) {
-			if(logger.isInfoEnabled()) {
-				logger.info(message);
-			}
+		if (!logger.isInfoEnabled()) return;	
+		logger.info(message);
 	}
-
 }
