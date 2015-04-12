@@ -472,7 +472,7 @@ public class ModelNavigatorView extends ViewPart {
 	
 	/**
 	 * Tries to resolve the name that shall be displayed for the given edit part
-	 * from any installed name provider. If none could be found, an emtpy string
+	 * from any installed name provider. If none could be found, an empty string
 	 * will be returned.
 	 * 
 	 * @param graphicalEditPart
@@ -480,11 +480,9 @@ public class ModelNavigatorView extends ViewPart {
 	 * @return name of the edit part or an empty string if none could be found
 	 */
 	private String resolveNameFromNameProvider(IGraphicalEditPart graphicalEditPart) {
-		String name = EMFCoreUtil.getQualifiedName(graphicalEditPart.resolveSemanticElement(), false);
-		
-		if (name != null && !name.isEmpty()) {
-			return name;
-		}
+//		String name = EMFCoreUtil.getQualifiedName(graphicalEditPart.resolveSemanticElement(), false);
+		String name = EMFCoreUtil.getName(graphicalEditPart.resolveSemanticElement());
+		if (name != null && !name.isEmpty()) return name;
 		
 		INameProvider nameProvider = AddonModelNavigatorPlugin.getInstance().getNameProvider(graphicalEditPart);
 		return (nameProvider == null ? EMPTY : nameProvider.getName(graphicalEditPart));
