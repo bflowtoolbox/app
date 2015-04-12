@@ -3,7 +3,7 @@ package org.bflow.toolbox.hive.gmfbridge.graphiti;
 import java.util.HashMap;
 
 import org.bflow.toolbox.hive.gmfbridge.IGmfEditPartAdapterFactory;
-import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.ConnectionEditPartAdapter;
+import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.DiagramEditPartAdapter;
 import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.DiagramEditorAdapter;
 import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.ShapeEditPartAdapter;
 import org.eclipse.gef.GraphicalEditPart;
@@ -63,10 +63,11 @@ public class GraphitiGmfEditPartAdapterFactory implements IGmfEditPartAdapterFac
 	public org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart getAdapter(GraphicalEditPart graphicalEditPart) {
 		org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart cachedGraphicalEditPart = fGraphicalEditPartMap.get(graphicalEditPart);
 		if (cachedGraphicalEditPart == null) {
-			if (graphicalEditPart instanceof org.eclipse.graphiti.ui.internal.parts.ShapeEditPart)
+			if (graphicalEditPart instanceof org.eclipse.graphiti.ui.internal.parts.DiagramEditPart) 
+				cachedGraphicalEditPart = new DiagramEditPartAdapter((org.eclipse.graphiti.ui.internal.parts.DiagramEditPart) graphicalEditPart);
+			else if (graphicalEditPart instanceof org.eclipse.graphiti.ui.internal.parts.ShapeEditPart)
 				cachedGraphicalEditPart = new ShapeEditPartAdapter(graphicalEditPart);
-			
-			if (graphicalEditPart instanceof org.eclipse.graphiti.ui.internal.parts.ConnectionEditPart)
+			else if (graphicalEditPart instanceof org.eclipse.graphiti.ui.internal.parts.ConnectionEditPart)
 				cachedGraphicalEditPart = null; //new ConnectionEditPartAdapter(graphicalEditPart);
 			
 			fGraphicalEditPartMap.put(graphicalEditPart, cachedGraphicalEditPart);

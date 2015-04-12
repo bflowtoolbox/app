@@ -2,6 +2,9 @@ package org.bflow.toolbox.hive.gmfbridge.graphiti.adapters;
 
 import java.util.List;
 
+import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.RootElement;
+import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.EditPart;
@@ -12,6 +15,7 @@ import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.runtime.notation.impl.ViewImpl;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
 
 /**
@@ -43,16 +47,8 @@ public class ShapeEditPartAdapter extends ShapeNodeEditPart {
 		fContainerShapeEditPart = (ContainerShapeEditPart) originEditPart;
 		
 		// TODO Check suspicious cast
-		fContainerShapeModel = (ContainerShape) originEditPart.getModel();
-		
-		PictogramElement el = fContainerShapeEditPart.getPictogramElement();
-		if (el.getLink() == null) return;
-		if (el.getLink().getBusinessObjects().size() == 0) return;
-		
-		List<EObject> bos = el.getLink().getBusinessObjects();
-		
-		EObject realEObject = bos.get(0);
-		eObject = realEObject;		
+		fContainerShapeModel = (ContainerShape) originEditPart.getModel();	
+		eObject = Graphiti.getLinkService().getBusinessObjectForLinkedPictogramElement(fContainerShapeModel);		
 		
 		getPrimaryView().setElement(eObject);
 	}

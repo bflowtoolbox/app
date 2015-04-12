@@ -9,8 +9,8 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 /**
  * Provides some methods for an easier handling of EMF objects.
  * 
- * @author Arian Storch
- * @since 17/07/12
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 17.07.12
  * 
  */
 public class EMFUtility {
@@ -25,8 +25,8 @@ public class EMFUtility {
 	 */
 	public static EObject getEObject(IGraphicalEditPart graphicalEditPart) {
 		if (graphicalEditPart instanceof DiagramEditPart) {
-			DiagramEditPart dep = (DiagramEditPart) graphicalEditPart;
-			return dep.getNotationView().getElement();
+			DiagramEditPart diagramEditPart = (DiagramEditPart) graphicalEditPart;
+			return diagramEditPart.getNotationView().getElement();
 		}
 
 		if (graphicalEditPart instanceof ShapeNodeEditPart || graphicalEditPart instanceof ConnectionNodeEditPart) {

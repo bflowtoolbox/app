@@ -2,6 +2,8 @@ package org.bflow.toolbox.hive.gmfbridge.graphiti.adapters;
 
 import java.lang.reflect.Field;
 
+import org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor;
+import org.bflow.toolbox.hive.gmfbridge.HiveGmfBridge;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
@@ -11,6 +13,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.graphiti.ui.editor.DiagramBehavior;
@@ -27,9 +30,11 @@ import org.eclipse.ui.part.FileEditorInput;
  * @since 27.03.2015
  * 
  */
-public class DiagramEditorAdapter extends DiagramEditor {
+public class DiagramEditorAdapter extends DiagramEditor implements IAttributableDocumentEditor {
 	
-	org.eclipse.graphiti.ui.editor.DiagramEditor fGraphitiDiagramEditor;
+	private org.eclipse.graphiti.ui.editor.DiagramEditor fGraphitiDiagramEditor;
+	private DiagramEditPartAdapter fDiagramEditPartAdapter;
+	
 	
 	/**
 	 * Creates a new instance based on the given graphiti editor.
@@ -102,11 +107,30 @@ public class DiagramEditorAdapter extends DiagramEditor {
 	 */
 	@Override
 	public DiagramEditPart getDiagramEditPart() {
+		if (fDiagramEditPartAdapter != null) return fDiagramEditPartAdapter;
 		DiagramBehavior diagramBehaviour = fGraphitiDiagramEditor.getDiagramBehavior();
 		EditPart editPart = diagramBehaviour.getContentEditPart();
 		
 		@SuppressWarnings("restriction")
 		org.eclipse.graphiti.ui.internal.parts.DiagramEditPart graphitiDiagramEditPart = (org.eclipse.graphiti.ui.internal.parts.DiagramEditPart) editPart;
-		return new DiagramEditPartAdapter(graphitiDiagramEditPart, fGraphitiDiagramEditor.getGraphicalViewer());
+		fDiagramEditPartAdapter = (DiagramEditPartAdapter) HiveGmfBridge.adapt(graphitiDiagramEditPart); // Get it out of the cache
+		return fDiagramEditPartAdapter;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor#firePropertyChanged()
+	 */
+	@Override
+	public void firePropertyChanged() {
+		super.firePropertyChange(GraphicalEditor.PROP_DIRTY);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor#getFileExtension()
+	 */
+	@Override
+	public String getFileExtension() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -140,6 +140,9 @@ public class AttributeFileRegistry implements IPartListener {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IPartListener#partActivated(org.eclipse.ui.IWorkbenchPart)
+	 */
 	@Override
 	public void partActivated(IWorkbenchPart part) {
 		part = WorkbenchUtil.getActiveEditorPart(part);
@@ -170,9 +173,15 @@ public class AttributeFileRegistry implements IPartListener {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IPartListener#partBroughtToTop(org.eclipse.ui.IWorkbenchPart)
+	 */
 	@Override
 	public void partBroughtToTop(IWorkbenchPart part) {	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IPartListener#partClosed(org.eclipse.ui.IWorkbenchPart)
+	 */
 	@Override
 	public void partClosed(IWorkbenchPart part) {
 		part = WorkbenchUtil.getActiveEditorPart(part);
