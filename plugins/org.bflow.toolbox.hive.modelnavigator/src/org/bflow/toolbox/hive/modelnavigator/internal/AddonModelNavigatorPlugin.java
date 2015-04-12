@@ -18,8 +18,8 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  * 
- * @author Arian Storch
- * @since 01/08/12
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 01.08.12
  */
 public class AddonModelNavigatorPlugin extends AbstractUIPlugin {
 
@@ -34,8 +34,7 @@ public class AddonModelNavigatorPlugin extends AbstractUIPlugin {
 	private static AddonModelNavigatorPlugin plugin;
 
 	// The logging instance
-	private static Log logger = LogFactory
-			.getLog(AddonModelNavigatorPlugin.class);
+	private static Log logger = LogFactory.getLog(AddonModelNavigatorPlugin.class);
 
 	// The icon provider store
 	private List<IIconProvider> installedIconProvider = new LinkedList<IIconProvider>();
@@ -81,8 +80,7 @@ public class AddonModelNavigatorPlugin extends AbstractUIPlugin {
 	 * by the defined extension point.
 	 */
 	private void registerIconProvider() {
-		IConfigurationElement elements[] = Platform.getExtensionRegistry()
-				.getConfigurationElementsFor(EXTENSION_POINT_ICON_PROVIDER_ID);
+		IConfigurationElement elements[] = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_POINT_ICON_PROVIDER_ID);
 
 		for (int i = 0; i < elements.length; i++) {
 			IConfigurationElement element = elements[i];
@@ -90,13 +88,11 @@ public class AddonModelNavigatorPlugin extends AbstractUIPlugin {
 
 			try {
 				Class<?> clIconProvider = Class.forName(clazz);
-				IIconProvider providerInstance = (IIconProvider) clIconProvider
-						.newInstance();
+				IIconProvider providerInstance = (IIconProvider) clIconProvider.newInstance();
 
 				installedIconProvider.add(providerInstance);
 			} catch (Exception ex) {
-				String message = String.format(
-						"Could not register %s as IIconProvider!", clazz);
+				String message = String.format("Could not register '%s' as IIconProvider!", clazz);
 				logError(message);
 			}
 		}
@@ -111,8 +107,7 @@ public class AddonModelNavigatorPlugin extends AbstractUIPlugin {
 	 * by the defined extension point.
 	 */
 	private void registerNameProvider() {
-		IConfigurationElement elements[] = Platform.getExtensionRegistry()
-				.getConfigurationElementsFor(EXTENSION_POINT_NAME_PROVIDER_ID);
+		IConfigurationElement elements[] = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_POINT_NAME_PROVIDER_ID);
 
 		for (int i = 0; i < elements.length; i++) {
 			IConfigurationElement element = elements[i];
@@ -120,13 +115,10 @@ public class AddonModelNavigatorPlugin extends AbstractUIPlugin {
 
 			try {
 				Class<?> clIconProvider = Class.forName(clazz);
-				INameProvider providerInstance = (INameProvider) clIconProvider
-						.newInstance();
-
+				INameProvider providerInstance = (INameProvider) clIconProvider.newInstance();
 				installedNameProvider.add(providerInstance);
 			} catch (Exception ex) {
-				String message = String.format(
-						"Could not register %s as INameProvider!", clazz);
+				String message = String.format("Could not register '%s' as INameProvider!", clazz);
 				logError(message);
 			}
 		}
@@ -148,17 +140,11 @@ public class AddonModelNavigatorPlugin extends AbstractUIPlugin {
 	 * @return Instance of IIconProvider or null if none could be found
 	 */
 	public IIconProvider getIconProvider(IElementType elementType) {
-		if (elementType == null) {
-			return null;
-		}
+		if (elementType == null) return null;
 
-		for (Iterator<IIconProvider> it = installedIconProvider.iterator(); it
-				.hasNext();) {
+		for (Iterator<IIconProvider> it = installedIconProvider.iterator(); it.hasNext();) {
 			IIconProvider provider = it.next();
-
-			if (provider.getIcon(elementType, 0) != null) {
-				return provider;
-			}
+			if (provider.getIcon(elementType, 0) != null) return provider;
 		}
 
 		return null;
@@ -175,17 +161,11 @@ public class AddonModelNavigatorPlugin extends AbstractUIPlugin {
 	 * @return Instance of INameProvider or null if none could be found
 	 */
 	public INameProvider getNameProvider(IGraphicalEditPart graphicalEditPart) {
-		if (graphicalEditPart == null) {
-			return null;
-		}
+		if (graphicalEditPart == null) return null;
 
-		for (Iterator<INameProvider> it = installedNameProvider.iterator(); it
-				.hasNext();) {
+		for (Iterator<INameProvider> it = installedNameProvider.iterator(); it.hasNext();) {
 			INameProvider provider = it.next();
-
-			if (provider.getName(graphicalEditPart) != null) {
-				return provider;
-			}
+			if (provider.getName(graphicalEditPart) != null) return provider;
 		}
 
 		return null;
@@ -209,9 +189,8 @@ public class AddonModelNavigatorPlugin extends AbstractUIPlugin {
 	 *            exception that is used for the stack trace
 	 */
 	public static void logError(String message, Exception ex) {
-		if (logger.isErrorEnabled()) {
-			logger.error(message, ex);
-		}
+		if (!logger.isErrorEnabled()) return;
+		logger.error(message, ex);
 	}
 
 	/**
@@ -221,9 +200,8 @@ public class AddonModelNavigatorPlugin extends AbstractUIPlugin {
 	 *            message to log
 	 */
 	public static void logDebug(String message) {
-		if (logger.isDebugEnabled()) {
-			logger.debug(message);
-		}
+		if (!logger.isDebugEnabled()) return;
+		logger.debug(message);
 	}
 
 	/**
@@ -243,8 +221,7 @@ public class AddonModelNavigatorPlugin extends AbstractUIPlugin {
 	 *            message to log
 	 */
 	public static void logInfo(String message) {
-		if (logger.isInfoEnabled()) {
-			logger.info(message);
-		}
+		if (!logger.isInfoEnabled()) return;
+		logger.info(message);
 	}
 }
