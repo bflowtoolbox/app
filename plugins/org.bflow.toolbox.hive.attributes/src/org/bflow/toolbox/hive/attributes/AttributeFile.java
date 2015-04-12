@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.bflow.toolbox.hive.attributes.internal.AttributeViewPlugin;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -27,12 +26,14 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 24.04.2010
  * @version 27.09.2014
+ * 			10.04.2015 Introducing feature IAttributeFilePersister and IAttributeFileListener
  * 
  */
 public class AttributeFile {
 	private boolean dirty;
 
-	private HashMap<String, HashMap<String, String>> attributes = new HashMap<String, HashMap<String, String>>();
+	private final HashMap<String, HashMap<String, String>> attributes = new HashMap<>();
+	private ArrayList<IAttributeFileListener> fListeners = new ArrayList<>();
 	
 	private DiagramEditPart diagramEditPart;
 	
@@ -53,6 +54,28 @@ public class AttributeFile {
 		super();
 		this.diagramEditPart = diagramEditPart;
 	}
+	
+	/**
+	 * Adds the given listener to this instance.
+	 * 
+	 * @param listener
+	 *            Listener to add
+	 */
+	public void addListener(IAttributeFileListener listener) {
+		if (listener == null) return;
+		fListeners.add(listener);
+	}
+	
+	/**
+	 * Removes the given listener from this instance.
+	 * 
+	 * @param listener
+	 *            Listener to remove
+	 */
+	public void removeListener(IAttributeFileListener listener) {
+		if (listener == null) return;
+		fListeners.remove(listener);
+	}
 
 	/**
 	 * Loads the attribute file.
@@ -60,8 +83,27 @@ public class AttributeFile {
 	public void load() {	
 		if (loaded) return;
 		
+		try {
+			if (diagramEditPart instanceof IAttributeFilePersister) {
+				loadUsingPersister((IAttributeFilePersister) diagramEditPart);
+			} else {
+				loadUsingResource();
+			}
+		} catch(Exception ex) {
+			AttributeViewPlugin.logError("Error on loading attribute file", ex);
+		} finally {
+			dirty = false;
+			loaded = true;
+		}
+	}
+	
+	private void loadUsingPersister(IAttributeFilePersister persister) throws Exception {
+		if (persister == null) throw new NullPointerException("persister is null!");
+		persister.load(attributes);
+	}
+	
+	private void loadUsingResource() throws Exception {
 		EObject semanticElement = diagramEditPart.resolveSemanticElement();
-		
 		Resource resource = semanticElement.eResource();
 		this.resource = resource;
 		
@@ -81,39 +123,64 @@ public class AttributeFile {
 					
 					HashMap<String, String> map = attributes.get(id);
 					
-					if(map == null)
+					if (map == null)
 						map = new HashMap<String, String>();
 					
 					map.put(name, value);
 					attributes.put(id, map);
-				}
-				
-				/*EMFRemoveCommand com = new EMFRemoveCommand(resource, addonAttributes);
-				
-				EMFCommandOperation op = new EMFCommandOperation(diagramEditPart.getEditingDomain(), com);
-				try {
-					op.execute(null, null);
-				} catch (ExecutionException e1) {
-					AttributeViewPlugin.logError(e1.getMessage(), e1);
-				}*/
-				
+				}				
 				break;
 			}
 		}
-
-		dirty = false;
-		loaded = true;
 	}
 
 	/**
 	 * Saves the attribute file.
 	 */
+	public void save() {		
+		// TODO Fix saving though the user rejected to
+		// The file can be dirty but the user has rejected to save any changes
+		// in this case the file will be saved though
+		
+		// Only perform a save operation if the file is dirty
+		if (!dirty) return;
+		
+		try {
+			if (diagramEditPart instanceof IAttributeFilePersister) {
+				saveUsingPersister((IAttributeFilePersister)diagramEditPart);
+			} else {
+				saveUsingResource();
+			}
+		} catch (Exception e1) {
+			AttributeViewPlugin.logError("Error on saving attribute file", e1);
+		} finally {
+			dirty = false;
+		}
+	}
+	
+	/**
+	 * Saves the attributes using the given perister.
+	 * 
+	 * @param persister
+	 *            Persister which saves the attributes
+	 * @throws Exception
+	 */
+	private void saveUsingPersister(IAttributeFilePersister persister) throws Exception {
+		if (persister == null) throw new NullPointerException("persister is null!");
+		persister.save(attributes);
+	}
+	
+	/**
+	 * Saves the attributes within the resource that is associated with the
+	 * diagram edit part.
+	 * 
+	 * @throws Exception
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void save() {
+	private void saveUsingResource() throws Exception {
 		// Create instances
 		EFactory addonFactory = addonEPackage.getEFactoryInstance();
-		
-		final EObject addonAttributes = addonFactory.create(addonEClass);
+		EObject addonAttributes = addonFactory.create(addonEClass);
 		
 		for (String id:attributes.keySet()) {
 			HashMap<String, String> map = attributes.get(id);
@@ -128,30 +195,14 @@ public class AttributeFile {
 			}
 		}
 		
-//		EObject semanticElement = diagramEditPart.resolveSemanticElement();
-//		Resource resource = semanticElement.eResource();
-		
 		EMFAddCommand com = new EMFAddCommand(resource, addonAttributes);
 		EMFRemoveCommand remCom = new EMFRemoveCommand(resource, addonAttributes);
 		
 		EMFCommandOperation op = new EMFCommandOperation(diagramEditPart.getEditingDomain(), com);
 		EMFCommandOperation opRem = new EMFCommandOperation(diagramEditPart.getEditingDomain(), remCom);
 		
-		// TODO Fix saving though the user rejected to
-		// The file can be dirty but the user has rejected to save any changes
-		// in this case the file will be saved though
-		
-		// Only perform a save operation if the file is dirty
-		if(!dirty) return;
-		
-		try {
-			opRem.execute(null, null);
-			op.execute(null, null);
-		} catch (ExecutionException e1) {
-			AttributeViewPlugin.logError(e1.getMessage(), e1);
-		}
-			
-		dirty = false;
+		opRem.execute(null, null);
+		op.execute(null, null);
 	}
 
 	/**
@@ -177,11 +228,12 @@ public class AttributeFile {
 		if (!attributes.containsKey(id))
 			attributes.put(id, new HashMap<String, String>());
 
-		if (value.isEmpty())
+		if (value.isEmpty()) 
 			value = "0";
 
 		attributes.get(id).put(attribute, value);
-
+		raiseAttributeAddedEvent(id, attribute, value);
+		
 		dirty = true;
 	}
 
@@ -197,6 +249,8 @@ public class AttributeFile {
 		if (!attributes.containsKey(id)) return;
 
 		attributes.get(id).remove(attribute);
+		raiseAttributeRemovedEvent(id, attribute);
+		
 		dirty = true;
 	}
 	
@@ -210,6 +264,8 @@ public class AttributeFile {
 		if (!attributes.containsKey(id)) return;
 		
 		attributes.remove(id);
+		raiseAttributesRemovedEvent(id);
+		
 		dirty = true;
 	}
 
@@ -308,10 +364,99 @@ public class AttributeFile {
 	}
 	
 	/**
+	 * Raises the event that an attribute with the given name and value has been
+	 * added to the given model element.
+	 * 
+	 * @param modelElementId
+	 *            Id of the model element
+	 * @param attributeName
+	 *            Name of the newly created attribute
+	 * @param attributeValue
+	 *            Value of the newly created attribute
+	 */
+	private void raiseAttributeAddedEvent(final String modelElementId, final String attributeName, final String attributeValue) {
+		dispatchEvent(new DispatchEvent<IAttributeFileListener>() {
+			@Override
+			public void dispatch(IAttributeFileListener item) {
+				item.onAttributeAdded(modelElementId, attributeName, attributeValue);
+			}});
+	}
+	
+	/**
+	 * Raises the event that the attribute with the given name has been removed
+	 * from the given model element.
+	 * 
+	 * @param modelElementId
+	 *            Id of the model element
+	 * @param attributeName
+	 *            Name of the removed attribute
+	 */
+	private void raiseAttributeRemovedEvent(final String modelElementId, final String attributeName) {
+		dispatchEvent(new DispatchEvent<IAttributeFileListener>() {
+			@Override
+			public void dispatch(IAttributeFileListener item) {
+				item.onAttributeRemoved(modelElementId, attributeName);
+			}
+		});
+	}
+	
+	/**
+	 * Raises the event that all attributes of a model element has been removed.
+	 * 
+	 * @param modelElementId
+	 *            Id of the model element
+	 */
+	private void raiseAttributesRemovedEvent(final String modelElementId) {
+		dispatchEvent(new DispatchEvent<IAttributeFileListener>() {
+			@Override
+			public void dispatch(IAttributeFileListener item) {
+				item.onAttributesRemoved(modelElementId);
+			}
+		});
+	}
+	
+	/**
+	 * Dispatches the given event to all listeners.
+	 * 
+	 * @param event
+	 *            Event to dispatch
+	 */
+	private void dispatchEvent(DispatchEvent<IAttributeFileListener> event) {
+		for (int i = -1; ++i != fListeners.size();) {
+			try {
+				IAttributeFileListener listener = fListeners.get(i);
+				event.dispatch(listener);
+			} catch (Exception ex) {
+				AttributeViewPlugin.logError("Error on notifying listener", ex);
+			}
+		}
+	}
+	
+	/**
+	 * Defines a delegate to simply dispatch events.
+	 * 
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 11.04.2015
+	 * 
+	 * @param <CItem>
+	 *            Listener type
+	 */
+	interface DispatchEvent<CItem> {
+		/**
+		 * Tells the dispatcher to notify the given listener.
+		 * 
+		 * @param item
+		 *            Listener to notify
+		 */
+		void dispatch(CItem item);
+	}
+	
+	/**
 	 * Provides a simple EMF add command.
-	 * @author Arian Storch
-	 * @since 27/05/11
-	 * @version 02/07/12
+	 * 
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 27.05.11
+	 * @version 02.07.12
 	 */
 	private class EMFAddCommand extends AbstractCommand {
 		
@@ -326,8 +471,7 @@ public class AttributeFile {
 		}
 		
 		@Override
-		public void redo() {				
-		}
+		public void redo() { }
 		
 		@Override
 		public void execute() {	
@@ -344,8 +488,9 @@ public class AttributeFile {
 	
 	/**
 	 * Provides a simple EMF remove command.
-	 * @author Arian Storch
-	 * @since 27/05/11
+	 * 
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 27.05.11
 	 */
 	private class EMFRemoveCommand extends AbstractCommand {
 		
@@ -354,35 +499,28 @@ public class AttributeFile {
 		
 		public EMFRemoveCommand(Resource resource, EObject addonAttributes) {
 			super("RemoveAttributesCommand", "Removes the attributes from the document.");
-			
 			this.resource = resource;
 			this.addonAttributes = addonAttributes;
 		}
 
 		@Override
 		public void execute() {
-			
-			if(resource == null)
-				return ;
+			if (resource == null) return ;
 			
 			List<EObject> coll = new ArrayList<EObject>();
 			
-			for(EObject eObj:resource.getContents()) {
-				if(eObj.eClass().getInstanceClassName().equalsIgnoreCase(
-						addonAttributes.eClass().getInstanceClassName()))
+			for (EObject eObj:resource.getContents()) {
+				if (eObj.eClass().getInstanceClassName().equalsIgnoreCase(addonAttributes.eClass().getInstanceClassName()))
 					coll.add(eObj);
 			}
 			
 			resource.eSetDeliver(false);
-			
 			resource.getContents().removeAll(coll);
-			
 			resource.eSetDeliver(true);		
 		}
 
 		@Override
-		public void redo() {			
-		}
+		public void redo() { }
 		
 	}
 

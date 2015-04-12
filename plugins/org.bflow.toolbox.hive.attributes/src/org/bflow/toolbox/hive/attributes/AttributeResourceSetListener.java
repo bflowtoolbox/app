@@ -124,7 +124,10 @@ public class AttributeResourceSetListener implements ResourceSetListener {
 		for (Notification notify:event.getNotifications()) {			
 			
 			if (notify.getEventType() == Notification.ADD) {
-				EObject obj = (EObject) notify.getNewValue();
+				Object newValue = notify.getNewValue();
+				if (!(newValue instanceof EObject)) continue;
+				
+				EObject obj = (EObject) newValue;
 				String proxyId = EMFCoreUtil.getProxyID(obj);
 				String clName = getInstanceClassName(notify);
 				
@@ -146,7 +149,10 @@ public class AttributeResourceSetListener implements ResourceSetListener {
 			}
 			
 			if (notify.getEventType() == Notification.REMOVE) {
-				EObject obj = (EObject) notify.getOldValue();
+				Object oldValue = notify.getOldValue();
+				if (!(oldValue instanceof EObject)) continue;
+				
+				EObject obj = (EObject) oldValue;
 				String proxyId = iAffectedObjectMap.get(obj); // We need to get the id from here (see comments later)
 				if (proxyId != null && !proxyId.equalsIgnoreCase("//"))
 					file.removeAll(proxyId);
