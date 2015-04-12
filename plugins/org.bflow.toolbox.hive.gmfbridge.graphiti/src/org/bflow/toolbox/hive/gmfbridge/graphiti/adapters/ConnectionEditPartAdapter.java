@@ -5,6 +5,7 @@ import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionNodeEditPart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.runtime.notation.impl.ViewImpl;
@@ -25,7 +26,6 @@ public class ConnectionEditPartAdapter extends ConnectionNodeEditPart {
 	private EObject fUnderlyingModelObject;
 	private SequenceFlow fUnderlyingSequenceFlow;
 	
-	@SuppressWarnings("unused")
 	private EditPart fOriginEditPart;
 	private EObject fOriginEditPartModel;
 	private org.eclipse.graphiti.ui.internal.parts.ConnectionEditPart fOriginConnectionEditPart;
@@ -66,6 +66,15 @@ public class ConnectionEditPartAdapter extends ConnectionNodeEditPart {
 	@Override
 	protected org.eclipse.draw2d.Connection createConnectionFigure() {
 		throw new RuntimeException("#AS Not implemented yet");
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.gef.editparts.AbstractEditPart#getViewer()
+	 */
+	@Override
+	public EditPartViewer getViewer() {
+		EditPartViewer editPartViewer = fOriginEditPart.getViewer();
+		return editPartViewer;
 	}
 	
 	/* (non-Javadoc)

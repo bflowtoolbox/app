@@ -10,6 +10,7 @@ import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
@@ -31,7 +32,6 @@ public class ShapeEditPartAdapter extends ShapeNodeEditPart {
 	private EObject fUnderlyingModelObject;
 	private FlowNode fUnderlyingFlowNode;
 	
-	@SuppressWarnings("unused")
 	private EditPart fOriginEditPart; // ContainerShapeEditPart
 	private EObject fOriginEditPartModel; // ContainerShape
 
@@ -123,11 +123,20 @@ public class ShapeEditPartAdapter extends ShapeNodeEditPart {
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.eclipse.gef.editparts.AbstractEditPart#getViewer()
+	 */
+	@Override
+	public EditPartViewer getViewer() {
+		EditPartViewer editPartViewer = fOriginEditPart.getViewer();
+		return editPartViewer;
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#getFigure()
 	 */
 	@Override
 	public IFigure getFigure() { 
-		IFigure figure = ((IGraphicalEditPart)fOriginEditPartModel).getFigure();
+		IFigure figure = ((org.eclipse.gef.GraphicalEditPart)fOriginEditPart).getFigure();
 		return figure;
 	}
 	
