@@ -43,7 +43,7 @@ import org.eclipse.graphiti.services.Graphiti;
  * 
  */
 @SuppressWarnings("restriction")
-public class DiagramEditPartAdapter extends DiagramEditPart implements IAttributeFilePersister {
+public class DiagramEditPartAdapter extends DiagramEditPart implements IAttributeFilePersister, IDisposable {
 	
 	private static final String DynamicAddonAttributePrefix = "customAddonAttribute"; // "dynamicAddonAttribute";
 
@@ -57,6 +57,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	private View fNotationView = new ViewImpl() {};
 	
 	private IAttributeFileListener fAttributeFileListener = new _AttributeFileListener();
+	private IAttributeFileRegistryListener fAttributeFileRegistryListener = new _AttributeFileRegistryListener();
 	private AttributeFile fCurrentAttributeFile;
 	
 	/**
@@ -81,21 +82,21 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			fCurrentAttributeFile = attributeFile;
 		}
 		
-		AttributeFileRegistry.getInstance().addRegistryListener(new IAttributeFileRegistryListener() {
-			@Override
-			public void noticeAttributeFileChange(AttributeFileRegistryEvent event) {
-				if (fCurrentAttributeFile != null) {
-					fCurrentAttributeFile.removeListener(fAttributeFileListener);
-					fCurrentAttributeFile = null;
-				}
-				
-				fCurrentAttributeFile = event.attributeFile;
-				
-				if (fCurrentAttributeFile != null) {
-					fCurrentAttributeFile.addListener(fAttributeFileListener);
-				}
-			}
-		});
+		AttributeFileRegistry.getInstance().addRegistryListener(fAttributeFileRegistryListener);
+	}
+	
+	/**
+	 * Tells this instance that it is going to be disposed and it can release
+	 * all its bound resources.
+	 */
+	@Override
+	public void dispose() {
+		if (fCurrentAttributeFile != null) {
+			fCurrentAttributeFile.removeListener(fAttributeFileListener);
+			fCurrentAttributeFile = null;
+		}
+		
+		AttributeFileRegistry.getInstance().removeRegistryListener(fAttributeFileRegistryListener);
 	}
 	
 	/* (non-Javadoc)
@@ -329,6 +330,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			public void execute() {				
 				EStructuralFeature attribute = ModelUtil.getAnyAttribute(objectModel, attributeName);
 				if (attribute == null) {
+					if (attributeValue == null) return;
 					attribute = ModelUtil.addAnyAttribute(objectModel, DynamicAddonAttributePrefix, attributeName, attributeValue);
 					return;
 				}
@@ -415,6 +417,28 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 				onAttributeRemoved(modelElementId, attributeName);
 			}
 		}
-		
+	}
+	
+	/**
+	 * Implements {@link IAttributeFileRegistryListener}.
+	 * 
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 11.04.2015
+	 * 
+	 */
+	class _AttributeFileRegistryListener implements IAttributeFileRegistryListener {
+		@Override
+		public void noticeAttributeFileChange(AttributeFileRegistryEvent event) {
+			if (fCurrentAttributeFile != null) {
+				fCurrentAttributeFile.removeListener(fAttributeFileListener);
+				fCurrentAttributeFile = null;
+			}
+			
+			fCurrentAttributeFile = event.attributeFile;
+			
+			if (fCurrentAttributeFile != null) {
+				fCurrentAttributeFile.addListener(fAttributeFileListener);
+			}
+		}
 	}
 }

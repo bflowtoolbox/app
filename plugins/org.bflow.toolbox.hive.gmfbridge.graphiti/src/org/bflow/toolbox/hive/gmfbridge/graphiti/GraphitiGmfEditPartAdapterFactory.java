@@ -5,10 +5,15 @@ import java.util.HashMap;
 import org.bflow.toolbox.hive.gmfbridge.IGmfEditPartAdapterFactory;
 import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.DiagramEditPartAdapter;
 import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.DiagramEditorAdapter;
+import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.IDisposable;
 import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.ShapeEditPartAdapter;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.MultiPageEditorPart;
 
 /**
  * Provides an implementation of {@link IGmfEditPartAdapterFactory} to adapt
@@ -23,6 +28,14 @@ public class GraphitiGmfEditPartAdapterFactory implements IGmfEditPartAdapterFac
 	
 	private final HashMap<IEditorPart, DiagramEditor> fDiagramEditorMap = new HashMap<>();
 	private final HashMap<GraphicalEditPart, org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart> fGraphicalEditPartMap = new HashMap<>();
+	
+	/**
+	 * Default constructor.
+	 */
+	public GraphitiGmfEditPartAdapterFactory() {
+		// Register listener for cache clean up
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(new _PartListener());
+	}
 
 	/* (non-Javadoc)
 	 * @see org.bflow.toolbox.hive.gmfbridge.IGmfEditPartAdapterFactory#canAdapt(org.eclipse.ui.IEditorPart)
@@ -73,5 +86,63 @@ public class GraphitiGmfEditPartAdapterFactory implements IGmfEditPartAdapterFac
 			fGraphicalEditPartMap.put(graphicalEditPart, cachedGraphicalEditPart);
 		}
 		return cachedGraphicalEditPart;
+	}
+	
+	/**
+	 * Implements {@link IPartListener}.
+	 * 
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 11.04.2015
+	 * 
+	 */
+	class _PartListener implements IPartListener {
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener#partActivated(org.eclipse.ui.IWorkbenchPart)
+		 */
+		@Override
+		public void partActivated(IWorkbenchPart part) { }
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener#partBroughtToTop(org.eclipse.ui.IWorkbenchPart)
+		 */
+		@Override
+		public void partBroughtToTop(IWorkbenchPart part) {	}
+
+		@Override
+		public void partClosed(IWorkbenchPart part) {
+			if (!(part instanceof IEditorPart)) return;
+			IEditorPart editorPart = (IEditorPart)part;
+			
+			// Handling multi page editor
+			if (editorPart instanceof MultiPageEditorPart) {
+				MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart) editorPart;
+				editorPart = (IEditorPart) multiPageEditorPart.getSelectedPage();
+			}
+			
+			DiagramEditor cachedDiagramEditor = fDiagramEditorMap.get(editorPart);
+			if (cachedDiagramEditor == null) return;
+			
+			for (GraphicalEditPart graphicalEditPart : fGraphicalEditPartMap.values()) {
+				if (!(graphicalEditPart instanceof IDisposable)) continue;
+				IDisposable disposableObject = (IDisposable)graphicalEditPart;
+				disposableObject.dispose();
+			}				
+			
+			// TODO Don't clear all up - some other editors might still be open
+			fDiagramEditorMap.clear();
+			fGraphicalEditPartMap.clear();				
+		}
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener#partDeactivated(org.eclipse.ui.IWorkbenchPart)
+		 */
+		@Override
+		public void partDeactivated(IWorkbenchPart part) { }
+
+		/* (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener#partOpened(org.eclipse.ui.IWorkbenchPart)
+		 */
+		@Override
+		public void partOpened(IWorkbenchPart part) { }
 	}
 }

@@ -100,6 +100,7 @@ public class AttributeFileRegistry implements IPartListener {
 	
 	/**
 	 * Returns the Attribute File of the active editor.
+	 * 
 	 * @return Attribute File of the active editor.
 	 */
 	public AttributeFile getActiveAttributeFile() {
@@ -108,17 +109,23 @@ public class AttributeFileRegistry implements IPartListener {
 	
 	/**
 	 * Adds a listener to the registry.
-	 * @param listener listener
+	 * 
+	 * @param listener
+	 *            listener
 	 */
 	public void addRegistryListener(IAttributeFileRegistryListener listener) {
+		if (listener == null) return;
 		listeners.add(listener);
 	}
 	
 	/**
 	 * Removes the listener from the registry.
-	 * @param listener listener
+	 * 
+	 * @param listener
+	 *            listener
 	 */
 	public void removeRegistryListener(IAttributeFileRegistryListener listener) {
+		if (listener == null) return;
 		listeners.remove(listener);
 	}
 	
