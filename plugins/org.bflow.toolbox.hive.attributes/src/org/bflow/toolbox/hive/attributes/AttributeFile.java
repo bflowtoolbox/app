@@ -97,11 +97,24 @@ public class AttributeFile {
 		}
 	}
 	
+	/**
+	 * Loads all attributes using the given persister.
+	 * 
+	 * @param persister
+	 *            Persister to use
+	 * @throws Exception
+	 */
 	private void loadUsingPersister(IAttributeFilePersister persister) throws Exception {
 		if (persister == null) throw new NullPointerException("persister is null!");
 		persister.load(attributes);
 	}
 	
+	/**
+	 * Loads all attributes within the resource that is associated with the
+	 * diagram edit part.
+	 * 
+	 * @throws Exception
+	 */	
 	private void loadUsingResource() throws Exception {
 		EObject semanticElement = diagramEditPart.resolveSemanticElement();
 		Resource resource = semanticElement.eResource();
@@ -159,7 +172,7 @@ public class AttributeFile {
 	}
 	
 	/**
-	 * Saves the attributes using the given perister.
+	 * Saves the attributes using the given persister.
 	 * 
 	 * @param persister
 	 *            Persister which saves the attributes
