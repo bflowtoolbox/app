@@ -1,6 +1,7 @@
 package org.bflow.toolbox.hive.gmfbridge;
 
 import org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.ui.IEditorPart;
 
@@ -51,6 +52,5 @@ public interface IGmfEditPartAdapterFactory {
 	 *            Graphical edit part to adapt
 	 * @return Instance of {@link GraphicalEditPart}
 	 */
-	GraphicalEditPart getAdapter(org.eclipse.gef.GraphicalEditPart graphicalEditPart);
-
+	IGraphicalEditPart getAdapter(org.eclipse.gef.GraphicalEditPart graphicalEditPart);
 }

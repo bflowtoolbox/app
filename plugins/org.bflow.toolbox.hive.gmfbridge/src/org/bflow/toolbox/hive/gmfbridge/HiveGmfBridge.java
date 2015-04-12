@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.ui.IEditorPart;
 
@@ -70,7 +71,7 @@ public class HiveGmfBridge {
 	 * @return GraphicalEditPart that has been adapted or derived from the given
 	 *         edit part instance
 	 */
-	static public GraphicalEditPart adapt(org.eclipse.gef.GraphicalEditPart graphicalEditPart) {
+	static public IGraphicalEditPart adapt(org.eclipse.gef.GraphicalEditPart graphicalEditPart) {
 		if (GraphicalEditPart.class.isAssignableFrom(graphicalEditPart.getClass())) return (GraphicalEditPart) graphicalEditPart;
 		
 		for (int i = -1; ++i != fAdapterFactories.size();) {

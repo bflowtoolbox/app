@@ -6,7 +6,9 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionNodeEditPart;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.gmf.runtime.notation.impl.ViewImpl;
 import org.eclipse.graphiti.mm.pictograms.Connection;
+import org.eclipse.graphiti.services.Graphiti;
 
 /**
  * Provides an adapter for {@link Connection}.
@@ -31,13 +33,18 @@ public class ConnectionEditPartAdapter extends ConnectionNodeEditPart {
 	 *            Origin edit part
 	 */
 	public ConnectionEditPartAdapter(EditPart originEditPart) {
-		this((View)null);
+		this(new ViewImpl() {});
 		
 		eObject = (EObject) originEditPart.getModel();
 		fConnectionModel = (Connection)eObject;
 		
 		fOriginEditPart = originEditPart;
 		fConnectionEditPart = (org.eclipse.graphiti.ui.internal.parts.ConnectionEditPart) originEditPart;
+		
+		EObject underlyingModelObject = Graphiti.getLinkService().getBusinessObjectForLinkedPictogramElement(fConnectionModel);
+		eObject = underlyingModelObject;
+		
+		getPrimaryView().setElement(eObject);
 	}
 	
 	/**
