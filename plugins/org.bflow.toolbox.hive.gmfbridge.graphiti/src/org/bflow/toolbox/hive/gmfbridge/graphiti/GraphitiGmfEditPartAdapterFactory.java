@@ -3,11 +3,10 @@ package org.bflow.toolbox.hive.gmfbridge.graphiti;
 import java.util.HashMap;
 
 import org.bflow.toolbox.hive.gmfbridge.IGmfEditPartAdapterFactory;
-import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.ConnectionEditPartAdapter;
+import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.AdapterFactory;
 import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.DiagramEditPartAdapter;
 import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.DiagramEditorAdapter;
 import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.IDisposable;
-import org.bflow.toolbox.hive.gmfbridge.graphiti.adapters.ShapeEditPartAdapter;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.ui.IEditorPart;
@@ -80,9 +79,9 @@ public class GraphitiGmfEditPartAdapterFactory implements IGmfEditPartAdapterFac
 			if (graphicalEditPart instanceof org.eclipse.graphiti.ui.internal.parts.DiagramEditPart) 
 				cachedGraphicalEditPart = new DiagramEditPartAdapter((org.eclipse.graphiti.ui.internal.parts.DiagramEditPart) graphicalEditPart);
 			else if (graphicalEditPart instanceof org.eclipse.graphiti.ui.internal.parts.ShapeEditPart)
-				cachedGraphicalEditPart = new ShapeEditPartAdapter(graphicalEditPart);
+				cachedGraphicalEditPart = AdapterFactory.getShapeEditPartAdapter(graphicalEditPart);
 			else if (graphicalEditPart instanceof org.eclipse.graphiti.ui.internal.parts.ConnectionEditPart)
-				cachedGraphicalEditPart = new ConnectionEditPartAdapter(graphicalEditPart);
+				cachedGraphicalEditPart = AdapterFactory.getConnectionEditPartAdapter(graphicalEditPart);
 			
 			fGraphicalEditPartMap.put(graphicalEditPart, cachedGraphicalEditPart);
 		}
@@ -131,7 +130,8 @@ public class GraphitiGmfEditPartAdapterFactory implements IGmfEditPartAdapterFac
 			
 			// TODO Don't clear all up - some other editors might still be open
 			fDiagramEditorMap.clear();
-			fGraphicalEditPartMap.clear();				
+			fGraphicalEditPartMap.clear();
+			AdapterFactory.clearCache(); // TODO Think about using dipose or listener pattern
 		}
 
 		/* (non-Javadoc)

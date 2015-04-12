@@ -1,13 +1,15 @@
 package org.bflow.toolbox.hive.gmfbridge.graphiti.adapters;
 
+import org.eclipse.bpmn2.FlowNode;
+import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionNodeEditPart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.runtime.notation.impl.ViewImpl;
 import org.eclipse.graphiti.mm.pictograms.Connection;
+import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.services.Graphiti;
 
 /**
@@ -17,14 +19,16 @@ import org.eclipse.graphiti.services.Graphiti;
  * @since 27.03.2015
  * 
  */
-@SuppressWarnings({"restriction", "unused"})
+@SuppressWarnings({"restriction"})
 public class ConnectionEditPartAdapter extends ConnectionNodeEditPart {
 	
-	private EObject eObject;
-	private Connection fConnectionModel;
+	private EObject fUnderlyingModelObject;
+	private SequenceFlow fUnderlyingSequenceFlow;
 	
+	@SuppressWarnings("unused")
 	private EditPart fOriginEditPart;
-	private org.eclipse.graphiti.ui.internal.parts.ConnectionEditPart fConnectionEditPart;
+	private EObject fOriginEditPartModel;
+	private org.eclipse.graphiti.ui.internal.parts.ConnectionEditPart fOriginConnectionEditPart;
 	
 	/**
 	 * Creates a new instance based on the given edit part.
@@ -35,16 +39,17 @@ public class ConnectionEditPartAdapter extends ConnectionNodeEditPart {
 	public ConnectionEditPartAdapter(EditPart originEditPart) {
 		this(new ViewImpl() {});
 		
-		eObject = (EObject) originEditPart.getModel();
-		fConnectionModel = (Connection)eObject;
-		
+		// Origin references
 		fOriginEditPart = originEditPart;
-		fConnectionEditPart = (org.eclipse.graphiti.ui.internal.parts.ConnectionEditPart) originEditPart;
+		fOriginEditPartModel = (EObject) originEditPart.getModel();
+		fOriginConnectionEditPart = (org.eclipse.graphiti.ui.internal.parts.ConnectionEditPart) originEditPart;
 		
-		EObject underlyingModelObject = Graphiti.getLinkService().getBusinessObjectForLinkedPictogramElement(fConnectionModel);
-		eObject = underlyingModelObject;
+		// Underlying references
+		PictogramElement connectionModel = (PictogramElement) fOriginEditPartModel;
+		fUnderlyingModelObject = Graphiti.getLinkService().getBusinessObjectForLinkedPictogramElement(connectionModel);
+		fUnderlyingSequenceFlow = (SequenceFlow)fUnderlyingModelObject;
 		
-		getPrimaryView().setElement(eObject);
+		getPrimaryView().setElement(fUnderlyingModelObject);
 	}
 	
 	/**
@@ -68,7 +73,7 @@ public class ConnectionEditPartAdapter extends ConnectionNodeEditPart {
 	 */
 	@Override
 	public IFigure getFigure() {
-		IFigure figure = fConnectionEditPart.getFigure();
+		IFigure figure = fOriginConnectionEditPart.getFigure();
 		return figure;
 	}
 	
@@ -77,17 +82,19 @@ public class ConnectionEditPartAdapter extends ConnectionNodeEditPart {
 	 */
 	@Override
 	public EditPart getSource() {
-		EditPart sourceEditPart = fConnectionEditPart.getSource();
-		return new ShapeEditPartAdapter(sourceEditPart);
+		FlowNode sourceNode = fUnderlyingSequenceFlow.getSourceRef();
+		ShapeEditPartAdapter shapeEditPart = AdapterFactory.getShapeEditPartAdapter(sourceNode);
+		return shapeEditPart;
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.editparts.AbstractConnectionEditPart#getTarget()
 	 */
 	@Override
-	public EditPart getTarget() {
-		EditPart targetEditPart = fConnectionEditPart.getTarget();
-		return new ShapeEditPartAdapter(targetEditPart);
+	public EditPart getTarget() {		
+		FlowNode targetNode = fUnderlyingSequenceFlow.getTargetRef();
+		ShapeEditPartAdapter shapeEditPart = AdapterFactory.getShapeEditPartAdapter(targetNode);
+		return shapeEditPart;
 	}
 	
 	/* (non-Javadoc)
@@ -95,6 +102,6 @@ public class ConnectionEditPartAdapter extends ConnectionNodeEditPart {
 	 */
 	@Override
 	public EObject resolveSemanticElement() {
-		return eObject;
+		return fUnderlyingModelObject;
 	}
 }

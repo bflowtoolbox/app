@@ -48,6 +48,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	private static final String DynamicAddonAttributePrefix = "customAddonAttribute"; // "dynamicAddonAttribute";
 
 	private org.eclipse.graphiti.ui.internal.parts.DiagramEditPart fGraphitiDiagramEditPart;
+	@SuppressWarnings("unused")
 	private GraphicalViewer fDiagramGraphicalViewer;
 	
 	@SuppressWarnings("unused")
@@ -110,8 +111,8 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 		List<Connection> connectionModels = diagram.getConnections();
 		List<EditPart> connectionEditParts = new ArrayList<>(connectionModels.size());
 		for (Connection connectionModel : connectionModels) {
-			EditPart connectionEditPart = (EditPart) fDiagramGraphicalViewer.getEditPartRegistry().get(connectionModel);
-			connectionEditParts.add(new ConnectionEditPartAdapter(connectionEditPart));
+			ConnectionEditPartAdapter connectionEditPart = AdapterFactory.getConnectionEditPartAdapter(connectionModel);
+			connectionEditParts.add(connectionEditPart);
 		}
 		return connectionEditParts;
 	}
@@ -121,15 +122,14 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 */
 	@Override
 	public List<?> getChildren() {
-//		List<PictogramElement> modelChildren = fGraphitiDiagramEditPart.getModelChildren();
 		EObject model = (EObject)fGraphitiDiagramEditPart.getModel();
 		Diagram diagram = (Diagram) model;
 		
 		List<Shape> shapeModels = diagram.getChildren();
 		List<EditPart> shapeEditParts = new ArrayList<>(shapeModels.size());
 		for (Shape shapeModel : shapeModels) {
-			EditPart shapeEditPart = (EditPart) fDiagramGraphicalViewer.getEditPartRegistry().get(shapeModel);
-			shapeEditParts.add(new ShapeEditPartAdapter(shapeEditPart));
+			ShapeEditPartAdapter shapeEditPart = AdapterFactory.getShapeEditPartAdapter(shapeModel);
+			shapeEditParts.add(shapeEditPart);
 		}
 		return shapeEditParts;
 	}
