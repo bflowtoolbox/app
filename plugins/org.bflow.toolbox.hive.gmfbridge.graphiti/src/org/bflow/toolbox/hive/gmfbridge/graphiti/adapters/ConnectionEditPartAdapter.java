@@ -4,6 +4,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionNodeEditPart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 
@@ -15,7 +16,7 @@ import org.eclipse.graphiti.mm.pictograms.Connection;
  * 
  */
 @SuppressWarnings({"restriction", "unused"})
-public class ConnectionEditPartAdapter extends ConnectionEditPart {
+public class ConnectionEditPartAdapter extends ConnectionNodeEditPart {
 	
 	private EObject eObject;
 	private Connection fConnectionModel;

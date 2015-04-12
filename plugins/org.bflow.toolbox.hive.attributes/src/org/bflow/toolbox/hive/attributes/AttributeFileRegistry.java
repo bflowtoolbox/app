@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.bflow.toolbox.hive.attributes.utils.WorkbenchUtil;
+import org.bflow.toolbox.hive.gmfbridge.HiveGmfBridge;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
+import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPageListener;
@@ -17,23 +20,22 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 /**
- * This class provides a registry instance for attribute files. Everytime when a diagram editor is opened which
- * could modify attributes this registry notice this. It also provides the model for the <code>AttributeViewPart</code>. 
- * @author Arian Storch
- * @since 17/07/11
+ * This class provides a registry instance for attribute files. Everytime when a
+ * diagram editor is opened which could modify attributes this registry notice
+ * this. It also provides the model for the <code>AttributeViewPart</code>.
+ * 
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 17.07.11
+ * @version 04.04.2015 Using lower GMF object references
  */
 public class AttributeFileRegistry implements IPartListener {
 	
-	private static HashMap<DiagramDocumentEditor, AttributeFile> fileMap = new HashMap<DiagramDocumentEditor, AttributeFile>();
-	
-	private static AttributeResourceSetListener resourceSetListener = new AttributeResourceSetListener();
+	private static final HashMap<DiagramEditor, AttributeFile> fileMap = new HashMap<DiagramEditor, AttributeFile>();
+	private static final List<IAttributeFileRegistryListener> listeners = new ArrayList<IAttributeFileRegistryListener>();
+	private static final AttributeResourceSetListener resourceSetListener = new AttributeResourceSetListener();
 	
 	private static AttributeFile activeAttrFile;
-	
-	private static DiagramDocumentEditor activeDiagramEditor;
-	
-	private static List<IAttributeFileRegistryListener> listeners = new ArrayList<IAttributeFileRegistryListener>();
-	
+	private static DiagramEditor activeDiagramEditor;
 	private static AttributeFileRegistry instance;
 	
 	/**
@@ -65,10 +67,11 @@ public class AttributeFileRegistry implements IPartListener {
 	
 	/**
 	 * Returns the instance of the registry.
+	 * 
 	 * @return instance
 	 */
 	public static AttributeFileRegistry getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new AttributeFileRegistry();
 		}
 				
@@ -77,18 +80,21 @@ public class AttributeFileRegistry implements IPartListener {
 	
 	/**
 	 * Returns all opened and registered editors.
+	 * 
 	 * @return opened and registered editors
 	 */
-	public Set<DiagramDocumentEditor> getRegisteredEditors() {
+	public Set<DiagramEditor> getRegisteredEditors() {
 		return fileMap.keySet();
 	}
 	
 	/**
 	 * Returns the Attribute File that is hold by the editor.
-	 * @param editor editor
+	 * 
+	 * @param editor
+	 *            editor
 	 * @return
 	 */
-	public AttributeFile getAttributeFile(DiagramDocumentEditor editor) {
+	public AttributeFile getAttributeFile(DiagramEditor editor) {
 		return fileMap.get(editor);
 	}
 	
@@ -118,13 +124,14 @@ public class AttributeFileRegistry implements IPartListener {
 	
 	/**
 	 * Returns the IFile of the Editor Input of the active workbench part.
-	 * @param part workbench part
+	 * 
+	 * @param part
+	 *            workbench part
 	 * @return IFile of Editor Input
 	 */
 	private IFile getActiveResource(IWorkbenchPart part) {
-		if (part instanceof DiagramDocumentEditor) {
-			IEditorInput input = ((DiagramDocumentEditor) part)
-					.getEditorInput();
+		if (part instanceof DiagramEditor) {
+			IEditorInput input = ((DiagramEditor) part).getEditorInput();
 
 			if (input instanceof IFileEditorInput)
 				return ((IFileEditorInput) input).getFile();
@@ -135,20 +142,27 @@ public class AttributeFileRegistry implements IPartListener {
 
 	@Override
 	public void partActivated(IWorkbenchPart part) {
-		if (part instanceof DiagramDocumentEditor) {
-			activeDiagramEditor = (DiagramDocumentEditor)part;
+		part = WorkbenchUtil.getActiveEditorPart(part);
+		if (!(part instanceof GraphicalEditor)) return;
+		
+		GraphicalEditor graphicalEditor = (GraphicalEditor) part;
+		part = HiveGmfBridge.adapt(graphicalEditor);
+		
+		if (part instanceof DiagramEditor) {
+			activeDiagramEditor = (DiagramEditor)part;
 
 			activeAttrFile = fileMap.get(part);
 			
-			if(activeAttrFile == null) { // partOpened wasn't called
+			if (activeAttrFile == null) { // partOpened wasn't called
 				partOpened(part);
-				
 				activeAttrFile = fileMap.get(part);
 			}
 			
 			resourceSetListener.setFile(activeAttrFile);
-			resourceSetListener.setDiagramName(getActiveResource(part).getName());
-			resourceSetListener.setProjectName(getActiveResource(part).getProject().getName());
+			
+			IFile diagramFileInput = getActiveResource(part);
+			resourceSetListener.setDiagramName(diagramFileInput.getName());
+			resourceSetListener.setProjectName(diagramFileInput.getProject().getName());
 
 			activeDiagramEditor.getEditingDomain().addResourceSetListener(resourceSetListener);
 			
@@ -157,60 +171,70 @@ public class AttributeFileRegistry implements IPartListener {
 	}
 
 	@Override
-	public void partBroughtToTop(IWorkbenchPart part) {		
-	}
+	public void partBroughtToTop(IWorkbenchPart part) {	}
 
 	@Override
 	public void partClosed(IWorkbenchPart part) {
-		if (part instanceof DiagramDocumentEditor) {
-			AttributeFile aFile = fileMap.get(part);
-
-			aFile.save();
+		part = WorkbenchUtil.getActiveEditorPart(part);
+		if (!(part instanceof GraphicalEditor)) return;
+		
+		GraphicalEditor graphicalEditor = (GraphicalEditor) part;
+		part = HiveGmfBridge.adapt(graphicalEditor);
+		
+		if (part instanceof DiagramEditor) {
+			AttributeFile attributeFile = fileMap.get(part);
+			attributeFile.save();
 
 			fileMap.remove(part);
 			
-			DiagramDocumentEditor diagramEditor = (DiagramDocumentEditor)part;
-			
+			DiagramEditor diagramEditor = (DiagramEditor)part;
 			diagramEditor.getEditingDomain().removeResourceSetListener(resourceSetListener);
 		}
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IPartListener#partDeactivated(org.eclipse.ui.IWorkbenchPart)
+	 */
 	@Override
-	public void partDeactivated(IWorkbenchPart part) {
-		/*if (part instanceof DiagramDocumentEditor) {
-			activeDiagramEditor.getEditingDomain().removeResourceSetListener(resourceSetListener);
-			activeAttrFile = null;
-			activeDiagramEditor = null;
-			
-			dispatchAttributeFileChangedEvent(null);
-		}*/
-	}
+	public void partDeactivated(IWorkbenchPart part) {	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.IPartListener#partOpened(org.eclipse.ui.IWorkbenchPart)
+	 */
 	@Override
 	public void partOpened(IWorkbenchPart part) {
-		if (part instanceof DiagramDocumentEditor) {
-			DiagramEditPart diagramEditPart = ((DiagramDocumentEditor) part)
-					.getDiagramEditPart();
+		part = WorkbenchUtil.getActiveEditorPart(part);
+		if (!(part instanceof GraphicalEditor)) return;
+		
+		GraphicalEditor graphicalEditor = (GraphicalEditor) part;
+		part = HiveGmfBridge.adapt(graphicalEditor);
+		
+		if (part instanceof DiagramEditor) {
+			DiagramEditor diagramEditor = (DiagramEditor) part;
+			DiagramEditPart diagramEditPart = diagramEditor.getDiagramEditPart();
 
-			AttributeFile f = new AttributeFile(diagramEditPart);
-			f.load();
+			AttributeFile attributeFile = new AttributeFile(diagramEditPart);
+			attributeFile.load();
 
-			fileMap.put((DiagramDocumentEditor) part, f);
+			fileMap.put(diagramEditor, attributeFile);
 		}
 	}
 	
 	/**
 	 * Dispatches the event to all listeners.
-	 * @param file Attribute File
-	 * @param diagramEditor Diagram Editor
+	 * 
+	 * @param file
+	 *            Attribute File
+	 * @param diagramEditor
+	 *            Diagram Editor
 	 */
-	private void dispatchAttributeFileChangedEvent(AttributeFile file, DiagramDocumentEditor diagramEditor) {
+	private void dispatchAttributeFileChangedEvent(AttributeFile file, DiagramEditor diagramEditor) {
 		AttributeFileRegistryEvent event = new AttributeFileRegistryEvent();
 		event.attributeFile = file;
 		event.diagramEditor = diagramEditor;
 		
-		for(IAttributeFileRegistryListener listener:listeners) {
+		for (IAttributeFileRegistryListener listener:listeners) {
 			listener.noticeAttributeFileChange(event);			
 		}
 	}

@@ -29,8 +29,7 @@ public class EMFUtility {
 			return dep.getNotationView().getElement();
 		}
 
-		if (graphicalEditPart instanceof ShapeNodeEditPart
-				|| graphicalEditPart instanceof ConnectionNodeEditPart) {
+		if (graphicalEditPart instanceof ShapeNodeEditPart || graphicalEditPart instanceof ConnectionNodeEditPart) {
 			return graphicalEditPart.getPrimaryView().getElement();
 		}
 

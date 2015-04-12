@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bflow.toolbox.hive.attributes.internal.AttributeAdjustProcessorRegistry;
 import org.bflow.toolbox.hive.attributes.internal.AttributeViewPlugin;
 import org.bflow.toolbox.hive.attributes.utils.EMFUtility;
+import org.bflow.toolbox.hive.gmfbridge.HiveGmfBridge;
 import org.bflow.toolbox.hive.nls.NLSupport;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -21,11 +22,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gmf.runtime.diagram.ui.OffscreenEditPartFactory;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.internal.util.DiagramIOUtil;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
@@ -37,6 +40,7 @@ import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -70,6 +74,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -99,7 +104,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 
 	private static AttributeViewPart instance;
 
-	private DiagramDocumentEditor diagramEditor;
+	private DiagramEditor diagramEditor;
 	
 	private WorkbenchCommandExecutionListener workbenchCommandExecutionListener = new WorkbenchCommandExecutionListener();
 	private boolean isViewEnabled;
@@ -374,13 +379,13 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 							AttributeFile prFile = null;
 
 							// ist das Dokument vlt. schon offen?
-							for (DiagramDocumentEditor DDE : AttributeFileRegistry.getInstance().getRegisteredEditors()) {
-								DiagramEditPart DEP = DDE.getDiagramEditPart();
-								String idMap = EMFCoreUtil.getProxyID(DEP.resolveSemanticElement());
+							for (DiagramEditor diagramEditor : AttributeFileRegistry.getInstance().getRegisteredEditors()) {
+								DiagramEditPart diagramEditPart = diagramEditor.getDiagramEditPart();
+								String idMap = EMFCoreUtil.getProxyID(diagramEditPart.resolveSemanticElement());
 								String idLoad = EMFCoreUtil.getProxyID(prEditPart.resolveSemanticElement());
 
 								if (idMap.equalsIgnoreCase(idLoad)) {
-									prFile = AttributeFileRegistry.getInstance().getAttributeFile(DDE);
+									prFile = AttributeFileRegistry.getInstance().getAttributeFile(diagramEditor);
 								}
 							}
 
@@ -684,14 +689,31 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		// Check if the active editor is a diagram editor. If not deactivate the view
-		IEditorPart editorPart = part.getSite().getPage().getActiveEditor();
-		if (!(editorPart instanceof DiagramDocumentEditor)) {
+		IEditorPart activeEditorPart = part.getSite().getPage().getActiveEditor();
+		
+		// Handling MultiPageEditorPart
+		if (activeEditorPart instanceof MultiPageEditorPart) {
+			MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart)activeEditorPart;
+			activeEditorPart = (IEditorPart) multiPageEditorPart.getSelectedPage();
+		}	
+		
+		// Ensure that is a graphical editor
+		if (!(activeEditorPart instanceof GraphicalEditor)) {
 			disableView();
 			return;
 		} 
 		
+		// Handling MultiPageEditorPart
+		if (part instanceof MultiPageEditorPart) {
+			MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart)part;
+			part = (IEditorPart) multiPageEditorPart.getSelectedPage();
+		}
+		
+		if (!(part instanceof IEditorPart)) return;
+		part = HiveGmfBridge.adapt((IEditorPart) part);
+		
 		// Check if the part which is affected by the selection is a diagram editor. If not deactivate the view.
-		if (!(part instanceof DiagramDocumentEditor)) {
+		if (!(part instanceof DiagramEditor)) {
 			// deactivateView();
 			return;
 		}
@@ -704,9 +726,13 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 			return ;
 		}
 		
-		IStructuredSelection sel = (IStructuredSelection) selection;
-		this.selection = sel;
-		Object selectedObject = sel.getFirstElement();
+		// Adapt selected objects if necessary
+		IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+		Object[] selectedObjectsArray = structuredSelection.toArray();
+		Object[] adaptedObjectsArray = HiveGmfBridge.adaptSelection(selectedObjectsArray);
+		
+		this.selection = new StructuredSelection(adaptedObjectsArray);
+		Object selectedObject = ((StructuredSelection)this.selection).getFirstElement();
 		
 		isAssignable &= isAttributable(selectedObject);
 		
@@ -1085,17 +1111,17 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 
 	}
 
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener#noticeAttributeFileChange(org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent)
+	 */
 	@Override
 	public void noticeAttributeFileChange(AttributeFileRegistryEvent event) {
-		if(event.attributeFile == null) {
-			
-		} else {
-			attrFile = event.attributeFile;
-			diagramEditor = event.diagramEditor;
-			diagramEditPart = diagramEditor.getDiagramEditPart();
-			updateView();
-		}
+		if (event.attributeFile == null) return; 
 		
+		attrFile = event.attributeFile;
+		diagramEditor = event.diagramEditor;
+		diagramEditPart = ((DiagramEditor) diagramEditor).getDiagramEditPart(); // TODO
+		updateView();
 	}
 	
 	/**

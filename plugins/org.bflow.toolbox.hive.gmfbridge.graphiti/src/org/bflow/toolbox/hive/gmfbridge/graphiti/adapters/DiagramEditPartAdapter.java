@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
@@ -80,5 +81,13 @@ class DiagramEditPartAdapter extends DiagramEditPart {
 		Object model = fGraphitiDiagramEditPart.getModel();
 		EObject eModel = (EObject)model;
 		return eModel;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart#getModel()
+	 */
+	@Override
+	public Object getModel() {
+		return resolveSemanticElement();
 	}
 }

@@ -6,6 +6,10 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
+import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
+import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.gmf.runtime.notation.impl.ViewImpl;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
@@ -18,7 +22,7 @@ import org.eclipse.graphiti.ui.internal.parts.ContainerShapeEditPart;
  * 
  */
 @SuppressWarnings({"restriction", "unused"})
-public class ShapeEditPartAdapter extends GraphicalEditPart {
+public class ShapeEditPartAdapter extends ShapeNodeEditPart {
 	
 	private EObject eObject;
 	private ContainerShape fContainerShapeModel;
@@ -49,6 +53,8 @@ public class ShapeEditPartAdapter extends GraphicalEditPart {
 		
 		EObject realEObject = bos.get(0);
 		eObject = realEObject;		
+		
+		getPrimaryView().setElement(eObject);
 	}
 
 	/**
@@ -58,7 +64,7 @@ public class ShapeEditPartAdapter extends GraphicalEditPart {
 	 *            Semantic model element
 	 */
 	ShapeEditPartAdapter(EObject model) {
-		super(model);
+		super(new ViewAdapter());
 		eObject = model;
 		fContainerShapeModel = (ContainerShape) model;
 	}
@@ -86,5 +92,23 @@ public class ShapeEditPartAdapter extends GraphicalEditPart {
 	@Override
 	public EObject resolveSemanticElement() {
 		return eObject;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart#createNodeFigure()
+	 */
+	@Override
+	protected NodeFigure createNodeFigure() {
+		throw new RuntimeException("#AS Not implemented yet");
+	}
+	
+	/**
+	 * Custom implementation of {@link ViewImpl}.
+	 * 
+	 * @author Arian Storch<arian.storch@bflow.org>
+	 * @since 04.04.2015
+	 * 
+	 */
+	static class ViewAdapter extends ViewImpl {
 	}
 }
