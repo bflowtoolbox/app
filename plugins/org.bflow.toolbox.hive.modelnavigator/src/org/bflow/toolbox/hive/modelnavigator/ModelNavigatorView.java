@@ -3,6 +3,7 @@ package org.bflow.toolbox.hive.modelnavigator;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bflow.toolbox.hive.gmfbridge.HiveGmfBridge;
 import org.bflow.toolbox.hive.modelnavigator.internal.AddonModelNavigatorPlugin;
 import org.bflow.toolbox.hive.modelnavigator.model.FlowGraph;
@@ -55,7 +56,7 @@ import org.eclipse.ui.part.ViewPart;
  */
 public class ModelNavigatorView extends ViewPart {
 	
-	private static final String EMPTY = "";
+	private static final String EMPTY = StringUtils.EMPTY;
 	
 	private DiagramSelectionListener diagramSelectionListener = new DiagramSelectionListener();
 	
@@ -459,6 +460,11 @@ public class ModelNavigatorView extends ViewPart {
 		// Resolve the element type of edit part
 		IElementType elementType = ElementTypeRegistry.getInstance().getElementType(graphicalEditPart.resolveSemanticElement());
 		IIconProvider iconProvider = AddonModelNavigatorPlugin.getInstance().getIconProvider(elementType);
+		
+		// TODO re-think pattern or interface
+		if (iconProvider instanceof IExtendedIconProvider) {
+			return ((IExtendedIconProvider)iconProvider).getIcon(graphicalEditPart);
+		}
 		
 		// Resolve the icon of element type
 		Image image = null;

@@ -7,5 +7,11 @@
             class="org.bflow.toolbox.hive.gmfbridge.graphiti.GraphitiGmfEditPartAdapterFactory">
       </factory>
    </extension>
+   <extension
+         point="org.bflow.toolbox.modelnavigator.iconprovider">
+      <provider
+            class="org.bflow.toolbox.hive.gmfbridge.graphiti.modelnavigation.GraphitiIconProvider">
+      </provider>
+   </extension>
 
 </plugin>
