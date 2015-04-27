@@ -118,14 +118,22 @@ uarc(X,Y) :- arc(X,Y);arc(Y,X).
 % more_than_one_outgoing_arcs(X) :- arc(X,A),arc(X,B),A\==B,!.
 more_than_one_incoming_arcs(X) :- findall(A,arc(A,X),L),L = [_|L2], L2 \== [].
 more_than_one_outgoing_arcs(X) :-  findall(A,arc(X,A),L),L = [_|L2], L2 \== [].
-no_incoming_arcs(X) :- not(arc(_,X)).
-no_outgoing_arcs(X) :- not(arc(X,_)).
+
+% Für Ereignisse, Funktionen und Prozesswegweiser kann mit no_incoming_arcs getestet werden, ob
+% es eingehende / ausgehende Kontrollflusskanten gibt, die der EPK-Syntax entsprechen, also von
+% anderen Konnektoren, Ereignissen, Funktionen oder Prozesswegweiser kommen.
+% Hat also beispielsweise eine Funktion nur eine eingehende Kontrollflusskante, die (syntaktisch illegal)
+% von einer Organisationseinheit kommt, liefert no_incoming_arcs/1 als Ergebnis "true".
+no_incoming_arcs(X) :- not(arc(Y,X)),once((event(Y);function(Y);connector(Y),pi(Y))).
+no_outgoing_arcs(X) :- not(arc(X,Y)),once((event(Y);function(Y);connector(Y),pi(Y))).
+
 connectors_only([L|Rest]) :- connector(L),!,connectors_only(Rest).
 connectors_only([]).
 % successor(X,Y) means that X is followed by Y (possibly via some connectors)
 successor(X,Y) :- arc(X,Y).
 successor(X,Y) :- arc(X,C),connector(C),(not(path_containing_connectors_only(C,C,_))),successor(C,Y).
 % types of elements
+pi(X)			:- clause(processinterface(X),true).
 orconnector(X)  :- clause(or(X),true).
 andconnector(X) :- clause(and(X),true).
 xorconnector(X) :- clause(xor(X),true).
@@ -143,8 +151,12 @@ type(X,Type)    :- (orconnector(X),Type=or);(andconnector(X),Type=and);(xorconne
 have_same_type(X,Y) :- type(X,TypeX),type(Y,TypeY),TypeX=TypeY.
 element(X) :- clause(event(X),true);clause(function(X),true);connector(X).
 
+% Ein Start- oder Endereignis hat entweder gar keinen ein- bzw. ausgehenden Kontrollflusspfeil
+% oder aber genau einen, der zu einem Prozesswegweiser führt.
 startevent(X) :- event(X),no_incoming_arcs(X).
+startevent(X) :- event(X),findall(A,arc(A,X),L),L = [L1|L2], pi(L1), L2 == [].
 endevent(X) :- event(X),no_outgoing_arcs(X).
+endevent(X) :- event(X),findall(A,arc(X,A),L),L = [L1|L2], pi(L1), L2 == [].
 
 binarysplit(X) :- split(X),findall(Y,arc(X,Y),L),length(L,2).
 binaryjoin(X) :- join(X),findall(Y,arc(Y,X),L),length(L,2).
@@ -1113,7 +1125,16 @@ forget(Me) :- % vprint('Vergiss: '),vprintln(Me),
 	((arc(In,Me),retract(arc(In,Me)),fail);true), % Alle Arcs von und zu diesem Element vergessen
 	((arc(Me,Out),retract(arc(Me,Out)),fail);true),
 	(retract(region(Me));retract(function(Me));retract(event(Me));
-	 retract(xor(Me));retract(or(Me));retract(and(Me))).
+	 retract(xor(Me));retract(or(Me));retract(and(Me));retract(processinterface(Me))).
+	 
+reduce_processinterface :- pi(P),event(E),
+		(
+			(arc(P,E),no_incoming_arcs(P))
+		;
+			(arc(E,P),no_outgoing_arcs(P))
+		),
+		vprint('Reduce process interface '),vprintln(P),
+		forget(P).
 
 
 reduce_sequence :- region(M1), arc(M1,M2), region(M2),
@@ -1281,19 +1302,19 @@ reduce_homogeneous :- split(S),join(J),sese(S,J,Between),have_same_type(S,J),
 % Wohlgeformte Modelle werden reduziert zu: Startevent -> Region -> Endevent
 % Reduktionsregeln liefern true, wenn Reduzierung stattfand, sonst false
 
-re :- (
-          (reduce_sequence,!);
-	  (reduce_wellstructured_split_join_block,!);
-          (reduce_correct_split_join_block,!);
-          (merge_startevent_region_join,!);
-	  (merge_split_region_endevent,!);
-          (merge_startevents,!);
-          (merge_endevents,!);
-	  (reduce_wellstructured_iteration,!);
-	  (reduce_correct_iteration,!);
-	  (reduce_big_split_join_block,!);
-	  (delete_and_endevent,!);
-	  (reduce_homogeneous,!)
+re :- (		(reduce_processinterface,!);
+      		(reduce_sequence,!);
+	  		(reduce_wellstructured_split_join_block,!);
+          	(reduce_correct_split_join_block,!);
+          	(merge_startevent_region_join,!);
+	  		(merge_split_region_endevent,!);
+          	(merge_startevents,!);
+          	(merge_endevents,!);
+	  		(reduce_wellstructured_iteration,!);
+	  		(reduce_correct_iteration,!);
+	 		(reduce_big_split_join_block,!);
+	  		(delete_and_endevent,!);
+	  		(reduce_homogeneous,!)
        ),
         re;reduced.
 

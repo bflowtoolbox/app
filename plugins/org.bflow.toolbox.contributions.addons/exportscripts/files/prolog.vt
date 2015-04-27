@@ -5,6 +5,7 @@
 :- dynamic event/1.
 :- dynamic function/1.
 :- dynamic region/1.
+:- dynamic processinterface/1.
 
 #set( $items = {})
 
