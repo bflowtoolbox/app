@@ -185,7 +185,7 @@
 		<diagram>epc</diagram>
 		<description>Meldet AND-Join, bei dem es wegen eines davorliegenden (X)OR-Splits möglich ist, dass der Kontrollfluss nicht alle Eingänge des AND-Joins erreicht. Dies kann, muss aber kein Modellierungsfehler sein.</description>
 		<image>/images/EPCCFlowElementRule1.jpeg</image>
-		<default>true</default>
+		<default>false</default>
 		<type>check</type>
 	</rule>						
 	<rule>
@@ -317,7 +317,7 @@
 		<diagram>epc</diagram>
 		<description>Meldet Ereignisse, die von einem weiteren Ereignis gefolgt werden.</description>
 		<image></image>
-		<default>false</default>
+		<default>true</default>
 		<type>prolog</type>
 	</rule>
 	<rule>

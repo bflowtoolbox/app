@@ -185,7 +185,7 @@
 		<diagram>epc</diagram>
 		<description>Reports a situation where it can happen that the control flow does not reach all incoming arcs of an AND-join. (NOTE: In some cases, this does not have to be a modeling error.)</description>
 		<image>/images/EPCCFlowElementRule1.jpeg</image>
-		<default>true</default>
+		<default>false</default>
 		<type>check</type>
 	</rule>						
 	<rule>
@@ -317,7 +317,7 @@
 		<diagram>epc</diagram>
 		<description>Reports events which are followed by another event</description>
 		<image></image>
-		<default>false</default>
+		<default>true</default>
 		<type>prolog</type>
 	</rule>
 	<rule>
