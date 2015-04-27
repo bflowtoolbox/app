@@ -99,7 +99,7 @@ public class PrologRunComponent implements IPrologRunComponent {
 			return str;
 		}
 
-		String str = "Starts the swi prolog interpreter. It must be installed and registered within bflow* before!";
+		String str = "Starts the SWI Prolog interpreter. It must be installed and registered within bflow* before!";
 		return str;
 	}
 
@@ -246,7 +246,7 @@ public class PrologRunComponent implements IPrologRunComponent {
 
 			if (facts == null)
 				throw new ComponentException(
-						"There is no prolog program set! Look at the parameter for the add-on!");
+						"No Prolog program set or Prolog programm cannot be found. Look at the parameter for the Prolog Run component (-pl:Filename)");
 
 			try {
 				String factsStream = FileUtils.readFileToString(facts);
@@ -343,7 +343,7 @@ public class PrologRunComponent implements IPrologRunComponent {
 			
 			// Process ended with exception
 			if(prologEngineListener.hasTerminatedByException()) {
-				String message = String.format("An exception occured! Check the following prolog output: %n%s", 
+				String message = String.format("An exception occurred! Check the following Prolog output: %n%s", 
 						simpleStream.toString());
 				throw new ComponentException(message);
 			}
