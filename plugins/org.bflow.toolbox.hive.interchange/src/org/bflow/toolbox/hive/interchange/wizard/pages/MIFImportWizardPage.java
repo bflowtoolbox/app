@@ -49,10 +49,10 @@ import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
  * @since 17.08.09
  * @version 14.12.13
  * 			12.03.15 Changed representation of of a multiple file selection
+ * 			07.06.15 Fixed missing source file string when just selecting one element
  *
  */
-public class MIFImportWizardPage extends WizardPage 
-{
+public class MIFImportWizardPage extends WizardPage {
 	private List<IInterchangeDescriptor> importDescriptions = new ArrayList<IInterchangeDescriptor>();
 	private String fileExtensions[];
 	private Text textFieldFile;
@@ -82,8 +82,7 @@ public class MIFImportWizardPage extends WizardPage
 	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
-	public void createControl(Composite parent) 
-	{
+	public void createControl(Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
 		
 		composite.setLayout(new GridLayout(2, false));
@@ -99,8 +98,7 @@ public class MIFImportWizardPage extends WizardPage
 		
 		textFieldDescription = new Text(composite, SWT.READ_ONLY);
 		
-		GridData txtDescriptionGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL
-																| GridData.GRAB_HORIZONTAL);
+		GridData txtDescriptionGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		txtDescriptionGridData.widthHint = 200;
 		txtDescriptionGridData.heightHint = 50;
 
@@ -167,6 +165,7 @@ public class MIFImportWizardPage extends WizardPage
 					
 					textFieldFile.setText(textString);
 				} else {
+					sourceFileString = files[0];
 					textFieldFile.setText(files[0]);
 				}
 				
