@@ -152,11 +152,11 @@ have_same_type(X,Y) :- type(X,TypeX),type(Y,TypeY),TypeX=TypeY.
 element(X) :- clause(event(X),true);clause(function(X),true);connector(X).
 
 % Ein Start- oder Endereignis hat entweder gar keinen ein- bzw. ausgehenden Kontrollflusspfeil
-% oder aber genau einen, der zu einem Prozesswegweiser führt.
-startevent(X) :- event(X),no_incoming_arcs(X).
-startevent(X) :- event(X),findall(A,arc(A,X),L),L = [L1|L2], pi(L1), L2 == [].
-endevent(X) :- event(X),no_outgoing_arcs(X).
-endevent(X) :- event(X),findall(A,arc(X,A),L),L = [L1|L2], pi(L1), L2 == [].
+% oder aber einen, der (ggf. über einige Konnektoren) zu einem oder mehreren Prozesswegweisern führt.
+startevent(X) :- event(X),findall(A,(successor_via_connectors(A,X),not(connector(A))),L),contains_processinterfaces_and_connectors_only(L).
+endevent(X) :- event(X),findall(A,(successor_via_connectors(X,A),not(connector(A))),L),contains_processinterfaces_and_connectors_only(L).
+
+contains_processinterfaces_and_connectors_only(List) :- not((member(C,List),not(pi(C);connector(C)))).
 
 binarysplit(X) :- split(X),findall(Y,arc(X,Y),L),length(L,2).
 binaryjoin(X) :- join(X),findall(Y,arc(Y,X),L),length(L,2).
@@ -626,7 +626,7 @@ property14 :- 	startevent(_),	%not tested if there are no start events at all (s
 		compose_message(en,Message,
 		 ['The element cannot be reached from a start event!'
 		 ]),
-		findall(X,(member(X,UnreachableElements),message('ERROR',X,Message,'syntax14')),_).
+		findall(X,((member(X,UnreachableElements),not(connector(X))),message('ERROR',X,Message,'syntax14')),_).
 
 % Property 15 - For every element X, there is a path from X to an end event
 adddirectpredecessors(OldSet,NewSet) :- findall(Y,(member(X,OldSet),arc(Y,X),not(ord_memberchk(Y,OldSet))),NewlyFound),
@@ -651,7 +651,7 @@ property15 :- 	endevent(_),	%not tested if there are no start events at all (see
 		compose_message(en,Message,
 		 ['No end event can be reached from this event!'
 		 ]),
-		findall(X,(member(X,UnreachableElements),message('ERROR',X,Message,'syntax15')),_).
+		findall(X,((member(X,UnreachableElements),not(connector(X))),message('ERROR',X,Message,'syntax15')),_).
 
 
 % Additional Properties:
@@ -1709,13 +1709,18 @@ equality_included(C,NameE1,NameE2) :-   	((split(C),arc(C,E3))
 						
 % X wird von Y gefolgt (direkt oder über einige Splits)
 % Muss auch für syntaktisch falsche Modelle (mit einem nur aus Konnektoren bestehenden Zyklus) funktionieren!
+% Beachte: Die Splits selber sind auch successor_via_splits
 successor_via_splits(X,Y) :- arc(X,Y),X\==Y.
 successor_via_splits(X,Y) :- arc(X,C),split(C),not(path_containing_connectors_only(X,X,_)),successor_via_splits(C,Y).
 
 % X wird von Y gefolgt (direkt oder über einige Joins)
 % Muss auch für syntaktisch falsche Modelle (mit einem nur aus Konnektoren bestehenden Zyklus) funktionieren!
+% Beachte: Die Joins selber sind auch successor_via_joins
 successor_via_joins(X,Y) :- arc(X,Y),X\==Y.
 successor_via_joins(X,Y) :- arc(X,C),join(C),not(path_containing_connectors_only(X,X,_)),successor_via_joins(C,Y).
+
+successor_via_connectors(X,Y) :- arc(X,Y),X\==Y.
+successor_via_connectors(X,Y) :- arc(X,C),connector(C),not(path_containing_connectors_only(X,X,_)),successor_via_connectors(C,Y).
 
 
 % Ein Split führt zu zwei Ereignissen, und es ist der den Ereignissen "nächste" Split mit dieser Eigenschaft.
@@ -2425,7 +2430,7 @@ metric :- metric_number_of_events.
 metric :- metric_number_of_startevents.
 
 metric_number_of_nodes			:- tocheck(metric_number_of_nodes),
-				findall(N,(function(N);event(N);connector(N)),L),length(L,Len),
+				findall(N,(function(N);event(N);connector(N);pi(N)),L),length(L,Len),
 				compose_message(de,Message,
 				[
 				'Anzahl der Modellelemente: ',
