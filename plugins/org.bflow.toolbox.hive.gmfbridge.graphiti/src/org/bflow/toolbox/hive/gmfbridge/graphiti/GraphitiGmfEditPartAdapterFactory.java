@@ -21,6 +21,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 27.03.2015
+ * @version 17.06.2015 AST - Extended interface implementation
  * 
  */
 @SuppressWarnings("restriction")
@@ -35,6 +36,22 @@ public class GraphitiGmfEditPartAdapterFactory implements IGmfEditPartAdapterFac
 	public GraphitiGmfEditPartAdapterFactory() {
 		// Register listener for cache clean up
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(new _PartListener());
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.gmfbridge.IGmfEditPartAdapterFactory#canOperate()
+	 */
+	@Override
+	public boolean canOperate() {
+		try {
+			String clsName = "org.eclipse.bpmn2.modeler.core.utils.ModelUtil";
+			Class<?> cls = Class.forName(clsName); // TODO Check Buddy-Policy
+			return true;
+		} catch (ClassNotFoundException ex) {
+			String error = ex.toString();
+			// TODO
+			return false;
+		}
 	}
 
 	/* (non-Javadoc)
