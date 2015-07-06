@@ -72,7 +72,7 @@ public class HiveGmfBridge {
 	 *         edit part instance
 	 */
 	static public IGraphicalEditPart adapt(org.eclipse.gef.GraphicalEditPart graphicalEditPart) {
-		if (GraphicalEditPart.class.isAssignableFrom(graphicalEditPart.getClass())) return (GraphicalEditPart) graphicalEditPart;
+		if (IGraphicalEditPart.class.isAssignableFrom(graphicalEditPart.getClass())) return (IGraphicalEditPart) graphicalEditPart;
 		
 		for (int i = -1; ++i != fAdapterFactories.size();) {
 			IGmfEditPartAdapterFactory factory = fAdapterFactories.get(i);
@@ -115,6 +115,7 @@ public class HiveGmfBridge {
 			try {
 				Object factoryInstance = element.createExecutableExtension("class");
 				IGmfEditPartAdapterFactory factory = (IGmfEditPartAdapterFactory) factoryInstance;
+				if (!factory.canOperate()) continue;
 				fAdapterFactories.add(factory);
 			} catch (CoreException e) {
 				e.printStackTrace();

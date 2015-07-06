@@ -10,9 +10,18 @@ import org.eclipse.ui.IEditorPart;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 27.03.2015
+ * @version 17.06.2015 AST - Added canOperate() method
  * 
  */
 public interface IGmfEditPartAdapterFactory {
+	
+	/**
+	 * Returns TRUE if the factory can operate within the current environment.
+	 * This may be FALSE if not all dependencies are fulfilled.
+	 * 
+	 * @return TRUE or FALSE
+	 */
+	boolean canOperate();
 
 	/**
 	 * Returns TRUE if the factory can create an adapter for the given editor
