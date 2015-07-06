@@ -7,13 +7,13 @@
               nsURI="org.bflow.toolbox.epc"
               override="false">
            <checkFile
-                 path="src/check/epcSyntax">
+                 path="src/check/epcDeadlocks">
               <referencedMetaModel
                     nsURI="org.bflow.toolbox.bflow">
               </referencedMetaModel>
            </checkFile>
            <checkFile
-                 path="src/check/epcDeadlocks">
+                 path="src/check/epcSyntax">
               <referencedMetaModel
                     nsURI="org.bflow.toolbox.bflow">
               </referencedMetaModel>

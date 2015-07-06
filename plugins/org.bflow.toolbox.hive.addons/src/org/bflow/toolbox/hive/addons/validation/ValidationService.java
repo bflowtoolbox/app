@@ -17,9 +17,10 @@ import org.osgi.service.prefs.Preferences;
 /**
  * Implements an administrative instance for the validation rules and behaviour.
  * 
- * @author Arian Storch
- * @since 28/03/11
- * @version 13/09/13
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 28.03.11
+ * @version 13.09.13
+ * 			03.07.15 Fixed issue when a rule is disabled by default
  * 
  */
 public class ValidationService {
@@ -77,7 +78,8 @@ public class ValidationService {
 
 	/**
 	 * Loads the installed rules.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	private void loadRules() throws IOException {
 		IConfigurationElement[] config = Platform.getExtensionRegistry()
@@ -104,7 +106,7 @@ public class ValidationService {
 			// Get already registered ones
 			ArrayList<Rule> base = rulesMap.get(abbr);
 			
-			if(base == null) { // none has been registered yet
+			if (base == null) { // none has been registered yet
 				base = rules;
 			} else { // extend the existing ones
 				base.addAll(rules);
@@ -157,29 +159,27 @@ public class ValidationService {
 	 * Returns all rules of the specified type that are associated with the
 	 * language abbreviation.
 	 * 
-	 * @param abbr language abbreviation
-	 * @param type see Class Constants
-	 * @return
+	 * @param abbr
+	 *            language abbreviation
+	 * @param type
+	 *            see Class Constants
+	 * @return Collection of rules
 	 */
 	public List<Rule> getRulesByType(String abbr, int type) {
 		ArrayList<Rule> filteredList = new ArrayList<Rule>();
-		
 		ArrayList<Rule> list = rulesMap.get(abbr);
 		
-		if(list == null)
-			return filteredList;
+		if (list == null) return filteredList;
+		if (type == ValidationService.TYPE_ALL) return list;
 		
-		if(type == ValidationService.TYPE_ALL)
-			return list;
-		
-		for(Rule rule:list) {
-			if(type == ValidationService.TYPE_DEFAULT) {
-				if(rule.isDfault())
+		for (Rule rule:list) {
+			if (type == ValidationService.TYPE_DEFAULT) {
+				if (rule.isDfault())
 					filteredList.add(rule);
 			}
 			
-			if(type == ValidationService.TYPE_SETUP) {
-				if(prefStore.getBoolean(rule.getId(), rule.isDfault()))
+			if (type == ValidationService.TYPE_SETUP) {
+				if (prefStore.getBoolean(rule.getId(), rule.isDfault()))
 						filteredList.add(rule);
 			}
 		}
@@ -188,13 +188,40 @@ public class ValidationService {
 	}
 	
 	/**
-	 * Returns true if the rule shall be checked.<p/>
+	 * Returns true if the rule shall be checked.
+	 * <p/>
 	 * If there is no rule defined, false will be returned.
-	 * @param ruleId identifier of the rule
+	 * 
+	 * @param ruleId
+	 *            identifier of the rule
 	 * @return true or false
 	 */
-	public boolean isEnabled(String ruleId) {				
-		return prefStore.getBoolean(ruleId, true);
+	public boolean isEnabled(String ruleId) {			
+		String ruleIdValue = prefStore.get(ruleId, null);
+		
+		// Value has been set by the user
+		if (ruleIdValue != null) {
+			boolean value = prefStore.getBoolean(ruleId, true);
+			return value;
+		}		
+		
+		// Use the default setting
+		String langAbbr = Platform.getNL();
+		ArrayList<Rule> rules = rulesMap.get(langAbbr);		
+		Rule rule = null;
+		
+		for (Rule r : rules) {
+			if (!r.getId().equalsIgnoreCase(ruleId)) continue;
+			rule = r;
+			break;
+		}
+		
+		// This should never happen
+		if (rule == null) return true;
+		
+		// Take the rule default value
+		boolean dfaultValue = rule.isDfault();
+		return dfaultValue;
 	}
 	
 	/**
@@ -207,15 +234,15 @@ public class ValidationService {
 	public String getErrorMessage(String ruleId, String value)	{		
 		String prefStoreMsg = prefStore.get(ruleId+"Message", null);
 		
-		if(prefStoreMsg != null)
+		if (prefStoreMsg != null)
 			return prefStoreMsg.replace("$value", value);
 		
 		String abbr = NLUtil.getActiveLanguageAbbreviation();
 		
 		ArrayList<Rule> rules = rulesMap.get(abbr);
 		
-		for(Rule rule:rules)
-			if(rule.getId().equalsIgnoreCase(ruleId))				
+		for (Rule rule:rules)
+			if (rule.getId().equalsIgnoreCase(ruleId))				
 					return rule.getMessage().replace("$value", value);
 		
 		return null;
