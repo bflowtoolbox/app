@@ -5,6 +5,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="org.bflow.toolbox.hive.eclipse.integration.internal.editor.DiagramEditorProxy"
+            contributorClass="org.bflow.toolbox.hive.eclipse.integration.internal.editor.DynamicDiagramActionBarContributor"
             default="false"
             icon="images/Beejive-Im-flat-circle-16.png"
             id="org.bflow.toolbox.hive.eclipse.integration.internal.editor.diagramEditorProxy"
