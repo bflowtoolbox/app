@@ -1,7 +1,11 @@
 package org.bflow.toolbox.hive.eclipse.integration.internal.editor.gmf;
 
+import java.util.ArrayList;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.bflow.toolbox.hive.eclipse.integration.internal.editor.DynamicDiagramActionBarContributor;
 import org.bflow.toolbox.hive.eclipse.integration.internal.editor.IDynamicActionBarContributor;
+import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gmf.runtime.common.ui.action.global.GlobalActionId;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramActionBarContributor;
 import org.eclipse.ui.IActionBars;
@@ -35,11 +39,24 @@ public class GmfDynamicDiagramActionBarContributor extends DiagramActionBarContr
 		fCurrentEditorClass = editorClass;
 		
 		try {
-			dispose();
+			dispose(); // Disposes super field
+			reinitFields(); // Reinitialize super fields
+			
 			init(getActionBars(), getPage());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Reinitializes fields that are used by the super instances.
+	 * 
+	 * @throws IllegalAccessException
+	 */
+	protected void reinitFields() throws IllegalAccessException {		
+		FieldUtils.writeField(this, "registry", new ActionRegistry(), true);
+		FieldUtils.writeField(this, "retargetActions", new ArrayList<>(), true);
+		FieldUtils.writeField(this, "globalActionKeys", new ArrayList<>(), true);
 	}
 	
 	/* (non-Javadoc)

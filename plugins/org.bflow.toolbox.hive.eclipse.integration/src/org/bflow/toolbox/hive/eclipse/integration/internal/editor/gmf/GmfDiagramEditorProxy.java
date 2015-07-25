@@ -153,7 +153,7 @@ public class GmfDiagramEditorProxy extends DiagramDocumentEditor {
 	@Override
 	public void dispose() {
 		fAdapterUtil.OriginEditorPart().dispose();
-		super.dispose();
+		// super.dispose(); May lead to exceptions
 	}
 	
 	/* (non-Javadoc)
