@@ -15,11 +15,17 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: bflow* toolbox dev team
 Export-Package: org.bflow.toolbox.hive.eclipse.integration
 Eclipse-BuddyPolicy: global
-Import-Package: org.eclipse.emf.transaction,
+Import-Package: org.eclipse.emf.edit.domain,
+ org.eclipse.emf.transaction,
  org.eclipse.gmf.runtime.common.ui.action,
  org.eclipse.gmf.runtime.common.ui.action.global,
  org.eclipse.gmf.runtime.diagram.ui.actions,
  org.eclipse.gmf.runtime.diagram.ui.parts,
  org.eclipse.gmf.runtime.diagram.ui.resources.editor.document,
  org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts,
- org.eclipse.gmf.runtime.notation
+ org.eclipse.gmf.runtime.notation,
+ org.eclipse.graphiti.dt;version="0.11.2",
+ org.eclipse.graphiti.mm;version="0.11.2",
+ org.eclipse.graphiti.mm.pictograms;version="0.11.2",
+ org.eclipse.graphiti.platform;version="0.11.2",
+ org.eclipse.graphiti.ui.editor;version="0.11.2"
