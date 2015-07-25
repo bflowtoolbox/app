@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.commons.io.FilenameUtils;
-import org.bflow.toolbox.hive.eclipse.integration.internal.editor.DiagramEditorProxy;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.IEditorDescriptor;
@@ -83,8 +82,11 @@ public class EclipseIntegrator {
 		String fileNameExtension = FilenameUtils.getExtension(fileName);
 		fRegisteredEditors.put(fileNameExtension, editorId);
 		
+		// Get concrete implementation
+		String implEditorId = DiagramProxyEditorRelay.getEditorId(editorId, fileNameExtension);
+		
 		// Override default editor
-		editorRegistry.setDefaultEditor(fileNameExtension, DiagramEditorProxy.EditorId);
+		editorRegistry.setDefaultEditor(fileNameExtension, implEditorId);
 	}
 	
 	/**
