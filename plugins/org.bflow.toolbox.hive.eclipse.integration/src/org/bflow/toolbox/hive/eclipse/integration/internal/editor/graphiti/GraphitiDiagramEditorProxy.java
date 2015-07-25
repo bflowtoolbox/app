@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
-import org.bflow.toolbox.hive.eclipse.integration.internal.editor.AdapterUtil;
-import org.bflow.toolbox.hive.eclipse.integration.internal.editor.AdapterUtil.Ref;
+import org.bflow.toolbox.hive.eclipse.integration.internal.editor.DiagramProxyUtil;
+import org.bflow.toolbox.hive.eclipse.integration.internal.editor.DiagramProxyUtil.Ref;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -42,7 +42,7 @@ public class GraphitiDiagramEditorProxy extends DiagramEditor {
 	
 	static public final String EditorId = "org.bflow.toolbox.hive.eclipse.integration.internal.editor.diagramEditorProxy.Graphiti";
 	
-	private final AdapterUtil fAdapterUtil = new AdapterUtil();
+	private final DiagramProxyUtil fAdapterUtil = new DiagramProxyUtil();
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)

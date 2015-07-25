@@ -83,7 +83,7 @@ public class EclipseIntegrator {
 		fRegisteredEditors.put(fileNameExtension, editorId);
 		
 		// Get concrete implementation
-		String implEditorId = DiagramProxyEditorRelay.getEditorId(editorId, fileNameExtension);
+		String implEditorId = DiagramEditorProxyRelay.getEditorProxyId(editorId, fileNameExtension);
 		
 		// Override default editor
 		editorRegistry.setDefaultEditor(fileNameExtension, implEditorId);
