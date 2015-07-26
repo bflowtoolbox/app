@@ -1,11 +1,10 @@
-package org.bflow.toolbox.hive.eclipse.integration.internal.editor;
+package org.bflow.toolbox.hive.eclipse.integration;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.bflow.toolbox.hive.eclipse.integration.EclipseIntegrator;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.graphics.Image;

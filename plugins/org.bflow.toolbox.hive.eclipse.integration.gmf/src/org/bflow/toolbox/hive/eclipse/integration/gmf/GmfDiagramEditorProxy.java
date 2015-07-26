@@ -1,11 +1,11 @@
-package org.bflow.toolbox.hive.eclipse.integration.internal.editor.gmf;
+package org.bflow.toolbox.hive.eclipse.integration.gmf;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.bflow.toolbox.hive.eclipse.integration.internal.editor.DiagramProxyUtil;
-import org.bflow.toolbox.hive.eclipse.integration.internal.editor.DiagramProxyUtil.Ref;
+import org.bflow.toolbox.hive.eclipse.integration.DiagramProxyUtil;
+import org.bflow.toolbox.hive.eclipse.integration.DiagramProxyUtil.Ref;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.GraphicalViewer;

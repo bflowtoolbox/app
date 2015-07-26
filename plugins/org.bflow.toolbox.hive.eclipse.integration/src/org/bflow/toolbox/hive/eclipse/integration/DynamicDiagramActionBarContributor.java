@@ -1,4 +1,4 @@
-package org.bflow.toolbox.hive.eclipse.integration.internal.editor;
+package org.bflow.toolbox.hive.eclipse.integration;
 
 /**
  * Provides access to the currently active {@link IDynamicActionBarContributor}.
