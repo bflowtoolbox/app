@@ -40,5 +40,11 @@
          </dynamic>
       </menuContribution>
    </extension>
+   <extension
+         point="org.bflow.toolbox.hive.eclipse.integration.editorproxy">
+      <proxy
+            class="org.bflow.toolbox.hive.eclipse.integration.graphiti.GraphitiEditorProxyInfo">
+      </proxy>
+   </extension>
 
 </plugin>
