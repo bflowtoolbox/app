@@ -1,4 +1,4 @@
-package org.bflow.toolbox.hive.eclipse.integration.internal.editor;
+package org.bflow.toolbox.hive.eclipse.integration;
 
 /**
  * Defines a dynamic action bar contributor.

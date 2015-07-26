@@ -1,7 +1,7 @@
-package org.bflow.toolbox.hive.eclipse.integration.internal.editor.graphiti;
+package org.bflow.toolbox.hive.eclipse.integration.graphiti;
 
-import org.bflow.toolbox.hive.eclipse.integration.internal.editor.DynamicDiagramActionBarContributor;
-import org.bflow.toolbox.hive.eclipse.integration.internal.editor.IDynamicActionBarContributor;
+import org.bflow.toolbox.hive.eclipse.integration.DynamicDiagramActionBarContributor;
+import org.bflow.toolbox.hive.eclipse.integration.IDynamicActionBarContributor;
 import org.eclipse.graphiti.ui.editor.DiagramEditorActionBarContributor;
 
 /**

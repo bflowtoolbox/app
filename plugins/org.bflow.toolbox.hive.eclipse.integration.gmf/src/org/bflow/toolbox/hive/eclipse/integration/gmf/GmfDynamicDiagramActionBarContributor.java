@@ -1,10 +1,10 @@
-package org.bflow.toolbox.hive.eclipse.integration.internal.editor.gmf;
+package org.bflow.toolbox.hive.eclipse.integration.gmf;
 
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.bflow.toolbox.hive.eclipse.integration.internal.editor.DynamicDiagramActionBarContributor;
-import org.bflow.toolbox.hive.eclipse.integration.internal.editor.IDynamicActionBarContributor;
+import org.bflow.toolbox.hive.eclipse.integration.DynamicDiagramActionBarContributor;
+import org.bflow.toolbox.hive.eclipse.integration.IDynamicActionBarContributor;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gmf.runtime.common.ui.action.global.GlobalActionId;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramActionBarContributor;

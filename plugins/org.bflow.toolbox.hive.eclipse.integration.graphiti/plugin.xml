@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.bflow.toolbox.hive.eclipse.integration.graphiti.GraphitiDiagramEditorProxy"
+            contributorClass="org.bflow.toolbox.hive.eclipse.integration.graphiti.GraphitiDynamicDiagramActionBarContributor"
+            default="true"
+            icon="platform:/plugin/org.bflow.toolbox.hive.eclipse.integration/images/Beejive-Im-flat-circle-16.png"
+            id="org.bflow.toolbox.hive.eclipse.integration.internal.editor.diagramEditorProxy.Graphiti"
+            name="Bflow* Toolbox Diagram Editor (Graphiti)">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="org.bflow.toolbox.hive.eclipse.integration.editor.graphiti.additional"
+               label="Additional">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeEditorId">
+                  <equals
+                        value="org.bflow.toolbox.hive.eclipse.integration.internal.editor.diagramEditorProxy.Graphiti">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.bflow.toolbox.hive.eclipse.integration.editor.graphiti.additional?after=additions">
+         <dynamic
+               class="org.bflow.toolbox.hive.eclipse.integration.graphiti.GraphitiDynamicMenuContribution"
+               id="org.bflow.toolbox.hive.eclipse.integration.dynamic1">
+         </dynamic>
+      </menuContribution>
+   </extension>
+
+</plugin>

@@ -1,4 +1,4 @@
-package org.bflow.toolbox.hive.eclipse.integration.internal.editor.graphiti;
+package org.bflow.toolbox.hive.eclipse.integration.graphiti;
 
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.swt.widgets.Menu;

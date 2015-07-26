@@ -1,11 +1,20 @@
-package org.bflow.toolbox.hive.eclipse.integration.internal.editor.graphiti;
+package org.bflow.toolbox.hive.eclipse.integration.graphiti;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
-import org.bflow.toolbox.hive.eclipse.integration.internal.editor.DiagramProxyUtil;
-import org.bflow.toolbox.hive.eclipse.integration.internal.editor.DiagramProxyUtil.Ref;
+import org.bflow.toolbox.hive.eclipse.integration.DiagramProxyUtil;
+import org.bflow.toolbox.hive.eclipse.integration.DiagramProxyUtil.Ref;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.Namespace;
+import org.dom4j.QName;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -24,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -49,6 +59,9 @@ public class GraphitiDiagramEditorProxy extends DiagramEditor {
 	 */
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		// We have to remove our attributes so that the XML is understandable to the origin deserializer
+		removeAttributes(input);
+		
 		setSite(site);
 		
 		// Support origin lifecycle
@@ -101,6 +114,9 @@ public class GraphitiDiagramEditorProxy extends DiagramEditor {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		fAdapterUtil.OriginEditorPart().doSave(monitor);
+		
+		// Finally, we have to add our attributes
+		addAttributes();
 	}
 
 	/* (non-Javadoc)
@@ -234,6 +250,39 @@ public class GraphitiDiagramEditorProxy extends DiagramEditor {
 		return diagramContainerUI.getDiagramEditorInput();
 	}
 	
+	private void removeAttributes(IEditorInput input) {
+		String fileName = ((IFileEditorInput)input).getFile().getLocation().toFile().getAbsolutePath();
+		
+		try {
+			SAXReader saxReader = new SAXReader();
+			Document xmlDocument = saxReader.read(new File(fileName));
+			Element rootElement = xmlDocument.getRootElement();
+			Element attributeCollection = rootElement.element(new QName("attributeCollection", new Namespace("bflow", "http://bflow.org")));
+			if (attributeCollection == null) return;
+			
+			// TODO
+			rootElement.remove(attributeCollection);
+			new XMLWriter(new FileOutputStream(new File(fileName)), OutputFormat.createPrettyPrint()).write(xmlDocument);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	private void addAttributes() {
+		String fileName = ((IFileEditorInput)getEditorInput()).getFile().getLocation().toFile().getAbsolutePath();
+		
+		try {
+			SAXReader saxReader = new SAXReader();
+			Document xmlDocument = saxReader.read(new File(fileName));
+			Element rootElement = xmlDocument.getRootElement();
+			Element element = rootElement.addElement(new QName("attributeCollection", new Namespace("bflow", "http://bflow.org")));
+			new XMLWriter(new FileOutputStream(new File(fileName)), OutputFormat.createPrettyPrint()).write(xmlDocument);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	
 	@Override
 	public void close() {
 		// TODO Auto-generated method stub
@@ -273,10 +322,16 @@ public class GraphitiDiagramEditorProxy extends DiagramEditor {
 		return diagramEditor.getEditDomain();
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#getEditingDomain()
+	 */
 	@Override
 	public TransactionalEditingDomain getEditingDomain() {
-		// TODO Auto-generated method stub
-		return super.getEditingDomain();
+		Ref<DiagramEditor> outRef = Ref._new();
+		if (!fAdapterUtil.tryAdapt(DiagramEditor.class, outRef)) return null;
+		
+		DiagramEditor diagramEditor = outRef.Value;
+		return diagramEditor.getEditingDomain();
 	}
 	
 	@Override
