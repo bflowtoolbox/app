@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="org.bflow.toolbox.hive.eclipse.integration.editorproxy" name="Editor Proxy Info" schema="schema/org.bflow.toolbox.hive.eclipse.integration.editorproxy.exsd"/>
    <extension
          point="org.eclipse.ui.ide.editorAssociationOverride">
       <editorAssociationOverride
-            class="org.bflow.toolbox.hive.eclipse.integration.EditorAssociationOverride2"
+            class="org.bflow.toolbox.hive.eclipse.integration.EditorAssociationOverride"
             id="org.bflow.toolbox.hive.eclipse.integration.editorAssociationOverride2">
       </editorAssociationOverride>
    </extension>
