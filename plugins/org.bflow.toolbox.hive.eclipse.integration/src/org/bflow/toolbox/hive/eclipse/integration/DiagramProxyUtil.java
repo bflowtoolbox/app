@@ -4,8 +4,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import org.bflow.toolbox.hive.eclipse.integration.events.EEditorLifecycleEventType;
+import org.bflow.toolbox.hive.eclipse.integration.events.EEditorInputType;
+import org.bflow.toolbox.hive.eclipse.integration.events.EditorLifecycleEventArgs;
+import org.bflow.toolbox.hive.eclipse.integration.events.IEditorLifecycleListener;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
@@ -28,6 +38,15 @@ public class DiagramProxyUtil {
 	private IEditorPart fOriginEditorPart;
 	private GraphicalEditor fOriginGraphicalEditor;
 	private IAdaptable fAdapterRoot;
+	
+	private HashMap<EEditorInputType, List<IEditorLifecycleListener>> fRegisteredListener = new HashMap<>();
+	
+	/**
+	 * Default constructor.
+	 */
+	public DiagramProxyUtil() {
+		registerListener();
+	}
 	
 	/**
 	 * Returns a specific image that can be used as editor image to signal that
@@ -243,5 +262,92 @@ public class DiagramProxyUtil {
 		TResult result = (TResult) method.invoke(obj, args);
 		method.setAccessible(isAccessible);
 		return result;
+	}
+	
+	/**
+	 * Dispatches the specific event to all registered listener.
+	 * 
+	 * @param eventType
+	 *            Event type
+	 * @param inputType
+	 *            Editor input type
+	 * @param editorInput
+	 *            Editor input
+	 * @param graphicalEditor
+	 *            Graphical editor
+	 * @param transactionalEditingDomain
+	 *            Transactional editing domain
+	 */
+	public void dispatchEditorLifecycleEvent(EEditorLifecycleEventType eventType, EEditorInputType inputType, IEditorInput editorInput, GraphicalEditor graphicalEditor, TransactionalEditingDomain transactionalEditingDomain) {
+		List<IEditorLifecycleListener> listenerCollection = fRegisteredListener.get(inputType);
+		if (listenerCollection == null) return;
+		
+		for (int i = -1; ++i != listenerCollection.size();) {
+			IEditorLifecycleListener listener = listenerCollection.get(i);
+			try {
+				final IEditorInput input = editorInput;
+				final GraphicalEditor editor = graphicalEditor;
+				final TransactionalEditingDomain editingDomain = transactionalEditingDomain;
+				EditorLifecycleEventArgs eventArgs = new EditorLifecycleEventArgs() {
+					
+					@Override
+					public TransactionalEditingDomain TransactionalEditingDomain() {
+						return editingDomain;
+					}
+					
+					@Override
+					public GraphicalEditor GraphicalEditor() {
+						return editor;
+					}
+					
+					@Override
+					public IEditorInput EditorInput() {
+						return input;
+					}
+				};
+				
+				if (eventType == EEditorLifecycleEventType.BeforeInit)
+					listener.beforeInit(eventArgs);
+				
+				if (eventType == EEditorLifecycleEventType.AfterInit)
+					listener.afterInit(eventArgs);
+				
+				if (eventType == EEditorLifecycleEventType.BeforeSave)
+					listener.beforeSave(eventArgs);
+				
+				if (eventType == EEditorLifecycleEventType.AfterSave)
+					listener.afterSave(eventArgs);
+				
+				if (eventType == EEditorLifecycleEventType.Dispose) 
+					listener.onDispose(eventArgs);
+				
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Registers all listeners that have been declared using the extension point.
+	 */
+	private void registerListener() {
+		IConfigurationElement[] contributions = Platform.getExtensionRegistry().getConfigurationElementsFor("org.bflow.toolbox.hive.eclipse.integration.editorlifecyclelistener");
+		
+		for (int i = -1; ++i != contributions.length;) {
+			IConfigurationElement contribution = contributions[i];
+			try {
+				String inputTypeStr = contribution.getAttribute("inputType");
+				EEditorInputType inputType = ("xml".equalsIgnoreCase(inputTypeStr) ? EEditorInputType.Xml : EEditorInputType.Xmi);
+				IEditorLifecycleListener listener = (IEditorLifecycleListener) contribution.createExecutableExtension("class");
+				
+				List<IEditorLifecycleListener> listenerCollection = fRegisteredListener.get(inputType);
+				if (listenerCollection == null)
+					fRegisteredListener.put(inputType, (listenerCollection = new ArrayList<>()));
+				
+				listenerCollection.add(listener);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 }
