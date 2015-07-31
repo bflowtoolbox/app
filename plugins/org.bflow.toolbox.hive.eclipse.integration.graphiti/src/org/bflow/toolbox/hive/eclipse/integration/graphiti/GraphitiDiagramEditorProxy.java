@@ -1,20 +1,13 @@
 package org.bflow.toolbox.hive.eclipse.integration.graphiti;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
 import org.bflow.toolbox.hive.eclipse.integration.DiagramProxyUtil;
 import org.bflow.toolbox.hive.eclipse.integration.DiagramProxyUtil.Ref;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.Namespace;
-import org.dom4j.QName;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
+import org.bflow.toolbox.hive.eclipse.integration.events.EEditorInputType;
+import org.bflow.toolbox.hive.eclipse.integration.events.EEditorLifecycleEventType;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -33,7 +26,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -58,9 +50,9 @@ public class GraphitiDiagramEditorProxy extends DiagramEditor {
 	 * @see org.eclipse.graphiti.ui.editor.DiagramEditor#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
 	 */
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		// We have to remove our attributes so that the XML is understandable to the origin deserializer
-		removeAttributes(input);
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {		
+		// Dispatch ante event
+		fAdapterUtil.dispatchEditorLifecycleEvent(EEditorLifecycleEventType.BeforeInit, EEditorInputType.Xml, input, null, null);
 		
 		setSite(site);
 		
@@ -88,6 +80,9 @@ public class GraphitiDiagramEditorProxy extends DiagramEditor {
 		setPartName(originEditorPart.getTitle());
 		setTitleToolTip(originEditorPart.getTitleToolTip());
 		setTitleImage(fAdapterUtil.TitleImage());
+		
+		// Dispatch post event
+		fAdapterUtil.dispatchEditorLifecycleEvent(EEditorLifecycleEventType.AfterInit, EEditorInputType.Xml, input, null, null);
 	}
 	
 	/* (non-Javadoc)
@@ -113,10 +108,15 @@ public class GraphitiDiagramEditorProxy extends DiagramEditor {
 	 */
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		// Dispatch ante event
+		fAdapterUtil.dispatchEditorLifecycleEvent(EEditorLifecycleEventType.BeforeSave, EEditorInputType.Xml, 
+				fAdapterUtil.OriginEditorPart().getEditorInput(), fAdapterUtil.OriginGraphicalEditor(), getEditingDomain());
+		
 		fAdapterUtil.OriginEditorPart().doSave(monitor);
 		
-		// Finally, we have to add our attributes
-		addAttributes();
+		// Dispatch post event
+		fAdapterUtil.dispatchEditorLifecycleEvent(EEditorLifecycleEventType.AfterSave, EEditorInputType.Xml, 
+				fAdapterUtil.OriginEditorPart().getEditorInput(), fAdapterUtil.OriginGraphicalEditor(), getEditingDomain());
 	}
 
 	/* (non-Javadoc)
@@ -249,39 +249,6 @@ public class GraphitiDiagramEditorProxy extends DiagramEditor {
 		IDiagramContainerUI diagramContainerUI = outRef.Value;
 		return diagramContainerUI.getDiagramEditorInput();
 	}
-	
-	private void removeAttributes(IEditorInput input) {
-		String fileName = ((IFileEditorInput)input).getFile().getLocation().toFile().getAbsolutePath();
-		
-		try {
-			SAXReader saxReader = new SAXReader();
-			Document xmlDocument = saxReader.read(new File(fileName));
-			Element rootElement = xmlDocument.getRootElement();
-			Element attributeCollection = rootElement.element(new QName("attributeCollection", new Namespace("bflow", "http://bflow.org")));
-			if (attributeCollection == null) return;
-			
-			// TODO
-			rootElement.remove(attributeCollection);
-			new XMLWriter(new FileOutputStream(new File(fileName)), OutputFormat.createPrettyPrint()).write(xmlDocument);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-	
-	private void addAttributes() {
-		String fileName = ((IFileEditorInput)getEditorInput()).getFile().getLocation().toFile().getAbsolutePath();
-		
-		try {
-			SAXReader saxReader = new SAXReader();
-			Document xmlDocument = saxReader.read(new File(fileName));
-			Element rootElement = xmlDocument.getRootElement();
-			Element element = rootElement.addElement(new QName("attributeCollection", new Namespace("bflow", "http://bflow.org")));
-			new XMLWriter(new FileOutputStream(new File(fileName)), OutputFormat.createPrettyPrint()).write(xmlDocument);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
 	
 	@Override
 	public void close() {
