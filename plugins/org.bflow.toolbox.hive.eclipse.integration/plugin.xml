@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.bflow.toolbox.hive.eclipse.integration.editorproxy" name="Editor Proxy Info" schema="schema/org.bflow.toolbox.hive.eclipse.integration.editorproxy.exsd"/>
+   <extension-point id="org.bflow.toolbox.hive.eclipse.integration.editorlifecyclelistener" name="Editor Input Lifecycle Listener" schema="schema/org.bflow.toolbox.hive.eclipse.integration.editorlifecyclelistener.exsd"/>
    <extension
          point="org.eclipse.ui.ide.editorAssociationOverride">
       <editorAssociationOverride
