@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.bflow.toolbox.hive.eclipse.integration.DiagramProxyUtil;
 import org.bflow.toolbox.hive.eclipse.integration.DiagramProxyUtil.Ref;
+import org.bflow.toolbox.hive.eclipse.integration.events.EEditorInputType;
+import org.bflow.toolbox.hive.eclipse.integration.events.EEditorLifecycleEventType;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
@@ -55,6 +58,9 @@ public class GmfDiagramEditorProxy extends DiagramDocumentEditor {
 	 */
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		// Dispatch ante event
+		fAdapterUtil.dispatchEditorLifecycleEvent(EEditorLifecycleEventType.BeforeInit, EEditorInputType.Xmi, input, null, null);
+		
 		setSite(site);
 		
 		// Support origin lifecycle
@@ -86,6 +92,9 @@ public class GmfDiagramEditorProxy extends DiagramDocumentEditor {
 		setPartName(originEditorPart.getTitle());
 		setTitleToolTip(originEditorPart.getTitleToolTip());
 		setTitleImage(fAdapterUtil.TitleImage());
+		
+		// Dispatch post event
+		fAdapterUtil.dispatchEditorLifecycleEvent(EEditorLifecycleEventType.AfterInit, EEditorInputType.Xmi, input, null, null);
 	}
 		
 	/* (non-Javadoc)
@@ -112,7 +121,15 @@ public class GmfDiagramEditorProxy extends DiagramDocumentEditor {
 	 */
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		// Dispatch ante event
+		fAdapterUtil.dispatchEditorLifecycleEvent(EEditorLifecycleEventType.BeforeSave, EEditorInputType.Xmi, 
+				fAdapterUtil.OriginEditorPart().getEditorInput(), fAdapterUtil.OriginGraphicalEditor(), getEditingDomain());
+				
 		fAdapterUtil.OriginEditorPart().doSave(monitor);
+		
+		// Dispatch post event
+		fAdapterUtil.dispatchEditorLifecycleEvent(EEditorLifecycleEventType.AfterSave, EEditorInputType.Xmi, 
+				fAdapterUtil.OriginEditorPart().getEditorInput(), fAdapterUtil.OriginGraphicalEditor(), getEditingDomain());
 	}
 
 	/* (non-Javadoc)
@@ -209,6 +226,18 @@ public class GmfDiagramEditorProxy extends DiagramDocumentEditor {
 	}	
 	
 	// REGION Override
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor#getEditingDomain()
+	 */
+	@Override
+	public TransactionalEditingDomain getEditingDomain() {
+		Ref<DiagramDocumentEditor> outRef = Ref._new();
+		if (!fAdapterUtil.tryAdapt(DiagramDocumentEditor.class, outRef)) return null;
+		
+		DiagramDocumentEditor diagramDocumentEditor = outRef.Value;
+		return diagramDocumentEditor.getEditingDomain();
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor#getActionManager()
