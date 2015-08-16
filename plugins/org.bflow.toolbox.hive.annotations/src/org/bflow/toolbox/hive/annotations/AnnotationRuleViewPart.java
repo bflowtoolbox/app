@@ -7,11 +7,12 @@ import java.util.List;
 
 import javax.swing.JFileChooser;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
 import org.bflow.toolbox.hive.attributes.AttributeViewPart;
 import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
-import org.bflow.toolbox.hive.attributes.internal.AttributeViewPlugin;
 import org.bflow.toolbox.hive.gmfbridge.HiveGmfBridge;
 import org.bflow.toolbox.hive.nls.NLSupport;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
@@ -33,8 +34,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -69,6 +70,8 @@ public class AnnotationRuleViewPart extends ViewPart implements
 	 * Extension view id
 	 */
 	public static final String VIEW_ID = "org.bflow.toolbox.annotationRule.view"; //$NON-NLS-1$
+	
+	private static Log log = LogFactory.getLog(AnnotationRuleViewPart.class);
 
 	private AnnotationRuleController annotationRuleController = AnnotationRuleController
 			.getInstance();
@@ -361,24 +364,10 @@ public class AnnotationRuleViewPart extends ViewPart implements
 		rulesTable.setHeaderVisible(true);
 		rulesTable.setLayoutData(gridData);
 		rulesTable.addKeyListener(new TableViewerKeyListener());
-		rulesTable.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
+		rulesTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				onButtonEditKlick();
-
 			}
 		});
 
@@ -491,8 +480,7 @@ public class AnnotationRuleViewPart extends ViewPart implements
 				.adaptSelection(selectedObjectsArray);
 
 		this.selection = new StructuredSelection(adaptedObjectsArray);
-		Object selectedObject = ((StructuredSelection) this.selection)
-				.getFirstElement();
+//		Object selectedObject = ((StructuredSelection) this.selection).getFirstElement();
 
 		// isAssignable &= isAttributable(selectedObject);
 
@@ -562,7 +550,7 @@ public class AnnotationRuleViewPart extends ViewPart implements
 				try {
 					workbenchPage.showView(VIEW_ID);
 				} catch (PartInitException e) {
-					AttributeViewPlugin.logError(e.getMessage(), e);
+					log.error(e.getMessage(), e);
 				}
 			}
 		}
