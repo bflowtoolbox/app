@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import javax.swing.JFileChooser;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
@@ -43,6 +41,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
@@ -586,8 +585,7 @@ public class AnnotationRuleViewPart extends ViewPart implements
 			viewer.remove(entry);
 
 			//notify the Editor that rule is deleted (uses the attributeFileChangedEvent for that)
-			AttributeFileRegistry.getInstance()
-					.dispatchAttributeFileChangedEvent();
+			AttributeFileRegistry.getInstance().dispatchAttributeFileChangedEvent();
 			AnnotationRuleController.getInstance().notifyListeners(diagramEditor);
 
 			updateView();
@@ -602,59 +600,39 @@ public class AnnotationRuleViewPart extends ViewPart implements
 	 *            the parent Shell
 	 */
 	private void onButtonImportIconClick(Composite parent) {
-
-		JFileChooser fc = new JFileChooser();
-
-		// Add a custom file filter and disable the default
-		// (Accept All) file filter.
-		fc.addChoosableFileFilter(new ImageFileChooserFilter());
-		fc.setAcceptAllFileFilterUsed(false);
-
-		// Add the preview pane.
-		fc.setAccessory(new ImageFileChooserPreview(fc));
-
-		// Show it.
-		int returnValOfFileChooser = fc.showDialog(null,
-				NLSupport.ValidationPage_ButtonImportText);
-
-		String filename = "";
-		// Process the results.
-		if (returnValOfFileChooser == JFileChooser.APPROVE_OPTION) {
-			File file = fc.getSelectedFile();
-			filename = file.getName();
-			fc.setSelectedFile(null);
-			File newFile = new File(
-					AnnotationLauncherConfigurator
-							.getANNOTATIONLOGIC_FOLDER_PATH()
-							+ filename);
-				try {
-					Files.copy(file.toPath(), newFile.toPath(),
-							java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
+		FileDialog fileDialog = new FileDialog(parent.getShell(), SWT.OPEN);
+		fileDialog.setText(NLSupport.ValidationPage_ButtonImportText);
+		fileDialog.setFilterExtensions(ImageFileChooserUtils.WildcardFileExtensions);
+		
+		String filePath = fileDialog.open();
+		if (filePath == null) return;
+		
+		File file = new File(filePath);
+		
+		String filename = file.getName();
+		
+		File newFile = new File(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH()	+ filename);
+		try {
+			Files.copy(file.toPath(), newFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
 	}
 
-	private void onButtonEditKlick(){
-	int sel = rulesTable.getSelectionIndex();
-
-	if (sel > -1) {
+	private void onButtonEditKlick() {
+		int sel = rulesTable.getSelectionIndex();
+		if (sel == -1) return;
+		
 		RuleEntry entry = (RuleEntry) viewer.getElementAt(sel); 
 		
-	AnnotationRuleCreateDialog dialog = new AnnotationRuleCreateDialog(
-			null, annotationRuleController, entry);
-	dialog.create();
-	dialog.open();
+		AnnotationRuleCreateDialog dialog = new AnnotationRuleCreateDialog(null, annotationRuleController, entry);
+		dialog.create();
+		dialog.open();
 
-	//notify the Editor that a new rule is active (uses the attributeFileChangedEvent for that)
-	AttributeFileRegistry.getInstance().dispatchAttributeFileChangedEvent();
-	AnnotationRuleController.getInstance().notifyListeners(diagramEditor);
-				updateView();
-
-		}
+		//notify the Editor that a new rule is active (uses the attributeFileChangedEvent for that)
+		AttributeFileRegistry.getInstance().dispatchAttributeFileChangedEvent();
+		AnnotationRuleController.getInstance().notifyListeners(diagramEditor);
+		updateView();
 	}
 
 

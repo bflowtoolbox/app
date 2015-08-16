@@ -42,6 +42,24 @@ public class ImageFileChooserUtils {
     public final static String tiff = "tiff";
     public final static String tif = "tif";
     public final static String png = "png";
+    
+    private static final String[] FileExtensions = {jpeg, jpg, tiff, tif, png, gif};
+    
+    public static final String[] WildcardFileExtensions = getApplicableFileExtensions();
+    
+	/**
+	 * Returns all define file extensions with wildcard prefix (for instance,
+	 * *.gif)
+	 * 
+	 * @return Array of String
+	 */
+    private static String[] getApplicableFileExtensions() {
+    	String[] fileExtensions = new String[FileExtensions.length];
+    	for (int i = -1; ++i != fileExtensions.length;) {
+    		fileExtensions[i] = String.format("*.%s", FileExtensions[i]);
+    	}
+    	return fileExtensions;			
+    }
 
     /*
      * Get the extension of a file.
