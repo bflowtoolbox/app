@@ -3,12 +3,13 @@ package org.bflow.toolbox.hive.attributefilter;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
 import org.bflow.toolbox.hive.attributes.AttributeViewPart;
 import org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor;
 import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
-import org.bflow.toolbox.hive.attributes.internal.AttributeViewPlugin;
 import org.bflow.toolbox.hive.gmfbridge.HiveGmfBridge;
 import org.bflow.toolbox.hive.nls.NLSupport;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
@@ -67,7 +68,7 @@ public class AttributeFilterViewPart extends ViewPart implements
 	 */
 	public static final String VIEW_ID = "org.bflow.toolbox.attributesFilter.view"; //$NON-NLS-1$
 
-
+	private static Log log = LogFactory.getLog(AttributeFilterViewPart.class);
 
 	private IStructuredSelection selection; // Selection of rows in the table
 
@@ -475,7 +476,7 @@ public class AttributeFilterViewPart extends ViewPart implements
 				try {
 					workbenchPage.showView(VIEW_ID);
 				} catch (PartInitException e) {
-					AttributeViewPlugin.logError(e.getMessage(), e);
+					log.error(e.getMessage(), e);
 				}
 			}
 		}

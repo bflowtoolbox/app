@@ -8,10 +8,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
 import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
-import org.bflow.toolbox.hive.attributes.internal.InterchangeAttributeProvider;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gef.ConnectionEditPart;
@@ -168,7 +168,7 @@ public class FilterController implements IAttributeFileRegistryListener {
 	
 		Set<Object> set = new HashSet<Object>();
 		Set<String> idlist = new HashSet<String>();
-		InterchangeAttributeProvider iap = new InterchangeAttributeProvider();
+
 		boolean result = false;
 		boolean filterUsed = false;
 		Locale locale = new Locale(Platform.getNL());
@@ -181,8 +181,7 @@ public class FilterController implements IAttributeFileRegistryListener {
 				String id = EMFCoreUtil.getProxyID(eObj);
 				if (idlist.contains(id) || set.contains(obj))
 					continue;
-				HashMap<String, String> attributes = (HashMap<String, String>) iap
-						.getAttributesFor(null, id);
+				HashMap<String, String> attributes = (HashMap<String, String>) getAttributesForActiveModel(id);
 				if (attributes != null && !attributes.isEmpty()) {
 					String value = "";
 					for (String key : attributes.keySet()) {
@@ -283,6 +282,12 @@ public class FilterController implements IAttributeFileRegistryListener {
 		// return null if the set is empty and filters are in use with no effect.
 		return (set.isEmpty() && filterUsed) ? null : set;
 	
+	}
+	
+	private Map<String, String> getAttributesForActiveModel(String elementId) {
+		AttributeFile file = AttributeFileRegistry.getInstance().getActiveAttributeFile();
+		if (file == null) return new HashMap<String, String>();
+		return file.get(elementId);
 	}
 
 }
