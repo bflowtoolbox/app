@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.gmf.runtime.diagram.ui.decoratorProviders">
+      <decoratorProvider
+            class="org.bflow.toolbox.hive.annotations.AnnotationDecoratorProvider">
+         <Priority
+               name="Lowest">
+         </Priority>
+      </decoratorProvider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.bflow.toolbox.attributes.category"
+            class="org.bflow.toolbox.hive.annotations.AnnotationRuleViewPart"
+            icon="platform:/plugin/org.eclipse.ui.views/icons/full/eview16/prop_ps.gif"
+            id="org.bflow.toolbox.annotationRule.view"
+            name="%AnnotationRuleView_name"
+            restorable="true">
+      </view>
+      <view
+            category="org.bflow.toolbox.attributes.category"
+            class="org.bflow.toolbox.hive.annotations.AnnotationViewPart"
+            icon="platform:/plugin/org.eclipse.ui.views/icons/full/eview16/prop_ps.gif"
+            id="org.bflow.toolbox.annotations.view"
+            name="%AnnotationView_name"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>
