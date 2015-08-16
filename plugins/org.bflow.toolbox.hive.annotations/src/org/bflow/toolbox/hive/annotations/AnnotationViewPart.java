@@ -5,10 +5,11 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeViewPart;
 import org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor;
-import org.bflow.toolbox.hive.attributes.internal.AttributeViewPlugin;
 import org.bflow.toolbox.hive.attributes.utils.EMFUtility;
 import org.bflow.toolbox.hive.gmfbridge.HiveGmfBridge;
 import org.bflow.toolbox.hive.nls.NLSupport;
@@ -55,6 +56,8 @@ public class AnnotationViewPart extends ViewPart
 	 * Extension view id
 	 */
 	public static final String VIEW_ID = "org.bflow.toolbox.annotations.view"; //$NON-NLS-1$
+	
+	private static Log log = LogFactory.getLog(AnnotationViewPart.class);
 
 	private IGraphicalEditPart selectedEditPart;
 
@@ -413,7 +416,7 @@ public class AnnotationViewPart extends ViewPart
 				try {
 					workbenchPage.showView(VIEW_ID);
 				} catch (PartInitException e) {
-					AttributeViewPlugin.logError(e.getMessage(), e);
+					log.error(e.getMessage(), e);
 				}
 			}
 		}

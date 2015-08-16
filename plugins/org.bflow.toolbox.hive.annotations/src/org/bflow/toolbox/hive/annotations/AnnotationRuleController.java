@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
@@ -19,7 +20,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.bflow.toolbox.hive.attributes.internal.InterchangeAttributeProvider;
+import org.bflow.toolbox.hive.attributes.AttributeFile;
+import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.nls.NLSupport;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
@@ -61,8 +63,6 @@ public class AnnotationRuleController {
 	private static AnnotationRuleController instance = null;
 	private ArrayList<IAnnotationRuleListener> ruleListener;
 
-	private InterchangeAttributeProvider iap;
-
 	/**
 	 * Checks whether the attribute's names of a model element (by id as String)
 	 * match with the annotation rules. Returns a Set of
@@ -82,7 +82,7 @@ public class AnnotationRuleController {
 		String ruleOperator = "";
 		String ruleDirection = "CENTER"; //Center is default
 		String ruleFilename = "";
-		iap = new InterchangeAttributeProvider();
+		
 		boolean applyRule = false;
 		double dRule = 0d;
 		double dAttribute = 0d;
@@ -93,8 +93,8 @@ public class AnnotationRuleController {
 		Collator col = Collator.getInstance(locale);
 
 		Set<ShapeDecorationInfo> annotations = new HashSet<ShapeDecorationInfo>();
-		HashMap<String, String> attributes = (HashMap<String, String>) iap
-				.getAttributesFor(null, id);
+		
+		HashMap<String, String> attributes = (HashMap<String, String>) getAttributesOfActiveModel(id);
 
 		if (attributes != null && !attributes.isEmpty()) {
 			for (RuleEntry rule : AnnotationRuleController.getInstance()
@@ -226,6 +226,20 @@ public class AnnotationRuleController {
 		}
 
 		return annotations;
+	}
+	
+	/**
+	 * Returns the attributes collection of the model element with the given id.
+	 * 
+	 * @param elementId
+	 *            Id of the element
+	 * @return Collection of attributes
+	 */
+	private Map<String, String> getAttributesOfActiveModel(String elementId) {
+		AttributeFile file = AttributeFileRegistry.getInstance().getActiveAttributeFile();
+		if (file == null) return new HashMap<String, String>();
+		
+		return file.get(elementId);
 	}
 
 	/**
