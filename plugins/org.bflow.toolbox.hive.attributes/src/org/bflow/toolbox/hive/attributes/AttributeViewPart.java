@@ -559,7 +559,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	 * Updates the view content.
 	 */
 	private void updateView() {
-		AttributeFileRegistry.getInstance().dispatchAttributeFileChangedEvent(); // TODO Remove call
+		// AttributeFileRegistry.getInstance().dispatchAttributeFileChangedEvent(); // TODO Remove call
 		
 		viewer.getTable().setRedraw(false);
 		viewer.setItemCount(0);
