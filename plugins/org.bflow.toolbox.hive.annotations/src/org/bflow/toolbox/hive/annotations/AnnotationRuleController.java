@@ -515,11 +515,11 @@ public class AnnotationRuleController {
 		MessageDialog dialog = new MessageDialog(
 				null,
 				NLSupport.AnnotationViewPart_Annotation_Warning_FileNotFound_Headline,
-				null,
-				AnnotationLauncherConfigurator.getRULES_XML_PATH()
-						+ "\n\n"
-						+ NLSupport.AnnotationViewPart_Annotation_Warning_FileNotFound_Message,
-				MessageDialog.ERROR, "OK".split(" "), 0);
+				null,			
+				NLSupport.AnnotationViewPart_Annotation_Warning_FileNotFound_Message
+				+ "\n\n"
+				+ AnnotationLauncherConfigurator.getRULES_XML_PATH(),
+				MessageDialog.INFORMATION, "OK".split(" "), 0);
 		dialog.open();
 	
 	}
