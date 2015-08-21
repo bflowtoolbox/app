@@ -3,7 +3,10 @@ package org.bflow.toolbox.hive.annotations;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,9 +51,7 @@ import org.eclipse.ui.part.ViewPart;
 /**
  * Implements the view part to support the add-ons annotation view.
  */
-public class AnnotationViewPart extends ViewPart
- implements ISelectionListener
-		, IAnnotationRuleListener {
+public class AnnotationViewPart extends ViewPart implements ISelectionListener, IAnnotationRuleListener {
 
 	/**
 	 * Extension view id
@@ -202,7 +203,36 @@ public class AnnotationViewPart extends ViewPart
 		GridLayout layout = new GridLayout();
 		layout.marginLeft = layout.marginTop = layout.marginRight = layout.marginBottom = 10;
 		layout.verticalSpacing = 10;
-		for (RuleEntry r:AnnotationRuleController.getInstance().getRules()){
+		List<RuleEntry> allRules = AnnotationRuleController.getInstance()
+				.getRules();
+		//split all rules in sets of their category for sorting
+		HashMap<String, List<RuleEntry>> rulesInCategory = new HashMap<String, List<RuleEntry>>();
+		for (RuleEntry r : allRules) {
+			cat = r.getCategory();
+			if (!rulesInCategory.containsKey(cat)) {
+				rulesInCategory.put(cat, new ArrayList<RuleEntry>());
+			}
+			rulesInCategory.get(cat).add(r);
+		}
+
+		//sort all sets separately, but only if at least one rule name is not empty
+		for (String categoryName : rulesInCategory.keySet()) {
+			List<RuleEntry> categoryRules = rulesInCategory.get(categoryName);
+			boolean sort = false;
+			for (RuleEntry r : categoryRules) {
+				if (!r.getAttributeName().isEmpty()) {
+					sort = true;
+					break;
+				}
+			}
+			if (sort && AnnotationRuleController.getInstance().getSortingOrderForCategory(categoryName))
+				Collections.sort(categoryRules, new AnnotationRuleComparator());
+		}
+		//create the buttons for all rules
+
+		for (String categoryName : rulesInCategory.keySet()) {
+			List<RuleEntry> categoryRules = rulesInCategory.get(categoryName);
+			for (RuleEntry r : categoryRules) {
 			cat = r.getCategory();
 			if (!categories.containsKey(cat))
 			{
@@ -252,18 +282,17 @@ public class AnnotationViewPart extends ViewPart
 								.add(id, keyFinal, valueFinal);
 					}
 
-					AttributeFileRegistry.getInstance()
-							.dispatchAttributeFileChangedEvent();
+					AttributeFileRegistry.getInstance().dispatchAttributeFileChangedEvent();
 
 					if (diagramEditor instanceof IAttributableDocumentEditor) {
-						((IAttributableDocumentEditor) diagramEditor)
-								.firePropertyChanged();
+						((IAttributableDocumentEditor) diagramEditor).firePropertyChanged();
 					}
 
 					return;
 				}
 			});
 
+		}
 		}
 		
 		for (String key : categories.keySet()) {
@@ -439,6 +468,16 @@ public class AnnotationViewPart extends ViewPart
 		updateView();
 	}
 
+	/**
+	 * helper class for sorting RuleEntries
+	 */
+	private class AnnotationRuleComparator implements Comparator<RuleEntry> {
+
+		@Override
+		public int compare(RuleEntry o1, RuleEntry o2) {
+			return o1.getName().compareToIgnoreCase(o2.getName());
+		}
+	}
 
 
 }

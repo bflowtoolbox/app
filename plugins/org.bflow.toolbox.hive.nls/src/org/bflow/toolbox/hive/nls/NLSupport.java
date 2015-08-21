@@ -39,9 +39,11 @@ public class NLSupport extends NLS {
 	public static String AttributeViewPart_MenuItemOpenFileText;
 	public static String AnnotationRuleViewPart_AnnotationChooserDialog_Warning;
 	public static String AnnotationRuleViewPart_AnnotationChooserDialog_WarningEmpty;
+	public static String AnnotationRuleViewPart_AnnotationChooserDialog_WarningWrongChars;
 	public static String AnnotationRuleViewPart_AnnotationChooserDialog_Text;
 	public static String AnnotationRuleViewPart_AnnotationChooserDialog_ImagePreview;
 	public static String AnnotationRuleViewPart_AnnotationChooserDialog_XMLFilename;
+	public static String AnnotationRuleViewPart_AnnotationChooserDialog_SortASC;
 	public static String AnnotationRuleViewPart_AnnotationKeyWord_AttributeName;
 	public static String AnnotationRuleViewPart_AnnotationKeyWord_Value;
 	public static String AnnotationRuleViewPart_AnnotationKeyWord_RuleName;
