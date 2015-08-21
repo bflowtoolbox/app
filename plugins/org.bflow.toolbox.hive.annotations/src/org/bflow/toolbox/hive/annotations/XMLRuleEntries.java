@@ -16,7 +16,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "Annotation_Rules")
 public class XMLRuleEntries {
 
-
+	/**
+	 * field to store whether the category of this rule set should be sorted alphabetically or in the order in which the rule entries were created
+	 */
+	private static boolean sortASC = false;
 	private List<RuleEntry> annotationRules;
 
 	public List<RuleEntry> getRule() {
@@ -31,6 +34,13 @@ public class XMLRuleEntries {
 
 	}
 
+	public boolean isSortASC() {
+		return sortASC;
+	}
+
+	public void setSortASC(boolean sortASC) {
+		XMLRuleEntries.sortASC = sortASC;
+	}
 
 
 }

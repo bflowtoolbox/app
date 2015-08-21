@@ -59,6 +59,12 @@ public class AnnotationRuleController {
 	 */
 	private HashMap<String, List<RuleEntry>> rules = new HashMap<String, List<RuleEntry>>();
 
+	/**
+	 * stores whether a category should be sorted ascending by rule names or as
+	 * a sequence of how they are created
+	 */
+	private HashMap<String, Boolean> sortingOrderForCategory = new HashMap<String, Boolean>();
+
 
 	private static AnnotationRuleController instance = null;
 	private ArrayList<IAnnotationRuleListener> ruleListener;
@@ -238,7 +244,6 @@ public class AnnotationRuleController {
 	private Map<String, String> getAttributesOfActiveModel(String elementId) {
 		AttributeFile file = AttributeFileRegistry.getInstance().getActiveAttributeFile();
 		if (file == null) return new HashMap<String, String>();
-		
 		return file.get(elementId);
 	}
 
@@ -253,10 +258,14 @@ public class AnnotationRuleController {
 	 * @param inputAttributeName
 	 * @param inputCategory
 	 * @param entry
+	 * @param sortCategoryASC
+	 *            true, if entries of the category should be sorted in ascending
+	 *            order
 	 */
 	public void updateRule(RuleEntry entry, String inputCategory,
 			String inputAttributeName, String inputOperator, String inputValue,
-			String inputDirection, String inputFilename, String inputRuleName) {
+			String inputDirection, String inputFilename, String inputRuleName,
+			Boolean sortCategoryASC) {
 		for (String str : rules.keySet()) {
 			if (rules.get(str).contains(entry)) {
 		//set new values to the rule
@@ -269,6 +278,7 @@ public class AnnotationRuleController {
 				entry.setRuleName(inputRuleName);
 			isDirty = true;
 			isSynchronized = false;
+				sortingOrderForCategory.put(inputCategory, sortCategoryASC);
 				write(str);
 
 			}
@@ -302,16 +312,16 @@ public class AnnotationRuleController {
 			FileInputStream fis = null;
 			InputStreamReader reader = null;
 			rules.clear();
-			for (String filename : getXMLFileNames()) {
+			sortingOrderForCategory.clear();
+			for (String filename : getXMLFilePathNames()) {
+				sortingOrderForCategory.put(filename, false);
 				rules.put(filename, new ArrayList<RuleEntry>());
 				ArrayList<RuleEntry> list = new ArrayList<RuleEntry>();
 			try {
 				fis = new FileInputStream(
 							AnnotationLauncherConfigurator
 									.getANNOTATIONLOGIC_FOLDER_PATH()
-									+ filename
-									+ AnnotationLauncherConfigurator
-											.getDefaultFileExtension());
+									+ filename);
 			} catch (FileNotFoundException e) {
 				//file not found. create new empty xml file
 				File newFile = new File(
@@ -351,6 +361,8 @@ public class AnnotationRuleController {
 						um = context.createUnmarshaller();
 				XMLRuleEntries xmlrules = (XMLRuleEntries) um.unmarshal(reader);
 				list = (ArrayList<RuleEntry>) xmlrules.getRule();
+							sortingOrderForCategory.put(filename,
+									xmlrules.isSortASC());
 			} catch (JAXBException e) {
 							showCorruptionDialog(filename);
 							continue;
@@ -375,6 +387,7 @@ public class AnnotationRuleController {
 			return allRuleList;
 		}
 	}
+
 
 	/**
 	 * returns a String[] of all filenames with .xml in the (default or custom)
@@ -407,15 +420,15 @@ public class AnnotationRuleController {
 
 				if (listOfFiles[i].isFile()) {
 					String name = listOfFiles[i].getName();
-					String extension = "." + getFileExtension(listOfFiles[i]);
+					String extension = getFileExtension(listOfFiles[i]);
 					if (extension != null) {
 						if (extension.equals(AnnotationLauncherConfigurator
 								.getDefaultFileExtension())) {
 							xmlFileNames
 									.add(name.substring(0, name.length()
-											- AnnotationLauncherConfigurator
+													- (1 + AnnotationLauncherConfigurator
 													.getDefaultFileExtension()
-													.length()));
+															.length())));
 						}
 					}
 				}
@@ -426,21 +439,146 @@ public class AnnotationRuleController {
 	}
 
 	/**
+	 * returns all filenames of xmls which are stored in the AnnotationIcons
+	 * folder (or other default folder chosen by the applicant in the bflow.ini)
+	 * and its sub folders
+	 * 
+	 * @return
+	 */
+	public String[] getXMLFilePathNames() {
+		ArrayList<String> result = new ArrayList<String>(50);
+		String folderPath = AnnotationLauncherConfigurator
+				.getANNOTATIONLOGIC_FOLDER_PATH();
+
+		File file = new File(folderPath);
+		File[] listOfFiles = file.listFiles();
+		result = getXMLFilePathNames("", listOfFiles);
+		return result.toArray(new String[0]);
+	}
+
+	/**
+	 * recursive submethod of {@link getAllAvailableImgNames()} to find rule
+	 * .XML files in sub folders
+	 * 
+	 * @param path
+	 * @param listOfFiles
+	 * @return
+	 */
+	private ArrayList<String> getXMLFilePathNames(String path,
+			File[] listOfFiles) {
+		ArrayList<String> result = new ArrayList<String>();
+		String name = path;
+		int i = 0;
+		while (i < listOfFiles.length) {
+
+			name += listOfFiles[i].getName();
+
+			if (listOfFiles[i].isDirectory()) {
+				File file = new File(
+						AnnotationLauncherConfigurator
+								.getANNOTATIONLOGIC_FOLDER_PATH() + "/" + name);
+				File[] listFiles = file.listFiles();
+				result.addAll(getXMLFilePathNames(name + "/", listFiles));
+			}
+			String extension = ImageFileChooserUtils
+					.getExtension(listOfFiles[i]);
+			if (extension != null) {
+				if (extension.equals(AnnotationLauncherConfigurator
+						.getDefaultFileExtension())) {
+					result.add(name);
+				}
+			}
+			name = path;
+			i++;
+
+		}
+		return result;
+
+	}
+
+	/**
+	 * returns all filenames of images which are stored in the AnnotationIcons
+	 * folder (or other default folder chosen by the applicant in the bflow.ini)
+	 * and its sub folders
+	 * 
+	 * @return
+	 */
+	public String[] getAllAvailableImgNames() {
+		ArrayList<String> result = new ArrayList<String>(50);
+		String folderPath = AnnotationLauncherConfigurator
+				.getANNOTATIONLOGIC_FOLDER_PATH();
+
+		File file = new File(folderPath);
+		File[] listOfFiles = file.listFiles();
+		result = getAllAvailableImgNames("", listOfFiles);
+		return result.toArray(new String[0]);
+	}
+
+	/**
+	 * recursive submethod of {@link getAllAvailableImgNames()} to find images
+	 * in sub folders
+	 * 
+	 * @param path
+	 * @param listOfFiles
+	 * @return
+	 */
+	private ArrayList<String> getAllAvailableImgNames(String path,
+			File[] listOfFiles) {
+		ArrayList<String> result = new ArrayList<String>();
+		String name = path;
+		int i = 0;
+		while (i < listOfFiles.length) {
+
+			name += listOfFiles[i].getName();
+
+			if (listOfFiles[i].isDirectory()) {
+				File file = new File(
+						AnnotationLauncherConfigurator
+								.getANNOTATIONLOGIC_FOLDER_PATH() + "/" + name);
+				File[] listFiles = file.listFiles();
+				result.addAll(getAllAvailableImgNames(name + "/", listFiles));
+			}
+			String extension = ImageFileChooserUtils
+					.getExtension(listOfFiles[i]);
+			if (extension != null) {
+				if (extension.equals(ImageFileChooserUtils.tiff)
+						|| extension.equals(ImageFileChooserUtils.tif)
+						|| extension.equals(ImageFileChooserUtils.gif)
+						|| extension.equals(ImageFileChooserUtils.jpeg)
+						|| extension.equals(ImageFileChooserUtils.jpg)
+						|| extension.equals(ImageFileChooserUtils.png)) {
+					result.add(name);
+				}
+			}
+			name = path;
+			i++;
+
+		}
+		return result;
+
+	}
+
+	/**
 	 * Add a annotation rule to the internal rule set and the external xml file
 	 * 
 	 * @param entry
+	 * @param sortCategoryASC
+	 *            true, if entries of its category should be sorted
+	 *            alphabetically ascending
 	 */
-	public void addRule(RuleEntry entry, String filename) {
-		if (!rules.containsKey(filename)) {
-			rules.put(filename, new ArrayList<RuleEntry>());
+	public void addRule(RuleEntry entry, String xmlfilename,
+			Boolean sortCategoryASC) {
+		if (!rules.containsKey(xmlfilename)) {
+			rules.put(xmlfilename, new ArrayList<RuleEntry>());
 			isSynchronized = false;
 		}
 
-		if (!rules.get(filename).contains(entry)) {
-			rules.get(filename).add(entry);
+		if (!rules.get(xmlfilename).contains(entry)) {
+			rules.get(xmlfilename).add(entry);
+			sortingOrderForCategory.put(xmlfilename, sortCategoryASC);
 			isDirty = true;
 			isSynchronized = false;
-			write(filename);
+			write(xmlfilename);
 		}
 
 	}
@@ -478,9 +616,7 @@ public class AnnotationRuleController {
 		File xmlfile = new File(
 					AnnotationLauncherConfigurator
 							.getANNOTATIONLOGIC_FOLDER_PATH()
-							+ filename
-							+ AnnotationLauncherConfigurator
-									.getDefaultFileExtension());
+							+ filename);
 		xmlfile.getParentFile().mkdirs();
 		try {
 			xmlfile.createNewFile();
@@ -491,6 +627,7 @@ public class AnnotationRuleController {
 			JAXBContext context;
 			XMLRuleEntries xmlRules = new XMLRuleEntries();
 			xmlRules.setRule(rules.get(filename));
+			xmlRules.setSortASC(sortingOrderForCategory.get(filename));
 			try {
 				context = JAXBContext.newInstance(XMLRuleEntries.class);
 				Marshaller m = context.createMarshaller();
@@ -537,8 +674,6 @@ public class AnnotationRuleController {
 				null,
 				AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH()
 						+ filename
-						+ AnnotationLauncherConfigurator
-								.getDefaultFileExtension()
 						+ "\n\n"
 						+ NLSupport.AttributeFilterViewPart_Annotation_Warning_FileCorrupted_Message,
 				MessageDialog.ERROR, "OK".split(" "), 0);
@@ -606,6 +741,51 @@ public class AnnotationRuleController {
 			ext = s.substring(i + 1).toLowerCase();
 		}
 		return ext;
+	}
+
+	/**
+	 * Returns the saved sorting order. This is either ascending by the rule
+	 * name or in the order in which the entries were made.
+	 * 
+	 * @param categoryName
+	 *            name of the category/xml file name
+	 * @return true, if ascending order
+	 */
+	public boolean getSortingOrderForCategory(String categoryName) {
+
+		if (sortingOrderForCategory.containsKey(categoryName))
+			return sortingOrderForCategory.get(categoryName);
+		else
+			return false;
+	}
+
+	/**
+	 * returns the path of the xml file for the given category (eg.
+	 * "risk/risk.xml" for category "risk") or ("annotations.xml" for category
+	 * "annotations") or ("Security/Security.xml" for category "Security")
+	 * 
+	 * If the category is not in use. it returns the input string and adds
+	 * ".xml" (or the default file extension)
+	 * 
+	 * @param inputCategory
+	 *            string of the name of the category
+	 * @return
+	 */
+	public String getXMLFilePathForCategory(String inputCategory) {
+		String result = "";
+		boolean categoryInUse = false;
+		for (String categoryWithPath : rules.keySet()) {
+			if (categoryWithPath.contains(inputCategory)) {
+				result = categoryWithPath;
+				categoryInUse = true;
+				break;
+			}
+		}
+		if (!categoryInUse) {
+			result = inputCategory + "."
+					+ AnnotationLauncherConfigurator.getDefaultFileExtension();
+		}
+		return result;
 	}
 
 }

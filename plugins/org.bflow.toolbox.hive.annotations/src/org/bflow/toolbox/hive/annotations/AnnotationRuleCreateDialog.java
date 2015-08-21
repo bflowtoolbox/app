@@ -1,6 +1,5 @@
 package org.bflow.toolbox.hive.annotations;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -47,6 +47,8 @@ public class AnnotationRuleCreateDialog extends TitleAreaDialog {
 	 * (+1 for the desctiption/name of the rule)
 	 */
 	private Combo[] userComboInput = new Combo[RuleEntry.ColumnQuantity + 2];
+
+	private Button sortingOrderButton;
 
 	//used to update the attribute view
 	private String key = "";
@@ -150,10 +152,6 @@ public class AnnotationRuleCreateDialog extends TitleAreaDialog {
 				RuleEntry.ColumnOPERATOR,
 				new HashSet<String>(Arrays.asList("<", ">", "\u2260", "\u2264",
 						"\u2265", "=")));
-		strSet.set(
-				RuleEntry.ColumnQuantity,
-				new HashSet<String>(Arrays.asList(AnnotationRuleController
-						.getInstance().getXMLFileNames())));
 
 		//create input text fields
 		createComboInputRow(
@@ -181,7 +179,7 @@ public class AnnotationRuleCreateDialog extends TitleAreaDialog {
 		userComboInput[RuleEntry.ColumnFILENAME].setLayoutData(new GridData(
 				SWT.FILL, SWT.NONE, true, true));
 		userComboInput[RuleEntry.ColumnFILENAME]
-				.setItems(getAllAvailableImgNames());
+				.setItems(annotationRuleController.getAllAvailableImgNames());
 		userComboInput[RuleEntry.ColumnFILENAME]
 				.addSelectionListener(new SelectionListener() {
 
@@ -212,19 +210,37 @@ public class AnnotationRuleCreateDialog extends TitleAreaDialog {
 				NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_RuleName,
 				RuleEntry.ColumnRuleName);
 
-		if (defaultRule == null) {
-			//choosing the xml filename is only possible when creating new rules.
-			createComboInputRow(
-					container,
-					NLSupport.AnnotationRuleViewPart_AnnotationChooserDialog_XMLFilename,
-					RuleEntry.ColumnQuantity, false);
+		//choosing the sorting order is only possible when creating new rules.
+		Label rowLabel = new Label(container, SWT.NONE);
+		rowLabel.setText(NLSupport.AnnotationRuleViewPart_AnnotationChooserDialog_SortASC);
+		sortingOrderButton = new Button(container, SWT.CHECK);
+		sortingOrderButton
+				.setSelection(annotationRuleController
+						.getSortingOrderForCategory(userComboInput[RuleEntry.ColumnCATEGORY]
+								.getText()));
+		userComboInput[RuleEntry.ColumnCATEGORY]
+				.addSelectionListener(new SelectionListener() {
 
-		}
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						Combo combo = (Combo) e.getSource();
+
+						sortingOrderButton
+								.setSelection(annotationRuleController
+										.getSortingOrderForCategory(combo
+												.getText()));
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+					}
+				});
 
 		//if a rule should be edited (and not new created) defaultRule is != null, set the used image file name as default
 		if (defaultRule != null) {
 			//calculate the index of the filename in the string[] of all available image names
-			String[] allImages = getAllAvailableImgNames();
+			String[] allImages = annotationRuleController
+					.getAllAvailableImgNames();
 			for (int i = 0; i < allImages.length; i++) {
 				if (allImages[i].equals(defaultRule.getFilename())) {
 					//and set this index as a default value
@@ -237,58 +253,7 @@ public class AnnotationRuleCreateDialog extends TitleAreaDialog {
 		return area;
 	}
 
-	/**
-	 * returns all filenames of images which are stored in the AnnotationIcons
-	 * folder (or other default folder chosen by the applicant in the bflow.ini)
-	 * 
-	 * @return
-	 */
-	private String[] getAllAvailableImgNames() {
-		ArrayList<String> result = new ArrayList<String>(50);
-		String folderPath = AnnotationLauncherConfigurator
-				.getANNOTATIONLOGIC_FOLDER_PATH();
 
-		File file = new File(folderPath);
-		File[] listOfFiles = file.listFiles();
-		result = getAllAvailableImgNames("", listOfFiles);
-		return result.toArray(new String[0]);
-	}
-
-	private ArrayList<String> getAllAvailableImgNames(String path,
-			File[] listOfFiles) {
-		ArrayList<String> result = new ArrayList<String>(50);
-		String name = path;
-		int i = 0;
-		while (i < listOfFiles.length) {
-
-			name += listOfFiles[i].getName();
-
-			if (listOfFiles[i].isDirectory()) {
-				File file = new File(
-						AnnotationLauncherConfigurator
-								.getANNOTATIONLOGIC_FOLDER_PATH() + "/" + name);
-				File[] listFiles = file.listFiles();
-				result.addAll(getAllAvailableImgNames(name + "/", listFiles));
-			}
-			String extension = ImageFileChooserUtils
-					.getExtension(listOfFiles[i]);
-			if (extension != null) {
-				if (extension.equals(ImageFileChooserUtils.tiff)
-						|| extension.equals(ImageFileChooserUtils.tif)
-						|| extension.equals(ImageFileChooserUtils.gif)
-						|| extension.equals(ImageFileChooserUtils.jpeg)
-						|| extension.equals(ImageFileChooserUtils.jpg)
-						|| extension.equals(ImageFileChooserUtils.png)) {
-					result.add(name);
-				}
-			}
-			name = path;
-			i++;
-
-		}
-		return result;
-
-	}
 
 	/**
 	 * creates a new user input line with a given label and a Textfield
@@ -412,10 +377,12 @@ public class AnnotationRuleCreateDialog extends TitleAreaDialog {
 				.getText().trim();
 		String inputFilename = userComboInput[RuleEntry.ColumnFILENAME]
 				.getText().trim();
-		String inputXMLFilename = "";
+		String inputXMLFilename = annotationRuleController
+				.getXMLFilePathForCategory(inputCategory);
+		Boolean sortCategoryASC = sortingOrderButton.getSelection();
 		if (defaultRule == null) {
-			inputXMLFilename = userComboInput[RuleEntry.ColumnQuantity]
-					.getText().trim();
+			//			inputXMLFilename = userComboInput[RuleEntry.ColumnQuantity]
+			//					.getText().trim();
 		}
 		String inputRulename = userInput[RuleEntry.ColumnRuleName].getText()
 				.trim();
@@ -424,12 +391,19 @@ public class AnnotationRuleCreateDialog extends TitleAreaDialog {
 		if (inputValue.isEmpty() || inputAttributeName.isEmpty()
 				|| inputCategory.isEmpty() || inputFilename.isEmpty()
 				|| inputRulename.isEmpty()
-				|| (defaultRule == null && inputXMLFilename.isEmpty())) {
+		) {
 			setMessage(
 					NLSupport.AnnotationRuleViewPart_AnnotationChooserDialog_WarningEmpty,
 					IMessageProvider.WARNING);
 			setReturnCode(CANCEL);
-		} else {
+		} else if (!isCategoryValid(inputCategory)) {
+			setMessage(
+					NLSupport.AnnotationRuleViewPart_AnnotationChooserDialog_WarningWrongChars,
+					IMessageProvider.WARNING);
+			setReturnCode(CANCEL);
+		} else
+
+		{
 			//VALIDATION. Do we need this?
 			if (defaultRule == null) { //only validate new rules
 				for (String[] line : strList) {
@@ -457,13 +431,14 @@ public class AnnotationRuleCreateDialog extends TitleAreaDialog {
 							inputAttributeName, inputOperator, inputValue,
 							inputDirection, inputFilename, inputRulename);
 
-					annotationRuleController.addRule(entry, inputXMLFilename);
+					annotationRuleController.addRule(entry, inputXMLFilename,
+							sortCategoryASC);
 				} else {
 
 					annotationRuleController.updateRule(defaultRule,
 							inputCategory, inputAttributeName, inputOperator,
 							inputValue, inputDirection, inputFilename,
-							inputRulename);
+							inputRulename, sortCategoryASC);
 				}
 
 				key = inputAttributeName;
@@ -478,6 +453,17 @@ public class AnnotationRuleCreateDialog extends TitleAreaDialog {
 				setReturnCode(CANCEL);
 			}
 		}
+	}
+
+	/**
+	 * returns false if one of the following character is used:  *?"\/|<>:
+	 */
+	private boolean isCategoryValid(String inputCategory) {
+		return !(inputCategory.contains(">") || inputCategory.contains("<")
+				|| inputCategory.contains("|") || inputCategory.contains("\"")
+				|| inputCategory.contains("*") || inputCategory.contains("?")
+				|| inputCategory.contains(":") || inputCategory.contains("\\") || inputCategory
+					.contains("/"));
 	}
 
 	public String getKey() {
