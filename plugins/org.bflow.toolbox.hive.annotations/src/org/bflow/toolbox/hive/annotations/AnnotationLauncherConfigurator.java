@@ -23,7 +23,7 @@ public class AnnotationLauncherConfigurator {
 	private static final String INI_NAME = "bflow.ini";
 	private static final String DEFAULT_FILENAME = "AnnotationRules";
 	private static final String DEFAULT_FILE_EXTENSION = "xml";
-	private static final String INI_ARGUMENT = "-AnnotationsFolder";
+	private static final String INI_ARGUMENT = "-AnnotationFolder";
 
 	private boolean iniFound = false;
 	private String iniContent = "";
@@ -79,19 +79,17 @@ public class AnnotationLauncherConfigurator {
 			return;
 		}
 
-		int start = index + 19;
+		int start = index + INI_ARGUMENT.length()+1;
 		//overwrite the default with the custom path
-		ANNOTATIONLOGIC_FOLDER_PATH = iniContent.substring(start,
-				(iniContent.indexOf("\n", start) - 1));
-		RULES_XML_PATH = ANNOTATIONLOGIC_FOLDER_PATH + DEFAULT_FILENAME + "."
-				+ DEFAULT_FILE_EXTENSION;
+		ANNOTATIONLOGIC_FOLDER_PATH = iniContent.substring(start, (iniContent.indexOf("\n", start) - 1));
+		RULES_XML_PATH = ANNOTATIONLOGIC_FOLDER_PATH + DEFAULT_FILENAME + "." + DEFAULT_FILE_EXTENSION;
 
 	}
 
 	public static String getANNOTATIONLOGIC_FOLDER_PATH() {
 		if (ANNOTATIONLOGIC_FOLDER_PATH == null)
 			new AnnotationLauncherConfigurator();
-			return ANNOTATIONLOGIC_FOLDER_PATH;
+		return ANNOTATIONLOGIC_FOLDER_PATH;
 	}
 
 	/**
@@ -119,12 +117,8 @@ public class AnnotationLauncherConfigurator {
 	 * set default path values
 	 */
 	private void setDefault() {
-		ANNOTATIONLOGIC_FOLDER_PATH = Platform.getInstallLocation()
-				.getURL().getPath()
-				+ "AnnotationIcons/";
-		RULES_XML_PATH = ANNOTATIONLOGIC_FOLDER_PATH + DEFAULT_FILENAME
- + "."
-				+ DEFAULT_FILE_EXTENSION;
+		ANNOTATIONLOGIC_FOLDER_PATH = Platform.getInstallLocation().getURL().getPath() + "AnnotationIcons/";
+		RULES_XML_PATH = ANNOTATIONLOGIC_FOLDER_PATH + DEFAULT_FILENAME + "." + DEFAULT_FILE_EXTENSION;
 	}
 
 	public static String getDefaultFileExtension() {

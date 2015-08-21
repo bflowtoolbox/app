@@ -447,9 +447,7 @@ public class AnnotationRuleController {
 	 */
 	public String[] getXMLFilePathNames() {
 		ArrayList<String> result = new ArrayList<String>(50);
-		String folderPath = AnnotationLauncherConfigurator
-				.getANNOTATIONLOGIC_FOLDER_PATH();
-
+		String folderPath = AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH();
 		File file = new File(folderPath);
 		File[] listOfFiles = file.listFiles();
 		result = getXMLFilePathNames("", listOfFiles);
@@ -464,9 +462,10 @@ public class AnnotationRuleController {
 	 * @param listOfFiles
 	 * @return
 	 */
-	private ArrayList<String> getXMLFilePathNames(String path,
-			File[] listOfFiles) {
+	private ArrayList<String> getXMLFilePathNames(String path, File[] listOfFiles) {
 		ArrayList<String> result = new ArrayList<String>();
+		if (listOfFiles == null) return result;
+		
 		String name = path;
 		int i = 0;
 		while (i < listOfFiles.length) {
@@ -474,17 +473,13 @@ public class AnnotationRuleController {
 			name += listOfFiles[i].getName();
 
 			if (listOfFiles[i].isDirectory()) {
-				File file = new File(
-						AnnotationLauncherConfigurator
-								.getANNOTATIONLOGIC_FOLDER_PATH() + "/" + name);
+				File file = new File(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH() + "/" + name);
 				File[] listFiles = file.listFiles();
 				result.addAll(getXMLFilePathNames(name + "/", listFiles));
 			}
-			String extension = ImageFileChooserUtils
-					.getExtension(listOfFiles[i]);
+			String extension = ImageFileChooserUtils.getExtension(listOfFiles[i]);
 			if (extension != null) {
-				if (extension.equals(AnnotationLauncherConfigurator
-						.getDefaultFileExtension())) {
+				if (extension.equals(AnnotationLauncherConfigurator.getDefaultFileExtension())) {
 					result.add(name);
 				}
 			}
@@ -505,8 +500,7 @@ public class AnnotationRuleController {
 	 */
 	public String[] getAllAvailableImgNames() {
 		ArrayList<String> result = new ArrayList<String>(50);
-		String folderPath = AnnotationLauncherConfigurator
-				.getANNOTATIONLOGIC_FOLDER_PATH();
+		String folderPath = AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH();
 
 		File file = new File(folderPath);
 		File[] listOfFiles = file.listFiles();
@@ -522,9 +516,10 @@ public class AnnotationRuleController {
 	 * @param listOfFiles
 	 * @return
 	 */
-	private ArrayList<String> getAllAvailableImgNames(String path,
-			File[] listOfFiles) {
+	private ArrayList<String> getAllAvailableImgNames(String path, File[] listOfFiles) {
 		ArrayList<String> result = new ArrayList<String>();
+		if (listOfFiles == null) return result;
+		
 		String name = path;
 		int i = 0;
 		while (i < listOfFiles.length) {
@@ -532,14 +527,11 @@ public class AnnotationRuleController {
 			name += listOfFiles[i].getName();
 
 			if (listOfFiles[i].isDirectory()) {
-				File file = new File(
-						AnnotationLauncherConfigurator
-								.getANNOTATIONLOGIC_FOLDER_PATH() + "/" + name);
+				File file = new File(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH() + "/" + name);
 				File[] listFiles = file.listFiles();
 				result.addAll(getAllAvailableImgNames(name + "/", listFiles));
 			}
-			String extension = ImageFileChooserUtils
-					.getExtension(listOfFiles[i]);
+			String extension = ImageFileChooserUtils.getExtension(listOfFiles[i]);
 			if (extension != null) {
 				if (extension.equals(ImageFileChooserUtils.tiff)
 						|| extension.equals(ImageFileChooserUtils.tif)
