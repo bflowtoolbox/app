@@ -611,8 +611,9 @@ public class AnnotationRuleViewPart extends ViewPart implements
 		
 		String filename = file.getName();
 		
-		File newFile = new File(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH()	+ filename);
 		try {
+			File newFile = new File(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH()	+ filename);
+			newFile.mkdirs();
 			Files.copy(file.toPath(), newFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
