@@ -7,8 +7,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.service.datalocation.Location;
 
 /**
- * Provides some methods to set the annotationlogic folder defined in the .ini
- * file
+ * Provides some methods to set the annotation logic folder defined in the .ini
+ * file.
  * 
  * Code based on {@link LauncherConfigurator} by Arian Storch
  * 
