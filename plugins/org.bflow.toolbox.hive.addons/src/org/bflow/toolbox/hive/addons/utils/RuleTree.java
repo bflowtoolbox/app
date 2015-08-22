@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bflow.toolbox.hive.addons.validation.Rule;
-import org.bflow.toolbox.hive.libs.aprogu.MapValue;
+import org.bflow.toolbox.hive.libs.aprogu.collections.MapValue;
 
 /**
  * Models a tree structure for validation rules.
