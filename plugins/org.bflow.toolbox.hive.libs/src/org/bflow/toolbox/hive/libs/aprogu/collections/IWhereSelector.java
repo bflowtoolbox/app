@@ -1,4 +1,4 @@
-package org.bflow.toolbox.hive.libs.aprogu;
+package org.bflow.toolbox.hive.libs.aprogu.collections;
 
 /**
  * Defines the interface of a selector which is used 
