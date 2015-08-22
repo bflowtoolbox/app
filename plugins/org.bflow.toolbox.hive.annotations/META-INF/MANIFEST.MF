@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: AnnotationsPlugin
+Bundle-Name: Hive Model Annotations
 Bundle-SymbolicName: org.bflow.toolbox.hive.annotations;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -14,3 +14,6 @@ Require-Bundle: org.eclipse.gmf.runtime.diagram.ui,
 Export-Package: 
  org.bflow.toolbox.hive.annotations
 Bundle-ClassPath: .
+Bundle-Vendor: Felix Hoess, bflow dev team
+Bundle-Activator: org.bflow.toolbox.hive.annotations.internal.PluginActivator
+Bundle-ActivationPolicy: lazy
