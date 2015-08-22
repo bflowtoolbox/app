@@ -3,20 +3,20 @@ package org.bflow.toolbox.hive.swiprolog;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.bflow.toolbox.hive.libs.aprogu.io.ZipUtil;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 /**
  * Provides methods to install the embedded SWI-Prolog engine into the running system.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 06/04/13
- * @version 04/01/14
+ * @since 06.04.13
+ * @version 04.01.14
+ * 			22.08.15 Moved unZip method to newly created ZipUtil class
  *
  */
 public class SWIPrologInstaller {
@@ -33,7 +33,7 @@ public class SWIPrologInstaller {
 		String path = file.getAbsolutePath();
 		String installDir = String.format("%s\\%s", path, ".swiprolog");
 		
-		if(new File(installDir).exists()) {
+		if (new File(installDir).exists()) {
 			String installPath = getRootDir(installDir);
 			// FIXME this can lead to null pointer exception
 			InstallMetaInfo installMetaInfo = new InstallMetaInfo(installPath, null);
@@ -57,17 +57,17 @@ public class SWIPrologInstaller {
 		String srcPath = null;
 		String executableName = null;
 		
-		if(osName.equalsIgnoreCase("windows")) {
+		if (osName.equalsIgnoreCase("windows")) {
 			srcPath = String.format(pathFormat, "win32");
 			executableName = "plcon.exe";
 		}
 		
-		if(osName.equalsIgnoreCase("linux")) {
+		if (osName.equalsIgnoreCase("linux")) {
 			srcPath = String.format(pathFormat, "linux32");
 			executableName = "pl.sh";
 		}
 		
-		if(osName.equalsIgnoreCase("mac")) {
+		if (osName.equalsIgnoreCase("mac")) {
 			srcPath = String.format(pathFormat, "macosx");
 			executableName = null; //"swipl";
 			// Note: The path varies on mac (look at the zip)
@@ -86,7 +86,7 @@ public class SWIPrologInstaller {
 			FileInputStream fis = new FileInputStream(tmpFile);
 			
 			// Unzip the file
-			unZip(fis, outputFolder);
+			ZipUtil.unZip(fis, outputFolder);
 			
 			fis.close();
 		
@@ -116,63 +116,22 @@ public class SWIPrologInstaller {
 	}
 	
 	/**
-	 * Unzips the given input stream to the given output folder.
-	 * 
-	 * @param inputStream InputStream of the zip file
-	 * @param outputFolder Path to the output folder
-	 * @throws IOException 
-	 */
-	private static void unZip(InputStream inputStream, String outputFolder) throws IOException {
-		byte[] buffer = new byte[1024];
-		
-		ZipInputStream zis = new ZipInputStream(inputStream);
-		
-    	// Get the zipped file list entry
-    	ZipEntry ze = zis.getNextEntry();
-    	
-    	while( ze != null ) {
-    		String fileName = ze.getName();
-    		
-            File newFile = new File(outputFolder + File.separator + fileName);
-            
-            // If the entry is an directory
-            // ensure to create all needed directories
-            if(ze.isDirectory()) {
-            	newFile.mkdirs();
-            	ze = zis.getNextEntry();
-            	continue;
-            }
-  
-             FileOutputStream fos = new FileOutputStream(newFile);             
-  
-             int len;
-             while ((len = zis.read(buffer)) > 0) {
-        		fos.write(buffer, 0, len);
-             }
-  
-             fos.close();   
-             ze = zis.getNextEntry();
-     	}
-  
-        zis.closeEntry();
-     	zis.close();
-	}
-	
-	/**
 	 * Returns the name of the current operating system.
 	 * 
 	 * @return Name of the operating system
 	 */
 	private static String getOsName() {
-	  String os = "";
-	  if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1) {
-	    os = "windows";
-	  } else if (System.getProperty("os.name").toLowerCase().indexOf("linux") > -1) {
-	    os = "linux";
-	  } else if (System.getProperty("os.name").toLowerCase().indexOf("mac") > -1) {
-	    os = "mac";
+	  String osName = StringUtils.EMPTY;
+	  String osPropertyValue = System.getProperty("os.name").toLowerCase();
+	  
+	  if (osPropertyValue.indexOf("windows") > -1) {
+	    osName = "windows";
+	  } else if (osPropertyValue.indexOf("linux") > -1) {
+	    osName = "linux";
+	  } else if (osPropertyValue.indexOf("mac") > -1) {
+	    osName = "mac";
 	  }
 		 
-	  return os;
+	  return osName;
 	}
 }
