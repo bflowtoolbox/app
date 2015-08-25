@@ -53,7 +53,7 @@ public class RuleEntry {
 	 */
 	private List<AnnotationCategory> categories = new ArrayList<AnnotationCategory>();
 	/**
-	 * holds file names of icons of the rule (one entry each language)
+	 * holds file names (relative path) of icons of the rule (one entry each language)
 	 */
 	private List<AnnotationFilename> filenames = new ArrayList<AnnotationFilename>();
 
@@ -216,6 +216,22 @@ public class RuleEntry {
 	public String getCategory() {
 		return getStrForNLin(categories);
 	}
+	
+	/**
+	 * Returns the default (en_US) category name of rule or null if not existent.
+	 * @return
+	 */
+	@XmlTransient
+	public String getDefaultCategory() {
+		String defCat =null;
+		for (IAnnotationRuleElement nameInList : categories) {
+			if (nameInList.getAttribute().equals("en_US")) {
+				defCat= nameInList.getValue();
+				break;
+			}
+		}
+		return defCat;
+	}
 
 
 
@@ -304,6 +320,11 @@ public class RuleEntry {
 	//		}
 	//	}
 
+	/**
+	 * returns the category name (as String) for the used language in the current editor. 
+	 * @param listOfRuleElement
+	 * @return
+	 */
 	private String getStrForNLin(List<? extends IAnnotationRuleElement> listOfRuleElement) {
 		String nl = Platform.getNL();
 		String country = nl.substring(0, 2);
