@@ -20,6 +20,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.nls.NLSupport;
@@ -42,7 +43,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
  */
 public class AnnotationRuleController {
 
-	//TODO implement save and load (To many read and write operations through add and remove, file should only be written if and only if the diagram is saved)
+	// TODO implement save and load (To many read and write operations through
+	// add and remove, file should only be written if and only if the diagram is
+	// saved)
 	/**
 	 * isDirty is true, if the rule (stored internal in an ArrayList) has
 	 * changed
@@ -61,10 +64,10 @@ public class AnnotationRuleController {
 
 	/**
 	 * stores whether a category should be sorted ascending by rule names or as
-	 * a sequence of how they are created
+	 * a sequence of how they are created, The key is the string of the relative
+	 * path of the xml file
 	 */
-	private HashMap<String, Boolean> sortingOrderForCategory = new HashMap<String, Boolean>();
-
+	private HashMap<String, Boolean> sortingOrderForXMLRuleSet = new HashMap<String, Boolean>();
 
 	private static AnnotationRuleController instance = null;
 	private ArrayList<IAnnotationRuleListener> ruleListener;
@@ -86,7 +89,7 @@ public class AnnotationRuleController {
 		String ruleAttributeName = "";
 		String ruleValue = "";
 		String ruleOperator = "";
-		String ruleDirection = "CENTER"; //Center is default
+		String ruleDirection = "CENTER"; // Center is default
 		String ruleFilename = "";
 		
 		boolean applyRule = false;
@@ -103,10 +106,8 @@ public class AnnotationRuleController {
 		HashMap<String, String> attributes = (HashMap<String, String>) getAttributesOfActiveModel(id);
 
 		if (attributes != null && !attributes.isEmpty()) {
-			for (RuleEntry rule : AnnotationRuleController.getInstance()
-					.getRules()) {
-				if (!rule.isActive())
-					continue;
+			for (RuleEntry rule : AnnotationRuleController.getInstance().getRules()) {
+				if (!rule.isActive()) continue;
 				ruleAttributeName = rule.getAttributeName();
 				ruleValue = rule.getAttributeValue();
 				ruleOperator = rule.getOperator();
@@ -132,7 +133,6 @@ public class AnnotationRuleController {
 
 						if (dAttributeIsDigit && dRuleIsDigit) {
 							applyRule = dAttribute == dRule;
-
 						} else if (!dAttributeIsDigit && !dRuleIsDigit) {
 							applyRule = col.compare(value, ruleValue) == 0;
 						} else {
@@ -224,8 +224,7 @@ public class AnnotationRuleController {
 							iconDirection = IDecoratorTarget.Direction.NORTH_EAST;
 							break;
 						}
-						annotations.add(new ShapeDecorationInfo(iconDirection,
-								ruleFilename));
+						annotations.add(new ShapeDecorationInfo(iconDirection, ruleFilename));
 					}
 				}
 			}
@@ -268,17 +267,17 @@ public class AnnotationRuleController {
 			Boolean sortCategoryASC) {
 		for (String str : rules.keySet()) {
 			if (rules.get(str).contains(entry)) {
-		//set new values to the rule
-			entry.setCategory(inputCategory);
-			entry.setDirection(inputDirection);
-			entry.setFilename(inputFilename);
-			entry.setAttributeName(inputAttributeName);
-			entry.setOperator(inputOperator);
-			entry.setAttributeValue(inputValue);
+				// set new values to the rule
+				entry.setCategory(inputCategory);
+				entry.setDirection(inputDirection);
+				entry.setFilename(inputFilename);
+				entry.setAttributeName(inputAttributeName);
+				entry.setOperator(inputOperator);
+				entry.setAttributeValue(inputValue);
 				entry.setRuleName(inputRuleName);
-			isDirty = true;
-			isSynchronized = false;
-				sortingOrderForCategory.put(inputCategory, sortCategoryASC);
+				isDirty = true;
+				isSynchronized = false;
+				sortingOrderForXMLRuleSet.put(getXMLFilePathForCategory(inputCategory), sortCategoryASC);
 				write(str);
 
 			}
@@ -294,9 +293,9 @@ public class AnnotationRuleController {
 	public void updateRule(RuleEntry entry, boolean isActive) {
 		for (String str : rules.keySet()) {
 			if (rules.get(str).contains(entry)) {
-		entry.setActive(isActive);
-		isDirty = true;
-		isSynchronized = false;
+				entry.setActive(isActive);
+				isDirty = true;
+				isSynchronized = false;
 				write(str);
 			}
 		}
@@ -312,62 +311,56 @@ public class AnnotationRuleController {
 			FileInputStream fis = null;
 			InputStreamReader reader = null;
 			rules.clear();
-			sortingOrderForCategory.clear();
+			sortingOrderForXMLRuleSet.clear();
 			for (String filename : getXMLFilePathNames()) {
-				sortingOrderForCategory.put(filename, false);
+				sortingOrderForXMLRuleSet.put(filename, false);
 				rules.put(filename, new ArrayList<RuleEntry>());
 				ArrayList<RuleEntry> list = new ArrayList<RuleEntry>();
-			try {
-				fis = new FileInputStream(
-							AnnotationLauncherConfigurator
-									.getANNOTATIONLOGIC_FOLDER_PATH()
-									+ filename);
-			} catch (FileNotFoundException e) {
-				//file not found. create new empty xml file
-				File newFile = new File(
-						AnnotationLauncherConfigurator.getRULES_XML_PATH());
 				try {
-					newFile.createNewFile();
+					fis = new FileInputStream(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH() + filename);
+				} catch (FileNotFoundException e) {
+					// file not found. create new empty xml file
+					File newFile = new File(AnnotationLauncherConfigurator.getRULES_XML_PATH());
+					try {
+						newFile.createNewFile();
 						rules.put(filename, new ArrayList<RuleEntry>());
-					isSynchronized = true;
-					showWarningDialog();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+						isSynchronized = true;
+						showWarningDialog();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 
-			}
-			if (fis == null) {
-				try {
-					fis = new FileInputStream(
-							AnnotationLauncherConfigurator.getRULES_XML_PATH());
-				} catch (FileNotFoundException e1) {
-					//access on file denied , create empty rule list
+				}
+				if (fis == null) {
+					try {
+						fis = new FileInputStream(AnnotationLauncherConfigurator.getRULES_XML_PATH());
+					} catch (FileNotFoundException e1) {
+						// access on file denied , create empty rule list
 						rules.put(filename, new ArrayList<RuleEntry>());
-					showWarningDialog();
-					e1.printStackTrace();
+						showWarningDialog();
+						e1.printStackTrace();
+					}
 				}
-			}
-			if (fis != null) {
-			try {
-				reader = new InputStreamReader(fis, "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+				if (fis != null) {
+					try {
+						reader = new InputStreamReader(fis, "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
 
-				if (!isSynchronized) {
-			Unmarshaller um;
-			try {
-				JAXBContext context = JAXBContext.newInstance(XMLRuleEntries.class);
-						um = context.createUnmarshaller();
-				XMLRuleEntries xmlrules = (XMLRuleEntries) um.unmarshal(reader);
-				list = (ArrayList<RuleEntry>) xmlrules.getRule();
-							sortingOrderForCategory.put(filename,
-									xmlrules.isSortASC());
-			} catch (JAXBException e) {
+					if (!isSynchronized) {
+						Unmarshaller um;
+						try {
+							JAXBContext context = JAXBContext.newInstance(XMLRuleEntries.class);
+							um = context.createUnmarshaller();
+							XMLRuleEntries xmlrules = (XMLRuleEntries) um.unmarshal(reader);
+							list = (ArrayList<RuleEntry>) xmlrules.getRule();
+							sortingOrderForXMLRuleSet.put(filename, xmlrules.isSortASC());
+						} catch (JAXBException e) {
 							showCorruptionDialog(filename);
 							continue;
-			}
-				}
+						}
+					}
 					if (list != null) {
 						rules.put(filename, list);
 						allRuleList.addAll(list);
@@ -379,7 +372,8 @@ public class AnnotationRuleController {
 			isDirty = false;
 			return allRuleList;
 		} else
-			// in the three other cases (isSynchronized && (isDirty || !isDirty)) just return the list
+		// in the three other cases (isSynchronized && (isDirty || !isDirty))
+		// just return the list
 		{
 			for (String str : rules.keySet()) {
 				allRuleList.addAll(rules.get(str));
@@ -388,7 +382,6 @@ public class AnnotationRuleController {
 		}
 	}
 
-
 	/**
 	 * returns a String[] of all filenames with .xml in the (default or custom)
 	 * AnnotationIcons/ folder.
@@ -396,18 +389,17 @@ public class AnnotationRuleController {
 	 * @return
 	 */
 	public String[] getXMLFileNames() {
-		File folder = new File(
-				AnnotationLauncherConfigurator
-				.getANNOTATIONLOGIC_FOLDER_PATH());
+		File folder = new File(	AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH());
 		folder.mkdirs();
 		File[] listOfFiles = folder.listFiles();
-		if (listOfFiles == null || listOfFiles.length == 0) {//In this case there is no file available
+		if (listOfFiles == null || listOfFiles.length == 0) {// In this case
+																// there is no
+																// file
+																// available
 
 			String[] defaultXmlFileName = new String[1];
-			defaultXmlFileName[0] = AnnotationLauncherConfigurator
-					.getRULES_XML_PATH();
-			File newFile = new File(
-					AnnotationLauncherConfigurator.getRULES_XML_PATH());
+			defaultXmlFileName[0] = AnnotationLauncherConfigurator.getRULES_XML_PATH();
+			File newFile = new File(AnnotationLauncherConfigurator.getRULES_XML_PATH());
 			try {
 				newFile.createNewFile();
 			} catch (IOException e) {
@@ -422,13 +414,8 @@ public class AnnotationRuleController {
 					String name = listOfFiles[i].getName();
 					String extension = getFileExtension(listOfFiles[i]);
 					if (extension != null) {
-						if (extension.equals(AnnotationLauncherConfigurator
-								.getDefaultFileExtension())) {
-							xmlFileNames
-									.add(name.substring(0, name.length()
-													- (1 + AnnotationLauncherConfigurator
-													.getDefaultFileExtension()
-															.length())));
+						if (extension.equals(AnnotationLauncherConfigurator.getDefaultFileExtension())) {
+							xmlFileNames.add(name.substring(0, name.length() - (1 + AnnotationLauncherConfigurator.getDefaultFileExtension().length())));
 						}
 					}
 				}
@@ -448,6 +435,7 @@ public class AnnotationRuleController {
 	public String[] getXMLFilePathNames() {
 		ArrayList<String> result = new ArrayList<String>(50);
 		String folderPath = AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH();
+
 		File file = new File(folderPath);
 		File[] listOfFiles = file.listFiles();
 		result = getXMLFilePathNames("", listOfFiles);
@@ -462,30 +450,31 @@ public class AnnotationRuleController {
 	 * @param listOfFiles
 	 * @return
 	 */
-	private ArrayList<String> getXMLFilePathNames(String path, File[] listOfFiles) {
+	private ArrayList<String> getXMLFilePathNames(String path,
+			File[] listOfFiles) {
 		ArrayList<String> result = new ArrayList<String>();
-		if (listOfFiles == null) return result;
-		
 		String name = path;
 		int i = 0;
-		while (i < listOfFiles.length) {
+		if (listOfFiles != null) {
+			while (i < listOfFiles.length) {
 
-			name += listOfFiles[i].getName();
+				name += listOfFiles[i].getName();
 
-			if (listOfFiles[i].isDirectory()) {
-				File file = new File(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH() + "/" + name);
-				File[] listFiles = file.listFiles();
-				result.addAll(getXMLFilePathNames(name + "/", listFiles));
-			}
-			String extension = ImageFileChooserUtils.getExtension(listOfFiles[i]);
-			if (extension != null) {
-				if (extension.equals(AnnotationLauncherConfigurator.getDefaultFileExtension())) {
-					result.add(name);
+				if (listOfFiles[i].isDirectory()) {
+					File file = new File(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH() + "/" + name);
+					File[] listFiles = file.listFiles();
+					result.addAll(getXMLFilePathNames(name + "/", listFiles));
 				}
-			}
-			name = path;
-			i++;
+				String extension = ImageFileChooserUtils.getExtension(listOfFiles[i]);
+				if (extension != null) {
+					if (extension.equals(AnnotationLauncherConfigurator.getDefaultFileExtension())) {
+						result.add(name);
+					}
+				}
+				name = path;
+				i++;
 
+			}
 		}
 		return result;
 
@@ -516,35 +505,36 @@ public class AnnotationRuleController {
 	 * @param listOfFiles
 	 * @return
 	 */
-	private ArrayList<String> getAllAvailableImgNames(String path, File[] listOfFiles) {
+	private ArrayList<String> getAllAvailableImgNames(String path,
+			File[] listOfFiles) {
 		ArrayList<String> result = new ArrayList<String>();
-		if (listOfFiles == null) return result;
-		
 		String name = path;
 		int i = 0;
-		while (i < listOfFiles.length) {
+		if (listOfFiles != null) {
+			while (i < listOfFiles.length) {
 
-			name += listOfFiles[i].getName();
+				name += listOfFiles[i].getName();
 
-			if (listOfFiles[i].isDirectory()) {
-				File file = new File(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH() + "/" + name);
-				File[] listFiles = file.listFiles();
-				result.addAll(getAllAvailableImgNames(name + "/", listFiles));
-			}
-			String extension = ImageFileChooserUtils.getExtension(listOfFiles[i]);
-			if (extension != null) {
-				if (extension.equals(ImageFileChooserUtils.tiff)
-						|| extension.equals(ImageFileChooserUtils.tif)
-						|| extension.equals(ImageFileChooserUtils.gif)
-						|| extension.equals(ImageFileChooserUtils.jpeg)
-						|| extension.equals(ImageFileChooserUtils.jpg)
-						|| extension.equals(ImageFileChooserUtils.png)) {
-					result.add(name);
+				if (listOfFiles[i].isDirectory()) {
+					File file = new File(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH() + "/" + name);
+					File[] listFiles = file.listFiles();
+					result.addAll(getAllAvailableImgNames(name + "/", listFiles));
 				}
-			}
-			name = path;
-			i++;
+				String extension = ImageFileChooserUtils.getExtension(listOfFiles[i]);
+				if (extension != null) {
+					if (extension.equals(ImageFileChooserUtils.tiff)
+							|| extension.equals(ImageFileChooserUtils.tif)
+							|| extension.equals(ImageFileChooserUtils.gif)
+							|| extension.equals(ImageFileChooserUtils.jpeg)
+							|| extension.equals(ImageFileChooserUtils.jpg)
+							|| extension.equals(ImageFileChooserUtils.png)) {
+						result.add(name);
+					}
+				}
+				name = path;
+				i++;
 
+			}
 		}
 		return result;
 
@@ -558,8 +548,7 @@ public class AnnotationRuleController {
 	 *            true, if entries of its category should be sorted
 	 *            alphabetically ascending
 	 */
-	public void addRule(RuleEntry entry, String xmlfilename,
-			Boolean sortCategoryASC) {
+	public void addRule(RuleEntry entry, String xmlfilename, boolean sortCategoryASC) {
 		if (!rules.containsKey(xmlfilename)) {
 			rules.put(xmlfilename, new ArrayList<RuleEntry>());
 			isSynchronized = false;
@@ -567,7 +556,7 @@ public class AnnotationRuleController {
 
 		if (!rules.get(xmlfilename).contains(entry)) {
 			rules.get(xmlfilename).add(entry);
-			sortingOrderForCategory.put(xmlfilename, sortCategoryASC);
+			sortingOrderForXMLRuleSet.put(xmlfilename, sortCategoryASC);
 			isDirty = true;
 			isSynchronized = false;
 			write(xmlfilename);
@@ -580,8 +569,8 @@ public class AnnotationRuleController {
 	 * 
 	 * @param entry
 	 */
-	public void remove(RuleEntry entry) { 
-		for (String str:rules.keySet()){
+	public void remove(RuleEntry entry) {
+		for (String str : rules.keySet()) {
 			if (rules.get(str).contains(entry)) {
 				rules.get(str).remove(entry);
 				isDirty = true;
@@ -589,11 +578,8 @@ public class AnnotationRuleController {
 				write(str);
 			}
 		}
-		
 
 	}
-
-
 
 	/**
 	 * 
@@ -602,37 +588,34 @@ public class AnnotationRuleController {
 	 *
 	 */
 	private void write(String filename) {
-		//init new xml file
+		// init new xml file
 
 		if (!isSynchronized && isDirty) {
-		File xmlfile = new File(
-					AnnotationLauncherConfigurator
-							.getANNOTATIONLOGIC_FOLDER_PATH()
-							+ filename);
-		xmlfile.getParentFile().mkdirs();
-		try {
-			xmlfile.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			File xmlfile = new File(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH() + filename);
+			xmlfile.getParentFile().mkdirs();
+			try {
+				xmlfile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			// create JAXB context and instantiate marshaller
 			JAXBContext context;
 			XMLRuleEntries xmlRules = new XMLRuleEntries();
 			xmlRules.setRule(rules.get(filename));
-			xmlRules.setSortASC(sortingOrderForCategory.get(filename));
+			xmlRules.setSortASC(sortingOrderForXMLRuleSet.get(filename));
 			try {
 				context = JAXBContext.newInstance(XMLRuleEntries.class);
 				Marshaller m = context.createMarshaller();
 				m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 				// Write to File
-			m.marshal(xmlRules, xmlfile);
+				m.marshal(xmlRules, xmlfile);
 
 			} catch (JAXBException e1) {
 				e1.printStackTrace();
 			}
 			isDirty = false;
 			isSynchronized = true;
-			//	TODO		notifyListeners(diagramEditor);
+			// TODO notifyListeners(diagramEditor);
 		}
 
 	}
@@ -644,13 +627,13 @@ public class AnnotationRuleController {
 		MessageDialog dialog = new MessageDialog(
 				null,
 				NLSupport.AnnotationViewPart_Annotation_Warning_FileNotFound_Headline,
-				null,			
-				NLSupport.AnnotationViewPart_Annotation_Warning_FileNotFound_Message
-				+ "\n\n"
-				+ AnnotationLauncherConfigurator.getRULES_XML_PATH(),
-				MessageDialog.INFORMATION, "OK".split(" "), 0);
+				null,
+				AnnotationLauncherConfigurator.getRULES_XML_PATH()
+						+ "\n\n"
+						+ NLSupport.AnnotationViewPart_Annotation_Warning_FileNotFound_Message,
+				MessageDialog.ERROR, "OK".split(" "), 0);
 		dialog.open();
-	
+
 	}
 
 	/**
@@ -670,7 +653,7 @@ public class AnnotationRuleController {
 						+ NLSupport.AttributeFilterViewPart_Annotation_Warning_FileCorrupted_Message,
 				MessageDialog.ERROR, "OK".split(" "), 0);
 		dialog.open();
-	
+
 	}
 
 	private AnnotationRuleController() {
@@ -678,7 +661,6 @@ public class AnnotationRuleController {
 	}
 
 	public static AnnotationRuleController getInstance() {
-
 		if (instance == null) {
 			instance = new AnnotationRuleController();
 		}
@@ -744,9 +726,10 @@ public class AnnotationRuleController {
 	 * @return true, if ascending order
 	 */
 	public boolean getSortingOrderForCategory(String categoryName) {
-
-		if (sortingOrderForCategory.containsKey(categoryName))
-			return sortingOrderForCategory.get(categoryName);
+		
+		String xmlFilePathForCat = getXMLFilePathForCategory(categoryName);
+		if (sortingOrderForXMLRuleSet.containsKey(xmlFilePathForCat))
+			return sortingOrderForXMLRuleSet.get(xmlFilePathForCat);
 		else
 			return false;
 	}
@@ -764,19 +747,18 @@ public class AnnotationRuleController {
 	 * @return
 	 */
 	public String getXMLFilePathForCategory(String inputCategory) {
-		String result = "";
-		boolean categoryInUse = false;
-		for (String categoryWithPath : rules.keySet()) {
-			if (categoryWithPath.contains(inputCategory)) {
-				result = categoryWithPath;
-				categoryInUse = true;
-				break;
+		String result = StringUtils.EMPTY;
+		for (String rulesKey : rules.keySet()) {
+			for (RuleEntry r : rules.get(rulesKey)) {
+				if (r.getCategory().contains(inputCategory)) {
+					String l = r.getDefaultCategory();
+					
+					return rulesKey;
+				}
 			}
 		}
-		if (!categoryInUse) {
-			result = inputCategory + "."
-					+ AnnotationLauncherConfigurator.getDefaultFileExtension();
-		}
+		result = inputCategory + "." + AnnotationLauncherConfigurator.getDefaultFileExtension();
+
 		return result;
 	}
 
