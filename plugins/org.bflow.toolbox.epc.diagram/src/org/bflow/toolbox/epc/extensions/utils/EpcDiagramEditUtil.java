@@ -9,11 +9,23 @@ import java.util.Vector;
 import org.bflow.toolbox.bflow.BflowPackage;
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditor;
+import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorUtil;
 import org.bflow.toolbox.epc.diagram.providers.EpcElementTypes;
 import org.bflow.toolbox.epc.extensions.idelete.IntelligentDeleter;
+import org.bflow.toolbox.epc.extensions.actions.DiagramLiveValidator;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.bflow.toolbox.extensions.edit.parts.ColoredNodeEditPart;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.AbstractOperation;
+import org.eclipse.core.commands.operations.DefaultOperationHistory;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.IUndoableOperation;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
@@ -445,5 +457,55 @@ public class EpcDiagramEditUtil {
 		
 		EpcDiagramEditUtil.SetElementLocation(editpart, location);
 	}
+	
+	
+	public static AbstractOperation getCollectedUndoRedoCommand(final String id, String label) {
+		AbstractOperation aoend = new AbstractOperation(label) {
+			
+			@Override
+			public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+				DiagramLiveValidator diagramLiveValidator = EpcDiagramEditorPlugin.getInstance().getDiagramLiveValidator();
+				boolean validationStatusBefore = diagramLiveValidator.isEnabled();
+				diagramLiveValidator.setEnabled(false);
+				DefaultOperationHistory history = (DefaultOperationHistory) OperationHistoryFactory.getOperationHistory();
+				IUndoableOperation[] s = history.getUndoHistory(IOperationHistory.GLOBAL_UNDO_CONTEXT);
+				for (int i = s.length-1; i >= 0; i--) {
+					IUndoableOperation iUndoableOperation = s[i];
+					if (iUndoableOperation.getLabel().contains(id)) {
+							history.undoOperation(iUndoableOperation, null, null);
+					}
+				}
+				if (validationStatusBefore) {
+					diagramLiveValidator.setEnabled(true);
+				}
+				return Status.OK_STATUS;
+			}
 
+			@Override
+			public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+				DiagramLiveValidator diagramLiveValidator = EpcDiagramEditorPlugin.getInstance().getDiagramLiveValidator();
+				boolean validationStatusBefore = diagramLiveValidator.isEnabled();
+				diagramLiveValidator.setEnabled(false);
+				DefaultOperationHistory history = (DefaultOperationHistory) OperationHistoryFactory.getOperationHistory();
+				IUndoableOperation[] s = history.getRedoHistory(IOperationHistory.GLOBAL_UNDO_CONTEXT);
+				
+				for (int i = s.length-1; i >= 0; i--) {
+					IUndoableOperation iUndoableOperation = s[i];
+					if (iUndoableOperation.getLabel().contains(id)) {
+							history.redoOperation(iUndoableOperation, null, null);
+					}
+				}
+				if (validationStatusBefore) {
+					diagramLiveValidator.setEnabled(true);
+				}
+				return Status.OK_STATUS;
+			}
+
+			@Override
+			public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+				return Status.OK_STATUS;
+			}
+		};
+		return aoend;
+	}
 }
