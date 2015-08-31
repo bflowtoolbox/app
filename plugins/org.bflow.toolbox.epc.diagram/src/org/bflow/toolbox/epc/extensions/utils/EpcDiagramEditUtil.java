@@ -459,6 +459,13 @@ public class EpcDiagramEditUtil {
 	}
 	
 	
+	/**
+	 * Returns an AbstractOperation. This can added in the OperationHistory and does 
+	 * redo/undo all commands in the history with the same unique ID in the commandlabel
+	 * @param id - the unique id for identify all related commands for redo/undo 
+	 * @param label - the name shown in the redo/undo context menu
+	 * @return
+	 */
 	public static AbstractOperation getCollectedUndoRedoCommand(final String id, String label) {
 		AbstractOperation aoend = new AbstractOperation(label) {
 			
