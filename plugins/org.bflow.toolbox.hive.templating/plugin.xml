@@ -63,7 +63,7 @@
                   checkEnabled="true">
                <test
                      forcePluginActivation="true"
-                     property="org.bflow.toolbox.hive.templating.commands.templatesexist">
+                     property="org.bflow.toolbox.epc.templating.commands.templatesexist">
                </test>
             </visibleWhen>
          </menu>
@@ -73,17 +73,17 @@
 
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="org.bflow.toolbox.hive.templating.commands.ShowTemplateWizardInsertCommand"
+            defaultHandler="org.bflow.toolbox.epc.templating.commands.ShowTemplateWizardInsertCommand"
             id="showTemplateWizardInsert"
             name="TemplateWizardInsertCommand">
       </command>
       <command
-            defaultHandler="org.bflow.toolbox.hive.templating.commands.ShowTemplateWizardAfterCommand"
+            defaultHandler="org.bflow.toolbox.epc.templating.commands.ShowTemplateWizardAfterCommand"
             id="showTemplateWizardAfter"
             name="TemplateWizardAfterCommand">
       </command>
       <command
-            defaultHandler="org.bflow.toolbox.hive.templating.commands.ShowTemplateWizardBeforeCommand"
+            defaultHandler="org.bflow.toolbox.epc.templating.commands.ShowTemplateWizardBeforeCommand"
             id="showTemplateWizardBefore"
             name="TemplateWizardBeforeCommand">
       </command>
@@ -103,16 +103,16 @@
                id="existTemplates">
             <test
                   forcePluginActivation="true"
-                  property="org.bflow.toolbox.hive.templating.commands.templatesexist">
+                  property="org.bflow.toolbox.epc.templating.commands.templatesexist">
             </test>
          </definition>
       </extension>
     <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
-            class="org.bflow.toolbox.hive.templating.commands.TemplateExistsPropertyTester"
+            class="org.bflow.toolbox.epc.templating.commands.TemplateExistsPropertyTester"
             id="templateExistsPropertyTester"
-            namespace="org.bflow.toolbox.hive.templating.commands"
+            namespace="org.bflow.toolbox.epc.templating.commands"
             properties="templatesexist"
             type="java.lang.Object">
       </propertyTester>

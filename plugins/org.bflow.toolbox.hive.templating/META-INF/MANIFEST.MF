@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: org.bflow.toolbox.hive.templating;singleton:=true
+Bundle-SymbolicName: org.bflow.toolbox.epc.templating;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.bflow.toolbox.hive.templating.internal.PluginActivator
+Bundle-Activator: org.bflow.toolbox.epc.templating.internal.PluginActivator
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.gmf.runtime.diagram.ui,
  org.eclipse.gmf.runtime.diagram.ui.render,
