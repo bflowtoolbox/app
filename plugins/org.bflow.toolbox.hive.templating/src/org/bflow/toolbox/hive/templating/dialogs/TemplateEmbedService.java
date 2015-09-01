@@ -116,8 +116,14 @@ public abstract class TemplateEmbedService {
 		}else {
 			dx = dx+100;
 		}
-	
+
+		if (isConnector(shape.getType().toString())) {
+			dx = (int) (dx - shape.getWidth() * 1.5 + 2);
+			dy = (int) (dy - shape.getHeight() *0.5);
+			
+		}
 		createRequest.setLocation(new Point(shape.getX()+dx,shape.getY()+dy));
+		
 		createRequest.setSize(new Dimension(shape.getWidth(), shape.getHeight()));		
 		CompoundCommand command = (CompoundCommand) editor.getDiagramEditPart().getCommand(createRequest);
 		shapesCreationCommand.add(command);
@@ -140,11 +146,14 @@ public abstract class TemplateEmbedService {
 				SetValueCommand svc = new SetValueCommand(setRequest);
 				shapesEditCommand.add(new ICommandProxy(svc));
 			}
-
 		};
 		shapesCreationCommand.add(createShapeNameCommand);
 	}
 	
+	private boolean isConnector(String type) {
+		return type.equals("org.bflow.toolbox.epc.XOR") || type.equals("org.bflow.toolbox.epc.AND") || type.equals("org.bflow.toolbox.epc.OR");
+	}
+
 	/**
 	 * Returns the EObject of the newly created edit part.
 	 * @param request create view request
