@@ -13,6 +13,8 @@ package org.bflow.toolbox.epc.templating.dialogs;
  * 
  * function_0 			== User has selected a function without incoming edges.
  * function_1 			== User has selected a function with ONE incoming edges.
+ * function_0_dummy 	== User has selected a function without incoming edges and the template connection element is a dummy.
+ * function_1_dummy 	== User has selected a function with ONE incoming edges and the template connection element is a dummy.
  * event_0 				== User has selected a event without incoming edges.
  * event_1 				== User has selected a event with ONE incoming edges.
  * function_connector_1 == User has selected a connector with ONE incoming edge AND a following function node. 
@@ -24,6 +26,8 @@ package org.bflow.toolbox.epc.templating.dialogs;
  * 
  * function_0 			== User has selected a function without outgoing edges.
  * function_1 			== User has selected a function with ONE outgoing edges.
+ * function_0_dummy 	== User has selected a function without outgoing edges and the template connection element is a dummy.
+ * function_1_dummy 	== User has selected a function with ONE outgoing edges and the template connection element is a dummy.
  * event_0 				== User has selected a event without outgoing edges.
  * event_1 				== User has selected a event with ONE outgoing edges.
  * function_connector_1 == User has selected a connector with ONE outgoing edge AND a before following function node. 
@@ -41,6 +45,8 @@ package org.bflow.toolbox.epc.templating.dialogs;
 public enum ConnectionType {
 	function_0,
 	function_1,
+	function_0_dummy,
+	function_1_dummy,
 	event_0,
 	event_1,
 	function_connector_1,
@@ -55,14 +61,20 @@ public enum ConnectionType {
 	 * @return boolean
 	 */
 	public boolean needsConnector() {
-		return  this == ConnectionType.function_1 || this == ConnectionType.event_1 || this == ConnectionType.function_connector_1 || this == ConnectionType.event_connector_1;
+		return  this == ConnectionType.function_1 || this == ConnectionType.event_1 || this == ConnectionType.function_connector_1 || this == ConnectionType.event_connector_1 || this == ConnectionType.function_1_dummy;
 	}
 	
 	/**
-	 * Returns true if the ConnectionType indicated a dummy node in the template.
+	 * Returns true if the ConnectionType indicated a dummy node in the
+	 * template.
+	 * 
 	 * @return
 	 */
 	public boolean isDummy() {
-		return  this == ConnectionType.event_0 || this == ConnectionType.event_1 || this == ConnectionType.event_connector_1 || this == ConnectionType.event_connector_n;
+		return this == ConnectionType.event_0 || this == ConnectionType.event_1
+				|| this == ConnectionType.event_connector_1
+				|| this == ConnectionType.event_connector_n
+				|| this == ConnectionType.function_0_dummy
+				|| this == ConnectionType.function_1_dummy;
 	}
 }

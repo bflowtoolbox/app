@@ -45,6 +45,14 @@ public class BflowTemplateBefore extends BflowTemplate {
 				return ConnectionType.function_1;
 			}
 		}
+		if (selectedElement instanceof FunctionEditPart && flag.equals(DUMMY_FLAG)) {
+			FunctionEditPart fep = (FunctionEditPart) selectedElement;
+			if (countArcs(fep.getTargetConnections()) == 0) {
+				return ConnectionType.function_0_dummy;
+			}else {
+				return ConnectionType.function_1_dummy;
+			}
+		}
 		if (selectedElement instanceof EventEditPart && flag.equals(DUMMY_FLAG)) {
 			EventEditPart eep = (EventEditPart) selectedElement;
 			if (countArcs(eep.getTargetConnections()) == 0) {

@@ -52,6 +52,9 @@ public class BflowTemplateReplace extends BflowTemplate {
 		if (selectedElement instanceof FunctionEditPart && flag.equals(NORMAL_FLAG)) {
 				return ConnectionType.function_0;
 		}
+		if (selectedElement instanceof FunctionEditPart && flag.equals(DUMMY_FLAG)) {
+			return ConnectionType.function_0_dummy;
+	}
 		if (selectedElement instanceof EventEditPart && flag.equals(DUMMY_FLAG)) {
 				return ConnectionType.event_0;
 		}
@@ -82,6 +85,10 @@ public class BflowTemplateReplace extends BflowTemplate {
 		if (selectedElement instanceof FunctionEditPart && flag.equals(NORMAL_FLAG)) {
 				return ConnectionType.function_0;
 		}
+		if (selectedElement instanceof FunctionEditPart && flag.equals(DUMMY_FLAG)) {
+			return ConnectionType.function_0_dummy;
+	}
+		
 		if (selectedElement instanceof EventEditPart && flag.equals(DUMMY_FLAG)) {
 				return ConnectionType.event_0;
 		}
