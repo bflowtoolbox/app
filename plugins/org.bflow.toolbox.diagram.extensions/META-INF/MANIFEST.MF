@@ -15,7 +15,8 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Import-Package: com.ibm.icu.text,
- org.bflow.toolbox.check
+ org.bflow.toolbox.check,
+ org.bflow.toolbox.hive.attributes
 Bundle-Vendor: Bflow Dev Team
 Bundle-Localization: OSGI-INF/l10n/bundle
 Export-Package: org.bflow.toolbox.extensions.actions,
