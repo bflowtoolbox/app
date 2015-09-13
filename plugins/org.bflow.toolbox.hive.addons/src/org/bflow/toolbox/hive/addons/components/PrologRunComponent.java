@@ -131,27 +131,27 @@ public class PrologRunComponent implements IPrologRunComponent {
 			if (str.contains("-pl:")) {
 				String value = str.substring(4);
 
-				URL url = PrologAdditionStore.getURL(value);
-
-				if (url != null) {
-					File prologBaseFile;
-
-					try {
-						prologBaseFile = File.createTempFile("epc2009", ".pl");
-						prologBaseFile.deleteOnExit();
-						FileUtils.copyURLToFile(url, prologBaseFile);
-
-						facts = prologBaseFile;
-
-						internal = true;
-					} catch (IOException ex) {
-						ex.printStackTrace();
+				try {
+					File prologBaseFile = File.createTempFile("epc2009", ".pl");
+					prologBaseFile.deleteOnExit();
+					URL url = PrologAdditionStore.getURL(value);
+										
+					if (url != null) {	
+							FileUtils.copyURLToFile(url, prologBaseFile);
+							facts = prologBaseFile;
+							internal = true;
+					} else {
+						File externFile = new File(value);
+						if (!externFile.exists()) {
+							facts = null;
+						}else {
+							FileUtils.copyFile(externFile, prologBaseFile);
+							facts = prologBaseFile;
+						}
 					}
-				} else {
-					facts = new File(value);
-
-					if (!facts.exists())
-						facts = null;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 
