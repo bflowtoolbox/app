@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.bflow.toolbox.epc.templating.dialogs.BflowTemplate.NamingVariable;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.FocusEvent;
@@ -13,12 +14,14 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -48,7 +51,7 @@ public class TemplateWizardPage1 extends WizardPage {
 	private TemplateFileService importer;
 	private Button btnChkLocal;
 	private Button btnChkGlobal;
-	private List templateList;
+	private Table templateList;
 	private Table namingtable;
 	private Rectangle lastBounds;
 	private Label description;
@@ -122,11 +125,11 @@ public class TemplateWizardPage1 extends WizardPage {
 		});
 		
 		// TemplateList
-	    templateList = new List(panelList, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+	    templateList = new Table(panelList, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
 	    updateTemplateList();
 	    GridData listLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-	    listLayoutData.heightHint = MAIN_HEIGHTHINT - 55;
-	    listLayoutData.widthHint = 80;
+	    listLayoutData.heightHint = MAIN_HEIGHTHINT - 50;
+	    listLayoutData.widthHint = 120;
 		templateList.setLayoutData(listLayoutData);
 		templateList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
@@ -161,7 +164,12 @@ public class TemplateWizardPage1 extends WizardPage {
 		
 		int count = 0;
 		for (BflowTemplate template : importer.getTemplates(btnChkLocal.getSelection(),btnChkGlobal.getSelection())) {
-			templateList.add(template.getTemplateName(), count);
+			TableItem item = new TableItem(templateList, SWT.NONE);
+			item.setText(template.getTemplateName());
+			if (!template.isValidForAction()) {
+				Display display = Display.getCurrent();
+				item.setForeground(display.getSystemColor(SWT.COLOR_RED));
+			}
 			templateList.setData(String.valueOf(count), template);
 			count++;
 		}
@@ -257,7 +265,7 @@ public class TemplateWizardPage1 extends WizardPage {
 		namingtable.setRedraw(true);	
 	}
 
-	protected List getTemplateList() {
+	protected Table getTemplateList() {
 		return templateList;
 	}
 
