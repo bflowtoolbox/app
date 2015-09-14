@@ -133,16 +133,15 @@ public class NameEditingSupport extends EditingSupport
 	private class MyTextCellEditor extends TextCellEditor {
 		public MyTextCellEditor(Composite parent) {
 			super(parent);
-
 		}
 
-		@Override
-		public void activate(ColumnViewerEditorActivationEvent activationEvent) {
-			super.activate();
-			if (activationEvent.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) {
-				this.text.setText(String.valueOf(activationEvent.character));
-			}
-		}
+//		@Override
+//		public void activate(ColumnViewerEditorActivationEvent activationEvent) {
+//			super.activate();
+//			if (activationEvent.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) {
+//				this.text.setText(String.valueOf(activationEvent.character));
+//			}
+//		}
 		
 		@Override
 		public void deactivate() {

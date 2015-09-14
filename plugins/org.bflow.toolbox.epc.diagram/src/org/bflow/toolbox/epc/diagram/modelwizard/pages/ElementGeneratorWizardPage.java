@@ -1,5 +1,7 @@
 package org.bflow.toolbox.epc.diagram.modelwizard.pages;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Vector;
 
 import org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart;
@@ -21,6 +23,8 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellNavigationStrategy;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
@@ -33,6 +37,8 @@ import org.eclipse.jface.viewers.TableViewerFocusCellManager;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -41,10 +47,13 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -91,6 +100,11 @@ public class ElementGeneratorWizardPage extends WizardPage {
 	 */
 	private boolean connectorOpen = false;
 
+	protected ViewerCell currentcell;
+
+	private Method setFocusCell;
+
+
 	/**
 	 * Default constructor.
 	 */
@@ -100,9 +114,18 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				.getMessage("ElementGeneratorWizardPage#msg2"));
 		this.setMessage(MessageProvider
 				.getMessage("ElementGeneratorWizardPage#msg3"));
-
 		this.anchor = anchor;
+		try {
+			setFocusCell = TableViewerFocusCellManager.class
+					.getSuperclass().getDeclaredMethod(
+							"setFocusCell",
+							new Class[] { ViewerCell.class });
+			setFocusCell.setAccessible(true);
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
 	}
+	
 
 	@Override
 	public void createControl(Composite parent) {
@@ -137,6 +160,8 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		int style = SWT.BORDER | SWT.HIDE_SELECTION | SWT.FULL_SELECTION;
 		tableViewer = new TableViewer(tablePanel, style);
 		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+		
+						
 		final TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(tableViewer,new FocusCellOwnerDrawHighlighter(tableViewer));
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
 
@@ -146,7 +171,14 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				int currentColumn = focusCell.getVisualIndex();
 				boolean isNameColumn = currentColumn%2 == 0;
 				
+				if(event.stateMask == SWT.ALT){
+					return false;
+				}
+				
 				if (event.keyCode == SWT.SPACE && currentColumn%2 == 1) {
+					return true;
+				}
+				if (event.keyCode == SWT.CR && currentColumn%2 == 0 && currentColumn != 0) {
 					return true;
 				}
 				
@@ -158,10 +190,11 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				if (isNameColumn && ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 97 && event.keyCode <= 122))) {
 					return true;
 				}
-				
+								
 				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION && currentColumn > 0;
 			}
 		};
+		
 		
 		int features = ColumnViewerEditor.TABBING_HORIZONTAL
 				| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
@@ -186,7 +219,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 		table.addKeyListener(new TableKeyListener());
 		table.addMenuDetectListener(new MyMenuDectectListener());
-
+				
 		// table pop-up menu
 		setUpPopUpMenu(table);
 
@@ -214,21 +247,79 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		tableViewer.add(step);
 
 		processSteps.add(step);
-
-		/*
-		 * 
-		 */
+		
+		getShell().addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("nooo"); 
+				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				table.setFocus();
+				System.out.println("yyyyyyyyy");
+			}
+		});
 
 		this.setControl(composite);
 
 		tableViewer.editElement(step, 2);
+		
+		//avoids the wizard finish activation
+		table.addTraverseListener(new TraverseListener() {
+			
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if ( e.detail == SWT.TRAVERSE_RETURN )
+		        {
+		            e.doit = false;
+		        }
+				
+			}
+		});
+		table.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				currentcell =  focusCellManager.getFocusCell();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (currentcell != null) {
+						try {
+							setFocusCell.invoke(focusCellManager, currentcell);
+							currentcell.getItem();
+						} catch (IllegalAccessException	| IllegalArgumentException | InvocationTargetException e1) {
+							e1.printStackTrace();
+						}
+				}else {
+					ViewerCell secondColumn = focusCellManager.getFocusCell().getNeighbor(ViewerCell.RIGHT, true);
+					try {
+						setFocusCell.invoke(focusCellManager,secondColumn.getNeighbor(ViewerCell.RIGHT, true));
+					} catch (IllegalAccessException | IllegalArgumentException
+							| InvocationTargetException e1) {
+						e1.printStackTrace();
+					}
+				}
+
+			}
+		});
 	}
 
 	@Override
 	public boolean canFlipToNextPage() {
 		return true;
 	}
-
+	
+	@Override
+	public void setVisible(boolean f) {
+		super.setVisible(f);
+		table.setFocus();
+	}
+		
 	/**
 	 * Returns the processStep steps.
 	 * 
