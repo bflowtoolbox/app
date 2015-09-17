@@ -6,12 +6,9 @@ import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector.ConnectorType;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Element.Kind;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
-import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -130,18 +127,11 @@ public class NameEditingSupport extends EditingSupport
 	 * @version 26/01/10
 	 *
 	 */
-	private class MyTextCellEditor extends TextCellEditor {
+	private class MyTextCellEditor extends TextCellEditor
+	{
 		public MyTextCellEditor(Composite parent) {
-			super(parent);
+			super(parent);			
 		}
-
-//		@Override
-//		public void activate(ColumnViewerEditorActivationEvent activationEvent) {
-//			super.activate();
-//			if (activationEvent.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) {
-//				this.text.setText(String.valueOf(activationEvent.character));
-//			}
-//		}
 		
 		@Override
 		public void deactivate() {
@@ -154,36 +144,14 @@ public class NameEditingSupport extends EditingSupport
 				ProcessStep ps1 = steps.get(moveTo-1);
 				ProcessStep ps2 = steps.get(moveTo);
 				
-				if (ps2.getConnector() != ps1.getConnector())
-					if (ps2.size() < ps1.size())
+				if(ps2.getConnector() != ps1.getConnector())
+					if(ps2.size() < ps1.size())
 						col = 0;
 			}
-			if (moveCursor)
-				if (viewer != null && steps != null && steps.size() > 0)
-					viewer.editElement(steps.get(moveTo), col * 2 + 2);
-		}
-
-		@Override
-		protected void keyReleaseOccured(KeyEvent keyEvent) {
-			// System.out.println(keyEvent.keyCode);
-			if (keyEvent.keyCode == 9) { // Tabulator
-				super.deactivate();
-				this.fireCancelEditor();
-			}
-			super.keyReleaseOccured(keyEvent);
-			if (keyEvent.keyCode == SWT.ESC) {
-				super.deactivate();
-				this.fireCancelEditor();
-			}
-
-		}
-
-		@Override
-		protected void doSetFocus() {
-			super.doSetFocus();
-			if (text != null) {
-				text.clearSelection();
-			}
-		}
+			
+			if(moveCursor)
+				if(viewer != null && steps != null && steps.size() > 0)
+						viewer.editElement(steps.get(moveTo), col*2+2);
+		}	
 	}
 }

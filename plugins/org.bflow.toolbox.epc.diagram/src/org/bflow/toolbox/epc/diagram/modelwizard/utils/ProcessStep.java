@@ -135,6 +135,6 @@ public class ProcessStep implements ISelection
 
 	@Override
 	public boolean isEmpty() {
-		return elements.isEmpty();
+		return false;
 	}
 }

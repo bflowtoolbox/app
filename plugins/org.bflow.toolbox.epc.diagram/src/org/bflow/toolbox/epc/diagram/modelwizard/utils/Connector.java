@@ -191,49 +191,5 @@ public class Connector
 			
 			return null;
 		}
-		
-		/**
-		 * Returns the Shortcut for the ModelWizard Connector Selection.
-		 * @return EMF IElementType
-		 */
-		public String getShortcut() {
-			switch (this) {
-			case AND_SINGLE:
-				return "Alt + y";
-			case AND_DOUBLE:
-				return "Alt + x";
-			case AND_N:
-				return "Alt + c";
-			case OR_SINGLE:
-				return "Alt + a";
-			case OR_DOUBLE:
-				return "Alt + s";
-			case OR_N:
-				return "Alt + d";
-			case XOR_SINGLE:
-				return "Alt + q";
-			case XOR_DOUBLE:
-				return "Alt + w";
-			case XOR_N:
-				return "Alt + c";
-			case XOR_IT:
-				return "Alt + r";
-			case NONE:
-				return "Strg + x";
-			default:
-				break;
-			}
-			return "";
-			
-		}
-		
-		/**
-		 * Returns true if it is a SingleConnector
-		 * @return
-		 */
-		public boolean isSingleConnector(){
-			return this == AND_SINGLE || this == OR_SINGLE || this == XOR_SINGLE;
-		} 
-		
 	}
 }

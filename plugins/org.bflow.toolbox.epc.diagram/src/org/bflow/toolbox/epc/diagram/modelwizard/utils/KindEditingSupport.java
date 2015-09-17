@@ -8,8 +8,6 @@ import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 
 /**
  * Implements the EditingSupport interface for a table viewer.
@@ -62,30 +60,13 @@ public class KindEditingSupport extends EditingSupport
 	@Override
 	protected Object getValue(Object element) 
 	{
-		ProcessStep currentProcessStep = (ProcessStep)element;
-		Element el = currentProcessStep.get(column);
-
+		ProcessStep processStep = (ProcessStep)element;
+		Element el = processStep.get(column);
 		
-		currentProcessStep.set(new Element(el.getName(), (el.getKind() == Kind.Event ? Kind.Function : Kind.Event)), column);
+		processStep.set(new Element(el.getName(), (el.getKind() == Kind.Event ? Kind.Function : Kind.Event))
+											, column);
 		
-		TableViewer tv = (TableViewer) getViewer();
-		Table table = tv.getTable();
-		TableItem[] items = table.getItems();
-		ProcessStep lastItem = (ProcessStep) items[items.length-1].getData();
-		if (items.length >= 2) {
-			ProcessStep secondLastItem = (ProcessStep) items[items.length - 2].getData();
-
-			if (secondLastItem.equals(currentProcessStep) && !lastItem.isEmpty()) {
-				Element lastelement = lastItem.get(column);
-				if (lastelement.getName().isEmpty()) {
-					Kind kind = currentProcessStep.get(column).getKind();
-
-					lastItem.set(new Element("", (kind == Kind.Event ? Kind.Function : Kind.Event)), column);
-				}
-			}
-		}
-		
-		tv.update(element, null);
+		getViewer().update(element, null);
 		
 		return null;
 	}
