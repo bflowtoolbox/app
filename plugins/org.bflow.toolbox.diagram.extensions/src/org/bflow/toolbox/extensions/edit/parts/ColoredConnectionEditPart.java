@@ -1,9 +1,7 @@
 package org.bflow.toolbox.extensions.edit.parts;
 
-import org.bflow.toolbox.extensions.edit.parts.policies.SelectionFeedbackEditPolicy;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.EditDomain;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionNodeEditPart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.graphics.Color;
@@ -37,11 +35,6 @@ public abstract class ColoredConnectionEditPart extends ConnectionNodeEditPart i
 		setBackgroundColor(background);
 	}
 
-	@Override
-	protected void createDefaultEditPolicies() {
-		super.createDefaultEditPolicies();
-		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new SelectionFeedbackEditPolicy());
-	}
 	
 	/**
 	 * Returns the edit domain.
