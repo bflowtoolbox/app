@@ -1,7 +1,11 @@
 package org.bflow.toolbox.epc.diagram.modelwizard.pages;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.ColumnConnectorLabelProvider;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.ColumnImageLabelProvider;
@@ -20,11 +24,21 @@ import org.bflow.toolbox.extensions.internationalisation.MessageProvider;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.FocusCellOwnerDrawHighlighter;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.jface.viewers.TableViewerFocusCellManager;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -33,6 +47,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -82,6 +98,14 @@ public class ElementGeneratorWizardPage extends WizardPage {
 	 * Tells if a connector is recently open.
 	 */
 	private boolean connectorOpen = false;
+	
+	/**
+	 * For storing the last visited cell by interruption of a other program
+	 */
+	protected ViewerCell currentcell;
+
+	/** The log instance for this class */
+	private static final Log logger = LogFactory.getLog(ElementGeneratorWizardPage.class);
 
 	/**
 	 * Default constructor.
@@ -94,6 +118,8 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				.getMessage("ElementGeneratorWizardPage#msg3"));
 
 		this.anchor = anchor;
+		
+		
 	}
 
 	@Override
@@ -124,8 +150,51 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		Composite tablePanel = new Composite(composite, SWT.NONE);
 		tablePanel.setLayout(new GridLayout(1, false));
 
-		tableViewer = new TableViewer(tablePanel, SWT.FULL_SELECTION
-				| SWT.V_SCROLL | SWT.H_SCROLL);
+		int style = SWT.BORDER | SWT.HIDE_SELECTION | SWT.FULL_SELECTION;
+		tableViewer = new TableViewer(tablePanel, style);
+		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+		
+						
+		final TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(tableViewer,new FocusCellOwnerDrawHighlighter(tableViewer));
+		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
+
+			@Override
+			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
+				ViewerCell focusCell = (ViewerCell) event.getSource();
+				int currentColumn = focusCell.getVisualIndex();
+				boolean isNameColumn = currentColumn%2 == 0;
+				
+				if(event.stateMask == SWT.ALT){
+					return false;
+				}
+				
+				if (event.keyCode == SWT.SPACE && currentColumn%2 == 1) {
+					return true;
+				}
+				if (event.keyCode == SWT.CR && currentColumn%2 == 0 && currentColumn != 0) {
+					return true;
+				}
+				
+				if (event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC && isNameColumn) {
+					focusCellManager.getFocusCell(); //bug, dies stellt aber die Sictbarkeit des Cell-Cursors wieder her
+					return false;
+				}
+				
+				if (isNameColumn && ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 97 && event.keyCode <= 122))) {
+					return true;
+				}
+								
+				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION && currentColumn > 0;
+			}
+		};
+		
+		int features = ColumnViewerEditor.TABBING_HORIZONTAL
+				| ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
+				| ColumnViewerEditor.TABBING_VERTICAL
+				| ColumnViewerEditor.KEYBOARD_ACTIVATION;
+
+		TableViewerEditor.create(tableViewer, focusCellManager, actSupport, features);
+		
 		table = tableViewer.getTable();
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
@@ -140,6 +209,47 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 		table.addKeyListener(new TableKeyListener());
 		table.addMenuDetectListener(new MyMenuDectectListener());
+
+		//avoids the wizard finish activation
+		table.addTraverseListener(new TraverseListener() {
+			
+			@Override
+			public void keyTraversed(TraverseEvent e) {
+				if ( e.detail == SWT.TRAVERSE_RETURN )
+		        {
+		            e.doit = false;
+		        }
+				
+			}
+		});
+		table.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				currentcell =  focusCellManager.getFocusCell();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				// Reflection for access to the setFocusCell-Methode of TableViewerFocusCellManager
+				// Bugreport: --> https://bugs.eclipse.org/bugs/show_bug.cgi?id=198260
+				try {
+					Method setFocusCell = TableViewerFocusCellManager.class.getSuperclass().getDeclaredMethod("setFocusCell", 
+							new Class[] { ViewerCell.class });
+					setFocusCell.setAccessible(true);
+					
+					if (currentcell != null) {
+						setFocusCell.invoke(focusCellManager, currentcell);
+						currentcell.getItem();
+
+					} else {
+						ViewerCell secondColumn = focusCellManager.getFocusCell().getNeighbor(ViewerCell.RIGHT,true);
+						setFocusCell.invoke(focusCellManager, secondColumn.getNeighbor(ViewerCell.RIGHT, true));
+					}
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e1) {
+					logger.error("Reflection does not work, focus to a cell cannot programmatically set.",e1);
+				}
+			}
+		});
 
 		// table pop-up menu
 		setUpPopUpMenu(table);
@@ -168,19 +278,33 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		tableViewer.add(step);
 
 		processSteps.add(step);
-
-		/*
-		 * 
-		 */
+		
+		getShell().addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				currentcell =  focusCellManager.getFocusCell();
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				table.setFocus();
+			}
+		});
 
 		this.setControl(composite);
-
 		tableViewer.editElement(step, 2);
 	}
 
 	@Override
 	public boolean canFlipToNextPage() {
 		return true;
+	}
+	
+	@Override
+	public void setVisible(boolean f) {
+		super.setVisible(f);
+		table.setFocus();
 	}
 
 	/**

@@ -54,4 +54,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.epsilon.common.dt;bundle-version="0.9.1",
  org.bflow.toolbox.hive.interchange;bundle-version="1.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: check
+Import-Package: check,
+ org.apache.commons.logging

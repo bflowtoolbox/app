@@ -77,6 +77,23 @@ public class EpcDiagramEditUtil {
 	 */
 	public static void createConnection(EpcDiagramEditor editor,
 			EditPart source, EditPart target) {
+		createConnection(editor, source, target, null);
+	}
+	
+	/**
+	 * Creates a new connection between two model elements.
+	 * 
+	 * @param editor
+	 *            editor instance
+	 * @param source
+	 *            source edit part
+	 * @param target
+	 *            target edit part
+	 * @param commandLabel
+	 *            command label
+	 */
+	public static void createConnection(EpcDiagramEditor editor,
+			EditPart source, EditPart target, String commandLabel) {
 		if (target == null || source == null)
 			return;
 
@@ -94,7 +111,11 @@ public class EpcDiagramEditUtil {
 				.getCommand(new EditCommandRequestWrapper(request,
 						Collections.EMPTY_MAP));
 
-		command.setLabel("intelligent arc creation");
+		if (commandLabel != null) {
+			command.setLabel(commandLabel);
+		}else {
+			command.setLabel("intelligent arc creation");
+		}
 		command.execute();
 		currentCommandCollection.getStack().add(command);
 	}

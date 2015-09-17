@@ -9,6 +9,8 @@ import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -153,5 +155,26 @@ public class NameEditingSupport extends EditingSupport
 				if(viewer != null && steps != null && steps.size() > 0)
 						viewer.editElement(steps.get(moveTo), col*2+2);
 		}	
+		
+		@Override
+		protected void keyReleaseOccured(KeyEvent keyEvent) {
+			if (keyEvent.keyCode == 9) { // Tabulator
+				super.deactivate();
+				this.fireCancelEditor();
+			}
+			super.keyReleaseOccured(keyEvent);
+			if (keyEvent.keyCode == SWT.ESC) {
+				super.deactivate();
+				this.fireCancelEditor();
+			}
+		}
+		
+		@Override
+		protected void doSetFocus() {
+			super.doSetFocus();
+			if (text != null) {
+				text.clearSelection();
+			}
+		}
 	}
 }
