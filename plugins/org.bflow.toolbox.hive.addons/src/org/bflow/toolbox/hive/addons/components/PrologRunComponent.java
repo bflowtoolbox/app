@@ -11,6 +11,8 @@ import java.util.Vector;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.interfaces.IPrologRunComponent;
@@ -61,6 +63,9 @@ public class PrologRunComponent implements IPrologRunComponent {
 	private String endCommand = null;
 
 	private boolean internal = false;
+	
+	/** The log instance for this class */
+	private static final Log logger = LogFactory.getLog(PrologRunComponent.class);
 
 	/**
 	 * Default constructor.
@@ -130,28 +135,27 @@ public class PrologRunComponent implements IPrologRunComponent {
 			// pl
 			if (str.contains("-pl:")) {
 				String value = str.substring(4);
-
-				URL url = PrologAdditionStore.getURL(value);
-
-				if (url != null) {
-					File prologBaseFile;
-
-					try {
-						prologBaseFile = File.createTempFile("epc2009", ".pl");
-						prologBaseFile.deleteOnExit();
-						FileUtils.copyURLToFile(url, prologBaseFile);
-
-						facts = prologBaseFile;
-
-						internal = true;
-					} catch (IOException ex) {
-						ex.printStackTrace();
+				
+				try {
+					File prologBaseFile = File.createTempFile("epc2009", ".pl");
+					prologBaseFile.deleteOnExit();
+					URL url = PrologAdditionStore.getURL(value);
+										
+					if (url != null) {	
+							FileUtils.copyURLToFile(url, prologBaseFile);
+							facts = prologBaseFile;
+							internal = true;
+					} else {
+						File externFile = new File(value);
+						if (!externFile.exists()) {
+							facts = null;
+						}else {
+							FileUtils.copyFile(externFile, prologBaseFile);
+							facts = prologBaseFile;
+						}
 					}
-				} else {
-					facts = new File(value);
-
-					if (!facts.exists())
-						facts = null;
+				} catch (IOException e) {
+					logger.error("Temporary file for Prolog execution could not be created.", e);
 				}
 			}
 
