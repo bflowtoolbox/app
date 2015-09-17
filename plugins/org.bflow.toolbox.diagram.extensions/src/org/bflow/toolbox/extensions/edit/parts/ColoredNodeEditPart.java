@@ -3,8 +3,10 @@ package org.bflow.toolbox.extensions.edit.parts;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bflow.toolbox.extensions.edit.parts.policies.SelectionFeedbackEditPolicy;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.EditDomain;
+import org.eclipse.gef.EditPolicy;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.graphics.Color;
 
@@ -91,5 +93,11 @@ public abstract class ColoredNodeEditPart extends AnchoredNodeEditPart
 	 */
 	public EditDomain getEditDomain(){
 		return super.getEditDomain();
+	}
+	
+	@Override
+	protected void createDefaultEditPolicies() {
+		super.createDefaultEditPolicies();
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new SelectionFeedbackEditPolicy());
 	}
 }
