@@ -87,14 +87,7 @@ public class SelectionFeedbackEditPolicy extends GraphicalEditPolicy {
 	 * @return associated EObject or null
 	 */
 	private EObject getEObject(IGraphicalEditPart graphicalEditPart) {
-		if (graphicalEditPart instanceof DiagramEditPart) {
-			DiagramEditPart diagramEditPart = (DiagramEditPart) graphicalEditPart;
-			return diagramEditPart.getNotationView().getElement();
-		}
-		if (graphicalEditPart instanceof ShapeNodeEditPart || graphicalEditPart instanceof ConnectionNodeEditPart) {
-			return graphicalEditPart.getPrimaryView().getElement();
-		}
-		return null;
+			return (EObject) graphicalEditPart.getAdapter(EObject.class);
 	}
  
 }
