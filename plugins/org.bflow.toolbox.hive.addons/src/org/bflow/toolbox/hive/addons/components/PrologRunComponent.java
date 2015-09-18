@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bflow.toolbox.hive.addons.AddonPlugin;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.interfaces.IPrologRunComponent;
@@ -65,7 +66,7 @@ public class PrologRunComponent implements IPrologRunComponent {
 	private boolean internal = false;
 	
 	/** The log instance for this class */
-	private static final Log logger = LogFactory.getLog(PrologRunComponent.class);
+	private static final Log logger = LogFactory.getLog(AddonPlugin.class);
 
 	/**
 	 * Default constructor.
