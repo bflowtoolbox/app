@@ -6,6 +6,7 @@ import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector.ConnectorType;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Element.Kind;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -134,6 +135,16 @@ public class NameEditingSupport extends EditingSupport
 		public MyTextCellEditor(Composite parent) {
 			super(parent);			
 		}
+		
+		@Override
+		public void activate(ColumnViewerEditorActivationEvent activationEvent) {
+			super.activate();
+			if (activationEvent.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) {
+				this.text.setText(String.valueOf(activationEvent.character));
+
+			}
+		}
+
 		
 		@Override
 		public void deactivate() {
