@@ -126,7 +126,7 @@ public class PrologRunComponent implements IPrologRunComponent {
 	 * @see org.bflow.toolbox.mitamm.components.IPrologRunComponent#init()
 	 */
 	@Override
-	public void init() {
+	public void init() throws IOException {
 		this.params = new Vector<String>();
 
 		String params[] = this.toolParam.split(" ");
@@ -156,7 +156,7 @@ public class PrologRunComponent implements IPrologRunComponent {
 						}
 					}
 				} catch (IOException e) {
-					logger.error("Temporary file for Prolog execution could not be created.", e);
+					throw e;
 				}
 			}
 
