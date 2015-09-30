@@ -39,6 +39,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -153,7 +154,6 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		int style = SWT.BORDER | SWT.HIDE_SELECTION | SWT.FULL_SELECTION;
 		tableViewer = new TableViewer(tablePanel, style);
 		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-		
 						
 		final TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(tableViewer,new FocusCellOwnerDrawHighlighter(tableViewer));
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
@@ -163,6 +163,8 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				ViewerCell focusCell = (ViewerCell) event.getSource();
 				int currentColumn = focusCell.getVisualIndex();
 				boolean isNameColumn = currentColumn%2 == 0;
+				
+				
 				
 				if(event.stateMask == SWT.ALT){
 					return false;
@@ -183,8 +185,9 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				if (isNameColumn && ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 97 && event.keyCode <= 122))) {
 					return true;
 				}
-								
+				
 				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION && currentColumn > 0;
+				
 			}
 		};
 		
@@ -220,6 +223,16 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		            e.doit = false;
 		        }
 				
+			}
+		});
+		
+		table.addKeyListener(new KeyAdapter() {			
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// anosonsten wird das Event in bestimmten Situation an das Widget und OS weitergeleitet
+				// und führt zu einem Warnton (für ungültige Taste) obwohl die Taste im TableViewer verarbeitet wird.
+				e.doit = false;// do nothing	
 			}
 		});
 		table.addFocusListener(new FocusListener() {
