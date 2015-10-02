@@ -164,8 +164,6 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				int currentColumn = focusCell.getVisualIndex();
 				boolean isNameColumn = currentColumn%2 == 0;
 				
-				
-				
 				if(event.stateMask == SWT.ALT){
 					return false;
 				}
@@ -183,11 +181,11 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				}
 				
 				if (isNameColumn && ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 97 && event.keyCode <= 122))) {
+					KeyEvent ke = (KeyEvent) event.sourceEvent;
+					ke.doit = false;
 					return true;
 				}
-				
 				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION && currentColumn > 0;
-				
 			}
 		};
 		
@@ -226,15 +224,6 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			}
 		});
 		
-		table.addKeyListener(new KeyAdapter() {			
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// anosonsten wird das Event in bestimmten Situation an das Widget und OS weitergeleitet
-				// und führt zu einem Warnton (für ungültige Taste) obwohl die Taste im TableViewer verarbeitet wird.
-				e.doit = false;// do nothing	
-			}
-		});
 		table.addFocusListener(new FocusListener() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -338,7 +327,6 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		// processSteps.lastElement().getConnector().getConnectorType() ==
 		// ConnectorType.NONE)
 		// return ;
-
 		if (pp > visibleColumns) {
 			TableViewerColumn typColumn = new TableViewerColumn(tableViewer,
 					SWT.NONE);
@@ -368,12 +356,9 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		parallelProcesses++;
 
 		if (processSteps.size() > 1) {
-
 			int lastIndex = processSteps.size() - 1;
-
 			ProcessStep step = processSteps.get(lastIndex - 1);
 			boolean event = (step.get(0).getKind() == Kind.Event ? true : false);
-
 			processSteps.lastElement().add(
 					new Element("", (event ? Kind.Function : Kind.Event)));
 		}
