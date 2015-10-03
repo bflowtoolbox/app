@@ -80,7 +80,23 @@ public class Element
 		/**
 		 * function flag
 		 */
-		Function;
+		Function,
+		
+		/**
+		 * xor_single flag
+		 */
+		XOR_Single,
+		
+		/**
+		 * xor_single flag
+		 */
+		OR_Single,
+		
+		/**
+		 * xor_single flag
+		 */
+		AND_Single;
+		
 		
 		/**
 		 * Returns the position of the element within the enumeration hierarchie.

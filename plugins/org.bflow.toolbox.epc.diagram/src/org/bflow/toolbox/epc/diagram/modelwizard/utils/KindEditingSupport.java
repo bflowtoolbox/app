@@ -64,26 +64,28 @@ public class KindEditingSupport extends EditingSupport
 	{
 		ProcessStep currentProcessStep = (ProcessStep)element;
 		Element el = currentProcessStep.get(column);
-		
-		currentProcessStep.set(new Element(el.getName(), (el.getKind() == Kind.Event ? Kind.Function : Kind.Event)), column);
-		
 		TableViewer tv = (TableViewer) getViewer();
-		Table table = tv.getTable();
-		TableItem[] items = table.getItems();
-		ProcessStep lastItem = (ProcessStep) items[items.length-1].getData();
-		if (items.length >= 2) {
-			ProcessStep secondLastItem = (ProcessStep) items[items.length - 2].getData();
+		
+		if (el.getKind() == Kind.Event || el.getKind() == Kind.Function) {
+			currentProcessStep.set(new Element(el.getName(),(el.getKind() == Kind.Event ? Kind.Function : Kind.Event)),column);
 
-			if (secondLastItem.equals(currentProcessStep) && !lastItem.isEmpty()) {
-				Element lastelement = lastItem.get(column);
-				if (lastelement.getName().isEmpty()) {
-					Kind kind = currentProcessStep.get(column).getKind();
+			Table table = tv.getTable();
+			TableItem[] items = table.getItems();
+			ProcessStep lastItem = (ProcessStep) items[items.length - 1].getData();
+			if (items.length >= 2) {
+				ProcessStep secondLastItem = (ProcessStep) items[items.length - 2].getData();
 
-					lastItem.set(new Element("", (kind == Kind.Event ? Kind.Function : Kind.Event)), column);
+				if (secondLastItem.equals(currentProcessStep) && !lastItem.isEmpty()) {
+					Element lastelement = lastItem.get(column);
+					if (lastelement.getName().isEmpty()) {
+						Kind kind = currentProcessStep.get(column).getKind();
+						lastItem.set(new Element("",(kind == Kind.Event ? Kind.Function	: Kind.Event)), column);
+					}
 				}
 			}
+		}else {// es ist eine Single-Konnektor
+			currentProcessStep.set(new Element(" ",(Kind.Event)), column);
 		}
-		
 		tv.update(element, null);
 		
 		return null;

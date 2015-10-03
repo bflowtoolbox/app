@@ -25,10 +25,12 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.FocusCellOwnerDrawHighlighter;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -105,6 +107,8 @@ public class ElementGeneratorWizardPage extends WizardPage {
 	 */
 	protected ViewerCell currentcell;
 
+	private TableViewerFocusCellManager focusCellManager;
+
 	/** The log instance for this class */
 	private static final Log logger = LogFactory.getLog(ElementGeneratorWizardPage.class);
 
@@ -155,7 +159,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		tableViewer = new TableViewer(tablePanel, style);
 		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
 						
-		final TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(tableViewer,new FocusCellOwnerDrawHighlighter(tableViewer));
+		focusCellManager = new TableViewerFocusCellManager(tableViewer,new FocusCellOwnerDrawHighlighter(tableViewer));
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
 
 			@Override
@@ -599,19 +603,43 @@ public class ElementGeneratorWizardPage extends WizardPage {
 					|| type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE)) {
 				selectConnector(newConn);
 				progressTable(newConn);
-			} else // nur ein single step
-			{
-				progressTable(newConn); // alten Connektor setzen
-
-				newConn = new Connector(ConnectorType.NONE); // neuen einfügen
-																// und
-																// aktivieren
-
-				ProcessStep step = new ProcessStep(newConn);
-				step.add(new Element("", Kind.Event));
-				processSteps.add(step);
-				tableViewer.add(step);
-				progressTable(newConn);
+			} else { // nur ein single step
+			
+				ViewerCell focusCell = focusCellManager.getFocusCell();
+				ProcessStep currentStep = (ProcessStep) focusCell.getElement();
+				int index = focusCell.getVisualIndex();
+				int stepPosition;
+				if (index % 2 == 0) {
+					stepPosition = index - 2;
+				}else{
+					stepPosition = index - 1;
+				}
+				
+				if (type == ConnectorType.XOR_SINGLE) {
+					currentStep.set(new Element("XOR", Kind.XOR_Single), stepPosition);
+				}
+				if (type == ConnectorType.OR_SINGLE) {
+					currentStep.set(new Element("OR", Kind.OR_Single), stepPosition);
+				}
+				if (type == ConnectorType.AND_SINGLE) {
+					currentStep.set(new Element("AND", Kind.AND_Single), stepPosition);
+				}
+				
+				tableViewer.update(currentStep, null);
+				
+				
+				if (processSteps.lastElement().equals(currentStep)) {
+					newConn = new Connector(ConnectorType.NONE); // neuen
+																	// einfügen
+					// und
+					// aktivieren
+					ProcessStep newEmptyStep = new ProcessStep(newConn);
+					newEmptyStep.add(new Element("", Kind.Event));
+					processSteps.add(newEmptyStep);
+					tableViewer.add(newEmptyStep);
+					progressTable(newConn);
+				}		
+				
 			}
 		}
 
@@ -671,8 +699,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 					|| type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE)) {
 				selectConnector(newConn);
 				progressTable(newConn);
-			} else // nur ein single step
-			{
+			} else {// nur ein single step
 				progressTable(newConn); // alten Connektor setzen
 
 				newConn = new Connector(ConnectorType.NONE); // neuen einfügen

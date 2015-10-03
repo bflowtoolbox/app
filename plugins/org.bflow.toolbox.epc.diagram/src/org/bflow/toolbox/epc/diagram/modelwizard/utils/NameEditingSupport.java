@@ -44,7 +44,6 @@ public class NameEditingSupport extends EditingSupport
 	{
 		super(viewer);
 		
-		this.editor = new TextCellEditor(((TableViewer)viewer).getTable());
 		this.column = column;
 		this.steps = steps;
 		this.viewer = (TableViewer)viewer;
@@ -144,12 +143,11 @@ public class NameEditingSupport extends EditingSupport
 
 			}
 		}
-
 		
 		@Override
 		public void deactivate() {
 			super.deactivate();
-			
+						
 			int col = column;
 			
 			if(moveCursor)

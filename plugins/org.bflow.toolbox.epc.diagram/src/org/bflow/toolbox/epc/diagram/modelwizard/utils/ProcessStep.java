@@ -132,7 +132,7 @@ public class ProcessStep implements ISelection
 		
 		return count;
 	}
-
+	
 	@Override
 	public boolean isEmpty() {
 		return elements.isEmpty();
