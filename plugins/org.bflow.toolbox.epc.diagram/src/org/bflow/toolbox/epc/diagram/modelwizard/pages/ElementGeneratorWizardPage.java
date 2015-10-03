@@ -588,23 +588,15 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				if (getOpenConnectorLabel().getType() == newConn.getConnectorType()){// offener Konnektor wurde ausgewählt
 					newConn = new Connector(ConnectorType.NONE);
 				}else if ((type == ConnectorType.AND_SINGLE	|| type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE)) {
-					// erstmal so um isProcessable zuumgehen, da es derzeit nur mit Shortcuts geht, später das in is PRcessable prüfen
+					// erstmal so um isProcessable zuumgehen, da es derzeit nur mit Shortcuts geht, später das in isPRcessable prüfen
 				}else if (!isProcessable())
 					return;
 
-			deselectConnectors();
-			/*
-			 * selectConnector(newConn);
-			 * 
-			 * progressTable(newConn);
-			 */
-
-			if (!(type == ConnectorType.AND_SINGLE
-					|| type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE)) {
-				selectConnector(newConn);
-				progressTable(newConn);
-			} else { // nur ein single step
 			
+			
+
+			if (type == ConnectorType.AND_SINGLE || type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE) {
+							
 				ViewerCell focusCell = focusCellManager.getFocusCell();
 				ProcessStep currentStep = (ProcessStep) focusCell.getElement();
 				int index = focusCell.getVisualIndex();
@@ -629,17 +621,22 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				
 				
 				if (processSteps.lastElement().equals(currentStep)) {
-					newConn = new Connector(ConnectorType.NONE); // neuen
-																	// einfügen
-					// und
-					// aktivieren
-					ProcessStep newEmptyStep = new ProcessStep(newConn);
-					newEmptyStep.add(new Element("", Kind.Event));
-					processSteps.add(newEmptyStep);
-					tableViewer.add(newEmptyStep);
-					progressTable(newConn);
+					newConn = currentStep.getConnector();
+					ProcessStep newStep = new ProcessStep(newConn);
+					
+					for(int i = 0; i < currentStep.size(); i++){
+						newStep.add(new Element("", Kind.Event));
+					}
+					processSteps.add(newStep);
+					tableViewer.add(newStep);
+					
+					for(ProcessStep s:processSteps)
+						tableViewer.update(s, null);
 				}		
-				
+			}else {
+				deselectConnectors();
+				selectConnector(newConn);
+				progressTable(newConn);
 			}
 		}
 
