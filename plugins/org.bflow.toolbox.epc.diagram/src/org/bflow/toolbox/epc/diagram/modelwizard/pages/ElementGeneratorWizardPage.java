@@ -581,13 +581,15 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 			if (newConn == null) // keine interessante Taste wurde gedrückt
 				return;
-
+			
+			ConnectorType type = newConn.getConnectorType();
+			
 			if (connectorOpen)
-				if (getOpenConnectorLabel().getType() == newConn
-						.getConnectorType()) // offener Konnektor wurde
-												// ausgewählt
+				if (getOpenConnectorLabel().getType() == newConn.getConnectorType()){// offener Konnektor wurde ausgewählt
 					newConn = new Connector(ConnectorType.NONE);
-				else if (!isProcessable())
+				}else if ((type == ConnectorType.AND_SINGLE	|| type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE)) {
+					// erstmal so um isProcessable zuumgehen, da es derzeit nur mit Shortcuts geht, später das in is PRcessable prüfen
+				}else if (!isProcessable())
 					return;
 
 			deselectConnectors();
@@ -596,8 +598,6 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			 * 
 			 * progressTable(newConn);
 			 */
-
-			ConnectorType type = newConn.getConnectorType();
 
 			if (!(type == ConnectorType.AND_SINGLE
 					|| type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE)) {
@@ -610,9 +610,9 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				int index = focusCell.getVisualIndex();
 				int stepPosition;
 				if (index % 2 == 0) {
-					stepPosition = index - 2;
+					stepPosition = index - ((index/2)+1);
 				}else{
-					stepPosition = index - 1;
+					stepPosition = index - (index + 1)/2;
 				}
 				
 				if (type == ConnectorType.XOR_SINGLE) {
