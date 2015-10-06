@@ -48,15 +48,15 @@ public class ColumnImageLabelProvider extends ColumnLabelProvider
 		
 		XOR_SINGLE = new Image(composite.getDisplay(), 
 				this.getClass().
-				getResourceAsStream(Constants.IMGPACKAGE+"xor.gif"));
+				getResourceAsStream(Constants.IMGPACKAGE+"xor_single_kind.gif"));
 		
 		OR_SINGLE = new Image(composite.getDisplay(), 
 				this.getClass().
-				getResourceAsStream(Constants.IMGPACKAGE+"or.gif"));
+				getResourceAsStream(Constants.IMGPACKAGE+"or_single_kind.gif"));
 		
 		AND_SINGLE = new Image(composite.getDisplay(), 
 				this.getClass().
-				getResourceAsStream(Constants.IMGPACKAGE+"and.gif"));
+				getResourceAsStream(Constants.IMGPACKAGE+"and_single_kind.gif"));
 		
 		NONE = new Image(composite.getDisplay(), 
 				this.getClass().
