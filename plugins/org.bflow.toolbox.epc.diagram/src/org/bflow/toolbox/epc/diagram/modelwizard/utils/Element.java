@@ -142,6 +142,15 @@ public class Element
 		{
 			return next().getPosition();
 		}
+		
+		/**
+		 * Returns true if is a single connector
+		 * @return boolean
+		 */
+		public boolean isSingleConnector()
+		{
+			return this == AND_Single || this == XOR_Single || this == OR_Single;
+		}
 	}
 	
 	@Override

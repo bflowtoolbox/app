@@ -109,6 +109,8 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 	private TableViewerFocusCellManager focusCellManager;
 
+	private Method setFocusCell;
+
 	/** The log instance for this class */
 	private static final Log logger = LogFactory.getLog(ElementGeneratorWizardPage.class);
 
@@ -123,8 +125,20 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				.getMessage("ElementGeneratorWizardPage#msg3"));
 
 		this.anchor = anchor;
+		initSetFocusCellMethod();
 		
-		
+	}
+
+	private void initSetFocusCellMethod() {
+		// Reflection for access to the setFocusCell-Methode of TableViewerFocusCellManager
+		// Bugreport: --> https://bugs.eclipse.org/bugs/show_bug.cgi?id=198260
+		try {
+			setFocusCell = TableViewerFocusCellManager.class.getSuperclass().getDeclaredMethod("setFocusCell", 
+					new Class[] { ViewerCell.class });
+			setFocusCell.setAccessible(true);
+		} catch (IllegalArgumentException | NoSuchMethodException | SecurityException e1) {
+			logger.error("Reflection does not work, focus to a cell cannot programmatically set.",e1);
+		}
 	}
 
 	@Override
@@ -167,6 +181,11 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				ViewerCell focusCell = (ViewerCell) event.getSource();
 				int currentColumn = focusCell.getVisualIndex();
 				boolean isNameColumn = currentColumn%2 == 0;
+				ProcessStep currentStep = (ProcessStep) focusCell.getElement();
+				int elementPosition = getProcessElementIndexByColumnIndex(currentColumn);
+				if (currentStep.get(elementPosition).getKind().isSingleConnector()) {
+					return false;
+				}
 				
 				if(event.stateMask == SWT.ALT){
 					return false;
@@ -236,13 +255,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			
 			@Override
 			public void focusGained(FocusEvent e) {
-				// Reflection for access to the setFocusCell-Methode of TableViewerFocusCellManager
-				// Bugreport: --> https://bugs.eclipse.org/bugs/show_bug.cgi?id=198260
 				try {
-					Method setFocusCell = TableViewerFocusCellManager.class.getSuperclass().getDeclaredMethod("setFocusCell", 
-							new Class[] { ViewerCell.class });
-					setFocusCell.setAccessible(true);
-					
 					if (currentcell != null) {
 						setFocusCell.invoke(focusCellManager, currentcell);
 						currentcell.getItem();
@@ -251,8 +264,8 @@ public class ElementGeneratorWizardPage extends WizardPage {
 						ViewerCell secondColumn = focusCellManager.getFocusCell().getNeighbor(ViewerCell.RIGHT,true);
 						setFocusCell.invoke(focusCellManager, secondColumn.getNeighbor(ViewerCell.RIGHT, true));
 					}
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e1) {
-					logger.error("Reflection does not work, focus to a cell cannot programmatically set.",e1);
+				} catch ( IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+					logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.",e1);
 				}
 			}
 		});
@@ -527,6 +540,21 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 		table.setMenu(popUpMenu);
 	}
+	
+	/**
+	 * Returns the position of an element within of a process step 
+	 * @param index of the table column
+	 * @return index of the element
+	 */
+	private int getProcessElementIndexByColumnIndex(int index) {
+		int stepPosition;
+		if (index % 2 == 0) { 
+			stepPosition = index - ((index/2)+1);
+		}else{ 
+			stepPosition = index - (index + 1)/2;
+		}
+		return stepPosition;
+	}
 
 	/**
 	 * Implements a KeyListener for a table cursor.
@@ -592,20 +620,12 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				}else if (!isProcessable())
 					return;
 
-			
-			
-
 			if (type == ConnectorType.AND_SINGLE || type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE) {
 							
 				ViewerCell focusCell = focusCellManager.getFocusCell();
 				ProcessStep currentStep = (ProcessStep) focusCell.getElement();
 				int index = focusCell.getVisualIndex();
-				int stepPosition;
-				if (index % 2 == 0) {
-					stepPosition = index - ((index/2)+1);
-				}else{
-					stepPosition = index - (index + 1)/2;
-				}
+				int stepPosition = getProcessElementIndexByColumnIndex(index);
 				
 				if (type == ConnectorType.XOR_SINGLE) {
 					currentStep.set(new Element("XOR", Kind.XOR_Single), stepPosition);
@@ -623,7 +643,6 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				if (processSteps.lastElement().equals(currentStep)) {
 					newConn = currentStep.getConnector();
 					ProcessStep newStep = new ProcessStep(newConn);
-					
 					for(int i = 0; i < currentStep.size(); i++){
 						newStep.add(new Element("", Kind.Event));
 					}
@@ -632,7 +651,29 @@ public class ElementGeneratorWizardPage extends WizardPage {
 					
 					for(ProcessStep s:processSteps)
 						tableViewer.update(s, null);
-				}		
+					
+		//WIRD NOCH weiter entwickelt			
+//					try {
+//						if (index % 2 == 0) {//Bennenungsspalte
+//							setFocusCell.invoke(focusCellManager, focusCell.getNeighbor(ViewerCell.BELOW, true));
+//						}else {//Typspalte
+//							ViewerCell rightNeighbor = focusCell.getNeighbor(ViewerCell.RIGHT,true);
+//							setFocusCell.invoke(focusCellManager, rightNeighbor.getNeighbor(ViewerCell.BELOW, true));
+//						}
+//					} catch ( IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+//						logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.",e1);
+//					}
+				}
+//				else {
+//					try {
+//						System.out.println();
+//						ViewerCell below = focusCell.getNeighbor(ViewerCell.BELOW, true);
+//						ViewerCell left = focusCell.getNeighbor(ViewerCell.LEFT, true);
+//						setFocusCell.invoke(focusCellManager, below);
+//				} catch ( IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+//					logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.",e1);
+//				}
+//				}		
 			}else {
 				deselectConnectors();
 				selectConnector(newConn);
