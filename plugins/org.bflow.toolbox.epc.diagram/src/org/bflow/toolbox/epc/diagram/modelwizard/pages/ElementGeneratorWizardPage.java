@@ -25,12 +25,10 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.FocusCellOwnerDrawHighlighter;
-import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -41,7 +39,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -463,13 +460,17 @@ public class ElementGeneratorWizardPage extends WizardPage {
 	}
 
 	/**
-	 * Proofs if a connector is still open and so the table shouldn't be
+	 * Proofs if a connector is still open and if the table shouldn't be
 	 * processed.
+	 * @param connectorType 
 	 * 
-	 * @return true if all connectors are closed
+	 * @return true if all connectors are closed or the current Connector is a singleConnector
 	 */
-	private boolean isProcessable() {
+	private boolean isProcessable(ConnectorType connectorType) {
 		if (connectorOpen) {
+			if (connectorType == ConnectorType.AND_SINGLE || connectorType == ConnectorType.OR_SINGLE || connectorType == ConnectorType.XOR_SINGLE) {
+				return true;
+			}
 			MessageDialog.openError(null, MessageProvider
 					.getMessage("ElementGeneratorWizardPage#msg7"),
 					MessageProvider
@@ -539,6 +540,59 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		mItemRedCC.addSelectionListener(listener);
 
 		table.setMenu(popUpMenu);
+	}
+	
+	/**
+	 * Adds a single connector to the current focused process step element
+	 * @param ConnectorType
+	 */
+	private void addSingleConnector(ConnectorType type) {
+		if (type == ConnectorType.AND_SINGLE || type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE) {
+			Connector newConn;
+			ViewerCell focusCell = focusCellManager.getFocusCell();
+			ProcessStep currentStep = (ProcessStep) focusCell.getElement();
+			int index = focusCell.getVisualIndex();
+			int stepPosition = getProcessElementIndexByColumnIndex(index);
+
+			if (type == ConnectorType.XOR_SINGLE) {
+				currentStep.set(new Element("XOR", Kind.XOR_Single), stepPosition);
+			}
+			if (type == ConnectorType.OR_SINGLE) {
+				currentStep.set(new Element("OR", Kind.OR_Single), stepPosition);
+			}
+			if (type == ConnectorType.AND_SINGLE) {
+				currentStep.set(new Element("AND", Kind.AND_Single), stepPosition);
+			}
+
+			tableViewer.update(currentStep, null);
+
+			if (processSteps.lastElement().equals(currentStep)) {
+				newConn = currentStep.getConnector();
+				ProcessStep newStep = new ProcessStep(newConn);
+				for (int i = 0; i < currentStep.size(); i++) {
+					newStep.add(new Element("", Kind.Event));
+				}
+				processSteps.add(newStep);
+				tableViewer.add(newStep);
+
+				for (ProcessStep s : processSteps)
+					tableViewer.update(s, null);
+
+				try {
+					if (index % 2 == 0) {// Bennenungsspalte
+						ViewerCell nextCell = focusCell.getNeighbor(ViewerCell.BELOW, true);
+						setFocusCell.invoke(focusCellManager, nextCell);
+						tableViewer.editElement(nextCell.getElement(), 2);
+					} else {// Typspalte
+						ViewerCell nextCell = focusCell.getNeighbor(ViewerCell.RIGHT | ViewerCell.BELOW, true);
+						setFocusCell.invoke(focusCellManager, nextCell);
+						tableViewer.editElement(nextCell.getElement(), 2);
+					}
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+					logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.", e1);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -612,66 +666,25 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			
 			ConnectorType type = newConn.getConnectorType();
 			
-			if (connectorOpen)
-				if (getOpenConnectorLabel().getType() == newConn.getConnectorType()){// offener Konnektor wurde ausgewählt
+			if (connectorOpen) {
+				if (getOpenConnectorLabel().getType() == newConn.getConnectorType()) {// offener Konnektor wurde ausgewählt
 					newConn = new Connector(ConnectorType.NONE);
-				}else if ((type == ConnectorType.AND_SINGLE	|| type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE)) {
-					// erstmal so um isProcessable zuumgehen, da es derzeit nur mit Shortcuts geht, später das in isPRcessable prüfen
-				}else if (!isProcessable())
+				} else if (!isProcessable(type)) {
 					return;
+				}
+			}
 
 			if (type == ConnectorType.AND_SINGLE || type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE) {
 							
-				ViewerCell focusCell = focusCellManager.getFocusCell();
-				ProcessStep currentStep = (ProcessStep) focusCell.getElement();
-				int index = focusCell.getVisualIndex();
-				int stepPosition = getProcessElementIndexByColumnIndex(index);
-				
-				if (type == ConnectorType.XOR_SINGLE) {
-					currentStep.set(new Element("XOR", Kind.XOR_Single), stepPosition);
-				}
-				if (type == ConnectorType.OR_SINGLE) {
-					currentStep.set(new Element("OR", Kind.OR_Single), stepPosition);
-				}
-				if (type == ConnectorType.AND_SINGLE) {
-					currentStep.set(new Element("AND", Kind.AND_Single), stepPosition);
-				}
-				
-				tableViewer.update(currentStep, null);
-				
-				
-				if (processSteps.lastElement().equals(currentStep)) {
-					newConn = currentStep.getConnector();
-					ProcessStep newStep = new ProcessStep(newConn);
-					for(int i = 0; i < currentStep.size(); i++){
-						newStep.add(new Element("", Kind.Event));
-					}
-					processSteps.add(newStep);
-					tableViewer.add(newStep);
-					
-					for(ProcessStep s:processSteps)
-						tableViewer.update(s, null);
-							
-					try {
-						if (index % 2 == 0) {// Bennenungsspalte
-							ViewerCell nextCell = focusCell.getNeighbor(ViewerCell.BELOW, true);
-							setFocusCell.invoke(focusCellManager, nextCell);
-							tableViewer.editElement(nextCell.getElement(), 2);
-						} else {// Typspalte
-							ViewerCell nextCell = focusCell.getNeighbor(ViewerCell.RIGHT | ViewerCell.BELOW, true);
-							setFocusCell.invoke(focusCellManager, nextCell);
-							tableViewer.editElement(nextCell.getElement(), 2);
-						}
-					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-						logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.", e1);
-					}
-				}
+				addSingleConnector(type);
 			}else {
 				deselectConnectors();
 				selectConnector(newConn);
 				progressTable(newConn);
 			}
 		}
+
+		
 
 		@Override
 		public void keyReleased(KeyEvent e) {
@@ -707,39 +720,24 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 			ConnectorType type;
 
-			if (conLabel == getOpenConnectorLabel()) // offener Konnektor wird
+			if (conLabel == getOpenConnectorLabel()) { // offener Konnektor wird
 														// geschlossen
 				type = ConnectorType.NONE;
-			else // neuer Konnektor wird ausgewählt
-			{
-				if (!isProcessable())
-					return;
-
+			} else { // neuer Konnektor wird ausgewählt
 				type = conLabel.getType();
+				if (!isProcessable(type)) {
+					return;
+				}
 			}
 
 			Connector newConn = new Connector(type);
-
-			deselectConnectors();
-
-			if (newConn == null)
-				return;
-
-			if (!(type == ConnectorType.AND_SINGLE
-					|| type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE)) {
+			
+			if (type == ConnectorType.AND_SINGLE || type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE) {
+				
+				addSingleConnector(type);
+			}else {
+				deselectConnectors();
 				selectConnector(newConn);
-				progressTable(newConn);
-			} else {// nur ein single step
-				progressTable(newConn); // alten Connektor setzen
-
-				newConn = new Connector(ConnectorType.NONE); // neuen einfügen
-																// und
-																// aktivieren
-
-				ProcessStep step = new ProcessStep(newConn);
-				step.add(new Element("", Kind.Event));
-				processSteps.add(step);
-				tableViewer.add(step);
 				progressTable(newConn);
 			}
 		}
