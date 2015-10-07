@@ -577,20 +577,20 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 				for (ProcessStep s : processSteps)
 					tableViewer.update(s, null);
-
-				try {
-					if (index % 2 == 0) {// Bennenungsspalte
-						ViewerCell nextCell = focusCell.getNeighbor(ViewerCell.BELOW, true);
-						setFocusCell.invoke(focusCellManager, nextCell);
-						tableViewer.editElement(nextCell.getElement(), 2);
-					} else {// Typspalte
-						ViewerCell nextCell = focusCell.getNeighbor(ViewerCell.RIGHT | ViewerCell.BELOW, true);
-						setFocusCell.invoke(focusCellManager, nextCell);
-						tableViewer.editElement(nextCell.getElement(), 2);
-					}
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-					logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.", e1);
+			}
+			
+			try {
+				if (index % 2 == 0) {// Bennenungsspalte
+					ViewerCell nextCell = focusCell.getNeighbor(ViewerCell.BELOW, true);
+					setFocusCell.invoke(focusCellManager, nextCell);
+					tableViewer.editElement(nextCell.getElement(), 2);
+				} else {// Typspalte
+					ViewerCell nextCell = focusCell.getNeighbor(ViewerCell.RIGHT | ViewerCell.BELOW, true);
+					setFocusCell.invoke(focusCellManager, nextCell);
+					tableViewer.editElement(nextCell.getElement(), 2);
 				}
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+				logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.", e1);
 			}
 		}
 	}
