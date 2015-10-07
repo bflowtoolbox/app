@@ -261,8 +261,8 @@ public class ElementGeneratorWizardPage extends WizardPage {
 						currentcell.getItem();
 
 					} else {
-						ViewerCell secondColumn = focusCellManager.getFocusCell().getNeighbor(ViewerCell.RIGHT,true);
-						setFocusCell.invoke(focusCellManager, secondColumn.getNeighbor(ViewerCell.RIGHT, true));
+						ViewerCell thirdColumn = focusCellManager.getFocusCell().getNeighbor(ViewerCell.RIGHT,true).getNeighbor(ViewerCell.RIGHT, true);
+						setFocusCell.invoke(focusCellManager, thirdColumn);
 					}
 				} catch ( IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 					logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.",e1);
@@ -651,29 +651,21 @@ public class ElementGeneratorWizardPage extends WizardPage {
 					
 					for(ProcessStep s:processSteps)
 						tableViewer.update(s, null);
-					
-		//WIRD NOCH weiter entwickelt			
-//					try {
-//						if (index % 2 == 0) {//Bennenungsspalte
-//							setFocusCell.invoke(focusCellManager, focusCell.getNeighbor(ViewerCell.BELOW, true));
-//						}else {//Typspalte
-//							ViewerCell rightNeighbor = focusCell.getNeighbor(ViewerCell.RIGHT,true);
-//							setFocusCell.invoke(focusCellManager, rightNeighbor.getNeighbor(ViewerCell.BELOW, true));
-//						}
-//					} catch ( IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-//						logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.",e1);
-//					}
+							
+					try {
+						if (index % 2 == 0) {// Bennenungsspalte
+							ViewerCell nextCell = focusCell.getNeighbor(ViewerCell.BELOW, true);
+							setFocusCell.invoke(focusCellManager, nextCell);
+							tableViewer.editElement(nextCell.getElement(), 2);
+						} else {// Typspalte
+							ViewerCell nextCell = focusCell.getNeighbor(ViewerCell.RIGHT | ViewerCell.BELOW, true);
+							setFocusCell.invoke(focusCellManager, nextCell);
+							tableViewer.editElement(nextCell.getElement(), 2);
+						}
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+						logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.", e1);
+					}
 				}
-//				else {
-//					try {
-//						System.out.println();
-//						ViewerCell below = focusCell.getNeighbor(ViewerCell.BELOW, true);
-//						ViewerCell left = focusCell.getNeighbor(ViewerCell.LEFT, true);
-//						setFocusCell.invoke(focusCellManager, below);
-//				} catch ( IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-//					logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.",e1);
-//				}
-//				}		
 			}else {
 				deselectConnectors();
 				selectConnector(newConn);
