@@ -8,8 +8,6 @@ import java.util.Vector;
 
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart;
-import org.bflow.toolbox.epc.diagram.edit.parts.EventNameEditPart;
-import org.bflow.toolbox.epc.diagram.edit.parts.FunctionNameEditPart;
 import org.bflow.toolbox.epc.diagram.modelwizard.pages.ElementGeneratorWizardPage;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Constants;
@@ -21,8 +19,6 @@ import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;
 import org.bflow.toolbox.epc.diagram.providers.EpcElementTypes;
 import org.bflow.toolbox.epc.extensions.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.extensions.utils.EpcDiagramEditUtil;
-import org.bflow.toolbox.epc.impl.EventImpl;
-import org.bflow.toolbox.epc.impl.FunctionImpl;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
 import org.bflow.toolbox.extensions.edit.parts.ColoredNodeEditPart;
@@ -35,7 +31,6 @@ import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gmf.runtime.diagram.core.edithelpers.CreateElementRequestAdapter;
 import org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy;
@@ -101,7 +96,7 @@ public class ModelWizard extends Wizard {
 	/**
 	 * last drawn BflowNodeEditParts
 	 */
-	private Stack<BflowNodeEditPart> lastDrawnEditParts = new Stack<BflowNodeEditPart>();
+	private Stack<ColoredNodeEditPart> lastDrawnEditParts = new Stack<ColoredNodeEditPart>();
 
 	/**
 	 * array of edit parts for layouting
@@ -279,21 +274,23 @@ public class ModelWizard extends Wizard {
 				if (!el.isReducable()) {
 					CreateViewRequest createRequest;
 
-					boolean createFunction = (el.getKind() == Element.Kind.Function ? true
-							: false);
 
-					if (el.getKind() == Element.Kind.Function)
-						createRequest = CreateViewRequestFactory
-								.getCreateShapeRequest(
-										EpcElementTypes.Function_2007, editor
-												.getDiagramEditPart()
-												.getDiagramPreferencesHint());
-					else
-						createRequest = CreateViewRequestFactory
-								.getCreateShapeRequest(
-										EpcElementTypes.Event_2006, editor
-												.getDiagramEditPart()
-												.getDiagramPreferencesHint());
+					if (el.getKind() == Element.Kind.Function) {
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.Function_2007, editor.getDiagramEditPart()
+								.getDiagramPreferencesHint());
+					} else if (el.getKind() == Element.Kind.AND_Single) {
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.AND_2003, editor.getDiagramEditPart()
+								.getDiagramPreferencesHint());
+					} else if (el.getKind() == Element.Kind.OR_Single) {
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.OR_2001, editor.getDiagramEditPart()
+								.getDiagramPreferencesHint());
+					} else if (el.getKind() == Element.Kind.XOR_Single) {
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.XOR_2008, editor.getDiagramEditPart()
+								.getDiagramPreferencesHint());
+					}else {
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.Event_2006, editor.getDiagramEditPart()
+								.getDiagramPreferencesHint());
+					}
 
 					int dX = x;
 					// int middle = Math.round((float)(align/2));
@@ -314,23 +311,25 @@ public class ModelWizard extends Wizard {
 
 					List<?> listChildren = editor.getDiagramEditPart().getChildren();
 					
-					final BflowNodeEditPart editPart = (BflowNodeEditPart) listChildren.get(listChildren.size() - 1);
+					final ColoredNodeEditPart editPart = (ColoredNodeEditPart) listChildren.get(listChildren.size() - 1);
 					
-					ViewAndElementDescriptor desc = (ViewAndElementDescriptor) createRequest.getViewDescriptors().get(0);
-					CreateElementRequestAdapter adapter = (CreateElementRequestAdapter) desc.getElementAdapter();
-					EObject element = adapter.resolve();
-					if (element == null) {
-						return;
+					if (!el.getKind().isSingleConnector()) {
+						ViewAndElementDescriptor desc = (ViewAndElementDescriptor) createRequest.getViewDescriptors().get(0);
+						CreateElementRequestAdapter adapter = (CreateElementRequestAdapter) desc.getElementAdapter();
+						EObject element = adapter.resolve();
+						if (element == null) {
+							return;
+						}
+						
+						IModelBuilderAttendant att = ModelBuilderAttendantRegistry.getModelBuilderFor("epc");
+						EStructuralFeature structuralFeature = att.getEStructuralFeatureFor(null, "name");
+						String shapeName = el.getName();
+						SetRequest setRequest = new SetRequest(element, structuralFeature, shapeName);
+						SetValueCommand svc = new SetValueCommand(setRequest);
+
+						shapesNamingCommand.add(new ICommandProxy(svc));
 					}
 					
-					IModelBuilderAttendant att = ModelBuilderAttendantRegistry.getModelBuilderFor("epc");
-					EStructuralFeature structuralFeature = att.getEStructuralFeatureFor(null, "name");
-					String shapeName = el.getName();
-					SetRequest setRequest = new SetRequest(element, structuralFeature, shapeName);
-					SetValueCommand svc = new SetValueCommand(setRequest);
-
-					shapesNamingCommand.add(new ICommandProxy(svc));
-
 					/*
 					 * collect connections
 					 */
