@@ -115,12 +115,13 @@ public class NameEditingSupport extends EditingSupport
 			
 			moveTo = steps.size()-1;
 		}else if (isLastElementInColumn(processStep)) {
-//			ProcessStep nextStep = steps.get(row + 1);
-//			Kind kind = (el.getKind() == Kind.Event ? Kind.Function : Kind.Event);
-//			nextStep.set(new Element("",kind), column);
-//			
-//			for(ProcessStep s:steps)
-//				getViewer().update(s, null);
+			ProcessStep nextStep = steps.get(row + 1);
+			Kind kind = (el.getKind() == Kind.Event ? Kind.Function : Kind.Event);
+			nextStep.set(new Element("",kind), column);
+			
+			for(ProcessStep s:steps){
+				getViewer().update(s, null);
+			}
 			moveTo = row+1;
 		}
 		
@@ -130,7 +131,7 @@ public class NameEditingSupport extends EditingSupport
 	}
 	
 	/**
-	 * Returns true, if the current column is the last element in that process step. 
+	 * Returns true, if the current column is the last element in that tree. 
 	 * @param processStep
 	 * @return boolean
 	 */

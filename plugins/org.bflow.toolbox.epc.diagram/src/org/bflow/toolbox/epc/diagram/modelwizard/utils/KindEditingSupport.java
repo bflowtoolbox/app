@@ -75,16 +75,19 @@ public class KindEditingSupport extends EditingSupport
 			if (items.length >= 2) {
 				ProcessStep secondLastItem = (ProcessStep) items[items.length - 2].getData();
 
-				if (secondLastItem.equals(currentProcessStep) && !lastItem.isEmpty()) {
-					Element lastelement = lastItem.get(column);
-					if (lastelement.getName().isEmpty()) {
+				if (secondLastItem.equals(currentProcessStep) && !lastItem.isEmpty()) {//diese Bedingung ist nicht korrekt!
+					Element lastelement = lastItem.get(column);		//die bedingung sollte sein, ob vorletztes element in dieser spalte
+					if (lastelement.getName().isEmpty()) {			//nicht vorletzter ProzessStep!!! evtl Refactor, weil so eien Methode
+																	//existiert bereits in Nameditingsupport
 						Kind kind = currentProcessStep.get(column).getKind();
-						lastItem.set(new Element("",(kind == Kind.Event ? Kind.Function	: Kind.Event)), column);
+						Element el2 = new Element("",(kind == Kind.Event ? Kind.Function	: Kind.Event));
+						lastItem.set(el2, column);
 					}
 				}
 			}
 		}else {// es ist eine Single-Konnektor
-			currentProcessStep.set(new Element(" ",(Kind.Event)), column);
+			Element el2 = new Element(" ",(Kind.Event));
+			currentProcessStep.set(el2, column);
 		}
 		tv.update(element, null);
 		
