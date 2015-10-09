@@ -15,6 +15,8 @@ import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.RootElement;
+import org.eclipse.bpmn2.modeler.core.adapters.ExtendedPropertiesProvider;
+import org.eclipse.bpmn2.modeler.core.model.ModelDecorator;
 import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.common.command.AbstractCommand;
@@ -227,7 +229,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 *            HashMap can stores every found attribute
 	 */
 	private void lookupAndApplyAttributes(EObject modelObject, HashMap<String, HashMap<String, String>> attributes) {
-		List<EStructuralFeature> features = ModelUtil.getAnyAttributes(modelObject);
+		List<EStructuralFeature> features = ModelDecorator.getAnyAttributes(modelObject);
 		
 		for (EStructuralFeature structuralFeature : features) {
 			if (!(structuralFeature instanceof EAttribute)) continue;
@@ -328,13 +330,14 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			
 			@Override
 			public void execute() {				
-				EStructuralFeature attribute = ModelUtil.getAnyAttribute(objectModel, attributeName);
+				EStructuralFeature attribute = ModelDecorator.getAnyAttribute(objectModel, attributeName);
 				if (attribute == null) {
 					if (attributeValue == null) return;
-					attribute = ModelUtil.addAnyAttribute(objectModel, DynamicAddonAttributePrefix, attributeName, attributeValue);
+					ModelDecorator modelDecorator = new ModelDecorator(objectModel.eClass().getEPackage());
+					attribute = modelDecorator.addAnyAttribute(objectModel, DynamicAddonAttributePrefix, attributeName, attributeValue);
 					return;
 				}
-				ModelUtil.setValue(getEditingDomain(), objectModel, attribute, attributeValue);				
+				ExtendedPropertiesProvider.setValue(objectModel, attribute, attributeValue);				
 			}
 		};
 		
@@ -357,9 +360,9 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 * @return Attribute value or NULL
 	 */
 	private String getAttributeValue(final EObject modelObject, final String attributeName) {
-		EStructuralFeature attribute = ModelUtil.getAnyAttribute(modelObject, attributeName);
+		EStructuralFeature attribute = ModelDecorator.getAnyAttribute(modelObject, attributeName);
 		if (attribute == null) return null;
-		Object value = ModelUtil.getValue(modelObject, attribute);
+		Object value = ExtendedPropertiesProvider.getValue(modelObject, attribute);
 		if (value == null) return null;
 		String str = value.toString();
 		return str;
