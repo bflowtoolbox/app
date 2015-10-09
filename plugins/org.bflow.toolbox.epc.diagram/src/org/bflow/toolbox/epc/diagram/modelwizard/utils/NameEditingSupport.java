@@ -89,7 +89,6 @@ public class NameEditingSupport extends EditingSupport
 		
 		ProcessStep processStep = (ProcessStep)element;
 		Element el = processStep.get(column);
-		
 		if(((String)value).equalsIgnoreCase(el.getName())) // nur Änderungen werden berücksichtigt
 			return ;
 		
@@ -115,6 +114,14 @@ public class NameEditingSupport extends EditingSupport
 				getViewer().update(s, null);
 			
 			moveTo = steps.size()-1;
+		}else if (isLastElementInColumn(processStep)) {
+//			ProcessStep nextStep = steps.get(row + 1);
+//			Kind kind = (el.getKind() == Kind.Event ? Kind.Function : Kind.Event);
+//			nextStep.set(new Element("",kind), column);
+//			
+//			for(ProcessStep s:steps)
+//				getViewer().update(s, null);
+			moveTo = row+1;
 		}
 		
 		moveCursor = true;
@@ -122,6 +129,30 @@ public class NameEditingSupport extends EditingSupport
 			moveTo = row+1;
 	}
 	
+	/**
+	 * Returns true, if the current column is the last element in that process step. 
+	 * @param processStep
+	 * @return boolean
+	 */
+	private boolean isLastElementInColumn(ProcessStep processStep) {
+		Element el = processStep.get(column);
+		int indexCurrentStep = steps.indexOf(processStep);
+		if (indexCurrentStep != -1) { //Step existiert
+			ProcessStep currentStep = steps.get(indexCurrentStep);
+			if (!steps.lastElement().equals(currentStep)) { //Step ist nicht letzter
+				ProcessStep nextStep = steps.get(indexCurrentStep + 1);
+				if (nextStep.size() > column) {
+					Element nextElement = nextStep.get(column);
+					if (nextElement.getName().isEmpty()) {
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+
 	/**
 	 * Anonymous class to extend the default TextCellEditor to react of apply changes.
 	 * @author Arian Storch
