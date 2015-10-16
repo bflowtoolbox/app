@@ -21,21 +21,20 @@ public class BflowTemplateFactory {
 	
 	private  ArrayList<ColoredNodeEditPart>  baseModelSources = new ArrayList<>();
 	private  ArrayList<ColoredNodeEditPart>  baseModelTargets = new ArrayList<>();
+	boolean isInitated = false;
 
 	public BflowTemplate createNewTemplate(TemplateAction action, boolean local, File file, String filename, IStructuredSelection selection) {
 		switch (action) {
 		case before:
-			baseModelSources.add((ColoredNodeEditPart) selection.getFirstElement());
 			baseModelTargets.add((ColoredNodeEditPart) selection.getFirstElement());
 			return new BflowTemplateBefore(local, file, filename, baseModelSources, baseModelTargets);
 		case insert:
-			if (baseModelSources.isEmpty() && baseModelTargets.isEmpty()) {
+			if (!isInitated) {
 				findBaseModelInsertPoints(selection, baseModelSources, baseModelTargets);	
 			}
 			return new BflowTemplateReplace(local, file, filename, baseModelSources, baseModelTargets, selection);
 		case after:
 			baseModelSources.add((ColoredNodeEditPart) selection.getFirstElement());
-			baseModelTargets.add((ColoredNodeEditPart) selection.getFirstElement());
 			return new BflowTemplateAfter(local, file, filename, baseModelSources, baseModelTargets);
 		default:
 			break;
@@ -43,6 +42,12 @@ public class BflowTemplateFactory {
 		return null;
 	}
 
+	/**
+	 * Finds the basemodel-linking-nodes, if the user is using the replace/insert action 
+	 * @param selection
+	 * @param baseModelSources
+	 * @param baseModelTargets
+	 */
 	@SuppressWarnings("unchecked")
 	private void findBaseModelInsertPoints(IStructuredSelection selection, ArrayList<ColoredNodeEditPart> baseModelSources,
 			ArrayList<ColoredNodeEditPart> baseModelTargets) {
@@ -80,6 +85,7 @@ public class BflowTemplateFactory {
 				}
 			}
 		}
+		isInitated = true;
 	}
 	
 	private boolean selectionContainsNode(ColoredNodeEditPart node, IStructuredSelection selection) {

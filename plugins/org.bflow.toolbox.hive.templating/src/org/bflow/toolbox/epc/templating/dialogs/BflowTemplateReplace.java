@@ -240,11 +240,15 @@ public class BflowTemplateReplace extends BflowTemplate {
 		removeNotConnectableElements(allNodesExits);
 		removeNotConnectableElements(allNodesEntries);
 		
-		for (IShape iShape : allNodesExits) {
-			this.possibleTemplateExits.add(iShape.getId());
+		if (!baseModelSources.isEmpty()) {
+			for (IShape iShape : allNodesEntries) {
+				this.possibleTemplateEntries.add(iShape.getId());
+			}
 		}
-		for (IShape iShape : allNodesEntries) {
-			this.possibleTemplateEntries.add(iShape.getId());
+		if (!baseModelTargets.isEmpty()) {
+			for (IShape iShape : allNodesExits) {
+				this.possibleTemplateExits.add(iShape.getId());
+			}
 		}
 	}
 	
