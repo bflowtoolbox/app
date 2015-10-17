@@ -27,9 +27,16 @@ import org.bflow.toolbox.hive.interchange.mif.core.ModelBuilderAttendantRegistry
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.commands.operations.DefaultOperationHistory;
 import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.emf.workspace.ResourceUndoContext;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gmf.runtime.diagram.core.edithelpers.CreateElementRequestAdapter;
@@ -37,13 +44,17 @@ import org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewAndElementRequest.ViewAndElementDescriptor;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequest;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequestFactory;
+import org.eclipse.gmf.runtime.emf.commands.core.command.EditingDomainUndoContext;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
 import org.eclipse.gmf.runtime.emf.type.core.commands.SetValueCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
+import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * Defines a wizard to generate and add numerous elements to the diagram.
@@ -153,15 +164,24 @@ public class ModelWizard extends Wizard {
 		try {
 			//id for identify all commands of this insertion
 			id = UUID.randomUUID().toString();
-
+			//add an command for undo/redo all insertion commands with one
+			DefaultOperationHistory history=(DefaultOperationHistory) OperationHistoryFactory.getOperationHistory();
+			//Erhöhen des Undo-Operation-Buffers, da der Modelwizard für jedes Event/ Function genau 2 Operationen
+			//in der History registriert und das Default_Limit der History liegt bei 20 -> größere Modelle können
+			//nicht mehr vollständig rückgängig gemacht werden.
+			//2000 reicht für 100 vollausgefüllte Zeilen (mit maximaler Elementanzahl von 10 pro Zeile)  
+			TransactionalEditingDomain editingDomain = editor.getEditingDomain();
+			history.setLimit(new EditingDomainUndoContext(editingDomain), 2000);
+			Resource res = editingDomain.getResourceSet().getResources().get(0);
+			history.setLimit(new ResourceUndoContext(editingDomain, res), 2000);
+			
 			/*
 			 * generating elements
 			 */
 			createElements();
 			createConnections();
 			
-			//add an command for undo/redo all insertion commands with one
-			DefaultOperationHistory history=(DefaultOperationHistory) OperationHistoryFactory.getOperationHistory();
+			
 					
 			AbstractOperation aoend = EpcDiagramEditUtil.getCollectedUndoRedoCommand(id, "Model Wizard");
 			aoend.addContext(IOperationHistory.GLOBAL_UNDO_CONTEXT);
