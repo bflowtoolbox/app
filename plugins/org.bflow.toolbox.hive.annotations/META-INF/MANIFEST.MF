@@ -8,6 +8,7 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.gmf.runtime.diagram.ui,
  org.bflow.toolbox.hive.attributes;bundle-version="1.3.0",
  org.bflow.toolbox.hive.interchange;bundle-version="1.3.0",
+ org.apache.commons.io;bundle-version="2.0.1",
  org.bflow.toolbox.hive.nls;bundle-version="1.3.0",
  org.bflow.toolbox.hive.libs;bundle-version="1.3.0",
  org.bflow.toolbox.hive.gmfbridge;bundle-version="1.0.0"

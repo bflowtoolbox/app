@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
+import javax.swing.JFileChooser;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
@@ -34,6 +36,7 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;

@@ -67,7 +67,8 @@ public class AnnotationRuleController {
 	 * a sequence of how they are created, The key is the string of the relative
 	 * path of the xml file
 	 */
-	private HashMap<String, Boolean> sortingOrderForXMLRuleSet = new HashMap<String, Boolean>();
+	private HashMap<String, Boolean> sortingOrderForCategory = new HashMap<String, Boolean>();
+
 
 	private static AnnotationRuleController instance = null;
 	private ArrayList<IAnnotationRuleListener> ruleListener;
@@ -277,7 +278,7 @@ public class AnnotationRuleController {
 				entry.setRuleName(inputRuleName);
 				isDirty = true;
 				isSynchronized = false;
-				sortingOrderForXMLRuleSet.put(getXMLFilePathForCategory(inputCategory), sortCategoryASC);
+				sortingOrderForCategory.put(inputCategory, sortCategoryASC);
 				write(str);
 
 			}
@@ -311,9 +312,9 @@ public class AnnotationRuleController {
 			FileInputStream fis = null;
 			InputStreamReader reader = null;
 			rules.clear();
-			sortingOrderForXMLRuleSet.clear();
+			sortingOrderForCategory.clear();
 			for (String filename : getXMLFilePathNames()) {
-				sortingOrderForXMLRuleSet.put(filename, false);
+				sortingOrderForCategory.put(filename, false);
 				rules.put(filename, new ArrayList<RuleEntry>());
 				ArrayList<RuleEntry> list = new ArrayList<RuleEntry>();
 				try {
@@ -355,7 +356,8 @@ public class AnnotationRuleController {
 							um = context.createUnmarshaller();
 							XMLRuleEntries xmlrules = (XMLRuleEntries) um.unmarshal(reader);
 							list = (ArrayList<RuleEntry>) xmlrules.getRule();
-							sortingOrderForXMLRuleSet.put(filename, xmlrules.isSortASC());
+							sortingOrderForCategory.put(filename,
+									xmlrules.isSortASC());
 						} catch (JAXBException e) {
 							showCorruptionDialog(filename);
 							continue;
@@ -556,7 +558,7 @@ public class AnnotationRuleController {
 
 		if (!rules.get(xmlfilename).contains(entry)) {
 			rules.get(xmlfilename).add(entry);
-			sortingOrderForXMLRuleSet.put(xmlfilename, sortCategoryASC);
+			sortingOrderForCategory.put(xmlfilename, sortCategoryASC);
 			isDirty = true;
 			isSynchronized = false;
 			write(xmlfilename);
@@ -602,7 +604,7 @@ public class AnnotationRuleController {
 			JAXBContext context;
 			XMLRuleEntries xmlRules = new XMLRuleEntries();
 			xmlRules.setRule(rules.get(filename));
-			xmlRules.setSortASC(sortingOrderForXMLRuleSet.get(filename));
+			xmlRules.setSortASC(sortingOrderForCategory.get(filename));
 			try {
 				context = JAXBContext.newInstance(XMLRuleEntries.class);
 				Marshaller m = context.createMarshaller();
@@ -727,9 +729,9 @@ public class AnnotationRuleController {
 	 */
 	public boolean getSortingOrderForCategory(String categoryName) {
 		
-		String xmlFilePathForCat = getXMLFilePathForCategory(categoryName);
-		if (sortingOrderForXMLRuleSet.containsKey(xmlFilePathForCat))
-			return sortingOrderForXMLRuleSet.get(xmlFilePathForCat);
+
+		if (sortingOrderForCategory.containsKey(categoryName))
+			return sortingOrderForCategory.get(categoryName);
 		else
 			return false;
 	}
@@ -747,18 +749,19 @@ public class AnnotationRuleController {
 	 * @return
 	 */
 	public String getXMLFilePathForCategory(String inputCategory) {
-		String result = StringUtils.EMPTY;
-		for (String rulesKey : rules.keySet()) {
-			for (RuleEntry r : rules.get(rulesKey)) {
-				if (r.getCategory().contains(inputCategory)) {
-					String l = r.getDefaultCategory();
-					
-					return rulesKey;
+		String result = "";
+		boolean categoryInUse = false;
+		for (String categoryWithPath : rules.keySet()) {
+			if (categoryWithPath.contains(inputCategory)) {
+				result = categoryWithPath;
+				categoryInUse = true;
+				break;
 				}
 			}
+		if (!categoryInUse) {
+			result = inputCategory + "."
+					+ AnnotationLauncherConfigurator.getDefaultFileExtension();
 		}
-		result = inputCategory + "." + AnnotationLauncherConfigurator.getDefaultFileExtension();
-
 		return result;
 	}
 

@@ -217,22 +217,6 @@ public class RuleEntry {
 		return getStrForNLin(categories);
 	}
 	
-	/**
-	 * Returns the default (en_US) category name of rule or null if not existent.
-	 * @return
-	 */
-	@XmlTransient
-	public String getDefaultCategory() {
-		String defCat =null;
-		for (IAnnotationRuleElement nameInList : categories) {
-			if (nameInList.getAttribute().equals("en_US")) {
-				defCat= nameInList.getValue();
-				break;
-			}
-		}
-		return defCat;
-	}
-
 
 
 	public void setCategory(String category) {

@@ -33,6 +33,11 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 public class AttributeFile {
 	private boolean dirty;
 
+	/**
+	 * HashMap with the editor element id as a key (first String) mapped to a
+	 * Hashmap of Attribute Name (first/key string) and Attribute Value
+	 * (second/value string)
+	 */
 	private final HashMap<String, HashMap<String, String>> attributes = new HashMap<>();
 	private ArrayList<IAttributeFileListener> fListeners = new ArrayList<>();
 	
