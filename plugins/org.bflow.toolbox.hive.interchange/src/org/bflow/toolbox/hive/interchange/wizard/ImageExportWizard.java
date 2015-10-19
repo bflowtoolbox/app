@@ -1,16 +1,16 @@
 package org.bflow.toolbox.hive.interchange.wizard;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.bflow.toolbox.hive.interchange.wizard.pages.ImageExportWizardPage;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.render.actions.CopyToImageAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -66,9 +66,8 @@ public class ImageExportWizard extends Wizard implements IExportWizard {
 		for(int i = 0; i < selectedElements.length; i++) {
 			Object selectedElement = selectedElements[i];
 			
-			// Should be impossible
-			if(selectedElement instanceof IEditorPart) {
-				throw new NotImplementedException();
+			if (selectedElement instanceof AbstractEditPart) {
+				copyToImage();
 			}
 			
 			if(selectedElement instanceof IFile) {
@@ -76,14 +75,18 @@ public class ImageExportWizard extends Wizard implements IExportWizard {
 				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
 				try {
 					iWorkbenchPage.openEditor(new FileEditorInput(file), desc.getId());
-					CopyToImageAction copyToImageAction = new CopyToImageAction(iWorkbenchPage);
-					copyToImageAction.init();
-					copyToImageAction.run();
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (PartInitException e) {
+					throw new RuntimeException(e);
 				}
+				copyToImage();
 			}
 		}
 		return true;
+	}
+
+	private void copyToImage() {
+		CopyToImageAction copyToImageAction = new CopyToImageAction(iWorkbenchPage);
+		copyToImageAction.init();
+		copyToImageAction.run();
 	}
 }
