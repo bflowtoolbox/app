@@ -174,6 +174,8 @@ public class ModelWizard extends Wizard {
 			history.setLimit(new EditingDomainUndoContext(editingDomain), 2000);
 			Resource res = editingDomain.getResourceSet().getResources().get(0);
 			history.setLimit(new ResourceUndoContext(editingDomain, res), 2000);
+			history.setLimit(IOperationHistory.GLOBAL_UNDO_CONTEXT, 2000);
+			
 			
 			/*
 			 * generating elements
