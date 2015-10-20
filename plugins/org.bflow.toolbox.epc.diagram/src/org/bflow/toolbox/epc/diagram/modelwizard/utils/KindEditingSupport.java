@@ -1,5 +1,7 @@
 package org.bflow.toolbox.epc.diagram.modelwizard.utils;
 
+import java.util.Vector;
+
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector.ConnectorType;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Element.Kind;
 import org.eclipse.jface.viewers.CellEditor;
@@ -24,19 +26,22 @@ public class KindEditingSupport extends EditingSupport
 	
 	private int column;
 
+	private Vector<ProcessStep> steps;
+
 	/**
 	 * Default constructor.
 	 * @param viewer table viewer
 	 * @param column column of the table
+	 * @param steps 
 	 */
-	public KindEditingSupport(ColumnViewer viewer, int column) 
+	public KindEditingSupport(ColumnViewer viewer, int column, Vector<ProcessStep> steps) 
 	{
 		super(viewer);
 		
 		this.editor = new ComboBoxCellEditor(((TableViewer)viewer).getTable(), 
 								new String[]{ "Event", "Function", "None" }, 
 								SWT.BORDER | SWT.READ_ONLY);
-		
+		this.steps = steps;
 		this.column = column;
 	}
 
@@ -65,28 +70,17 @@ public class KindEditingSupport extends EditingSupport
 		ProcessStep currentProcessStep = (ProcessStep)element;
 		Element el = currentProcessStep.get(column);
 		TableViewer tv = (TableViewer) getViewer();
-		
+
 		if (el.getKind() == Kind.Event || el.getKind() == Kind.Function) {
-			currentProcessStep.set(new Element(el.getName(),(el.getKind() == Kind.Event ? Kind.Function : Kind.Event)),column);
-
-			Table table = tv.getTable();
-			TableItem[] items = table.getItems();
-			ProcessStep lastItem = (ProcessStep) items[items.length - 1].getData();
-			if (items.length >= 2) {
-				ProcessStep secondLastItem = (ProcessStep) items[items.length - 2].getData();
-
-				if (secondLastItem.equals(currentProcessStep) && !lastItem.isEmpty()) {//diese Bedingung ist nicht korrekt!
-					Element lastelement = lastItem.get(column);		//die bedingung sollte sein, ob vorletztes element in dieser spalte
-					if (lastelement.getName().isEmpty()) {			//nicht vorletzter ProzessStep!!! evtl Refactor, weil so eien Methode
-																	//existiert bereits in Nameditingsupport
-						Kind kind = currentProcessStep.get(column).getKind();
-						Element el2 = new Element("",(kind == Kind.Event ? Kind.Function	: Kind.Event));
-						lastItem.set(el2, column);
-					}
-				}
+			Kind currentNewKind = (el.getKind() == Kind.Event ? Kind.Function : Kind.Event);
+			currentProcessStep.set(new Element(el.getName(), currentNewKind), column);
+			if (isLastElementInColumn(currentProcessStep)) {
+				ProcessStep nextStep = steps.get(steps.indexOf(currentProcessStep) + 1);
+				Kind nextKind = (currentNewKind == Kind.Event ? Kind.Function : Kind.Event);
+				nextStep.set(new Element("", nextKind), column);
 			}
-		}else {// es ist eine Single-Konnektor
-			Element el2 = new Element(" ",(Kind.Event));
+		} else {// es ist eine Single-Konnektor
+			Element el2 = new Element(" ", (Kind.Event));
 			currentProcessStep.set(el2, column);
 		}
 		tv.update(element, null);
@@ -98,6 +92,30 @@ public class KindEditingSupport extends EditingSupport
 	protected void setValue(Object element, Object value) 
 	{
 
+	}
+	
+	/**
+	 * Returns true, if the current column is the last element in that tree. 
+	 * @param processStep
+	 * @return boolean
+	 */
+	private boolean isLastElementInColumn(ProcessStep processStep) {
+		Element el = processStep.get(column);
+		int indexCurrentStep = steps.indexOf(processStep);
+		if (indexCurrentStep != -1) { //Step existiert
+			ProcessStep currentStep = steps.get(indexCurrentStep);
+			if (!steps.lastElement().equals(currentStep)) { //Step ist nicht letzter
+				ProcessStep nextStep = steps.get(indexCurrentStep + 1);
+				if (nextStep.size() > column) {
+					Element nextElement = nextStep.get(column);
+					if (nextElement.getName().isEmpty()) {
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 
 }

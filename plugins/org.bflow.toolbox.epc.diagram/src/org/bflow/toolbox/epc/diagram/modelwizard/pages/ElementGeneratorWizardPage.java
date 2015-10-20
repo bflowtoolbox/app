@@ -351,7 +351,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			typColumn.setLabelProvider(new ColumnImageLabelProvider(composite,
 					parallelProcesses));
 			typColumn.setEditingSupport(new KindEditingSupport(tableViewer,
-					parallelProcesses));
+					parallelProcesses, processSteps));
 
 			TableViewerColumn txtColumn = new TableViewerColumn(tableViewer,
 					SWT.NONE);
