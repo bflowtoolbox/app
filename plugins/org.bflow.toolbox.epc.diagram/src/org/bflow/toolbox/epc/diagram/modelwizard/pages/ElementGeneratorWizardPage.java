@@ -552,16 +552,16 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			ViewerCell focusCell = focusCellManager.getFocusCell();
 			ProcessStep currentStep = (ProcessStep) focusCell.getElement();
 			int index = focusCell.getVisualIndex();
-			int stepPosition = getProcessElementIndexByColumnIndex(index);
+			int elementIndex = getProcessElementIndexByColumnIndex(index);
 
 			if (type == ConnectorType.XOR_SINGLE) {
-				currentStep.set(new Element("XOR", Kind.XOR_Single), stepPosition);
+				currentStep.set(new Element("XOR", Kind.XOR_Single), elementIndex);
 			}
 			if (type == ConnectorType.OR_SINGLE) {
-				currentStep.set(new Element("OR", Kind.OR_Single), stepPosition);
+				currentStep.set(new Element("OR", Kind.OR_Single), elementIndex);
 			}
 			if (type == ConnectorType.AND_SINGLE) {
-				currentStep.set(new Element("AND", Kind.AND_Single), stepPosition);
+				currentStep.set(new Element("AND", Kind.AND_Single), elementIndex);
 			}
 
 			tableViewer.update(currentStep, null);
@@ -569,14 +569,19 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			if (processSteps.lastElement().equals(currentStep)) {
 				newConn = currentStep.getConnector();
 				ProcessStep newStep = new ProcessStep(newConn);
+				Kind nextKind = getNextKind(currentStep, elementIndex);
 				for (int i = 0; i < currentStep.size(); i++) {
-					newStep.add(new Element("", Kind.Event));
+					newStep.add(new Element("", nextKind));
 				}
 				processSteps.add(newStep);
 				tableViewer.add(newStep);
 
 				for (ProcessStep s : processSteps)
 					tableViewer.update(s, null);
+			} else if (isLastElementInColumn(processSteps, currentStep, elementIndex)) {
+				ProcessStep nextStep = processSteps.get(processSteps.indexOf(currentStep) + 1);
+				Kind nextKind = getNextKind(currentStep, elementIndex);
+				nextStep.set(new Element("", nextKind), elementIndex);
 			}
 			
 			try {
@@ -844,7 +849,8 @@ public class ElementGeneratorWizardPage extends WizardPage {
 	}
 	
 	/**
-	 * Returns true, if the current step-element is the last element in that branch. 
+	 * Returns true, if the current step-element is the last element in that branch BUT
+	 * the current step is NOT the last processstep at all.
 	 * @param processStep
 	 * @param column or elementIndex
 	 * @return boolean
