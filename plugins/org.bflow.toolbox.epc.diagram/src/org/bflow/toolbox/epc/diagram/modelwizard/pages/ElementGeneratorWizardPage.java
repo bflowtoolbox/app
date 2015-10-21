@@ -596,6 +596,28 @@ public class ElementGeneratorWizardPage extends WizardPage {
 	}
 	
 	/**
+	 * @param processStep
+	 * @param column 
+	 * @return 
+	 */
+	private Kind getNextKind(ProcessStep processStep, int column) {
+		int currentIndex = processSteps.indexOf(processStep);
+		Kind nextKind = Kind.Event;
+		if (currentIndex >= 0) {
+			for (int i = currentIndex; i >= 0; i--) {
+				ProcessStep previousStep = processSteps.get(i);
+				Element previousElement = previousStep.get(column);
+				Kind previousKind = previousElement.getKind();
+				if (previousKind == Kind.Event || previousKind == Kind.Function){
+					nextKind = (previousKind == Kind.Event ? Kind.Function : Kind.Event);
+					break;
+				}
+			}
+		}
+		return nextKind;
+	}
+		
+	/**
 	 * Returns the position of an element within of a process step 
 	 * @param index of the table column
 	 * @return index of the element
@@ -819,6 +841,29 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 		}
 
+	}
+	
+	/**
+	 * Returns true, if the current step-element is the last element in that branch. 
+	 * @param processStep
+	 * @param column or elementIndex
+	 * @return boolean
+	 */
+	static public boolean isLastElementInColumn(Vector<ProcessStep> steps, ProcessStep currentStep, int column) {
+		int indexCurrentStep = steps.indexOf(currentStep);
+		if (indexCurrentStep != -1) { //Step existiert
+			if (!steps.lastElement().equals(currentStep)) { //Step ist nicht letzter
+				ProcessStep nextStep = steps.get(indexCurrentStep + 1);
+				if (nextStep.size() > column) {
+					Element nextElement = nextStep.get(column);
+					if (nextElement.getName().isEmpty()) {
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	/*

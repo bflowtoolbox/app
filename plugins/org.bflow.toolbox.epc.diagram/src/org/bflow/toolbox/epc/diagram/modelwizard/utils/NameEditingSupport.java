@@ -2,6 +2,7 @@ package org.bflow.toolbox.epc.diagram.modelwizard.utils;
 
 import java.util.Vector;
 
+import org.bflow.toolbox.epc.diagram.modelwizard.pages.ElementGeneratorWizardPage;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector.ConnectorType;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Element.Kind;
 import org.eclipse.jface.viewers.CellEditor;
@@ -98,7 +99,7 @@ public class NameEditingSupport extends EditingSupport
 		
 		int row = steps.indexOf(processStep);
 		
-		if(row == steps.size()-1)	// letztes Element
+		if(row == steps.size()-1)	// letzter Prozessstep
 		{
 			ProcessStep newStep = new ProcessStep(processStep.getConnector());
 						
@@ -114,7 +115,7 @@ public class NameEditingSupport extends EditingSupport
 				getViewer().update(s, null);
 			
 			moveTo = steps.size()-1;
-		}else if (isLastElementInColumn(processStep)) {
+		}else if (ElementGeneratorWizardPage.isLastElementInColumn(steps, processStep, column)) {
 			ProcessStep nextStep = steps.get(row + 1);
 			Kind kind = (el.getKind() == Kind.Event ? Kind.Function : Kind.Event);
 			nextStep.set(new Element("",kind), column);
@@ -130,30 +131,6 @@ public class NameEditingSupport extends EditingSupport
 			moveTo = row+1;
 	}
 	
-	/**
-	 * Returns true, if the current column is the last element in that tree. 
-	 * @param processStep
-	 * @return boolean
-	 */
-	private boolean isLastElementInColumn(ProcessStep processStep) {
-		Element el = processStep.get(column);
-		int indexCurrentStep = steps.indexOf(processStep);
-		if (indexCurrentStep != -1) { //Step existiert
-			ProcessStep currentStep = steps.get(indexCurrentStep);
-			if (!steps.lastElement().equals(currentStep)) { //Step ist nicht letzter
-				ProcessStep nextStep = steps.get(indexCurrentStep + 1);
-				if (nextStep.size() > column) {
-					Element nextElement = nextStep.get(column);
-					if (nextElement.getName().isEmpty()) {
-						return true;
-					}
-				}
-			}
-		}
-		
-		return false;
-	}
-
 	/**
 	 * Anonymous class to extend the default TextCellEditor to react of apply changes.
 	 * @author Arian Storch

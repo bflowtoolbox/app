@@ -2,6 +2,7 @@ package org.bflow.toolbox.epc.diagram.modelwizard.utils;
 
 import java.util.Vector;
 
+import org.bflow.toolbox.epc.diagram.modelwizard.pages.ElementGeneratorWizardPage;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector.ConnectorType;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Element.Kind;
 import org.eclipse.jface.viewers.CellEditor;
@@ -74,17 +75,14 @@ public class KindEditingSupport extends EditingSupport
 		if (el.getKind() == Kind.Event || el.getKind() == Kind.Function) {
 			Kind currentNewKind = (el.getKind() == Kind.Event ? Kind.Function : Kind.Event);
 			currentProcessStep.set(new Element(el.getName(), currentNewKind), column);
-			if (isLastElementInColumn(currentProcessStep)) {
+			if (ElementGeneratorWizardPage.isLastElementInColumn(steps, currentProcessStep, column)) {
 				ProcessStep nextStep = steps.get(steps.indexOf(currentProcessStep) + 1);
 				Kind nextKind = (currentNewKind == Kind.Event ? Kind.Function : Kind.Event);
 				nextStep.set(new Element("", nextKind), column);
 			}
-		} else {// es ist eine Single-Konnektor
-			Element el2 = new Element(" ", (Kind.Event));
-			currentProcessStep.set(el2, column);
 		}
-		tv.update(element, null);
 		
+		tv.update(element, null);
 		return null;
 	}
 
@@ -94,28 +92,4 @@ public class KindEditingSupport extends EditingSupport
 
 	}
 	
-	/**
-	 * Returns true, if the current column is the last element in that tree. 
-	 * @param processStep
-	 * @return boolean
-	 */
-	private boolean isLastElementInColumn(ProcessStep processStep) {
-		Element el = processStep.get(column);
-		int indexCurrentStep = steps.indexOf(processStep);
-		if (indexCurrentStep != -1) { //Step existiert
-			ProcessStep currentStep = steps.get(indexCurrentStep);
-			if (!steps.lastElement().equals(currentStep)) { //Step ist nicht letzter
-				ProcessStep nextStep = steps.get(indexCurrentStep + 1);
-				if (nextStep.size() > column) {
-					Element nextElement = nextStep.get(column);
-					if (nextElement.getName().isEmpty()) {
-						return true;
-					}
-				}
-			}
-		}
-		
-		return false;
-	}
-
 }
