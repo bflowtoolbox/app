@@ -175,37 +175,50 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 			@Override
 			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
-				ViewerCell focusCell = (ViewerCell) event.getSource();
-				int currentColumn = focusCell.getVisualIndex();
-				boolean isNameColumn = currentColumn%2 == 0;
-				ProcessStep currentStep = (ProcessStep) focusCell.getElement();
-				int elementPosition = getProcessElementIndexByColumnIndex(currentColumn);
-				if (currentStep.get(elementPosition).getKind().isSingleConnector()) {
-					return false;
-				}
 				
 				if(event.stateMask == SWT.ALT){
 					return false;
 				}
 				
-				if (event.keyCode == SWT.SPACE && currentColumn%2 == 1) {
-					return true;
+				ViewerCell focusCell = (ViewerCell) event.getSource();
+				int currentColumn = focusCell.getVisualIndex();
+				boolean isNameColumn = currentColumn%2 == 0;
+				ProcessStep currentStep = (ProcessStep) focusCell.getElement();
+				int elementPosition = getProcessElementIndexByColumnIndex(currentColumn);
+				if (elementPosition < currentStep.size()) {
+					if (currentStep.get(elementPosition).getKind().isSingleConnector()) {
+						return false;
+					}
+					if (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION && currentColumn > 0) {
+						return true;
+					}
+					
+					if (event.keyCode == SWT.SPACE && currentColumn%2 == 1) {
+						return true;
+					}
+					if (event.keyCode == SWT.CR && currentColumn%2 == 0 && currentColumn != 0) {
+						return true;
+					}
+					if (isNameColumn && ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 97 && event.keyCode <= 122))) {
+						KeyEvent ke = (KeyEvent) event.sourceEvent;
+						ke.doit = false;
+						return true;
+					}
+					
 				}
-				if (event.keyCode == SWT.CR && currentColumn%2 == 0 && currentColumn != 0) {
-					return true;
-				}
+				
+				
+				
+				
+				
 				
 				if (event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC && isNameColumn) {
 					focusCellManager.getFocusCell(); //bug, dies stellt aber die Sictbarkeit des Cell-Cursors wieder her
 					return false;
 				}
 				
-				if (isNameColumn && ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 97 && event.keyCode <= 122))) {
-					KeyEvent ke = (KeyEvent) event.sourceEvent;
-					ke.doit = false;
-					return true;
-				}
-				return event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION && currentColumn > 0;
+				
+				return false;
 			}
 		};
 		
@@ -631,6 +644,9 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		int stepPosition;
 		if (index % 2 == 0) { 
 			stepPosition = index - ((index/2)+1);
+			if (stepPosition < 0) {
+				stepPosition = 0;
+			}
 		}else{ 
 			stepPosition = index - (index + 1)/2;
 		}
