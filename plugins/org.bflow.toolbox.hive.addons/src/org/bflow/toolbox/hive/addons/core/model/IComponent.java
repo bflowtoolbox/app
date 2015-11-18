@@ -3,6 +3,7 @@ package org.bflow.toolbox.hive.addons.core.model;
 import java.io.IOException;
 
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
+import org.bflow.toolbox.hive.addons.core.exceptions.ProtocolException;
 
 /**
  * Defines an interface for an add-on component.
@@ -18,7 +19,7 @@ public interface IComponent {
 	 * this to do basic initial stuff.
 	 * @throws IOException 
 	 */
-	public void init() throws IOException;
+	public void init() throws ProtocolException;
 
 	/**
 	 * You can use this method to manipulate the input source of the component

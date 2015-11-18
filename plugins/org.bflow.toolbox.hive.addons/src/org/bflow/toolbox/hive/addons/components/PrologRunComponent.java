@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.hive.addons.AddonPlugin;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
+import org.bflow.toolbox.hive.addons.core.exceptions.ProtocolException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.interfaces.IPrologRunComponent;
 import org.bflow.toolbox.hive.addons.interprolog.AddonsSWISubprocessEngine;
@@ -65,9 +66,6 @@ public class PrologRunComponent implements IPrologRunComponent {
 
 	private boolean internal = false;
 	
-	/** The log instance for this class */
-	private static final Log logger = LogFactory.getLog(AddonPlugin.class);
-
 	/**
 	 * Default constructor.
 	 */
@@ -126,7 +124,7 @@ public class PrologRunComponent implements IPrologRunComponent {
 	 * @see org.bflow.toolbox.mitamm.components.IPrologRunComponent#init()
 	 */
 	@Override
-	public void init() throws IOException {
+	public void init() throws ProtocolException {
 		this.params = new Vector<String>();
 
 		String params[] = this.toolParam.split(" ");
@@ -156,7 +154,7 @@ public class PrologRunComponent implements IPrologRunComponent {
 						}
 					}
 				} catch (IOException e) {
-					throw e;
+					throw new ProtocolException("Temporary file for Prolog execution could not be created.", e);
 				}
 			}
 

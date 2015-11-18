@@ -210,11 +210,6 @@ public abstract class Protocol implements Runnable {
 			
 			try {
 				link.init();
-			} catch (IOException e) {
-				logger.error("Error during initialization of the program.", e);
-			}
-
-			try {
 				link.transformInput(output);
 
 				link.invoke();
