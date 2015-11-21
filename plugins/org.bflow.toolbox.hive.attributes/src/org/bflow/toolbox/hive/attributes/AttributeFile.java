@@ -27,11 +27,17 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
  * @since 24.04.2010
  * @version 27.09.2014
  * 			10.04.2015 Introducing feature IAttributeFilePersister and IAttributeFileListener
+ * 			16.08.2015 Added contains() method; needed by risk annotation feature
  * 
  */
 public class AttributeFile {
 	private boolean dirty;
 
+	/**
+	 * HashMap with the editor element id as a key (first String) mapped to a
+	 * Hashmap of Attribute Name (first/key string) and Attribute Value
+	 * (second/value string)
+	 */
 	private final HashMap<String, HashMap<String, String>> attributes = new HashMap<>();
 	private ArrayList<IAttributeFileListener> fListeners = new ArrayList<>();
 	
@@ -267,6 +273,21 @@ public class AttributeFile {
 		dirty = true;
 	}
 	
+	/**
+	 * Returns TRUE if the file contains a value for the given element id and attribute name.
+	 * 
+	 * @param id Element id to check
+	 * @param attributeName Attribute name to check
+	 * @param attributeValue Attribute value to check
+	 * @return TRUE or FALSE
+	 */
+	public boolean contains(String id, String attributeName, String attributeValue) {
+		String cachedAttributeValue = get(id, attributeName);
+		if (cachedAttributeValue == null) return false;
+		boolean isEqual = cachedAttributeValue.equalsIgnoreCase(attributeValue);
+		return isEqual;
+	}
+
 	/**
 	 * Removes all attributes from the model element.
 	 * 

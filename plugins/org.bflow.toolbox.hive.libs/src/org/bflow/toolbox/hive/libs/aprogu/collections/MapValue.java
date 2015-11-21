@@ -1,4 +1,4 @@
-package org.bflow.toolbox.hive.libs.aprogu;
+package org.bflow.toolbox.hive.libs.aprogu.collections;
 
 import java.util.Map;
 

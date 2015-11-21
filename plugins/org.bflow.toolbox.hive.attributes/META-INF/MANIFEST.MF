@@ -16,6 +16,8 @@ Require-Bundle: org.eclipse.gmf.runtime.diagram.ui;bundle-version="1.3.0",
  org.bflow.toolbox.hive.gmfbridge;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: org.bflow.toolbox.hive.attributes
+Export-Package: org.bflow.toolbox.hive.attributes,
+ org.bflow.toolbox.hive.attributes.internal,
+ org.bflow.toolbox.hive.attributes.utils
 Import-Package: org.eclipse.ui
 Bundle-ClassPath: .
