@@ -18,7 +18,6 @@ public class ShapeDecorationInfo {
 	public ShapeDecorationInfo(Direction position, String iconResourceName) {
 		this.position = position;
 		this.setIconResourceName(iconResourceName);
-
 	}
 
 	public Direction getPosition() {
