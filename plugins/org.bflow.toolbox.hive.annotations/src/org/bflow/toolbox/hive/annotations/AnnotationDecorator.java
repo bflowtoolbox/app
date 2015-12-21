@@ -58,68 +58,53 @@ public class AnnotationDecorator extends MultipleAbstractDecorator implements
 	@Override
 	public void refresh() {
 		View view = (View) getDecoratorTarget().getAdapter(View.class);
-		if (view == null || view.eResource() == null) {
-			return;
-		}
-		EditPart editPart = (EditPart) getDecoratorTarget().getAdapter(
-				EditPart.class);
-		if (editPart == null || editPart.getViewer() == null) {
-			return;
-		}
+		if (view == null || view.eResource() == null) return;
+		EditPart editPart = (EditPart) getDecoratorTarget().getAdapter(EditPart.class);
+		if (editPart == null || editPart.getViewer() == null) return;
 
 		EObject eObj = EMFUtility.getEObject((IGraphicalEditPart) editPart);
 		String id = EMFCoreUtil.getProxyID(eObj);
 
 		// get decorations for annotation
-		Set<ShapeDecorationInfo> shapeDecorations = AnnotationRuleController
-				.getInstance()
-				.getAnnotationsForRules(id);
+		Set<ShapeDecorationInfo> shapeDecorations = AnnotationRuleController.getInstance().getAnnotationsForRules(id);
 
 		deactivate();
-		if (isVisible){
+		
+		if (!isVisible) return;
+		
 		for (ShapeDecorationInfo shapeDecoration : shapeDecorations) {
 			// add decoration if keyword was found
 			if (editPart instanceof org.eclipse.gef.GraphicalEditPart) {
 					int margin = -1;
 					if (editPart instanceof org.eclipse.gef.GraphicalEditPart) {
-						margin = MapModeUtil.getMapMode(
-								((org.eclipse.gef.GraphicalEditPart) editPart)
-										.getFigure()).DPtoLP(margin);
+						margin = MapModeUtil.getMapMode(((org.eclipse.gef.GraphicalEditPart) editPart).getFigure()).DPtoLP(margin);
 					}
 					
 					Direction direction = shapeDecoration.getPosition();
 					if (view instanceof Edge) {
 						direction = Direction.CENTER;
 					}
-					addDecoration(this.getDecoratorTarget()
-							.addShapeDecoration(
-							getImage(shapeDecoration.getIconResourceName()),
+					addDecoration(this.getDecoratorTarget().addShapeDecoration(getImage(shapeDecoration.getIconResourceName()),
 							direction, margin, false));
 				}
-
 		}
+		
 		if (shapeDecorations.isEmpty()) {
 			// deactivate decorations if no keyword was found
 			this.deactivate();
 		}
-		}
 	}
-
 
 	private Image getImage(String imgFileName) {
 
 		InputStream is = null;
 		try {
-			is = new FileInputStream(
-					AnnotationLauncherConfigurator
-							.getANNOTATIONLOGIC_FOLDER_PATH()
-							+ imgFileName);
+			is = new FileInputStream(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH() + imgFileName);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		
 		Image img = new Image(null, is);
-
 		return img;
 	}
 
@@ -129,13 +114,9 @@ public class AnnotationDecorator extends MultipleAbstractDecorator implements
 
 	}
 	
-
 	@Override
 	public void noticeToggleChange(boolean show) {
 		isVisible = show;
-				refresh();
-		
+		refresh();
 	}
-
-	
 }

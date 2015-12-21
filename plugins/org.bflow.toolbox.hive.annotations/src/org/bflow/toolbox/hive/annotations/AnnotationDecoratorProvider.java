@@ -36,22 +36,18 @@ public class AnnotationDecoratorProvider implements IDecoratorProvider {
 
 	@Override
 	public boolean provides(IOperation operation) {
-
 		if (!(operation instanceof CreateDecoratorsOperation)) {
 			return false;
 		}
 
-		IDecoratorTarget decoratorTarget = ((CreateDecoratorsOperation) operation)
-				.getDecoratorTarget();
+		IDecoratorTarget decoratorTarget = ((CreateDecoratorsOperation) operation).getDecoratorTarget();
 		View view = (View) decoratorTarget.getAdapter(View.class);
 		return view != null;
 	}
 
 	@Override
 	public void createDecorators(IDecoratorTarget decoratorTarget) {
-
-		EditPart editPart = (EditPart) decoratorTarget
-				.getAdapter(EditPart.class);
+		EditPart editPart = (EditPart) decoratorTarget.getAdapter(EditPart.class);
 		
 		if (editPart instanceof DiagramEditPart)
 			return;
@@ -69,12 +65,8 @@ public class AnnotationDecoratorProvider implements IDecoratorProvider {
 			}
 			
 			// Use the custom AnnotationDecorator
-			AnnotationDecorator decorator =new AnnotationDecorator(
-					decoratorTarget);
+			AnnotationDecorator decorator =new AnnotationDecorator(decoratorTarget);
 			decoratorTarget.installDecorator(KEY  ,decorator );
-
-			
-
 		}
 	}
 
