@@ -86,11 +86,11 @@ public class AnnotationRuleController {
 	 * @return Set<ShapeDecorationInfo> HashSet<ShapeDecorationInfo>
 	 */
 	public Set<ShapeDecorationInfo> getAnnotationsForRules(String id) {
-		String ruleAttributeName = "";
-		String ruleValue = "";
-		String ruleOperator = "";
+		String ruleAttributeName = StringUtils.EMPTY;
+		String ruleValue = StringUtils.EMPTY;
+		String ruleOperator = StringUtils.EMPTY;
 		String ruleDirection = "CENTER"; // Center is default
-		String ruleFilename = "";
+		String ruleFilename = StringUtils.EMPTY;
 		
 		boolean applyRule = false;
 		double dRule = 0d;
