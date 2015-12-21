@@ -751,8 +751,7 @@ public class AnnotationRuleController {
 		for (String rulesKey : rules.keySet()) {
 			for (RuleEntry r : rules.get(rulesKey)) {
 				if (r.getCategory().contains(inputCategory)) {
-					String l = r.getDefaultCategory();
-					
+					r.getDefaultCategory();
 					return rulesKey;
 				}
 			}

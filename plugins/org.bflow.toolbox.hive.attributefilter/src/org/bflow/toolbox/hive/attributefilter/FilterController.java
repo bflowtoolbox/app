@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
@@ -39,7 +40,6 @@ public class FilterController implements IAttributeFileRegistryListener {
 
 	private FilterController() {
 		AttributeFileRegistry.getInstance().addRegistryListener(this);
-
 	}
 
 	public static FilterController getInstance() {
@@ -55,22 +55,17 @@ public class FilterController implements IAttributeFileRegistryListener {
 	 * @param editor
 	 */
 	private void applyFiltersToEditorView(DiagramEditor editor) {
-
-		if (editor == null)
-			return;
+		if (editor == null) return;
+		
 		Object adapter = editor.getAdapter(GraphicalViewer.class);
-		if (!(adapter instanceof DiagramGraphicalViewer))
-			return;
+		if (!(adapter instanceof DiagramGraphicalViewer)) return;
 		DiagramGraphicalViewer viewer = (DiagramGraphicalViewer) adapter;
 
-
 		//get all EditParts of the Model
-		Map editPartRegistry = viewer.getEditPartRegistry();
+		Map<?,?> editPartRegistry = viewer.getEditPartRegistry();
 		Object editPart = null;
 
-
-		Set<Object> visibleElements = getElementsForFilter(editPartRegistry,
-				AttributeFilterController.getInstance().getAllFilters());
+		Set<Object> visibleElements = getElementsForFilter(editPartRegistry, AttributeFilterController.getInstance().getAllFilters());
 	
 		//show all elements if the processed result is a non-empty set (look AttributeAnalyser.getVisibleElementsForFilter())
 		boolean showAll = (visibleElements != null && visibleElements.isEmpty());
@@ -91,11 +86,7 @@ public class FilterController implements IAttributeFileRegistryListener {
 				editPart = editPartRegistry.get(keyOfEditPartRegistry);
 	
 				if (editPart instanceof GraphicalEditPart) {
-					if (showAll
-	
-							|| visibleEObjects
-									.contains(((NodeImpl) keyOfEditPartRegistry)
-											.getElement())) {
+					if (showAll	|| visibleEObjects.contains(((NodeImpl) keyOfEditPartRegistry).getElement())) {
 						show = true;
 					} else {
 						show = false;
@@ -105,30 +96,19 @@ public class FilterController implements IAttributeFileRegistryListener {
 				}
 			} else if (keyOfEditPartRegistry instanceof EdgeImpl) {
 				editPart = editPartRegistry.get(keyOfEditPartRegistry);
-				if (showAll
-						|| visibleEObjects
-								.contains(((EdgeImpl) keyOfEditPartRegistry)
-										.getElement())) {
+				if (showAll || visibleEObjects.contains(((EdgeImpl) keyOfEditPartRegistry).getElement())) {
 					show = true;
 	
 				} else {
 					show = false;
 				}
 				if (editPart instanceof ConnectionEditPart)
-					((ConnectionEditPart) editPartRegistry
-							.get(keyOfEditPartRegistry)).getFigure()
-							.setVisible(show);
+					((ConnectionEditPart) editPartRegistry.get(keyOfEditPartRegistry)).getFigure().setVisible(show);
 	
 			}
 		}
 	
 	}
-	//
-	//	private DiagramDocumentEditor getEditor() {
-	//		return (DiagramDocumentEditor) EditorService.getInstance()
-	//				.getRegisteredEditors(
-	//						"epc.diagram.part.BflowEpcDiagramEditorID");
-	//	}
 
 	/**
 	 * Notice, if attributes are changed. If so, it delegates that all filters
@@ -163,8 +143,7 @@ public class FilterController implements IAttributeFileRegistryListener {
 	 *         effect (e.g. they are off/inactive)<br>
 	 * 
 	 */
-	private Set<Object> getElementsForFilter(Map editParts,
-			List<FilterEntry> filters) {
+	private Set<Object> getElementsForFilter(Map<?,?> editParts, List<FilterEntry> filters) {
 	
 		Set<Object> set = new HashSet<Object>();
 		Set<String> idlist = new HashSet<String>();
@@ -183,9 +162,8 @@ public class FilterController implements IAttributeFileRegistryListener {
 					continue;
 				HashMap<String, String> attributes = (HashMap<String, String>) getAttributesForActiveModel(id);
 				if (attributes != null && !attributes.isEmpty()) {
-					String value = "";
+					String value = StringUtils.EMPTY;
 					for (String key : attributes.keySet()) {
-	
 						for (FilterEntry entry : filters) {
 							if (!entry.isActive())
 								continue;
@@ -198,70 +176,55 @@ public class FilterController implements IAttributeFileRegistryListener {
 	
 								case ">": {
 									try {
-										d = Double
-												.parseDouble(entry.getValue());
-										result = (Double.valueOf(value) > Double
-												.valueOf(d));
+										d = Double.parseDouble(entry.getValue());
+										result = (Double.valueOf(value) > Double.valueOf(d));
 									} catch (NumberFormatException e) {
-										result = col.compare(value,
-												entry.getValue()) > 0;
+										result = col.compare(value, entry.getValue()) > 0;
 									}
 								}
 									break;
 								case "=": {
 	
 									try {
-										d = Double
-												.parseDouble(entry.getValue());
-										result = (Double.valueOf(value) == Double
-												.valueOf(d));
+										d = Double.parseDouble(entry.getValue());
+										result = (Double.valueOf(value) == Double.valueOf(d));
 									} catch (NumberFormatException e) {
-										result = col.compare(value,
-												entry.getValue()) == 0;
+										result = col.compare(value, entry.getValue()) == 0;
 									}
 	
 								}
 									break;
 								case "<": {
 									try {
-										d = Double
-												.parseDouble(entry.getValue());
-										result = (Double.valueOf(value) < Double
-												.valueOf(d));
+										d = Double.parseDouble(entry.getValue());
+										result = (Double.valueOf(value) < Double.valueOf(d));
 									} catch (NumberFormatException e) {
-										result = col.compare(value,
-												entry.getValue()) < 0;
+										result = col.compare(value, entry.getValue()) < 0;
 									}
 								}
 									break;
 								case "\u2260":
 									try {
-										d = Double
-												.parseDouble(entry.getValue());
+										d = Double.parseDouble(entry.getValue());
 										result = Double.valueOf(value) != d;
 									} catch (NumberFormatException e) {
-										result = col.compare(value,
-												entry.getValue()) != 0;
+										result = col.compare(value, entry.getValue()) != 0;
 									}
 									break;
 								case "\u2265":
 									try {
-										d = Double
-												.parseDouble(entry.getValue());
+										d = Double.parseDouble(entry.getValue());
 										result = Double.valueOf(value) >= d;
 									} catch (NumberFormatException e) {
-										result = col.compare(value,
-												entry.getValue()) >= 0;
+										result = col.compare(value, entry.getValue()) >= 0;
 									}
 									break;
 								case "\u2264":
 									try {
-										d = Double
-												.parseDouble(entry.getValue());
+										d = Double.parseDouble(entry.getValue());
 										result = Double.valueOf(value) <= d;
 									} catch (NumberFormatException e) {
-										result = col.compare(value,
-												entry.getValue()) <= 0;
+										result = col.compare(value, entry.getValue()) <= 0;
 									}
 									break;
 	

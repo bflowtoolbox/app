@@ -145,7 +145,6 @@ public class AnnotationViewPart extends ViewPart implements ISelectionListener, 
 	 *            include all the buttons
 	 */
 	private void setUpView(Composite container, Composite mainPane) {
-
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 
@@ -154,42 +153,30 @@ public class AnnotationViewPart extends ViewPart implements ISelectionListener, 
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.minimumWidth = 200;
 
-
 		mainPane.setLayout(gridLayout);
 		mainPane.setLayoutData(gridData);
 
-
 		btnToggleAnnotations = new Button(mainPane, SWT.NONE);
 		btnToggleAnnotations.setLayoutData(gridData);
-		btnToggleAnnotations.setImage(new Image(mainPane.getDisplay(), this
-				.getClass().getResourceAsStream("/icons/Eye.png")));
-		btnToggleAnnotations
-				.setToolTipText(NLSupport.AnnotationViewPart_Annotation_Button_VisibilityToggle_Tooltip);
+		btnToggleAnnotations.setImage(new Image(mainPane.getDisplay(), this.getClass().getResourceAsStream("/icons/Eye.png")));
+		btnToggleAnnotations.setToolTipText(NLSupport.AnnotationViewPart_Annotation_Button_VisibilityToggle_Tooltip);
 		if (annotationsVisible)
-			btnToggleAnnotations
-					.setText(NLSupport.AnnotationViewPart_Annotation_Button_VisibilityToggle_Text_Hide);
+			btnToggleAnnotations.setText(NLSupport.AnnotationViewPart_Annotation_Button_VisibilityToggle_Text_Hide);
 		else
-			btnToggleAnnotations
-					.setText(NLSupport.AnnotationViewPart_Annotation_Button_VisibilityToggle_Text_Show);
+			btnToggleAnnotations.setText(NLSupport.AnnotationViewPart_Annotation_Button_VisibilityToggle_Text_Show);
 
 		btnToggleAnnotations.setEnabled(isViewEnabled);
 
 		btnToggleAnnotations.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
-
 				annotationsVisible = !areAnnotationsVisible();
 				if (annotationsVisible)
-					btnToggleAnnotations
-							.setText(NLSupport.AnnotationViewPart_Annotation_Button_VisibilityToggle_Text_Hide);
+					btnToggleAnnotations.setText(NLSupport.AnnotationViewPart_Annotation_Button_VisibilityToggle_Text_Hide);
 				else
-					btnToggleAnnotations
-							.setText(NLSupport.AnnotationViewPart_Annotation_Button_VisibilityToggle_Text_Show);
+					btnToggleAnnotations.setText(NLSupport.AnnotationViewPart_Annotation_Button_VisibilityToggle_Text_Show);
 
 				AnnotationDecoratorProvider.noticeToggleChange(annotationsVisible);
-
-
 			}
 		});
 
@@ -234,10 +221,8 @@ public class AnnotationViewPart extends ViewPart implements ISelectionListener, 
 			List<RuleEntry> categoryRules = rulesInCategory.get(categoryName);
 			for (RuleEntry r : categoryRules) {
 			cat = r.getCategory();
-			if (!categories.containsKey(cat))
-			{
+			if (!categories.containsKey(cat)) {
 				categories.put(cat, new Composite(bar, SWT.NONE));
-
 			}
 			composite =categories.get(cat);
 			composite.setLayout(layout);
@@ -249,12 +234,9 @@ public class AnnotationViewPart extends ViewPart implements ISelectionListener, 
 			button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 			//catch the icon 
-			String completePath = AnnotationLauncherConfigurator
-					.getANNOTATIONLOGIC_FOLDER_PATH()
-					+ r.getFilename();
+			String completePath = AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH() + r.getFilename();
 			try {
-				button.setImage(new Image(mainPane.getShell().getDisplay(),
-						new FileInputStream(completePath)));
+				button.setImage(new Image(mainPane.getShell().getDisplay(), new FileInputStream(completePath)));
 
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
@@ -267,19 +249,16 @@ public class AnnotationViewPart extends ViewPart implements ISelectionListener, 
 			button.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					if (selectedEditPart == null)
-						return;
+					if (selectedEditPart == null) return;
+					
 					EObject eObj = EMFUtility.getEObject(selectedEditPart);
 					final String id = EMFCoreUtil.getProxyID(eObj);
 
 
-					if (AttributeViewPart.getInstance().getAttributeFile()
-							.contains(id, keyFinal, valueFinal)) {
-						AttributeViewPart.getInstance().getAttributeFile()
-								.remove(id, keyFinal);
+					if (AttributeViewPart.getInstance().getAttributeFile().contains(id, keyFinal, valueFinal)) {
+						AttributeViewPart.getInstance().getAttributeFile().remove(id, keyFinal);
 					} else {
-						AttributeViewPart.getInstance().getAttributeFile()
-								.add(id, keyFinal, valueFinal);
+						AttributeViewPart.getInstance().getAttributeFile().add(id, keyFinal, valueFinal);
 					}
 
 					AttributeFileRegistry.getInstance().dispatchAttributeFileChangedEvent();
