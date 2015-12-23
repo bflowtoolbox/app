@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
@@ -20,7 +21,6 @@ import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -103,14 +103,16 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 						DiagramTypeProviderAdapter adapter = new DiagramTypeProviderAdapter(dtp);
 						HReflectionUtils.invokeMethode(cfg, "setDiagramTypeProvider", adapter);
 					} catch(Exception ex) {
-						GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error on installing diagram type provider adapter. Reason: %s", ex);
+						GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error on installing diagram type provider adapter. Reason: %s", 
+								ExceptionUtils.getStackTrace(ex));
 					}
 					
 					try {
 						// Refresh UI due to annotation changes
 						graphitiDiagramEditPart.refresh();
 					} catch (Exception ex) {
-						GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error on refreshing diagram edit part. Reason: %s", ex);
+						GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error on refreshing diagram edit part. Reason: %s", 
+								ExceptionUtils.getStackTrace(ex));
 					}
 				}});
 		}
@@ -370,7 +372,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 *            Value of the attribute
 	 */
 	private void setAttributeValue(final EObject objectModel, final String attributeName, final String attributeValue) {
-		AbstractCommand command = new AbstractCommand() {
+		final AbstractCommand command = new AbstractCommand() {
 			@Override
 			public void redo() { }
 			
@@ -386,14 +388,21 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			}
 		};
 
-		// if (!diagramEditor.getEditingDomain().isReadOnly(shapeModel.eResource()) && dooIt) // TODO
+				
+		Display.getCurrent().asyncExec(new Runnable(){
+			@Override
+			public void run() {
+				EMFCommandOperation commandOperation = new EMFCommandOperation(getEditingDomain(), command);
+				try {
+					commandOperation.execute(null, null);
+				} catch (Exception ex) {
+					GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error saving attribute values. Reason: %s", 
+							ExceptionUtils.getStackTrace(ex));
+				}
+			}});
 		
-		EMFCommandOperation commandOperation = new EMFCommandOperation(getEditingDomain(), command);
-		try {
-			commandOperation.execute(null, null);
-		} catch (ExecutionException ex) {
-			GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error saving attribute values. Reason: %s", ex);
-		}
+//		TransactionalEditingDomain domain = TransactionUtil.getEditingDomain(objectModel);
+//		domain.getCommandStack().execute(command);
 	}
 	
 	/**
