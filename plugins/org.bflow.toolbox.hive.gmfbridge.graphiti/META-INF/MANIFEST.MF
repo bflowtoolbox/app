@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Hive GMF bridge for Graphiti
 Bundle-SymbolicName: org.bflow.toolbox.hive.gmfbridge.graphiti;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.bflow.toolbox.hive.gmfbridge.graphiti.internal.PluginActivator
+Bundle-Activator: org.bflow.toolbox.hive.gmfbridge.graphiti.internal.GraphitiGmfBridgePlugin
 Bundle-Vendor: bflow* dev team
 Require-Bundle: org.eclipse.ui,
  org.eclipse.graphiti;bundle-version="0.10.2",

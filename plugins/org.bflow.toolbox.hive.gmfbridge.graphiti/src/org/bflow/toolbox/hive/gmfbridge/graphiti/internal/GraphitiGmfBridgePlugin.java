@@ -1,23 +1,27 @@
 package org.bflow.toolbox.hive.gmfbridge.graphiti.internal;
 
+import org.bflow.toolbox.hive.libs.aprogu.logging.ILogWriter;
+import org.bflow.toolbox.hive.libs.aprogu.logging.LogWriter;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class PluginActivator extends AbstractUIPlugin {
+public class GraphitiGmfBridgePlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.bflow.toolbox.hive.gmfbridge.graphiti"; //$NON-NLS-1$
 
 	// The shared instance
-	private static PluginActivator plugin;
+	private static GraphitiGmfBridgePlugin plugin;
+	
+	private ILogWriter fLogWriter = LogWriter.createInstance(GraphitiGmfBridgePlugin.class);
 	
 	/**
 	 * The constructor
 	 */
-	public PluginActivator() {
+	public GraphitiGmfBridgePlugin() {
 	}
 
 	/*
@@ -43,8 +47,17 @@ public class PluginActivator extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static PluginActivator getDefault() {
+	public static GraphitiGmfBridgePlugin getDefault() {
 		return plugin;
+	}
+	
+	/**
+	 * Returns the log writer of this plug-in.
+	 * 
+	 * @return The log writer of this plug-in
+	 */
+	public static ILogWriter LogWriter() {
+		return getDefault().fLogWriter;
 	}
 
 }
