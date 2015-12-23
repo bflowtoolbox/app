@@ -1,8 +1,7 @@
 package org.bflow.toolbox.hive.annotations;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.Set;
 
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
@@ -25,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
  * 
  * @author Felix Hoess
  * @since 05.05.2015
+ * @version 2015-12-23 Introduced static getImage() function
  *
  */
 public class AnnotationDecorator extends MultipleAbstractDecorator implements
@@ -96,16 +96,7 @@ public class AnnotationDecorator extends MultipleAbstractDecorator implements
 	}
 
 	private Image getImage(String imgFileName) {
-
-		InputStream is = null;
-		try {
-			is = new FileInputStream(AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH() + imgFileName);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		Image img = new Image(null, is);
-		return img;
+		return getImage(new ShapeDecorationInfo(null, imgFileName));
 	}
 
 	@Override
@@ -118,5 +109,26 @@ public class AnnotationDecorator extends MultipleAbstractDecorator implements
 	public void noticeToggleChange(boolean show) {
 		isVisible = show;
 		refresh();
+	}
+	
+	/**
+	 * Returns the image associated with the given shape decoration info. Note
+	 * that a new image is being created every time!
+	 * 
+	 * @param shapeDecorationInfo
+	 *            Shape decoration info
+	 * @return Image or NULL
+	 */
+	public static Image getImage(ShapeDecorationInfo shapeDecorationInfo) {
+		if (shapeDecorationInfo == null) return null;
+		String imgFileName = shapeDecorationInfo.getIconResourceName();
+		String resourcePath = String.format("%s%s", AnnotationLauncherConfigurator.getANNOTATIONLOGIC_FOLDER_PATH(), imgFileName);
+		Image image = null;
+		try (FileInputStream is = new FileInputStream(resourcePath)) {
+			image = new Image(null, is);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return image;
 	}
 }
