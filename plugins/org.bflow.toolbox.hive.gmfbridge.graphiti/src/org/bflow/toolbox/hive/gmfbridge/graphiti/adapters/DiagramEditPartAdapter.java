@@ -238,7 +238,6 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 		// Nothing to do because we add/remove attributes at runtime
 	}
 	
-	
 	/* (non-Javadoc)
 	 * @see org.bflow.toolbox.hive.attributes.IAttributeFilePersister#load(java.util.HashMap)
 	 */
@@ -388,7 +387,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			}
 		};
 
-				
+		// Perform transaction async to avoid concurrent transactions
 		Display.getCurrent().asyncExec(new Runnable(){
 			@Override
 			public void run() {
