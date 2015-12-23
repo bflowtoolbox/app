@@ -12,6 +12,9 @@ import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
 import org.bflow.toolbox.hive.attributes.IAttributeFileListener;
 import org.bflow.toolbox.hive.attributes.IAttributeFilePersister;
 import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
+import org.bflow.toolbox.hive.gmfbridge.graphiti.annotations.AnnotationDecorationSupport;
+import org.bflow.toolbox.hive.gmfbridge.graphiti.providers.DiagramTypeProviderAdapter;
+import org.bflow.toolbox.hive.libs.aprogu.lang.HReflectionUtils;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.RootElement;
@@ -29,10 +32,15 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.runtime.notation.impl.ViewImpl;
+import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
+import org.eclipse.graphiti.ui.internal.config.ConfigurationProvider;
+import org.eclipse.graphiti.ui.internal.parts.IContainerShapeEditPart;
+import org.eclipse.graphiti.ui.platform.IConfigurationProvider;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * Provides an adapter for
@@ -61,13 +69,41 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	private IAttributeFileRegistryListener fAttributeFileRegistryListener = new _AttributeFileRegistryListener();
 	private AttributeFile fCurrentAttributeFile;
 	
+	private AnnotationDecorationSupport fAnnotationDecorationSupport = new AnnotationDecorationSupport();
+	
 	/**
 	 * Creates a new instance based on the given instances.
 	 * 
 	 * @param graphitiDiagramEditPart
 	 */
-	public DiagramEditPartAdapter(org.eclipse.graphiti.ui.internal.parts.DiagramEditPart graphitiDiagramEditPart) {
+	public DiagramEditPartAdapter(final org.eclipse.graphiti.ui.internal.parts.DiagramEditPart graphitiDiagramEditPart) {
 		super(null);
+		
+		final IContainerShapeEditPart pp = graphitiDiagramEditPart;
+		IConfigurationProvider cfgProv = pp.getConfigurationProvider();
+		final ConfigurationProvider cfg = (ConfigurationProvider) cfgProv;
+		final IDiagramTypeProvider dtp = cfg.getDiagramTypeProvider(); // Alternative: Override field toolBehaviorProviders
+		
+		/*
+		 * After this instance has been initialized the (BPMN) framework performs a hard cast. Therefore we 
+		 * try to inject the adapted provider as late as we can.
+		 */
+		if (dtp.getClass() != DiagramTypeProviderAdapter.class) {
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						DiagramTypeProviderAdapter adapter = new DiagramTypeProviderAdapter(dtp);
+						HReflectionUtils.invokeMethode(cfg, "setDiagramTypeProvider", adapter);
+						
+						// Refresh UI due to annotation changes
+						graphitiDiagramEditPart.refresh();
+					} catch(Exception ex) {
+						ex.printStackTrace(); // TODO
+					}
+				}});
+		}
+		
 		fGraphitiDiagramEditPart = graphitiDiagramEditPart;
 		fDiagramGraphicalViewer = (GraphicalViewer) fGraphitiDiagramEditPart.getViewer();
 		fDiagramModel = Graphiti.getLinkService().getBusinessObjectForLinkedPictogramElement(fGraphitiDiagramEditPart.getPictogramElement());
@@ -97,6 +133,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			fCurrentAttributeFile = null;
 		}
 		
+		fAnnotationDecorationSupport.dispose();
 		AttributeFileRegistry.getInstance().removeRegistryListener(fAttributeFileRegistryListener);
 	}
 	
@@ -384,6 +421,9 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			
 			attributeName = escapeAttributeName(attributeName);
 			setAttributeValue(modelObject, attributeName, attributeValue);
+			
+			// Refresh UI due to annotation changes
+			fGraphitiDiagramEditPart.refresh();
 		}
 
 		/* (non-Javadoc)
@@ -396,6 +436,9 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			
 			attributeName = escapeAttributeName(attributeName);
 			setAttributeValue(modelObject, attributeName, null);
+			
+			// Refresh UI due to annotation changes
+			fGraphitiDiagramEditPart.refresh();
 		}
 		
 		/* (non-Javadoc)
