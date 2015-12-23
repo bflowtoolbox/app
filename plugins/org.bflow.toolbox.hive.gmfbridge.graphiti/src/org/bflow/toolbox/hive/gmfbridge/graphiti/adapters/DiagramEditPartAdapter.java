@@ -13,6 +13,7 @@ import org.bflow.toolbox.hive.attributes.IAttributeFileListener;
 import org.bflow.toolbox.hive.attributes.IAttributeFilePersister;
 import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
 import org.bflow.toolbox.hive.gmfbridge.graphiti.annotations.AnnotationDecorationSupport;
+import org.bflow.toolbox.hive.gmfbridge.graphiti.internal.GraphitiGmfBridgePlugin;
 import org.bflow.toolbox.hive.gmfbridge.graphiti.providers.DiagramTypeProviderAdapter;
 import org.bflow.toolbox.hive.libs.aprogu.lang.HReflectionUtils;
 import org.eclipse.bpmn2.BaseElement;
@@ -47,7 +48,8 @@ import org.eclipse.swt.widgets.Display;
  * {@link org.eclipse.graphiti.ui.internal.parts.DiagramEditPart}.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 27.03.2015
+ * @since 	2015-03-27
+ * @version 2015-12-23 Added injecting of diagram type provider adapter
  * 
  */
 @SuppressWarnings("restriction")
@@ -69,7 +71,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	private IAttributeFileRegistryListener fAttributeFileRegistryListener = new _AttributeFileRegistryListener();
 	private AttributeFile fCurrentAttributeFile;
 	
-	private AnnotationDecorationSupport fAnnotationDecorationSupport = new AnnotationDecorationSupport();
+	private AnnotationDecorationSupport fAnnotationDecorationSupport;
 	
 	/**
 	 * Creates a new instance based on the given instances.
@@ -84,22 +86,31 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 		final ConfigurationProvider cfg = (ConfigurationProvider) cfgProv;
 		final IDiagramTypeProvider dtp = cfg.getDiagramTypeProvider(); // Alternative: Override field toolBehaviorProviders
 		
+		fAnnotationDecorationSupport = new AnnotationDecorationSupport(dtp.getProviderId());
+		
 		/*
-		 * After this instance has been initialized the (BPMN) framework performs a hard cast. Therefore we 
-		 * try to inject the adapted provider as late as we can.
+		 * We must inject our own Diagram Type Provider to hook up the interfaces.
 		 */
 		if (dtp.getClass() != DiagramTypeProviderAdapter.class) {
+			/*
+			 * After this instance has been initialized the (BPMN) framework performs a hard cast. Therefore we 
+			 * try to inject the adapted provider as late as we can.
+			 */
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
 					try {
 						DiagramTypeProviderAdapter adapter = new DiagramTypeProviderAdapter(dtp);
 						HReflectionUtils.invokeMethode(cfg, "setDiagramTypeProvider", adapter);
-						
+					} catch(Exception ex) {
+						GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error on installing diagram type provider adapter. Reason: %s", ex);
+					}
+					
+					try {
 						// Refresh UI due to annotation changes
 						graphitiDiagramEditPart.refresh();
-					} catch(Exception ex) {
-						ex.printStackTrace(); // TODO
+					} catch (Exception ex) {
+						GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error on refreshing diagram edit part. Reason: %s", ex);
 					}
 				}});
 		}
@@ -374,12 +385,14 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 				ModelUtil.setValue(getEditingDomain(), objectModel, attribute, attributeValue);				
 			}
 		};
+
+		// if (!diagramEditor.getEditingDomain().isReadOnly(shapeModel.eResource()) && dooIt) // TODO
 		
 		EMFCommandOperation commandOperation = new EMFCommandOperation(getEditingDomain(), command);
 		try {
 			commandOperation.execute(null, null);
-		} catch (ExecutionException e) {
-			e.printStackTrace();
+		} catch (ExecutionException ex) {
+			GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error saving attribute values. Reason: %s", ex);
 		}
 	}
 	
