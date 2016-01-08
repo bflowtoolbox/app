@@ -274,7 +274,9 @@ public class FunctionEditPart extends BflowNodeEditPart {
 					getMapMode().DPtoLP(12)));
 			
 			BflowDiagramEditPart diagramEditPart = 
-				BflowDiagramEditPart.getCurrentViewer();
+				(BflowDiagramEditPart) FunctionEditPart.this.getParent();
+			
+			
 			if(diagramEditPart != null){
 				this.setBackgroundColor(
 						diagramEditPart.getColorSchema().getBackground(
