@@ -16,6 +16,7 @@ import org.eclipse.gef.EditDomain;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.layout.FreeFormLayoutEx;
 import org.eclipse.gmf.runtime.diagram.ui.parts.IDiagramWorkbenchPart;
+import org.eclipse.gmf.runtime.draw2d.ui.figures.FigureUtilities;
 import org.eclipse.gmf.runtime.draw2d.ui.mapmode.IMapMode;
 import org.eclipse.gmf.runtime.notation.DiagramStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
@@ -207,8 +208,8 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 	public static void apply(Class<?> type, ShapeStyle style) {
 		BflowDiagramEditPart diagramEditPart = BflowDiagramEditPart.getCurrentViewer();
 		if (diagramEditPart != null) {
-			style.setFillColor(diagramEditPart.getColorSchema().getBackground(type).hashCode());
-			style.setLineColor(diagramEditPart.getColorSchema().getForeground(type).hashCode());
+			style.setFillColor(FigureUtilities.colorToInteger(diagramEditPart.getColorSchema().getBackground(type)));
+			style.setLineColor(FigureUtilities.colorToInteger(diagramEditPart.getColorSchema().getForeground(type)));
 		} else {
 			style.setFillColor(ColorConstants.white.hashCode());
 			style.setLineColor(ColorConstants.black.hashCode());
