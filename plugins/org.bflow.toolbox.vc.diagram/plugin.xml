@@ -137,37 +137,37 @@
       <page
             category="org.bflow.toolbox.epc.diagram.bflowMainPage"
             class="org.bflow.toolbox.vc.diagram.preferences.DiagramGeneralPreferencePage"
-            id="org.bflow.toolbox.diagram.general"
-            name="%preference.page.title.org.bflow.toolbox.diagram.general">
+            id="org.bflow.toolbox.vc.diagram.general"
+            name="%preference.page.title.org.bflow.toolbox.vc.diagram.general">
       </page>
       <page
             id="org.bflow.toolbox.diagram.appearance"
-            name="%preference.page.title.org.bflow.toolbox.diagram.appearance"
-            category="org.bflow.toolbox.diagram.general"
+            name="%preference.page.title.org.bflow.toolbox.vc.diagram.appearance"
+            category="org.bflow.toolbox.vc.diagram.general"
             class="org.bflow.toolbox.vc.diagram.preferences.DiagramAppearancePreferencePage">
       </page>
       <page
             id="org.bflow.toolbox.diagram.connections"
-            name="%preference.page.title.org.bflow.toolbox.diagram.connections"
-            category="org.bflow.toolbox.diagram.general"
+            name="%preference.page.title.org.bflow.toolbox.vc.diagram.connections"
+            category="org.bflow.toolbox.vc.diagram.general"
             class="org.bflow.toolbox.vc.diagram.preferences.DiagramConnectionsPreferencePage">
       </page>
       <page
             id="org.bflow.toolbox.diagram.printing"
-            name="%preference.page.title.org.bflow.toolbox.diagram.printing"
-            category="org.bflow.toolbox.diagram.general"
+            name="%preference.page.title.org.bflow.toolbox.vc.diagram.printing"
+            category="org.bflow.toolbox.vc.diagram.general"
             class="org.bflow.toolbox.vc.diagram.preferences.DiagramPrintingPreferencePage">
       </page>
       <page
             id="org.bflow.toolbox.diagram.rulersAndGrid"
-            name="%preference.page.title.org.bflow.toolbox.diagram.rulersAndGrid"
-            category="org.bflow.toolbox.diagram.general"
+            name="%preference.page.title.org.bflow.toolbox.vc.diagram.rulersAndGrid"
+            category="org.bflow.toolbox.vc.diagram.general"
             class="org.bflow.toolbox.vc.diagram.preferences.DiagramRulersAndGridPreferencePage">
       </page>
       <page
             id="org.bflow.toolbox.diagram.pathmaps"
-            name="%preference.page.title.org.bflow.toolbox.diagram.pathmaps"
-            category="org.bflow.toolbox.diagram.general"
+            name="%preference.page.title.org.bflow.toolbox.vc.diagram.pathmaps"
+            category="org.bflow.toolbox.vc.diagram.general"
             class="org.eclipse.gmf.runtime.emf.ui.preferences.PathmapsPreferencePage">
       </page>
    </extension>

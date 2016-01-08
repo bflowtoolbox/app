@@ -309,6 +309,28 @@
             id="org.bflow.toolbox.diagram.general"
             name="%preference.page.title.org.bflow.toolbox.diagram.general">
       </page>
+      <page id="org.bflow.toolbox.diagram.appearance"
+			name="%preference.page.title.org.bflow.toolbox.diagram.appearance"
+			category="org.bflow.toolbox.diagram.general" class="org.bflow.toolbox.epc.diagram.preferences.DiagramAppearancePreferencePage">
+		</page>
+		<page id="org.bflow.toolbox.diagram.connections"
+			name="%preference.page.title.org.bflow.toolbox.diagram.connections"
+			category="org.bflow.toolbox.diagram.general" class="org.bflow.toolbox.epc.diagram.preferences.DiagramConnectionsPreferencePage">
+		</page>
+		<page id="org.bflow.toolbox.diagram.printing"
+			name="%preference.page.title.org.bflow.toolbox.diagram.printing"
+			category="org.bflow.toolbox.diagram.general" class="org.bflow.toolbox.epc.diagram.preferences.DiagramPrintingPreferencePage">
+		</page>
+		<page id="org.bflow.toolbox.diagram.rulersAndGrid"
+			name="%preference.page.title.org.bflow.toolbox.diagram.rulersAndGrid"
+			category="org.bflow.toolbox.diagram.general"
+			class="org.bflow.toolbox.epc.diagram.preferences.DiagramRulersAndGridPreferencePage">
+		</page>
+		<page id="org.bflow.toolbox.diagram.pathmaps"
+			name="%preference.page.title.org.bflow.toolbox.diagram.pathmaps"
+			category="org.bflow.toolbox.diagram.general"
+			class="org.eclipse.gmf.runtime.emf.ui.preferences.PathmapsPreferencePage">
+		</page>
    </extension>
 
    <extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
