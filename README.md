@@ -163,7 +163,30 @@ http://sourceforge.net/projects/eclipsemodeling/files/doc/
 
 ## Contact
 
-If you have any questions, contact bflow@bflow.org
+This bflow version is enhanced by
+
+Hamburg Research Center for Information Systems (HARCIS)
+
+University of Hamburg
+
+Max-Brauer-Allee 60
+
+22765 Hamburg
+
+Germany
+
+
+https://www.bwl.uni-hamburg.de/harcis
+
+
+If you have any questions, please contact
+
+Daniel Heid
+
+daniel.heid@uni-hamburg.de
+
+https://www.bwl.uni-hamburg.de/harcis/zentrum/team/researcher/daniel-heid.html
+
 
 Please tell us about your own code modifications, code enhancements and newly developed add-ons that
 could be useful for the community!
