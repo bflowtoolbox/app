@@ -24,12 +24,10 @@ public class Messages extends NLS {
 	public static String TemplateWizardDialog_8;
 	public static String TemplateWizardPage1_0;
 	public static String TemplateWizardPage1_1;
-	public static String TemplateWizardPage1_10;
 	public static String TemplateWizardPage1_2;
 	public static String TemplateWizardPage1_3;
 	public static String TemplateWizardPage1_4;
 	public static String TemplateWizardPage1_5;
-	public static String TemplateWizardPage1_8;
 	public static String TemplateWizardPage1_9;
 	static {
 		// initialize resource bundle

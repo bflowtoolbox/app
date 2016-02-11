@@ -12,15 +12,17 @@ import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditor;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorUtil;
 import org.bflow.toolbox.epc.diagram.providers.EpcElementTypes;
-import org.bflow.toolbox.epc.extensions.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.extensions.idelete.IntelligentDeleter;
+import org.bflow.toolbox.epc.extensions.actions.DiagramLiveValidator;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.bflow.toolbox.extensions.edit.parts.ColoredNodeEditPart;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.commands.operations.DefaultOperationHistory;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -47,8 +49,6 @@ import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.IAdaptable;
 
 /**
  * Defines an utility to make simple model and views editings within an epc
@@ -77,6 +77,23 @@ public class EpcDiagramEditUtil {
 	 */
 	public static void createConnection(EpcDiagramEditor editor,
 			EditPart source, EditPart target) {
+		createConnection(editor, source, target, null);
+	}
+	
+	/**
+	 * Creates a new connection between two model elements.
+	 * 
+	 * @param editor
+	 *            editor instance
+	 * @param source
+	 *            source edit part
+	 * @param target
+	 *            target edit part
+	 * @param commandLabel
+	 *            command label
+	 */
+	public static void createConnection(EpcDiagramEditor editor,
+			EditPart source, EditPart target, String commandLabel) {
 		if (target == null || source == null)
 			return;
 
@@ -94,7 +111,11 @@ public class EpcDiagramEditUtil {
 				.getCommand(new EditCommandRequestWrapper(request,
 						Collections.EMPTY_MAP));
 
-		command.setLabel("intelligent arc creation");
+		if (commandLabel != null) {
+			command.setLabel(commandLabel);
+		}else {
+			command.setLabel("intelligent arc creation");
+		}
 		command.execute();
 		currentCommandCollection.getStack().add(command);
 	}
@@ -458,6 +479,7 @@ public class EpcDiagramEditUtil {
 		EpcDiagramEditUtil.SetElementLocation(editpart, location);
 	}
 	
+	
 	/**
 	 * Returns an AbstractOperation. This can added in the OperationHistory and does 
 	 * redo/undo all commands in the history with the same unique ID in the commandlabel
@@ -514,5 +536,4 @@ public class EpcDiagramEditUtil {
 		};
 		return aoend;
 	}
-
 }
