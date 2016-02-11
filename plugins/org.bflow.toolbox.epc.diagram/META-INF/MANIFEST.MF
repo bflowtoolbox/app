@@ -16,7 +16,8 @@ Export-Package: org.bflow.toolbox.epc.diagram.edit.parts,
  org.bflow.toolbox.epc.diagram.views,
  org.bflow.toolbox.epc.extensions.actions,
  org.bflow.toolbox.epc.extensions.edit.parts,
- org.bflow.toolbox.epc.extensions.idelete
+ org.bflow.toolbox.epc.extensions.idelete,
+ org.bflow.toolbox.epc.extensions.utils
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.expressions,
