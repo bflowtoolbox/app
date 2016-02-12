@@ -26,7 +26,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface Function extends Element, IBflowElement {
+public interface Function extends Element, IBflowElement, EpcNode {
 	/**
 	 * Returns the value of the '<em><b>Subdiagram</b></em>' attribute list.
 	 * The list contents are of type {@link java.lang.String}.

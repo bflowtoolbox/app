@@ -6,7 +6,6 @@
  */
 package org.bflow.toolbox.epc.impl;
 
-import org.bflow.toolbox.bflow.impl.ElementImpl;
 import org.bflow.toolbox.epc.EpcPackage;
 import org.bflow.toolbox.epc.TechnicalTerm;
 import org.eclipse.emf.ecore.EClass;
@@ -20,7 +19,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class TechnicalTermImpl extends ElementImpl implements TechnicalTerm {
+public class TechnicalTermImpl extends EpcNodeImpl implements TechnicalTerm {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

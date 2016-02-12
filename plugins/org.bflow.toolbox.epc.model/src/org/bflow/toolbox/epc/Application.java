@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IEBflowElement;
  * @model
  * @generated
  */
-public interface Application extends Element, IEBflowElement {
+public interface Application extends Element, IEBflowElement, EpcNode {
 } // Application

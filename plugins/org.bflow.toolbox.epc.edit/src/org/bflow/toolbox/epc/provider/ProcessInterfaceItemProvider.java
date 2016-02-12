@@ -10,7 +10,6 @@ package org.bflow.toolbox.epc.provider;
 import java.util.Collection;
 import java.util.List;
 
-import org.bflow.toolbox.bflow.provider.ElementItemProvider;
 import org.bflow.toolbox.epc.EpcPackage;
 import org.bflow.toolbox.epc.ProcessInterface;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -33,7 +32,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class ProcessInterfaceItemProvider
-	extends ElementItemProvider
+	extends EpcItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,

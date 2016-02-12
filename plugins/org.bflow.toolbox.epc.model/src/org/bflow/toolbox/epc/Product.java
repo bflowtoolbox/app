@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IBflowElement;
  * @model
  * @generated
  */
-public interface Product extends Element, IBflowElement {
+public interface Product extends Element, IBflowElement, EpcNode {
 } // Product

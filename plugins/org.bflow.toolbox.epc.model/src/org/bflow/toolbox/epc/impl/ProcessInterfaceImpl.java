@@ -6,7 +6,6 @@
  */
 package org.bflow.toolbox.epc.impl;
 
-import org.bflow.toolbox.bflow.impl.ElementImpl;
 import org.bflow.toolbox.epc.EpcPackage;
 import org.bflow.toolbox.epc.ProcessInterface;
 import org.eclipse.emf.common.notify.Notification;
@@ -26,7 +25,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class ProcessInterfaceImpl extends ElementImpl implements ProcessInterface {
+public class ProcessInterfaceImpl extends EpcNodeImpl implements ProcessInterface {
 	/**
 	 * The default value of the '{@link #getSubdiagram() <em>Subdiagram</em>}' attribute.
 	 * <!-- begin-user-doc -->
