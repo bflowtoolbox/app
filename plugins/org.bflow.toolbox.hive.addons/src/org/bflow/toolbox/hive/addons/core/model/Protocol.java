@@ -207,9 +207,8 @@ public abstract class Protocol implements Runnable {
 		for (int i = 0; i < components.size(); i++) {
 			IComponent link = components.get(i);
 			
-			link.init();
-
 			try {
+				link.init();
 				link.transformInput(output);
 
 				link.invoke();
