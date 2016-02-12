@@ -1,0 +1,106 @@
+@namespace(uri="vc", prefix="vc")
+package vcchart;
+
+@gmf.diagram(onefile="true", diagram.extension="vc")
+class Model {
+   val Activity1[*] Activitys1;
+   val Activity2[*] Activitys2;
+   val Cluster[*] Clusters;
+   val Product[*] Products;
+   val TechnicalTerm[*] TechnicalTerms;
+   val Objective[*] Objectives;
+   val Participant[*] Participants;
+   val Application[*] Applications;
+   val Document[*] Documents;
+   val Relation1[*] Relations1;
+   val Relation2[*] Relations2;
+   val Relation3[*] Relations3;
+}
+
+abstract class NamedElement {
+   attr String name;
+}
+
+abstract class All {
+   
+}
+
+abstract class All_Rel_1 extends All {
+   
+}
+
+abstract class All_Rel_1_EndPoint extends All_Rel_1 {
+   
+}
+
+abstract class All_Rel_3 extends All {
+   
+}
+
+abstract class RelationsObject extends All {
+   
+}
+
+@gmf.node(label="name", label.icon="false", figure="polygon", polygon.x="0 0 85 100 85 0", polygon.y="0 50 50 25 0 0", color="0,248,0", size="100,50", border.color = "0,0,0")
+class Activity1 extends NamedElement, All_Rel_1, All_Rel_3 {
+	   
+}
+
+@gmf.node(label="name", label.icon="false", figure="polygon", polygon.x="0 15 0 85 100 85 0", polygon.y="0 25 50 50 25 0 0", color="0,248,0", size="100,50", border.color = "0,0,0")
+class Activity2 extends NamedElement, All_Rel_1, All_Rel_3 {
+	   
+}
+
+@gmf.node(label="name", label.icon="false", figure="polygon", polygon.x="0 50 100 100 0 0 100 0", polygon.y="10 0 10 50 50 42 42 42", color="0,248,0", size="100,50", border.color = "0,0,0")
+class Product extends NamedElement, All_Rel_1_EndPoint, All_Rel_3 {
+	   
+}
+
+@gmf.node(label="name", label.icon="false", figure="polygon", polygon.x="0 50 100 100 0", polygon.y="10 0 10 50 50", color="0,248,0", size="100,50", border.color = "0,0,0")
+class Objective extends NamedElement, All_Rel_1_EndPoint, All_Rel_3 {
+	   
+}
+
+@gmf.node(label="name", label.icon="false",figure="polygon", polygon.x="0 10 10 10 90 90 90 100 100 0", polygon.y="0 0 50 0 0 50 0 0 50 50", color="223,22,22", size="100,50", border.color = "0,0,0")
+class Cluster extends NamedElement, All_Rel_3, RelationsObject {
+	   
+}
+
+@gmf.node(label="name", label.icon="false", figure="rectangle", size="100,50", border.color = "0,0,0")
+class TechnicalTerm extends NamedElement, All_Rel_3, RelationsObject {
+	   
+}
+
+@gmf.node(label="name", label.icon="false", figure="ellipse", size="100,50", border.color = "0,0,0", color="22,22,22")
+class Participant extends NamedElement, All_Rel_3, RelationsObject {
+	   
+}
+
+@gmf.node(label="name", label.icon="false", figure="rectangle", size="100,50", border.color = "0,0,0", color="22,22,22")
+class Application extends NamedElement, All_Rel_3, RelationsObject {
+	   
+}
+
+@gmf.node(label="name", label.icon="false", figure="rectangle", size="100,50", border.color = "0,0,0", color="22,22,22")
+class Document extends NamedElement, All_Rel_3, RelationsObject {
+	   
+}
+
+
+@gmf.link(source="source", target="target", style="dash", target.decoration="arrow", color = "0,0,0", source.constraint = "self.oclIsKindOf(All_Rel_1) and self <> oppositeEnd", target.constraint = "(self.oclIsKindOf(All_Rel_1) and oppositeEnd.oclIsKindOf(All_Rel_1)) and not (self.oclIsTypeOf(Activity1)) and not (oppositeEnd.oclIsKindOf(All_Rel_1_EndPoint))")
+class Relation1 {
+   ref All_Rel_1 source;
+   ref All_Rel_1 target;
+}
+
+@gmf.link(source="source", target="target",color = "0,0,0", target.decoration="arrow", source.constraint = "self.oclIsKindOf(All_Rel_1) and self <> oppositeEnd", target.constraint = "(self.oclIsTypeOf(Activity1) and oppositeEnd.oclIsTypeOf(Activity1)) or (self.oclIsTypeOf(Activity2) and oppositeEnd.oclIsTypeOf(Activity2)) or (self.oclIsTypeOf(Objective) and oppositeEnd.oclIsTypeOf(Objective)) or (self.oclIsTypeOf(Product) and oppositeEnd.oclIsTypeOf(Product))")
+class Relation2 {
+   ref All_Rel_1 source;
+   ref All_Rel_1 target;
+}
+
+@gmf.link(source="source", target="target",color = "0,0,0", source.constraint = "self <> oppositeEnd", target.constraint = "(self.oclIsKindOf(All_Rel_1) and oppositeEnd.oclIsKindOf(RelationsObject)) or (self.oclIsKindOf(RelationsObject) and oppositeEnd.oclIsKindOf(All_Rel_1))")
+class Relation3 {
+   ref All_Rel_3 source;
+   ref All_Rel_3 target;
+}
