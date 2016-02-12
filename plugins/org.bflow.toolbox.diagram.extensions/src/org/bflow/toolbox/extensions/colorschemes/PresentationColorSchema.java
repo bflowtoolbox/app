@@ -54,7 +54,7 @@ public class PresentationColorSchema extends OriginalColorSchema {
 		
 		if(className.equals("Event"))
 			bgColor = ClrEvent;
-		else if(className.equals("Function") || className.equals("Objective"))
+		else if(className.equals("Function") || className.equals("Objective") || className.equals("Activity1") || className.equals("Activity2"))
 			bgColor = ClrFunction;
 		else if(className.equals("Application"))
 			bgColor = ClrApplication;
