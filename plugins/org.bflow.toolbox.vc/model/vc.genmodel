@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.bflow.toolbox.vc/src" modelPluginID="org.bflow.toolbox.vc"
+    modelName="Vc" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>vc.ecore</foreignModel>
+  <genPackages prefix="Vcchart" disposableProviderFactory="true" ecorePackage="vc.ecore#/">
+    <genClasses ecoreClass="vc.ecore#//Model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/Activitys1"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/Activitys2"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/Clusters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/Products"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/TechnicalTerms"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/Objectives"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/Participants"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/Applications"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/Documents"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/Relations1"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/Relations2"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference vc.ecore#//Model/Relations3"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="vc.ecore#//NamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute vc.ecore#//NamedElement/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="vc.ecore#//All"/>
+    <genClasses image="false" ecoreClass="vc.ecore#//All_Rel_1"/>
+    <genClasses image="false" ecoreClass="vc.ecore#//All_Rel_1_EndPoint"/>
+    <genClasses image="false" ecoreClass="vc.ecore#//All_Rel_3"/>
+    <genClasses image="false" ecoreClass="vc.ecore#//RelationsObject"/>
+    <genClasses ecoreClass="vc.ecore#//Activity1"/>
+    <genClasses ecoreClass="vc.ecore#//Activity2"/>
+    <genClasses ecoreClass="vc.ecore#//Product"/>
+    <genClasses ecoreClass="vc.ecore#//Objective"/>
+    <genClasses ecoreClass="vc.ecore#//Cluster"/>
+    <genClasses ecoreClass="vc.ecore#//TechnicalTerm"/>
+    <genClasses ecoreClass="vc.ecore#//Participant"/>
+    <genClasses ecoreClass="vc.ecore#//Application"/>
+    <genClasses ecoreClass="vc.ecore#//Document"/>
+    <genClasses ecoreClass="vc.ecore#//Relation1">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference vc.ecore#//Relation1/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference vc.ecore#//Relation1/target"/>
+    </genClasses>
+    <genClasses ecoreClass="vc.ecore#//Relation2">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference vc.ecore#//Relation2/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference vc.ecore#//Relation2/target"/>
+    </genClasses>
+    <genClasses ecoreClass="vc.ecore#//Relation3">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference vc.ecore#//Relation3/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference vc.ecore#//Relation3/target"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
