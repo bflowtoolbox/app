@@ -25,7 +25,7 @@ import org.bflow.toolbox.bflow.IBflowElement;
  * @model
  * @generated
  */
-public interface ProcessInterface extends Element, IBflowElement {
+public interface ProcessInterface extends Element, IBflowElement, EpcNode {
 	/**
 	 * Returns the value of the '<em><b>Subdiagram</b></em>' attribute.
 	 * <!-- begin-user-doc -->

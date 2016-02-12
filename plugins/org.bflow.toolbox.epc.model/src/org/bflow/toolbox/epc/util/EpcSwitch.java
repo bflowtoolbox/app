@@ -21,6 +21,7 @@ import org.bflow.toolbox.epc.CardFile;
 import org.bflow.toolbox.epc.Cluster;
 import org.bflow.toolbox.epc.Document;
 import org.bflow.toolbox.epc.Epc;
+import org.bflow.toolbox.epc.EpcNode;
 import org.bflow.toolbox.epc.EpcPackage;
 import org.bflow.toolbox.epc.Event;
 import org.bflow.toolbox.epc.ExternalPerson;
@@ -124,6 +125,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(event);
 				if (result == null) result = caseBflowSymbol(event);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(event);
 				return result;
 			}
 			case EpcPackage.FUNCTION: {
@@ -133,6 +135,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(function);
 				if (result == null) result = caseBflowSymbol(function);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(function);
 				return result;
 			}
 			case EpcPackage.PROCESS_INTERFACE: {
@@ -142,6 +145,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(processInterface);
 				if (result == null) result = caseBflowSymbol(processInterface);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(processInterface);
 				return result;
 			}
 			case EpcPackage.APPLICATION: {
@@ -151,6 +155,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIEBflowElement(application);
 				if (result == null) result = caseBflowSymbol(application);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(application);
 				return result;
 			}
 			case EpcPackage.PARTICIPANT: {
@@ -160,6 +165,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIEBflowElement(participant);
 				if (result == null) result = caseBflowSymbol(participant);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(participant);
 				return result;
 			}
 			case EpcPackage.AND: {
@@ -169,6 +175,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIConnector(and);
 				if (result == null) result = caseBflowSymbol(and);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(and);
 				return result;
 			}
 			case EpcPackage.OR: {
@@ -178,6 +185,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIConnector(or);
 				if (result == null) result = caseBflowSymbol(or);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(or);
 				return result;
 			}
 			case EpcPackage.XOR: {
@@ -187,6 +195,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIConnector(xor);
 				if (result == null) result = caseBflowSymbol(xor);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(xor);
 				return result;
 			}
 			case EpcPackage.ARC: {
@@ -212,6 +221,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(group);
 				if (result == null) result = caseBflowSymbol(group);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(group);
 				return result;
 			}
 			case EpcPackage.LOCATION: {
@@ -221,6 +231,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(location);
 				if (result == null) result = caseBflowSymbol(location);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(location);
 				return result;
 			}
 			case EpcPackage.POSITION: {
@@ -230,6 +241,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(position);
 				if (result == null) result = caseBflowSymbol(position);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(position);
 				return result;
 			}
 			case EpcPackage.FILE: {
@@ -239,6 +251,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(file);
 				if (result == null) result = caseBflowSymbol(file);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(file);
 				return result;
 			}
 			case EpcPackage.CARD_FILE: {
@@ -248,6 +261,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(cardFile);
 				if (result == null) result = caseBflowSymbol(cardFile);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(cardFile);
 				return result;
 			}
 			case EpcPackage.CLUSTER: {
@@ -257,6 +271,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(cluster);
 				if (result == null) result = caseBflowSymbol(cluster);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(cluster);
 				return result;
 			}
 			case EpcPackage.INTERNAL_PERSON: {
@@ -266,6 +281,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(internalPerson);
 				if (result == null) result = caseBflowSymbol(internalPerson);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(internalPerson);
 				return result;
 			}
 			case EpcPackage.EXTERNAL_PERSON: {
@@ -275,6 +291,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(externalPerson);
 				if (result == null) result = caseBflowSymbol(externalPerson);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(externalPerson);
 				return result;
 			}
 			case EpcPackage.PERSON_TYPE: {
@@ -284,6 +301,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(personType);
 				if (result == null) result = caseBflowSymbol(personType);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(personType);
 				return result;
 			}
 			case EpcPackage.TECHNICAL_TERM: {
@@ -293,6 +311,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(technicalTerm);
 				if (result == null) result = caseBflowSymbol(technicalTerm);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(technicalTerm);
 				return result;
 			}
 			case EpcPackage.DOCUMENT: {
@@ -302,6 +321,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(document);
 				if (result == null) result = caseBflowSymbol(document);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(document);
 				return result;
 			}
 			case EpcPackage.OBJECTIVE: {
@@ -311,6 +331,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(objective);
 				if (result == null) result = caseBflowSymbol(objective);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(objective);
 				return result;
 			}
 			case EpcPackage.PRODUCT: {
@@ -320,6 +341,7 @@ public class EpcSwitch<T> {
 				if (result == null) result = caseIBflowElement(product);
 				if (result == null) result = caseBflowSymbol(product);
 				if (result == null) result = defaultCase(theEObject);
+				if (result == null) result = caseEpcNode(product);
 				return result;
 			}
 			case EpcPackage.INFORMATION_ARC: {
@@ -327,6 +349,12 @@ public class EpcSwitch<T> {
 				T result = caseInformationArc(informationArc);
 				if (result == null) result = caseConnection(informationArc);
 				if (result == null) result = caseBflowSymbol(informationArc);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case EpcPackage.EpcNode: {
+				EpcNode epcNode = (EpcNode)theEObject;
+				T result = caseEpcNode(epcNode);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -697,6 +725,10 @@ public class EpcSwitch<T> {
 	 * @generated
 	 */
 	public T caseInformationArc(InformationArc object) {
+		return null;
+	}
+	
+	public T caseEpcNode(EpcNode object) {
 		return null;
 	}
 

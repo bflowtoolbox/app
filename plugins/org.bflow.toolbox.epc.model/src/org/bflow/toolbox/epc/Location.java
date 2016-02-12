@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IBflowElement;
  * @model
  * @generated
  */
-public interface Location extends Element, IBflowElement {
+public interface Location extends Element, IBflowElement, EpcNode {
 } // Location

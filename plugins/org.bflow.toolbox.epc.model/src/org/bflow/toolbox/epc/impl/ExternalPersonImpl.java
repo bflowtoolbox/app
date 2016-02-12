@@ -6,7 +6,6 @@
  */
 package org.bflow.toolbox.epc.impl;
 
-import org.bflow.toolbox.bflow.impl.ElementImpl;
 import org.bflow.toolbox.epc.EpcPackage;
 import org.bflow.toolbox.epc.ExternalPerson;
 import org.eclipse.emf.ecore.EClass;
@@ -20,7 +19,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class ExternalPersonImpl extends ElementImpl implements ExternalPerson {
+public class ExternalPersonImpl extends EpcNodeImpl implements ExternalPerson {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

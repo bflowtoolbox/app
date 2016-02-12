@@ -10,6 +10,7 @@ package org.bflow.toolbox.epc.provider;
 import java.util.Collection;
 import java.util.List;
 
+import org.bflow.toolbox.bflow.provider.ElementItemProvider;
 import org.bflow.toolbox.epc.Epc;
 import org.bflow.toolbox.epc.EpcFactory;
 import org.bflow.toolbox.epc.EpcPackage;
@@ -23,7 +24,6 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
@@ -33,7 +33,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class EpcItemProvider
-	extends ItemProviderAdapter
+	extends ElementItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
