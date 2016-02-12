@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bflow.toolbox.bflow.provider.BflowItemProviderAdapterFactory;
+import org.bflow.toolbox.epc.diagram.expressions.EpcOCLFactory;
 import org.bflow.toolbox.epc.diagram.providers.EpcMarkerNavigationProvider;
 import org.bflow.toolbox.epc.extensions.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.provider.EpcItemProviderAdapterFactory;
@@ -67,6 +68,11 @@ public class EpcDiagramEditorPlugin extends AbstractUIPlugin {
 	 * @generated
 	 */
 	private EpcDocumentProvider documentProvider;
+	
+	/**
+	 * @generated NOT
+	 */
+	private EpcOCLFactory oclFactory;
 
 	/**
 	 * @generated
@@ -315,5 +321,17 @@ public class EpcDiagramEditorPlugin extends AbstractUIPlugin {
 		}
 	}
 	
-	
+	/**
+	 * @generated NOT
+	 */
+	public EpcOCLFactory getEpcOCLFactory() {
+		return oclFactory;
+	}
+
+	/**
+	 * @generated NOT
+	 */
+	public void setEpcOCLFactory(EpcOCLFactory f) {
+		this.oclFactory = f;
+	}
 }
