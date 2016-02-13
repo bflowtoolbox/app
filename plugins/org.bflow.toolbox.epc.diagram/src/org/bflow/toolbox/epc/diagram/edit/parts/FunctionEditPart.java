@@ -15,9 +15,11 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.ScalablePolygonShape;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -37,6 +39,7 @@ import org.eclipse.gmf.runtime.emf.core.resources.GMFResource;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PartInitException;
 
@@ -260,6 +263,7 @@ public class FunctionEditPart extends BflowNodeEditPart {
 		 * @generated
 		 */
 		private WrappingLabel fFigureFunctionNameFigure;
+		private ScalablePolygonShape fSubdiagramFigure;
 
 		/**
 		 * @generated NOT
@@ -273,25 +277,15 @@ public class FunctionEditPart extends BflowNodeEditPart {
 			this.setCornerDimensions(new Dimension(getMapMode().DPtoLP(12),
 					getMapMode().DPtoLP(12)));
 			
-			BflowDiagramEditPart diagramEditPart = 
-				BflowDiagramEditPart.getCurrentViewer();
-			if(diagramEditPart != null){
-				this.setBackgroundColor(
-						diagramEditPart.getColorSchema().getBackground(
-								FunctionEditPart.class));
-				this.setForegroundColor(
-						diagramEditPart.getColorSchema().getForeground(
-								FunctionEditPart.class));
-			}
-			else{
-				this.setBackgroundColor(ColorConstants.white);
-				this.setForegroundColor(
-						ColorConstants.black);
-			}
+			this.setBackgroundColor(getCurrentColorSchemaBackgroundColor());
+			this.setForegroundColor(getCurentColorShemaForegroundColor());
 			
 			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100),
 					getMapMode().DPtoLP(50)));
-			
+			this.setBorder(new MarginBorder(getMapMode().DPtoLP(5),
+					getMapMode().DPtoLP(5), getMapMode().DPtoLP(5),
+					getMapMode().DPtoLP(5)));	
+			this.setLayoutManager(new StackLayout());
 			createContents();
 		}
 
@@ -299,7 +293,7 @@ public class FunctionEditPart extends BflowNodeEditPart {
 		 * @generated NOT
 		 */
 		private void createContents() {
-
+			
 			fFigureFunctionNameFigure = new WrappingLabel();
 			fFigureFunctionNameFigure.setText("");
 			fFigureFunctionNameFigure.setTextWrap(true);
@@ -307,31 +301,39 @@ public class FunctionEditPart extends BflowNodeEditPart {
 			fFigureFunctionNameFigure
 					.setTextJustification(PositionConstants.CENTER);
 			fFigureFunctionNameFigure.setBorder(new MarginBorder(getMapMode()
-					.DPtoLP(4), getMapMode().DPtoLP(4), getMapMode().DPtoLP(4),
-					getMapMode().DPtoLP(4)));
-
-			this.add(fFigureFunctionNameFigure);
+					.DPtoLP(4), getMapMode().DPtoLP(3), getMapMode().DPtoLP(4),
+					getMapMode().DPtoLP(12)));
 			
-			/*
-			 * Installs the OpenDiagramAction
-			 */
-			fFigureFunctionNameFigure.addMouseListener(new MouseListener(){
+			this.add(fFigureFunctionNameFigure);
 
+			fSubdiagramFigure = new ScalablePolygonShape(){
 				@Override
-				public void mouseDoubleClicked(MouseEvent arg0) {}
-
-				@Override
-				public void mousePressed(MouseEvent arg0) 
-				{	
-					if(arg0.getState() == MouseEvent.ALT)
-						openSubdiagram();
+				protected void fillShape(Graphics graphics) {
+					graphics.setForegroundColor(getCurrentColorSchemaBackgroundColor());
+					super.fillShape(graphics);
 				}
-
+			};
+			
+			fSubdiagramFigure.setLayoutManager(new StackLayout());
+			fSubdiagramFigure.addPoint(new Point(getMapMode().DPtoLP(80), getMapMode().DPtoLP(0)));
+			fSubdiagramFigure.addPoint(new Point(getMapMode().DPtoLP(95), getMapMode().DPtoLP(0)));
+			fSubdiagramFigure.addPoint(new Point(getMapMode().DPtoLP(95), getMapMode().DPtoLP(30)));
+			fSubdiagramFigure.addPoint(new Point(getMapMode().DPtoLP(80), getMapMode().DPtoLP(30)));
+			fSubdiagramFigure.setPreferredSize(new Dimension(getMapMode().DPtoLP(6),getMapMode().DPtoLP(12)));
+			fSubdiagramFigure.addMouseListener(new MouseListener.Stub() {
+				
 				@Override
-				public void mouseReleased(MouseEvent arg0) {}
+				public void mouseDoubleClicked(final MouseEvent me) {
+					openSubdiagram();
 				}
-			);
-
+				
+				@Override
+				public void mousePressed(final MouseEvent me){
+					me.consume();
+				}
+			});
+			
+			this.add(fSubdiagramFigure);
 		}
 		
 		@Override
@@ -345,6 +347,8 @@ public class FunctionEditPart extends BflowNodeEditPart {
 				
 				if(f.getSubdiagram().size() > 0)
 				{
+					fSubdiagramFigure.setEnabled(true);
+					fSubdiagramFigure.setVisible(true);
 					Point p = fFigureFunctionNameFigure.getLocation();
 					Dimension d = fFigureFunctionNameFigure.getSize();
 								
@@ -353,6 +357,9 @@ public class FunctionEditPart extends BflowNodeEditPart {
 					Point nPoint = new Point(p.x+d.width-16, p.y+3);
 					
 					graphics.drawImage(img, nPoint);					
+				}else {
+					fSubdiagramFigure.setEnabled(false);
+					fSubdiagramFigure.setVisible(false);
 				}
 			}
 			catch(Exception ex)
@@ -403,6 +410,24 @@ public class FunctionEditPart extends BflowNodeEditPart {
 	
 	public View getPrimaryView2(){
 		return super.getPrimaryView();
+	}
+	
+	public Color getCurrentColorSchemaBackgroundColor() {
+		BflowDiagramEditPart diagramEditPart = BflowDiagramEditPart.getCurrentViewer();
+		if(diagramEditPart != null){
+			return diagramEditPart.getColorSchema().getBackground(FunctionEditPart.class);
+		}else {
+			return ColorConstants.white;
+		}		
+	}
+	
+	public Color getCurentColorShemaForegroundColor() {
+		BflowDiagramEditPart diagramEditPart = BflowDiagramEditPart.getCurrentViewer();
+		if(diagramEditPart != null){
+			return diagramEditPart.getColorSchema().getForeground(FunctionEditPart.class);
+		}else {
+			return ColorConstants.black;
+		}
 	}
 	
 	/**
