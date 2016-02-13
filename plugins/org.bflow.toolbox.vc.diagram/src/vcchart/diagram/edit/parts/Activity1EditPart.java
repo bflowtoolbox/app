@@ -276,7 +276,7 @@ public class Activity1EditPart extends BflowNodeEditPart {
 			this.setFill(true);
 			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100),
 					getMapMode().DPtoLP(50)));
-			this.setBorder(new MarginBorder(getMapMode().DPtoLP(5),
+			this.setBorder(new MarginBorder(getMapMode().DPtoLP(1),
 					getMapMode().DPtoLP(5), getMapMode().DPtoLP(5),
 					getMapMode().DPtoLP(5)));	
 			this.setLayoutManager(new StackLayout());
