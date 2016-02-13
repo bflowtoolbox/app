@@ -1651,6 +1651,12 @@ public interface EpcPackage extends EPackage {
 	 * @ordered
 	 */
 	int EPC_FEATURE_COUNT = 2;
+	
+	
+	/**
+	 * The number of structural features for'<em>Epc Nodes</em>' class.
+	 */
+	int EpcNode = 25;
 
 
 	/**
@@ -1914,6 +1920,16 @@ public interface EpcPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getInformationArc();
+	
+	/**
+	 * Returns the meta object for class '{@link org.bflow.toolbox.epc.EpcNode <em>Epc Node</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Objective</em>'.
+	 * @see org.bflow.toolbox.epc.Objective
+	 * @generated
+	 */
+	EClass getEpcNode();
 
 	/**
 	 * Returns the meta object for class '{@link org.bflow.toolbox.epc.Epc <em>Epc</em>}'.
@@ -1955,7 +1971,7 @@ public interface EpcPackage extends EPackage {
 	 * @generated
 	 */
 	EpcFactory getEpcFactory();
-
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
@@ -2216,14 +2232,19 @@ public interface EpcPackage extends EPackage {
 		EClass PRODUCT = eINSTANCE.getProduct();
 
 		/**
-		 * The meta object literal for the '{@link org.bflow.toolbox.epc.impl.InformationArcImpl <em>Information Arc</em>}' class.
+		 * The meta object literal for the '{@link org.bflow.toolbox.epc.impl.EpcNodeImpl <em>Epc Node</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.bflow.toolbox.epc.impl.InformationArcImpl
-		 * @see org.bflow.toolbox.epc.impl.EpcPackageImpl#getInformationArc()
-		 * @generated
+		 * @see org.bflow.toolbox.epc.impl.NodeEpcImpl
+		 * @see org.bflow.toolbox.epc.impl.EpcPackageImpl#getNodeEpc()
+		 * @generated NOT
 		 */
 		EClass INFORMATION_ARC = eINSTANCE.getInformationArc();
+		
+		/**
+		 * The meta object literal for the '{@link org.bflow.toolbox.epc.impl.EpcNodeImpl <em>Epc Node</em>}' class.
+		 */
+		EClass EPC_NODE = eINSTANCE.getEpcNode();
 
 		/**
 		 * The meta object literal for the '{@link org.bflow.toolbox.epc.impl.EpcImpl <em>Epc</em>}' class.
@@ -2250,6 +2271,7 @@ public interface EpcPackage extends EPackage {
 		 * @generated
 		 */
 		EReference EPC__CONNECTIONS = eINSTANCE.getEpc_Connections();
+		
 
 	}
 

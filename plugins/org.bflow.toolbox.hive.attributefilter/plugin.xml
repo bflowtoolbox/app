@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.bflow.toolbox.attributes.category"
+            class="org.bflow.toolbox.hive.attributefilter.AttributeFilterViewPart"
+            icon="platform:/plugin/org.eclipse.ui.views/icons/full/eview16/prop_ps.gif"
+            id="org.bflow.toolbox.attributesFilter.view"
+            name="%FilterView_name"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>

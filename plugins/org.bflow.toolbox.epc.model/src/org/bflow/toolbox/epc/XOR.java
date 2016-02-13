@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IConnector;
  * @model
  * @generated
  */
-public interface XOR extends Element, IConnector {
+public interface XOR extends Element, IConnector, EpcNode {
 } // XOR

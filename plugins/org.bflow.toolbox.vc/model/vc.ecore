@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="vcchart" nsURI="vc" nsPrefix="vc">
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eAnnotations source="gmf.diagram">
+      <details key="onefile" value="true"/>
+      <details key="diagram.extension" value="vc"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Activitys1" upperBound="-1"
+        eType="#//Activity1" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Activitys2" upperBound="-1"
+        eType="#//Activity2" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Clusters" upperBound="-1"
+        eType="#//Cluster" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Products" upperBound="-1"
+        eType="#//Product" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TechnicalTerms" upperBound="-1"
+        eType="#//TechnicalTerm" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Objectives" upperBound="-1"
+        eType="#//Objective" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Participants" upperBound="-1"
+        eType="#//Participant" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Applications" upperBound="-1"
+        eType="#//Application" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Documents" upperBound="-1"
+        eType="#//Document" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Relations1" upperBound="-1"
+        eType="#//Relation1" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Relations2" upperBound="-1"
+        eType="#//Relation2" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Relations3" upperBound="-1"
+        eType="#//Relation3" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="All" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="All_Rel_1" abstract="true" eSuperTypes="#//All"/>
+  <eClassifiers xsi:type="ecore:EClass" name="All_Rel_1_EndPoint" abstract="true"
+      eSuperTypes="#//All_Rel_1"/>
+  <eClassifiers xsi:type="ecore:EClass" name="All_Rel_3" abstract="true" eSuperTypes="#//All"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationsObject" abstract="true" eSuperTypes="#//All"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity1" eSuperTypes="#//NamedElement #//All_Rel_1 #//All_Rel_3">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="polygon"/>
+      <details key="polygon.x" value="0 0 85 100 85 0"/>
+      <details key="polygon.y" value="0 50 50 25 0 0"/>
+      <details key="color" value="0,248,0"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity2" eSuperTypes="#//NamedElement #//All_Rel_1 #//All_Rel_3">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="polygon"/>
+      <details key="polygon.x" value="0 15 0 85 100 85 0"/>
+      <details key="polygon.y" value="0 25 50 50 25 0 0"/>
+      <details key="color" value="0,248,0"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Product" eSuperTypes="#//NamedElement #//All_Rel_1_EndPoint #//All_Rel_3">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="polygon"/>
+      <details key="polygon.x" value="0 50 100 100 0 0 100 0"/>
+      <details key="polygon.y" value="10 0 10 50 50 42 42 42"/>
+      <details key="color" value="0,248,0"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="#//NamedElement #//All_Rel_1_EndPoint #//All_Rel_3">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="polygon"/>
+      <details key="polygon.x" value="0 50 100 100 0"/>
+      <details key="polygon.y" value="10 0 10 50 50"/>
+      <details key="color" value="0,248,0"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cluster" eSuperTypes="#//NamedElement #//All_Rel_3 #//RelationsObject">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="polygon"/>
+      <details key="polygon.x" value="0 10 10 10 90 90 90 100 100 0"/>
+      <details key="polygon.y" value="0 0 50 0 0 50 0 0 50 50"/>
+      <details key="color" value="223,22,22"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TechnicalTerm" eSuperTypes="#//NamedElement #//All_Rel_3 #//RelationsObject">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="rectangle"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Participant" eSuperTypes="#//NamedElement #//All_Rel_3 #//RelationsObject">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="ellipse"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+      <details key="color" value="22,22,22"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Application" eSuperTypes="#//NamedElement #//All_Rel_3 #//RelationsObject">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="rectangle"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+      <details key="color" value="22,22,22"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Document" eSuperTypes="#//NamedElement #//All_Rel_3 #//RelationsObject">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="rectangle"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+      <details key="color" value="22,22,22"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation1">
+    <eAnnotations source="gmf.link">
+      <details key="source" value="source"/>
+      <details key="target" value="target"/>
+      <details key="style" value="dash"/>
+      <details key="target.decoration" value="arrow"/>
+      <details key="color" value="0,0,0"/>
+      <details key="source.constraint" value="self.oclIsKindOf(All_Rel_1) and self &lt;> oppositeEnd"/>
+      <details key="target.constraint" value="(self.oclIsKindOf(All_Rel_1) and oppositeEnd.oclIsKindOf(All_Rel_1)) and not (self.oclIsTypeOf(Activity1)) and not (oppositeEnd.oclIsKindOf(All_Rel_1_EndPoint))"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//All_Rel_1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//All_Rel_1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation2">
+    <eAnnotations source="gmf.link">
+      <details key="source" value="source"/>
+      <details key="target" value="target"/>
+      <details key="color" value="0,0,0"/>
+      <details key="target.decoration" value="arrow"/>
+      <details key="source.constraint" value="self.oclIsKindOf(All_Rel_1) and self &lt;> oppositeEnd"/>
+      <details key="target.constraint" value="(self.oclIsTypeOf(Activity1) and oppositeEnd.oclIsTypeOf(Activity1)) or (self.oclIsTypeOf(Activity2) and oppositeEnd.oclIsTypeOf(Activity2)) or (self.oclIsTypeOf(Objective) and oppositeEnd.oclIsTypeOf(Objective)) or (self.oclIsTypeOf(Product) and oppositeEnd.oclIsTypeOf(Product))"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//All_Rel_1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//All_Rel_1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation3">
+    <eAnnotations source="gmf.link">
+      <details key="source" value="source"/>
+      <details key="target" value="target"/>
+      <details key="color" value="0,0,0"/>
+      <details key="source.constraint" value="self &lt;> oppositeEnd"/>
+      <details key="target.constraint" value="(self.oclIsKindOf(All_Rel_1) and oppositeEnd.oclIsKindOf(RelationsObject)) or (self.oclIsKindOf(RelationsObject) and oppositeEnd.oclIsKindOf(All_Rel_1))"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//All_Rel_3"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//All_Rel_3"/>
+  </eClassifiers>
+</ecore:EPackage>

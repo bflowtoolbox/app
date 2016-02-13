@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IBflowElement;
  * @model
  * @generated
  */
-public interface ExternalPerson extends Element, IBflowElement {
+public interface ExternalPerson extends Element, IBflowElement, EpcNode {
 } // ExternalPerson

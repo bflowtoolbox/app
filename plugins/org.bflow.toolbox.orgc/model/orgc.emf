@@ -1,0 +1,82 @@
+@namespace(uri="orgc", prefix="orgc")
+package orgchart;
+
+@gmf.diagram(onefile="true", diagram.extension="orgc")
+class Model {
+   val Participant[*] Participants;
+   val Position[*] Positions;
+   val InternalPerson[*] InternalPersons;
+   val ExternalPerson[*] ExternalPersons;
+   val PersonType[*] PersonTypes;
+   val Location[*] Locations;
+   val Group[*] Groups;
+   val Relation1[*] Relations1;
+   val Relation2[*] Relations2;
+}
+
+abstract class NamedElement {
+   attr String name;
+}
+
+abstract class All {
+   
+}
+
+abstract class All_Rel_1 extends All {
+   
+}
+
+abstract class All_Rel_2 extends All {
+   
+}
+
+abstract class Person extends All_Rel_2 {
+   
+}
+
+@gmf.node(label="name", label.icon="false", figure="ellipse", color="255,255,0", size="100,50", border.color = "0,0,0")
+class Participant extends NamedElement, All_Rel_1 {
+	   
+}
+
+@gmf.node(label="name", label.icon="false", figure="ellipse", color="255,255,0", size="100,50", border.color = "0,0,0")
+class Location extends NamedElement, All_Rel_1 {
+	   
+}
+
+@gmf.node(label="name", label.icon="false", figure="ellipse", color="255,255,0", size="100,50", border.color = "0,0,0")
+class Group extends NamedElement, All_Rel_1, All_Rel_2 {
+	   
+}
+
+@gmf.node(label="name", label.icon="false", figure="rectangle", color="255,255,0", size="100,50", border.color = "0,0,0")
+class Position extends NamedElement, All_Rel_1, All_Rel_2 {
+	   
+}
+
+@gmf.node(label="name", label.icon="false", figure="rectangle", color="255,255,0", size="100,50", border.color = "0,0,0")
+class InternalPerson extends NamedElement, Person {
+	
+}
+
+@gmf.node(label="name", label.icon="false", figure="rectangle", size="100,50", border.color = "0,0,0")
+class ExternalPerson extends NamedElement, Person {
+	
+}
+
+@gmf.node(label="name", label.icon="false", figure="rectangle", color="255,255,0", size="100,50", border.color = "0,0,0")
+class PersonType extends NamedElement, All_Rel_2 {
+	   
+}
+
+@gmf.link(source="source", target="target", target.decoration="arrow", color = "0,0,0", source.constraint = "self.oclIsKindOf(All_Rel_1) and self <> oppositeEnd", target.constraint = "(self.oclIsTypeOf(Participant) and oppositeEnd.oclIsKindOf(All_Rel_1) and not oppositeEnd.oclIsKindOf(Position)) or (self.oclIsTypeOf(Group) and oppositeEnd.oclIsKindOf(All_Rel_1) and not oppositeEnd.oclIsKindOf(Position)) or (self.oclIsTypeOf(Location) and oppositeEnd.oclIsKindOf(All_Rel_1) and not oppositeEnd.oclIsKindOf(Position)) or (self.oclIsTypeOf(Position) and (oppositeEnd.oclIsTypeOf(Position) or oppositeEnd.oclIsTypeOf(Participant)))")
+class Relation1 {
+   ref All_Rel_1 source;
+   ref All_Rel_1 target;
+}
+
+@gmf.link(source="source", target="target",color = "0,0,0", source.constraint = "self.oclIsKindOf(All_Rel_2) and self <> oppositeEnd", target.constraint = "(self.oclIsTypeOf(Position) and oppositeEnd.oclIsKindOf(Person)) or (self.oclIsTypeOf(PersonType) and (oppositeEnd.oclIsTypeOf(PersonType) or oppositeEnd.oclIsKindOf(Person))) or (self.oclIsKindOf(Person) and (oppositeEnd.oclIsTypeOf(PersonType) or oppositeEnd.oclIsTypeOf(Position) or oppositeEnd.oclIsTypeOf(Group))) or (self.oclIsKindOf(Group) and (oppositeEnd.oclIsKindOf(Person)))")
+class Relation2 {
+   ref All_Rel_2 source;
+   ref All_Rel_2 target;
+}

@@ -252,7 +252,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 				if (diagramEditor instanceof IAttributableDocumentEditor) {
 					((IAttributableDocumentEditor) diagramEditor).firePropertyChanged();
 				}
-
+				
 				updateView();
 			}
 		});
@@ -435,8 +435,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 				txtName.setFocus();
 
 				if (diagramEditor instanceof IAttributableDocumentEditor) {
-					((IAttributableDocumentEditor) diagramEditor)
-					.firePropertyChanged();
+					((IAttributableDocumentEditor) diagramEditor).firePropertyChanged();
 				}
 
 				updateView();
@@ -560,6 +559,8 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	 * Updates the view content.
 	 */
 	private void updateView() {
+		// AttributeFileRegistry.getInstance().dispatchAttributeFileChangedEvent(); // TODO Remove call
+		
 		viewer.getTable().setRedraw(false);
 		viewer.setItemCount(0);
 		
@@ -1120,7 +1121,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 		
 		attrFile = event.attributeFile;
 		diagramEditor = event.diagramEditor;
-		diagramEditPart = ((DiagramEditor) diagramEditor).getDiagramEditPart(); // TODO
+		diagramEditPart = diagramEditor.getDiagramEditPart();
 		updateView();
 	}
 	

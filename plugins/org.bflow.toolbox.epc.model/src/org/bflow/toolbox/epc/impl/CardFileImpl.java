@@ -6,7 +6,6 @@
  */
 package org.bflow.toolbox.epc.impl;
 
-import org.bflow.toolbox.bflow.impl.ElementImpl;
 import org.bflow.toolbox.epc.CardFile;
 import org.bflow.toolbox.epc.EpcPackage;
 import org.eclipse.emf.ecore.EClass;
@@ -20,7 +19,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class CardFileImpl extends ElementImpl implements CardFile {
+public class CardFileImpl extends EpcNodeImpl implements CardFile {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -1,12 +1,13 @@
 package org.bflow.toolbox.epc.diagram.wizards;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+import java.util.UUID;
 import java.util.Vector;
 
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart;
-import org.bflow.toolbox.epc.diagram.edit.parts.EventNameEditPart;
-import org.bflow.toolbox.epc.diagram.edit.parts.FunctionNameEditPart;
 import org.bflow.toolbox.epc.diagram.modelwizard.pages.ElementGeneratorWizardPage;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Constants;
@@ -18,18 +19,33 @@ import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;
 import org.bflow.toolbox.epc.diagram.providers.EpcElementTypes;
 import org.bflow.toolbox.epc.extensions.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.extensions.utils.EpcDiagramEditUtil;
-import org.bflow.toolbox.epc.impl.EventImpl;
-import org.bflow.toolbox.epc.impl.FunctionImpl;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
 import org.bflow.toolbox.extensions.edit.parts.ColoredNodeEditPart;
+import org.bflow.toolbox.hive.interchange.mif.core.IModelBuilderAttendant;
+import org.bflow.toolbox.hive.interchange.mif.core.ModelBuilderAttendantRegistry;
+import org.eclipse.core.commands.operations.AbstractOperation;
+import org.eclipse.core.commands.operations.DefaultOperationHistory;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.emf.workspace.ResourceUndoContext;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gmf.runtime.diagram.core.edithelpers.CreateElementRequestAdapter;
+import org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy;
+import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewAndElementRequest.ViewAndElementDescriptor;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequest;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequestFactory;
+import org.eclipse.gmf.runtime.emf.commands.core.command.EditingDomainUndoContext;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
+import org.eclipse.gmf.runtime.emf.type.core.commands.SetValueCommand;
+import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.graphics.Point;
 
@@ -77,14 +93,14 @@ public class ModelWizard extends Wizard {
 	private Connector lastDrawnConnector = null;
 
 	/**
-	 * last drawn ColoredNodeEditPart
+	 * last drawn ColoredNodeEditParts
 	 */
-	private ColoredNodeEditPart lastDrawnCNEditPart;
+	private Stack<ColoredNodeEditPart> lastDrawnCNEditParts = new Stack<ColoredNodeEditPart>();
 
 	/**
-	 * last drawn BflowNodeEditPart
+	 * last drawn BflowNodeEditParts
 	 */
-	private BflowNodeEditPart lastDrawnEditPart;
+	private Stack<ColoredNodeEditPart> lastDrawnEditParts = new Stack<ColoredNodeEditPart>();
 
 	/**
 	 * array of edit parts for layouting
@@ -100,6 +116,11 @@ public class ModelWizard extends Wizard {
 	 * flag that indicates if the live validation is enabled
 	 */
 	private boolean validationEnabled;
+	
+	/**
+	 * the unique id of that insert operation (for redo/undo)
+	 */
+	private String id;
 
 	/**
 	 * Default constructor.
@@ -134,13 +155,32 @@ public class ModelWizard extends Wizard {
 		validator.setEnabled(false);
 
 		try {
-
+			//id for identify all commands of this insertion
+			id = UUID.randomUUID().toString();
+			//add an command for undo/redo all insertion commands with one
+			DefaultOperationHistory history=(DefaultOperationHistory) OperationHistoryFactory.getOperationHistory();
+			//Erhöhen des Undo-Operation-Buffers, da der Modelwizard für jedes Event/ Function genau 2 Operationen
+			//in der History registriert und das Default_Limit der History liegt bei 20 -> größere Modelle können
+			//nicht mehr vollständig rückgängig gemacht werden.
+			//2000 reicht für 100 vollausgefüllte Zeilen (mit maximaler Elementanzahl von 10 pro Zeile)  
+			TransactionalEditingDomain editingDomain = editor.getEditingDomain();
+			history.setLimit(new EditingDomainUndoContext(editingDomain), 2000);
+			Resource res = editingDomain.getResourceSet().getResources().get(0);
+			history.setLimit(new ResourceUndoContext(editingDomain, res), 2000);
+			history.setLimit(IOperationHistory.GLOBAL_UNDO_CONTEXT, 2000);
+			
+			
 			/*
 			 * generating elements
 			 */
 			createElements();
 			createConnections();
-
+			
+			
+					
+			AbstractOperation aoend = EpcDiagramEditUtil.getCollectedUndoRedoCommand(id, "Model Wizard");
+			aoend.addContext(IOperationHistory.GLOBAL_UNDO_CONTEXT);
+			history.add(aoend);
 			/*
 			 * do update
 			 */
@@ -162,6 +202,13 @@ public class ModelWizard extends Wizard {
 			 * check bendpoints
 			 */
 			checkBendpoints();
+			
+			//inserted elements pre-selection
+			ArrayList<EditPart> allInsertedNodes = new ArrayList<EditPart>();
+			allInsertedNodes.addAll(lastDrawnCNEditParts);
+			allInsertedNodes.addAll(lastDrawnEditParts);
+			StructuredSelection newSelection = new StructuredSelection(allInsertedNodes);
+			editor.getSite().getSelectionProvider().setSelection(newSelection);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -211,14 +258,14 @@ public class ModelWizard extends Wizard {
 					&& newConnector) {
 				split = true;
 				createConnector(connector.getConnectorType(), new Point(x, y));
-				splitPart = lastDrawnCNEditPart;
+				splitPart = lastDrawnCNEditParts.peek();
 
 				y += Constants.DRAW_CONNECTOR_Y_ADDITION;
 				lastDrawnConnector = connector;
 
-				if (lastDrawnEditPart != null)
-					connectionStack.add(new Connection(lastDrawnEditPart,
-							lastDrawnCNEditPart));
+				if (!lastDrawnEditParts.empty())
+					connectionStack.add(new Connection(lastDrawnEditParts.peek(),
+							lastDrawnCNEditParts.peek()));
 			}
 
 			/*
@@ -234,7 +281,7 @@ public class ModelWizard extends Wizard {
 			/*
 			 * create process steps
 			 */
-
+			CompoundCommand shapesNamingCommand = new CompoundCommand(id);
 			// int align = processStep.getSpreading();
 			for (int i = 0; i < processStep.size(); i++) {
 				final Element el = processStep.get(i);
@@ -242,21 +289,23 @@ public class ModelWizard extends Wizard {
 				if (!el.isReducable()) {
 					CreateViewRequest createRequest;
 
-					boolean createFunction = (el.getKind() == Element.Kind.Function ? true
-							: false);
 
-					if (el.getKind() == Element.Kind.Function)
-						createRequest = CreateViewRequestFactory
-								.getCreateShapeRequest(
-										EpcElementTypes.Function_2007, editor
-												.getDiagramEditPart()
-												.getDiagramPreferencesHint());
-					else
-						createRequest = CreateViewRequestFactory
-								.getCreateShapeRequest(
-										EpcElementTypes.Event_2006, editor
-												.getDiagramEditPart()
-												.getDiagramPreferencesHint());
+					if (el.getKind() == Element.Kind.Function) {
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.Function_2007, editor.getDiagramEditPart()
+								.getDiagramPreferencesHint());
+					} else if (el.getKind() == Element.Kind.AND_Single) {
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.AND_2003, editor.getDiagramEditPart()
+								.getDiagramPreferencesHint());
+					} else if (el.getKind() == Element.Kind.OR_Single) {
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.OR_2001, editor.getDiagramEditPart()
+								.getDiagramPreferencesHint());
+					} else if (el.getKind() == Element.Kind.XOR_Single) {
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.XOR_2008, editor.getDiagramEditPart()
+								.getDiagramPreferencesHint());
+					}else {
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.Event_2006, editor.getDiagramEditPart()
+								.getDiagramPreferencesHint());
+					}
 
 					int dX = x;
 					// int middle = Math.round((float)(align/2));
@@ -269,61 +318,46 @@ public class ModelWizard extends Wizard {
 
 					CompoundCommand command = (CompoundCommand) editor
 							.getDiagramEditPart().getCommand(createRequest);
-
+					
+					command.setLabel(id);
+					
 					editor.getDiagramEditDomain().getDiagramCommandStack()
 							.execute(command);
 
-					List<?> listChildren = editor.getDiagramEditPart()
-							.getChildren();
+					List<?> listChildren = editor.getDiagramEditPart().getChildren();
+					
+					final ColoredNodeEditPart editPart = (ColoredNodeEditPart) listChildren.get(listChildren.size() - 1);
+					
+					if (!el.getKind().isSingleConnector()) {
+						ViewAndElementDescriptor desc = (ViewAndElementDescriptor) createRequest.getViewDescriptors().get(0);
+						CreateElementRequestAdapter adapter = (CreateElementRequestAdapter) desc.getElementAdapter();
+						EObject element = adapter.resolve();
+						if (element == null) {
+							return;
+						}
+						
+						IModelBuilderAttendant att = ModelBuilderAttendantRegistry.getModelBuilderFor("epc");
+						EStructuralFeature structuralFeature = att.getEStructuralFeatureFor(null, "name");
+						String shapeName = el.getName();
+						SetRequest setRequest = new SetRequest(element, structuralFeature, shapeName);
+						SetValueCommand svc = new SetValueCommand(setRequest);
 
-					final BflowNodeEditPart editPart = (BflowNodeEditPart) listChildren
-							.get(listChildren.size() - 1);
-
-					if (createFunction) {
-						FunctionNameEditPart txtEditPart = (FunctionNameEditPart) editPart
-								.getPrimaryChildEditPart();
-						txtEditPart.setLabelText(el.getName());
-
-						editor.getDiagramEditDomain().getDiagramCommandStack()
-								.execute(new Command() {
-									@Override
-									public void execute() {
-										super.execute();
-										FunctionImpl f = (FunctionImpl) editPart
-												.resolveSemanticElement();
-										f.setName(el.getName());
-									}
-								});
-					} else {
-						EventNameEditPart txtEditPart = (EventNameEditPart) editPart
-								.getPrimaryChildEditPart();
-						txtEditPart.setLabelText(el.getName());
-
-						editor.getDiagramEditDomain().getDiagramCommandStack()
-								.execute(new Command() {
-									@Override
-									public void execute() {
-										super.execute();
-										EventImpl e = (EventImpl) editPart
-												.resolveSemanticElement();
-										e.setName(el.getName());
-									}
-								});
+						shapesNamingCommand.add(new ICommandProxy(svc));
 					}
-
+					
 					/*
 					 * collect connections
 					 */
 					if (split || newConnector) {
 						if (isFirstConnectorStep(processStep, i)
-								&& lastDrawnCNEditPart != null)
+								&& !lastDrawnCNEditParts.empty())
 							if (connector.getConnectorType() == ConnectorType.XOR_IT
 									&& i == 1) // xor it
 								connectionStack.add(new Connection(editPart,
-										lastDrawnCNEditPart));
+										lastDrawnCNEditParts.peek()));
 							else
 								connectionStack.add(new Connection(
-										lastDrawnCNEditPart, editPart));
+										lastDrawnCNEditParts.peek(), editPart));
 						else if (editParts[i] != null)
 							if (connector.getConnectorType() == ConnectorType.XOR_IT
 									&& i == 1) // xor it
@@ -337,10 +371,11 @@ public class ModelWizard extends Wizard {
 								editPart));
 
 					editParts[i] = editPart;
-					lastDrawnEditPart = editPart;
+					lastDrawnEditParts.push(editPart);
 
 				}
 			}
+			editor.getDiagramEditDomain().getDiagramCommandStack().execute(shapesNamingCommand);
 			y += Constants.DRAW_ELEMENT_Y_ADDITION;
 
 			/*
@@ -360,10 +395,10 @@ public class ModelWizard extends Wizard {
 							if (connector.getConnectorType() == ConnectorType.XOR_IT
 									&& i == 1) // xor it
 								connectionStack.add(new Connection(
-										lastDrawnCNEditPart, editParts[i]));
+										lastDrawnCNEditParts.peek(), editParts[i]));
 							else
 								connectionStack.add(new Connection(
-										editParts[i], lastDrawnCNEditPart));
+										editParts[i], lastDrawnCNEditParts.peek()));
 
 							if (i == 1)
 								none = false;
@@ -372,11 +407,11 @@ public class ModelWizard extends Wizard {
 					if (none)
 						if (connector.getConnectorType() == ConnectorType.XOR_IT)
 							connectionStack.add(new Connection(
-									lastDrawnCNEditPart, splitPart));
+									lastDrawnCNEditParts.peek(), splitPart));
 						else if (connector.getConnectorType() != ConnectorType.AND_DOUBLE
 								&& connector.getConnectorType() != ConnectorType.AND_N)
 							connectionStack.add(new Connection(splitPart,
-									lastDrawnCNEditPart));
+									lastDrawnCNEditParts.peek()));
 
 					split = false;
 					editParts = new Object[10];
@@ -396,8 +431,8 @@ public class ModelWizard extends Wizard {
 			// dirty quick fix
 			if (connectionStack.size() == 0) {// only one element created
 				connectionStack.add(new Connection(anchor,
-						(lastDrawnEditPart == null ? lastDrawnCNEditPart
-								: lastDrawnEditPart)));
+						(lastDrawnEditParts.empty() ? lastDrawnCNEditParts.peek()
+								: lastDrawnEditParts.peek())));
 				quickFix = true;
 			}
 
@@ -482,7 +517,7 @@ public class ModelWizard extends Wizard {
 
 		// CreateConnectionViewRequest.getCreateCommand(r, source, target)
 		// .execute();
-		EpcDiagramEditUtil.createConnection(editor, source, target);
+		EpcDiagramEditUtil.createConnection(editor, source, target, id);
 	}
 
 	/**
@@ -540,7 +575,7 @@ public class ModelWizard extends Wizard {
 
 		CompoundCommand command = (CompoundCommand) editor.getDiagramEditPart()
 				.getCommand(createRequest);
-
+		command.setLabel(id);
 		editor.getDiagramEditDomain().getDiagramCommandStack().execute(command);
 
 		List<?> listChildren = editor.getDiagramEditPart().getChildren();
@@ -548,7 +583,7 @@ public class ModelWizard extends Wizard {
 		ColoredNodeEditPart editPart = (ColoredNodeEditPart) listChildren
 				.get(listChildren.size() - 1);
 
-		lastDrawnCNEditPart = editPart;
+		lastDrawnCNEditParts.push(editPart);
 
 		if (connectorTop == null)
 			connectorTop = editPart;
@@ -568,7 +603,7 @@ public class ModelWizard extends Wizard {
 	private boolean isFirstConnectorStep(ProcessStep step, int i) {
 		int pos = egwp.getProcessSteps().indexOf(step);
 
-		if (pos == 0 && lastDrawnCNEditPart != null)
+		if (pos == 0 && !lastDrawnCNEditParts.empty())
 			return true;
 
 		if (pos > 0) {

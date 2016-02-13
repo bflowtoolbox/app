@@ -53,7 +53,7 @@ public class ShapeEditPartAdapter extends ShapeNodeEditPart {
 		fUnderlyingModelObject = Graphiti.getLinkService().getBusinessObjectForLinkedPictogramElement(shapeModel);		
 		fUnderlyingFlowNode = (FlowNode) fUnderlyingModelObject;
 		
-		getPrimaryView().setElement(fUnderlyingModelObject);
+		getPrimaryView().setElement(fUnderlyingModelObject);		
 	}
 
 	/**

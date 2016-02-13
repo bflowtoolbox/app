@@ -25,8 +25,10 @@ import org.eclipse.gmf.runtime.emf.core.GMFEditingDomainFactory;
 import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
 import org.eclipse.gmf.runtime.notation.Node;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.gmf.runtime.notation.impl.DiagramImpl;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -359,7 +361,7 @@ public class EpcElementChooserDialog extends Dialog {
 	private class OkButtonEnabler implements ISelectionChangedListener {
 
 		/**
-		 * @generated
+		 * @generated NOT
 		 */
 		public void selectionChanged(SelectionChangedEvent event) {
 			if (event.getSelection() instanceof IStructuredSelection) {
@@ -377,19 +379,25 @@ public class EpcElementChooserDialog extends Dialog {
 					}
 					if (selectedElement instanceof EObject) {
 						EObject selectedModelElement = (EObject) selectedElement;
-						setOkButtonEnabled(ViewService
-								.getInstance()
-								.provides(
-										Node.class,
-										new EObjectAdapter(selectedModelElement),
-										myView,
-										null,
-										ViewUtil.APPEND,
-										true,
-										EpcDiagramEditorPlugin.DIAGRAM_PREFERENCES_HINT));
+						setOkButtonEnabled(isEpcModelFile(selectedModelElement));
 						mySelectedModelElementURI = EcoreUtil
 								.getURI(selectedModelElement);
 						return;
+					}
+					if (selectedElement instanceof IFile) {
+						IContentProvider cp = myTreeViewer.getContentProvider();
+						if (cp instanceof ITreeContentProvider) {
+							ITreeContentProvider tcp = (ITreeContentProvider) cp;
+							Object[] result = tcp.getChildren(selectedElement);
+							for (Object object : result) {
+								if (object instanceof DiagramImpl) {
+									EObject eObject = (EObject) object;
+									setOkButtonEnabled(isEpcModelFile(eObject));
+									mySelectedModelElementURI = EcoreUtil.getURI(eObject);
+									return;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -397,6 +405,18 @@ public class EpcElementChooserDialog extends Dialog {
 			setOkButtonEnabled(false);
 		}
 
+		private boolean isEpcModelFile(EObject selectedModelElement) {
+			return ViewService
+					.getInstance()
+					.provides(
+							Node.class,
+							new EObjectAdapter(selectedModelElement),
+							myView,
+							null,
+							ViewUtil.APPEND,
+							true,
+							EpcDiagramEditorPlugin.DIAGRAM_PREFERENCES_HINT);
+		}
 	}
 
 }

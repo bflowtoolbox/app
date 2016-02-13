@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+gmf_dashboard/domainGenerationModel=platform\:/resource/org.bflow.toolbox.orgc/model/orgc.genmodel
+gmf_dashboard/domainModel=platform\:/resource/org.bflow.toolbox.orgc/model/orgc.ecore
+gmf_dashboard/generationModel=platform\:/resource/org.bflow.toolbox.orgc/model/orgc.gmfgen
+gmf_dashboard/graphicalDefinitionModel=platform\:/resource/org.bflow.toolbox.orgc/model/orgc.gmfgraph
+gmf_dashboard/mappingModel=platform\:/resource/org.bflow.toolbox.orgc/model/orgc.gmfmap
+gmf_dashboard/toolingDefinitionModel=platform\:/resource/org.bflow.toolbox.orgc/model/orgc.gmftool

@@ -140,7 +140,7 @@ public class MIFExportWizardPage extends WizardPage {
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				showDirectoryDialog(((Control)e.widget).getShell());
+				showDirectoryDialog(((Control)e.widget).getShell(),textFieldTargetFile.getText());
 			}
 		});
 
@@ -183,10 +183,10 @@ public class MIFExportWizardPage extends WizardPage {
 	 * @param shell
 	 *            Dialog shell
 	 */
-	private void showDirectoryDialog(Shell shell) {
+	private void showDirectoryDialog(Shell shell, String startpath) {
 		DirectoryDialog dialog = new DirectoryDialog(shell);
 
-		dialog.setFilterPath(null);
+		dialog.setFilterPath(startpath);
 		dialog.setMessage(NLSupport.MIFExportWizardPage_DialogMessage);
 		String selectedFolder = dialog.open();
 		if (selectedFolder == null) return; // User cancelled	

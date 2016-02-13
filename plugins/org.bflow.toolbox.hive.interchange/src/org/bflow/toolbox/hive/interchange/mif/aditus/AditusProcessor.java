@@ -15,7 +15,7 @@ import org.bflow.toolbox.hive.interchange.mif.core.IModel;
 import org.bflow.toolbox.hive.interchange.mif.core.IModelData;
 import org.bflow.toolbox.hive.interchange.mif.core.IShape;
 import org.bflow.toolbox.hive.interchange.utils.ModelBuilderService;
-import org.bflow.toolbox.hive.libs.aprogu.IntegerValue;
+import org.bflow.toolbox.hive.libs.aprogu.collections.IntegerValue;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;

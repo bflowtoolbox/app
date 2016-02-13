@@ -95,6 +95,13 @@ public class OriginalColorSchema extends GlobalColorSchema {
 			background = new Color(null, 0, 248, 0);
 		}
 		
+		//For VC-Diagram-Nodes
+		else if(className.equals("Activity1")){
+			background = new Color(null, 0, 248, 0);
+		}else if(className.equals("Activity2")){
+			background = new Color(null, 0, 248, 0);
+		}
+		
 		return background;
 	}
 

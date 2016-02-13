@@ -2,11 +2,16 @@ package org.bflow.toolbox.epc.diagram.edit.policies;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.bflow.toolbox.bflow.Element;
 import org.bflow.toolbox.epc.Epc;
+import org.bflow.toolbox.epc.EpcPackage;
 import org.bflow.toolbox.epc.diagram.edit.helpers.EpcBaseEditHelper;
+import org.bflow.toolbox.epc.diagram.expressions.EpcOCLFactory;
+import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;
 import org.bflow.toolbox.epc.diagram.part.EpcVisualIDRegistry;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.EditPart;
@@ -377,8 +382,43 @@ public class EpcBaseItemSemanticEditPolicy extends SemanticEditPolicy {
 		 */
 		public static boolean canExistArc_4001(Epc container, Element source,
 				Element target) {
-
-			return true;
+			try {
+				if (source == null) {
+					return true;
+				} else {
+					Map<String, EClassifier> env = Collections
+							.<String, EClassifier> singletonMap(
+									"oppositeEnd", EpcPackage.eINSTANCE.getEpcNode()); //$NON-NLS-1$
+					Object sourceVal = EpcOCLFactory.getExpression(0,
+							EpcPackage.eINSTANCE.getEpcNode(), env).evaluate(
+							source,
+							Collections.singletonMap("oppositeEnd", target)); //$NON-NLS-1$
+					if (false == sourceVal instanceof Boolean
+							|| !((Boolean) sourceVal).booleanValue()) {
+						return false;
+					} // else fall-through
+				}
+				if (target == null) {
+					return true;
+				} else {
+					Map<String, EClassifier> env = Collections
+							.<String, EClassifier> singletonMap(
+									"oppositeEnd", EpcPackage.eINSTANCE.getEpcNode()); //$NON-NLS-1$
+					Object targetVal = EpcOCLFactory.getExpression(1,
+							EpcPackage.eINSTANCE.getEpcNode(), env).evaluate(
+							target,
+							Collections.singletonMap("oppositeEnd", source)); //$NON-NLS-1$
+					if (false == targetVal instanceof Boolean
+							|| !((Boolean) targetVal).booleanValue()) {
+						return false;
+					} // else fall-through
+				}
+				return true;
+			} catch (Exception e) {
+				EpcDiagramEditorPlugin.getInstance().logError(
+						"Link constraint evaluation error", e); //$NON-NLS-1$
+				return false;
+			}
 		}
 
 		/**
@@ -386,8 +426,43 @@ public class EpcBaseItemSemanticEditPolicy extends SemanticEditPolicy {
 		 */
 		public static boolean canExistRelation_4002(Epc container,
 				Element source, Element target) {
-
-			return true;
+			try {
+				if (source == null) {
+					return true;
+				} else {
+					Map<String, EClassifier> env = Collections
+							.<String, EClassifier> singletonMap(
+									"oppositeEnd", EpcPackage.eINSTANCE.getEpcNode()); //$NON-NLS-1$
+					Object sourceVal = EpcOCLFactory.getExpression(4,
+							EpcPackage.eINSTANCE.getEpcNode(), env).evaluate(
+							source,
+							Collections.singletonMap("oppositeEnd", target)); //$NON-NLS-1$
+					if (false == sourceVal instanceof Boolean
+							|| !((Boolean) sourceVal).booleanValue()) {
+						return false;
+					} // else fall-through
+				}
+				if (target == null) {
+					return true;
+				} else {
+					Map<String, EClassifier> env = Collections
+							.<String, EClassifier> singletonMap(
+									"oppositeEnd", EpcPackage.eINSTANCE.getEpcNode()); //$NON-NLS-1$
+					Object targetVal = EpcOCLFactory.getExpression(5,
+							EpcPackage.eINSTANCE.getEpcNode(), env).evaluate(
+							target,
+							Collections.singletonMap("oppositeEnd", source)); //$NON-NLS-1$
+					if (false == targetVal instanceof Boolean
+							|| !((Boolean) targetVal).booleanValue()) {
+						return false;
+					} // else fall-through
+				}
+				return true;
+			} catch (Exception e) {
+				EpcDiagramEditorPlugin.getInstance().logError(
+						"Link constraint evaluation error", e); //$NON-NLS-1$
+				return false;
+			}
 		}
 
 		/**
@@ -395,8 +470,43 @@ public class EpcBaseItemSemanticEditPolicy extends SemanticEditPolicy {
 		 */
 		public static boolean canExistInformationArc_4003(Epc container,
 				Element source, Element target) {
-
-			return true;
+			try {
+				if (source == null) {
+					return true;
+				} else {
+					Map<String, EClassifier> env = Collections
+							.<String, EClassifier> singletonMap(
+									"oppositeEnd", EpcPackage.eINSTANCE.getEpcNode()); //$NON-NLS-1$
+					Object sourceVal = EpcOCLFactory.getExpression(2,
+							EpcPackage.eINSTANCE.getEpcNode(), env).evaluate(
+							source,
+							Collections.singletonMap("oppositeEnd", target)); //$NON-NLS-1$
+					if (false == sourceVal instanceof Boolean
+							|| !((Boolean) sourceVal).booleanValue()) {
+						return false;
+					} // else fall-through
+				}
+				if (target == null) {
+					return true;
+				} else {
+					Map<String, EClassifier> env = Collections
+							.<String, EClassifier> singletonMap(
+									"oppositeEnd", EpcPackage.eINSTANCE.getEpcNode()); //$NON-NLS-1$
+					Object targetVal = EpcOCLFactory.getExpression(3,
+							EpcPackage.eINSTANCE.getEpcNode(), env).evaluate(
+							target,
+							Collections.singletonMap("oppositeEnd", source)); //$NON-NLS-1$
+					if (false == targetVal instanceof Boolean
+							|| !((Boolean) targetVal).booleanValue()) {
+						return false;
+					} // else fall-through
+				}
+				return true;
+			} catch (Exception e) {
+				EpcDiagramEditorPlugin.getInstance().logError(
+						"Link constraint evaluation error", e); //$NON-NLS-1$
+				return false;
+			}
 		}
 
 	}

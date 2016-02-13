@@ -4,6 +4,8 @@ import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector.ConnectorType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -15,7 +17,7 @@ import org.eclipse.swt.widgets.Label;
  */
 public class ConnectorLabel 
 {
-	private Label label;
+	private Label imgLabel;
 	private Image img;
 	private Image imgHighlight;
 	private boolean selected;
@@ -30,16 +32,24 @@ public class ConnectorLabel
 	public ConnectorLabel(ConnectorType type, Composite composite, MouseListener listener)
 	{
 		this.type = type;
+		Composite imgWithLabel = new Composite(composite, SWT.NONE);
+		imgWithLabel.setLayout(new GridLayout(1, false));
 		
-		label = new Label(composite, SWT.NONE);
+		imgLabel = new Label(imgWithLabel, SWT.NONE);
 				
 		String imgName = type.name().toLowerCase();
 		
-		img = ImageFactory.getImage(label.getDisplay(), imgName+".png");
-		imgHighlight = ImageFactory.getImage(label.getDisplay(), imgName+"_highlight.png");
+		img = ImageFactory.getImage(imgLabel.getDisplay(), imgName+".png");
+		imgHighlight = ImageFactory.getImage(imgLabel.getDisplay(), imgName+"_highlight.png");
 		
-		label.setImage(img);
-		label.addMouseListener(listener);
+		imgLabel.setImage(img);
+		imgLabel.addMouseListener(listener);
+		
+		Label labelShortcut = new Label(imgWithLabel, SWT.NONE);
+		GridData infoLabelLayoutData = new GridData(GridData.FILL_BOTH);
+		infoLabelLayoutData.horizontalAlignment = SWT.CENTER;
+		labelShortcut.setText(type.getShortcut());
+		labelShortcut.setLayoutData(infoLabelLayoutData);
 	}
 	
 	/**
@@ -50,7 +60,7 @@ public class ConnectorLabel
 	{
 		this.selected = b;
 		
-		label.setImage((selected ? imgHighlight : img));
+		imgLabel.setImage((selected ? imgHighlight : img));
 	}
 	
 	/**
@@ -74,6 +84,6 @@ public class ConnectorLabel
 	 * @return associated label
 	 */
 	public Label getLabel() {
-		return label;
+		return imgLabel;
 	}
 }

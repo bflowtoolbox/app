@@ -176,7 +176,7 @@ public class AttributeFileRegistry implements IPartListener {
 
 			activeDiagramEditor.getEditingDomain().addResourceSetListener(resourceSetListener);
 			
-			dispatchAttributeFileChangedEvent(activeAttrFile, activeDiagramEditor);
+			raiseAttributeFileChangedEvent(activeAttrFile, activeDiagramEditor);
 		}
 	}
 
@@ -245,7 +245,7 @@ public class AttributeFileRegistry implements IPartListener {
 	 * @param diagramEditor
 	 *            Diagram Editor
 	 */
-	private void dispatchAttributeFileChangedEvent(AttributeFile file, DiagramEditor diagramEditor) {
+	private void raiseAttributeFileChangedEvent(AttributeFile file, DiagramEditor diagramEditor) {
 		AttributeFileRegistryEvent event = new AttributeFileRegistryEvent();
 		event.attributeFile = file;
 		event.diagramEditor = diagramEditor;
@@ -254,5 +254,12 @@ public class AttributeFileRegistry implements IPartListener {
 			listener.noticeAttributeFileChange(event);			
 		}
 	}
-
+	
+	/**
+	 * @deprecated Will be removed due to restricted API access
+	 */
+	public void dispatchAttributeFileChangedEvent() {
+		if (activeAttrFile == null || activeDiagramEditor == null) return;
+		raiseAttributeFileChangedEvent(activeAttrFile, activeDiagramEditor);
+	}
 }

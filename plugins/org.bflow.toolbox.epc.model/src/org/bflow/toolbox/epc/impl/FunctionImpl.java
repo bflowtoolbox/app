@@ -8,7 +8,6 @@ package org.bflow.toolbox.epc.impl;
 
 import java.util.Collection;
 
-import org.bflow.toolbox.bflow.impl.ElementImpl;
 import org.bflow.toolbox.epc.EpcPackage;
 import org.bflow.toolbox.epc.Function;
 import org.eclipse.emf.common.util.EList;
@@ -28,7 +27,7 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  *
  * @generated
  */
-public class FunctionImpl extends ElementImpl implements Function {
+public class FunctionImpl extends EpcNodeImpl implements Function {
 	/**
 	 * The cached value of the '{@link #getSubdiagram() <em>Subdiagram</em>}' attribute list.
 	 * <!-- begin-user-doc -->

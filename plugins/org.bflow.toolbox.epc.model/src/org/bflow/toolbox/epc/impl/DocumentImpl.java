@@ -6,7 +6,6 @@
  */
 package org.bflow.toolbox.epc.impl;
 
-import org.bflow.toolbox.bflow.impl.ElementImpl;
 import org.bflow.toolbox.epc.Document;
 import org.bflow.toolbox.epc.EpcPackage;
 import org.eclipse.emf.ecore.EClass;
@@ -20,7 +19,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class DocumentImpl extends ElementImpl implements Document {
+public class DocumentImpl extends EpcNodeImpl implements Document {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

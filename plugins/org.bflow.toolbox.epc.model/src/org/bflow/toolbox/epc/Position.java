@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IBflowElement;
  * @model
  * @generated
  */
-public interface Position extends Element, IBflowElement {
+public interface Position extends Element, IBflowElement, EpcNode {
 } // Position

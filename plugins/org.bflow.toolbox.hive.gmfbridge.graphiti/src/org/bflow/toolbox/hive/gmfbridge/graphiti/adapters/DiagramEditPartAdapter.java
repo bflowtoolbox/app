@@ -6,17 +6,21 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
 import org.bflow.toolbox.hive.attributes.IAttributeFileListener;
 import org.bflow.toolbox.hive.attributes.IAttributeFilePersister;
 import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
+import org.bflow.toolbox.hive.gmfbridge.graphiti.annotations.AnnotationDecorationSupport;
+import org.bflow.toolbox.hive.gmfbridge.graphiti.internal.GraphitiGmfBridgePlugin;
+import org.bflow.toolbox.hive.gmfbridge.graphiti.providers.DiagramTypeProviderAdapter;
+import org.bflow.toolbox.hive.libs.aprogu.lang.HReflectionUtils;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -29,17 +33,23 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.runtime.notation.impl.ViewImpl;
+import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.Shape;
 import org.eclipse.graphiti.services.Graphiti;
+import org.eclipse.graphiti.ui.internal.config.ConfigurationProvider;
+import org.eclipse.graphiti.ui.internal.parts.IContainerShapeEditPart;
+import org.eclipse.graphiti.ui.platform.IConfigurationProvider;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * Provides an adapter for
  * {@link org.eclipse.graphiti.ui.internal.parts.DiagramEditPart}.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 27.03.2015
+ * @since 	2015-03-27
+ * @version 2015-12-23 Added injecting of diagram type provider adapter
  * 
  */
 @SuppressWarnings("restriction")
@@ -61,13 +71,52 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	private IAttributeFileRegistryListener fAttributeFileRegistryListener = new _AttributeFileRegistryListener();
 	private AttributeFile fCurrentAttributeFile;
 	
+	private AnnotationDecorationSupport fAnnotationDecorationSupport;
+	
 	/**
 	 * Creates a new instance based on the given instances.
 	 * 
 	 * @param graphitiDiagramEditPart
 	 */
-	public DiagramEditPartAdapter(org.eclipse.graphiti.ui.internal.parts.DiagramEditPart graphitiDiagramEditPart) {
+	public DiagramEditPartAdapter(final org.eclipse.graphiti.ui.internal.parts.DiagramEditPart graphitiDiagramEditPart) {
 		super(null);
+		
+		final IContainerShapeEditPart pp = graphitiDiagramEditPart;
+		IConfigurationProvider cfgProv = pp.getConfigurationProvider();
+		final ConfigurationProvider cfg = (ConfigurationProvider) cfgProv;
+		final IDiagramTypeProvider dtp = cfg.getDiagramTypeProvider(); // Alternative: Override field toolBehaviorProviders
+		
+		fAnnotationDecorationSupport = new AnnotationDecorationSupport(dtp.getProviderId());
+		
+		/*
+		 * We must inject our own Diagram Type Provider to hook up the interfaces.
+		 */
+		if (dtp.getClass() != DiagramTypeProviderAdapter.class) {
+			/*
+			 * After this instance has been initialized the (BPMN) framework performs a hard cast. Therefore we 
+			 * try to inject the adapted provider as late as we can.
+			 */
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						DiagramTypeProviderAdapter adapter = new DiagramTypeProviderAdapter(dtp);
+						HReflectionUtils.invokeMethode(cfg, "setDiagramTypeProvider", adapter);
+					} catch(Exception ex) {
+						GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error on installing diagram type provider adapter. Reason: %s", 
+								ExceptionUtils.getStackTrace(ex));
+					}
+					
+					try {
+						// Refresh UI due to annotation changes
+						graphitiDiagramEditPart.refresh();
+					} catch (Exception ex) {
+						GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error on refreshing diagram edit part. Reason: %s", 
+								ExceptionUtils.getStackTrace(ex));
+					}
+				}});
+		}
+		
 		fGraphitiDiagramEditPart = graphitiDiagramEditPart;
 		fDiagramGraphicalViewer = (GraphicalViewer) fGraphitiDiagramEditPart.getViewer();
 		fDiagramModel = Graphiti.getLinkService().getBusinessObjectForLinkedPictogramElement(fGraphitiDiagramEditPart.getPictogramElement());
@@ -97,6 +146,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			fCurrentAttributeFile = null;
 		}
 		
+		fAnnotationDecorationSupport.dispose();
 		AttributeFileRegistry.getInstance().removeRegistryListener(fAttributeFileRegistryListener);
 	}
 	
@@ -187,7 +237,6 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	public void save(HashMap<String, HashMap<String, String>> attributes) throws Exception {
 		// Nothing to do because we add/remove attributes at runtime
 	}
-	
 	
 	/* (non-Javadoc)
 	 * @see org.bflow.toolbox.hive.attributes.IAttributeFilePersister#load(java.util.HashMap)
@@ -322,7 +371,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 *            Value of the attribute
 	 */
 	private void setAttributeValue(final EObject objectModel, final String attributeName, final String attributeValue) {
-		AbstractCommand command = new AbstractCommand() {
+		final AbstractCommand command = new AbstractCommand() {
 			@Override
 			public void redo() { }
 			
@@ -337,13 +386,22 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 				ModelUtil.setValue(getEditingDomain(), objectModel, attribute, attributeValue);				
 			}
 		};
+
+		// Perform transaction async to avoid concurrent transactions
+		Display.getCurrent().asyncExec(new Runnable(){
+			@Override
+			public void run() {
+				EMFCommandOperation commandOperation = new EMFCommandOperation(getEditingDomain(), command);
+				try {
+					commandOperation.execute(null, null);
+				} catch (Exception ex) {
+					GraphitiGmfBridgePlugin.LogWriter().errorFormat("Error saving attribute values. Reason: %s", 
+							ExceptionUtils.getStackTrace(ex));
+				}
+			}});
 		
-		EMFCommandOperation commandOperation = new EMFCommandOperation(getEditingDomain(), command);
-		try {
-			commandOperation.execute(null, null);
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+//		TransactionalEditingDomain domain = TransactionUtil.getEditingDomain(objectModel);
+//		domain.getCommandStack().execute(command);
 	}
 	
 	/**
@@ -384,6 +442,9 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			
 			attributeName = escapeAttributeName(attributeName);
 			setAttributeValue(modelObject, attributeName, attributeValue);
+			
+			// Refresh UI due to annotation changes
+			fGraphitiDiagramEditPart.refresh();
 		}
 
 		/* (non-Javadoc)
@@ -396,6 +457,9 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			
 			attributeName = escapeAttributeName(attributeName);
 			setAttributeValue(modelObject, attributeName, null);
+			
+			// Refresh UI due to annotation changes
+			fGraphitiDiagramEditPart.refresh();
 		}
 		
 		/* (non-Javadoc)

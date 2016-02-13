@@ -1,5 +1,6 @@
 package org.bflow.toolbox.hive.attributes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -22,8 +23,9 @@ import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 22.06.2011
- * @version 27.09.2014
- * 			01.03.2015 Added copy and paste support for attributes
+ * @version 2014-09-27 
+ * 			2015-03-01 Added copy and paste support for attributes
+ * 			2015-12-23 Added support of handling elements that are removed and added within an event queue
  *
  */
 public class AttributeResourceSetListener implements ResourceSetListener {
@@ -121,6 +123,15 @@ public class AttributeResourceSetListener implements ResourceSetListener {
 		Assert.isNotNull(diagramName, "Diagram name mustn't be null!");
 		Assert.isNotNull(projectName, "Project name mustn't be null!");
 
+		/*
+		 * It may happen that the notification list contains a remove and add event for the same element. 
+		 * As a result, the element attributes must not be dropped prematurely. Therefore we first observe 
+		 * if an element is really going to be deleted. Then, after processing all events we remove them 
+		 * accurately.
+		 */
+		ArrayList<String> designatedRemovableElements = new ArrayList<>();
+		
+		// Process the event queue
 		for (Notification notify:event.getNotifications()) {			
 			
 			if (notify.getEventType() == Notification.ADD) {
@@ -130,6 +141,9 @@ public class AttributeResourceSetListener implements ResourceSetListener {
 				EObject obj = (EObject) newValue;
 				String proxyId = EMFCoreUtil.getProxyID(obj);
 				String clName = getInstanceClassName(notify);
+				
+				// If the element is designated, we remove it
+				designatedRemovableElements.remove(proxyId);
 				
 				for (Attribute attr: DefaultAttributeProvider.getAttributesByDiagram(diagramName, clName)) {
 					file.add(proxyId, attr.getName(), attr.getValue());
@@ -155,8 +169,13 @@ public class AttributeResourceSetListener implements ResourceSetListener {
 				EObject obj = (EObject) oldValue;
 				String proxyId = iAffectedObjectMap.get(obj); // We need to get the id from here (see comments later)
 				if (proxyId != null && !proxyId.equalsIgnoreCase("//"))
-					file.removeAll(proxyId);
+					designatedRemovableElements.add(proxyId); // designate for remove
 			}
+		}
+		
+		// After all events are processed, it's time to remove all designated elements
+		for (String proxyId : designatedRemovableElements) {
+			file.removeAll(proxyId);
 		}
 		
 		iAffectedObjectMap.clear();

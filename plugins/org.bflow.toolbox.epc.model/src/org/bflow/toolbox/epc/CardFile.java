@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IBflowElement;
  * @model
  * @generated
  */
-public interface CardFile extends Element, IBflowElement {
+public interface CardFile extends Element, IBflowElement, EpcNode {
 } // CardFile

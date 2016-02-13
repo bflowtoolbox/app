@@ -6,7 +6,6 @@
  */
 package org.bflow.toolbox.epc.impl;
 
-import org.bflow.toolbox.bflow.impl.ElementImpl;
 import org.bflow.toolbox.epc.Application;
 import org.bflow.toolbox.epc.EpcPackage;
 import org.eclipse.emf.ecore.EClass;
@@ -20,7 +19,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class ApplicationImpl extends ElementImpl implements Application {
+public class ApplicationImpl extends EpcNodeImpl implements Application {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

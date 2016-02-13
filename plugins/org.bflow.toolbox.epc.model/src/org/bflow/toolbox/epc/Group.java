@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IBflowElement;
  * @model
  * @generated
  */
-public interface Group extends Element, IBflowElement {
+public interface Group extends Element, IBflowElement, EpcNode {
 } // Group

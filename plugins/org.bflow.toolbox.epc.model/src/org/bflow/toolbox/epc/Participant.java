@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IEBflowElement;
  * @model
  * @generated
  */
-public interface Participant extends Element, IEBflowElement {
+public interface Participant extends Element, IEBflowElement, EpcNode {
 } // Participant
