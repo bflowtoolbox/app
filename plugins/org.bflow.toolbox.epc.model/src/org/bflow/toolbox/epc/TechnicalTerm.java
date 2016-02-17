@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IBflowElement;
  * @model
  * @generated
  */
-public interface TechnicalTerm extends Element, IBflowElement {
+public interface TechnicalTerm extends Element, IBflowElement, EpcNode {
 } // TechnicalTerm

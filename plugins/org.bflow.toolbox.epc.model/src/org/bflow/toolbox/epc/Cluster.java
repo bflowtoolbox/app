@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IBflowElement;
  * @model
  * @generated
  */
-public interface Cluster extends Element, IBflowElement {
+public interface Cluster extends Element, IBflowElement, EpcNode {
 } // Cluster

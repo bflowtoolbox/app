@@ -13,6 +13,7 @@ import org.bflow.toolbox.epc.CardFile;
 import org.bflow.toolbox.epc.Cluster;
 import org.bflow.toolbox.epc.Document;
 import org.bflow.toolbox.epc.Epc;
+import org.bflow.toolbox.epc.EpcNode;
 import org.bflow.toolbox.epc.EpcFactory;
 import org.bflow.toolbox.epc.EpcPackage;
 import org.bflow.toolbox.epc.Event;
@@ -218,6 +219,8 @@ public class EpcPackageImpl extends EPackageImpl implements EpcPackage {
 	 * @generated
 	 */
 	private EClass epcEClass = null;
+	
+	private EClass epcNodeEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -550,6 +553,15 @@ public class EpcPackageImpl extends EPackageImpl implements EpcPackage {
 	public EReference getEpc_Connections() {
 		return (EReference)epcEClass.getEStructuralFeatures().get(1);
 	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public EClass getEpcNode() {
+		return epcNodeEClass;
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -632,6 +644,8 @@ public class EpcPackageImpl extends EPackageImpl implements EpcPackage {
 		epcEClass = createEClass(EPC);
 		createEReference(epcEClass, EPC__ELEMENTS);
 		createEReference(epcEClass, EPC__CONNECTIONS);
+		
+		epcNodeEClass = createEClass(EpcNode);
 	}
 
 	/**
@@ -710,6 +724,31 @@ public class EpcPackageImpl extends EPackageImpl implements EpcPackage {
 		productEClass.getESuperTypes().add(theBflowPackage.getElement());
 		productEClass.getESuperTypes().add(theBflowPackage.getIBflowElement());
 		informationArcEClass.getESuperTypes().add(theBflowPackage.getConnection());
+		
+		
+		//Add new Supertype "EpcNode" to all epc nodes
+		participantEClass.getESuperTypes().add(this.getEpcNode());
+		locationEClass.getESuperTypes().add(this.getEpcNode());
+		groupEClass.getESuperTypes().add(this.getEpcNode());
+		positionEClass.getESuperTypes().add(this.getEpcNode());
+		internalPersonEClass.getESuperTypes().add(this.getEpcNode());
+		externalPersonEClass.getESuperTypes().add(this.getEpcNode());
+		personTypeEClass.getESuperTypes().add(this.getEpcNode());
+		eventEClass.getESuperTypes().add(this.getEpcNode());
+		functionEClass.getESuperTypes().add(this.getEpcNode());
+		processInterfaceEClass.getESuperTypes().add(this.getEpcNode());
+		applicationEClass.getESuperTypes().add(this.getEpcNode());
+		fileEClass.getESuperTypes().add(this.getEpcNode());
+		cardFileEClass.getESuperTypes().add(this.getEpcNode());
+		clusterEClass.getESuperTypes().add(this.getEpcNode());
+		technicalTermEClass.getESuperTypes().add(this.getEpcNode());
+		documentEClass.getESuperTypes().add(this.getEpcNode());
+		objectiveEClass.getESuperTypes().add(this.getEpcNode());
+		productEClass.getESuperTypes().add(this.getEpcNode());
+		xorEClass.getESuperTypes().add(this.getEpcNode());
+		orEClass.getESuperTypes().add(this.getEpcNode());
+		andEClass.getESuperTypes().add(this.getEpcNode());
+		
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(eventEClass, Event.class, "Event", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -762,6 +801,8 @@ public class EpcPackageImpl extends EPackageImpl implements EpcPackage {
 
 		initEClass(informationArcEClass, InformationArc.class, "InformationArc", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(epcNodeEClass, EpcNode.class, "EpcNode", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		
 		initEClass(epcEClass, Epc.class, "Epc", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEpc_Elements(), theBflowPackage.getElement(), null, "elements", null, 0, -1, Epc.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getEpc_Connections(), theBflowPackage.getConnection(), null, "connections", null, 0, -1, Epc.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

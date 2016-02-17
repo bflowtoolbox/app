@@ -10,7 +10,6 @@ package org.bflow.toolbox.epc.provider;
 import java.util.Collection;
 import java.util.List;
 
-import org.bflow.toolbox.bflow.provider.ElementItemProvider;
 import org.bflow.toolbox.epc.XOR;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -29,7 +28,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * @generated
  */
 public class XORItemProvider
-	extends ElementItemProvider
+	extends EpcItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,

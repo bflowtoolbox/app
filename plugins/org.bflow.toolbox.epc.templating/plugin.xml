@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+     <extension point="org.eclipse.ui.menus"> 
+      <menuContribution
+         locationURI=
+         "popup:org.eclipse.ui.popup.any?after=additions">
+         
+         <menu
+               id="TemplateWizardMenu"
+               label="%menu.label">
+               <enablement></enablement>
+            <command
+                  commandId="showTemplateWizardInsert"
+                  label="%action.label"
+                  style="push">
+            </command>
+            <command
+                  commandId="showTemplateWizardAfter"
+                  label="%action.label.0"
+                  style="push">
+               <visibleWhen>
+     <iterate ifEmpty="false">
+         <or>
+            <instanceof value="org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart"/>
+            <instanceof value="org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart"/>
+            <instanceof value="org.bflow.toolbox.epc.diagram.edit.parts.OREditPart"/>
+            <instanceof value="org.bflow.toolbox.epc.diagram.edit.parts.ANDEditPart"/>
+            <instanceof value="org.bflow.toolbox.epc.diagram.edit.parts.XOREditPart"/>
+		
+         </or>
+         <and>
+            <reference
+                  definitionId="oneElementSelected">
+            </reference>
+         </and>
+     </iterate>
+ </visibleWhen>
+            </command>
+            <command
+                  commandId="showTemplateWizardBefore"
+                  label="%action.label.1"
+                  style="push">
+                  <visibleWhen>
+     <iterate ifEmpty="false">
+         <or>
+            <instanceof value="org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart"/>
+            <instanceof value="org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart"/>
+            <instanceof value="org.bflow.toolbox.epc.diagram.edit.parts.OREditPart"/>
+            <instanceof value="org.bflow.toolbox.epc.diagram.edit.parts.ANDEditPart"/>
+            <instanceof value="org.bflow.toolbox.epc.diagram.edit.parts.XOREditPart"/>
+		
+         </or>
+         <and>
+            <reference
+                  definitionId="oneElementSelected">
+            </reference>
+         </and>
+     </iterate>
+ </visibleWhen>
+            </command>
+            <visibleWhen
+                  checkEnabled="true">
+               <test
+                     forcePluginActivation="true"
+                     property="org.bflow.toolbox.epc.templating.commands.templatesexist">
+               </test>
+            </visibleWhen>
+         </menu>
+      </menuContribution>
+   </extension>
+      <extension
+
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.bflow.toolbox.epc.templating.commands.ShowTemplateWizardInsertCommand"
+            id="showTemplateWizardInsert"
+            name="TemplateWizardInsertCommand">
+      </command>
+      <command
+            defaultHandler="org.bflow.toolbox.epc.templating.commands.ShowTemplateWizardAfterCommand"
+            id="showTemplateWizardAfter"
+            name="TemplateWizardAfterCommand">
+      </command>
+      <command
+            defaultHandler="org.bflow.toolbox.epc.templating.commands.ShowTemplateWizardBeforeCommand"
+            id="showTemplateWizardBefore"
+            name="TemplateWizardBeforeCommand">
+      </command>
+   </extension>
+      <extension
+            point="org.eclipse.core.expressions.definitions">
+         <definition
+               id="oneElementSelected">
+            <with
+                  variable="selection">
+               <count
+                     value="1">
+               </count>
+            </with>
+         </definition>
+         <definition
+               id="existTemplates">
+            <test
+                  forcePluginActivation="true"
+                  property="org.bflow.toolbox.epc.templating.commands.templatesexist">
+            </test>
+         </definition>
+      </extension>
+    <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="org.bflow.toolbox.epc.templating.commands.TemplateExistsPropertyTester"
+            id="templateExistsPropertyTester"
+            namespace="org.bflow.toolbox.epc.templating.commands"
+            properties="templatesexist"
+            type="java.lang.Object">
+      </propertyTester>
+   </extension>
+    <extension
+          point="org.eclipse.ui.handlers">
+       <handler
+             commandId="templateHandler">
+       </handler>
+    </extension>
+</plugin>

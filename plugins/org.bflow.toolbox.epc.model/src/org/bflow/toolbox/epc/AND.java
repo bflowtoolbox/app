@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IConnector;
  * @model
  * @generated
  */
-public interface AND extends Element, IConnector {
+public interface AND extends Element, IConnector, EpcNode {
 } // AND

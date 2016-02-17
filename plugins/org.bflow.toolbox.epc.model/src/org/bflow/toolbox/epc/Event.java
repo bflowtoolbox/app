@@ -19,5 +19,5 @@ import org.bflow.toolbox.bflow.IBflowElement;
  * @model
  * @generated
  */
-public interface Event extends Element, IBflowElement {
+public interface Event extends Element, IBflowElement, EpcNode {
 } // Event

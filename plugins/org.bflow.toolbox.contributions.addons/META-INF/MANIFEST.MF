@@ -16,7 +16,7 @@ Require-Bundle: org.bflow.toolbox.hive.addons;bundle-version="1.0.0",
  org.bflow.toolbox.oepc.diagram;bundle-version="1.2.0",
  org.bflow.toolbox.diagram.extensions;bundle-version="1.1.0",
  org.bflow.toolbox.hive.libs;bundle-version="1.0.0",
- org.bflow.toolbox.vc.diagram;bundle-version="1.2.0"
+ org.bflow.toolbox.vc.diagram;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .,
  libs/commons-beanutils-1.8.3.jar,

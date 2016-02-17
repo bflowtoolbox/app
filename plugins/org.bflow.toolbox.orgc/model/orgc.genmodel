@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.bflow.toolbox.orgc/src" modelPluginID="org.bflow.toolbox.orgc"
+    modelName="Orgc" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>orgc.ecore</foreignModel>
+  <genPackages prefix="Orgchart" disposableProviderFactory="true" ecorePackage="orgc.ecore#/">
+    <genClasses ecoreClass="orgc.ecore#//Model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference orgc.ecore#//Model/Participants"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference orgc.ecore#//Model/Positions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference orgc.ecore#//Model/InternalPersons"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference orgc.ecore#//Model/ExternalPersons"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference orgc.ecore#//Model/PersonTypes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference orgc.ecore#//Model/Locations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference orgc.ecore#//Model/Groups"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference orgc.ecore#//Model/Relations1"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference orgc.ecore#//Model/Relations2"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="orgc.ecore#//NamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute orgc.ecore#//NamedElement/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="orgc.ecore#//All"/>
+    <genClasses image="false" ecoreClass="orgc.ecore#//All_Rel_1"/>
+    <genClasses image="false" ecoreClass="orgc.ecore#//All_Rel_2"/>
+    <genClasses image="false" ecoreClass="orgc.ecore#//Person"/>
+    <genClasses ecoreClass="orgc.ecore#//Participant"/>
+    <genClasses ecoreClass="orgc.ecore#//Location"/>
+    <genClasses ecoreClass="orgc.ecore#//Group"/>
+    <genClasses ecoreClass="orgc.ecore#//Position"/>
+    <genClasses ecoreClass="orgc.ecore#//InternalPerson"/>
+    <genClasses ecoreClass="orgc.ecore#//ExternalPerson"/>
+    <genClasses ecoreClass="orgc.ecore#//PersonType"/>
+    <genClasses ecoreClass="orgc.ecore#//Relation1">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference orgc.ecore#//Relation1/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference orgc.ecore#//Relation1/target"/>
+    </genClasses>
+    <genClasses ecoreClass="orgc.ecore#//Relation2">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference orgc.ecore#//Relation2/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference orgc.ecore#//Relation2/target"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

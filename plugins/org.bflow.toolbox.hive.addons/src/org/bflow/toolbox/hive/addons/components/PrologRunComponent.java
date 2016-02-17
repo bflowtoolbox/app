@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
+import org.bflow.toolbox.hive.addons.core.exceptions.ProtocolException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.interfaces.IPrologRunComponent;
 import org.bflow.toolbox.hive.addons.interprolog.AddonsSWISubprocessEngine;
@@ -61,7 +62,7 @@ public class PrologRunComponent implements IPrologRunComponent {
 	private String endCommand = null;
 
 	private boolean internal = false;
-
+	
 	/**
 	 * Default constructor.
 	 */
@@ -120,7 +121,7 @@ public class PrologRunComponent implements IPrologRunComponent {
 	 * @see org.bflow.toolbox.mitamm.components.IPrologRunComponent#init()
 	 */
 	@Override
-	public void init() {
+	public void init() throws ProtocolException {
 		this.params = new Vector<String>();
 
 		String params[] = this.toolParam.split(" ");
@@ -130,28 +131,27 @@ public class PrologRunComponent implements IPrologRunComponent {
 			// pl
 			if (str.contains("-pl:")) {
 				String value = str.substring(4);
-
-				URL url = PrologAdditionStore.getURL(value);
-
-				if (url != null) {
-					File prologBaseFile;
-
-					try {
-						prologBaseFile = File.createTempFile("epc2009", ".pl");
-						prologBaseFile.deleteOnExit();
-						FileUtils.copyURLToFile(url, prologBaseFile);
-
-						facts = prologBaseFile;
-
-						internal = true;
-					} catch (IOException ex) {
-						ex.printStackTrace();
+				
+				try {
+					File prologBaseFile = File.createTempFile("epc2009", ".pl");
+					prologBaseFile.deleteOnExit();
+					URL url = PrologAdditionStore.getURL(value);
+										
+					if (url != null) {	
+							FileUtils.copyURLToFile(url, prologBaseFile);
+							facts = prologBaseFile;
+							internal = true;
+					} else {
+						File externFile = new File(value);
+						if (!externFile.exists()) {
+							facts = null;
+						}else {
+							FileUtils.copyFile(externFile, prologBaseFile);
+							facts = prologBaseFile;
+						}
 					}
-				} else {
-					facts = new File(value);
-
-					if (!facts.exists())
-						facts = null;
+				} catch (IOException e) {
+					throw new ProtocolException("Temporary file for Prolog execution could not be created.", e);
 				}
 			}
 

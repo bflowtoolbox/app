@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="orgchart" nsURI="orgc" nsPrefix="orgc">
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eAnnotations source="gmf.diagram">
+      <details key="onefile" value="true"/>
+      <details key="diagram.extension" value="orgc"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Participants" upperBound="-1"
+        eType="#//Participant" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Positions" upperBound="-1"
+        eType="#//Position" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="InternalPersons" upperBound="-1"
+        eType="#//InternalPerson" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ExternalPersons" upperBound="-1"
+        eType="#//ExternalPerson" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PersonTypes" upperBound="-1"
+        eType="#//PersonType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Locations" upperBound="-1"
+        eType="#//Location" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Groups" upperBound="-1"
+        eType="#//Group" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Relations1" upperBound="-1"
+        eType="#//Relation1" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Relations2" upperBound="-1"
+        eType="#//Relation2" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="All" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="All_Rel_1" abstract="true" eSuperTypes="#//All"/>
+  <eClassifiers xsi:type="ecore:EClass" name="All_Rel_2" abstract="true" eSuperTypes="#//All"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true" eSuperTypes="#//All_Rel_2"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Participant" eSuperTypes="#//NamedElement #//All_Rel_1">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="ellipse"/>
+      <details key="color" value="255,255,0"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="#//NamedElement #//All_Rel_1">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="ellipse"/>
+      <details key="color" value="255,255,0"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//NamedElement #//All_Rel_1 #//All_Rel_2">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="ellipse"/>
+      <details key="color" value="255,255,0"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Position" eSuperTypes="#//NamedElement #//All_Rel_1 #//All_Rel_2">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="rectangle"/>
+      <details key="color" value="255,255,0"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InternalPerson" eSuperTypes="#//NamedElement #//Person">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="rectangle"/>
+      <details key="color" value="255,255,0"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExternalPerson" eSuperTypes="#//NamedElement #//Person">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="rectangle"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PersonType" eSuperTypes="#//NamedElement #//All_Rel_2">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="rectangle"/>
+      <details key="color" value="255,255,0"/>
+      <details key="size" value="100,50"/>
+      <details key="border.color" value="0,0,0"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation1">
+    <eAnnotations source="gmf.link">
+      <details key="source" value="source"/>
+      <details key="target" value="target"/>
+      <details key="target.decoration" value="arrow"/>
+      <details key="color" value="0,0,0"/>
+      <details key="source.constraint" value="self.oclIsKindOf(All_Rel_1) and self &lt;> oppositeEnd"/>
+      <details key="target.constraint" value="(self.oclIsTypeOf(Participant) and oppositeEnd.oclIsKindOf(All_Rel_1) and not oppositeEnd.oclIsKindOf(Position)) or (self.oclIsTypeOf(Group) and oppositeEnd.oclIsKindOf(All_Rel_1) and not oppositeEnd.oclIsKindOf(Position)) or (self.oclIsTypeOf(Location) and oppositeEnd.oclIsKindOf(All_Rel_1) and not oppositeEnd.oclIsKindOf(Position)) or (self.oclIsTypeOf(Position) and (oppositeEnd.oclIsTypeOf(Position) or oppositeEnd.oclIsTypeOf(Participant)))"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//All_Rel_1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//All_Rel_1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation2">
+    <eAnnotations source="gmf.link">
+      <details key="source" value="source"/>
+      <details key="target" value="target"/>
+      <details key="color" value="0,0,0"/>
+      <details key="source.constraint" value="self.oclIsKindOf(All_Rel_2) and self &lt;> oppositeEnd"/>
+      <details key="target.constraint" value="(self.oclIsTypeOf(Position) and oppositeEnd.oclIsKindOf(Person)) or (self.oclIsTypeOf(PersonType) and (oppositeEnd.oclIsTypeOf(PersonType) or oppositeEnd.oclIsKindOf(Person))) or (self.oclIsKindOf(Person) and (oppositeEnd.oclIsTypeOf(PersonType) or oppositeEnd.oclIsTypeOf(Position) or oppositeEnd.oclIsTypeOf(Group))) or (self.oclIsKindOf(Group) and (oppositeEnd.oclIsKindOf(Person)))"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//All_Rel_2"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//All_Rel_2"/>
+  </eClassifiers>
+</ecore:EPackage>

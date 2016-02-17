@@ -2,18 +2,15 @@
 <?eclipse version="3.0"?>
 
 <!--
- <copyright>
- </copyright>
-
- $Id$
 -->
 
 <plugin>
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
+      <!-- @generated vc -->
       <factory
-            uri="org.bflow.toolbox.vc"
-            class="org.bflow.toolbox.vc.provider.VcItemProviderAdapterFactory"
+            uri="vc"
+            class="vcchart.provider.VcchartItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
                org.eclipse.emf.edit.provider.IStructuredItemContentProvider

@@ -19,6 +19,7 @@ import org.bflow.toolbox.epc.CardFile;
 import org.bflow.toolbox.epc.Cluster;
 import org.bflow.toolbox.epc.Document;
 import org.bflow.toolbox.epc.Epc;
+import org.bflow.toolbox.epc.EpcNode;
 import org.bflow.toolbox.epc.EpcPackage;
 import org.bflow.toolbox.epc.Event;
 import org.bflow.toolbox.epc.ExternalPerson;
@@ -194,6 +195,10 @@ public class EpcAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseInformationArc(InformationArc object) {
 				return createInformationArcAdapter();
+			}
+			@Override
+			public Adapter caseEpcNode(EpcNode object) {
+				return createEpcNodeAdapter();
 			}
 			@Override
 			public Adapter caseEpc(Epc object) {
@@ -578,7 +583,20 @@ public class EpcAdapterFactory extends AdapterFactoryImpl {
 	public Adapter createInformationArcAdapter() {
 		return null;
 	}
-
+	
+	/**
+	 * Creates a new adapter for an object of class '{@link org.bflow.toolbox.epc.EpcNode <em>EpcNode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.bflow.toolbox.epc.EpcNode
+	 * @generated NOT
+	 */
+	public Adapter createEpcNodeAdapter() {
+		return null;
+	}
 	/**
 	 * Creates a new adapter for an object of class '{@link org.bflow.toolbox.epc.Epc <em>Epc</em>}'.
 	 * <!-- begin-user-doc -->
