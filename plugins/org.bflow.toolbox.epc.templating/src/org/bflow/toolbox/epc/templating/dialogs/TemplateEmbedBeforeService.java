@@ -84,7 +84,7 @@ public class TemplateEmbedBeforeService extends TemplateEmbedService {
 	
 	private boolean isConnectorWithTwoOrMoreEntries(ColoredNodeEditPart shapeSrc) {
 		if (shapeSrc instanceof OREditPart || shapeSrc instanceof XOREditPart || shapeSrc instanceof ANDEditPart) {
-			List targetConnections = shapeSrc.getTargetConnections();
+			List<?> targetConnections = shapeSrc.getTargetConnections();
 			if (targetConnections.size() > 1) {
 				return true;
 			}

@@ -80,7 +80,7 @@ public class TemplateEmbedAfterService extends TemplateEmbedService {
 
 	private boolean isConnectorWithTwoOrMoreExits(ColoredNodeEditPart shape) {
 		if (shape instanceof OREditPart || shape instanceof XOREditPart || shape instanceof ANDEditPart) {
-			List sourceConnections = shape.getSourceConnections();
+			List<?> sourceConnections = shape.getSourceConnections();
 			if (sourceConnections.size() > 1) {
 				return true;
 			}

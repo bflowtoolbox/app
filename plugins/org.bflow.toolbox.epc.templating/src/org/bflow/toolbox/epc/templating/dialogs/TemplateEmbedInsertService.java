@@ -73,8 +73,8 @@ public class TemplateEmbedInsertService extends TemplateEmbedService {
 	private void addRemoveSelectionCommand(IStructuredSelection selection, CompoundCommand removeCommand, DiagramEditPart diagramEditPart) {
 		if (isOneNode(selection)) {
 			BflowNodeEditPart  node = (BflowNodeEditPart) selection.toArray()[0];
-			List source_edges = node.getSourceConnections();
-			List target_edges = node.getTargetConnections();
+			List<?> source_edges = node.getSourceConnections();
+			List<?> target_edges = node.getTargetConnections();
 			for (Object object : target_edges) {
 				if (object instanceof ArcEditPart) {
 					ArcEditPart edge = (ArcEditPart) object;
