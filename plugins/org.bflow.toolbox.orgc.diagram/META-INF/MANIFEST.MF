@@ -44,4 +44,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.bflow.toolbox.diagram.extensions,
  org.bflow.toolbox.epc.diagram
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
