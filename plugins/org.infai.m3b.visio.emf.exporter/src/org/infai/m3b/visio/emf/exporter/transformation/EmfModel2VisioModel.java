@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.infai.m3b.visio.emf.emfutil.EmfShapeSheetUtil;
 import org.infai.m3b.visio.emf.emfutil.EmfUtil;
-import org.infai.m3b.visio.emf.emfutil.EmfVisioMetamodel;
 import org.infai.m3b.visio.emf.visiostub.IVApplication;
 import org.infai.m3b.visio.emf.visiostub.IVDocument;
 import org.infai.m3b.visio.emf.visiostub.IVMaster;
@@ -41,6 +40,7 @@ public class EmfModel2VisioModel {
 		HashMap<String, IVMaster> allVisioMasters = registerVisioMasters(visioStencils);
 		
 		//all emf pages		
+		@SuppressWarnings("unchecked")
 		EList<EObject> emfPages = (EList<EObject>)emfModel.eGet(emfModel.eClass().getEStructuralFeature("visioPages"));
 		
 		try {
@@ -70,8 +70,8 @@ public class EmfModel2VisioModel {
 					visioPage.setName(name.toString());	
 				
 				//for each contained Visio shape
-				EList<EObject> emfContainedShapes = (EList<EObject>)emfPage.eGet(emfPage.eClass().
-						getEStructuralFeature("visioContainedShapes"));
+				@SuppressWarnings("unchecked")
+				EList<EObject> emfContainedShapes = (EList<EObject>)emfPage.eGet(emfPage.eClass().getEStructuralFeature("visioContainedShapes"));
 				
 				for(EObject emfShape : emfContainedShapes) {
 					
@@ -82,8 +82,8 @@ public class EmfModel2VisioModel {
 				
 				//alle Verbindungen zeichnen
 				for(EObject emfShape : emfContainedShapes) {
-					EClass conClazz = (EClass)emfShape.eClass().getEPackage().
-						getESuperPackage().getEClassifier("EVisioConnectionShape");
+					@SuppressWarnings("unused")
+					EClass conClazz = (EClass)emfShape.eClass().getEPackage().getESuperPackage().getEClassifier("EVisioConnectionShape");
 					EClass shapeClazz = emfShape.eClass();
 					
 					for(EClass type : shapeClazz.getESuperTypes()) {
@@ -186,6 +186,7 @@ public class EmfModel2VisioModel {
 	
 	private void createSubVisioShapes(EObject parentShape, IVShape parentVisioShape) throws COMException {
 		
+		@SuppressWarnings("unchecked")
 		EList<EObject> emfCShapes = (EList<EObject>)parentShape.eGet(parentShape.eClass().getEStructuralFeature("visioContainedShapes"));
 		
 		for(EObject emfCShape : emfCShapes) {
