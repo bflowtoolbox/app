@@ -14,9 +14,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.infai.m3b.visio.emf.visiostub.IVApplication;
 import org.infai.m3b.visio.emf.visiostub.IVCell;
 import org.infai.m3b.visio.emf.visiostub.IVDocument;
@@ -29,11 +26,9 @@ import org.infai.m3b.visio.emf.visiostub.VisCellIndices;
 import org.infai.m3b.visio.emf.visiostub.VisRowIndices;
 import org.infai.m3b.visio.emf.visiostub.VisSectionIndices;
 import org.infai.m3b.visio.emf.visiostub.VisSpatialRelationCodes;
-import org.infai.m3b.visio.emf.visiostub.VisUnitCodes;
 import org.infai.m3b.visio.emf.visiostub.tagVisOpenSaveArgs;
 import org.jawin.COMException;
 import org.jawin.DispatchPtr;
-import org.jawin.Variant;
 
 /**
  * This class allows access on Visio models.

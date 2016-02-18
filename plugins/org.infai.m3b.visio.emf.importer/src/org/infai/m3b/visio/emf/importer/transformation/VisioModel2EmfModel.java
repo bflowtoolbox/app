@@ -97,11 +97,13 @@ public class VisioModel2EmfModel {
 				//create Visio page
 				EObject emfPage = visioFactory.create(evm.getEVisioPage());
 				emfPage.eSet(evm.getEVisioPage().getEStructuralFeature("visioName"), visioPage.getName());
+				@SuppressWarnings("unchecked")
 				EList<EObject> pages = (EList<EObject>)emfVisioDocument.eGet(evm.getEVisioDocument().getEStructuralFeature("visioPages"));
 				pages.add(emfPage);
 				
 				//foreach Visio shape in a Visio page a corresponding EMF object is created
 				VisioList<IVShape> visioShapes = new VisioList<IVShape>(visioPage.getShapes(), IVShape.class);
+				@SuppressWarnings("unchecked")
 				EList<EObject> pageShapes = (EList<EObject>)emfPage.eGet(evm.getEVisioPage().getEStructuralFeature("visioContainedShapes"));
 				
 				for(IVShape visioShape : visioShapes) {
@@ -114,6 +116,7 @@ public class VisioModel2EmfModel {
 					ArrayList<IVShape> visioContainedShapes = visioModelReader.getSpatialContainedShapes(visioShape, 0.0);
 					EObject emfShape = createEmfShape(visioShape, allEmfClassifier);
 					
+					@SuppressWarnings("unchecked")
 					EList<EObject> conShapes = (EList<EObject>)emfShape.eGet(evm.getEVisioConnectinShape().getEStructuralFeature("visioContainedShapes"));
 					for(IVShape visioContainedShape : visioContainedShapes) {	
 						EObject emfContainedShape = createEmfShape(visioContainedShape, allEmfClassifier);
@@ -168,6 +171,8 @@ public class VisioModel2EmfModel {
 		try {
 			//foreach Visio shape that is structural contained in a parent shape the createShape-method is called recursively
 			VisioList<IVShape> containedShapes = new VisioList<IVShape>(visioShape.getShapes(), IVShape.class);
+			
+			@SuppressWarnings("unchecked")
 			EList<EObject> shapes = (EList<EObject>)emfShape.eGet(evm.getEVisioShape().getEStructuralFeature("visioContainedShapes"));
 			
 			for(IVShape containedShape : containedShapes)
@@ -297,7 +302,10 @@ public class VisioModel2EmfModel {
 				EObject emfAttribute = visioFactory.create(visioAttribute);
 				emfAttribute.eSet(visioAttribute.getEStructuralFeature("visioName"), vp.getName());
 				emfAttribute.eSet(visioAttribute.getEStructuralFeature("visioValue"), vp.getValue());
-				((EList)emfShape.eGet(this.emfVisioMetamodel.getEVisioShape().getEStructuralFeature("visioAttributes"))).add(emfAttribute);
+				
+				@SuppressWarnings("unchecked")
+				EList<EObject> structuralFeatures = ((EList<EObject>)emfShape.eGet(this.emfVisioMetamodel.getEVisioShape().getEStructuralFeature("visioAttributes")));
+				structuralFeatures.add(emfAttribute);
 			}
 		}
 	}
@@ -312,7 +320,9 @@ public class VisioModel2EmfModel {
 		try {
 			//System.out.println("--->"+ visioShape.getName());
 			
+			@SuppressWarnings("unchecked")
 			EList<EObject> sections = (EList<EObject>)emfSheet.eGet(emfSheet.eClass().getEStructuralFeature("visioSections"));
+			
 			//for each section
 			for(VisioShapeSheetSection section : VisioUtil.getShapeSheetSections(visioShape)) {
 			
@@ -322,6 +332,8 @@ public class VisioModel2EmfModel {
 					
 				//for each row
 				short rowCount = visioShape.getRowCount(section.getId());
+				
+				@SuppressWarnings("unchecked")
 				EList<EObject> rows = (EList<EObject>)emfSection.eGet(emfSection.eClass().getEStructuralFeature("visioRows"));
 				for (short rowIndex = 0; rowIndex < rowCount; rowIndex++) {
 					
@@ -333,6 +345,8 @@ public class VisioModel2EmfModel {
 												
 						//for each cell
 						short cellCount = visioShape.getRowsCellCount(section.getId(), rowIndex);
+						
+						@SuppressWarnings("unchecked")
 						EList<EObject> cells = (EList<EObject>)emfRow.eGet(emfRow.eClass().getEStructuralFeature("visioCells"));						
 						for (short cellIndex = 0; cellIndex < cellCount; cellIndex++) {
 
