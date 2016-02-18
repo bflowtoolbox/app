@@ -42,7 +42,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.gef;visibility:=reexport,
  org.bflow.toolbox.diagram.extensions,
  org.bflow.toolbox.epc.diagram,
- org.eclipse.gmf.tooling,
  org.eclipse.gmf.tooling.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
