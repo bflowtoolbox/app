@@ -59,7 +59,7 @@ public class SWIPrologInstaller {
 		
 		if (osName.equalsIgnoreCase("windows")) {
 			srcPath = String.format(pathFormat, "win32");
-			executableName = "plcon.exe";
+			executableName = "swipl.exe";
 		}
 		
 		if (osName.equalsIgnoreCase("linux")) {
