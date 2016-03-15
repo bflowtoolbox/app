@@ -73,7 +73,14 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	 * The constructor.
 	 */
 	public StatementView() {
-		this.diagramTitle = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getTitle();
+		
+		IEditorPart currentEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if (currentEditorPart != null) {
+			this.diagramTitle = currentEditorPart.getTitle();
+		}else {
+			this.diagramTitle = "Kein Diagram ausgewählt";
+		}
+				
 		this.statements.add("Funktion1 kann mehrfach ausgeführt werden");
 		this.statements.add("");
 	}
@@ -259,9 +266,12 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		// TODO Auto-generated method stub
 		IEditorPart activeEditorPart = part.getSite().getPage().getActiveEditor();
-
-		diagramTitle = activeEditorPart.getTitle();
-		viewCol1.getColumn().setText("Statements für " + diagramTitle);
+		
+		if (activeEditorPart != null) {
+			diagramTitle = activeEditorPart.getTitle();
+			viewCol1.getColumn().setText("Statements für " + diagramTitle);
+		}
+		
 		
 	}
 
