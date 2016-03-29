@@ -36,7 +36,11 @@ import org.eclipse.emf.workspace.ResourceUndoContext;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gmf.runtime.diagram.core.edithelpers.CreateElementRequestAdapter;
+import org.eclipse.gmf.runtime.diagram.ui.commands.DeferredCreateConnectionViewAndElementCommand;
 import org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.requests.CreateConnectionViewAndElementRequest;
+import org.eclipse.gmf.runtime.diagram.ui.requests.CreateConnectionViewRequest;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewAndElementRequest.ViewAndElementDescriptor;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequest;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequestFactory;
@@ -290,20 +294,21 @@ public class ModelWizard extends Wizard {
 					CreateViewRequest createRequest;
 
 
+					DiagramEditPart diagramEditPart = editor.getDiagramEditPart();
 					if (el.getKind() == Element.Kind.Function) {
-						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.Function_2007, editor.getDiagramEditPart()
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.Function_2007, diagramEditPart
 								.getDiagramPreferencesHint());
 					} else if (el.getKind() == Element.Kind.AND_Single) {
-						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.AND_2003, editor.getDiagramEditPart()
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.AND_2003, diagramEditPart
 								.getDiagramPreferencesHint());
 					} else if (el.getKind() == Element.Kind.OR_Single) {
-						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.OR_2001, editor.getDiagramEditPart()
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.OR_2001, diagramEditPart
 								.getDiagramPreferencesHint());
 					} else if (el.getKind() == Element.Kind.XOR_Single) {
-						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.XOR_2008, editor.getDiagramEditPart()
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.XOR_2008, diagramEditPart
 								.getDiagramPreferencesHint());
 					}else {
-						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.Event_2006, editor.getDiagramEditPart()
+						createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.Event_2006, diagramEditPart
 								.getDiagramPreferencesHint());
 					}
 
@@ -316,33 +321,61 @@ public class ModelWizard extends Wizard {
 							.setLocation(new org.eclipse.draw2d.geometry.Point(
 									dX, y));
 
-					CompoundCommand command = (CompoundCommand) editor
-							.getDiagramEditPart().getCommand(createRequest);
+					CompoundCommand command = (CompoundCommand) diagramEditPart.getCommand(createRequest);
 					
+					//internal ID for redo/ undo functionallity
 					command.setLabel(id);
 					
 					editor.getDiagramEditDomain().getDiagramCommandStack()
 							.execute(command);
 
-					List<?> listChildren = editor.getDiagramEditPart().getChildren();
+					List<?> listChildren = diagramEditPart.getChildren();
 					
 					final ColoredNodeEditPart editPart = (ColoredNodeEditPart) listChildren.get(listChildren.size() - 1);
 					
+					String shapeName = el.getName();
+					
+					//Extrahiere eventuell vorhande Bedingungen für dieses Shape
+					AdditionalFunctionConditions additionalFunctionConditions = null;
+					if(shapeName.contains("[pos=")){ //SPÄTER REGEX ODER EIGENE BOOL METHOD
+						additionalFunctionConditions = new AdditionalFunctionConditions(shapeName.substring(shapeName.indexOf("[pos=")));
+						shapeName = shapeName.substring(0,shapeName.indexOf("[pos="));	
+					}
+					
+					
 					if (!el.getKind().isSingleConnector()) {
-						ViewAndElementDescriptor desc = (ViewAndElementDescriptor) createRequest.getViewDescriptors().get(0);
-						CreateElementRequestAdapter adapter = (CreateElementRequestAdapter) desc.getElementAdapter();
-						EObject element = adapter.resolve();
-						if (element == null) {
-							return;
-						}
-						
-						IModelBuilderAttendant att = ModelBuilderAttendantRegistry.getModelBuilderFor("epc");
-						EStructuralFeature structuralFeature = att.getEStructuralFeatureFor(null, "name");
-						String shapeName = el.getName();
-						SetRequest setRequest = new SetRequest(element, structuralFeature, shapeName);
-						SetValueCommand svc = new SetValueCommand(setRequest);
-
+						SetValueCommand svc = createSetValueCommandForShapeNaming(createRequest, shapeName);
 						shapesNamingCommand.add(new ICommandProxy(svc));
+					}
+					
+					//INSERT Additional NODES TO FUNCTIONS IF THERE IS A DECLARATION IN SHAPENAME
+					if (additionalFunctionConditions != null) {
+						CompoundCommand edgesCreationCommand = new CompoundCommand(id);
+
+						for (AdditionalFunctionCondition condition : additionalFunctionConditions) {
+							if (condition.getShapeType() == EpcElementTypes.Position_2013) {
+								createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.Position_2013, diagramEditPart
+										.getDiagramPreferencesHint());
+							}
+							
+							CompoundCommand commandAdditionalShape = (CompoundCommand) diagramEditPart.getCommand(createRequest);
+							commandAdditionalShape.setLabel(id);
+							editor.getDiagramEditDomain().getDiagramCommandStack().execute(commandAdditionalShape);
+							final ColoredNodeEditPart additionalShape = (ColoredNodeEditPart) listChildren.get(listChildren.size() - 1);
+							//Set names
+							SetValueCommand svc = createSetValueCommandForShapeNaming(createRequest, condition.getShapeName());
+							shapesNamingCommand.add(new ICommandProxy(svc));
+							//create Connections
+							CreateConnectionViewRequest request = CreateViewRequestFactory.getCreateConnectionRequest(EpcElementTypes.Relation_4002,
+									diagramEditPart.getDiagramPreferencesHint());
+							DeferredCreateConnectionViewAndElementCommand createCommand = new DeferredCreateConnectionViewAndElementCommand(
+									(CreateConnectionViewAndElementRequest) request, editPart, additionalShape, diagramEditPart.getViewer());
+							request.setSourceEditPart(editPart);
+							request.setTargetEditPart(additionalShape);
+							edgesCreationCommand.add(new ICommandProxy(createCommand));
+							
+						}
+						editor.getDiagramEditDomain().getDiagramCommandStack().execute(edgesCreationCommand);
 					}
 					
 					/*
@@ -366,9 +399,10 @@ public class ModelWizard extends Wizard {
 							else
 								connectionStack.add(new Connection(
 										editParts[i], editPart));
-					} else if (editParts[i] != null)
-						connectionStack.add(new Connection(editParts[i],
-								editPart));
+					} else if (editParts[i] != null){
+						connectionStack.add(new Connection(editParts[i],editPart));
+					}
+
 
 					editParts[i] = editPart;
 					lastDrawnEditParts.push(editPart);
@@ -460,6 +494,20 @@ public class ModelWizard extends Wizard {
 						0).getSource()));
 			}
 		}
+	}
+
+	private SetValueCommand createSetValueCommandForShapeNaming(
+			CreateViewRequest createRequest, String shapeName) {
+		ViewAndElementDescriptor desc = (ViewAndElementDescriptor) createRequest.getViewDescriptors().get(0);
+		CreateElementRequestAdapter adapter = (CreateElementRequestAdapter) desc.getElementAdapter();
+		EObject element = adapter.resolve();
+		
+		IModelBuilderAttendant att = ModelBuilderAttendantRegistry.getModelBuilderFor("epc");
+		EStructuralFeature structuralFeature = att.getEStructuralFeatureFor(null, "name");
+		
+		SetRequest setRequest = new SetRequest(element, structuralFeature, shapeName);
+		SetValueCommand svc = new SetValueCommand(setRequest);
+		return svc;
 	}
 
 	/**
