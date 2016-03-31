@@ -337,11 +337,11 @@ public class ModelWizard extends Wizard {
 					
 					//Extrahiere eventuell vorhande Bedingungen für dieses Shape
 					AdditionalFunctionConditions additionalFunctionConditions = null;
-					if(shapeName.contains("[pos=")){ //SPÄTER REGEX ODER EIGENE BOOL METHOD
-						additionalFunctionConditions = new AdditionalFunctionConditions(shapeName.substring(shapeName.indexOf("[pos=")));
-						shapeName = shapeName.substring(0,shapeName.indexOf("[pos="));	
+					if(el.getKind() == Element.Kind.Function && shapeName.matches(".*[//].*[=].*")){
+						//nur für Funktionen
+						additionalFunctionConditions = new AdditionalFunctionConditions(shapeName.substring(shapeName.indexOf("//")));
+						shapeName = shapeName.substring(0,shapeName.indexOf("//"));	 
 					}
-					
 					
 					if (!el.getKind().isSingleConnector()) {
 						SetValueCommand svc = createSetValueCommandForShapeNaming(createRequest, shapeName);
@@ -353,10 +353,8 @@ public class ModelWizard extends Wizard {
 						CompoundCommand edgesCreationCommand = new CompoundCommand(id);
 
 						for (AdditionalFunctionCondition condition : additionalFunctionConditions) {
-							if (condition.getShapeType() == EpcElementTypes.Position_2013) {
-								createRequest = CreateViewRequestFactory.getCreateShapeRequest(EpcElementTypes.Position_2013, diagramEditPart
-										.getDiagramPreferencesHint());
-							}
+							createRequest = CreateViewRequestFactory.getCreateShapeRequest(condition.getType(),
+									diagramEditPart.getDiagramPreferencesHint());
 							
 							CompoundCommand commandAdditionalShape = (CompoundCommand) diagramEditPart.getCommand(createRequest);
 							commandAdditionalShape.setLabel(id);
