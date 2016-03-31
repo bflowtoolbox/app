@@ -1,22 +1,26 @@
 package org.bflow.toolbox.epc.diagram.wizards;
 
+import org.bflow.toolbox.epc.diagram.wizards.AdditionalFunctionConditions.EpcElementTypeWrapper;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
 
 public class AdditionalFunctionCondition {
-	private IElementType shapeType;
+	private EpcElementTypeWrapper type;
 	private String shapeName;
 	
-	public AdditionalFunctionCondition(IElementType shapeType, String shapeName) {
-		this.shapeType = shapeType;
+	public AdditionalFunctionCondition(EpcElementTypeWrapper type, String shapeName) {
+		this.type = type;
 		this.shapeName = shapeName;
 	}
 
-	public IElementType getShapeType() {
-		return shapeType;
+	public IElementType getType() {
+		return type.getType();
 	}
 
 	public String getShapeName() {
 		return shapeName;
 	}
 	
+	public boolean isIncoming() {
+		return type.isIncoming();
+	}
 }
