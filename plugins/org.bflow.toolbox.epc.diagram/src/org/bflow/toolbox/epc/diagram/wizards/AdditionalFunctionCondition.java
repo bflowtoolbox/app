@@ -12,12 +12,16 @@ public class AdditionalFunctionCondition {
 		this.shapeName = shapeName;
 	}
 
-	public IElementType getType() {
-		return type.getType();
+	public IElementType getShapeType() {
+		return type.getNodeType();
 	}
 
 	public String getShapeName() {
 		return shapeName;
+	}
+	
+	public IElementType getArcType() {
+		return type.getArcType();
 	}
 	
 	public boolean isIncoming() {
