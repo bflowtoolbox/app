@@ -351,11 +351,15 @@ public class ModelWizard extends Wizard {
 					//INSERT Additional NODES TO FUNCTIONS IF THERE IS A DECLARATION IN SHAPENAME
 					if (additionalFunctionConditions != null) {
 						CompoundCommand edgesCreationCommand = new CompoundCommand(id);
-
+						
+						int locationIncrement = 0; 
 						for (AdditionalFunctionCondition condition : additionalFunctionConditions) {
-							createRequest = CreateViewRequestFactory.getCreateShapeRequest(condition.getType(),
+							createRequest = CreateViewRequestFactory.getCreateShapeRequest(condition.getShapeType(),
 									diagramEditPart.getDiagramPreferencesHint());
 							
+							createRequest.setLocation(new org.eclipse.draw2d.geometry.Point(dX-150-locationIncrement, y-locationIncrement));
+							locationIncrement =locationIncrement + 8;
+							System.out.println(locationIncrement);
 							CompoundCommand commandAdditionalShape = (CompoundCommand) diagramEditPart.getCommand(createRequest);
 							commandAdditionalShape.setLabel(id);
 							editor.getDiagramEditDomain().getDiagramCommandStack().execute(commandAdditionalShape);
@@ -364,10 +368,17 @@ public class ModelWizard extends Wizard {
 							SetValueCommand svc = createSetValueCommandForShapeNaming(createRequest, condition.getShapeName());
 							shapesNamingCommand.add(new ICommandProxy(svc));
 							//create Connections
-							CreateConnectionViewRequest request = CreateViewRequestFactory.getCreateConnectionRequest(EpcElementTypes.Relation_4002,
+							CreateConnectionViewRequest request = CreateViewRequestFactory.getCreateConnectionRequest(condition.getArcType(),
 									diagramEditPart.getDiagramPreferencesHint());
-							DeferredCreateConnectionViewAndElementCommand createCommand = new DeferredCreateConnectionViewAndElementCommand(
-									(CreateConnectionViewAndElementRequest) request, editPart, additionalShape, diagramEditPart.getViewer());
+							
+							DeferredCreateConnectionViewAndElementCommand createCommand;
+							if (condition.isIncoming()) {
+								createCommand = new DeferredCreateConnectionViewAndElementCommand(
+										(CreateConnectionViewAndElementRequest) request, additionalShape, editPart, diagramEditPart.getViewer());
+							}else {
+								createCommand = new DeferredCreateConnectionViewAndElementCommand(
+										(CreateConnectionViewAndElementRequest) request, editPart, additionalShape, diagramEditPart.getViewer());
+							}
 							request.setSourceEditPart(editPart);
 							request.setTargetEditPart(additionalShape);
 							edgesCreationCommand.add(new ICommandProxy(createCommand));

@@ -47,13 +47,13 @@ public class AdditionalFunctionConditions implements Iterable<AdditionalFunction
 		case "app":
 			return new EpcElementTypeWrapper(EpcElementTypes.Application_2004);
 		case ">file":
-			return new EpcElementTypeWrapper(EpcElementTypes.File_2019);
+			return new EpcElementTypeWrapper(EpcElementTypes.File_2019, EpcElementTypes.InformationArc_4003, false);
 		case "file>":
-			return new EpcElementTypeWrapper(EpcElementTypes.File_2019,true);
+			return new EpcElementTypeWrapper(EpcElementTypes.File_2019, EpcElementTypes.InformationArc_4003, true);
 		case ">doc":
-			return new EpcElementTypeWrapper(EpcElementTypes.Document_2018);
+			return new EpcElementTypeWrapper(EpcElementTypes.Document_2018, EpcElementTypes.InformationArc_4003, false);
 		case "doc>":
-			return new EpcElementTypeWrapper(EpcElementTypes.Document_2018,true);
+			return new EpcElementTypeWrapper(EpcElementTypes.Document_2018, EpcElementTypes.InformationArc_4003, true);
 		default:
 			return null;
 		}
@@ -87,24 +87,31 @@ public class AdditionalFunctionConditions implements Iterable<AdditionalFunction
 	}
 	
 	protected class EpcElementTypeWrapper {
-		private IElementType type;
+		private IElementType nodeType;
+		private IElementType arcType;
 		private boolean incoming = false;
 		
-		public EpcElementTypeWrapper(IElementType type, boolean incoming) {
-			this.type = type;
+		public EpcElementTypeWrapper(IElementType nodeType, IElementType arcType, boolean incoming) {
+			this.nodeType = nodeType;
+			this.arcType = arcType;
 			this.incoming = incoming;
 		}
 		
-		public EpcElementTypeWrapper(IElementType type) {
-			this.type = type;
+		public EpcElementTypeWrapper(IElementType nodeType) {
+			this.nodeType = nodeType;
+			this.arcType = EpcElementTypes.Relation_4002;
 		}
 
-		public IElementType getType() {
-			return type;
+		public IElementType getNodeType() {
+			return nodeType;
 		}
 		
 		public boolean isIncoming() {
 			return incoming;
+		}
+
+		public IElementType getArcType() {
+			return arcType;
 		}
 	}
 }
