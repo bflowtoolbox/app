@@ -359,7 +359,6 @@ public class ModelWizard extends Wizard {
 							
 							createRequest.setLocation(new org.eclipse.draw2d.geometry.Point(dX-150-locationIncrement, y-locationIncrement));
 							locationIncrement =locationIncrement + 8;
-							System.out.println(locationIncrement);
 							CompoundCommand commandAdditionalShape = (CompoundCommand) diagramEditPart.getCommand(createRequest);
 							commandAdditionalShape.setLabel(id);
 							editor.getDiagramEditDomain().getDiagramCommandStack().execute(commandAdditionalShape);
@@ -368,23 +367,12 @@ public class ModelWizard extends Wizard {
 							SetValueCommand svc = createSetValueCommandForShapeNaming(createRequest, condition.getShapeName());
 							shapesNamingCommand.add(new ICommandProxy(svc));
 							//create Connections
-							CreateConnectionViewRequest request = CreateViewRequestFactory.getCreateConnectionRequest(condition.getArcType(),
-									diagramEditPart.getDiagramPreferencesHint());
-							
-							DeferredCreateConnectionViewAndElementCommand createCommand;
 							if (condition.isIncoming()) {
-								createCommand = new DeferredCreateConnectionViewAndElementCommand(
-										(CreateConnectionViewAndElementRequest) request, additionalShape, editPart, diagramEditPart.getViewer());
+								connectionStack.add(new Connection(additionalShape,editPart, condition.getArcType()));
 							}else {
-								createCommand = new DeferredCreateConnectionViewAndElementCommand(
-										(CreateConnectionViewAndElementRequest) request, editPart, additionalShape, diagramEditPart.getViewer());
+								connectionStack.add(new Connection(editPart,additionalShape, condition.getArcType()));
 							}
-							request.setSourceEditPart(editPart);
-							request.setTargetEditPart(additionalShape);
-							edgesCreationCommand.add(new ICommandProxy(createCommand));
-							
 						}
-						editor.getDiagramEditDomain().getDiagramCommandStack().execute(edgesCreationCommand);
 					}
 					
 					/*
@@ -561,8 +549,9 @@ public class ModelWizard extends Wizard {
 	 *            source edit part
 	 * @param target
 	 *            target edit part
+	 * @param arcType 
 	 */
-	private void createConnection(EditPart source, EditPart target) {
+	private void createConnection(EditPart source, EditPart target, IElementType arcType) {
 		if (target == null)
 			return;
 
@@ -574,7 +563,7 @@ public class ModelWizard extends Wizard {
 
 		// CreateConnectionViewRequest.getCreateCommand(r, source, target)
 		// .execute();
-		EpcDiagramEditUtil.createConnection(editor, source, target, id);
+		EpcDiagramEditUtil.createConnection(editor, source, target, arcType, id);
 	}
 
 	/**
@@ -705,6 +694,7 @@ public class ModelWizard extends Wizard {
 	private class Connection {
 		private Object source;
 		private Object target;
+		private IElementType arcType;
 
 		/**
 		 * Default constructor.
@@ -717,13 +707,20 @@ public class ModelWizard extends Wizard {
 		public Connection(Object source, Object target) {
 			this.source = source;
 			this.target = target;
+			this.arcType = EpcElementTypes.Arc_4001;
+		}
+
+		public Connection(Object source, Object target, IElementType arcType) {
+			this.source = source;
+			this.target = target;
+			this.arcType = arcType;
 		}
 
 		/**
 		 * Creates the defined connection.
 		 */
 		public void create() {
-			createConnection((EditPart) source, (EditPart) target);
+			createConnection((EditPart) source, (EditPart) target, arcType);
 		}
 
 //		public void delete() {
