@@ -350,14 +350,17 @@ public class ModelWizard extends Wizard {
 					
 					//INSERT Additional NODES TO FUNCTIONS IF THERE IS A DECLARATION IN SHAPENAME
 					if (additionalFunctionConditions != null) {
-						CompoundCommand edgesCreationCommand = new CompoundCommand(id);
 						
 						int locationIncrement = 0; 
 						for (AdditionalFunctionCondition condition : additionalFunctionConditions) {
 							createRequest = CreateViewRequestFactory.getCreateShapeRequest(condition.getShapeType(),
 									diagramEditPart.getDiagramPreferencesHint());
 							
-							createRequest.setLocation(new org.eclipse.draw2d.geometry.Point(dX-150-locationIncrement, y-locationIncrement));
+							if (condition.isIncoming()) {
+								createRequest.setLocation(new org.eclipse.draw2d.geometry.Point(dX+150+locationIncrement, y-locationIncrement));
+							}else {
+								createRequest.setLocation(new org.eclipse.draw2d.geometry.Point(dX-150-locationIncrement, y-locationIncrement));
+							}
 							locationIncrement =locationIncrement + 8;
 							CompoundCommand commandAdditionalShape = (CompoundCommand) diagramEditPart.getCommand(createRequest);
 							commandAdditionalShape.setLabel(id);
