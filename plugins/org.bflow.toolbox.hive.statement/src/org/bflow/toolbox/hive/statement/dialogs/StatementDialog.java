@@ -85,7 +85,7 @@ public class StatementDialog extends Dialog {
 		ArrayList<String> temps = new ArrayList<>();
 		
 		IPath rootPath = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
-		rootPath = rootPath.append(".statements/templates.txt");
+		rootPath = rootPath.append(".properties/templates.txt");
 		File templateFile = rootPath.toFile();
 		if (templateFile.isFile() && templateFile.canRead()) {
 			BufferedReader in = null;
