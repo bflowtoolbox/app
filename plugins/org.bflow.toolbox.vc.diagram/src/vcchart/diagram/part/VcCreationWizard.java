@@ -154,6 +154,9 @@ public class VcCreationWizard extends Wizard implements INewWizard {
 			}
 			return false;
 		}
+		
+		pageSetupWizardPage.applySetup(3, 5);
+		
 		return diagram != null;
 	}
 }
