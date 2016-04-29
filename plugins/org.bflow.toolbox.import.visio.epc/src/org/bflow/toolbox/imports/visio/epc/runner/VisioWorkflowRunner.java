@@ -14,7 +14,7 @@ import org.eclipse.emf.mwe.core.monitor.NullProgressMonitor;
  * 
  */
 
-public class VisioWorkflowRunner extends AbstractVisioWorkflowRunner{
+public class VisioWorkflowRunner extends AbstractVisioWorkflowRunner {
 
 	public VisioWorkflowRunner() {
 		
