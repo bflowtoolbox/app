@@ -21,6 +21,7 @@ import org.eclipse.ui.PlatformUI;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 12.07.2015
+ * @version 29.04.2016 Fixed NPE during onInitialize()
  *
  */
 public class EclipseIntegrator {
@@ -39,8 +40,18 @@ public class EclipseIntegrator {
 	 */
 	static private void onInitialized() {		
 		// Register part listener
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(new IntegratorWorkbenchPartListener());
-		
+		// Note: getActiveWorkbenchWindow() may return NULL if it's not running on the UI thread
+		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(new IntegratorWorkbenchPartListener());
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+			
 		// Select all installed editors
 		fPlatformEditors = new ArrayList<>();
 		
