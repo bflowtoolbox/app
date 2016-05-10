@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?><target name="Running Platform" sequenceNumber="9">
+<locations>
+<location path="${eclipse_home}" type="Profile"/>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.babel.nls_tools.gef_de.feature.group" version="4.2.0.v20141223083953"/>
+<unit id="org.eclipse.babel.nls_eclipse_de.feature.group" version="4.2.0.v20141223083953"/>
+<unit id="org.eclipse.babel.nls_modeling.gmp.gmf-tooling_de.feature.group" version="4.2.0.v20141223083953"/>
+<unit id="org.eclipse.babel.nls_modeling.gmp.graphiti_de.feature.group" version="4.2.0.v20141223083953"/>
+<repository location="http://archive.eclipse.org/technology/babel/update-site/R0.12.1/juno"/>
+</location>
+</locations>
+<environment>
+<os>win32</os>
+<ws>win32</ws>
+<arch>x86</arch>
+<nl>de_DE</nl>
+</environment>
+<launcherArgs>
+<vmArgs>-Dosgi.requiredJavaVersion=1.6 -Xms40m -Xmx512m</vmArgs>
+</launcherArgs>
+</target>
