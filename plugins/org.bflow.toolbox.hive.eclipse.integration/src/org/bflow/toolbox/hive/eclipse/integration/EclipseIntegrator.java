@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.commons.io.FilenameUtils;
+import org.bflow.toolbox.hive.eclipse.integration.internal.editor.DiagramEditorProxy;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.IEditorDescriptor;
@@ -62,10 +63,10 @@ public class EclipseIntegrator {
 		// TODO Remove me
 		activateFor("*.bpmn");
 		activateFor("*.epc");		
+		activateFor("*.oepc");
 	}
 	
 	static private HashMap<String, String> fRegisteredEditors = new HashMap<>();
-	static private HashMap<String, String> fActiveEditorProxy = new HashMap<>();
 	
 	/**
 	 * Activates the bflow* toolbox hive features for all editors that are
@@ -80,15 +81,10 @@ public class EclipseIntegrator {
 		String editorId = editorDescriptor.getId();
 		
 		String fileNameExtension = FilenameUtils.getExtension(fileName);
+		fRegisteredEditors.put(fileNameExtension, editorId);
 		
-		fRegisteredEditors.put(fileNameExtension, editorId); // TODO Fix cyclic dependency
-		
-		// Is there a proxy?
-		String editorProxyId = DiagramEditorProxyRegistry.getEditorProxyId(editorId, fileName);
-		if (editorProxyId == null) return;
-		
-		// Map origin editor to proxy
-		fActiveEditorProxy.put(editorId, editorProxyId);
+		// Override default editor
+		editorRegistry.setDefaultEditor(fileNameExtension, DiagramEditorProxy.EditorId);
 	}
 	
 	/**
@@ -101,10 +97,8 @@ public class EclipseIntegrator {
 	 */
 	static public boolean isActivatedFor(String fileName) {
 		String fileNameExtension = FilenameUtils.getExtension(fileName);
-		String originEditorId = fRegisteredEditors.get(fileNameExtension);
-		if (originEditorId == null) return false;
-		boolean isActive = (fActiveEditorProxy.get(originEditorId) != null);
-		return isActive;
+		boolean isRegistered = (fRegisteredEditors.get(fileNameExtension) != null);
+		return isRegistered;
 	}
 	
 	/**
@@ -117,6 +111,7 @@ public class EclipseIntegrator {
 	 * @return Origin editor id or NULL
 	 */
 	static public String getOriginDefaultEditorIdFor(String fileName) {
+		if (!isActivatedFor(fileName)) return null;
 		String fileNameExtension = FilenameUtils.getExtension(fileName);
 		String originEditorId = fRegisteredEditors.get(fileNameExtension);
 		return originEditorId;
@@ -153,37 +148,6 @@ public class EclipseIntegrator {
 			ex.printStackTrace();
 			return null;
 		}
-	}
-	
-	/**
-	 * Returns TRUE if the given editor can be proxied.
-	 * 
-	 * @param originEditorId
-	 *            Editor id to check
-	 * @param fileName
-	 *            File name to check
-	 * @return TRUE or FALSE
-	 */
-	public static boolean isProxySupported(String originEditorId, String fileName) {
-		String editorProxyId = fActiveEditorProxy.get(originEditorId);
-		boolean isProxySupported = editorProxyId != null;
-		return isProxySupported;
-	}
-	
-	/**
-	 * Returns TRUE if the given editor is an proxy.
-	 * 
-	 * @param editorId
-	 *            Editor id to check
-	 * @param fileName
-	 *            File name to check
-	 * @return TRUE or FALSE
-	 */
-	public static boolean isProxy(String editorId, String fileName) {
-		for (String activeProxyId : fActiveEditorProxy.values()) {
-			if (editorId.equalsIgnoreCase(activeProxyId)) return true;
-		}
-		return false;
 	}
 
 	/**

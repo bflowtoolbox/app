@@ -9,6 +9,7 @@
          <menu
                id="TemplateWizardMenu"
                label="%menu.label">
+               <enablement></enablement>
             <command
                   commandId="showTemplateWizardInsert"
                   label="%action.label"
@@ -116,4 +117,10 @@
             type="java.lang.Object">
       </propertyTester>
    </extension>
+    <extension
+          point="org.eclipse.ui.handlers">
+       <handler
+             commandId="templateHandler">
+       </handler>
+    </extension>
 </plugin>

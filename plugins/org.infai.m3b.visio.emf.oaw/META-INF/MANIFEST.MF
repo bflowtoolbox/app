@@ -14,5 +14,5 @@ Bundle-Name: Oaw Plug-in
 Bundle-Activator: org.infai.m3b.visio.emf.oaw.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.infai.m3b.visio.emf.oaw;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 
