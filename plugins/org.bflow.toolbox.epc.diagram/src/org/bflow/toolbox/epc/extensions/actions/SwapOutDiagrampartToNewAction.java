@@ -43,8 +43,8 @@ import org.eclipse.ui.IWorkbenchPart;
  * Implements the {@link IObjectActionDelegate} to handle the request.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 23.03.10
- * @version 14.12.13
+ * @since 23/03/10
+ * @version 14/12/13
  */
 public class SwapOutDiagrampartToNewAction implements IObjectActionDelegate {
 	private DiagramEditor editor;
@@ -58,7 +58,8 @@ public class SwapOutDiagrampartToNewAction implements IObjectActionDelegate {
 		workbench = targetPart.getSite().getWorkbenchWindow().getWorkbench();
 		myShell = targetPart.getSite().getShell();
 
-		editor = (DiagramEditor) targetPart.getSite().getWorkbenchWindow().getActivePage().getActiveEditor();
+		editor = (DiagramEditor) targetPart.getSite().getWorkbenchWindow()
+				.getActivePage().getActiveEditor();
 		editPart = (DiagramEditPart) editor.getDiagramEditPart();
 	}
 

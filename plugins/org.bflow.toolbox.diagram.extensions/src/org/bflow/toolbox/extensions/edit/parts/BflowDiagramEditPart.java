@@ -186,9 +186,8 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 					.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
 			if (editorPart != null) {
-				IDiagramWorkbenchPart diagramWorkbenchPart = (IDiagramWorkbenchPart) editorPart.getAdapter(IDiagramWorkbenchPart.class);
-				if (diagramWorkbenchPart != null) {
-					diagramEditPart = (BflowDiagramEditPart) diagramWorkbenchPart.getDiagramEditPart();
+				if (((IDiagramWorkbenchPart) editorPart).getDiagramEditPart() instanceof BflowDiagramEditPart) {
+					diagramEditPart = (BflowDiagramEditPart) ((IDiagramWorkbenchPart) editorPart).getDiagramEditPart();
 				}
 			}
 		} catch (Exception e) {
