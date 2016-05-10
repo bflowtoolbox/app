@@ -105,6 +105,11 @@ public class ModelWizard extends Wizard {
 	 * last drawn BflowNodeEditParts
 	 */
 	private Stack<ColoredNodeEditPart> lastDrawnEditParts = new Stack<ColoredNodeEditPart>();
+	
+	/**
+	 * additional BflowNodeEditParts like File, OU, Document ...
+	 */
+	private ArrayList<ColoredNodeEditPart> additionalEditParts = new ArrayList<ColoredNodeEditPart>();
 
 	/**
 	 * array of edit parts for layouting
@@ -212,6 +217,7 @@ public class ModelWizard extends Wizard {
 			ArrayList<ColoredNodeEditPart> insertedNodes = new ArrayList<ColoredNodeEditPart>();
 			insertedNodes.addAll(lastDrawnCNEditParts);
 			insertedNodes.addAll(lastDrawnEditParts);
+			insertedNodes.addAll(additionalEditParts);
 			// add all new connections
 			ArrayList<EditPart> insertedEdges = new ArrayList<EditPart>();
 			for (ColoredNodeEditPart editPart : insertedNodes) {
@@ -387,6 +393,7 @@ public class ModelWizard extends Wizard {
 							}else {
 								connectionStack.add(new Connection(editPart,additionalShape, condition.getArcType()));
 							}
+							additionalEditParts.add(additionalShape);
 						}
 					}
 					
