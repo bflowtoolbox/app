@@ -207,11 +207,23 @@ public class ModelWizard extends Wizard {
 			 */
 			checkBendpoints();
 			
-			//inserted elements pre-selection
-			ArrayList<EditPart> allInsertedNodes = new ArrayList<EditPart>();
-			allInsertedNodes.addAll(lastDrawnCNEditParts);
-			allInsertedNodes.addAll(lastDrawnEditParts);
-			StructuredSelection newSelection = new StructuredSelection(allInsertedNodes);
+			//Pre-selection
+			//Add all new nodes
+			ArrayList<ColoredNodeEditPart> insertedNodes = new ArrayList<ColoredNodeEditPart>();
+			insertedNodes.addAll(lastDrawnCNEditParts);
+			insertedNodes.addAll(lastDrawnEditParts);
+			// add all new connections
+			ArrayList<EditPart> insertedEdges = new ArrayList<EditPart>();
+			for (ColoredNodeEditPart editPart : insertedNodes) {
+				List<EditPart> targetConnections = editPart.getTargetConnections();
+				insertedEdges.addAll(targetConnections);
+			}
+			ArrayList<EditPart> allEditParts = new ArrayList<EditPart>();
+			allEditParts.addAll(insertedNodes);
+			allEditParts.addAll(insertedEdges);
+						
+			StructuredSelection newSelection = new StructuredSelection(allEditParts);
+			
 			editor.getSite().getSelectionProvider().setSelection(newSelection);
 
 		} catch (Exception ex) {
@@ -633,6 +645,7 @@ public class ModelWizard extends Wizard {
 				.get(listChildren.size() - 1);
 
 		lastDrawnCNEditParts.push(editPart);
+		
 
 		if (connectorTop == null)
 			connectorTop = editPart;
