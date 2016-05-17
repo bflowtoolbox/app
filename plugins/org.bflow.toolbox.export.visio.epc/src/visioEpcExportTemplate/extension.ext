@@ -111,15 +111,15 @@ create visiomodel::EVisioCell createVisioCellPinY(bflow::Element e, Integer valu
 create visiomodel::EVisioCell createVisioCellHeight(bflow::Element e, Integer value):
 	this.setVisioName("Height") ->
 	//value.info()->
-	if (value != -1) then
-	this.setVisioValue(value.inchConversion().toString());
+	//if (value != -1) then
+	//this.setVisioValue(value.inchConversion().toString());
 
 //VisioCell
 create visiomodel::EVisioCell createVisioCellWidth(bflow::Element e, Integer value):
 	this.setVisioName("Width") ->
 	//value.info()->
-	if (value != -1) then
-	this.setVisioValue(value.inchConversion().toString());
+	//if (value != -1) then
+	//this.setVisioValue(value.inchConversion().toString());
 
 	
 //------------------------------
