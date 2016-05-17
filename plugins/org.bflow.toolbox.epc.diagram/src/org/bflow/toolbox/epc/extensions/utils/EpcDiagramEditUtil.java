@@ -119,6 +119,34 @@ public class EpcDiagramEditUtil {
 		command.execute();
 		currentCommandCollection.getStack().add(command);
 	}
+	
+	public static void createConnection(EpcDiagramEditor editor, EditPart source, EditPart target, IElementType arcType, String id) {
+		if (target == null || source == null)
+			return;
+
+		BflowDiagramEditPart diagramEditPart = (BflowDiagramEditPart) editor
+				.getDiagramEditPart();
+
+		CreateRelationshipRequest request = new CreateRelationshipRequest(
+				diagramEditPart.getEditingDomain(), diagramEditPart
+						.resolveSemanticElement(),
+				((ColoredNodeEditPart) source).resolveSemanticElement(),
+				((ColoredNodeEditPart) target).resolveSemanticElement(),
+				arcType);
+
+		Command command = ((ColoredNodeEditPart) source)
+				.getCommand(new EditCommandRequestWrapper(request,
+						Collections.EMPTY_MAP));
+
+		if (id != null) {
+			command.setLabel(id);
+		}else {
+			command.setLabel("intelligent arc creation");
+		}
+		command.execute();
+		currentCommandCollection.getStack().add(command);
+		
+	}
 
 	/**
 	 * Deletes a connector.
