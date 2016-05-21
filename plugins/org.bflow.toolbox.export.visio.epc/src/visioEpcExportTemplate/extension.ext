@@ -32,7 +32,7 @@ List[bflow::Element] selectCorrectOnes(List[bflow::Element] elements):
 
 //Foo	
 create visiomodel::EPC_Diagramm_Shapes::Ereignis createVisioShape(bflow::Element bflowElement, notation::Diagram epcDiagram):
-	info("not transformed: " + bflowElement.metaType);
+	this.setVisioText("not transformed");
 
 //Ereignis
 create visiomodel::EPC_Diagramm_Shapes::Ereignis createVisioShape(epc::Event element, notation::Diagram epcDiagram):

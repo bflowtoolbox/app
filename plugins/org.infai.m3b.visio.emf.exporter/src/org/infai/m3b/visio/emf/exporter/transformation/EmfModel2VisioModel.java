@@ -260,7 +260,16 @@ public class EmfModel2VisioModel {
 		IVShape visioSourceShape = allVisioShapes.get(emfShape.eGet(emfShape.eClass().getEStructuralFeature("visioSourceShape")));
 		IVShape visioTargetShape = allVisioShapes.get(emfShape.eGet(emfShape.eClass().getEStructuralFeature("visioTargetShape")));
 		
-		VisioModelUtil vsm = new VisioModelUtil(visioApp);
-		vsm.connectShapes(visioSourceShape, visioTargetShape, conShape);	
+		if(visioSourceShape != null && visioTargetShape != null){
+			VisioModelUtil vsm = new VisioModelUtil(visioApp);
+			vsm.connectShapes(visioSourceShape, visioTargetShape, conShape);
+		}else {
+			//entferne Verbinder von nicht untertsütztem Shape
+			try {
+				conShape.Delete();
+			} catch (COMException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
