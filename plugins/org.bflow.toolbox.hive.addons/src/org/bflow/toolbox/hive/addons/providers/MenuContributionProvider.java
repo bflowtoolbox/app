@@ -47,8 +47,7 @@ import org.eclipse.ui.services.IServiceLocator;
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 17.04.10
  * @version 30.12.13
- * 			27.02.15 Added more reliable dispose checks
- * 			12.07.15 Using getAdapter() instead of hard cast
+ * 			27.02.15 Added more reliable dispose checks 
  * 
  */
 public class MenuContributionProvider extends ContributionItem implements IWorkbenchContribution, ProtocolStoreListener, ToolStoreListener {
@@ -205,7 +204,7 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 	 */
 	private void checkAndApplyMenuState(IWorkbenchPage page) {
 		IEditorPart activeEditor = page.getActiveEditor();
-		boolean enabled = activeEditor != null && (activeEditor.getAdapter(DiagramEditor.class) != null);
+		boolean enabled = activeEditor != null && (activeEditor instanceof DiagramEditor);
 		
 		if (!menuContainer.isDisposed())
 			menuContainer.setEnabled(enabled);
