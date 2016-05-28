@@ -49,95 +49,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 
 	private List<Property> propertyTemplates;
 
-	class ColumnTextLabelProvider extends ColumnLabelProvider{
-		private int column;
-		
-		public ColumnTextLabelProvider(int column) 
-		{
-			this.column = column;
-		}
-		
-		@Override
-		public void update(ViewerCell cell) {
-			super.update(cell);
-
-			if (column == 0) {
-				Property property = (Property) cell.getElement();
-				final Control control;
-				
-				if (!isLastProperty(property) && !controlsToLinks.containsKey(property)) {
-					final Link link = new Link((Composite) cell.getViewerRow().getControl(), SWT.NONE);
-					link.setText(property.getTemplateString());
-					link.addListener(SWT.Selection, new Listener() {
-						public void handleEvent(Event event) {
-							System.out.println("Selection: " + link.getText());
-						}
-					});
-					control = link;
-					controlsToLinks.put(property, link);
-				}else if (isLastProperty(property) && combo == null) {
-					combo = new Combo((Composite) cell.getViewerRow().getControl(), SWT.DROP_DOWN);
-					
-					
-					
-					String[] templatesArray = new String[propertyTemplates.size()];
-					for (int i = 0; i < templatesArray.length; i++) {
-						templatesArray[i] = propertyTemplates.get(i).getTemplateString();
-					}
-					
-					combo.setItems(templatesArray);
-					combo.addSelectionListener(new SelectionAdapter() {
-						public void widgetSelected(SelectionEvent e) {
-							String selectedTemplateString = combo.getItem(combo.getSelectionIndex());
-							Property last = properties.get(properties.size()-1);
-							properties.remove(last);
-							properties.add(new Property(selectedTemplateString));
-							properties.add(last);
-					        combo.dispose();
-					        combo = null;
-					        viewer.refresh();
-						}
-						
-					});
-					control = combo;
-				}else{
-					control = controlsToLinks.get(property);
-				}
-				
-				TableItem item = (TableItem) cell.getItem();
-				TableEditor editor = new TableEditor(item.getParent());
-				editor.grabHorizontal = true;
-				editor.grabVertical = true;
-				editor.setEditor(control, item, cell.getColumnIndex());
-				editor.layout();
-				
-			}
-		}
-		
-		@Override
-		public Image getImage(Object obj) {
-			
-			if (column == 0) {
-				if (isLastProperty((Property) obj)) {
-					return null;
-					//return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
-					//return new Image(getSite().getShell().getDisplay(), this.getClass().getResourceAsStream("/icons/add.gif"));
-				}
-				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
-			}
-			if (column == 1) {
-				if (isLastProperty((Property) obj)) {
-					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
-				}
-				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED);
-			}
-			return null;
-		}
-	}
-
-	class NameSorter extends ViewerSorter {
-	}
-
+	
 	/**
 	 * The constructor.
 	 */
@@ -254,22 +166,6 @@ public class StatementView extends ViewPart implements ISelectionListener{
 		}
 		return propertyTemplates;
 	}
-	
-	private class Property {
-
-		private String templateString;
-
-		Property(String templateString) {
-			this.templateString = templateString;
-		}
-
-		public Property() {
-		}
-
-		public String getTemplateString() {
-			return templateString;
-		}
-	}
 
 	/**
 	 * Passing the focus request to the viewer's control.
@@ -302,5 +198,107 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		// TODO Auto-generated method stub
+	}
+	
+	private class Property {
+
+		private String templateString;
+
+		Property(String templateString) {
+			this.templateString = templateString;
+		}
+
+		public Property() {
+		}
+
+		public String getTemplateString() {
+			return templateString;
+		}
+	}
+	
+	private class ColumnTextLabelProvider extends ColumnLabelProvider{
+		private int column;
+		
+		public ColumnTextLabelProvider(int column) 
+		{
+			this.column = column;
+		}
+		
+		@Override
+		public void update(ViewerCell cell) {
+			super.update(cell);
+
+			if (column == 0) {
+				Property property = (Property) cell.getElement();
+				final Control control;
+				
+				if (!isLastProperty(property) && !controlsToLinks.containsKey(property)) {
+					final Link link = new Link((Composite) cell.getViewerRow().getControl(), SWT.NONE);
+					link.setText(property.getTemplateString());
+					link.addListener(SWT.Selection, new Listener() {
+						public void handleEvent(Event event) {
+							System.out.println("Selection: " + link.getText());
+						}
+					});
+					control = link;
+					controlsToLinks.put(property, link);
+				}else if (isLastProperty(property) && combo == null) {
+					combo = new Combo((Composite) cell.getViewerRow().getControl(), SWT.DROP_DOWN);
+					
+					
+					
+					String[] templatesArray = new String[propertyTemplates.size()];
+					for (int i = 0; i < templatesArray.length; i++) {
+						templatesArray[i] = propertyTemplates.get(i).getTemplateString();
+					}
+					
+					combo.setItems(templatesArray);
+					combo.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent e) {
+							String selectedTemplateString = combo.getItem(combo.getSelectionIndex());
+							Property last = properties.get(properties.size()-1);
+							properties.remove(last);
+							properties.add(new Property(selectedTemplateString));
+							properties.add(last);
+					        combo.dispose();
+					        combo = null;
+					        viewer.refresh();
+						}
+						
+					});
+					control = combo;
+				}else{
+					control = controlsToLinks.get(property);
+				}
+				
+				TableItem item = (TableItem) cell.getItem();
+				TableEditor editor = new TableEditor(item.getParent());
+				editor.grabHorizontal = true;
+				editor.grabVertical = true;
+				editor.setEditor(control, item, cell.getColumnIndex());
+				editor.layout();
+				
+			}
+		}
+		
+		@Override
+		public Image getImage(Object obj) {
+			
+			if (column == 0) {
+				if (isLastProperty((Property) obj)) {
+					return null;
+					//return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
+					//return new Image(getSite().getShell().getDisplay(), this.getClass().getResourceAsStream("/icons/add.gif"));
+				}
+				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
+			}
+			if (column == 1) {
+				if (isLastProperty((Property) obj)) {
+					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
+				}
+				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED);
+			}
+			return null;
+		}
 	}
 }
