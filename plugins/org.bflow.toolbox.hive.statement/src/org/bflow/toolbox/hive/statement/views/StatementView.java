@@ -1,6 +1,10 @@
 package org.bflow.toolbox.hive.statement.views;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +19,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.part.*;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -41,6 +47,8 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	
 	private String diagramTitle;
 
+	private List<Property> propertyTemplates;
+
 	class ColumnTextLabelProvider extends ColumnLabelProvider{
 		private int column;
 		
@@ -59,9 +67,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 				
 				if (!isLastProperty(property) && !controlsToLinks.containsKey(property)) {
 					final Link link = new Link((Composite) cell.getViewerRow().getControl(), SWT.NONE);
-					int randomNum = 0 + (int)(Math.random() * 100); 
-					link.setText(property.getTemplateString() + " " + randomNum);
-					// link.setSize(400, 400);
+					link.setText(property.getTemplateString());
 					link.addListener(SWT.Selection, new Listener() {
 						public void handleEvent(Event event) {
 							System.out.println("Selection: " + link.getText());
@@ -71,9 +77,14 @@ public class StatementView extends ViewPart implements ISelectionListener{
 					controlsToLinks.put(property, link);
 				}else if (isLastProperty(property) && combo == null) {
 					combo = new Combo((Composite) cell.getViewerRow().getControl(), SWT.DROP_DOWN);
-					String[] templatesArray = new String[2];
-					templatesArray[0]="<a>Funktion1</a> kann mehrfach ausgeführt werden";
-					templatesArray[1]="<a>Funktion2</a> kann mehrfach ausgeführt werden";
+					
+					
+					
+					String[] templatesArray = new String[propertyTemplates.size()];
+					for (int i = 0; i < templatesArray.length; i++) {
+						templatesArray[i] = propertyTemplates.get(i).getTemplateString();
+					}
+					
 					combo.setItems(templatesArray);
 					combo.addSelectionListener(new SelectionAdapter() {
 						public void widgetSelected(SelectionEvent e) {
@@ -138,7 +149,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 		}else {
 			this.diagramTitle = "Kein Diagram ausgewählt";
 		}
-		//templates = getStatmentTemplatesFromWorkspace();
+		propertyTemplates = getStatmentTemplatesFromWorkspace();
 	}
 	
 	/**
@@ -212,6 +223,36 @@ public class StatementView extends ViewPart implements ISelectionListener{
         properties.add(new Property());
         
         viewer.setInput(properties);
+	}
+	
+	private List<Property> getStatmentTemplatesFromWorkspace() {
+		ArrayList<Property> propertyTemplates = new ArrayList<>();
+		
+		IPath rootPath = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
+		rootPath = rootPath.append(".properties/templates.txt");
+		File templateFile = rootPath.toFile();
+		if (templateFile.isFile() && templateFile.canRead()) {
+			BufferedReader in = null;
+	        try {
+	            in = new BufferedReader(new FileReader(templateFile));
+	            String temp = null;
+	            while ((temp = in.readLine()) != null) {
+	            	if (!temp.trim().isEmpty()) {
+	            		propertyTemplates.add(new Property(temp));
+					}
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } finally {
+	            if (in != null)
+					try {
+						in.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+	        } 
+		}
+		return propertyTemplates;
 	}
 	
 	private class Property {
