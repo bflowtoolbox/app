@@ -2,19 +2,24 @@ package org.bflow.toolbox.hive.statement.views;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.bflow.toolbox.hive.statement.dialogs.StatementDialog;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
-import org.eclipse.jface.window.Window;
+import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.jface.action.*;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
 
 
@@ -28,11 +33,12 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	private TableViewer viewer;
 	private Action addSatementAction;
 	private Action doubleClickAction;
-	private ArrayList<String> statements = new ArrayList<String>();
-
+	
+	
+	private List<Property> properties = new ArrayList<Property>();
+	private Map<Property, Link> propertiesToLinks = new HashMap<Property, Link>();	
+	
 	private String diagramTitle;
-
-	private TableViewerColumn viewCol1;
 
 	class ColumnTextLabelProvider extends ColumnLabelProvider{
 		private int column;
@@ -43,18 +49,44 @@ public class StatementView extends ViewPart implements ISelectionListener{
 		}
 		
 		@Override
-		public String getText(Object element) 
-		{
+		public void update(ViewerCell cell) {
+			super.update(cell);
+
 			if (column == 0) {
-				return element.toString();
+				Property property = (Property) cell.getElement();
+				final Link link;
+				
+				if (!properties.contains(property) || !propertiesToLinks.containsKey(property)) {
+					
+					link = new Link((Composite) cell.getViewerRow().getControl(), SWT.NONE);
+					int randomNum = 0 + (int)(Math.random() * 100); 
+					link.setText(property.getTemplateString() + " " + randomNum);
+					// link.setSize(400, 400);
+					link.addListener(SWT.Selection, new Listener() {
+						public void handleEvent(Event event) {
+							System.out.println("Selection: " + link.getText());
+						}
+					});
+					propertiesToLinks.put(property, link);
+				}else{
+					link = propertiesToLinks.get(property);
+				}
+				
+				TableItem item = (TableItem) cell.getItem();
+				TableEditor editor = new TableEditor(item.getParent());
+				editor.grabHorizontal = true;
+				editor.grabVertical = true;
+				editor.setEditor(link, item, cell.getColumnIndex());
+				editor.layout();
+				
 			}
-			return null;
 		}
 		
+		@Override
 		public Image getImage(Object obj) {
 			
 			if (column == 0) {
-				if (isLastStatement(obj.toString())) {
+				if (isLastProperty((Property) obj)) {
 					return null;
 					//return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
 					//return new Image(getSite().getShell().getDisplay(), this.getClass().getResourceAsStream("/icons/add.gif"));
@@ -62,7 +94,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
 			}
 			if (column == 1) {
-				if (isLastStatement(obj.toString())) {
+				if (isLastProperty((Property) obj)) {
 					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
 				}
 				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED);
@@ -70,6 +102,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 			return null;
 		}
 	}
+
 	class NameSorter extends ViewerSorter {
 	}
 
@@ -84,9 +117,6 @@ public class StatementView extends ViewPart implements ISelectionListener{
 		}else {
 			this.diagramTitle = "Kein Diagram ausgewählt";
 		}
-				
-		this.statements.add("Funktion1 kann mehrfach ausgeführt werden");
-		this.statements.add("");
 	}
 	
 	/**
@@ -94,36 +124,41 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	 * to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
-		
-		viewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
-		viewer.setContentProvider(ArrayContentProvider.getInstance());
-		
-		final TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(viewer,new FocusCellOwnerDrawHighlighter(viewer));
+        parent.setLayout(new FillLayout());
+        viewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
+        viewer.getTable().setHeaderVisible(true);
+        viewer.getTable().setLinesVisible(true);
+        viewer.setContentProvider(new ArrayContentProvider());
+        
+        final TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(viewer,new FocusCellOwnerDrawHighlighter(viewer));
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(viewer) {
 
 			@Override
 			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
 				ViewerCell focusCell = (ViewerCell) event.getSource();
 				int currentColumn = focusCell.getVisualIndex();
-				String currentStatement = (String) focusCell.getElement();
-				
+				Property currentProperty = (Property) focusCell.getElement();
 				if (currentColumn == 0) {
-					if (isLastStatement(currentStatement)) {
-						if (event.keyCode == SWT.SPACE ||event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
-							addSatementAction.run();
-						}
-					}
+//					if (isLastStatement(currentStatement)) {
+//						if (event.keyCode == SWT.SPACE ||event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
+//							addSatementAction.run();
+//						}
+//					}
 				}
 				
 				if (currentColumn == 1) {
 					if (event.keyCode == SWT.SPACE ||event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
-						if (!isLastStatement(currentStatement)) {
-							boolean bool = MessageDialog.openQuestion(viewer.getControl().getShell(), "Statement wirklich entfernen?", "Soll "+ currentStatement + " wirklich entfernt werden?");
+						if (!isLastProperty(currentProperty)) {
+							boolean bool = MessageDialog.openQuestion(viewer.getControl().getShell(), "Statement wirklich entfernen?", "Soll "+ currentProperty.getTemplateString() + " wirklich entfernt werden?");
 							if (bool) {
-								statements.remove(currentStatement);
+								properties.remove(currentProperty);
+								propertiesToLinks.get(currentProperty).dispose();
+								propertiesToLinks.remove(currentProperty);
 								viewer.refresh();
 							}
-						}else {
+						}
+						else {
+							///ERSTMAL FÜR TESTSÄTZE
 							addSatementAction.run();
 						}
 					}
@@ -137,105 +172,86 @@ public class StatementView extends ViewPart implements ISelectionListener{
 				| ColumnViewerEditor.KEYBOARD_ACTIVATION;
 
 		TableViewerEditor.create(viewer, focusCellManager, actSupport, features);
-				
-		Table table = viewer.getTable();
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
-		
-		viewCol1 = new TableViewerColumn(viewer, SWT.NONE);
-		viewCol1.getColumn().setText("Statements für " + diagramTitle);
-		viewCol1.getColumn().setWidth(480);
-		viewCol1.setLabelProvider(new ColumnTextLabelProvider(0));
-		
-		TableViewerColumn viewCol2 = new TableViewerColumn(viewer, SWT.NONE);
-		viewCol2.getColumn().setWidth(17);
-		viewCol2.setLabelProvider(new ColumnTextLabelProvider(1));
-		
+
+		//FIRST Column
+        TableColumn tableColumPropertyTemplate = new TableColumn(viewer.getTable(), SWT.NONE);
+        tableColumPropertyTemplate.setText("Properties für " + diagramTitle);
+        tableColumPropertyTemplate.setWidth(480);
+        TableViewerColumn columnPropertyTemplate = new TableViewerColumn(viewer, tableColumPropertyTemplate);
+        columnPropertyTemplate.setLabelProvider(new ColumnTextLabelProvider(0));
+		        
+        //SECOND Column
+        TableColumn columnRemoveAction = new TableColumn(viewer.getTable(), SWT.NONE);
+		columnRemoveAction.setWidth(17);
+		TableViewerColumn col = new TableViewerColumn(viewer, columnRemoveAction);
+		col.setLabelProvider(new ColumnTextLabelProvider(1));
+
+		//TESTDATENSATZ
+		Property p1 = new Property("<a>Funktion1</a> kann mehrfach ausgeführt werden");
+        properties.add(p1);
+        
+        viewer.setInput(properties);
+        
 		// Create the help context id for the viewer's control
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "org.bflow.toolbox.hive.statement.viewer");
 		makeActions();
-		hookContextMenu();
-		hookDoubleClickAction();
-		contributeToActionBars();
-		viewer.setInput(statements);
-	}
-
-	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				StatementView.this.fillContextMenu(manager);
-			}
-		});
-		Menu menu = menuMgr.createContextMenu(viewer.getControl());
-		viewer.getControl().setMenu(menu);
-		getSite().registerContextMenu(menuMgr, viewer);
-	}
-
-	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
-		fillLocalPullDown(bars.getMenuManager());
-		fillLocalToolBar(bars.getToolBarManager());
-	}
-
-	private void fillLocalPullDown(IMenuManager manager) {
-		manager.add(addSatementAction);
-	}
-
-	private void fillContextMenu(IMenuManager manager) {
-		manager.add(addSatementAction);
-		// Other plug-ins can contribute there actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		// hookDoubleClickAction();
+        
 	}
 	
-	private void fillLocalToolBar(IToolBarManager manager) {
-		manager.add(addSatementAction);
+	private class Property {
+
+		private String templateString;
+
+		Property(String templateString) {
+			this.templateString = templateString;
+		}
+
+		public String getTemplateString() {
+			return templateString;
+		}
 	}
+	
 
 	private void makeActions() {
 		addSatementAction = new Action() {
 			public void run() {
-				
-				StatementDialog statmentDialog = new StatementDialog(getSite().getShell(),null);
-				
-				if (statmentDialog.open() == Window.OK) {
-					String last = statements.get(statements.size()-1);
-					statements.remove(last);
-					statements.add(statmentDialog.getSelectedTemplate());
-					statements.add(last);
-					viewer.refresh(statements);
-				}
+				//Weiteren Testdatensatz hinzufügen
+				Property p1 = new Property("<a>Funktion1</a> kann mehrfach ausgeführt werden");
+		        properties.add(p1);
+		        viewer.refresh(properties);
+//				StatementDialog statmentDialog = new StatementDialog(getSite().getShell(),null);
+//				
+//				if (statmentDialog.open() == Window.OK) {
+//					Link last = statements.get(statements.size()-1);
+//					statements.remove(last);
+//					//baue einen link
+//					//statements.add(statmentDialog.getSelectedTemplate());
+//					statements.add(last);
+//					viewer.refresh(statements);
+//				}
 			}
 		};
-		addSatementAction.setText("Statement hinzufügen");
-		addSatementAction.setToolTipText("Füge ein neues Statement hinzu");
+		addSatementAction.setText("Property hinzufügen");
+		addSatementAction.setToolTipText("Füge eine neue Property hinzu");
 		addSatementAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		
 		doubleClickAction = new Action() {
 			public void run() {
-				ISelection selection = viewer.getSelection();
-				String statement = (String) ((IStructuredSelection)selection).getFirstElement();
-				if (isLastStatement(statement)) {
-					return;
-				}
-				StatementDialog statmentDialog = new StatementDialog(getSite().getShell(),statement);
-				
-				if (statmentDialog.open() == Window.OK) {
-					  int index = statements.indexOf(statement);
-					  statements.set(index, statmentDialog.getSelectedTemplate());
-					  viewer.refresh(statements);
-					} 
+//				ISelection selection = viewer.getSelection();
+//				String property = (String) ((IStructuredSelection)selection).getFirstElement();
+//				if (isLastProperty(statement)) {
+//					return;
+//				}
+//				StatementDialog statmentDialog = new StatementDialog(getSite().getShell(),statement);
+//				
+//				if (statmentDialog.open() == Window.OK) {
+//					  int index = statements.indexOf(statement);
+//					  //statements.set(index, statmentDialog.getSelectedTemplate());
+//					  viewer.refresh(statements);
+//					} 
 			}
 		};
-	}
-
-	private void hookDoubleClickAction() {
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent event) {
-				doubleClickAction.run();
-			}
-		});
 	}
 
 	/**
@@ -245,8 +261,8 @@ public class StatementView extends ViewPart implements ISelectionListener{
 		viewer.getControl().setFocus();
 	}
 	
-	private boolean isLastStatement(String statement) {
-		return this.statements.indexOf(statement) == this.statements.size()-1;
+	private boolean isLastProperty(Property property) {
+		return this.properties.indexOf(property) == this.properties.size()-1;
 	}
 	
 	/*
@@ -269,14 +285,5 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		// TODO Auto-generated method stub
-		IEditorPart activeEditorPart = part.getSite().getPage().getActiveEditor();
-		
-		if (activeEditorPart != null) {
-			diagramTitle = activeEditorPart.getTitle();
-			viewCol1.getColumn().setText("Statements für " + diagramTitle);
-		}
-		
-		
 	}
-
 }
