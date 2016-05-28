@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
@@ -15,9 +17,10 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
 import org.eclipse.swt.SWT;
@@ -31,12 +34,10 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	public static final String ID = "org.bflow.toolbox.hive.statement.views.StatementView";
 
 	private TableViewer viewer;
-	private Action addSatementAction;
-	private Action doubleClickAction;
-	
+	private Combo combo = null;
 	
 	private List<Property> properties = new ArrayList<Property>();
-	private Map<Property, Link> propertiesToLinks = new HashMap<Property, Link>();	
+	private Map<Property, Control> controlsToLinks = new HashMap<Property, Control>();	
 	
 	private String diagramTitle;
 
@@ -54,11 +55,10 @@ public class StatementView extends ViewPart implements ISelectionListener{
 
 			if (column == 0) {
 				Property property = (Property) cell.getElement();
-				final Link link;
+				final Control control;
 				
-				if (!properties.contains(property) || !propertiesToLinks.containsKey(property)) {
-					
-					link = new Link((Composite) cell.getViewerRow().getControl(), SWT.NONE);
+				if (!isLastProperty(property) && !controlsToLinks.containsKey(property)) {
+					final Link link = new Link((Composite) cell.getViewerRow().getControl(), SWT.NONE);
 					int randomNum = 0 + (int)(Math.random() * 100); 
 					link.setText(property.getTemplateString() + " " + randomNum);
 					// link.setSize(400, 400);
@@ -67,16 +67,37 @@ public class StatementView extends ViewPart implements ISelectionListener{
 							System.out.println("Selection: " + link.getText());
 						}
 					});
-					propertiesToLinks.put(property, link);
+					control = link;
+					controlsToLinks.put(property, link);
+				}else if (isLastProperty(property) && combo == null) {
+					combo = new Combo((Composite) cell.getViewerRow().getControl(), SWT.DROP_DOWN);
+					String[] templatesArray = new String[2];
+					templatesArray[0]="<a>Funktion1</a> kann mehrfach ausgeführt werden";
+					templatesArray[1]="<a>Funktion2</a> kann mehrfach ausgeführt werden";
+					combo.setItems(templatesArray);
+					combo.addSelectionListener(new SelectionAdapter() {
+						public void widgetSelected(SelectionEvent e) {
+							String selectedTemplateString = combo.getItem(combo.getSelectionIndex());
+							Property last = properties.get(properties.size()-1);
+							properties.remove(last);
+							properties.add(new Property(selectedTemplateString));
+							properties.add(last);
+					        combo.dispose();
+					        combo = null;
+					        viewer.refresh();
+						}
+						
+					});
+					control = combo;
 				}else{
-					link = propertiesToLinks.get(property);
+					control = controlsToLinks.get(property);
 				}
 				
 				TableItem item = (TableItem) cell.getItem();
 				TableEditor editor = new TableEditor(item.getParent());
 				editor.grabHorizontal = true;
 				editor.grabVertical = true;
-				editor.setEditor(link, item, cell.getColumnIndex());
+				editor.setEditor(control, item, cell.getColumnIndex());
 				editor.layout();
 				
 			}
@@ -117,6 +138,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 		}else {
 			this.diagramTitle = "Kein Diagram ausgewählt";
 		}
+		//templates = getStatmentTemplatesFromWorkspace();
 	}
 	
 	/**
@@ -152,14 +174,15 @@ public class StatementView extends ViewPart implements ISelectionListener{
 							boolean bool = MessageDialog.openQuestion(viewer.getControl().getShell(), "Statement wirklich entfernen?", "Soll "+ currentProperty.getTemplateString() + " wirklich entfernt werden?");
 							if (bool) {
 								properties.remove(currentProperty);
-								propertiesToLinks.get(currentProperty).dispose();
-								propertiesToLinks.remove(currentProperty);
+								controlsToLinks.get(currentProperty).dispose();
+								controlsToLinks.remove(currentProperty);
+								if (combo != null) {
+									combo.dispose();
+									combo = null;
+								}
 								viewer.refresh();
+								
 							}
-						}
-						else {
-							///ERSTMAL FÜR TESTSÄTZE
-							addSatementAction.run();
 						}
 					}
 				}
@@ -186,17 +209,9 @@ public class StatementView extends ViewPart implements ISelectionListener{
 		TableViewerColumn col = new TableViewerColumn(viewer, columnRemoveAction);
 		col.setLabelProvider(new ColumnTextLabelProvider(1));
 
-		//TESTDATENSATZ
-		Property p1 = new Property("<a>Funktion1</a> kann mehrfach ausgeführt werden");
-        properties.add(p1);
+        properties.add(new Property());
         
         viewer.setInput(properties);
-        
-		// Create the help context id for the viewer's control
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "org.bflow.toolbox.hive.statement.viewer");
-		makeActions();
-		// hookDoubleClickAction();
-        
 	}
 	
 	private class Property {
@@ -207,51 +222,12 @@ public class StatementView extends ViewPart implements ISelectionListener{
 			this.templateString = templateString;
 		}
 
+		public Property() {
+		}
+
 		public String getTemplateString() {
 			return templateString;
 		}
-	}
-	
-
-	private void makeActions() {
-		addSatementAction = new Action() {
-			public void run() {
-				//Weiteren Testdatensatz hinzufügen
-				Property p1 = new Property("<a>Funktion1</a> kann mehrfach ausgeführt werden");
-		        properties.add(p1);
-		        viewer.refresh(properties);
-//				StatementDialog statmentDialog = new StatementDialog(getSite().getShell(),null);
-//				
-//				if (statmentDialog.open() == Window.OK) {
-//					Link last = statements.get(statements.size()-1);
-//					statements.remove(last);
-//					//baue einen link
-//					//statements.add(statmentDialog.getSelectedTemplate());
-//					statements.add(last);
-//					viewer.refresh(statements);
-//				}
-			}
-		};
-		addSatementAction.setText("Property hinzufügen");
-		addSatementAction.setToolTipText("Füge eine neue Property hinzu");
-		addSatementAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
-		
-		doubleClickAction = new Action() {
-			public void run() {
-//				ISelection selection = viewer.getSelection();
-//				String property = (String) ((IStructuredSelection)selection).getFirstElement();
-//				if (isLastProperty(statement)) {
-//					return;
-//				}
-//				StatementDialog statmentDialog = new StatementDialog(getSite().getShell(),statement);
-//				
-//				if (statmentDialog.open() == Window.OK) {
-//					  int index = statements.indexOf(statement);
-//					  //statements.set(index, statmentDialog.getSelectedTemplate());
-//					  viewer.refresh(statements);
-//					} 
-			}
-		};
 	}
 
 	/**
