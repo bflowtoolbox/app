@@ -88,8 +88,7 @@ public class VisioUtil {
 	
 	public static void connectShapes(EObject emfConnectionShape, HashMap<EObject, IVShape> allShapes) {
 		
-		@SuppressWarnings("unchecked")
-		EList<EObject> emfConList = ((EList<EObject>)emfConnectionShape.eGet(
+		EList<EObject> emfConList = ((EList)emfConnectionShape.eGet(
 				emfConnectionShape.eClass().getEStructuralFeature("visio_connectedShapes")));
 		
 		EObject emfSourceShape = emfConList.get(0);

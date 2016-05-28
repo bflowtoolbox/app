@@ -32,7 +32,7 @@ List[bflow::Element] selectCorrectOnes(List[bflow::Element] elements):
 
 //Foo	
 create visiomodel::EPC_Diagramm_Shapes::Ereignis createVisioShape(bflow::Element bflowElement, notation::Diagram epcDiagram):
-	info("not transformed: " + bflowElement.metaType);
+	this.setVisioText("not transformed");
 
 //Ereignis
 create visiomodel::EPC_Diagramm_Shapes::Ereignis createVisioShape(epc::Event element, notation::Diagram epcDiagram):
@@ -109,17 +109,17 @@ create visiomodel::EVisioCell createVisioCellPinY(bflow::Element e, Integer valu
 
 //VisioCell	
 create visiomodel::EVisioCell createVisioCellHeight(bflow::Element e, Integer value):
-	this.setVisioName("Height") ->
+	this.setVisioName("Height");
 	//value.info()->
-	if (value != -1) then
-	this.setVisioValue(value.inchConversion().toString());
+	//if (value != -1) then
+	//this.setVisioValue(value.inchConversion().toString());
 
 //VisioCell
 create visiomodel::EVisioCell createVisioCellWidth(bflow::Element e, Integer value):
-	this.setVisioName("Width") ->
+	this.setVisioName("Width");
 	//value.info()->
-	if (value != -1) then
-	this.setVisioValue(value.inchConversion().toString());
+	//if (value != -1) then
+	//this.setVisioValue(value.inchConversion().toString());
 
 	
 //------------------------------

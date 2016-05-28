@@ -20,8 +20,8 @@ public class EmfShapeSheetUtil {
 		if(shapeSheet==null)
 			return null;
 		
-		@SuppressWarnings("unchecked")
-		EList<EObject> sections = (EList<EObject>)shapeSheet.eGet(shapeSheet.eClass().getEStructuralFeature("visioSections"));
+		EList<EObject> sections = (EList<EObject>)shapeSheet.eGet(shapeSheet.eClass().
+				getEStructuralFeature("visioSections"));
 		
 		for(EObject section : sections) {
 			if(section.eGet(section.eClass().getEStructuralFeature("visioName")).toString().equals(name))
@@ -34,8 +34,8 @@ public class EmfShapeSheetUtil {
 		
 		if(section==null) return null;
 		
-		@SuppressWarnings("unchecked")
-		EList<EObject> rows = (EList<EObject>)section.eGet(section.eClass().getEStructuralFeature("visioRows"));
+		EList<EObject> rows = (EList<EObject>)section.eGet(section.eClass().
+				getEStructuralFeature("visioRows"));
 		
 		for(EObject row : rows) {
 			if(row.eGet(row.eClass().getEStructuralFeature("visioName")).toString().equals(name))
@@ -48,8 +48,8 @@ public class EmfShapeSheetUtil {
 		
 		if(row==null) return null;
 		
-		@SuppressWarnings("unchecked")
-		EList<EObject> cells = (EList<EObject>)row.eGet(row.eClass().getEStructuralFeature("visioCells"));
+		EList<EObject> cells = (EList<EObject>)row.eGet(row.eClass().
+				getEStructuralFeature("visioCells"));
 		
 		for(EObject cell : cells) {
 			if(cell.eGet(cell.eClass().getEStructuralFeature("visioName")).toString().equals(name))

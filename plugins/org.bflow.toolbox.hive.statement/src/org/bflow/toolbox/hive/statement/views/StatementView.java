@@ -3,10 +3,12 @@ package org.bflow.toolbox.hive.statement.views;
 
 import java.util.ArrayList;
 
+import org.bflow.toolbox.hive.statement.dialogs.StatementDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -53,7 +55,9 @@ public class StatementView extends ViewPart implements ISelectionListener {
 			
 			if (column == 0) {
 				if (isLastStatement(obj.toString())) {
-					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
+					return null;
+					//return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
+					//return new Image(getSite().getShell().getDisplay(), this.getClass().getResourceAsStream("/icons/add.gif"));
 				}
 				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
 			}
@@ -61,7 +65,7 @@ public class StatementView extends ViewPart implements ISelectionListener {
 				if (isLastStatement(obj.toString())) {
 					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
 				}
-				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE);
+				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED);
 			}
 			return null;
 		}
@@ -193,12 +197,12 @@ public class StatementView extends ViewPart implements ISelectionListener {
 		addSatementAction = new Action() {
 			public void run() {
 				
-				InputDialog newStatementDialog = new InputDialog(getSite().getShell(), "Statement hinzufügen", "Neues Statement", null, null);
-				int result = newStatementDialog.open();
-				if (result == 0) {
+				StatementDialog statmentDialog = new StatementDialog(getSite().getShell(),null);
+				
+				if (statmentDialog.open() == Window.OK) {
 					String last = statements.get(statements.size()-1);
 					statements.remove(last);
-					statements.add(newStatementDialog.getValue());
+					statements.add(statmentDialog.getSelectedTemplate());
 					statements.add(last);
 					viewer.refresh(statements);
 				}
@@ -215,13 +219,13 @@ public class StatementView extends ViewPart implements ISelectionListener {
 				if (isLastStatement(statement)) {
 					return;
 				}
-				InputDialog editStatementDialog = new InputDialog(getSite().getShell(), "Statement bearbeiten", "Statement", statement, null);
-				int result = editStatementDialog.open();
-				if (result == 0) {
-					int index = statements.indexOf(statement);
-					statements.set(index, editStatementDialog.getValue());
-					viewer.refresh(statements);
-				}
+				StatementDialog statmentDialog = new StatementDialog(getSite().getShell(),statement);
+				
+				if (statmentDialog.open() == Window.OK) {
+					  int index = statements.indexOf(statement);
+					  statements.set(index, statmentDialog.getSelectedTemplate());
+					  viewer.refresh(statements);
+					} 
 			}
 		};
 	}
