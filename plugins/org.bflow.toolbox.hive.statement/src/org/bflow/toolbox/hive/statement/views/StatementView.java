@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.part.*;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -48,6 +49,12 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	private String diagramTitle;
 
 	private List<Property> propertyTemplates;
+
+	private TableColumn tableColumPropertyTemplate;
+
+	private ISelectionService selectionService;
+
+	private IEditorPart activeEditorPart;
 
 	
 	/**
@@ -104,7 +111,6 @@ public class StatementView extends ViewPart implements ISelectionListener{
 									combo = null;
 								}
 								viewer.refresh();
-								
 							}
 						}
 					}
@@ -120,7 +126,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 		TableViewerEditor.create(viewer, focusCellManager, actSupport, features);
 
 		//FIRST Column
-        TableColumn tableColumPropertyTemplate = new TableColumn(viewer.getTable(), SWT.NONE);
+        tableColumPropertyTemplate = new TableColumn(viewer.getTable(), SWT.NONE);
         tableColumPropertyTemplate.setText("Properties für " + diagramTitle);
         tableColumPropertyTemplate.setWidth(480);
         TableViewerColumn columnPropertyTemplate = new TableViewerColumn(viewer, tableColumPropertyTemplate);
@@ -197,15 +203,23 @@ public class StatementView extends ViewPart implements ISelectionListener{
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		// TODO Auto-generated method stub
+		activeEditorPart = part.getSite().getPage().getActiveEditor();
+		selectionService = part.getSite().getWorkbenchWindow().getSelectionService();
+		if (activeEditorPart != null) {
+			diagramTitle = activeEditorPart.getTitle();
+			tableColumPropertyTemplate.setText("Properties für " + diagramTitle);
+		}
 	}
 	
 	private class Property {
 
 		private String templateString;
+		private List<Variable> variables;
+
 
 		Property(String templateString) {
 			this.templateString = templateString;
+			this.variables = getVariablesFromTemplate();
 		}
 
 		public Property() {
@@ -214,10 +228,73 @@ public class StatementView extends ViewPart implements ISelectionListener{
 		public String getTemplateString() {
 			return templateString;
 		}
+			
+		private List<Variable> getVariablesFromTemplate() {
+			ArrayList<Variable> vars = new ArrayList<>();
+
+			if (templateString.contains("$")) { //$NON-NLS-1$
+				String[] words = templateString.split("\\s"); //$NON-NLS-1$
+				for (String word : words) {
+					if (word.startsWith("$")) { //$NON-NLS-1$
+						while (word.startsWith("$")) {
+							word = word.substring(1);
+						}
+						vars.add(new Variable(word));
+					}
+				}
+			}
+			return vars;
+		}
+		
+		private String getTemplateStringWithLinks() {
+			if (templateString.contains("$")) { //$NON-NLS-1$
+				String[] words = templateString.split("\\s"); //$NON-NLS-1$
+				int j = 0;
+				for (int i = 0; i < words.length; i++) {
+					String word = words[i];
+					if (word.startsWith("$")) {
+						while (word.startsWith("$")) {
+							word = word.substring(1);
+						}
+						words[i] = "<a href=\""+ j +"\">" + "["+ word + "]" + "</a>";
+						j++;
+					}
+				}
+				StringBuilder builder = new StringBuilder();
+				for(String s : words) {
+				    builder.append(s);
+				    builder.append(" ");
+				}
+				return builder.toString().trim();
+			}
+			return templateString;
+		}
+		
+		private class Variable {
+			private String name;
+			private String id;
+
+			public Variable(String name) {
+				this.name = name;
+			}
+
+			public String getName() {
+				return name;
+			}
+
+			public String getId() {
+				return id;
+			}
+
+			public void setId(String id) {
+				this.id = id;
+			}
+		}
 	}
 	
 	private class ColumnTextLabelProvider extends ColumnLabelProvider{
 		private int column;
+		private boolean selectionInProgress = false;
 		
 		public ColumnTextLabelProvider(int column) 
 		{
@@ -229,15 +306,65 @@ public class StatementView extends ViewPart implements ISelectionListener{
 			super.update(cell);
 
 			if (column == 0) {
-				Property property = (Property) cell.getElement();
+				final Property property = (Property) cell.getElement();
 				final Control control;
 				
 				if (!isLastProperty(property) && !controlsToLinks.containsKey(property)) {
 					final Link link = new Link((Composite) cell.getViewerRow().getControl(), SWT.NONE);
-					link.setText(property.getTemplateString());
+					link.setText(property.getTemplateStringWithLinks());
 					link.addListener(SWT.Selection, new Listener() {
+
+						private int selectionVarId;
+						private ISelectionListener selectionListener;
+						
+						@Override
 						public void handleEvent(Event event) {
-							System.out.println("Selection: " + link.getText());
+							
+							
+							int varId = Integer.parseInt(event.text);
+							final String variablename = property.getVariablesFromTemplate().get(varId).getName();
+							
+							if (selectionInProgress && selectionVarId == varId) {
+								link.setText(link.getText().replace(">....<", variablename));
+								selectionService.removeSelectionListener(selectionListener);
+                				selectionInProgress = false;
+                				selectionVarId = -1;
+                				combo.setEnabled(true);
+								return;
+							}
+							if (selectionInProgress) {
+								return;
+							}
+							
+							String linktext = link.getText();
+							String oldLink = "<a href=\""+ event.text +"\">" + "["+ variablename + "]" + "</a>";
+							String newLink = "<a href=\""+ event.text +"\">" + "["+ ">....<" + "]" + "</a>";
+							linktext = linktext.replace(oldLink, newLink);
+							link.setText(linktext);
+							
+							selectionInProgress = true;
+							selectionVarId = varId;
+							combo.setEnabled(false);
+							selectionService.addSelectionListener(selectionListener =	new ISelectionListener() {
+								@Override
+								public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+									
+										IStructuredSelection sel = (IStructuredSelection) selection;
+										System.out.println(sel.getFirstElement());
+										if (sel.getFirstElement() instanceof ShapeNodeEditPart) {
+											ShapeNodeEditPart editPart = (ShapeNodeEditPart) sel.getFirstElement();
+											String classname = editPart.getClass().getSimpleName().replace("EditPart", "");
+				                			if (variablename.toLowerCase().equals(classname.toLowerCase())) {
+				                				link.setText(link.getText().replace(">....<", classname.toLowerCase()));
+				                				selectionService.removeSelectionListener(this);
+				                				selectionInProgress = false;
+				                				selectionVarId = -1;
+				                				combo.setEnabled(true);
+												viewer.refresh();
+				                			}
+										}
+								}
+							});
 						}
 					});
 					control = link;
@@ -277,13 +404,11 @@ public class StatementView extends ViewPart implements ISelectionListener{
 				editor.grabVertical = true;
 				editor.setEditor(control, item, cell.getColumnIndex());
 				editor.layout();
-				
 			}
 		}
 		
 		@Override
 		public Image getImage(Object obj) {
-			
 			if (column == 0) {
 				if (isLastProperty((Property) obj)) {
 					return null;
