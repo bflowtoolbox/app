@@ -15,7 +15,6 @@ import org.bflow.toolbox.hive.addons.store.PrologAdditionStore;
 import org.bflow.toolbox.hive.addons.utils.ProtocolDescriptor;
 import org.bflow.toolbox.hive.addons.validation.ValidationService;
 import org.bflow.toolbox.hive.addons.workbench.AddonsWorkbenchListener;
-import org.bflow.toolbox.hive.attributes.AttributeViewPart;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -71,11 +70,6 @@ public class AddonPlugin extends AbstractUIPlugin {
 	 */
 	public static final PreferencesHint DIAGRAM_PREFERENCES_HINT = new PreferencesHint(PLUGIN_ID);
 
-	/**
-	 * Constructor.
-	 */
-	public AddonPlugin() { }
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -90,8 +84,11 @@ public class AddonPlugin extends AbstractUIPlugin {
 
 		addonPlugin = this;
 
-		createConsole();
-		AttributeViewPart.getInstance();
+		/* 29.05.2016 - astorch
+		 * Don't create views that are initiated by the bflow perspective.
+		 */
+//		createConsole();
+//		AttributeViewPart.getInstance();
 		AddonsWorkbenchListener.register();
 
 		try {
