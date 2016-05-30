@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -21,7 +20,13 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.part.*;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
+import org.eclipse.gmf.runtime.notation.impl.DiagramImpl;
+import org.eclipse.gmf.runtime.notation.impl.NodeImpl;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -40,6 +45,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	 */
 	public static final String ID = "org.bflow.toolbox.hive.statement.views.StatementView";
 
+
 	private TableViewer viewer;
 	private Combo combo = null;
 	
@@ -56,15 +62,26 @@ public class StatementView extends ViewPart implements ISelectionListener{
 
 	private IEditorPart activeEditorPart;
 
+	private String diagramId;
+	private ISelectionListener selectionListener;
+	private boolean selectionInProgress = false;
+	
 	
 	/**
 	 * The constructor.
 	 */
 	public StatementView() {
 		
-		IEditorPart currentEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if (currentEditorPart != null) {
-			this.diagramTitle = currentEditorPart.getTitle();
+		activeEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		selectionService  = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
+		if (activeEditorPart != null && activeEditorPart instanceof DiagramEditor) {
+			this.diagramTitle = activeEditorPart.getTitle();
+			DiagramEditor diagramEditor = (DiagramEditor) activeEditorPart;
+			DiagramEditPart dep = diagramEditor.getDiagramEditPart();
+			DiagramImpl diagramImpl = (DiagramImpl) dep.getModel();
+			EObject eObj = diagramImpl.getElement();
+			XMLResource resource = (XMLResource) eObj.eResource();
+			this.diagramId = resource.getID(eObj);
 		}else {
 			this.diagramTitle = "Kein Diagram ausgewählt";
 		}
@@ -156,7 +173,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	            String temp = null;
 	            while ((temp = in.readLine()) != null) {
 	            	if (!temp.trim().isEmpty()) {
-	            		propertyTemplates.add(new Property(temp));
+	            		propertyTemplates.add(new Property(temp, null));
 					}
 	            }
 	        } catch (IOException e) {
@@ -203,98 +220,49 @@ public class StatementView extends ViewPart implements ISelectionListener{
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		activeEditorPart = part.getSite().getPage().getActiveEditor();
-		selectionService = part.getSite().getWorkbenchWindow().getSelectionService();
-		if (activeEditorPart != null) {
-			diagramTitle = activeEditorPart.getTitle();
-			tableColumPropertyTemplate.setText("Properties für " + diagramTitle);
+		IEditorPart editorPart = part.getSite().getPage().getActiveEditor();
+		
+		if (selectionService == null) {
+			selectionService = part.getSite().getWorkbenchWindow().getSelectionService();
+		}
+		
+		//Kontextwechsel - View muss reinitialisiert werden
+		if (editorPart != null && !editorPart.equals(activeEditorPart)) {
+//			combo.dispose();
+//			for (Property prop : controlsToLinks.keySet()) {
+//				controlsToLinks.get(prop).dispose();
+//			}
+//			controlsToLinks.clear();
+//			properties = new ArrayList<Property>();
+//			properties.add(new Property());
+//			selectionService = part.getSite().getWorkbenchWindow().getSelectionService();
+//			if (selectionInProgress) {
+//				selectionService.removeSelectionListener(selectionListener);
+//				selectionInProgress = false;
+//			}
+//			activeEditorPart = editorPart;
+//
+//			if (activeEditorPart instanceof DiagramEditor) {
+//				this.diagramTitle = activeEditorPart.getTitle();
+//				DiagramEditor diagramEditor = (DiagramEditor) activeEditorPart;
+//				DiagramEditPart dep = diagramEditor.getDiagramEditPart();
+//				DiagramImpl diagramImpl = (DiagramImpl) dep.getModel();
+//				EObject eObj = diagramImpl.getElement();
+//				XMLResource resource = (XMLResource) eObj.eResource();
+//				this.diagramId = resource.getID(eObj);
+//			}else {
+//				this.diagramTitle = "Kein Diagram ausgewählt";
+//			}
+//			viewer.refresh();
 		}
 	}
-	
-	private class Property {
-
-		private String templateString;
-		private List<Variable> variables;
-
-
-		Property(String templateString) {
-			this.templateString = templateString;
-			this.variables = getVariablesFromTemplate();
-		}
-
-		public Property() {
-		}
-
-		public String getTemplateString() {
-			return templateString;
-		}
-			
-		private List<Variable> getVariablesFromTemplate() {
-			ArrayList<Variable> vars = new ArrayList<>();
-
-			if (templateString.contains("$")) { //$NON-NLS-1$
-				String[] words = templateString.split("\\s"); //$NON-NLS-1$
-				for (String word : words) {
-					if (word.startsWith("$")) { //$NON-NLS-1$
-						while (word.startsWith("$")) {
-							word = word.substring(1);
-						}
-						vars.add(new Variable(word));
-					}
-				}
-			}
-			return vars;
-		}
 		
-		private String getTemplateStringWithLinks() {
-			if (templateString.contains("$")) { //$NON-NLS-1$
-				String[] words = templateString.split("\\s"); //$NON-NLS-1$
-				int j = 0;
-				for (int i = 0; i < words.length; i++) {
-					String word = words[i];
-					if (word.startsWith("$")) {
-						while (word.startsWith("$")) {
-							word = word.substring(1);
-						}
-						words[i] = "<a href=\""+ j +"\">" + "["+ word + "]" + "</a>";
-						j++;
-					}
-				}
-				StringBuilder builder = new StringBuilder();
-				for(String s : words) {
-				    builder.append(s);
-				    builder.append(" ");
-				}
-				return builder.toString().trim();
-			}
-			return templateString;
-		}
-		
-		private class Variable {
-			private String name;
-			private String id;
-
-			public Variable(String name) {
-				this.name = name;
-			}
-
-			public String getName() {
-				return name;
-			}
-
-			public String getId() {
-				return id;
-			}
-
-			public void setId(String id) {
-				this.id = id;
-			}
-		}
+	public String getDiagramId() {
+		return diagramId;
 	}
 	
 	private class ColumnTextLabelProvider extends ColumnLabelProvider{
 		private int column;
-		private boolean selectionInProgress = false;
 		
 		public ColumnTextLabelProvider(int column) 
 		{
@@ -315,13 +283,12 @@ public class StatementView extends ViewPart implements ISelectionListener{
 					link.addListener(SWT.Selection, new Listener() {
 
 						private int selectionVarId;
-						private ISelectionListener selectionListener;
 						
 						@Override
 						public void handleEvent(Event event) {
 							
 							
-							int varId = Integer.parseInt(event.text);
+							final int varId = Integer.parseInt(event.text);
 							final String variablename = property.getVariablesFromTemplate().get(varId).getName();
 							
 							if (selectionInProgress && selectionVarId == varId) {
@@ -345,15 +312,25 @@ public class StatementView extends ViewPart implements ISelectionListener{
 							selectionInProgress = true;
 							selectionVarId = varId;
 							combo.setEnabled(false);
+							if (activeEditorPart instanceof DiagramEditor) {
+								DiagramEditor diagramEditor = (DiagramEditor) activeEditorPart;
+								diagramEditor.getDiagramGraphicalViewer().deselectAll();
+							}
 							selectionService.addSelectionListener(selectionListener =	new ISelectionListener() {
 								@Override
 								public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 									
 										IStructuredSelection sel = (IStructuredSelection) selection;
-										System.out.println(sel.getFirstElement());
 										if (sel.getFirstElement() instanceof ShapeNodeEditPart) {
 											ShapeNodeEditPart editPart = (ShapeNodeEditPart) sel.getFirstElement();
+											NodeImpl nodeImpl = (NodeImpl) editPart.getModel();
+											EObject eObj = nodeImpl.getElement();
+											XMLResource resource = (XMLResource) eObj.eResource();
+											String id = resource.getID(eObj);
+											property.getVariable(varId).setId(id);
+											
 											String classname = editPart.getClass().getSimpleName().replace("EditPart", "");
+											
 				                			if (variablename.toLowerCase().equals(classname.toLowerCase())) {
 				                				link.setText(link.getText().replace(">....<", classname.toLowerCase()));
 				                				selectionService.removeSelectionListener(this);
@@ -385,7 +362,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 							String selectedTemplateString = combo.getItem(combo.getSelectionIndex());
 							Property last = properties.get(properties.size()-1);
 							properties.remove(last);
-							properties.add(new Property(selectedTemplateString));
+							properties.add(new Property(selectedTemplateString, diagramId));
 							properties.add(last);
 					        combo.dispose();
 					        combo = null;
