@@ -1,32 +1,32 @@
 package org.bflow.toolbox.hive.statement.views;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
+import org.bflow.toolbox.hive.attributes.AttributeFile;
+import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 
 
 public class Property {
 
+	private static AttributeFile attrFile;
 	private String templateString;
 	private List<Variable> variables;
 	private String id;
+	private String diagramId;
 
 	Property(String templateString, String diagramId) {
 		this.templateString = templateString;
 		this.variables = getVariablesFromTemplate();
-		this.id = diagramId + ";" + UUID.randomUUID().toString();
+		this.diagramId = diagramId;
+		this.id = "property_" + UUID.randomUUID().toString();
 	}
 
-	public Property(String templateString, List<Variable> variables, String id) {
+	public Property(String templateString, String diagramId, String id) {
 		super();
 		this.templateString = templateString;
-		this.variables = variables;
+		this.diagramId = diagramId;
 		this.id = id;
 	}
 
@@ -54,8 +54,16 @@ public class Property {
 		return null;
 	}
 	
-	private String getId() {
+	protected String getId() {
 		return id;
+	}
+	
+	private String getDiagramId() {
+		return diagramId;
+	}
+	
+	protected static void setAttributFile(AttributeFile af) {
+		attrFile = af;
 	}
 		
 	//Returns always a new List
@@ -100,41 +108,47 @@ public class Property {
 		return templateString;
 	}
 	
-	public static void persist(Property property) {
-		IPath rootPath = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
-		rootPath = rootPath.append(".properties/stored_properties.txt");
-		File templateFile = rootPath.toFile();
-		if (!templateFile.exists()) {
-			try {
-				templateFile.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		if (templateFile.isFile() && templateFile.canWrite()) {
-			FileWriter fw = null;
-			try {
-				fw = new FileWriter(templateFile, true);
-				fw.write(getPropertyAsStringEntry(property));
-				fw.write(System.getProperty("line.separator"));
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					if (fw != null) {
-						fw.close();
-					}
-				} catch (IOException e) {
-				}
-
-			}
-		}
-		// BufferedReader in = null;
-
+//	public static void persist(Property property) {
+//		IPath rootPath = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
+//		rootPath = rootPath.append(".properties/stored_properties.txt");
+//		File templateFile = rootPath.toFile();
+//		if (!templateFile.exists()) {
+//			try {
+//				templateFile.createNewFile();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//
+//		if (templateFile.isFile() && templateFile.canWrite()) {
+//			FileWriter fw = null;
+//			try {
+//				fw = new FileWriter(templateFile, true);
+//				fw.write(getPropertyAsStringEntry(property));
+//				fw.write(System.getProperty("line.separator"));
+//
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			} finally {
+//				try {
+//					if (fw != null) {
+//						fw.close();
+//					}
+//				} catch (IOException e) {
+//				}
+//
+//			}
+//		}
+//		// BufferedReader in = null;
+//	}
+	
+	public static void persistAsAttribute(Property property){
+		attrFile = AttributeFileRegistry.getInstance().getActiveAttributeFile();
+		attrFile.add(property.getDiagramId(), property.getId() , getPropertyAsStringEntry(property)); //$NON-NLS-1$
 	}
+	
+	
 	
 	//Returns always a new List
 	protected static String getPropertyAsStringEntry(Property property) {
@@ -150,7 +164,6 @@ public class Property {
 				}
 			}
 			StringBuilder builder = new StringBuilder();
-			builder.append(property.getId()+";");
 			for (String s : words) {
 				builder.append(s);
 				builder.append(" ");
@@ -179,7 +192,8 @@ public class Property {
 		public void setId(String id) {
 			this.id = id;
 			if (Property.this.isComplete()) {
-				persist(Property.this);
+//				persist(Property.this);
+				persistAsAttribute(Property.this);
 			}
 		}
 	}
