@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.bflow.toolbox.hive.attributes.AttributeFile;
+import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
+import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
+import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -38,7 +42,7 @@ import org.eclipse.ui.*;
 import org.eclipse.swt.SWT;
 
 
-public class StatementView extends ViewPart implements ISelectionListener{
+public class StatementView extends ViewPart implements ISelectionListener, IAttributeFileRegistryListener{
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -60,11 +64,14 @@ public class StatementView extends ViewPart implements ISelectionListener{
 
 	private ISelectionService selectionService;
 
-	private IEditorPart activeEditorPart;
+	private DiagramEditor activeEditorPart;
 
 	private String diagramId;
 	private ISelectionListener selectionListener;
 	private boolean selectionInProgress = false;
+
+
+	private AttributeFile attrFile;
 	
 	
 	/**
@@ -72,20 +79,33 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	 */
 	public StatementView() {
 		
-		activeEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		IEditorPart currentEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		activeEditorPart = null;
+		if (currentEditorPart instanceof DiagramEditor) {
+			activeEditorPart = (DiagramEditor) currentEditorPart;
+		}
+		
 		selectionService  = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
 		if (activeEditorPart != null && activeEditorPart instanceof DiagramEditor) {
+			attrFile = AttributeFileRegistry.getInstance().getActiveAttributeFile();
+			Property.setAttributFile(attrFile);
 			this.diagramTitle = activeEditorPart.getTitle();
-			DiagramEditor diagramEditor = (DiagramEditor) activeEditorPart;
-			DiagramEditPart dep = diagramEditor.getDiagramEditPart();
-			DiagramImpl diagramImpl = (DiagramImpl) dep.getModel();
-			EObject eObj = diagramImpl.getElement();
-			XMLResource resource = (XMLResource) eObj.eResource();
-			this.diagramId = resource.getID(eObj);
+			this.diagramId = getDiagramIdFromEditorPart((DiagramEditor) activeEditorPart);
 		}else {
 			this.diagramTitle = "Kein Diagram ausgewählt";
 		}
 		propertyTemplates = getStatmentTemplatesFromWorkspace();
+		
+		AttributeFileRegistry.getInstance().addRegistryListener(this);
+	}
+
+	private String getDiagramIdFromEditorPart(DiagramEditor activeEditorPart) {
+		DiagramEditor diagramEditor = activeEditorPart;
+		DiagramEditPart dep = diagramEditor.getDiagramEditPart();
+		DiagramImpl diagramImpl = (DiagramImpl) dep.getModel();
+		EObject eObj = diagramImpl.getElement();
+		XMLResource resource = (XMLResource) eObj.eResource();
+		return resource.getID(eObj);
 	}
 	
 	/**
@@ -120,6 +140,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 						if (!isLastProperty(currentProperty)) {
 							boolean bool = MessageDialog.openQuestion(viewer.getControl().getShell(), "Statement wirklich entfernen?", "Soll "+ currentProperty.getTemplateString() + " wirklich entfernt werden?");
 							if (bool) {
+								attrFile.remove(diagramId, currentProperty.getId());			
 								properties.remove(currentProperty);
 								controlsToLinks.get(currentProperty).dispose();
 								controlsToLinks.remove(currentProperty);
@@ -173,7 +194,7 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	            String temp = null;
 	            while ((temp = in.readLine()) != null) {
 	            	if (!temp.trim().isEmpty()) {
-	            		propertyTemplates.add(new Property(temp, null));
+	            		propertyTemplates.add(new Property(temp, null, null));
 					}
 	            }
 	        } catch (IOException e) {
@@ -214,49 +235,76 @@ public class StatementView extends ViewPart implements ISelectionListener{
 	
 	@Override
 	public void dispose() {
+		AttributeFileRegistry.getInstance().removeRegistryListener(this);
 		getSite().getPage().removeSelectionListener(this);
 		super.dispose();
 	}
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		IEditorPart editorPart = part.getSite().getPage().getActiveEditor();
-		
-		if (selectionService == null) {
-			selectionService = part.getSite().getWorkbenchWindow().getSelectionService();
-		}
-		
-		//Kontextwechsel - View muss reinitialisiert werden
-		if (editorPart != null && !editorPart.equals(activeEditorPart)) {
-//			combo.dispose();
-//			for (Property prop : controlsToLinks.keySet()) {
-//				controlsToLinks.get(prop).dispose();
-//			}
-//			controlsToLinks.clear();
-//			properties = new ArrayList<Property>();
-//			properties.add(new Property());
-//			selectionService = part.getSite().getWorkbenchWindow().getSelectionService();
-//			if (selectionInProgress) {
-//				selectionService.removeSelectionListener(selectionListener);
-//				selectionInProgress = false;
-//			}
-//			activeEditorPart = editorPart;
-//
-//			if (activeEditorPart instanceof DiagramEditor) {
-//				this.diagramTitle = activeEditorPart.getTitle();
-//				DiagramEditor diagramEditor = (DiagramEditor) activeEditorPart;
-//				DiagramEditPart dep = diagramEditor.getDiagramEditPart();
-//				DiagramImpl diagramImpl = (DiagramImpl) dep.getModel();
-//				EObject eObj = diagramImpl.getElement();
-//				XMLResource resource = (XMLResource) eObj.eResource();
-//				this.diagramId = resource.getID(eObj);
-//			}else {
-//				this.diagramTitle = "Kein Diagram ausgewählt";
-//			}
-//			viewer.refresh();
+		IEditorPart editorPart = part.getSite().getWorkbenchWindow().getActivePage().getActiveEditor();
+		selectionService = part.getSite().getWorkbenchWindow().getSelectionService();
+
+		// Kein unterstütztes Diagram geöffnet
+		if (!(editorPart instanceof DiagramEditor)) {
+			disableView();
 		}
 	}
+
+	@Override
+	public void noticeAttributeFileChange(AttributeFileRegistryEvent event) {
 		
+		if (event.attributeFile == null || event.diagramEditor == null) {
+			disableView();
+			return;
+		}
+		DiagramEditor editorPart =event.diagramEditor;
+
+		// Kontextwechsel - View muss reinitialisiert werden
+		if (!editorPart.equals(activeEditorPart)) {
+			activeEditorPart = editorPart;
+			
+			this.diagramTitle = activeEditorPart.getTitle();
+			tableColumPropertyTemplate.setText("Properties für " + diagramTitle);
+			this.diagramId = getDiagramIdFromEditorPart((DiagramEditor) activeEditorPart);
+			
+			for (Property prop : controlsToLinks.keySet()) {
+				controlsToLinks.get(prop).dispose();
+			}
+			controlsToLinks.clear();
+
+			combo.dispose();
+			combo = null;
+			if (selectionInProgress) {
+				selectionService.removeSelectionListener(selectionListener);
+				selectionInProgress = false;
+			}
+			
+			attrFile = event.attributeFile;
+			Property.setAttributFile(attrFile);
+			HashMap<String, String> allAttr = attrFile.get(diagramId);
+			properties.clear();
+			for (String string : allAttr.keySet()) {
+				if (string.matches("property_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) {
+					properties.add(new Property(allAttr.get(string), diagramId, string));
+				}
+			}
+			properties.add(new Property());
+			
+			viewer.getTable().setEnabled(true);
+			viewer.refresh();
+		}
+	}
+	
+	private void disableView() {
+		activeEditorPart = null;
+		this.diagramTitle = "";
+		tableColumPropertyTemplate.setText(diagramTitle);
+		this.diagramId = "";
+		viewer.getTable().setEnabled(false);
+		viewer.refresh();
+	}
+	
 	public String getDiagramId() {
 		return diagramId;
 	}
@@ -312,10 +360,9 @@ public class StatementView extends ViewPart implements ISelectionListener{
 							selectionInProgress = true;
 							selectionVarId = varId;
 							combo.setEnabled(false);
-							if (activeEditorPart instanceof DiagramEditor) {
-								DiagramEditor diagramEditor = (DiagramEditor) activeEditorPart;
-								diagramEditor.getDiagramGraphicalViewer().deselectAll();
-							}
+							
+							activeEditorPart.getDiagramGraphicalViewer().deselectAll();
+							
 							selectionService.addSelectionListener(selectionListener =	new ISelectionListener() {
 								@Override
 								public void selectionChanged(IWorkbenchPart part, ISelection selection) {
