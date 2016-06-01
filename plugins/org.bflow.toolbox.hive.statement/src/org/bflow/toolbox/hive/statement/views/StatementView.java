@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
@@ -32,6 +33,7 @@ import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.gmf.runtime.notation.impl.DiagramImpl;
 import org.eclipse.gmf.runtime.notation.impl.NodeImpl;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -118,6 +120,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
         viewer.getTable().setHeaderVisible(true);
         viewer.getTable().setLinesVisible(true);
         viewer.setContentProvider(new ArrayContentProvider());
+        ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE); 
         
         final TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(viewer,new FocusCellOwnerDrawHighlighter(viewer));
 		ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(viewer) {
@@ -433,19 +436,46 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		
 		@Override
 		public Image getImage(Object obj) {
+			Property prop = (Property) obj;
 			if (column == 0) {
-				if (isLastProperty((Property) obj)) {
+				if (isLastProperty(prop)) {
 					return null;
 					//return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
 					//return new Image(getSite().getShell().getDisplay(), this.getClass().getResourceAsStream("/icons/add.gif"));
 				}
-				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
+				if(prop.isComplete()){
+					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
+				}else {
+					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_WARN_TSK);
+				}
+				
+				
+				
 			}
 			if (column == 1) {
 				if (isLastProperty((Property) obj)) {
 					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
 				}
 				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED);
+			}
+			return null;
+		}
+		
+		@Override
+		public String getToolTipText(Object element) {
+			Property prop = (Property) element;
+			
+			if (column == 0 && prop.isComplete()) {
+				return "Property ist vollständig";
+			}
+			if (column == 0 && !prop.isComplete()) {
+				return "Property ist nicht vollständig. Alle Varaiblen müssen dem Diagramm zugeordnet sein";
+			}
+			if (column == 1 && isLastProperty(prop)) {
+				return null;
+			}
+			if (column == 1 && !isLastProperty(prop)) {
+				return "Löschen";
 			}
 			return null;
 		}

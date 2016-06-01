@@ -12,7 +12,7 @@ public class Property {
 
 	private static AttributeFile attrFile;
 	private String templateString;
-	private List<Variable> variables;
+	private List<Variable> variables = new ArrayList<>();
 	private String id;
 	private String diagramId;
 
