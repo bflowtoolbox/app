@@ -16,18 +16,18 @@ public class Property {
 	private String id;
 	private String diagramId;
 
+	//Konstruktor für Tempaltes
+	Property(String templateString) {
+		this.templateString = templateString;
+		this.variables = getVariablesFromTemplate();
+	}
+	
+	//Konstruktir für neue Properties
 	Property(String templateString, String diagramId) {
 		this.templateString = templateString;
 		this.variables = getVariablesFromTemplate();
 		this.diagramId = diagramId;
 		this.id = "property_" + UUID.randomUUID().toString();
-	}
-
-	public Property(String templateString, String diagramId, String id) {
-		super();
-		this.templateString = templateString;
-		this.diagramId = diagramId;
-		this.id = id;
 	}
 
 	public Property() {
@@ -60,6 +60,22 @@ public class Property {
 	
 	private String getDiagramId() {
 		return diagramId;
+	}
+	
+	protected void setDiagramId(String id) {
+		this.diagramId = id;
+	}
+	
+	protected void setId(String id) {
+		this.id = id;
+	}
+	
+	protected void setTemplateString(String templeteString) {
+		this.templateString = templeteString;
+	}
+	
+	protected void setVariables(List<Variable> vars) {
+		this.variables = vars;
 	}
 	
 	protected static void setAttributFile(AttributeFile af) {
@@ -159,7 +175,7 @@ public class Property {
 			for (int i = 0; i < words.length; i++) {
 				String word = words[i];
 				if (word.startsWith("$")) {
-					words[i] = property.getVariable(j).getId();
+					words[i] = "$" + property.getVariable(j).getId();
 					j++;
 				}
 			}
@@ -179,6 +195,11 @@ public class Property {
 
 		public Variable(String name) {
 			this.name = name;
+		}
+		
+		public Variable(String name, String id) {
+			this.name = name;
+			this.id = id;
 		}
 
 		public String getName() {
