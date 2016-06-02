@@ -14,6 +14,7 @@ import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
 import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
+import org.bflow.toolbox.hive.statement.views.Property.Variable;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -69,8 +70,13 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	private DiagramEditor activeEditorPart;
 
 	private String diagramId;
+	
 	private ISelectionListener selectionListener;
 	private boolean selectionInProgress = false;
+	//Proptery in selection-mode
+	private Property selectionProperty;
+	private int selectionVarId;
+	
 
 
 	private AttributeFile attrFile;
@@ -86,28 +92,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		if (currentEditorPart instanceof DiagramEditor) {
 			activeEditorPart = (DiagramEditor) currentEditorPart;
 		}
-		
 		selectionService  = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
-		if (activeEditorPart != null && activeEditorPart instanceof DiagramEditor) {
-			attrFile = AttributeFileRegistry.getInstance().getActiveAttributeFile();
-			Property.setAttributFile(attrFile);
-			this.diagramTitle = activeEditorPart.getTitle();
-			this.diagramId = getDiagramIdFromEditorPart((DiagramEditor) activeEditorPart);
-		}else {
-			this.diagramTitle = "Kein Diagram ausgewählt";
-		}
 		propertyTemplates = getStatmentTemplatesFromWorkspace();
-		
 		AttributeFileRegistry.getInstance().addRegistryListener(this);
-	}
-
-	private String getDiagramIdFromEditorPart(DiagramEditor activeEditorPart) {
-		DiagramEditor diagramEditor = activeEditorPart;
-		DiagramEditPart dep = diagramEditor.getDiagramEditPart();
-		DiagramImpl diagramImpl = (DiagramImpl) dep.getModel();
-		EObject eObj = diagramImpl.getElement();
-		XMLResource resource = (XMLResource) eObj.eResource();
-		return resource.getID(eObj);
 	}
 	
 	/**
@@ -115,6 +102,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	 * to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
+		
         parent.setLayout(new FillLayout());
         viewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
         viewer.getTable().setHeaderVisible(true);
@@ -151,6 +139,10 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 									combo.dispose();
 									combo = null;
 								}
+								if (selectionInProgress && currentProperty.equals(selectionProperty)) {
+									selectionService.removeSelectionListener(selectionListener);
+									selectionInProgress = false;
+								}	
 								viewer.refresh();
 							}
 						}
@@ -197,7 +189,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	            String temp = null;
 	            while ((temp = in.readLine()) != null) {
 	            	if (!temp.trim().isEmpty()) {
-	            		propertyTemplates.add(new Property(temp, null, null));
+	            		propertyTemplates.add(new Property(temp));
 					}
 	            }
 	        } catch (IOException e) {
@@ -256,7 +248,6 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 
 	@Override
 	public void noticeAttributeFileChange(AttributeFileRegistryEvent event) {
-		
 		if (event.attributeFile == null || event.diagramEditor == null) {
 			disableView();
 			return;
@@ -264,46 +255,130 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		DiagramEditor editorPart =event.diagramEditor;
 
 		// Kontextwechsel - View muss reinitialisiert werden
-		if (!editorPart.equals(activeEditorPart)) {
+		if (!editorPart.equals(activeEditorPart) || !event.attributeFile.equals(attrFile)) {
 			activeEditorPart = editorPart;
-			
+			attrFile = event.attributeFile;
+			Property.setAttributFile(attrFile);
 			this.diagramTitle = activeEditorPart.getTitle();
-			tableColumPropertyTemplate.setText("Properties für " + diagramTitle);
 			this.diagramId = getDiagramIdFromEditorPart((DiagramEditor) activeEditorPart);
+			HashMap<String, String> allAttr = attrFile.get(diagramId);
+			properties.clear();
 			
+			HashMap<String, String> shapeIdtoClassname = null;
+			if (allAttr != null) {
+				for (String propertyId : allAttr.keySet()) {
+					if (propertyId.matches("property_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) {
+						if (shapeIdtoClassname == null) {
+							shapeIdtoClassname = getShapeIdsAndClassnamesFromDiagram();
+						}
+						properties.add(getPropertyObjectfromAttribute(allAttr.get(propertyId), diagramId, propertyId, shapeIdtoClassname));
+					}
+				}
+			}
+			
+			properties.add(new Property());
+			tableColumPropertyTemplate.setText("Properties für " + diagramTitle);
 			for (Property prop : controlsToLinks.keySet()) {
 				controlsToLinks.get(prop).dispose();
 			}
 			controlsToLinks.clear();
-
-			combo.dispose();
-			combo = null;
+			if (combo != null) {
+				combo.dispose();
+				combo = null;
+			}
 			if (selectionInProgress) {
 				selectionService.removeSelectionListener(selectionListener);
 				selectionInProgress = false;
 			}
-			
-			attrFile = event.attributeFile;
-			Property.setAttributFile(attrFile);
-			HashMap<String, String> allAttr = attrFile.get(diagramId);
-			properties.clear();
-			for (String string : allAttr.keySet()) {
-				if (string.matches("property_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) {
-					properties.add(new Property(allAttr.get(string), diagramId, string));
-				}
-			}
-			properties.add(new Property());
-			
 			viewer.getTable().setEnabled(true);
 			viewer.refresh();
 		}
 	}
 	
+	private String getDiagramIdFromEditorPart(DiagramEditor activeEditorPart) {
+		DiagramEditor diagramEditor = activeEditorPart;
+		DiagramEditPart dep = diagramEditor.getDiagramEditPart();
+		DiagramImpl diagramImpl = (DiagramImpl) dep.getModel();
+		EObject eObj = diagramImpl.getElement();
+		XMLResource resource = (XMLResource) eObj.eResource();
+		return resource.getID(eObj);
+	}
+	
+	private Property getPropertyObjectfromAttribute(String propertyString, String diagramId, String propertyId, HashMap<String, String> shapeIdtoClassname) {
+		Property property = new Property();
+		property.setDiagramId(diagramId);
+		property.setId(propertyId);
+		
+		ArrayList<Variable> vars = new ArrayList<>();
+		
+		if (propertyString.contains("$")) { //$NON-NLS-1$
+			String[] words = propertyString.split("\\s"); //$NON-NLS-1$
+			for (int i = 0; i < words.length; i++) {
+				
+				if (words[i].startsWith("$")) { //$NON-NLS-1$
+					while (words[i].startsWith("$")) {
+						words[i] = words[i].substring(1);
+					}
+					String classname = shapeIdtoClassname.get(words[i]);
+					if (classname != null) {
+						Variable var = property.new Variable(classname, words[i]);
+						words[i] = classname;
+						vars.add(var);
+					}else {
+						words[i] = "unknown";
+						vars.add(property.new Variable("unknown"));
+					}
+				}
+				property.setVariables(vars);
+			}
+			StringBuilder builder = new StringBuilder();
+			for(String s : words) {
+			    builder.append(s);
+			    builder.append(" ");
+			}
+			property.setTemplateString(builder.toString().trim());
+		}else {
+			property.setTemplateString(propertyString);
+		}
+		return property;
+	}
+
+	private HashMap<String, String> getShapeIdsAndClassnamesFromDiagram() {
+		HashMap<String, String> shapeIdtoClassname = new HashMap<>();
+		List<Object> children = activeEditorPart.getDiagramEditPart().getChildren();
+		for (Object child : children) {
+			if (child instanceof ShapeNodeEditPart) {
+				//hole ShapeId
+				ShapeNodeEditPart editPart = (ShapeNodeEditPart) child;
+				NodeImpl nodeImpl = (NodeImpl) editPart.getModel();
+				EObject eObj = nodeImpl.getElement();
+				XMLResource resource = (XMLResource) eObj.eResource();
+				String id = resource.getID(eObj);
+				String classname = child.getClass().getSimpleName().replace("EditPart", "").toLowerCase();
+				shapeIdtoClassname.put(id, classname);
+			}
+		}
+		return shapeIdtoClassname;
+	}
+
 	private void disableView() {
-		activeEditorPart = null;
+		//activeEditorPart = null;
 		this.diagramTitle = "";
 		tableColumPropertyTemplate.setText(diagramTitle);
 		this.diagramId = "";
+		properties.clear();
+		for (Property prop : controlsToLinks.keySet()) {
+			controlsToLinks.get(prop).dispose();
+		}
+		controlsToLinks.clear();
+		if (combo != null) {
+			combo.dispose();
+			combo = null;
+		}
+		if (selectionInProgress) {
+			selectionService.removeSelectionListener(selectionListener);
+			selectionInProgress = false;
+		}		
 		viewer.getTable().setEnabled(false);
 		viewer.refresh();
 	}
@@ -333,7 +408,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 					link.setText(property.getTemplateStringWithLinks());
 					link.addListener(SWT.Selection, new Listener() {
 
-						private int selectionVarId;
+						
 						
 						@Override
 						public void handleEvent(Event event) {
@@ -342,11 +417,12 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 							final int varId = Integer.parseInt(event.text);
 							final String variablename = property.getVariablesFromTemplate().get(varId).getName();
 							
-							if (selectionInProgress && selectionVarId == varId) {
+							if (selectionInProgress && property.equals(selectionProperty) && selectionVarId == varId) {
 								link.setText(link.getText().replace(">....<", variablename));
 								selectionService.removeSelectionListener(selectionListener);
                 				selectionInProgress = false;
                 				selectionVarId = -1;
+                				selectionProperty = null;
                 				combo.setEnabled(true);
 								return;
 							}
@@ -362,6 +438,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 							
 							selectionInProgress = true;
 							selectionVarId = varId;
+							selectionProperty = property;
 							combo.setEnabled(false);
 							
 							activeEditorPart.getDiagramGraphicalViewer().deselectAll();
@@ -386,6 +463,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				                				selectionService.removeSelectionListener(this);
 				                				selectionInProgress = false;
 				                				selectionVarId = -1;
+				                				selectionProperty = null;
 				                				combo.setEnabled(true);
 												viewer.refresh();
 				                			}
@@ -435,12 +513,16 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		}
 		
 		@Override
+		public String getText(Object element) {
+			return "";
+		}
+		
+		@Override
 		public Image getImage(Object obj) {
 			Property prop = (Property) obj;
 			if (column == 0) {
 				if (isLastProperty(prop)) {
-					return null;
-					//return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
+					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
 					//return new Image(getSite().getShell().getDisplay(), this.getClass().getResourceAsStream("/icons/add.gif"));
 				}
 				if(prop.isComplete()){
@@ -454,7 +536,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			}
 			if (column == 1) {
 				if (isLastProperty((Property) obj)) {
-					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
+					return null;
 				}
 				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED);
 			}
