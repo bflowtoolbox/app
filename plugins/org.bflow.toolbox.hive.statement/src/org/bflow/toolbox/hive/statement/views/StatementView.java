@@ -76,8 +76,6 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	//Proptery in selection-mode
 	private Property selectionProperty;
 	private int selectionVarId;
-	
-
 
 	private AttributeFile attrFile;
 	
@@ -174,6 +172,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
         properties.add(new Property());
         
         viewer.setInput(properties);
+        disableView();
 	}
 	
 	private List<Property> getStatmentTemplatesFromWorkspace() {
@@ -406,17 +405,13 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				if (!isLastProperty(property) && !controlsToLinks.containsKey(property)) {
 					final Link link = new Link((Composite) cell.getViewerRow().getControl(), SWT.NONE);
 					link.setText(property.getTemplateStringWithLinks());
+					link.setToolTipText("nicht zugeordnet");
 					link.addListener(SWT.Selection, new Listener() {
-
-						
 						
 						@Override
 						public void handleEvent(Event event) {
-							
-							
 							final int varId = Integer.parseInt(event.text);
 							final String variablename = property.getVariablesFromTemplate().get(varId).getName();
-							
 							if (selectionInProgress && property.equals(selectionProperty) && selectionVarId == varId) {
 								link.setText(link.getText().replace(">....<", variablename));
 								selectionService.removeSelectionListener(selectionListener);
@@ -450,16 +445,17 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 										IStructuredSelection sel = (IStructuredSelection) selection;
 										if (sel.getFirstElement() instanceof ShapeNodeEditPart) {
 											ShapeNodeEditPart editPart = (ShapeNodeEditPart) sel.getFirstElement();
-											NodeImpl nodeImpl = (NodeImpl) editPart.getModel();
-											EObject eObj = nodeImpl.getElement();
-											XMLResource resource = (XMLResource) eObj.eResource();
-											String id = resource.getID(eObj);
-											property.getVariable(varId).setId(id);
-											
 											String classname = editPart.getClass().getSimpleName().replace("EditPart", "");
 											
 				                			if (variablename.toLowerCase().equals(classname.toLowerCase())) {
+				                				NodeImpl nodeImpl = (NodeImpl) editPart.getModel();
+												EObject eObj = nodeImpl.getElement();
+												XMLResource resource = (XMLResource) eObj.eResource();
+												String id = resource.getID(eObj);
+												property.getVariable(varId).setId(id);
+				                				
 				                				link.setText(link.getText().replace(">....<", classname.toLowerCase()));
+				                				link.setToolTipText("zugeordnet");
 				                				selectionService.removeSelectionListener(this);
 				                				selectionInProgress = false;
 				                				selectionVarId = -1;
