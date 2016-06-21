@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bflow.toolbox.hive.attributes.AttributeFile;
-import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 
 
 public class Property {
@@ -160,13 +159,10 @@ public class Property {
 //	}
 	
 	public static void persistAsAttribute(Property property){
-		attrFile = AttributeFileRegistry.getInstance().getActiveAttributeFile();
 		attrFile.add(property.getDiagramId(), property.getId() , getPropertyAsStringEntry(property)); //$NON-NLS-1$
 	}
 	
 	
-	
-	//Returns always a new List
 	protected static String getPropertyAsStringEntry(Property property) {
 		String tempString = property.getTemplateString();
 		if (tempString.contains("$")) { //$NON-NLS-1$
