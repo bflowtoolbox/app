@@ -38,7 +38,7 @@ public class BflowPerspective implements IPerspectiveFactory {
 	@Override
 	public void createInitialLayout(IPageLayout layout) {
 		IFolderLayout leftTopFolder = layout.createFolder(LeftTopFolderId, IPageLayout.LEFT, 0.2f, layout.getEditorArea());
-		IFolderLayout rigtTopFolder = layout.createFolder(RightTopFolderId, IPageLayout.RIGHT, 0.2f, layout.getEditorArea());
+		IFolderLayout rigtTopFolder = layout.createFolder(RightTopFolderId, IPageLayout.RIGHT, 0.8f, layout.getEditorArea());
 		IFolderLayout leftBottomFolder = layout.createFolder(LeftBottomFolderId, IPageLayout.BOTTOM, 0.4f, LeftTopFolderId);
 		IFolderLayout bottomFolder = layout.createFolder(BottomFolderId, IPageLayout.BOTTOM, 0.7f, layout.getEditorArea());
 		

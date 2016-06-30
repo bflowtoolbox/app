@@ -92,7 +92,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	/**
 	 * Extension view id
 	 */
-	public static final String VIEW_ID = "org.bflow.toolbox.attributes.view"; //$NON-NLS-1$
+	public static final String VIEW_ID = "org.bflow.toolbox.hive.attributes.view"; //$NON-NLS-1$
 	
 	private AttributeFile attrFile;
 
@@ -111,7 +111,7 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 	
 	private boolean sortByName = true;
 	private boolean sortASC = false;
-
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite)
 	 */

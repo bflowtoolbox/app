@@ -8,6 +8,7 @@ import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.interfaces.IDiagramExportComponent;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
+import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeViewPart;
 import org.bflow.toolbox.hive.interchange.mif.core.IInterchangeDescriptor;
 import org.bflow.toolbox.hive.interchange.mif.core.IInterchangeProcessor;
@@ -18,6 +19,8 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * Implements <code>IComponent</code> for exporting a gmf diagram.
@@ -83,7 +86,7 @@ public class DiagramExportComponent implements IDiagramExportComponent {
 					.getFileExtensions()[0]);
 
 			// Handle legacy format
-			if(xDescription instanceof org.bflow.toolbox.hive.interchange.model.XMLBasedExportDescriptor) {
+			if (xDescription instanceof org.bflow.toolbox.hive.interchange.model.XMLBasedExportDescriptor) {
 				((org.bflow.toolbox.hive.interchange.model.XMLBasedExportDescriptor)xDescription).parse();				
 			}			
 			
@@ -95,24 +98,34 @@ public class DiagramExportComponent implements IDiagramExportComponent {
 			
 			ArrayList<String> selElements = new ArrayList<String>();
 			
-			for(Object obj:sel.toArray()) {
-				if(obj instanceof ShapeNodeEditPart) {
+			for (Object obj:sel.toArray()) {
+				if (obj instanceof ShapeNodeEditPart) {
 					selElements.add(EMFCoreUtil.getProxyID(((ShapeNodeEditPart)obj).resolveSemanticElement()));
 				}
 			}
 			
 			// Add attributes for the selected elements
-			AttributeFile aF = AttributeViewPart.getInstance().getAttributeFile();
+			AttributeFile attributeFile = AttributeFileRegistry.getInstance().getActiveAttributeFile();
 			
-			aF.load();
+			/* 28.06.2016 - Arian Storch
+			 * Because of the lifecycle of eclipse it may happen that the attribute file registry hasn't been normally set up 
+			 * as expected. In this case, the attribute file is NULL. So we force to initialize the registry manually.
+			 */
+			if (attributeFile == null) {
+				IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+				AttributeFileRegistry.getInstance().partActivated(editor);
+				attributeFile = AttributeFileRegistry.getInstance().getActiveAttributeFile();
+			}
 			
-			for(String id:selElements) {
-				aF.add(id, "marked", "true");
+			attributeFile.load();
+			
+			for (String id:selElements) {
+				attributeFile.add(id, "marked", "true");
 			}
 			
 			// Save the modified attribute file
-			if(selElements.size() > 0)
-				aF.save();
+			if (selElements.size() > 0)
+				attributeFile.save();
 			
 			
 			File targetFolder = target.getParentFile();
@@ -132,12 +145,12 @@ public class DiagramExportComponent implements IDiagramExportComponent {
 			
 			// Remove the selected elements from the attribute file
 			for(String id:selElements) {
-				aF.remove(id, "marked");
+				attributeFile.remove(id, "marked");
 			}
 			
 			// Save the attribute file
 			if(selElements.size() > 0)
-				aF.save();
+				attributeFile.save();
 			
 		} catch (Exception ex) {
 			throw new ComponentException("Could not create temp file", ex);

@@ -9,12 +9,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources;bundle-version="3.4.2",
  org.eclipse.gmf.runtime.notation;bundle-version="1.1.1",
  org.bflow.toolbox.epc.model;bundle-version="1.0.0",
- org.eclipse.xtend;bundle-version="0.7.2",
- org.eclipse.xtend.typesystem.emf;bundle-version="0.7.2",
  org.infai.m3b.visio.emf;bundle-version="1.2.0",
  org.infai.m3b.visio.emf.exporter;bundle-version="1.2.0",
  org.infai.m3b.visio.emf.importer;bundle-version="1.2.0",
- org.infai.m3b.visio.emf.oaw;bundle-version="1.2.0"
+ org.infai.m3b.visio.emf.oaw;bundle-version="1.2.0",
+ org.eclipse.emf.mwe.core;bundle-version="1.2.1"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: Bflow Dev Team
