@@ -45,7 +45,7 @@ import org.eclipse.ui.*;
 import org.eclipse.swt.SWT;
 
 
-public class StatementView extends ViewPart implements ISelectionListener, IAttributeFileRegistryListener{
+public class StatementView extends ViewPart implements ISelectionListener, IAttributeFileRegistryListener {
 
 	/**
 	 * The ID of the view as specified by the extension.
