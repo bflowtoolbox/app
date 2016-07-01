@@ -493,17 +493,19 @@ public class ModelWizard extends Wizard {
 			 */
 			if (anchor.getSourceConnections().size() > 0) {
 
-				ArcEditPart arc = (ArcEditPart) anchor.getSourceConnections()
-						.get(0);
-
-				connectionStack.add(new Connection(connectionStack
-						.lastElement().getTarget(), arc.getTarget()));
+				List cons = anchor.getSourceConnections();
+				for (Object con : cons) {
+					if (con instanceof ArcEditPart) {
+						ArcEditPart arc = (ArcEditPart) con;
+						connectionStack.add(new Connection(connectionStack.lastElement().getTarget(), arc.getTarget()));
+						deleteConnection(arc);
+						break;
+					}
+				}
 
 				if (!quickFix)
 					connectionStack.add(new Connection(anchor, connectionStack
 							.get(0).getSource()));
-
-				deleteConnection(arc);
 			}
 
 			if (connectionStack.size() != 0
