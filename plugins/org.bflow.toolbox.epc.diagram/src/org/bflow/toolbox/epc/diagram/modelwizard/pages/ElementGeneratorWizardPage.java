@@ -439,6 +439,24 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 		tableViewer.update(newStep, null);
 		tableViewer.editElement(newStep, 2);
+		
+		ViewerCell focusCell = focusCellManager.getFocusCell();
+		int index = focusCell.getVisualIndex();
+		try {
+			if (index > n*2) {// Cursor liegt außerhalb des Bearbeitungbereiches, setzte auf erste zurück
+				ViewerCell nextCell = focusCell;
+				for (int i = 0; i < index - 2; i++) {
+					nextCell = nextCell.getNeighbor(ViewerCell.LEFT, true);
+				}
+				if (nextCell != null) {
+					setFocusCell.invoke(focusCellManager, nextCell);
+					tableViewer.editElement(nextCell.getElement(), 2);
+				}	
+			}
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+			logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.", e1);
+		}
+		
 	}
 
 	/**

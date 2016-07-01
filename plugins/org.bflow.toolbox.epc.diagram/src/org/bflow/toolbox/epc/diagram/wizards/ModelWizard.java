@@ -279,7 +279,7 @@ public class ModelWizard extends Wizard {
 			if (connector.getConnectorType() != ConnectorType.NONE
 					&& newConnector) {
 				split = true;
-				createConnector(connector.getConnectorType(), new Point(x, y));
+				createConnector(connector.getConnectorType(), new Point(x, y), false);
 				splitPart = lastDrawnCNEditParts.peek();
 
 				y += Constants.DRAW_CONNECTOR_Y_ADDITION;
@@ -388,7 +388,7 @@ public class ModelWizard extends Wizard {
 							SetValueCommand svc = createSetValueCommandForShapeNaming(createRequest, condition.getShapeName());
 							shapesNamingCommand.add(new ICommandProxy(svc));
 							//create Connections
-							if (condition.isIncoming()) {
+							if (!condition.isIncoming()) {
 								connectionStack.add(new Connection(additionalShape,editPart, condition.getArcType()));
 							}else {
 								connectionStack.add(new Connection(editPart,additionalShape, condition.getArcType()));
@@ -437,8 +437,7 @@ public class ModelWizard extends Wizard {
 			if (split) {
 				// last process step of connector?
 				if (isLastConnectorStep(processStep)) {
-					createConnector(connector.getConnectorType(), new Point(x,
-							y));
+					createConnector(connector.getConnectorType(), new Point(x,y),true);
 					y += Constants.DRAW_CONNECTOR_Y_ADDITION;
 
 					boolean none = true;
@@ -494,17 +493,19 @@ public class ModelWizard extends Wizard {
 			 */
 			if (anchor.getSourceConnections().size() > 0) {
 
-				ArcEditPart arc = (ArcEditPart) anchor.getSourceConnections()
-						.get(0);
-
-				connectionStack.add(new Connection(connectionStack
-						.lastElement().getTarget(), arc.getTarget()));
+				List cons = anchor.getSourceConnections();
+				for (Object con : cons) {
+					if (con instanceof ArcEditPart) {
+						ArcEditPart arc = (ArcEditPart) con;
+						connectionStack.add(new Connection(connectionStack.lastElement().getTarget(), arc.getTarget()));
+						deleteConnection(arc);
+						break;
+					}
+				}
 
 				if (!quickFix)
 					connectionStack.add(new Connection(anchor, connectionStack
 							.get(0).getSource()));
-
-				deleteConnection(arc);
 			}
 
 			if (connectionStack.size() != 0
@@ -628,7 +629,7 @@ public class ModelWizard extends Wizard {
 	private void checkBendpoints() {
 	}
 
-	private void createConnector(ConnectorType type, Point location) {
+	private void createConnector(ConnectorType type, Point location, boolean isJoin) {
 		if (type == null)
 			return;
 		
@@ -652,6 +653,10 @@ public class ModelWizard extends Wizard {
 				.get(listChildren.size() - 1);
 
 		lastDrawnCNEditParts.push(editPart);
+		if (isJoin) {
+			lastDrawnEditParts.push(editPart);
+		}
+		
 		
 
 		if (connectorTop == null)
