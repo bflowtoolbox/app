@@ -45,6 +45,11 @@ import org.eclipse.ui.*;
 import org.eclipse.swt.SWT;
 
 
+/**
+ * Implements the view part to support the add-ons Statement View.
+ * 
+ * @author Markus Schnädelbach
+ */
 public class StatementView extends ViewPart implements ISelectionListener, IAttributeFileRegistryListener{
 
 	/**
@@ -73,7 +78,8 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	
 	private ISelectionListener selectionListener;
 	private boolean selectionInProgress = false;
-	//Proptery in selection-mode
+	
+	//current Proptery in user-selection-mode
 	private Property selectionProperty;
 	private int selectionVarId;
 
@@ -116,13 +122,6 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				ViewerCell focusCell = (ViewerCell) event.getSource();
 				int currentColumn = focusCell.getVisualIndex();
 				Property currentProperty = (Property) focusCell.getElement();
-				if (currentColumn == 0) {
-//					if (isLastStatement(currentStatement)) {
-//						if (event.keyCode == SWT.SPACE ||event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
-//							addSatementAction.run();
-//						}
-//					}
-				}
 				
 				if (currentColumn == 1) {
 					if (event.keyCode == SWT.SPACE ||event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
@@ -175,6 +174,12 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
         disableView();
 	}
 	
+	
+	/**
+	 * Reads the available templates from the workspace.
+	 * 
+	 * @return a List of available Property-Templates
+	 */
 	private List<Property> getStatmentTemplatesFromWorkspace() {
 		ArrayList<Property> propertyTemplates = new ArrayList<>();
 		
@@ -212,6 +217,13 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		viewer.getControl().setFocus();
 	}
 	
+	
+	/**
+	 * Checks if the given property is the last in the current view table
+	 * 
+	 * @param Property
+	 * @return true if the given property is the last in the view table
+	 */
 	private boolean isLastProperty(Property property) {
 		return this.properties.indexOf(property) == this.properties.size()-1;
 	}
@@ -227,6 +239,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		site.getPage().addSelectionListener(this);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.WorkbenchPart#dispose()
+	 */
 	@Override
 	public void dispose() {
 		AttributeFileRegistry.getInstance().removeRegistryListener(this);
@@ -234,6 +249,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		super.dispose();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui.IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
+	 */
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		IEditorPart editorPart = part.getSite().getWorkbenchWindow().getActivePage().getActiveEditor();
@@ -245,6 +263,11 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		}
 	}
 
+	/**
+	 * If the attributefile is changed, that method will be called and re-init
+	 * the Statement-View
+	 * @see org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener#noticeAttributeFileChange(org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent)
+	 */
 	@Override
 	public void noticeAttributeFileChange(AttributeFileRegistryEvent event) {
 		if (event.attributeFile == null || event.diagramEditor == null) {
@@ -294,6 +317,12 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		}
 	}
 	
+	/**
+	 * Returns the uuid of the current diagram 
+	 * 
+	 * @param activeEditorPart as DiagramEditor
+	 * @return the uuid 
+	 */
 	private String getDiagramIdFromEditorPart(DiagramEditor activeEditorPart) {
 		DiagramEditor diagramEditor = activeEditorPart;
 		DiagramEditPart dep = diagramEditor.getDiagramEditPart();
@@ -303,6 +332,15 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		return resource.getID(eObj);
 	}
 	
+	/**
+	 * Returns a new property restored from a attribute.
+	 * 
+	 * @param propertyString
+	 * @param diagramId
+	 * @param propertyId
+	 * @param shapeIdtoClassname
+	 * @return Property - the restored Property
+	 */
 	private Property getPropertyObjectfromAttribute(String propertyString, String diagramId, String propertyId, HashMap<String, String> shapeIdtoClassname) {
 		Property property = new Property();
 		property.setDiagramId(diagramId);
@@ -342,6 +380,10 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		return property;
 	}
 
+	/**
+	 * Returns all uuids:classnames of ShapeNodeEditParts contained in the activeEdidorPart
+	 * @return Hashmap with uuid and classname pairs of ShapeNodeEditParts
+	 */
 	private HashMap<String, String> getShapeIdsAndClassnamesFromDiagram() {
 		HashMap<String, String> shapeIdtoClassname = new HashMap<>();
 		List<Object> children = activeEditorPart.getDiagramEditPart().getChildren();
@@ -360,6 +402,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		return shapeIdtoClassname;
 	}
 
+	/**
+	 * Disabled the StatementView
+	 */
 	private void disableView() {
 		//activeEditorPart = null;
 		this.diagramTitle = "";
@@ -394,6 +439,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			this.column = column;
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.eclipse.jface.viewers.ColumnLabelProvider#update(org.eclipse.jface.viewers.ViewerCell)
+		 */
 		@Override
 		public void update(ViewerCell cell) {
 			super.update(cell);
@@ -508,11 +556,17 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			}
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
+		 */
 		@Override
 		public String getText(Object element) {
 			return "";
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getImage(java.lang.Object)
+		 */
 		@Override
 		public Image getImage(Object obj) {
 			Property prop = (Property) obj;
@@ -539,6 +593,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			return null;
 		}
 		
+		/* (non-Javadoc)
+		 * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipText(java.lang.Object)
+		 */
 		@Override
 		public String getToolTipText(Object element) {
 			Property prop = (Property) element;
