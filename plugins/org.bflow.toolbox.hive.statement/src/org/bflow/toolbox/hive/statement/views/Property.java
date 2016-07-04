@@ -7,6 +7,11 @@ import java.util.UUID;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 
 
+/**
+ * Represents a property entry for the StatmentView-TableViewer
+ * 
+ * @author Markus Schnädelbach
+ */
 public class Property {
 
 	private static AttributeFile attrFile;
@@ -15,13 +20,11 @@ public class Property {
 	private String id;
 	private String diagramId;
 
-	//Konstruktor für Tempaltes
 	Property(String templateString) {
 		this.templateString = templateString;
 		this.variables = getVariablesFromTemplate();
 	}
 	
-	//Konstruktir für neue Properties
 	Property(String templateString, String diagramId) {
 		this.templateString = templateString;
 		this.variables = getVariablesFromTemplate();
@@ -36,6 +39,11 @@ public class Property {
 		return templateString;
 	}
 	
+	/**
+	 * Returns true if all variables are referenced to an editpart
+	 * (Referenced by ID of editpart)
+	 * @return true if all variables are referenced to an editpart
+	 */
 	public boolean isComplete(){
 		for (Variable var : variables) {
 			if(var.getId().isEmpty()){
@@ -81,7 +89,10 @@ public class Property {
 		attrFile = af;
 	}
 		
-	//Returns always a new List
+	/**
+	 * Returns always a new list with the contained variables of this property
+	 * @return List with Variables of this property
+	 */
 	protected List<Variable> getVariablesFromTemplate() {
 		ArrayList<Variable> vars = new ArrayList<>();
 
@@ -99,6 +110,10 @@ public class Property {
 		return vars;
 	}
 	
+	/**
+	 * Returns a string of the property name with variables as link
+	 * @return String with linked variables
+	 */
 	protected String getTemplateStringWithLinks() {
 		if (templateString.contains("$")) { //$NON-NLS-1$
 			String[] words = templateString.split("\\s"); //$NON-NLS-1$
@@ -123,46 +138,20 @@ public class Property {
 		return templateString;
 	}
 	
-//	public static void persist(Property property) {
-//		IPath rootPath = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
-//		rootPath = rootPath.append(".properties/stored_properties.txt");
-//		File templateFile = rootPath.toFile();
-//		if (!templateFile.exists()) {
-//			try {
-//				templateFile.createNewFile();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//
-//		if (templateFile.isFile() && templateFile.canWrite()) {
-//			FileWriter fw = null;
-//			try {
-//				fw = new FileWriter(templateFile, true);
-//				fw.write(getPropertyAsStringEntry(property));
-//				fw.write(System.getProperty("line.separator"));
-//
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			} finally {
-//				try {
-//					if (fw != null) {
-//						fw.close();
-//					}
-//				} catch (IOException e) {
-//				}
-//
-//			}
-//		}
-//		// BufferedReader in = null;
-//	}
-	
+	/**
+	 * Stores the property as diagram attribute.
+	 * @param property
+	 */
 	public static void persistAsAttribute(Property property){
 		attrFile.add(property.getDiagramId(), property.getId() , getPropertyAsStringEntry(property)); //$NON-NLS-1$
 	}
 	
 	
+	/**
+	 * Converts the property to string, for saving them.
+	 * @param property
+	 * @return String
+	 */
 	protected static String getPropertyAsStringEntry(Property property) {
 		String tempString = property.getTemplateString();
 		if (tempString.contains("$")) { //$NON-NLS-1$
@@ -209,7 +198,6 @@ public class Property {
 		public void setId(String id) {
 			this.id = id;
 			if (Property.this.isComplete()) {
-//				persist(Property.this);
 				persistAsAttribute(Property.this);
 			}
 		}
