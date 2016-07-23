@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,10 +80,10 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	
 	private ISelectionListener selectionListener;
 	private boolean selectionInProgress = false;
-	
 	//current Proptery in user-selection-mode
 	private Property selectionProperty;
 	private int selectionVarId;
+	private String selectionLinkText;
 
 	private AttributeFile attrFile;
 	
@@ -289,6 +291,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			HashMap<String, String> shapeIdtoClassname = null;
 			if (allAttr != null) {
 				for (String propertyId : allAttr.keySet()) {
+					//Id is an valid UUID?
 					if (propertyId.matches("property_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) {
 						if (shapeIdtoClassname == null) {
 							shapeIdtoClassname = getShapeIdsAndClassnamesFromDiagram();
@@ -455,13 +458,13 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 					link.setText(property.getTemplateStringWithLinks());
 					link.setToolTipText("nicht zugeordnet");
 					link.addListener(SWT.Selection, new Listener() {
-						
+
 						@Override
 						public void handleEvent(Event event) {
 							final int varId = Integer.parseInt(event.text);
 							final String variablename = property.getVariablesFromTemplate().get(varId).getName();
 							if (selectionInProgress && property.equals(selectionProperty) && selectionVarId == varId) {
-								link.setText(link.getText().replace(">....<", variablename));
+								link.setText(selectionLinkText);
 								selectionService.removeSelectionListener(selectionListener);
                 				selectionInProgress = false;
                 				selectionVarId = -1;
@@ -473,14 +476,14 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 								return;
 							}
 							
-							String linktext = link.getText();
-							String oldLink = "<a href=\""+ event.text +"\">" + "["+ variablename + "]" + "</a>";
+							String oldLinkText = link.getText();
 							String newLink = "<a href=\""+ event.text +"\">" + "["+ ">....<" + "]" + "</a>";
-							linktext = linktext.replace(oldLink, newLink);
-							link.setText(linktext);
+							String newLinkText = oldLinkText.replaceAll("<a href=\"" + event.text + "\">\\[(.*?)\\]</a>", newLink);
+							link.setText(newLinkText);
 							
 							selectionInProgress = true;
 							selectionVarId = varId;
+							selectionLinkText = oldLinkText;
 							selectionProperty = property;
 							combo.setEnabled(false);
 							
@@ -501,8 +504,31 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 												XMLResource resource = (XMLResource) eObj.eResource();
 												String id = resource.getID(eObj);
 												property.getVariable(varId).setId(id);
+												
+												//try to get the name attribute of that shape
+												String shapename = null;
+												Method getName = null;
+												try {
+												    getName = eObj.getClass().getMethod("getName");
+												    
+												    if(getName != null) {
+												        Object shapenameobject = getName.invoke(eObj);
+												        if (shapenameobject instanceof String) {
+															shapename = (String) shapenameobject;
+														}
+												    }
+												} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+												    e.printStackTrace();
+												}
 				                				
-				                				link.setText(link.getText().replace(">....<", classname.toLowerCase()));
+												String replacementString;
+												if (shapename != null && !shapename.trim().isEmpty()) {
+													replacementString = shapename;
+												}else {
+													replacementString = id;
+												}
+												
+				                				link.setText(link.getText().replace(">....<", replacementString));
 				                				link.setToolTipText("zugeordnet");
 				                				selectionService.removeSelectionListener(this);
 				                				selectionInProgress = false;
