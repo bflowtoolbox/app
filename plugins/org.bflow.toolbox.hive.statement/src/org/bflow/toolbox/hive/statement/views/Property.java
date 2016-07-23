@@ -142,6 +142,10 @@ public class Property {
 				if (word.startsWith("$")) { //$NON-NLS-1$
 					while (word.startsWith("$")) {
 						word = word.substring(1);
+						//Variable endet mit "_[0-9]"
+						if (word.matches("^.+?(_)\\d$")) {
+							word = word.substring(0, word.length()-2);
+						}
 					}
 					vars.add(new Variable(word));
 				}
@@ -163,6 +167,10 @@ public class Property {
 				if (word.startsWith("$")) {
 					while (word.startsWith("$")) {
 						word = word.substring(1);
+						//Variable endet mit "_[0-9]"
+						if (word.matches("^.+?(_)\\d$")) {
+							word = word.substring(0, word.length()-2);
+						}
 					}
 					words[i] = "<a href=\""+ j +"\">" + "["+ word + "]" + "</a>";
 					j++;
