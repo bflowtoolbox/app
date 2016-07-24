@@ -68,7 +68,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	
 	private String diagramTitle;
 
-	private List<String> propertyTemplates;
+	private List<Property> propertyTemplates;
 
 	private TableColumn tableColumPropertyTemplate;
 
@@ -179,12 +179,11 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	
 	/**
 	 * Reads the available templates from the workspace.
-	 * (.properties/templates.txt)
 	 * 
-	 * @return a List of available Property-Template Strings
+	 * @return a List of available Property-Templates
 	 */
-	private List<String> getStatmentTemplatesFromWorkspace() {
-		ArrayList<String> propertyTemplates = new ArrayList<>();
+	private List<Property> getStatmentTemplatesFromWorkspace() {
+		ArrayList<Property> propertyTemplates = new ArrayList<>();
 		
 		IPath rootPath = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
 		rootPath = rootPath.append(".properties/templates.txt");
@@ -196,7 +195,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	            String temp = null;
 	            while ((temp = in.readLine()) != null) {
 	            	if (!temp.trim().isEmpty()) {
-	            		propertyTemplates.add(temp);
+	            		propertyTemplates.add(new Property(temp));
 					}
 	            }
 	        } catch (IOException e) {
@@ -224,7 +223,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	/**
 	 * Checks if the given property is the last in the current view table
 	 * 
-	 * @param Property - to check
+	 * @param Property
 	 * @return true if the given property is the last in the view table
 	 */
 	private boolean isLastProperty(Property property) {
@@ -279,7 +278,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		}
 		DiagramEditor editorPart =event.diagramEditor;
 
-		// Context change - View must re-initialed
+		// Kontextwechsel - View muss reinitialisiert werden
 		if (!editorPart.equals(activeEditorPart) || !event.attributeFile.equals(attrFile)) {
 			activeEditorPart = editorPart;
 			attrFile = event.attributeFile;
@@ -289,7 +288,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			HashMap<String, String> allAttr = attrFile.get(diagramId);
 			properties.clear();
 			
-			HashMap<String, String> shapeIdtoClassname = null;
+			HashMap<String, NodeName> shapeIdtoClassname = null;
 			if (allAttr != null) {
 				for (String propertyId : allAttr.keySet()) {
 					//Id is an valid UUID?
@@ -322,6 +321,35 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	}
 	
 	/**
+	 * Returns the value of the nameattribute of the given eObject.
+	 * If there is no such attribute it will return null 
+	 * 
+	 * @param eObj
+	 * @return String or null
+	 */
+	private String getNameAttributeFromEObject(EObject eObj) {
+		String shapename = null;
+		Method getName = null;
+		try {
+		    getName = eObj.getClass().getMethod("getName");
+		    
+		    if(getName != null) {
+		        Object shapenameobject = getName.invoke(eObj);
+		        if (shapenameobject instanceof String) {
+					shapename = (String) shapenameobject;
+				}
+		    }
+		} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		    e.printStackTrace();
+		}
+		if (shapename != null && !shapename.trim().isEmpty()) {
+			return shapename;
+		}else {
+			return null;
+		}
+	}
+	
+	/**
 	 * Returns the uuid of the current diagram 
 	 * 
 	 * @param activeEditorPart as DiagramEditor
@@ -337,15 +365,15 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	}
 	
 	/**
-	 * Returns a new property restored from an attribute.
+	 * Returns a new property restored from a attribute.
 	 * 
-	 * @param propertyString - the name of the property
-	 * @param diagramId - the associated diagramId
-	 * @param propertyId - the unique property Id
-	 * @param shapeIdtoClassname - list of editpart-classnames with referenced editpart id of the current diagram
+	 * @param propertyString
+	 * @param diagramId
+	 * @param propertyId
+	 * @param shapeIdtoClassname
 	 * @return Property - the restored Property
 	 */
-	private Property getPropertyObjectfromAttribute(String propertyString, String diagramId, String propertyId, HashMap<String, String> shapeIdtoClassname) {
+	private Property getPropertyObjectfromAttribute(String propertyString, String diagramId, String propertyId, HashMap<String, NodeName> shapeIdtoClassname) {
 		Property property = new Property();
 		property.setDiagramId(diagramId);
 		property.setId(propertyId);
@@ -360,10 +388,13 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 					while (words[i].startsWith("$")) {
 						words[i] = words[i].substring(1);
 					}
-					String classname = shapeIdtoClassname.get(words[i]);
+					String classname = shapeIdtoClassname.get(words[i]).getClassname();
 					if (classname != null) {
 						Variable var = property.new Variable(classname, words[i]);
-						words[i] = classname;
+						String shapename = shapeIdtoClassname.get(words[i]).getName();
+						if (shapename != null) {
+							words[i] = shapename;
+						}
 						vars.add(var);
 					}else {
 						words[i] = "unknown";
@@ -388,8 +419,8 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	 * Returns all uuids:classnames of ShapeNodeEditParts contained in the activeEdidorPart
 	 * @return Hashmap with uuid and classname pairs of ShapeNodeEditParts
 	 */
-	private HashMap<String, String> getShapeIdsAndClassnamesFromDiagram() {
-		HashMap<String, String> shapeIdtoClassname = new HashMap<>();
+	private HashMap<String, NodeName> getShapeIdsAndClassnamesFromDiagram() {
+		HashMap<String, NodeName> shapeIdtoClassname = new HashMap<>();
 		List<Object> children = activeEditorPart.getDiagramEditPart().getChildren();
 		for (Object child : children) {
 			if (child instanceof ShapeNodeEditPart) {
@@ -400,7 +431,8 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				XMLResource resource = (XMLResource) eObj.eResource();
 				String id = resource.getID(eObj);
 				String classname = child.getClass().getSimpleName().replace("EditPart", "").toLowerCase();
-				shapeIdtoClassname.put(id, classname);
+				String shapename = getNameAttributeFromEObject(eObj);
+				shapeIdtoClassname.put(id, new NodeName(classname, shapename));
 			}
 		}
 		return shapeIdtoClassname;
@@ -410,6 +442,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	 * Disabled the StatementView
 	 */
 	private void disableView() {
+		//activeEditorPart = null;
 		this.diagramTitle = "";
 		tableColumPropertyTemplate.setText(diagramTitle);
 		this.diagramId = "";
@@ -430,17 +463,30 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		viewer.refresh();
 	}
 	
-	/**
-	 * Returns the Id of the current opened diagram
-	 * @return id of the current diagram
-	 */
 	public String getDiagramId() {
 		return diagramId;
 	}
 	
 	/**
-	 * Implements a ColumnLabelProvider.
+	 * Stores the name and classname of an editpart
 	 */
+	private class NodeName {
+		String classname;
+		String name;
+		
+		public NodeName(String classname, String name) {
+			this.classname = classname;
+			this.name = name;
+		}
+		
+		public String getClassname() {
+			return classname;
+		}
+		public String getName() {
+			return name;
+		}
+	}
+	
 	private class ColumnTextLabelProvider extends ColumnLabelProvider{
 		private int column;
 		
@@ -513,23 +559,10 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 												property.getVariable(varId).setId(id);
 												
 												//try to get the name attribute of that shape
-												String shapename = null;
-												Method getName = null;
-												try {
-												    getName = eObj.getClass().getMethod("getName");
-												    
-												    if(getName != null) {
-												        Object shapenameobject = getName.invoke(eObj);
-												        if (shapenameobject instanceof String) {
-															shapename = (String) shapenameobject;
-														}
-												    }
-												} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-												    e.printStackTrace();
-												}
+												String shapename = getNameAttributeFromEObject(eObj);
 				                				
 												String replacementString;
-												if (shapename != null && !shapename.trim().isEmpty()) {
+												if (shapename != null) {
 													replacementString = shapename;
 												}else {
 													replacementString = id;
@@ -558,7 +591,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 					
 					String[] templatesArray = new String[propertyTemplates.size()];
 					for (int i = 0; i < templatesArray.length; i++) {
-						templatesArray[i] = propertyTemplates.get(i);
+						templatesArray[i] = propertyTemplates.get(i).getTemplateString();
 					}
 					
 					combo.setItems(templatesArray);
