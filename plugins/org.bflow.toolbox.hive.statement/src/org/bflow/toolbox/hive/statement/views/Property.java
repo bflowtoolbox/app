@@ -161,6 +161,7 @@ public class Property {
 	 */
 	public static void persistAsAttribute(Property property){
 		attrFile.add(property.getDiagramId(), property.getId() , getPropertyAsStringEntry(property)); //$NON-NLS-1$
+		attrFile.save();
 	}
 	
 	

@@ -41,7 +41,6 @@ import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.ui.*;
@@ -130,7 +129,8 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 						if (!isLastProperty(currentProperty)) {
 							boolean bool = MessageDialog.openQuestion(viewer.getControl().getShell(), "Statement wirklich entfernen?", "Soll "+ currentProperty.getTemplateString() + " wirklich entfernt werden?");
 							if (bool) {
-								attrFile.remove(diagramId, currentProperty.getId());			
+								attrFile.remove(diagramId, currentProperty.getId());
+								attrFile.save();
 								properties.remove(currentProperty);
 								controlsToLinks.get(currentProperty).dispose();
 								controlsToLinks.remove(currentProperty);
