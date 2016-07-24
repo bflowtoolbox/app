@@ -53,6 +53,15 @@ public class Property {
 		return true;
 	}
 	
+	public boolean isValid() {
+		for (Variable var : variables) {
+			if(var.getName().equals("unknown")){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public Variable getVariable(int id){
 		
 		if (variables.size() > id) {
@@ -93,7 +102,7 @@ public class Property {
 	 * Returns always a new list with the contained variables of this property
 	 * @return List with Variables of this property
 	 */
-	protected List<Variable> getVariablesFromTemplate() {
+	private List<Variable> getVariablesFromTemplate() {
 		ArrayList<Variable> vars = new ArrayList<>();
 
 		if (templateString.contains("$")) { //$NON-NLS-1$

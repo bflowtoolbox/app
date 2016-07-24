@@ -388,16 +388,23 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 					while (words[i].startsWith("$")) {
 						words[i] = words[i].substring(1);
 					}
-					String classname = shapeIdtoClassname.get(words[i]).getClassname();
+					String classname = null;
+					NodeName nn = shapeIdtoClassname.get(words[i]);
+					if (nn != null) {
+						classname = nn.getClassname();
+					}
+					
 					if (classname != null) {
 						Variable var = property.new Variable(classname, words[i]);
 						String shapename = shapeIdtoClassname.get(words[i]).getName();
 						if (shapename != null) {
-							words[i] = shapename;
+							words[i] = "$" + shapename;
+						}else {
+							words[i] = "$" + words[i];
 						}
 						vars.add(var);
 					}else {
-						words[i] = "unknown";
+						words[i] = "$unknown";
 						vars.add(property.new Variable("unknown"));
 					}
 				}
@@ -509,13 +516,18 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				if (!isLastProperty(property) && !controlsToLinks.containsKey(property)) {
 					final Link link = new Link((Composite) cell.getViewerRow().getControl(), SWT.NONE);
 					link.setText(property.getTemplateStringWithLinks());
-					link.setToolTipText("nicht zugeordnet");
+					if (!property.isComplete()) {
+						link.setToolTipText("nicht zugeordnet");
+					}else {
+						link.setToolTipText("zugeordnet");
+					}
+					
 					link.addListener(SWT.Selection, new Listener() {
 
 						@Override
 						public void handleEvent(Event event) {
 							final int varId = Integer.parseInt(event.text);
-							final String variablename = property.getVariablesFromTemplate().get(varId).getName();
+							final String variablename = property.getVariable(varId).getName();
 							if (selectionInProgress && property.equals(selectionProperty) && selectionVarId == varId) {
 								link.setText(selectionLinkText);
 								selectionService.removeSelectionListener(selectionListener);
@@ -550,7 +562,6 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 										if (sel.getFirstElement() instanceof ShapeNodeEditPart) {
 											ShapeNodeEditPart editPart = (ShapeNodeEditPart) sel.getFirstElement();
 											String classname = editPart.getClass().getSimpleName().replace("EditPart", "");
-											
 				                			if (variablename.toLowerCase().equals(classname.toLowerCase())) {
 				                				NodeImpl nodeImpl = (NodeImpl) editPart.getModel();
 												EObject eObj = nodeImpl.getElement();
@@ -646,9 +657,6 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				}else {
 					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_WARN_TSK);
 				}
-				
-				
-				
 			}
 			if (column == 1) {
 				if (isLastProperty((Property) obj)) {
@@ -668,6 +676,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			
 			if (column == 0 && prop.isComplete()) {
 				return "Property ist vollständig";
+			}
+			if (column == 0 && !prop.isValid()) {
+				return "Beschädigte Property! Ein zugeordnetes Node existiert nicht mehr.";
 			}
 			if (column == 0 && !prop.isComplete()) {
 				return "Property ist nicht vollständig. Alle Varaiblen müssen dem Diagramm zugeordnet sein";
