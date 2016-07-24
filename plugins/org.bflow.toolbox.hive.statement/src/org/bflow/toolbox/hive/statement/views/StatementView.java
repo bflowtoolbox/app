@@ -43,6 +43,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.ui.*;
 import org.eclipse.swt.SWT;
 
@@ -109,7 +110,6 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	 */
 	public void createPartControl(Composite parent) {
 		
-        parent.setLayout(new FillLayout());
         viewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
         viewer.getTable().setHeaderVisible(true);
         viewer.getTable().setLinesVisible(true);
@@ -160,15 +160,19 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		//FIRST Column
         tableColumPropertyTemplate = new TableColumn(viewer.getTable(), SWT.NONE);
         tableColumPropertyTemplate.setText("Properties für " + diagramTitle);
-        tableColumPropertyTemplate.setWidth(480);
         TableViewerColumn columnPropertyTemplate = new TableViewerColumn(viewer, tableColumPropertyTemplate);
         columnPropertyTemplate.setLabelProvider(new ColumnTextLabelProvider(0));
 		        
         //SECOND Column
         TableColumn columnRemoveAction = new TableColumn(viewer.getTable(), SWT.NONE);
-		columnRemoveAction.setWidth(17);
 		TableViewerColumn col = new TableViewerColumn(viewer, columnRemoveAction);
+		col.getColumn().setResizable(false);
 		col.setLabelProvider(new ColumnTextLabelProvider(1));
+		
+		TableColumnLayout layout = new TableColumnLayout();
+		layout.setColumnData( tableColumPropertyTemplate, new ColumnWeightData( 99 ) );
+		layout.setColumnData( columnRemoveAction, new ColumnWeightData( 1 ) );
+        parent.setLayout(layout);
 
         properties.add(new Property());
         
