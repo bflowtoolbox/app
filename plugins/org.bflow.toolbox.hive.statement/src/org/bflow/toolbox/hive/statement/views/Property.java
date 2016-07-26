@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 
-
 /**
  * Represents a property entry for the StatmentView-TableViewer
  * 
@@ -124,12 +123,13 @@ public class Property {
 	}
 	
 	/**
-	 * Returns a string of the property name with variables as link
+	 * Returns a string representation of the property name with variables as link
 	 * @return String with linked variables
 	 */
 	protected String getTemplateStringWithLinks() {
-		if (templateString.contains("$")) { //$NON-NLS-1$
-			String[] words = templateString.split("\\s"); //$NON-NLS-1$
+		String propertyStringRepresentation = templateString;
+		if (propertyStringRepresentation.contains("$")) { //$NON-NLS-1$
+			String[] words = propertyStringRepresentation.split("\\s"); //$NON-NLS-1$
 			int j = 0;
 			for (int i = 0; i < words.length; i++) {
 				String word = words[i];
@@ -150,9 +150,14 @@ public class Property {
 			    builder.append(s);
 			    builder.append(" ");
 			}
-			return builder.toString().trim();
+			propertyStringRepresentation = builder.toString().trim();
 		}
-		return templateString;
+
+		String[] parts = propertyStringRepresentation.split("->\\["); //$NON-NLS-1$
+		if (parts.length == 2) {
+			propertyStringRepresentation = parts[0];
+		}
+		return propertyStringRepresentation;
 	}
 	
 	/**
@@ -163,7 +168,6 @@ public class Property {
 		attrFile.add(property.getDiagramId(), property.getId() , getPropertyAsStringEntry(property)); //$NON-NLS-1$
 		attrFile.save();
 	}
-	
 	
 	/**
 	 * Converts the property to string, for saving them.
@@ -215,6 +219,7 @@ public class Property {
 
 		public void setId(String id) {
 			this.id = id;
+			Property.this.templateString = Property.this.templateString.replace(this.getName(),this.getId() );
 			if (Property.this.isComplete()) {
 				persistAsAttribute(Property.this);
 			}
