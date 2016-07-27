@@ -8,7 +8,7 @@ import org.bflow.toolbox.hive.attributes.AttributeFile;
 
 
 /**
- * Represents a property entry for the StatmentView-TableViewer
+ * Represents a property entry for the StatementView-TableViewer
  * 
  * @author Markus Schnädelbach
  */
@@ -20,11 +20,20 @@ public class Property {
 	private String id;
 	private String diagramId;
 
+	/**
+	 * Constructor for creating a property as template
+	 * @param templateString
+	 */
 	Property(String templateString) {
 		this.templateString = templateString;
 		this.variables = getVariablesFromTemplate();
 	}
 	
+	/**
+	 * Constructor for creating a new concrete property for a diagram
+	 * @param templateString
+	 * @param diagramId
+	 */
 	Property(String templateString, String diagramId) {
 		this.templateString = templateString;
 		this.variables = getVariablesFromTemplate();
@@ -32,6 +41,9 @@ public class Property {
 		this.id = "property_" + UUID.randomUUID().toString();
 	}
 
+	/**
+	 * Constructor for an empty property
+	 */
 	public Property() {
 	}
 
@@ -53,38 +65,73 @@ public class Property {
 		return true;
 	}
 	
-	public Variable getVariable(int id){
+	/**
+	 * Returns the variable stored on the index position or null
+	 * @param index
+	 * @return  Variable or null 
+	 */
+	public Variable getVariable(int index){
 		
-		if (variables.size() > id) {
-			return variables.get(id);
+		if (variables.size() > index) {
+			return variables.get(index);
 		}
 		return null;
 	}
 	
+	/**
+	 * Returns the unique Id of this property
+	 * @return
+	 */
 	protected String getId() {
 		return id;
 	}
 	
+	/**
+	 * Returns the diagram id of the associated diagram.
+	 * @return
+	 */
 	private String getDiagramId() {
 		return diagramId;
 	}
 	
+	/**
+	 * Sets the diagram id of the associated diagram.
+	 * @param id
+	 */
 	protected void setDiagramId(String id) {
 		this.diagramId = id;
 	}
 	
+	/**
+	 * Sets the unique Id of this property.
+	 * @return
+	 */
 	protected void setId(String id) {
 		this.id = id;
 	}
 	
-	protected void setTemplateString(String templeteString) {
-		this.templateString = templeteString;
+	/**
+	 * Sets the templateString.
+	 * @param templateString
+	 */
+	protected void setTemplateString(String templateString) {
+		this.templateString = templateString;
 	}
 	
+	/**
+	 * Sets the list of contained variables of this property.
+	 * Order of list entries is depending of the variable occurrence in the property
+	 * (from left to right) 
+	 * @param list with sorted variables
+	 */
 	protected void setVariables(List<Variable> vars) {
 		this.variables = vars;
 	}
 	
+	/**
+	 * Set the associated attributfile for this property
+	 * @param AttributeFile
+	 */
 	protected static void setAttributFile(AttributeFile af) {
 		attrFile = af;
 	}
@@ -174,6 +221,11 @@ public class Property {
 		return property.getTemplateString();
 	}
 	
+	/**
+	 * Represents a variable of a property.
+	 * 
+	 * @author Markus Schnaedelbach
+	 */
 	public class Variable {
 		private String name;
 		private String id = "";
@@ -191,10 +243,20 @@ public class Property {
 			return name;
 		}
 
+		/**
+		 * Returns the id of the associated editpart node.
+		 * @return
+		 */
 		public String getId() {
 			return id;
 		}
 
+		/**
+		 * Sets the Id of an associated editPart-node.
+		 * If with that setting all variables of the property are assigned to a editpart node
+		 * the property will persisted as attribute for the associated diagram.
+		 * @param id
+		 */
 		public void setId(String id) {
 			this.id = id;
 			if (Property.this.isComplete()) {

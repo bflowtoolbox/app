@@ -276,7 +276,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		}
 		DiagramEditor editorPart =event.diagramEditor;
 
-		// Kontextwechsel - View muss reinitialisiert werden
+		// Context change - View must re-initialed
 		if (!editorPart.equals(activeEditorPart) || !event.attributeFile.equals(attrFile)) {
 			activeEditorPart = editorPart;
 			attrFile = event.attributeFile;
@@ -406,7 +406,6 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	 * Disabled the StatementView
 	 */
 	private void disableView() {
-		//activeEditorPart = null;
 		this.diagramTitle = "";
 		tableColumPropertyTemplate.setText(diagramTitle);
 		this.diagramId = "";
@@ -431,6 +430,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		return diagramId;
 	}
 	
+	/**
+	 * Implements a ColumnLabelProvider.
+	 */
 	private class ColumnTextLabelProvider extends ColumnLabelProvider{
 		private int column;
 		
