@@ -19,20 +19,11 @@ public class Property {
 	private List<Variable> variables = new ArrayList<>();
 	private String id;
 	private String diagramId;
-
-	/**
-	 * Constructor for creating a property as template
-	 * @param templateString
-	 */
-	Property(String templateString) {
-		this.templateString = templateString;
-		this.variables = getVariablesFromTemplate();
-	}
 	
 	/**
-	 * Constructor for creating a new concrete property for a diagram
-	 * @param templateString
-	 * @param diagramId
+	 * Constructor for creating a new property for a diagram
+	 * @param templateString - the name of this property
+	 * @param diagramId - id of the associated diagram
 	 */
 	Property(String templateString, String diagramId) {
 		this.templateString = templateString;
@@ -42,7 +33,9 @@ public class Property {
 	}
 
 	/**
-	 * Constructor for an empty property
+	 * Constructor for an empty property.
+	 * Can used as placeholder in TableViewer or for restoring a already former existing
+	 * property
 	 */
 	public Property() {
 	}
@@ -95,8 +88,8 @@ public class Property {
 	}
 	
 	/**
-	 * Sets the diagram id of the associated diagram.
-	 * @param id
+	 * Sets the id of the associated diagram.
+	 * @param id - id of the associated diagram
 	 */
 	protected void setDiagramId(String id) {
 		this.diagramId = id;
@@ -104,7 +97,7 @@ public class Property {
 	
 	/**
 	 * Sets the unique Id of this property.
-	 * @return
+	 * @param id - unique Id of this property
 	 */
 	protected void setId(String id) {
 		this.id = id;
@@ -112,7 +105,7 @@ public class Property {
 	
 	/**
 	 * Sets the templateString.
-	 * @param templateString
+	 * @param templateString - the name of this property
 	 */
 	protected void setTemplateString(String templateString) {
 		this.templateString = templateString;
@@ -130,7 +123,7 @@ public class Property {
 	
 	/**
 	 * Set the associated attributfile for this property
-	 * @param AttributeFile
+	 * @param AttributeFile - of the associated diagram
 	 */
 	protected static void setAttributFile(AttributeFile af) {
 		attrFile = af;
@@ -186,8 +179,8 @@ public class Property {
 	}
 	
 	/**
-	 * Stores the property as diagram attribute.
-	 * @param property
+	 * Stores the property as attribute in the associated diagram.
+	 * @param property - the property you want to save
 	 */
 	public static void persistAsAttribute(Property property){
 		attrFile.add(property.getDiagramId(), property.getId() , getPropertyAsStringEntry(property)); //$NON-NLS-1$
@@ -196,8 +189,8 @@ public class Property {
 	
 	/**
 	 * Converts the property to string, for saving them.
-	 * @param property
-	 * @return String
+	 * @param property - the property you want to save
+	 * @return String - property as restorable string
 	 */
 	protected static String getPropertyAsStringEntry(Property property) {
 		String tempString = property.getTemplateString();
@@ -245,7 +238,7 @@ public class Property {
 
 		/**
 		 * Returns the id of the associated editpart node.
-		 * @return
+		 * @return the id of the associated editpart-node
 		 */
 		public String getId() {
 			return id;
@@ -255,7 +248,7 @@ public class Property {
 		 * Sets the Id of an associated editPart-node.
 		 * If with that setting all variables of the property are assigned to a editpart node
 		 * the property will persisted as attribute for the associated diagram.
-		 * @param id
+		 * @param id - id of the associated editpart-node
 		 */
 		public void setId(String id) {
 			this.id = id;

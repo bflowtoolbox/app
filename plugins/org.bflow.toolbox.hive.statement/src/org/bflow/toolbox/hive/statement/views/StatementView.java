@@ -66,7 +66,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	
 	private String diagramTitle;
 
-	private List<Property> propertyTemplates;
+	private List<String> propertyTemplates;
 
 	private TableColumn tableColumPropertyTemplate;
 
@@ -177,11 +177,12 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	
 	/**
 	 * Reads the available templates from the workspace.
+	 * (.properties/templates.txt)
 	 * 
-	 * @return a List of available Property-Templates
+	 * @return a List of available Property-Template Strings
 	 */
-	private List<Property> getStatmentTemplatesFromWorkspace() {
-		ArrayList<Property> propertyTemplates = new ArrayList<>();
+	private List<String> getStatmentTemplatesFromWorkspace() {
+		ArrayList<String> propertyTemplates = new ArrayList<>();
 		
 		IPath rootPath = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
 		rootPath = rootPath.append(".properties/templates.txt");
@@ -193,7 +194,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	            String temp = null;
 	            while ((temp = in.readLine()) != null) {
 	            	if (!temp.trim().isEmpty()) {
-	            		propertyTemplates.add(new Property(temp));
+	            		propertyTemplates.add(temp);
 					}
 	            }
 	        } catch (IOException e) {
@@ -221,7 +222,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	/**
 	 * Checks if the given property is the last in the current view table
 	 * 
-	 * @param Property
+	 * @param Property - to check
 	 * @return true if the given property is the last in the view table
 	 */
 	private boolean isLastProperty(Property property) {
@@ -333,12 +334,12 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	}
 	
 	/**
-	 * Returns a new property restored from a attribute.
+	 * Returns a new property restored from an attribute.
 	 * 
-	 * @param propertyString
-	 * @param diagramId
-	 * @param propertyId
-	 * @param shapeIdtoClassname
+	 * @param propertyString - the name of the property
+	 * @param diagramId - the associated diagramId
+	 * @param propertyId - the unique property Id
+	 * @param shapeIdtoClassname - list of editpart-classnames with referenced editpart id of the current diagram
 	 * @return Property - the restored Property
 	 */
 	private Property getPropertyObjectfromAttribute(String propertyString, String diagramId, String propertyId, HashMap<String, String> shapeIdtoClassname) {
@@ -426,6 +427,10 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		viewer.refresh();
 	}
 	
+	/**
+	 * Returns the Id of the current opened diagram
+	 * @return id of the current diagram
+	 */
 	public String getDiagramId() {
 		return diagramId;
 	}
@@ -527,7 +532,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 					
 					String[] templatesArray = new String[propertyTemplates.size()];
 					for (int i = 0; i < templatesArray.length; i++) {
-						templatesArray[i] = propertyTemplates.get(i).getTemplateString();
+						templatesArray[i] = propertyTemplates.get(i);
 					}
 					
 					combo.setItems(templatesArray);
