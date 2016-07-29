@@ -528,7 +528,7 @@ public class ModelWizard extends Wizard {
 	}
 	
 	/**
-	 * Returns the first drawn controlflow editpart
+	 * Returns the first drawn controlflow-node editpart
 	 * 
 	 * @return EventEditPart, FunctionEditPart or null 
 	 */
