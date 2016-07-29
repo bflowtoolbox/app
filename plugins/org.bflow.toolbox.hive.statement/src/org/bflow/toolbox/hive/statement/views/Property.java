@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 
 /**
- * Represents a property entry for the StatmentView-TableViewer
+ * Represents a property entry for the StatementView-TableViewer
  * 
  * @author Markus Schnädelbach
  */
@@ -18,12 +18,12 @@ public class Property {
 	private List<Variable> variables = new ArrayList<>();
 	private String id;
 	private String diagramId;
-
-	Property(String templateString) {
-		this.templateString = templateString;
-		this.variables = getVariablesFromTemplate();
-	}
 	
+	/**
+	 * Constructor for creating a new property for a diagram
+	 * @param templateString - the name of this property
+	 * @param diagramId - id of the associated diagram
+	 */
 	Property(String templateString, String diagramId) {
 		this.templateString = templateString;
 		this.variables = getVariablesFromTemplate();
@@ -31,6 +31,11 @@ public class Property {
 		this.id = "property_" + UUID.randomUUID().toString();
 	}
 
+	/**
+	 * Constructor for an empty property.
+	 * Can used as placeholder in TableViewer or for restoring a already former existing
+	 * property
+	 */
 	public Property() {
 	}
 
@@ -52,6 +57,7 @@ public class Property {
 		return true;
 	}
 	
+
 	public boolean isValid() {
 		for (Variable var : variables) {
 			if(var.getName().equals("unknown")){
@@ -61,38 +67,72 @@ public class Property {
 		return true;
 	}
 	
-	public Variable getVariable(int id){
-		
-		if (variables.size() > id) {
-			return variables.get(id);
+	/**
+	 * Returns the variable stored on the index position or null
+	 * @param index
+	 * @return  Variable or null 
+	 */
+	public Variable getVariable(int index){
+		if (variables.size() > index) {
+			return variables.get(index);
 		}
 		return null;
 	}
 	
+	/**
+	 * Returns the unique Id of this property
+	 * @return
+	 */
 	protected String getId() {
 		return id;
 	}
 	
+	/**
+	 * Returns the diagram id of the associated diagram.
+	 * @return
+	 */
 	private String getDiagramId() {
 		return diagramId;
 	}
 	
+	/**
+	 * Sets the id of the associated diagram.
+	 * @param id - id of the associated diagram
+	 */
 	protected void setDiagramId(String id) {
 		this.diagramId = id;
 	}
 	
+	/**
+	 * Sets the unique Id of this property.
+	 * @param id - unique Id of this property
+	 */
 	protected void setId(String id) {
 		this.id = id;
 	}
 	
-	protected void setTemplateString(String templeteString) {
-		this.templateString = templeteString;
+	/**
+	 * Sets the templateString.
+	 * @param templateString - the name of this property
+	 */
+	protected void setTemplateString(String templateString) {
+		this.templateString = templateString;
 	}
 	
+	/**
+	 * Sets the list of contained variables of this property.
+	 * Order of list entries is depending of the variable occurrence in the property
+	 * (from left to right) 
+	 * @param list with sorted variables
+	 */
 	protected void setVariables(List<Variable> vars) {
 		this.variables = vars;
 	}
 	
+	/**
+	 * Set the associated attributfile for this property
+	 * @param AttributeFile - of the associated diagram
+	 */
 	protected static void setAttributFile(AttributeFile af) {
 		attrFile = af;
 	}
@@ -161,8 +201,8 @@ public class Property {
 	}
 	
 	/**
-	 * Stores the property as diagram attribute.
-	 * @param property
+	 * Stores the property as attribute in the associated diagram.
+	 * @param property - the property you want to save
 	 */
 	public static void persistAsAttribute(Property property){
 		attrFile.add(property.getDiagramId(), property.getId() , getPropertyAsStringEntry(property)); //$NON-NLS-1$
@@ -171,8 +211,8 @@ public class Property {
 	
 	/**
 	 * Converts the property to string, for saving them.
-	 * @param property
-	 * @return String
+	 * @param property - the property you want to save
+	 * @return String - property as restorable string
 	 */
 	protected static String getPropertyAsStringEntry(Property property) {
 		String tempString = property.getTemplateString();
@@ -196,6 +236,11 @@ public class Property {
 		return property.getTemplateString();
 	}
 	
+	/**
+	 * Represents a variable of a property.
+	 * 
+	 * @author Markus Schnaedelbach
+	 */
 	public class Variable {
 		private String name;
 		private String id = "";
@@ -213,10 +258,20 @@ public class Property {
 			return name;
 		}
 
+		/**
+		 * Returns the id of the associated editpart node.
+		 * @return the id of the associated editpart-node
+		 */
 		public String getId() {
 			return id;
 		}
 
+		/**
+		 * Sets the Id of an associated editPart-node.
+		 * If with that setting all variables of the property are assigned to a editpart node
+		 * the property will persisted as attribute for the associated diagram.
+		 * @param id - id of the associated editpart-node
+		 */
 		public void setId(String id) {
 			this.id = id;
 			Property.this.templateString = Property.this.templateString.replace(this.getName(),this.getId() );
