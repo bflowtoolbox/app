@@ -8,6 +8,8 @@ import java.util.Vector;
 
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart;
+import org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart;
+import org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart;
 import org.bflow.toolbox.epc.diagram.modelwizard.pages.ElementGeneratorWizardPage;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Constants;
@@ -36,11 +38,8 @@ import org.eclipse.emf.workspace.ResourceUndoContext;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gmf.runtime.diagram.core.edithelpers.CreateElementRequestAdapter;
-import org.eclipse.gmf.runtime.diagram.ui.commands.DeferredCreateConnectionViewAndElementCommand;
 import org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.requests.CreateConnectionViewAndElementRequest;
-import org.eclipse.gmf.runtime.diagram.ui.requests.CreateConnectionViewRequest;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewAndElementRequest.ViewAndElementDescriptor;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequest;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequestFactory;
@@ -491,7 +490,7 @@ public class ModelWizard extends Wizard {
 			/*
 			 * has anchor ouput?
 			 */
-			if (anchor.getSourceConnections().size() > 0) {
+			if (countArcConnections(anchor.getSourceConnections()) > 0) {
 
 				List cons = anchor.getSourceConnections();
 				for (Object con : cons) {
@@ -504,16 +503,43 @@ public class ModelWizard extends Wizard {
 				}
 
 				if (!quickFix)
-					connectionStack.add(new Connection(anchor, connectionStack
-							.get(0).getSource()));
+					connectionStack.add(new Connection(anchor, getFirstDrawnControlFlowEP()));
 			}
 
-			if (connectionStack.size() != 0
-					&& anchor.getSourceConnections().size() == 0 && !quickFix) {
-				connectionStack.add(new Connection(anchor, connectionStack.get(
-						0).getSource()));
+			if (connectionStack.size() != 0 && countArcConnections(anchor.getSourceConnections()) == 0 && !quickFix) {
+				connectionStack.add(new Connection(anchor, getFirstDrawnControlFlowEP()));
 			}
 		}
+	}
+	
+	/**
+	 * Counts the ArcEditParts-Connections in the given list
+	 * @param list with connections for a GraphicalEditPart
+	 * @return number of arc editparts
+	 */
+	private int countArcConnections(List list){
+		int count = 0;
+		for (Object con : list) {
+			if (con instanceof ArcEditPart) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	/**
+	 * Returns the first drawn controlflow-node editpart
+	 * 
+	 * @return EventEditPart, FunctionEditPart or null 
+	 */
+	private Object getFirstDrawnControlFlowEP(){
+		for (Connection con : connectionStack) {
+			Object ep = con.getSource();
+			if (ep instanceof FunctionEditPart || ep instanceof EventEditPart) {
+				return con.getSource();
+			}
+		}
+		return null;
 	}
 
 	private SetValueCommand createSetValueCommandForShapeNaming(
