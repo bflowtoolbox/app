@@ -502,12 +502,20 @@ public class ModelWizard extends Wizard {
 					}
 				}
 
-				if (!quickFix)
-					connectionStack.add(new Connection(anchor, getFirstDrawnControlFlowEP()));
+				if (!quickFix){
+					Object target = getFirstDrawnControlFlowEP();
+					if (target != null) {
+						connectionStack.add(new Connection(anchor, getFirstDrawnControlFlowEP()));
+					}
+				}
+				
 			}
 
 			if (connectionStack.size() != 0 && countArcConnections(anchor.getSourceConnections()) == 0 && !quickFix) {
-				connectionStack.add(new Connection(anchor, getFirstDrawnControlFlowEP()));
+				Object target = getFirstDrawnControlFlowEP();
+				if (target != null) {
+					connectionStack.add(new Connection(anchor, getFirstDrawnControlFlowEP()));
+				}
 			}
 		}
 	}
