@@ -38,11 +38,8 @@ import org.eclipse.emf.workspace.ResourceUndoContext;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gmf.runtime.diagram.core.edithelpers.CreateElementRequestAdapter;
-import org.eclipse.gmf.runtime.diagram.ui.commands.DeferredCreateConnectionViewAndElementCommand;
 import org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.requests.CreateConnectionViewAndElementRequest;
-import org.eclipse.gmf.runtime.diagram.ui.requests.CreateConnectionViewRequest;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewAndElementRequest.ViewAndElementDescriptor;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequest;
 import org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequestFactory;
@@ -516,9 +513,9 @@ public class ModelWizard extends Wizard {
 	}
 	
 	/**
-	 * Counts the ArcEditParts of an list 
-	 * @param list
-	 * @return number of arcs
+	 * Counts the ArcEditParts-Connections in the given list
+	 * @param list with connections for a GraphicalEditPart
+	 * @return number of arc editparts
 	 */
 	private int countArcConnections(List list){
 		int count = 0;
