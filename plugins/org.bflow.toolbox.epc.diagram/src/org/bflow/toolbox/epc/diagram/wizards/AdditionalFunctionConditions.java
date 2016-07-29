@@ -47,13 +47,13 @@ public class AdditionalFunctionConditions implements Iterable<AdditionalFunction
 		case "app":
 			return new EpcElementTypeWrapper(EpcElementTypes.Application_2004);
 		case ">file":
-			return new EpcElementTypeWrapper(EpcElementTypes.File_2019, EpcElementTypes.InformationArc_4003, false);
-		case "file>":
 			return new EpcElementTypeWrapper(EpcElementTypes.File_2019, EpcElementTypes.InformationArc_4003, true);
+		case "file>":
+			return new EpcElementTypeWrapper(EpcElementTypes.File_2019, EpcElementTypes.InformationArc_4003, false);
 		case ">doc":
-			return new EpcElementTypeWrapper(EpcElementTypes.Document_2018, EpcElementTypes.InformationArc_4003, false);
-		case "doc>":
 			return new EpcElementTypeWrapper(EpcElementTypes.Document_2018, EpcElementTypes.InformationArc_4003, true);
+		case "doc>":
+			return new EpcElementTypeWrapper(EpcElementTypes.Document_2018, EpcElementTypes.InformationArc_4003, false);
 		default:
 			return null;
 		}
