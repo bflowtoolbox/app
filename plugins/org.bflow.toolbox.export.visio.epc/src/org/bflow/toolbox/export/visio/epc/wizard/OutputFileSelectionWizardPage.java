@@ -30,7 +30,7 @@ public class OutputFileSelectionWizardPage extends WizardPage implements
 
 	public OutputFileSelectionWizardPage(String pageName) {
 		super(pageName);
-		setTitle("Visio Import Wizard");
+		setTitle("Visio Export Wizard");
 		setDescription("Select your destination file!");
 		setPageComplete(false);
 	}
