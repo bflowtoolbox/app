@@ -3,6 +3,8 @@ package org.bflow.toolbox.hive.statement.views;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 
@@ -15,17 +17,26 @@ public class Property {
 
 	private static AttributeFile attrFile;
 	private String templateString;
+	private String formulaString;
 	private List<Variable> variables = new ArrayList<>();
 	private String id;
 	private String diagramId;
 	
 	/**
 	 * Constructor for creating a new property for a diagram
-	 * @param templateString - the name of this property
-	 * @param diagramId - id of the associated diagram
+	 * @param templateString the name and formula of this property
+	 * @param diagramId id of the associated diagram
 	 */
 	Property(String templateString, String diagramId) {
-		this.templateString = templateString;
+		
+		String[] parts = templateString.split("-->"); //$NON-NLS-1$
+		if (parts.length == 2) {
+			this.templateString = parts[0];
+			this.formulaString = parts[1];
+		}else {
+			this.templateString = "unknown format";
+			this.formulaString = "unknown format";
+		}
 		this.variables = getVariablesFromTemplate();
 		this.diagramId = diagramId;
 		this.id = "property_" + UUID.randomUUID().toString();
@@ -41,6 +52,10 @@ public class Property {
 
 	public String getTemplateString() {
 		return templateString;
+	}
+	
+	public String getFormularString() {
+		return formulaString;
 	}
 	
 	/**
@@ -97,7 +112,7 @@ public class Property {
 	
 	/**
 	 * Sets the id of the associated diagram.
-	 * @param id - id of the associated diagram
+	 * @param id id of the associated diagram
 	 */
 	protected void setDiagramId(String id) {
 		this.diagramId = id;
@@ -105,7 +120,7 @@ public class Property {
 	
 	/**
 	 * Sets the unique Id of this property.
-	 * @param id - unique Id of this property
+	 * @param id unique Id of this property
 	 */
 	protected void setId(String id) {
 		this.id = id;
@@ -113,10 +128,18 @@ public class Property {
 	
 	/**
 	 * Sets the templateString.
-	 * @param templateString - the name of this property
+	 * @param templateString the name of this property
 	 */
 	protected void setTemplateString(String templateString) {
 		this.templateString = templateString;
+	}
+	
+	/**
+	 * Sets the formulaString.
+	 * @param formulaString the formula expression of this property
+	 */
+	protected void setFormulaString(String forumlaString) {
+		this.formulaString = forumlaString;
 	}
 	
 	/**
@@ -131,7 +154,7 @@ public class Property {
 	
 	/**
 	 * Set the associated attributfile for this property
-	 * @param AttributeFile - of the associated diagram
+	 * @param AttributeFile of the associated diagram
 	 */
 	protected static void setAttributFile(AttributeFile af) {
 		attrFile = af;
@@ -150,10 +173,10 @@ public class Property {
 				if (word.startsWith("$")) { //$NON-NLS-1$
 					while (word.startsWith("$")) {
 						word = word.substring(1);
-						//Variable endet mit "_[0-9]"
-						if (word.matches("^.+?(_)\\d$")) {
-							word = word.substring(0, word.length()-2);
-						}
+//						//Variable endet mit "_[0-9]"
+//						if (word.matches("^.+?(_)\\d$")) {
+//							word = word.substring(0, word.length()-2);
+//						}
 					}
 					vars.add(new Variable(word));
 				}
@@ -192,17 +215,12 @@ public class Property {
 			}
 			propertyStringRepresentation = builder.toString().trim();
 		}
-
-		String[] parts = propertyStringRepresentation.split("->\\["); //$NON-NLS-1$
-		if (parts.length == 2) {
-			propertyStringRepresentation = parts[0];
-		}
 		return propertyStringRepresentation;
 	}
 	
 	/**
 	 * Stores the property as attribute in the associated diagram.
-	 * @param property - the property you want to save
+	 * @param property the property you want to save
 	 */
 	public static void persistAsAttribute(Property property){
 		attrFile.add(property.getDiagramId(), property.getId() , getPropertyAsStringEntry(property)); //$NON-NLS-1$
@@ -211,18 +229,19 @@ public class Property {
 	
 	/**
 	 * Converts the property to string, for saving them.
-	 * @param property - the property you want to save
-	 * @return String - property as restorable string
+	 * @param property the property you want to save
+	 * @return String property as restorable string
 	 */
 	protected static String getPropertyAsStringEntry(Property property) {
 		String tempString = property.getTemplateString();
+		String storeableString = property.getTemplateString();
 		if (tempString.contains("$")) { //$NON-NLS-1$
 			String[] words = tempString.split("\\s"); //$NON-NLS-1$
 			int j = 0;
 			for (int i = 0; i < words.length; i++) {
 				String word = words[i];
 				if (word.startsWith("$")) {
-					words[i] = "$" + property.getVariable(j).getId();
+					words[i] = "$" + property.getVariable(j).getId()+property.getVariable(j).getVariableNameNumber();
 					j++;
 				}
 			}
@@ -231,9 +250,9 @@ public class Property {
 				builder.append(s);
 				builder.append(" ");
 			}
-			return builder.toString().trim();
+			storeableString = builder.toString().trim();
 		}
-		return property.getTemplateString();
+		return storeableString + "-->" + property.getFormularString();
 	}
 	
 	/**
@@ -273,11 +292,41 @@ public class Property {
 		 * @param id - id of the associated editpart-node
 		 */
 		public void setId(String id) {
+			if (this.id.isEmpty()) {
+				formulaString = formulaString.replaceAll("(" + name + ")", id + getVariableNameNumber());
+			} else {
+				formulaString = formulaString.replaceAll("(" + this.id + getVariableNameNumber() + ")", id + getVariableNameNumber());
+			}
 			this.id = id;
-			Property.this.templateString = Property.this.templateString.replace(this.getName(),this.getId() );
+
 			if (Property.this.isComplete()) {
 				persistAsAttribute(Property.this);
 			}
+		}
+
+		/**
+		 * Returns the variablename without index number
+		 * @return the variablename without index number
+		 */
+		public String getClearName() {
+			//Variable endet mit "_[0-9]"
+			if (name.matches("^.+?(_)\\d$")) {
+				return name.substring(0, name.length()-2);
+			}
+			return name;
+		}
+		
+		/**
+		 * Returns the index number of an variable or if there is no index than an empty string
+		 * @return the index number of an variable or if there is no index than an empty string
+		 */
+		public String getVariableNameNumber() {
+			Pattern pattern = Pattern.compile("(_)\\d$");
+		    Matcher matcher = pattern.matcher(this.name);
+		    while (matcher.find()) {
+		        return matcher.group();
+		    }
+			return "";
 		}
 	}
 }
