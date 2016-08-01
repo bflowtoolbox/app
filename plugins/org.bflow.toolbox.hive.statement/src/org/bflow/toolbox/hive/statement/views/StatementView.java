@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
@@ -228,7 +230,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	/**
 	 * Checks if the given property is the last in the current view table
 	 * 
-	 * @param Property - to check
+	 * @param Property to check
 	 * @return true if the given property is the last in the view table
 	 */
 	private boolean isLastProperty(Property property) {
@@ -385,42 +387,67 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		
 		ArrayList<Variable> vars = new ArrayList<>();
 		
-		if (propertyString.contains("$")) { //$NON-NLS-1$
-			String[] words = propertyString.split("\\s"); //$NON-NLS-1$
-			for (int i = 0; i < words.length; i++) {
+		if (propertyString.contains("$")) {
+			
+			String[] parts = propertyString.split("-->");
+			if (parts.length == 2) {
+				String templateString = parts[0];
+				String formulaString = parts[1];
 				
-				if (words[i].startsWith("$")) { //$NON-NLS-1$
-					while (words[i].startsWith("$")) {
-						words[i] = words[i].substring(1);
-					}
-					String classname = null;
-					NodeName nn = shapeIdtoClassname.get(words[i]);
-					if (nn != null) {
-						classname = nn.getClassname();
-					}
+				String[] words = templateString.split("\\s");
+				
+				for (int i = 0; i < words.length; i++) {
 					
-					if (classname != null) {
-						Variable var = property.new Variable(classname, words[i]);
-						String shapename = shapeIdtoClassname.get(words[i]).getName();
-						if (shapename != null) {
-							words[i] = "$" + shapename;
-						}else {
-							words[i] = "$" + words[i];
+					if (words[i].startsWith("$")) { //$NON-NLS-1$
+						while (words[i].startsWith("$")) {
+							words[i] = words[i].substring(1);
 						}
-						vars.add(var);
-					}else {
-						words[i] = "$unknown";
-						vars.add(property.new Variable("unknown"));
+						String classname = null;
+						String id;
+						if (words[i].matches("^.+?(_)\\d$")) {
+							id = words[i].substring(0, words[i].length()-2);
+						}else {
+							id = words[i];
+						}
+						NodeName nn = shapeIdtoClassname.get(id);
+						if (nn != null) {
+							classname = nn.getClassname();
+						}
+						
+						if (classname != null) {
+						    String variableNumber ="";
+							if (formulaString.contains(words[i])) {
+								Pattern pattern2 = Pattern.compile("(_)\\d$");
+								Matcher matcher2 = pattern2.matcher(words[i]);
+								while (matcher2.find()) {
+									variableNumber = matcher2.group();
+								}
+							}
+							Variable var = property.new Variable(classname + variableNumber, id);
+							String shapename = shapeIdtoClassname.get(id).getName();
+							if (shapename != null) {
+								words[i] = "$" + shapename;
+							}else {
+								words[i] = "$" + words[i];
+							}
+							vars.add(var);
+						}else {
+							words[i] = "$unknown";
+							vars.add(property.new Variable("unknown"));
+						}
 					}
+					property.setVariables(vars);
 				}
-				property.setVariables(vars);
+				
+				StringBuilder builder = new StringBuilder();
+				for(String s : words) {
+				    builder.append(s);
+				    builder.append(" ");
+				}
+				property.setTemplateString(builder.toString().trim());
+				formulaString = parts[1];
+				property.setFormulaString(formulaString);
 			}
-			StringBuilder builder = new StringBuilder();
-			for(String s : words) {
-			    builder.append(s);
-			    builder.append(" ");
-			}
-			property.setTemplateString(builder.toString().trim());
 		}else {
 			property.setTemplateString(propertyString);
 		}
@@ -436,7 +463,6 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		List<Object> children = activeEditorPart.getDiagramEditPart().getChildren();
 		for (Object child : children) {
 			if (child instanceof ShapeNodeEditPart) {
-				//hole ShapeId
 				ShapeNodeEditPart editPart = (ShapeNodeEditPart) child;
 				NodeImpl nodeImpl = (NodeImpl) editPart.getModel();
 				EObject eObj = nodeImpl.getElement();
@@ -538,7 +564,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 						@Override
 						public void handleEvent(Event event) {
 							final int varId = Integer.parseInt(event.text);
-							final String variablename = property.getVariable(varId).getName();
+							final String variablename = property.getVariable(varId).getClearName();
 							if (selectionInProgress && property.equals(selectionProperty) && selectionVarId == varId) {
 								link.setText(selectionLinkText);
 								selectionService.removeSelectionListener(selectionListener);
