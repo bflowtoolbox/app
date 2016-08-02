@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bflow.toolbox.hive.attributes.AttributeFile;
+import org.bflow.toolbox.hive.statement.nls.Messages;
 
 /**
  * Represents a property entry for the StatementView-TableViewer
@@ -34,12 +35,12 @@ public class Property {
 			this.templateString = parts[0];
 			this.formulaString = parts[1];
 		}else {
-			this.templateString = "unknown format";
-			this.formulaString = "unknown format";
+			this.templateString = "unknown format"; //$NON-NLS-1$
+			this.formulaString = "unknown format"; //$NON-NLS-1$
 		}
 		this.variables = getVariablesFromTemplate();
 		this.diagramId = diagramId;
-		this.id = "property_" + UUID.randomUUID().toString();
+		this.id = "property_" + UUID.randomUUID().toString(); //$NON-NLS-1$
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class Property {
 
 	public boolean isValid() {
 		for (Variable var : variables) {
-			if(var.getName().equals("unknown")){
+			if(var.getName().equals(Messages.StatementView_6)){
 				return false;
 			}
 		}
@@ -171,7 +172,7 @@ public class Property {
 			String[] words = templateString.split("\\s"); //$NON-NLS-1$
 			for (String word : words) {
 				if (word.startsWith("$")) { //$NON-NLS-1$
-					while (word.startsWith("$")) {
+					while (word.startsWith("$")) { //$NON-NLS-1$
 						word = word.substring(1);
 //						//Variable endet mit "_[0-9]"
 //						if (word.matches("^.+?(_)\\d$")) {
@@ -196,22 +197,22 @@ public class Property {
 			int j = 0;
 			for (int i = 0; i < words.length; i++) {
 				String word = words[i];
-				if (word.startsWith("$")) {
-					while (word.startsWith("$")) {
+				if (word.startsWith("$")) { //$NON-NLS-1$
+					while (word.startsWith("$")) { //$NON-NLS-1$
 						word = word.substring(1);
 						//Variable endet mit "_[0-9]"
-						if (word.matches("^.+?(_)\\d$")) {
+						if (word.matches("^.+?(_)\\d$")) { //$NON-NLS-1$
 							word = word.substring(0, word.length()-2);
 						}
 					}
-					words[i] = "<a href=\""+ j +"\">" + "["+ word + "]" + "</a>";
+					words[i] = "<a href=\""+ j +"\">" + "["+ word + "]" + "</a>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 					j++;
 				}
 			}
 			StringBuilder builder = new StringBuilder();
 			for(String s : words) {
 			    builder.append(s);
-			    builder.append(" ");
+			    builder.append(" "); //$NON-NLS-1$
 			}
 			propertyStringRepresentation = builder.toString().trim();
 		}
@@ -240,19 +241,19 @@ public class Property {
 			int j = 0;
 			for (int i = 0; i < words.length; i++) {
 				String word = words[i];
-				if (word.startsWith("$")) {
-					words[i] = "$" + property.getVariable(j).getId()+property.getVariable(j).getVariableNameNumber();
+				if (word.startsWith("$")) { //$NON-NLS-1$
+					words[i] = "$" + property.getVariable(j).getId()+property.getVariable(j).getVariableNameNumber(); //$NON-NLS-1$
 					j++;
 				}
 			}
 			StringBuilder builder = new StringBuilder();
 			for (String s : words) {
 				builder.append(s);
-				builder.append(" ");
+				builder.append(" "); //$NON-NLS-1$
 			}
 			storeableString = builder.toString().trim();
 		}
-		return storeableString + "-->" + property.getFormularString();
+		return storeableString + "-->" + property.getFormularString(); //$NON-NLS-1$
 	}
 	
 	/**
@@ -262,7 +263,7 @@ public class Property {
 	 */
 	public class Variable {
 		private String name;
-		private String id = "";
+		private String id = ""; //$NON-NLS-1$
 
 		public Variable(String name) {
 			this.name = name;
@@ -293,9 +294,9 @@ public class Property {
 		 */
 		public void setId(String id) {
 			if (this.id.isEmpty()) {
-				formulaString = formulaString.replaceAll("(" + name + ")", id + getVariableNameNumber());
+				formulaString = formulaString.replaceAll("(" + name + ")", id + getVariableNameNumber()); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
-				formulaString = formulaString.replaceAll("(" + this.id + getVariableNameNumber() + ")", id + getVariableNameNumber());
+				formulaString = formulaString.replaceAll("(" + this.id + getVariableNameNumber() + ")", id + getVariableNameNumber()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			this.id = id;
 
@@ -310,7 +311,7 @@ public class Property {
 		 */
 		public String getClearName() {
 			//Variable endet mit "_[0-9]"
-			if (name.matches("^.+?(_)\\d$")) {
+			if (name.matches("^.+?(_)\\d$")) { //$NON-NLS-1$
 				return name.substring(0, name.length()-2);
 			}
 			return name;
@@ -321,7 +322,7 @@ public class Property {
 		 * @return the index number of an variable or if there is no index than an empty string
 		 */
 		public String getVariableNameNumber() {
-			Pattern pattern = Pattern.compile("(_)\\d$");
+			Pattern pattern = Pattern.compile("(_)\\d$"); //$NON-NLS-1$
 		    Matcher matcher = pattern.matcher(this.name);
 		    while (matcher.find()) {
 		        return matcher.group();

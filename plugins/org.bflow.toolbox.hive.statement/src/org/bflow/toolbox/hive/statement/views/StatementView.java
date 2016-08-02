@@ -18,6 +18,7 @@ import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
 import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
+import org.bflow.toolbox.hive.statement.nls.Messages;
 import org.bflow.toolbox.hive.statement.views.Property.Variable;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -59,7 +60,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "org.bflow.toolbox.hive.statement.views.StatementView";
+	public static final String ID = "org.bflow.toolbox.hive.statement.views.StatementView"; //$NON-NLS-1$
 
 
 	private TableViewer viewer;
@@ -129,7 +130,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				if (currentColumn == 1) {
 					if (event.keyCode == SWT.SPACE ||event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
 						if (!isLastProperty(currentProperty)) {
-							boolean bool = MessageDialog.openQuestion(viewer.getControl().getShell(), "Statement wirklich entfernen?", "Soll "+ currentProperty.getTemplateString() + " wirklich entfernt werden?");
+							boolean bool = MessageDialog.openQuestion(viewer.getControl().getShell(), Messages.StatementView_0, Messages.StatementView_1+ currentProperty.getTemplateString() + Messages.StatementView_2);
 							if (bool) {
 								attrFile.remove(diagramId, currentProperty.getId());
 								attrFile.save();
@@ -161,7 +162,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 
 		//FIRST Column
         tableColumPropertyTemplate = new TableColumn(viewer.getTable(), SWT.NONE);
-        tableColumPropertyTemplate.setText("Properties für " + diagramTitle);
+        tableColumPropertyTemplate.setText(Messages.StatementView_3 + diagramTitle);
         TableViewerColumn columnPropertyTemplate = new TableViewerColumn(viewer, tableColumPropertyTemplate);
         columnPropertyTemplate.setLabelProvider(new ColumnTextLabelProvider(0));
 		        
@@ -193,7 +194,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		ArrayList<String> propertyTemplates = new ArrayList<>();
 		
 		IPath rootPath = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
-		rootPath = rootPath.append(".properties/templates.txt");
+		rootPath = rootPath.append(".properties/templates.txt"); //$NON-NLS-1$
 		File templateFile = rootPath.toFile();
 		if (templateFile.isFile() && templateFile.canRead()) {
 			BufferedReader in = null;
@@ -299,7 +300,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			if (allAttr != null) {
 				for (String propertyId : allAttr.keySet()) {
 					//Id is an valid UUID?
-					if (propertyId.matches("property_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) {
+					if (propertyId.matches("property_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) { //$NON-NLS-1$
 						if (shapeIdtoClassname == null) {
 							shapeIdtoClassname = getShapeIdsAndClassnamesFromDiagram();
 						}
@@ -309,7 +310,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			}
 			
 			properties.add(new Property());
-			tableColumPropertyTemplate.setText("Properties für " + diagramTitle);
+			tableColumPropertyTemplate.setText(Messages.StatementView_3 + diagramTitle);
 			for (Property prop : controlsToLinks.keySet()) {
 				controlsToLinks.get(prop).dispose();
 			}
@@ -338,7 +339,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		String shapename = null;
 		Method getName = null;
 		try {
-		    getName = eObj.getClass().getMethod("getName");
+		    getName = eObj.getClass().getMethod("getName"); //$NON-NLS-1$
 		    
 		    if(getName != null) {
 		        Object shapenameobject = getName.invoke(eObj);
@@ -387,24 +388,24 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		
 		ArrayList<Variable> vars = new ArrayList<>();
 		
-		if (propertyString.contains("$")) {
+		if (propertyString.contains("$")) { //$NON-NLS-1$
 			
-			String[] parts = propertyString.split("-->");
+			String[] parts = propertyString.split("-->"); //$NON-NLS-1$
 			if (parts.length == 2) {
 				String templateString = parts[0];
 				String formulaString = parts[1];
 				
-				String[] words = templateString.split("\\s");
+				String[] words = templateString.split("\\s"); //$NON-NLS-1$
 				
 				for (int i = 0; i < words.length; i++) {
 					
 					if (words[i].startsWith("$")) { //$NON-NLS-1$
-						while (words[i].startsWith("$")) {
+						while (words[i].startsWith("$")) { //$NON-NLS-1$
 							words[i] = words[i].substring(1);
 						}
 						String classname = null;
 						String id;
-						if (words[i].matches("^.+?(_)\\d$")) {
+						if (words[i].matches("^.+?(_)\\d$")) { //$NON-NLS-1$
 							id = words[i].substring(0, words[i].length()-2);
 						}else {
 							id = words[i];
@@ -415,9 +416,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 						}
 						
 						if (classname != null) {
-						    String variableNumber ="";
+						    String variableNumber =""; //$NON-NLS-1$
 							if (formulaString.contains(words[i])) {
-								Pattern pattern2 = Pattern.compile("(_)\\d$");
+								Pattern pattern2 = Pattern.compile("(_)\\d$"); //$NON-NLS-1$
 								Matcher matcher2 = pattern2.matcher(words[i]);
 								while (matcher2.find()) {
 									variableNumber = matcher2.group();
@@ -426,14 +427,14 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 							Variable var = property.new Variable(classname + variableNumber, id);
 							String shapename = shapeIdtoClassname.get(id).getName();
 							if (shapename != null) {
-								words[i] = "$" + shapename;
+								words[i] = "$" + shapename; //$NON-NLS-1$
 							}else {
-								words[i] = "$" + words[i];
+								words[i] = "$" + words[i]; //$NON-NLS-1$
 							}
 							vars.add(var);
 						}else {
-							words[i] = "$unknown";
-							vars.add(property.new Variable("unknown"));
+							words[i] = Messages.StatementView_5;
+							vars.add(property.new Variable(Messages.StatementView_6));
 						}
 					}
 					property.setVariables(vars);
@@ -442,7 +443,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				StringBuilder builder = new StringBuilder();
 				for(String s : words) {
 				    builder.append(s);
-				    builder.append(" ");
+				    builder.append(" "); //$NON-NLS-1$
 				}
 				property.setTemplateString(builder.toString().trim());
 				formulaString = parts[1];
@@ -468,7 +469,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				EObject eObj = nodeImpl.getElement();
 				XMLResource resource = (XMLResource) eObj.eResource();
 				String id = resource.getID(eObj);
-				String classname = child.getClass().getSimpleName().replace("EditPart", "").toLowerCase();
+				String classname = child.getClass().getSimpleName().replace("EditPart", "").toLowerCase(); //$NON-NLS-1$ //$NON-NLS-2$
 				String shapename = getNameAttributeFromEObject(eObj);
 				shapeIdtoClassname.put(id, new NodeName(classname, shapename));
 			}
@@ -480,9 +481,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	 * Disabled the StatementView
 	 */
 	private void disableView() {
-		this.diagramTitle = "";
+		this.diagramTitle = ""; //$NON-NLS-1$
 		tableColumPropertyTemplate.setText(diagramTitle);
-		this.diagramId = "";
+		this.diagramId = ""; //$NON-NLS-1$
 		properties.clear();
 		for (Property prop : controlsToLinks.keySet()) {
 			controlsToLinks.get(prop).dispose();
@@ -554,9 +555,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 					final Link link = new Link((Composite) cell.getViewerRow().getControl(), SWT.NONE);
 					link.setText(property.getTemplateStringWithLinks());
 					if (!property.isComplete()) {
-						link.setToolTipText("nicht zugeordnet");
+						link.setToolTipText(Messages.StatementView_7);
 					}else {
-						link.setToolTipText("zugeordnet");
+						link.setToolTipText(Messages.StatementView_8);
 					}
 					
 					link.addListener(SWT.Selection, new Listener() {
@@ -579,8 +580,8 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 							}
 							
 							String oldLinkText = link.getText();
-							String newLink = "<a href=\""+ event.text +"\">" + "["+ ">....<" + "]" + "</a>";
-							String newLinkText = oldLinkText.replaceAll("<a href=\"" + event.text + "\">\\[(.*?)\\]</a>", newLink);
+							String newLink = "<a href=\""+ event.text +"\">" + "["+ ">....<" + "]" + "</a>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+							String newLinkText = oldLinkText.replaceAll("<a href=\"" + event.text + "\">\\[(.*?)\\]</a>", newLink); //$NON-NLS-1$ //$NON-NLS-2$
 							link.setText(newLinkText);
 							
 							selectionInProgress = true;
@@ -598,7 +599,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 										IStructuredSelection sel = (IStructuredSelection) selection;
 										if (sel.getFirstElement() instanceof ShapeNodeEditPart) {
 											ShapeNodeEditPart editPart = (ShapeNodeEditPart) sel.getFirstElement();
-											String classname = editPart.getClass().getSimpleName().replace("EditPart", "");
+											String classname = editPart.getClass().getSimpleName().replace("EditPart", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				                			if (variablename.toLowerCase().equals(classname.toLowerCase())) {
 				                				NodeImpl nodeImpl = (NodeImpl) editPart.getModel();
 												EObject eObj = nodeImpl.getElement();
@@ -616,8 +617,8 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 													replacementString = id;
 												}
 												
-				                				link.setText(link.getText().replace(">....<", replacementString));
-				                				link.setToolTipText("zugeordnet");
+				                				link.setText(link.getText().replace(">....<", replacementString)); //$NON-NLS-1$
+				                				link.setToolTipText(Messages.StatementView_8);
 				                				selectionService.removeSelectionListener(this);
 				                				selectionInProgress = false;
 				                				selectionVarId = -1;
@@ -675,7 +676,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		 */
 		@Override
 		public String getText(Object element) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		
 		/* (non-Javadoc)
@@ -712,19 +713,19 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			Property prop = (Property) element;
 			
 			if (column == 0 && prop.isComplete()) {
-				return "Property ist vollständig";
+				return Messages.StatementView_10;
 			}
 			if (column == 0 && !prop.isValid()) {
-				return "Beschädigte Property! Ein zugeordnetes Node existiert nicht mehr.";
+				return Messages.StatementView_11;
 			}
 			if (column == 0 && !prop.isComplete()) {
-				return "Property ist nicht vollständig. Alle Varaiblen müssen dem Diagramm zugeordnet sein";
+				return Messages.StatementView_12;
 			}
 			if (column == 1 && isLastProperty(prop)) {
 				return null;
 			}
 			if (column == 1 && !isLastProperty(prop)) {
-				return "Löschen";
+				return Messages.StatementView_13;
 			}
 			return null;
 		}
