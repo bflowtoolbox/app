@@ -145,6 +145,18 @@ public class NLSupport extends NLS {
 	public static String MIFImportWizardPage_PackPage;
 	public static String MIFImportWizardPage_Text_ManyFilesSelected;
 	public static String MIFImportWizardPage_Title;
+	public static String StatementView_RemoveDialogTitle;
+	public static String StatementView_RemoveDialogText1;
+	public static String StatementView_ToolTipText_PropertyIsComplete;
+	public static String StatementView_ToolTipText_PropertyIsDamaged;
+	public static String StatementView_ToolTipText_PropertyNotComplete;
+	public static String StatementView_ToolTipText_PropertyRemove;
+	public static String StatementView_RemoveDialogText2;
+	public static String StatementView_TableColumnText;
+	public static String StatementView_ReplacementUnknownVariables1;
+	public static String StatementView_ReplacementUnknownVariables2;
+	public static String StatementView_ToolTipText_PropertyVariableNotAssigned;
+	public static String StatementView_ToolTipText_PropertyVariableAssigned;
 	public static String ValidationPage_ButtonDescriptionText;
 	public static String ValidationPage_ButtonEditText;
 	public static String ValidationPage_ButtonExportText;
