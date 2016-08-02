@@ -375,27 +375,27 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	/**
 	 * Returns a new property restored from an attribute.
 	 * 
-	 * @param propertyString the name of the property
+	 * @param templateString the name of the property
 	 * @param diagramId the associated diagramId
 	 * @param propertyId the unique property Id
 	 * @param shapeIdtoClassname list of editpart-classnames with referenced editpart id of the current diagram
 	 * @return Property the restored Property
 	 */
-	private Property getPropertyObjectfromAttribute(String propertyString, String diagramId, String propertyId, HashMap<String, NodeName> shapeIdtoClassname) {
+	private Property getPropertyObjectfromAttribute(String templateString, String diagramId, String propertyId, HashMap<String, NodeName> shapeIdtoClassname) {
 		Property property = new Property();
 		property.setDiagramId(diagramId);
 		property.setId(propertyId);
 		
 		ArrayList<Variable> vars = new ArrayList<>();
 		
-		if (propertyString.contains("$")) { //$NON-NLS-1$
+		if (templateString.contains("$")) { //$NON-NLS-1$
 			
-			String[] parts = propertyString.split("-->"); //$NON-NLS-1$
+			String[] parts = templateString.split("-->"); //$NON-NLS-1$
 			if (parts.length == 2) {
-				String templateString = parts[0];
+				String propertyString = parts[0];
 				String formulaString = parts[1];
 				
-				String[] words = templateString.split("\\s"); //$NON-NLS-1$
+				String[] words = propertyString.split("\\s"); //$NON-NLS-1$
 				
 				for (int i = 0; i < words.length; i++) {
 					
@@ -445,12 +445,12 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				    builder.append(s);
 				    builder.append(" "); //$NON-NLS-1$
 				}
-				property.setTemplateString(builder.toString().trim());
+				property.setPropertyString(builder.toString().trim());
 				formulaString = parts[1];
 				property.setFormulaString(formulaString);
 			}
 		}else {
-			property.setTemplateString(propertyString);
+			property.setPropertyString(templateString);
 		}
 		return property;
 	}

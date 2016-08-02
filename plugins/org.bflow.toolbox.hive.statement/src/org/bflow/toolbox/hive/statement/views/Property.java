@@ -17,7 +17,7 @@ import org.bflow.toolbox.hive.nls.NLSupport;
 public class Property {
 
 	private static AttributeFile attrFile;
-	private String templateString;
+	private String propertyString;
 	private String formulaString;
 	private List<Variable> variables = new ArrayList<>();
 	private String id;
@@ -25,17 +25,17 @@ public class Property {
 	
 	/**
 	 * Constructor for creating a new property for a diagram
-	 * @param templateString the name and formula of this property
+	 * @param propertyString the name and formula of this property
 	 * @param diagramId id of the associated diagram
 	 */
-	Property(String templateString, String diagramId) {
+	Property(String propertyString, String diagramId) {
 		
-		String[] parts = templateString.split("-->"); //$NON-NLS-1$
+		String[] parts = propertyString.split("-->"); //$NON-NLS-1$
 		if (parts.length == 2) {
-			this.templateString = parts[0];
+			this.propertyString = parts[0];
 			this.formulaString = parts[1];
 		}else {
-			this.templateString = "unknown format"; //$NON-NLS-1$
+			this.propertyString = "unknown format"; //$NON-NLS-1$
 			this.formulaString = "unknown format"; //$NON-NLS-1$
 		}
 		this.variables = getVariablesFromTemplate();
@@ -52,7 +52,7 @@ public class Property {
 	}
 
 	public String getTemplateString() {
-		return templateString;
+		return propertyString;
 	}
 	
 	public String getFormularString() {
@@ -127,11 +127,11 @@ public class Property {
 	}
 	
 	/**
-	 * Sets the templateString.
-	 * @param templateString the name of this property
+	 * Sets the propertyString.
+	 * @param propertyString the name of this property
 	 */
-	protected void setTemplateString(String templateString) {
-		this.templateString = templateString;
+	protected void setPropertyString(String propertyString) {
+		this.propertyString = propertyString;
 	}
 	
 	/**
@@ -167,8 +167,8 @@ public class Property {
 	private List<Variable> getVariablesFromTemplate() {
 		ArrayList<Variable> vars = new ArrayList<>();
 
-		if (templateString.contains("$")) { //$NON-NLS-1$
-			String[] words = templateString.split("\\s"); //$NON-NLS-1$
+		if (propertyString.contains("$")) { //$NON-NLS-1$
+			String[] words = propertyString.split("\\s"); //$NON-NLS-1$
 			for (String word : words) {
 				if (word.startsWith("$")) { //$NON-NLS-1$
 					while (word.startsWith("$")) { //$NON-NLS-1$
@@ -186,7 +186,7 @@ public class Property {
 	 * @return String with linked variables
 	 */
 	protected String getTemplateStringWithLinks() {
-		String propertyStringRepresentation = templateString;
+		String propertyStringRepresentation = propertyString;
 		if (propertyStringRepresentation.contains("$")) { //$NON-NLS-1$
 			String[] words = propertyStringRepresentation.split("\\s"); //$NON-NLS-1$
 			int j = 0;
