@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.nls.NLSupport;
-import org.bflow.toolbox.hive.statement.nls.Messages;
 
 /**
  * Represents a property entry for the StatementView-TableViewer
