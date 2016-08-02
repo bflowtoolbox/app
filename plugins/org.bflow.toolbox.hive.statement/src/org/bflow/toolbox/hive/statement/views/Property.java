@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bflow.toolbox.hive.attributes.AttributeFile;
+import org.bflow.toolbox.hive.nls.NLSupport;
 import org.bflow.toolbox.hive.statement.nls.Messages;
 
 /**
@@ -75,7 +76,7 @@ public class Property {
 	
 	public boolean isValid() {
 		for (Variable var : variables) {
-			if(var.getName().equals(Messages.StatementView_6)){
+			if(var.getName().equals(NLSupport.StatementView_ReplacementUnknownVariables2)){
 				return false;
 			}
 		}

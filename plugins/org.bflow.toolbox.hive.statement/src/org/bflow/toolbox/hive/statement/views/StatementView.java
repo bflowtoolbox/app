@@ -18,7 +18,7 @@ import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
 import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
-import org.bflow.toolbox.hive.statement.nls.Messages;
+import org.bflow.toolbox.hive.nls.NLSupport;
 import org.bflow.toolbox.hive.statement.views.Property.Variable;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -130,7 +130,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				if (currentColumn == 1) {
 					if (event.keyCode == SWT.SPACE ||event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
 						if (!isLastProperty(currentProperty)) {
-							boolean bool = MessageDialog.openQuestion(viewer.getControl().getShell(), Messages.StatementView_0, Messages.StatementView_1+ currentProperty.getTemplateString() + Messages.StatementView_2);
+							boolean bool = MessageDialog.openQuestion(viewer.getControl().getShell(), NLSupport.StatementView_RemoveDialogTitle, NLSupport.StatementView_RemoveDialogText1+ currentProperty.getTemplateString() + NLSupport.StatementView_RemoveDialogText2);
 							if (bool) {
 								attrFile.remove(diagramId, currentProperty.getId());
 								attrFile.save();
@@ -162,7 +162,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 
 		//FIRST Column
         tableColumPropertyTemplate = new TableColumn(viewer.getTable(), SWT.NONE);
-        tableColumPropertyTemplate.setText(Messages.StatementView_3 + diagramTitle);
+        tableColumPropertyTemplate.setText(NLSupport.StatementView_TableColumnText + diagramTitle);
         TableViewerColumn columnPropertyTemplate = new TableViewerColumn(viewer, tableColumPropertyTemplate);
         columnPropertyTemplate.setLabelProvider(new ColumnTextLabelProvider(0));
 		        
@@ -310,7 +310,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			}
 			
 			properties.add(new Property());
-			tableColumPropertyTemplate.setText(Messages.StatementView_3 + diagramTitle);
+			tableColumPropertyTemplate.setText(NLSupport.StatementView_TableColumnText + diagramTitle);
 			for (Property prop : controlsToLinks.keySet()) {
 				controlsToLinks.get(prop).dispose();
 			}
@@ -433,8 +433,8 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 							}
 							vars.add(var);
 						}else {
-							words[i] = Messages.StatementView_5;
-							vars.add(property.new Variable(Messages.StatementView_6));
+							words[i] = NLSupport.StatementView_ReplacementUnknownVariables1;
+							vars.add(property.new Variable(NLSupport.StatementView_ReplacementUnknownVariables2));
 						}
 					}
 					property.setVariables(vars);
@@ -555,9 +555,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 					final Link link = new Link((Composite) cell.getViewerRow().getControl(), SWT.NONE);
 					link.setText(property.getTemplateStringWithLinks());
 					if (!property.isComplete()) {
-						link.setToolTipText(Messages.StatementView_7);
+						link.setToolTipText(NLSupport.StatementView_ToolTipText_PropertyVariableNotAssigned);
 					}else {
-						link.setToolTipText(Messages.StatementView_8);
+						link.setToolTipText(NLSupport.StatementView_ToolTipText_PropertyVariableAssigned);
 					}
 					
 					link.addListener(SWT.Selection, new Listener() {
@@ -618,7 +618,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 												}
 												
 				                				link.setText(link.getText().replace(">....<", replacementString)); //$NON-NLS-1$
-				                				link.setToolTipText(Messages.StatementView_8);
+				                				link.setToolTipText(NLSupport.StatementView_ToolTipText_PropertyVariableAssigned);
 				                				selectionService.removeSelectionListener(this);
 				                				selectionInProgress = false;
 				                				selectionVarId = -1;
@@ -713,19 +713,19 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			Property prop = (Property) element;
 			
 			if (column == 0 && prop.isComplete()) {
-				return Messages.StatementView_10;
+				return NLSupport.StatementView_ToolTipText_PropertyIsComplete;
 			}
 			if (column == 0 && !prop.isValid()) {
-				return Messages.StatementView_11;
+				return NLSupport.StatementView_ToolTipText_PropertyIsDamaged;
 			}
 			if (column == 0 && !prop.isComplete()) {
-				return Messages.StatementView_12;
+				return NLSupport.StatementView_ToolTipText_PropertyNotComplete;
 			}
 			if (column == 1 && isLastProperty(prop)) {
 				return null;
 			}
 			if (column == 1 && !isLastProperty(prop)) {
-				return Messages.StatementView_13;
+				return NLSupport.StatementView_ToolTipText_PropertyRemove;
 			}
 			return null;
 		}

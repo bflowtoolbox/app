@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Localization: plugin
 Bundle-Activator: org.bflow.toolbox.hive.statement.Activator
 Require-Bundle: org.eclipse.gmf.runtime.diagram.ui,
- org.bflow.toolbox.hive.attributes
+ org.bflow.toolbox.hive.attributes,
+ org.bflow.toolbox.hive.nls
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
