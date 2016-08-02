@@ -375,11 +375,11 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	/**
 	 * Returns a new property restored from an attribute.
 	 * 
-	 * @param propertyString - the name of the property
-	 * @param diagramId - the associated diagramId
-	 * @param propertyId - the unique property Id
-	 * @param shapeIdtoClassname - list of editpart-classnames with referenced editpart id of the current diagram
-	 * @return Property - the restored Property
+	 * @param propertyString the name of the property
+	 * @param diagramId the associated diagramId
+	 * @param propertyId the unique property Id
+	 * @param shapeIdtoClassname list of editpart-classnames with referenced editpart id of the current diagram
+	 * @return Property the restored Property
 	 */
 	private Property getPropertyObjectfromAttribute(String propertyString, String diagramId, String propertyId, HashMap<String, NodeName> shapeIdtoClassname) {
 		Property property = new Property();

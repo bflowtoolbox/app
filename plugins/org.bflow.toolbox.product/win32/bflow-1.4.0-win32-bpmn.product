@@ -82,7 +82,6 @@
       <plugin id="org.bflow.toolbox.epc.diagram"/>
       <plugin id="org.bflow.toolbox.epc.edit"/>
       <plugin id="org.bflow.toolbox.epc.model"/>
-      <plugin id="org.bflow.toolbox.epc.templating"/>
       <plugin id="org.bflow.toolbox.export.visio.epc"/>
       <plugin id="org.bflow.toolbox.export.visio.oepc"/>
       <plugin id="org.bflow.toolbox.hive.actions"/>
@@ -98,6 +97,7 @@
       <plugin id="org.bflow.toolbox.hive.mbe"/>
       <plugin id="org.bflow.toolbox.hive.modelnavigator"/>
       <plugin id="org.bflow.toolbox.hive.nls"/>
+      <plugin id="org.bflow.toolbox.hive.statement"/>
       <plugin id="org.bflow.toolbox.hive.swiprolog"/>
       <plugin id="org.bflow.toolbox.import.visio"/>
       <plugin id="org.bflow.toolbox.import.visio.epc"/>
@@ -239,6 +239,8 @@
       <plugin id="org.eclipse.emf.ecore.xmi"/>
       <plugin id="org.eclipse.emf.edit"/>
       <plugin id="org.eclipse.emf.edit.ui"/>
+      <plugin id="org.eclipse.emf.mapping"/>
+      <plugin id="org.eclipse.emf.mapping.xsd2ecore"/>
       <plugin id="org.eclipse.emf.mwe.core"/>
       <plugin id="org.eclipse.emf.mwe.utils"/>
       <plugin id="org.eclipse.emf.mwe2.runtime"/>

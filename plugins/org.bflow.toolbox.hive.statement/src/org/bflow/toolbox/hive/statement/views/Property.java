@@ -73,7 +73,6 @@ public class Property {
 		return true;
 	}
 	
-
 	public boolean isValid() {
 		for (Variable var : variables) {
 			if(var.getName().equals(Messages.StatementView_6)){
@@ -174,10 +173,6 @@ public class Property {
 				if (word.startsWith("$")) { //$NON-NLS-1$
 					while (word.startsWith("$")) { //$NON-NLS-1$
 						word = word.substring(1);
-//						//Variable endet mit "_[0-9]"
-//						if (word.matches("^.+?(_)\\d$")) {
-//							word = word.substring(0, word.length()-2);
-//						}
 					}
 					vars.add(new Variable(word));
 				}
