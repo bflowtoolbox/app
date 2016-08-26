@@ -27,6 +27,7 @@ import org.eclipse.ui.PlatformUI;
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 17.07.11
  * @version 04.04.2015 Using lower GMF object references
+ * 			26.08.2016 AST - Added Part Listener to initial active page
  */
 public class AttributeFileRegistry implements IPartListener {
 	
@@ -63,6 +64,12 @@ public class AttributeFileRegistry implements IPartListener {
 			
 		});
 
+		/* 26.08.2016 AST
+		 * Because the page does not change anymore (see above), a part listener has to be added to the initial 
+		 * active page.
+		 * @suspect
+		 */
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(instance);
 	}
 	
 	/**
