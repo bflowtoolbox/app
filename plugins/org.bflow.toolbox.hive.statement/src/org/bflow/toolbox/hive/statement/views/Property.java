@@ -22,6 +22,7 @@ public class Property {
 	private List<Variable> variables = new ArrayList<>();
 	private String id;
 	private String diagramId;
+	private Boolean result;
 	
 	/**
 	 * Constructor for creating a new property for a diagram
@@ -30,7 +31,7 @@ public class Property {
 	 */
 	Property(String propertyString, String diagramId) {
 		
-		String[] parts = propertyString.split("-->"); //$NON-NLS-1$
+		String[] parts = propertyString.split(">>>"); //$NON-NLS-1$
 		if (parts.length == 2) {
 			this.propertyString = parts[0];
 			this.formulaString = parts[1];
@@ -41,6 +42,9 @@ public class Property {
 		this.variables = getVariablesFromTemplate();
 		this.diagramId = diagramId;
 		this.id = "property_" + UUID.randomUUID().toString(); //$NON-NLS-1$
+		if (variables.isEmpty()) {
+			Property.persistAsAttribute(this);
+		}
 	}
 
 	/**
@@ -111,6 +115,14 @@ public class Property {
 	}
 	
 	/**
+	 * Returns the result of that property
+	 * @return result as Boolean
+	 */
+	public Boolean getResult() {
+		return result;
+	}
+	
+	/**
 	 * Sets the id of the associated diagram.
 	 * @param id id of the associated diagram
 	 */
@@ -158,6 +170,15 @@ public class Property {
 	 */
 	protected static void setAttributFile(AttributeFile af) {
 		attrFile = af;
+	}
+	
+
+	/**
+	 * Set the result of that property
+	 * @param result
+	 */
+	public void setResult(Boolean result) {
+		this.result = result;
 	}
 		
 	/**
@@ -248,7 +269,7 @@ public class Property {
 			}
 			storeableString = builder.toString().trim();
 		}
-		return storeableString + "-->" + property.getFormularString(); //$NON-NLS-1$
+		return storeableString + ">>>" + property.getFormularString(); //$NON-NLS-1$
 	}
 	
 	/**
@@ -324,5 +345,13 @@ public class Property {
 		    }
 			return "";
 		}
+	}
+
+	public List<String> getVariableIds() {
+		ArrayList<String> ids = new ArrayList<>();
+		for (Variable v : variables) {
+			ids.add(v.getId());
+		}
+		return ids;
 	}
 }
