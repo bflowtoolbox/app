@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -62,6 +63,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	 */
 	public static final String ID = "org.bflow.toolbox.hive.statement.views.StatementView"; //$NON-NLS-1$
 
+	private static StatementView instance;
 
 	private TableViewer viewer;
 	private Combo combo = null;
@@ -89,6 +91,8 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	private String selectionLinkText;
 
 	private AttributeFile attrFile;
+
+	private boolean isTested = false;
 	
 	
 	/**
@@ -219,6 +223,39 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		}
 		return propertyTemplates;
 	}
+	
+	/**
+	 * Returns the instance of this view part.
+	 * 
+	 * @return instance of this view part
+	 */
+	public static StatementView getInstance() {
+		return instance;
+	}
+	
+	/**
+	 * Sets the resultFlag of a property.
+	 * true - property is satisfied
+	 * false  - property is not satisfied
+	 * null - property has an unknown satisfaction
+	 * 
+	 * @param indexOfProperty the index of the related property 
+	 * @param result true, false or null
+	 */
+	public void setResult(int indexOfProperty, Boolean result) {
+		for (Property p : properties) {
+			if (p.isComplete() && properties.indexOf(p) == indexOfProperty) {
+				p.setResult(result);
+			}
+		}
+		viewer.refresh();
+	}
+	
+	public void clearResult() {
+		reInitView();
+		this.isTested  = true;
+		viewer.refresh();
+	}
 
 	/**
 	 * Passing the focus request to the viewer's control.
@@ -247,6 +284,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
 		site.getPage().addSelectionListener(this);
+		instance = this;
 	}
 	
 	/* (non-Javadoc)
@@ -256,6 +294,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	public void dispose() {
 		AttributeFileRegistry.getInstance().removeRegistryListener(this);
 		getSite().getPage().removeSelectionListener(this);
+		instance = null;
 		super.dispose();
 	}
 
@@ -291,41 +330,45 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			activeEditorPart = editorPart;
 			attrFile = event.attributeFile;
 			Property.setAttributFile(attrFile);
-			this.diagramTitle = activeEditorPart.getTitle();
-			this.diagramId = getDiagramIdFromEditorPart((DiagramEditor) activeEditorPart);
-			HashMap<String, String> allAttr = attrFile.get(diagramId);
-			properties.clear();
-			
-			HashMap<String, NodeName> shapeIdtoClassname = null;
-			if (allAttr != null) {
-				for (String propertyId : allAttr.keySet()) {
-					//Id is an valid UUID?
-					if (propertyId.matches("property_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) { //$NON-NLS-1$
-						if (shapeIdtoClassname == null) {
-							shapeIdtoClassname = getShapeIdsAndClassnamesFromDiagram();
-						}
-						properties.add(getPropertyObjectfromAttribute(allAttr.get(propertyId), diagramId, propertyId, shapeIdtoClassname));
+			reInitView();
+		}
+	}
+
+	private void reInitView() {
+		this.diagramTitle = activeEditorPart.getTitle();
+		this.diagramId = getDiagramIdFromEditorPart((DiagramEditor) activeEditorPart);
+		HashMap<String, String> allAttr = attrFile.get(diagramId);
+		properties.clear();
+		
+		HashMap<String, NodeName> shapeIdtoClassname = null;
+		if (allAttr != null) {
+			for (String propertyId : allAttr.keySet()) {
+				//Id is an valid UUID?
+				if (propertyId.matches("property_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) { //$NON-NLS-1$
+					if (shapeIdtoClassname == null) {
+						shapeIdtoClassname = getShapeIdsAndClassnamesFromDiagram();
 					}
+					properties.add(getPropertyObjectfromAttribute(allAttr.get(propertyId), diagramId, propertyId, shapeIdtoClassname));
 				}
 			}
-			
-			properties.add(new Property());
-			tableColumPropertyTemplate.setText(NLSupport.StatementView_TableColumnText + diagramTitle);
-			for (Property prop : controlsToLinks.keySet()) {
-				controlsToLinks.get(prop).dispose();
-			}
-			controlsToLinks.clear();
-			if (combo != null) {
-				combo.dispose();
-				combo = null;
-			}
-			if (selectionInProgress) {
-				selectionService.removeSelectionListener(selectionListener);
-				selectionInProgress = false;
-			}
-			viewer.getTable().setEnabled(true);
-			viewer.refresh();
 		}
+		
+		properties.add(new Property());
+		tableColumPropertyTemplate.setText(NLSupport.StatementView_TableColumnText + diagramTitle);
+		for (Property prop : controlsToLinks.keySet()) {
+			controlsToLinks.get(prop).dispose();
+		}
+		controlsToLinks.clear();
+		if (combo != null) {
+			combo.dispose();
+			combo = null;
+		}
+		if (selectionInProgress) {
+			selectionService.removeSelectionListener(selectionListener);
+			selectionInProgress = false;
+		}
+		viewer.getTable().setEnabled(true);
+		viewer.refresh();
 	}
 	
 	/**
@@ -388,9 +431,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		
 		ArrayList<Variable> vars = new ArrayList<>();
 		
-		if (templateString.contains("$")) { //$NON-NLS-1$
-			
-			String[] parts = templateString.split("-->"); //$NON-NLS-1$
+			String[] parts = templateString.split(">>>"); //$NON-NLS-1$
 			if (parts.length == 2) {
 				String propertyString = parts[0];
 				String formulaString = parts[1];
@@ -448,10 +489,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				property.setPropertyString(builder.toString().trim());
 				formulaString = parts[1];
 				property.setFormulaString(formulaString);
+			} else {
+				property.setPropertyString(templateString);
 			}
-		}else {
-			property.setPropertyString(templateString);
-		}
 		return property;
 	}
 
@@ -475,6 +515,14 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			}
 		}
 		return shapeIdtoClassname;
+	}
+	
+	public HashSet<String> getAllRelatedNodeIds() {
+		HashSet<String> ids = new HashSet<>();
+		for (Property p : properties) {
+			ids.addAll(p.getVariableIds());
+		}
+		return ids;
 	}
 
 	/**
@@ -687,10 +735,19 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			Property prop = (Property) obj;
 			if (column == 0) {
 				if (isLastProperty(prop)) {
-					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
-					//return new Image(getSite().getShell().getDisplay(), this.getClass().getResourceAsStream("/icons/add.gif"));
+					return null;
 				}
 				if(prop.isComplete()){
+					Boolean p = prop.getResult();
+					if (isTested) {
+						if (Boolean.TRUE == p) {
+							return new Image(getSite().getShell().getDisplay(), this.getClass().getResourceAsStream("/icons/result_true.gif"));
+						}else if (Boolean.FALSE == p) {
+							return new Image(getSite().getShell().getDisplay(), this.getClass().getResourceAsStream("/icons/result_false.gif"));
+						}else if (null == p) {
+							return new Image(getSite().getShell().getDisplay(), this.getClass().getResourceAsStream("/icons/result_unknown.gif"));
+						}
+					}
 					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
 				}else {
 					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_WARN_TSK);
@@ -698,7 +755,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 			}
 			if (column == 1) {
 				if (isLastProperty((Property) obj)) {
-					return null;
+					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD);
 				}
 				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED);
 			}
@@ -712,6 +769,15 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		public String getToolTipText(Object element) {
 			Property prop = (Property) element;
 			
+			if (column == 0 && prop.isComplete() && isTested && prop.getResult() == Boolean.TRUE) {
+				return NLSupport.StatementView_ToolTipText_PropertyResultIsTrue;
+			}
+			if (column == 0 && prop.isComplete() && isTested && prop.getResult() == Boolean.FALSE) {
+				return NLSupport.StatementView_ToolTipText_PropertyResultIsFalse;
+			}
+			if (column == 0 && prop.isComplete() && isTested && prop.getResult() == null) {
+				return NLSupport.StatementView_ToolTipText_PropertyResultIsUnknown;
+			}
 			if (column == 0 && prop.isComplete()) {
 				return NLSupport.StatementView_ToolTipText_PropertyIsComplete;
 			}

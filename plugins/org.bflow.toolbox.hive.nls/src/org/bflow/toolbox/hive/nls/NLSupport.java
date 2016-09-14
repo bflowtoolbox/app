@@ -148,6 +148,9 @@ public class NLSupport extends NLS {
 	public static String StatementView_RemoveDialogTitle;
 	public static String StatementView_RemoveDialogText1;
 	public static String StatementView_ToolTipText_PropertyIsComplete;
+	public static String StatementView_ToolTipText_PropertyResultIsTrue;
+	public static String StatementView_ToolTipText_PropertyResultIsFalse;
+	public static String StatementView_ToolTipText_PropertyResultIsUnknown;
 	public static String StatementView_ToolTipText_PropertyIsDamaged;
 	public static String StatementView_ToolTipText_PropertyNotComplete;
 	public static String StatementView_ToolTipText_PropertyRemove;
