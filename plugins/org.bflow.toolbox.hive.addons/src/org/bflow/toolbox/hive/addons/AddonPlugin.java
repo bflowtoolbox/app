@@ -42,8 +42,7 @@ import org.osgi.service.prefs.Preferences;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 06.03.11
- * @version 23.01.15
- * 			28.02.15
+ * @version 19.09.2016 AST - Add-on console is created and registered on demand
  */
 public class AddonPlugin extends AbstractUIPlugin {
 
@@ -87,7 +86,6 @@ public class AddonPlugin extends AbstractUIPlugin {
 		/* 29.05.2016 - astorch
 		 * Don't create views that are initiated by the bflow perspective.
 		 */
-//		createConsole();
 //		AttributeViewPart.getInstance();
 		AddonsWorkbenchListener.register();
 
@@ -138,6 +136,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 	
 	/**
 	 * Returns the preferences store.
+	 * 
 	 * @return preferences store
 	 */
 	public Preferences getPreferencesStore() {
@@ -145,7 +144,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Use this method to log to the plugin, that markers has been created.
+	 * Use this method to log to the plug-in, that markers has been created.
 	 * 
 	 * @param id
 	 *            unique marker type id
@@ -209,29 +208,40 @@ public class AddonPlugin extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Creates the add-on console.
+	 * Returns the reference of the currently used Add-on console. If none
+	 * exists, a new one is created and registered.
+	 * 
+	 * @return Reference of the currently used Add-on console
 	 */
-	private void createConsole() {
+	private IOConsole getOrCreateAddonConsole() {
+		// Use the existing one
+		if (this.console != null) return this.console;
+		
+		// Create a new one
 		this.console = new IOConsole("Add-on Console", null);
-
+		
+		// Register it and make it visible
 		ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[] { this.console });
 		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(this.console);
+		
+		return this.console;
 	}
 
 	/**
-	 * Returns the add-on console.
+	 * Returns the Add-on console.
 	 * 
-	 * @return add-on console
+	 * @return Add-on console
 	 */
 	public IOConsole getAddonConsole() {
-		return this.console;
+		return getOrCreateAddonConsole();
 	}
 
 	/**
 	 * Requests to focus the add-on console.
 	 */
 	public void requestConsoleFocus() {
-		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(this.console);
+		IOConsole console = getOrCreateAddonConsole();
+		ConsolePlugin.getDefault().getConsoleManager().showConsoleView(console);
 	}
 
 	/**
@@ -284,8 +294,6 @@ public class AddonPlugin extends AbstractUIPlugin {
 			throwable.printStackTrace();
 		}
 	}
-
-	
 
 	/**
 	 * Registers all components to the component store that are registered by
