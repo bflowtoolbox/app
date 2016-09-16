@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Text;
  * @version 06.08.14
  * 			12.03.15 Added usage of ToolStore.hasTool()
  * 					 Removed obsolete NLSupport
+ * 			16.09.16 Changed file filter from 'plcon.*' to 'swipl.*'
  */
 public class EditToolDialog extends Dialog {	
 	
@@ -80,10 +81,11 @@ public class EditToolDialog extends Dialog {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fDlg = new FileDialog(composite.getShell(), SWT.OPEN);
 				
-				if(txtName.getText().equalsIgnoreCase("SWI-Prolog")) //$NON-NLS-1$
-					fDlg.setFilterExtensions(new String[] {"plcon.*", "*.*"}); //$NON-NLS-1$ //$NON-NLS-2$
+				// TODO Fixed platform specific name reference 'swipl.exe'
+				if (txtName.getText().equalsIgnoreCase("SWI-Prolog")) //$NON-NLS-1$
+					fDlg.setFilterExtensions(new String[] {"swipl.*", "*.*"}); //$NON-NLS-1$ //$NON-NLS-2$
 					
-				if(fDlg.open() != null) {
+				if (fDlg.open() != null) {
 					String toolPath = fDlg.getFilterPath()+System.getProperty("file.separator")+fDlg.getFileName(); //$NON-NLS-1$
 					txtPath.setText(toolPath);						
 				}
@@ -191,10 +193,10 @@ public class EditToolDialog extends Dialog {
 	/**
 	 * Sets the editable state of some input values.
 	 * 
-	 * @param b
+	 * @param value
 	 *            true or false
 	 */
-	public void setChangeable(boolean b) {
-		this.changeable = b;
+	public void setChangeable(boolean value) {
+		this.changeable = value;
 	}
 }
