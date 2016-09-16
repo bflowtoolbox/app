@@ -102,6 +102,13 @@ public class NLSupport extends NLS {
 	public static String InstalledProtocolsPage_ErrorDialogTitle;
 	public static String InstalledProtocolsPage_LblDescription;
 	public static String InstalledProtocolsPage_TableHeaderProtocol;
+	public static String InstalledToolsPage_ButtonAddText;
+	public static String InstalledToolsPage_ButtonEditText;
+	public static String InstalledToolsPage_ButtonRemoveText;
+	public static String InstalledToolsPage_PageDescription;
+	public static String InstalledToolsPage_TableColumnHeaderTextInstallPath;
+	public static String InstalledToolsPage_TableColumnHeaderTextName;
+	public static String InstalledToolsPage_TableColumnHeaderTextParameter;
 	public static String MenuContributionProvider_ConfirmDialogText;
 	public static String MenuContributionProvider_ConfirmDialogTitle;
 	public static String MenuContributionProvider_QuestionDialogText;

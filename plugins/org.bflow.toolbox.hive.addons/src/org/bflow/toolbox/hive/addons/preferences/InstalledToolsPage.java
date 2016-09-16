@@ -3,7 +3,7 @@ package org.bflow.toolbox.hive.addons.preferences;
 import org.bflow.toolbox.hive.addons.preferences.dialogs.EditToolDialog;
 import org.bflow.toolbox.hive.addons.store.ToolStore;
 import org.bflow.toolbox.hive.addons.utils.ToolDescriptor;
-import org.bflow.toolbox.hive.nls.NLUtil;
+import org.bflow.toolbox.hive.nls.NLSupport;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,6 +27,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  * @since 13.04.10
  * @version 06.08.14
  * 			12.03.15 Added usage of ToolStore.hasTool() by introducing editMode flag
+ * 			16.09.16 Removed obsolete NLSupport
  */
 public class InstalledToolsPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 	
@@ -80,13 +81,17 @@ public class InstalledToolsPage extends FieldEditorPreferencePage implements IWo
 		composite.setLayout(new GridLayout(1, false));
 
 		Label lblText = new Label(composite, SWT.NONE);
-		lblText.setText(NLUtil.getMessage("MitammPreferencesInstalledToolsPage#msg1"));
+		lblText.setText(NLSupport.InstalledToolsPage_PageDescription);
 
 		Composite panel = new Composite(composite, SWT.NONE);
 		panel.setLayout(new GridLayout(3, false));
 
+		GridData btnGridData = new GridData();
+		btnGridData.widthHint = 120;
+		
 		Button btnAdd = new Button(panel, SWT.NONE);
-		btnAdd.setText(NLUtil.getMessage("MitammPreferencesInstalledToolsPage#msg2"));
+		btnAdd.setText(NLSupport.InstalledToolsPage_ButtonAddText);
+		btnAdd.setLayoutData(btnGridData);
 
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 
@@ -109,7 +114,8 @@ public class InstalledToolsPage extends FieldEditorPreferencePage implements IWo
 		});
 
 		Button btnRemove = new Button(panel, SWT.NONE);
-		btnRemove.setText(NLUtil.getMessage("MitammPreferencesInstalledToolsPage#msg3"));
+		btnRemove.setText(NLSupport.InstalledToolsPage_ButtonRemoveText);
+		btnRemove.setLayoutData(btnGridData);
 
 		btnRemove.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -124,7 +130,8 @@ public class InstalledToolsPage extends FieldEditorPreferencePage implements IWo
 		});
 
 		Button btnEdit = new Button(panel, SWT.NONE);
-		btnEdit.setText(NLUtil.getMessage("MitammPreferencesInstalledToolsPage#msg4"));
+		btnEdit.setText(NLSupport.InstalledToolsPage_ButtonEditText);
+		btnEdit.setLayoutData(btnGridData);
 		btnEdit.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -162,15 +169,15 @@ public class InstalledToolsPage extends FieldEditorPreferencePage implements IWo
 		table.setLayoutData(tableData);
 
 		TableColumn colToolName = new TableColumn(table, SWT.NONE);
-		colToolName.setText("Name");
+		colToolName.setText(NLSupport.InstalledToolsPage_TableColumnHeaderTextName);
 		colToolName.setWidth(80);
 
 		TableColumn colToolPath = new TableColumn(table, SWT.NONE);
-		colToolPath.setText("Install path");
+		colToolPath.setText(NLSupport.InstalledToolsPage_TableColumnHeaderTextInstallPath);
 		colToolPath.setWidth(300);
 
 		TableColumn colToolParam = new TableColumn(table, SWT.NONE);
-		colToolParam.setText("Parameter");
+		colToolParam.setText(NLSupport.InstalledToolsPage_TableColumnHeaderTextParameter);
 		colToolParam.setWidth(220);
 
 		for (ToolDescriptor descriptor : ToolStore.getInstalledTools()) {
@@ -189,8 +196,7 @@ public class InstalledToolsPage extends FieldEditorPreferencePage implements IWo
 
 		String name = item.getText(0);
 
-		if (name.equalsIgnoreCase("swi-prolog")
-				|| name.equalsIgnoreCase("epctools"))
+		if (name.equalsIgnoreCase("swi-prolog") || name.equalsIgnoreCase("epctools")) //$NON-NLS-1$ //$NON-NLS-2$
 			return false;
 
 		return true;
@@ -198,7 +204,9 @@ public class InstalledToolsPage extends FieldEditorPreferencePage implements IWo
 	
 	/**
 	 * Inserts a tool descriptor into the table.
-	 * @param td tool descriptor
+	 * 
+	 * @param td
+	 *            tool descriptor
 	 */
 	public void insert(ToolDescriptor td) {
 		TableItem item = new TableItem(table, SWT.NONE);
@@ -209,6 +217,7 @@ public class InstalledToolsPage extends FieldEditorPreferencePage implements IWo
 	
 	/**
 	 * Returns the instance of this page.
+	 * 
 	 * @return instance of this page
 	 */
 	public static InstalledToolsPage getInstance() {
