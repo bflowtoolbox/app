@@ -17,11 +17,16 @@ import org.eclipse.core.resources.ResourcesPlugin;
  * @since 06.04.13
  * @version 04.01.14
  * 			22.08.15 Moved unZip method to newly created ZipUtil class
+ * 			16.09.16 Fixed NPE when Prolog had been already installed
  *
  */
 public class SWIPrologInstaller {
 	
 	private static final SWIPrologInstaller installer = new SWIPrologInstaller();
+	
+	public static final String OS_Windows = "windows";
+	public static final String OS_Linux = "linux";
+	public static final String OS_Mac = "mac";
 	
 	/**
 	 * Installs the SWI-Prolog engine into a muted subfolder of the workspace root named ".swiprolog".
@@ -34,9 +39,10 @@ public class SWIPrologInstaller {
 		String installDir = String.format("%s\\%s", path, ".swiprolog");
 		
 		if (new File(installDir).exists()) {
+			String osName = getOsName();
 			String installPath = getRootDir(installDir);
-			// FIXME this can lead to null pointer exception
-			InstallMetaInfo installMetaInfo = new InstallMetaInfo(installPath, null);
+			String executableName = getOSSpecificExecutableName(osName);
+			InstallMetaInfo installMetaInfo = new InstallMetaInfo(installPath, executableName);
 			return installMetaInfo;
 		}
 		
@@ -57,19 +63,19 @@ public class SWIPrologInstaller {
 		String srcPath = null;
 		String executableName = null;
 		
-		if (osName.equalsIgnoreCase("windows")) {
+		if (osName == OS_Windows) {
 			srcPath = String.format(pathFormat, "win32");
-			executableName = "swipl.exe";
+			executableName = getOSSpecificExecutableName(osName);
 		}
 		
-		if (osName.equalsIgnoreCase("linux")) {
+		if (osName == OS_Linux) {
 			srcPath = String.format(pathFormat, "linux32");
-			executableName = "pl.sh";
+			executableName = getOSSpecificExecutableName(osName);
 		}
 		
-		if (osName.equalsIgnoreCase("mac")) {
+		if (osName == OS_Mac) {
 			srcPath = String.format(pathFormat, "macosx");
-			executableName = null; //"swipl";
+			executableName = getOSSpecificExecutableName(osName);
 			// Note: The path varies on mac (look at the zip)
 			// The socket connection does not work at the moment so this feature
 			// will be unavailable
@@ -116,6 +122,21 @@ public class SWIPrologInstaller {
 	}
 	
 	/**
+	 * Returns the OS specific executable name.
+	 * 
+	 * @param osName
+	 *            Name of the operating system (see class constants)
+	 * @return OS specific executable name
+	 */
+	private static String getOSSpecificExecutableName(String osName) {
+		if (osName == OS_Windows) return "swipl.exe";
+		if (osName == OS_Linux) return "pl.sh";
+		if (osName == OS_Mac) return "unkown";
+		
+		return null;
+	}
+	
+	/**
 	 * Returns the name of the current operating system.
 	 * 
 	 * @return Name of the operating system
@@ -125,11 +146,11 @@ public class SWIPrologInstaller {
 	  String osPropertyValue = System.getProperty("os.name").toLowerCase();
 	  
 	  if (osPropertyValue.indexOf("windows") > -1) {
-	    osName = "windows";
+	    osName = OS_Windows;
 	  } else if (osPropertyValue.indexOf("linux") > -1) {
-	    osName = "linux";
+	    osName = OS_Linux;
 	  } else if (osPropertyValue.indexOf("mac") > -1) {
-	    osName = "mac";
+	    osName = OS_Mac;
 	  }
 		 
 	  return osName;
