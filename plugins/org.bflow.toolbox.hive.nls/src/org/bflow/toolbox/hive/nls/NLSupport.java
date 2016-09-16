@@ -109,6 +109,8 @@ public class NLSupport extends NLS {
 	public static String InstalledToolsPage_TableColumnHeaderTextInstallPath;
 	public static String InstalledToolsPage_TableColumnHeaderTextName;
 	public static String InstalledToolsPage_TableColumnHeaderTextParameter;
+	public static String MainPage_CheckBoxLabel;
+	public static String MainPage_GroupTitle;
 	public static String MenuContributionProvider_ConfirmDialogText;
 	public static String MenuContributionProvider_ConfirmDialogTitle;
 	public static String MenuContributionProvider_QuestionDialogText;
