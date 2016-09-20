@@ -72,6 +72,22 @@ public class AnalyseUtil {
 	}
 	
 	/**
+	 * Analyzes a stream that begins with [PROPERTY].
+	 * @param contents string array without []
+	 * @return {@link PropertyViewResultMessage}
+	 * @throws ComponentException
+	 */
+	public static IAddonMessage analysePropertyResult(String contents[]) throws ComponentException {
+		if(contents.length != 5)
+			throw new ComponentException("PropertyResult has unexpected number of records");
+		
+		String result = contents[2];
+		
+		return new PropertyViewResultMessage(resolvePropertyResult(result));
+		
+	}
+	
+	/**
 	 * Resolves the attribute adjust message type.
 	 * @param str string to check
 	 * @return message type
@@ -99,6 +115,22 @@ public class AnalyseUtil {
 		}
 		
 		throw new ComponentException("attribute adjust type "+str+" is not known");
+	}
+	
+	/**
+	 * Resolves the result and returns it as Boolean.
+	 * @param str string to check
+	 * @return result as Boolean or null
+	 */
+	private static Boolean resolvePropertyResult(String str) {
+		
+		if(str.equals("1")){
+			return true;
+		}else if (str.equals("0")) {
+			return false;
+		}else {
+			return null;
+		}
 	}
 	
 }
