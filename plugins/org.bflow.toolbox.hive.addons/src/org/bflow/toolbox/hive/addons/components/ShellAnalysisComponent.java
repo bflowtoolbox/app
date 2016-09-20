@@ -109,8 +109,11 @@ public class ShellAnalysisComponent implements IShellAnalysisComponent {
 				if(type.equalsIgnoreCase("attribute"))
 					messageList.add(AnalyseUtil.analyseAttribute(contents));
 				
+				if(type.equalsIgnoreCase("property"))
+					messageList.add(AnalyseUtil.analysePropertyResult(contents));
+				
 				if(type.equalsIgnoreCase("message")) {
-					IAddonMessage mm = AnalyseUtil.analyseMessage(contents, markerResource); 
+					IAddonMessage mm = AnalyseUtil.analyseMessage(contents, markerResource);			
 					
 					if(!messageList.contains(mm)) {
 						messageList.add(mm);

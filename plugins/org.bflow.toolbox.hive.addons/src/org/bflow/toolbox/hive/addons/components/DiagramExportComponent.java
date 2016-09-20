@@ -231,6 +231,9 @@ public class DiagramExportComponent implements IDiagramExportComponent {
 	 */
 	@Override
 	public boolean canLinkWith(IComponent component) {
+		if (component instanceof RuleSetExportComponent)
+			return true;
+		
 		return false;
 	}
 

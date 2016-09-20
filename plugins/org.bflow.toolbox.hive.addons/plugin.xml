@@ -108,6 +108,12 @@
       <Component
             Class="org.bflow.toolbox.hive.addons.components.HTMLViewComponent">
       </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.RuleSetExportComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.addons.components.PropertyViewComponent">
+      </Component>
    </extension>
    <extension
          id="org.bflow.toolbox.mitamm.marker"
