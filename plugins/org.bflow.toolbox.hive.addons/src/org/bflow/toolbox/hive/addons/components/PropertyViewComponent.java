@@ -19,8 +19,6 @@ import org.eclipse.core.resources.IMarker;
  * A Vector of PropertyViewResultMessage is expected as input source. If you don't
  * transmit this data structure you will get a <code>ComponentException</code>.
  * <p/>
- * As output source you will get a vector containing the created markers. So you
- * can work with it further.
  * 
  * @author Markus Schnädelbach
  */
