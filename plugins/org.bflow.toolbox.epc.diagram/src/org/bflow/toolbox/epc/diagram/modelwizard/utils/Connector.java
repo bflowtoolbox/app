@@ -215,7 +215,7 @@ public class Connector
 			case XOR_DOUBLE:
 				return "Alt + w";
 			case XOR_N:
-				return "Alt + c";
+				return "Alt + e";
 			case XOR_IT:
 				return "Alt + r";
 			case NONE:
