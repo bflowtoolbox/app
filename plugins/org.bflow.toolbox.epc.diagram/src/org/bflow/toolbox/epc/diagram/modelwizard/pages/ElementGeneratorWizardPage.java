@@ -199,7 +199,6 @@ public class ElementGeneratorWizardPage extends WizardPage {
 					if (event.keyCode == SWT.CR && currentColumn%2 == 0 && currentColumn != 0) {
 						return true;
 					}
-					//if (isNameColumn && ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 97 && event.keyCode <= 122))) {
 					if (isNameColumn && event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && isNotDifferentUsedKey(event.keyCode)) {
 						KeyEvent ke = (KeyEvent) event.sourceEvent;
 						ke.doit = false;
