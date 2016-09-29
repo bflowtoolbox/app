@@ -6,10 +6,13 @@ import java.util.Stack;
 import java.util.UUID;
 import java.util.Vector;
 
+import org.bflow.toolbox.epc.diagram.edit.parts.ANDEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart;
+import org.bflow.toolbox.epc.diagram.edit.parts.OREditPart;
+import org.bflow.toolbox.epc.diagram.edit.parts.XOREditPart;
 import org.bflow.toolbox.epc.diagram.modelwizard.pages.ElementGeneratorWizardPage;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Constants;
@@ -502,12 +505,20 @@ public class ModelWizard extends Wizard {
 					}
 				}
 
-				if (!quickFix)
-					connectionStack.add(new Connection(anchor, getFirstDrawnControlFlowEP()));
+				if (!quickFix){
+					Object target = getFirstDrawnControlFlowEP();
+					if (target != null) {
+						connectionStack.add(new Connection(anchor, getFirstDrawnControlFlowEP()));
+					}
+				}
+				
 			}
 
 			if (connectionStack.size() != 0 && countArcConnections(anchor.getSourceConnections()) == 0 && !quickFix) {
-				connectionStack.add(new Connection(anchor, getFirstDrawnControlFlowEP()));
+				Object target = getFirstDrawnControlFlowEP();
+				if (target != null) {
+					connectionStack.add(new Connection(anchor, getFirstDrawnControlFlowEP()));
+				}
 			}
 		}
 	}
@@ -535,7 +546,7 @@ public class ModelWizard extends Wizard {
 	private Object getFirstDrawnControlFlowEP(){
 		for (Connection con : connectionStack) {
 			Object ep = con.getSource();
-			if (ep instanceof FunctionEditPart || ep instanceof EventEditPart) {
+			if (ep instanceof FunctionEditPart || ep instanceof EventEditPart || ep instanceof ANDEditPart || ep instanceof OREditPart || ep instanceof XOREditPart) {
 				return con.getSource();
 			}
 		}

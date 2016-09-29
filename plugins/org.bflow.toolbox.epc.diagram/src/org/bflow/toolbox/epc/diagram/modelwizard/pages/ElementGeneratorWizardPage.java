@@ -199,18 +199,13 @@ public class ElementGeneratorWizardPage extends WizardPage {
 					if (event.keyCode == SWT.CR && currentColumn%2 == 0 && currentColumn != 0) {
 						return true;
 					}
-					if (isNameColumn && ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 97 && event.keyCode <= 122))) {
+					if (isNameColumn && event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED && isNotDifferentUsedKey(event.keyCode)) {
 						KeyEvent ke = (KeyEvent) event.sourceEvent;
 						ke.doit = false;
 						return true;
 					}
 					
 				}
-				
-				
-				
-				
-				
 				
 				if (event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC && isNameColumn) {
 					focusCellManager.getFocusCell(); //bug, dies stellt aber die Sictbarkeit des Cell-Cursors wieder her
@@ -219,6 +214,30 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				
 				
 				return false;
+			}
+
+			/**
+			 * Returns true if the given keycode has no special function in the modelwizard
+			 * @param keyCode
+			 * @return boolean
+			 */
+			private boolean isNotDifferentUsedKey(int keyCode) {
+				if (keyCode == SWT.ALT) {
+					return false;
+				}
+				if (keyCode == SWT.ARROW_DOWN) {
+					return false;
+				}
+				if (keyCode == SWT.ARROW_UP) {
+					return false;
+				}
+				if (keyCode == SWT.ARROW_RIGHT) {
+					return false;
+				}
+				if (keyCode == SWT.ARROW_LEFT) {
+					return false;
+				}
+				return true;
 			}
 		};
 		
