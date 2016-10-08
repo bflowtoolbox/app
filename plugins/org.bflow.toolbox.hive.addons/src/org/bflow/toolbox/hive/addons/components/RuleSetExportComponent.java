@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
@@ -97,7 +99,9 @@ public class RuleSetExportComponent implements IRuleSetExportComponent {
 		
 		StatementView sv = StatementView.getInstance();
 		if (allAttr != null) {
-			for (String propertyId : allAttr.keySet()) {
+			List<String> sortedKeys=new ArrayList<String>(allAttr.keySet());
+			Collections.sort(sortedKeys);
+			for (String propertyId : sortedKeys) {
 				if (propertyId.matches("property_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) {
 					String[] parts = allAttr.get(propertyId).split(">>>"); //$NON-NLS-1$
 					if (parts.length == 2) {
