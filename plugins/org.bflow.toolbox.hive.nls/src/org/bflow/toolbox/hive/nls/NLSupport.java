@@ -154,6 +154,7 @@ public class NLSupport extends NLS {
 	public static String MIFImportWizardPage_PackPage;
 	public static String MIFImportWizardPage_Text_ManyFilesSelected;
 	public static String MIFImportWizardPage_Title;
+	public static String ProtocolProgressDialog_TaskHeader;
 	public static String StatementView_RemoveDialogTitle;
 	public static String StatementView_RemoveDialogText1;
 	public static String StatementView_ToolTipText_PropertyIsComplete;
