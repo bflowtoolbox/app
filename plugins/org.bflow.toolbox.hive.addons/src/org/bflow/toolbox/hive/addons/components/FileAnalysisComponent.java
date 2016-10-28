@@ -2,41 +2,41 @@ package org.bflow.toolbox.hive.addons.components;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.interfaces.IAddonMessage;
 import org.bflow.toolbox.hive.addons.interfaces.IFileAnalysisComponent;
-import org.bflow.toolbox.hive.addons.utils.AnalyseUtil;
+import org.bflow.toolbox.hive.addons.interfaces.IMessageFormatter;
+import org.bflow.toolbox.hive.addons.utils.MessageFormatterRegistry;
 import org.eclipse.core.resources.IFile;
 
 /**
  * <p>
- * Implements the {@link IFileAnalysisComponent} to analyse a file input and
+ * Implements the {@link IFileAnalysisComponent} to analyze a file input and
  * generate problems view messages.
  * </p>
  * <p>
- * A vector containing strings is beeing expected as input source. Only the
- * first line beginning with "bflow*:" are beeing recognized and processed. This
+ * A vector containing strings is being expected as input source. Only the
+ * first line beginning with "addon:" are being recognized and processed. This
  * must be the file path!
  * </p>
  * <p>
  * A vector of ProblemsViewMessages is going to created by this link.
  * </p>
  * 
- * @author Arian Storch
- * @since 01/05/10
- * @version 11/09/11
+ * @author Arian Storch (arian.storch@bflow.org)
+ * @since 01.05.10
+ * @version 11.09.11
+ * 			28.10.16 AST - Integrated message formatter API
  */
 public class FileAnalysisComponent implements IFileAnalysisComponent {
 	private File srcFile;
-
 	private boolean finished;
-
-	private Vector<IAddonMessage> messageVector = new Vector<IAddonMessage>();
-
+	private List<IAddonMessage> messageList = new ArrayList<>();
 	private IFile markerResource;
 	
 	/**
@@ -109,13 +109,13 @@ public class FileAnalysisComponent implements IFileAnalysisComponent {
 					contents[i] = parts[i].substring(1).replace("#FS#", "");
 					
 				String type = contents[0];
+				IMessageFormatter messageFormatter = MessageFormatterRegistry.Instance.getMessageFormatter(type);
+				if (messageFormatter == null) continue; 				
 				
-				if(type.equalsIgnoreCase("attribute"))
-					messageVector.add(AnalyseUtil.analyseAttribute(contents));
+				IAddonMessage addonMessage = messageFormatter.format(contents, markerResource);
 				
-				if(type.equalsIgnoreCase("message"))
-					messageVector.add(AnalyseUtil.analyseMessage(contents, markerResource));
-		
+				if (!messageList.contains(addonMessage))
+					messageList.add(addonMessage);
 			}
 		} catch (IOException ex) {
 			throw new ComponentException(ex);
@@ -156,7 +156,7 @@ public class FileAnalysisComponent implements IFileAnalysisComponent {
 
 	@Override
 	public Object transformOutput() throws ComponentException {
-		return messageVector;
+		return messageList;
 	}
 
 	@Override
