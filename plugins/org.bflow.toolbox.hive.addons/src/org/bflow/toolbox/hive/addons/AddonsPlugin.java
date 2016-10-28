@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bflow.toolbox.hive.addons.store.AddonStore;
 import org.bflow.toolbox.hive.addons.store.ComponentStore;
 import org.bflow.toolbox.hive.addons.store.PrologAdditionStore;
+import org.bflow.toolbox.hive.addons.utils.MessageFormatterRegistry;
 import org.bflow.toolbox.hive.addons.utils.ProtocolDescriptor;
 import org.bflow.toolbox.hive.addons.validation.ValidationService;
 import org.bflow.toolbox.hive.addons.workbench.AddonsWorkbenchListener;
@@ -94,7 +95,9 @@ public class AddonsPlugin extends AbstractUIPlugin {
 		generatePrologAdditionRegistry();
 		generateProtocolRegistry();
 		
+		// Do some initialization stuff
 		ValidationService.getInstance();
+		MessageFormatterRegistry.Instance.initialize();
 		
 		// try to move all hive preference pages under the node of the diagram application 
 		tryEmbeddingPreferencePages();
