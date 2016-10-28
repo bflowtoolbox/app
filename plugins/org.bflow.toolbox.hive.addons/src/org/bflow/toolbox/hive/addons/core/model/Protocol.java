@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.exceptions.ProtocolException;
-import org.bflow.toolbox.hive.addons.core.utils.MessageCollector;
 
 /**
  * Defines a protocol that allows to call and run various types of classes,
@@ -114,11 +113,6 @@ public abstract class Protocol implements Runnable {
 	 * holds component parameters
 	 */
 	private HashMap<IComponent, String> paramList = new HashMap<IComponent, String>();
-
-	/**
-	 * Instance of a MessageCollector
-	 */
-	private static MessageCollector messageCollector = new MessageCollector();
 
 	/**
 	 * Instance of a Logger
@@ -414,15 +408,6 @@ public abstract class Protocol implements Runnable {
 	 */
 	public static void setLogger(Logger log) {
 		logger = log;
-	}
-
-	/**
-	 * Returns the {@link MessageCollector} for this protocol.
-	 * 
-	 * @return MessageCollector for this protcol.
-	 */
-	public static MessageCollector getMessageCollector() {
-		return messageCollector;
 	}
 
 	/**
