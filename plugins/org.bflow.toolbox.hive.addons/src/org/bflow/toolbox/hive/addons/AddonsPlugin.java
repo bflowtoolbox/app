@@ -43,6 +43,7 @@ import org.osgi.service.prefs.Preferences;
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 06.03.11
  * @version 19.09.2016 AST - Add-on console is created and registered on demand
+ * 			28.10.2016 AST - Code clean up
  */
 public class AddonsPlugin extends AbstractUIPlugin {
 
@@ -89,23 +90,9 @@ public class AddonsPlugin extends AbstractUIPlugin {
 //		AttributeViewPart.getInstance();
 		AddonsWorkbenchListener.register();
 
-		try {
-			generateComponentRegistry();
-		} catch (CoreException ex) {
-			ex.printStackTrace();
-		}
-
-		try {
-			generatePrologAdditionRegistry();
-		} catch (NullPointerException ex) {
-			ex.printStackTrace();
-		}
-
-		try {
-			generateProtocolRegistry();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		generateComponentRegistry();
+		generatePrologAdditionRegistry();
+		generateProtocolRegistry();
 		
 		ValidationService.getInstance();
 		
@@ -298,20 +285,16 @@ public class AddonsPlugin extends AbstractUIPlugin {
 	/**
 	 * Registers all components to the component store that are registered by
 	 * the defining extension point.
-	 * 
-	 * @throws CoreException
 	 */
-	private void generateComponentRegistry() throws CoreException {
+	private void generateComponentRegistry() {
 		ComponentStore.getInstance();
 	}
 
 	/**
 	 * Registers all prolog additions to the prolog addition store that are
 	 * registered by the defining extension point.
-	 * 
-	 * @throws IOException
 	 */
-	private void generatePrologAdditionRegistry() throws NullPointerException {
+	private void generatePrologAdditionRegistry() {
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID_ADDON_PROLOGADDITION);
 
 		for (IConfigurationElement element : config) {
@@ -323,37 +306,44 @@ public class AddonsPlugin extends AbstractUIPlugin {
 			String name = element.getAttribute("Name");
 			URL url = bundle.getEntry(file);
 
-			if (url == null)
-				throw new NullPointerException("file url is null");
+			if (url == null) {
+				String errorMessage = String.format("Bundle '%s' provides a prolog addition '%s' (%s) which URL is NULL", 
+						bundle.getSymbolicName(), id, name);
+				logError(errorMessage);
+			}
+				
 
 			PrologAdditionStore.register(id, name, url);
 		}
 	}
 
 	/**
-	 * Registers all protocols to the protocol store that are
-	 * registered by the defining extension point.
-	 * 
-	 * @throws IOException
+	 * Registers all protocols to the protocol store that are registered by the
+	 * defining extension point.
 	 */
-	private void generateProtocolRegistry() throws IOException {
-		IConfigurationElement[] config = Platform.getExtensionRegistry()
-				.getConfigurationElementsFor(EXTENSION_ID_ADDON_PROTOCOL);
+	private void generateProtocolRegistry() {
+		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID_ADDON_PROTOCOL);
 
 		for (IConfigurationElement element : config) {
 			IContributor con = element.getContributor();
 			Bundle bundle = Platform.getBundle(con.getName());
 
 			String file = element.getAttribute("File");
-			String ID = element.getAttribute("ID");
+			String id = element.getAttribute("ID");
 			URL url = bundle.getEntry(file);
+			File tmpFile = null;
 			
-			File tmpFile = File.createTempFile("protocol", "dyn");
-			tmpFile.deleteOnExit();
 			
-			FileUtils.copyURLToFile(url, tmpFile);
+			try {
+				tmpFile = File.createTempFile("protocol", "dyn");
+				tmpFile.deleteOnExit();
+				FileUtils.copyURLToFile(url, tmpFile);
+			} catch(IOException ex) {
+				String errorMessage = String.format("Error on creating temp file for a contributed protocol '%s'", id);
+				logError(errorMessage, ex);
+			}
 			
-			ProtocolDescriptor prtDesc = new ProtocolDescriptor(ID, tmpFile, false);
+			ProtocolDescriptor prtDesc = new ProtocolDescriptor(id, tmpFile, false);
 			
 			AddonStore.installAddon(prtDesc);
 		}

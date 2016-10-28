@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -13,8 +14,9 @@ import org.eclipse.core.runtime.Platform;
  * Defines a store that lists all available protocol components.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 25/09/10
- * @version 06/06/14
+ * @since 25.09.10
+ * @version 06.06.14
+ * 			28.10.16 AST - Changed exception handling in ctor
  */
 public class ComponentStore {
 	
@@ -28,7 +30,6 @@ public class ComponentStore {
 		return fInstance != null ? fInstance : (fInstance = new ComponentStore());
 	}
 	
-	
 	/**
 	 * static collection instance
 	 */
@@ -41,11 +42,13 @@ public class ComponentStore {
 		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID_ADDON_COMPONENT);
 
 		for (IConfigurationElement element : config) {
+			String elementName = element.getName();
 			try {
 				IComponent component = (IComponent) element.createExecutableExtension("Class");
 				register(component);
-			} catch (CoreException e) {
-				e.printStackTrace();
+			} catch (CoreException ex) {
+				String errorMessage = String.format("Error on creating an instance of a contributed component (%s)", elementName);
+				AddonsPlugin.getInstance().logError(errorMessage, ex);
 			}
 		}
 	}
