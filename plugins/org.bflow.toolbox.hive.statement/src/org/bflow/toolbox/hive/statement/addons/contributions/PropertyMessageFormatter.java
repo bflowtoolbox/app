@@ -3,7 +3,6 @@ package org.bflow.toolbox.hive.statement.addons.contributions;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.interfaces.IAddonMessage;
 import org.bflow.toolbox.hive.addons.interfaces.IMessageFormatter;
-import org.bflow.toolbox.hive.addons.utils.PropertyViewResultMessage;
 import org.eclipse.core.resources.IFile;
 
 /**

@@ -8,7 +8,6 @@ import org.bflow.toolbox.hive.addons.components.ShellAnalysisComponent;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.interfaces.IAddonMessage;
-import org.bflow.toolbox.hive.addons.utils.PropertyViewResultMessage;
 import org.bflow.toolbox.hive.statement.views.StatementView;
 
 /**
