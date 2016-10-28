@@ -8,7 +8,7 @@ import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
-import org.bflow.toolbox.hive.addons.AddonPlugin;
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.bflow.toolbox.hive.addons.components.AttributeAdjustComponent;
 import org.bflow.toolbox.hive.addons.components.EPCMetricsEvaluationComponent;
 import org.bflow.toolbox.hive.addons.components.FileAnalysisComponent;
@@ -117,7 +117,7 @@ public class Standardprotocol extends Protocol {
 		if ((object instanceof Vector) && !((Vector<?>) object).isEmpty()) {
 			if (((Vector<?>) object).firstElement() instanceof IMarker) {
 				Vector<IMarker> markers = (Vector<IMarker>) object;
-				AddonPlugin.getInstance().addMarker(markerId, markers);
+				AddonsPlugin.getInstance().addMarker(markerId, markers);
 			}
 		}
 	}
@@ -133,7 +133,7 @@ public class Standardprotocol extends Protocol {
 		try {
 			Standardprotocol.getLogger().addAppender(new FileAppender(new PatternLayout(), Key.KEY_MITAMM_LOG_FILE.getAbsolutePath(), false));
 		} catch (IOException e) {
-			AddonPlugin.getInstance().logError("Error on initializing Standardprotocol", e);
+			AddonsPlugin.getInstance().logError("Error on initializing Standardprotocol", e);
 		}
 
 		Vector<IComponent> locComp = new Vector<IComponent>();
@@ -168,7 +168,7 @@ public class Standardprotocol extends Protocol {
 
 		markerId = this.getName() + "Markers";
 
-		AddonPlugin.getInstance().deleteMarker(markerId, this.source);
+		AddonsPlugin.getInstance().deleteMarker(markerId, this.source);
 		TemporaryFileServer.init();
 
 		setThread(false);

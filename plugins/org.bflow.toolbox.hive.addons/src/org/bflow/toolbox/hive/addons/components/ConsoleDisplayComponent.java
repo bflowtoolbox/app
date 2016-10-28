@@ -2,7 +2,7 @@ package org.bflow.toolbox.hive.addons.components;
 
 import java.util.List;
 
-import org.bflow.toolbox.hive.addons.AddonPlugin;
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.interfaces.IAddonMessage;
@@ -131,7 +131,7 @@ public class ConsoleDisplayComponent implements IConsoleViewGeneratorComponent {
 		if (consoleLines.size() == 0) return;
 
 		try {
-			AddonPlugin addonPlugin = AddonPlugin.getInstance();
+			AddonsPlugin addonPlugin = AddonsPlugin.getInstance();
 			addonPlugin.requestConsoleFocus();
 
 			IOConsoleOutputStream stream = addonPlugin.getAddonConsole().newOutputStream();

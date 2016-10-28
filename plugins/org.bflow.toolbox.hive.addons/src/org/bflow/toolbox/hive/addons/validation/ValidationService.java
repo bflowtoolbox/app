@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bflow.toolbox.hive.addons.AddonPlugin;
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.bflow.toolbox.hive.nls.NLUtil;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
@@ -48,7 +48,7 @@ public class ValidationService {
 	/**
 	 * Extension point id.
 	 */
-	public static final String EXTENSION_ID_VALIDATION_RULE = AddonPlugin.EXTENSION_ID_ADDON_RULE;
+	public static final String EXTENSION_ID_VALIDATION_RULE = AddonsPlugin.EXTENSION_ID_ADDON_RULE;
 
 	/**
 	 * static instance
@@ -63,7 +63,7 @@ public class ValidationService {
 	/**
 	 * Preference store
 	 */
-	private Preferences prefStore = AddonPlugin.getInstance().getPreferencesStore();
+	private Preferences prefStore = AddonsPlugin.getInstance().getPreferencesStore();
 
 	/**
 	 * Constructor.

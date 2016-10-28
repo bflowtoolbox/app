@@ -44,13 +44,13 @@ import org.osgi.service.prefs.Preferences;
  * @since 06.03.11
  * @version 19.09.2016 AST - Add-on console is created and registered on demand
  */
-public class AddonPlugin extends AbstractUIPlugin {
+public class AddonsPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.bflow.toolbox.addons";
 
 	// The shared instance
-	private static AddonPlugin addonPlugin;
+	private static AddonsPlugin addonPlugin;
 
 	// holds all created markers
 	private HashMap<String, Vector<IMarker>> createdMarkers = new HashMap<String, Vector<IMarker>>();
@@ -130,7 +130,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 	 * 
 	 * @return the shared instance
 	 */
-	public static AddonPlugin getInstance() {
+	public static AddonsPlugin getInstance() {
 		return addonPlugin;
 	}
 	
@@ -258,7 +258,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 		if (error == null && throwable != null) {
 			error = throwable.getMessage();
 		}
-		getLog().log(new Status(IStatus.ERROR, AddonPlugin.PLUGIN_ID, IStatus.OK, error, throwable));
+		getLog().log(new Status(IStatus.ERROR, AddonsPlugin.PLUGIN_ID, IStatus.OK, error, throwable));
 		debug(error, throwable);
 	}
 
@@ -276,7 +276,7 @@ public class AddonPlugin extends AbstractUIPlugin {
 		if (message == null && throwable != null) {
 			message = throwable.getMessage();
 		}
-		getLog().log(new Status(IStatus.INFO, AddonPlugin.PLUGIN_ID, IStatus.OK, message, throwable));
+		getLog().log(new Status(IStatus.INFO, AddonsPlugin.PLUGIN_ID, IStatus.OK, message, throwable));
 		debug(message, throwable);
 	}
 

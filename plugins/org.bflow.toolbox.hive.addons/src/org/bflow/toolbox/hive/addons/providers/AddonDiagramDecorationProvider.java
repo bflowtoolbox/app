@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.bflow.toolbox.hive.addons.AddonPlugin;
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -139,7 +139,7 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 								}
 							});
 				} catch (Exception e) {
-					AddonPlugin.getInstance().logError("Decorator refresh failure", e); //$NON-NLS-1$
+					AddonsPlugin.getInstance().logError("Decorator refresh failure", e); //$NON-NLS-1$
 				}
 			}
 		});
@@ -170,7 +170,7 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 							}
 						});
 			} catch (Exception e) {
-				AddonPlugin.getInstance().logError("ViewID access failure", e); //$NON-NLS-1$		
+				AddonsPlugin.getInstance().logError("ViewID access failure", e); //$NON-NLS-1$		
 			}
 		}
 
@@ -203,7 +203,7 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 			try {
 				markers = resource.findMarkers(MARKER_TYPE, true, IResource.DEPTH_INFINITE);
 			} catch (CoreException e) {
-				AddonPlugin.getInstance().logError("Validation markers refresh failure", e); //$NON-NLS-1$
+				AddonsPlugin.getInstance().logError("Validation markers refresh failure", e); //$NON-NLS-1$
 			}
 			if (markers == null || markers.length == 0) {
 				return;
@@ -422,7 +422,7 @@ public class AddonDiagramDecorationProvider extends AbstractProvider implements 
 			try {
 				return marker.getType();
 			} catch (CoreException e) {
-				AddonPlugin.getInstance().logError(
+				AddonsPlugin.getInstance().logError(
 						"Validation marker refresh failure", e); //$NON-NLS-1$
 				return ""; //$NON-NLS-1$
 			}

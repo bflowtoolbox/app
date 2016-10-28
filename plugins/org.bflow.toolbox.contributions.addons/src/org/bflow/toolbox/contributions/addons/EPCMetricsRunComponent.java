@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.apache.commons.io.FilenameUtils;
-import org.bflow.toolbox.hive.addons.AddonPlugin;
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.bflow.toolbox.hive.addons.components.DiagramExportComponent;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
@@ -47,7 +47,7 @@ public class EPCMetricsRunComponent implements IComponent {
 
 			this.outputFolder.deleteOnExit();
 		} catch (IOException ex) {
-			AddonPlugin.getInstance().logError(
+			AddonsPlugin.getInstance().logError(
 					"could not create temp ouput folder", ex);
 		}
 	}
@@ -69,7 +69,7 @@ public class EPCMetricsRunComponent implements IComponent {
 		command = command + " -o " + this.outputFolder.getAbsolutePath();
 		command = command + " -c " + installPath + "sap.conf";
 		try {
-			AddonPlugin.getInstance()
+			AddonsPlugin.getInstance()
 					.logInfo("[EpcToolsHeuristics] " + command);
 
 			Process p = Runtime.getRuntime().exec(command);
@@ -140,10 +140,10 @@ public class EPCMetricsRunComponent implements IComponent {
 			String s;
 			while ((s = br.readLine()) != null) {
 				// String s;
-				AddonPlugin.getInstance().logInfo(s);
+				AddonsPlugin.getInstance().logInfo(s);
 			}
 		} catch (IOException e) {
-			AddonPlugin.getInstance().logError("", e);
+			AddonsPlugin.getInstance().logError("", e);
 		}
 	}
 

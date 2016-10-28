@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.bflow.toolbox.hive.addons.AddonPlugin;
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.bflow.toolbox.hive.addons.services.IMitammMarkerProvider;
 import org.bflow.toolbox.hive.addons.services.MitammMarkerService;
 import org.eclipse.core.resources.IFile;
@@ -122,7 +122,7 @@ public class DiagramMarkerNavigationProvider extends
 			resource.deleteMarkers(MARKER_TYPE, true, depth);
 			resource.deleteMarkers(IMarker.PROBLEM, true, depth);
 		} catch (CoreException e) {
-			AddonPlugin.getInstance().logError(
+			AddonsPlugin.getInstance().logError(
 					"Failed to delete validation markers", e); //$NON-NLS-1$
 		}
 	}
@@ -148,7 +148,7 @@ public class DiagramMarkerNavigationProvider extends
 
 			marker.setAttribute(IMarker.SEVERITY, markerSeverity);			
 		} catch (Exception e) {
-			AddonPlugin.getInstance().logError("Failed to create validation marker", e); //$NON-NLS-1$
+			AddonsPlugin.getInstance().logError("Failed to create validation marker", e); //$NON-NLS-1$
 		}
 		
 		return marker;

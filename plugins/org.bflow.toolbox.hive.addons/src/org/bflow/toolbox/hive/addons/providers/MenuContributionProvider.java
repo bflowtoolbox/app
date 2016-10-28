@@ -3,7 +3,7 @@ package org.bflow.toolbox.hive.addons.providers;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bflow.toolbox.hive.addons.AddonPlugin;
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.bflow.toolbox.hive.addons.core.model.Protocol;
 import org.bflow.toolbox.hive.addons.events.ProtocolStoreListener;
 import org.bflow.toolbox.hive.addons.events.ToolStoreListener;
@@ -282,12 +282,12 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 				if (input instanceof IFileEditorInput) {
 					IFile resource = ((IFileEditorInput) input).getFile();
 					chain.setSource(resource.getLocation().toFile());
-					AddonPlugin.getProgressMonitorDialog().run(true, true, new ProtocolProgressDialog(chain));
+					AddonsPlugin.getProgressMonitorDialog().run(true, true, new ProtocolProgressDialog(chain));
 				}
 			}
 
 		} catch (Exception ex) {
-			AddonPlugin.getInstance().logError("Error on executing add-on", ex);
+			AddonsPlugin.getInstance().logError("Error on executing add-on", ex);
 		}
 	}
 	
