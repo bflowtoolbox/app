@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bflow.toolbox.hive.addons.AddonPlugin;
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.bflow.toolbox.hive.addons.utils.RuleTree;
 import org.bflow.toolbox.hive.addons.validation.Rule;
 import org.bflow.toolbox.hive.addons.validation.ValidationService;
@@ -99,7 +99,7 @@ public class ValidationPage extends FieldEditorPreferencePage implements IWorkbe
 		String abbr = NLUtil.getActiveLanguageAbbreviation();
 		installedRules = ValidationService.getInstance().getRules(abbr);
 		Assert.isNotNull(installedRules, "Could not found validation rules"); //$NON-NLS-1$
-		this.prefStore = AddonPlugin.getInstance().getPreferencesStore(); 
+		this.prefStore = AddonsPlugin.getInstance().getPreferencesStore(); 
 		validationRulesSet = prefStore.getBoolean(IdValidationRulesSet, true);
 	}
 

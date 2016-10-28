@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import org.bflow.toolbox.hive.addons.AddonPlugin;
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.bflow.toolbox.hive.addons.core.model.Protocol;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeViewPart;
@@ -42,7 +42,7 @@ public class ImplementationProvider {
 	 *            must be a vector of type IMarker {@link IMarker}
 	 */
 	public static void addMarker(String markerID, Vector<IMarker> markers) {
-		AddonPlugin.getInstance().addMarker(markerID, markers);
+		AddonsPlugin.getInstance().addMarker(markerID, markers);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class ImplementationProvider {
 		else
 			resource = (IFile) protocol.getSource();
 
-		AddonPlugin.getInstance().deleteMarker(markerID, resource);
+		AddonsPlugin.getInstance().deleteMarker(markerID, resource);
 	}
 
 	/**

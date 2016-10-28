@@ -2,7 +2,7 @@ package org.bflow.toolbox.hive.addons.components;
 
 import java.net.URL;
 
-import org.bflow.toolbox.hive.addons.AddonPlugin;
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.protocols.Standardprotocol;
@@ -37,7 +37,7 @@ public class HTMLViewComponent implements IComponent {
 		try {
 			browser = support.createBrowser("viewer");
 		} catch (PartInitException e) {
-			AddonPlugin.getInstance().logError("Error on creating browser instance", e);
+			AddonsPlugin.getInstance().logError("Error on creating browser instance", e);
 		}
 
 	}
