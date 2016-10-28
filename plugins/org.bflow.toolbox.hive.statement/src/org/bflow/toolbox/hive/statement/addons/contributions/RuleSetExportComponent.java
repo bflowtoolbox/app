@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
-import org.bflow.toolbox.hive.addons.interfaces.IRuleSetExportComponent;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeViewPart;
 import org.bflow.toolbox.hive.statement.views.StatementView;
@@ -31,7 +30,7 @@ import org.eclipse.ui.PlatformUI;
  * 
  * @author Markus Schnädelbach
  */
-public class RuleSetExportComponent implements IRuleSetExportComponent {
+public class RuleSetExportComponent implements IComponent {
 
 	/** The source. */
 	private File source;
