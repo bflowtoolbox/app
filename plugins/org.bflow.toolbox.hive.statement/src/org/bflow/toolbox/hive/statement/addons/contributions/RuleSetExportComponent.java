@@ -1,4 +1,4 @@
-package org.bflow.toolbox.hive.addons.components;
+package org.bflow.toolbox.hive.statement.addons.contributions;
 
 import java.io.File;
 import java.io.FileWriter;

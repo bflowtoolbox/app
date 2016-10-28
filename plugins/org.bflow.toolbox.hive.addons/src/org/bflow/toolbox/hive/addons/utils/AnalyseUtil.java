@@ -78,13 +78,13 @@ public class AnalyseUtil {
 	 * @throws ComponentException
 	 */
 	public static IAddonMessage analysePropertyResult(String contents[]) throws ComponentException {
-		if(contents.length != 5)
-			throw new ComponentException("PropertyResult has unexpected number of records");
-		
-		String result = contents[2];
-		
-		return new PropertyViewResultMessage(resolvePropertyResult(result));
-		
+//		if(contents.length != 5)
+//			throw new ComponentException("PropertyResult has unexpected number of records");
+//		
+//		String result = contents[2];
+//		
+//		return new PropertyViewResultMessage(resolvePropertyResult(result));
+		return null;
 	}
 	
 	/**

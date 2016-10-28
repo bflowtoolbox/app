@@ -501,6 +501,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	 */
 	private HashMap<String, NodeName> getShapeIdsAndClassnamesFromDiagram() {
 		HashMap<String, NodeName> shapeIdtoClassname = new HashMap<>();
+		@SuppressWarnings("unchecked")
 		List<Object> children = activeEditorPart.getDiagramEditPart().getChildren();
 		for (Object child : children) {
 			if (child instanceof ShapeNodeEditPart) {

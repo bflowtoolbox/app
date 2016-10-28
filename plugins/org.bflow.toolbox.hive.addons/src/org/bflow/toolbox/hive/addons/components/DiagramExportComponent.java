@@ -230,10 +230,7 @@ public class DiagramExportComponent implements IDiagramExportComponent {
 	 * @see org.bflow.toolbox.addons.core.model.IComponent#canLinkWith(org.bflow.toolbox.addons.core.model.IComponent)
 	 */
 	@Override
-	public boolean canLinkWith(IComponent component) {
-		if (component instanceof RuleSetExportComponent)
-			return true;
-		
+	public boolean canLinkWith(IComponent component) {		
 		return false;
 	}
 
