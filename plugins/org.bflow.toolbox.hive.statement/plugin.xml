@@ -32,5 +32,12 @@
             Class="org.bflow.toolbox.hive.statement.addons.contributions.RuleSetExportComponent">
       </Component>
    </extension>
+   <extension
+         point="org.bflow.toolbox.hive.addons.messageFormatter">
+      <messageFormatter
+            formatter="org.bflow.toolbox.hive.statement.addons.contributions.PropertyMessageFormatter"
+            messageType="property">
+      </messageFormatter>
+   </extension>
 
 </plugin>
