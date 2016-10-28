@@ -1,13 +1,11 @@
 package org.bflow.toolbox.hive.addons.utils;
 
-import org.bflow.toolbox.hive.addons.interfaces.IPropertyViewResultMessage;
-
 /**
  * This class defines a message which can be handled by the Bflow Hive Property View.
  * 
  * @author Markus Schnädelbach
  */
-public class PropertyViewResultMessage implements IPropertyViewResultMessage
+public class PropertyViewResultMessage
 {		
 	private Boolean result;
 	

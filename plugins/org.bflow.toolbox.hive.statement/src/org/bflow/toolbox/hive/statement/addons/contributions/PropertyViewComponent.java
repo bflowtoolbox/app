@@ -1,9 +1,11 @@
-package org.bflow.toolbox.hive.addons.components;
+package org.bflow.toolbox.hive.statement.addons.contributions;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.bflow.toolbox.hive.addons.components.FileAnalysisComponent;
+import org.bflow.toolbox.hive.addons.components.ShellAnalysisComponent;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.interfaces.IAddonMessage;
