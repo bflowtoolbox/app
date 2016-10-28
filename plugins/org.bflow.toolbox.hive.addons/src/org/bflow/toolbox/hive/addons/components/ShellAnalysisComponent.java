@@ -6,8 +6,9 @@ import java.util.List;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.interfaces.IAddonMessage;
+import org.bflow.toolbox.hive.addons.interfaces.IMessageFormatter;
 import org.bflow.toolbox.hive.addons.interfaces.IShellAnalysisComponent;
-import org.bflow.toolbox.hive.addons.utils.AnalyseUtil;
+import org.bflow.toolbox.hive.addons.utils.MessageFormatterRegistry;
 import org.eclipse.core.resources.IFile;
 
 /**
@@ -21,18 +22,16 @@ import org.eclipse.core.resources.IFile;
  * ProblemsViewMessages is going to created by this component.
  * </p>
  * 
- * @author Arian Storch
- * @since 25/04/10
- * @version 10/03/13
+ * @author Arian Storch (arian.storch@bflow.org)
+ * @since 25.04.10
+ * @version 10.03.13
+ * 			28.10.16 AST - ???
  * 
  */
 public class ShellAnalysisComponent implements IShellAnalysisComponent {
 	private boolean finished;
-	
 	private StringBuffer simpleStream;
-
 	private List<IAddonMessage> messageList;
-
 	private IFile markerResource;
 	
 	/**
@@ -105,38 +104,25 @@ public class ShellAnalysisComponent implements IShellAnalysisComponent {
 					contents[i] = parts[i].substring(1).replace("#FS#", "");
 					
 				String type = contents[0];
+				IMessageFormatter messageFormatter = MessageFormatterRegistry.Instance.getMessageFormatter(type);
+				if (messageFormatter == null) continue; 				
 				
-				if(type.equalsIgnoreCase("attribute"))
-					messageList.add(AnalyseUtil.analyseAttribute(contents));
+				IAddonMessage addonMessage = messageFormatter.format(contents, markerResource);
 				
-				if(type.equalsIgnoreCase("property"))
-					messageList.add(AnalyseUtil.analysePropertyResult(contents));
-				
-				if(type.equalsIgnoreCase("message")) {
-					IAddonMessage mm = AnalyseUtil.analyseMessage(contents, markerResource);			
-					
-					if(!messageList.contains(mm)) {
-						messageList.add(mm);
-					}
-				}
-
+				if (!messageList.contains(addonMessage))
+					messageList.add(addonMessage);
 			}
 		} catch (Exception ex) {
 			throw new ComponentException(ex);
 		} finally {
 			finished = true;
 		}
-
 	}
 
 	@Override
 	public void transformInput(Object inputSource) throws ComponentException {
-		if(inputSource == null)
-			throw new ComponentException("Quelle ist null");
-		
-		if (!(inputSource instanceof StringBuffer))
-			throw new ComponentException(
-					"input source is no string");
+		if (inputSource == null) throw new ComponentException("inputSource is null");
+		if (!(inputSource instanceof StringBuffer))	throw new ComponentException("input source is no string");
 
 		simpleStream = (StringBuffer)inputSource;
 	}
