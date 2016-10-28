@@ -40,4 +40,3 @@ SwapOutDiagrampartToNewAction#msg8=Name of the function;
 NewProjectAction#msg1=Create new project;
 NewProjectAction#msg2=Create new project;
 NewProjectAction#msg3=Set the name of the new project.;
-ProtocolProgressDialog#RunningAddon=Running add-on...;

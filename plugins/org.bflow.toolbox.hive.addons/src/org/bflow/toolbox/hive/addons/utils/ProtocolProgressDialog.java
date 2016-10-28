@@ -3,7 +3,7 @@ package org.bflow.toolbox.hive.addons.utils;
 import java.lang.reflect.InvocationTargetException;
 
 import org.bflow.toolbox.hive.addons.core.model.Protocol;
-import org.bflow.toolbox.hive.nls.NLUtil;
+import org.bflow.toolbox.hive.nls.NLSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -15,8 +15,9 @@ import org.eclipse.ui.PlatformUI;
  * This is useful if you expect that the chain will take some time.
  * 
  * @author Arian Storch
- * @since 27/10/09
- * @version 13/07/11
+ * @since 27.10.09
+ * @version 13.07.11
+ * 			28.10.16 AST - Code clean up
  * 
  */
 public class ProtocolProgressDialog implements IRunnableWithProgress {
@@ -37,7 +38,7 @@ public class ProtocolProgressDialog implements IRunnableWithProgress {
 	public void run(final IProgressMonitor monitor)
 			throws InvocationTargetException, InterruptedException {
 
-		monitor.beginTask(NLUtil.getMessage("ProtocolProgressDialog#RunningAddon"), IProgressMonitor.UNKNOWN);
+		monitor.beginTask(NLSupport.ProtocolProgressDialog_TaskHeader, IProgressMonitor.UNKNOWN);
 
 		Runnable runnable = new Runnable() {
 
@@ -54,7 +55,7 @@ public class ProtocolProgressDialog implements IRunnableWithProgress {
 					}
 
 				} catch (Exception ex) {
-					protocol.getLogger().error("", ex);
+					protocol.getLogger().error("Error on executing protocol", ex); //$NON-NLS-1$
 				}
 			}
 
