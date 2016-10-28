@@ -1,12 +1,13 @@
-package org.bflow.toolbox.hive.addons.utils;
+package org.bflow.toolbox.hive.statement.addons.contributions;
+
+import org.bflow.toolbox.hive.addons.interfaces.IAddonMessage;
 
 /**
  * This class defines a message which can be handled by the Bflow Hive Property View.
  * 
  * @author Markus Schnädelbach
  */
-public class PropertyViewResultMessage
-{		
+public class PropertyViewResultMessage implements IAddonMessage {		
 	private Boolean result;
 	
 	/**
