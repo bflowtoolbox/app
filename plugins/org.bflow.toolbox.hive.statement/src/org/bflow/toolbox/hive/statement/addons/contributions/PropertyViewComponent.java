@@ -2,17 +2,14 @@ package org.bflow.toolbox.hive.statement.addons.contributions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.bflow.toolbox.hive.addons.components.FileAnalysisComponent;
 import org.bflow.toolbox.hive.addons.components.ShellAnalysisComponent;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.interfaces.IAddonMessage;
-import org.bflow.toolbox.hive.addons.interfaces.IPropertyViewComponent;
 import org.bflow.toolbox.hive.addons.utils.PropertyViewResultMessage;
 import org.bflow.toolbox.hive.statement.views.StatementView;
-import org.eclipse.core.resources.IMarker;
 
 /**
  * This component implements the {@link IPropertyViewComponent} and can
@@ -24,7 +21,7 @@ import org.eclipse.core.resources.IMarker;
  * 
  * @author Markus Schnädelbach
  */
-public class PropertyViewComponent implements IPropertyViewComponent {
+public class PropertyViewComponent implements IComponent {
 	
 	/**
 	 * Collection of messages

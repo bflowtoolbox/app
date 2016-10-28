@@ -23,5 +23,14 @@
             file="contexts.xml">
       </contexts>
    </extension>
+   <extension
+         point="org.bflow.toolbox.addons.component">
+      <Component
+            Class="org.bflow.toolbox.hive.statement.addons.contributions.PropertyViewComponent">
+      </Component>
+      <Component
+            Class="org.bflow.toolbox.hive.statement.addons.contributions.RuleSetExportComponent">
+      </Component>
+   </extension>
 
 </plugin>
