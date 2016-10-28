@@ -2,10 +2,11 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.bflow.toolbox.addons.component" name="Modelling Add-ons Component" schema="schema/org.bflow.toolbox.addons.component.exsd"/>
-   <extension-point id="org.bflow.toolbox.addons.prologaddition" name="Modelling Add-ons Prolog programm" schema="schema/org.bflow.toolbox.addons.prologaddition.exsd"/>
+   <extension-point id="org.bflow.toolbox.addons.prologaddition" name="Modelling Add-ons Prolog Addition" schema="schema/org.bflow.toolbox.addons.prologaddition.exsd"/>
    <extension-point id="org.bflow.toolbox.addons.protocol" name="Modelling Add-ons Protocol" schema="schema/org.bflow.toolbox.addons.protocol.exsd"/>
-   <extension-point id="org.bflow.toolbox.addons.rule" name="Add-ons Validation Rule" schema="schema/org.bflow.toolbox.addons.rule.exsd"/>
-   <extension-point id="org.bflow.toolbox.hive.addons.preferencePageContainer" name="Modeling Add-ons preference page container" schema="schema/org.bflow.toolbox.hive.addons.preferencePageContainer.exsd"/>
+   <extension-point id="org.bflow.toolbox.addons.rule" name="Modelling Add-ons Validation Rule" schema="schema/org.bflow.toolbox.addons.rule.exsd"/>
+   <extension-point id="org.bflow.toolbox.hive.addons.preferencePageContainer" name="Modelling Add-ons Preference Page Container" schema="schema/org.bflow.toolbox.hive.addons.preferencePageContainer.exsd"/>
+   <extension-point id="org.bflow.toolbox.hive.addons.messageFormatter" name="Modelling Add-ons Message Formatter" schema="schema/org.bflow.toolbox.hive.addons.messageFormatter.exsd"/>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -108,12 +109,6 @@
       <Component
             Class="org.bflow.toolbox.hive.addons.components.HTMLViewComponent">
       </Component>
-      <Component
-            Class="org.bflow.toolbox.hive.addons.components.RuleSetExportComponent">
-      </Component>
-      <Component
-            Class="org.bflow.toolbox.hive.addons.components.PropertyViewComponent">
-      </Component>
    </extension>
    <extension
          id="org.bflow.toolbox.mitamm.marker"
@@ -122,6 +117,17 @@
       <super
             type="org.bflow.toolbox.epc.diagram.diagnostic">
       </super>
+   </extension>
+   <extension
+         point="org.bflow.toolbox.hive.addons.messageFormatter">
+      <messageFormatter
+            formatter="org.bflow.toolbox.hive.addons.messageformatters.AttributeMessageFormatter"
+            messageType="attribute">
+      </messageFormatter>
+      <messageFormatter
+            formatter="org.bflow.toolbox.hive.addons.messageformatters.MessageMessageFormatter"
+            messageType="message">
+      </messageFormatter>
    </extension>
 
 </plugin>
