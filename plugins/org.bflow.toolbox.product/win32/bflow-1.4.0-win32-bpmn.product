@@ -98,6 +98,7 @@
       <plugin id="org.bflow.toolbox.hive.mbe"/>
       <plugin id="org.bflow.toolbox.hive.modelnavigator"/>
       <plugin id="org.bflow.toolbox.hive.nls"/>
+      <plugin id="org.bflow.toolbox.hive.statement"/>
       <plugin id="org.bflow.toolbox.hive.swiprolog"/>
       <plugin id="org.bflow.toolbox.import.visio"/>
       <plugin id="org.bflow.toolbox.import.visio.epc"/>
