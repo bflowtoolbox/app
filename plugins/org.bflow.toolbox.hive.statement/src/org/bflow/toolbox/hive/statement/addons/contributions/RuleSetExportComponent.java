@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bflow.toolbox.hive.addons.components.DiagramExportComponent;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
@@ -218,6 +219,7 @@ public class RuleSetExportComponent implements IComponent {
 	 */
 	@Override
 	public boolean canLinkWith(IComponent component) {
+		if (component instanceof DiagramExportComponent) return true;
 		return false;
 	}
 
