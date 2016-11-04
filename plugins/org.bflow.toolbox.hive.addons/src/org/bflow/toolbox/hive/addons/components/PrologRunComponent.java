@@ -396,11 +396,8 @@ public class PrologRunComponent implements IPrologRunComponent {
 
 	@Override
 	public boolean canLinkWith(IComponent component) {
-		if (component instanceof DiagramExportComponent)
-			return true;
-
-		if (component instanceof ToolAdapterComponent)
-			return true;
+		if (component instanceof DiagramExportComponent) return true;
+		if (component instanceof ToolAdapterComponent) return true;
 
 		return false;
 	}
