@@ -1,6 +1,7 @@
 package org.bflow.toolbox.hive.statement.views;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -8,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.nls.NLSupport;
+import org.bflow.toolbox.hive.statement.views.StatementView.NodeName;
 
 /**
  * Represents a property entry for the StatementView-TableViewer
@@ -17,6 +19,7 @@ import org.bflow.toolbox.hive.nls.NLSupport;
 public class Property {
 
 	private static AttributeFile attrFile;
+	private static HashMap<String, NodeName> shapeIdstoClassnames;
 	private String propertyString;
 	private String formulaString;
 	private List<Variable> variables = new ArrayList<>();
@@ -174,6 +177,15 @@ public class Property {
 	
 
 	/**
+	 * Set the hasmap with pairs of nodeid to their nodenames.
+	 * @param HashMap<String, NodeName> shapeIdstoClassnames
+	 */
+	public static void setShapeIdstoClassnames(HashMap<String, NodeName> shapeIdstoClassnames) {
+		Property.shapeIdstoClassnames = shapeIdstoClassnames;
+	}
+	
+
+	/**
 	 * Set the result of that property
 	 * @param result
 	 */
@@ -219,6 +231,13 @@ public class Property {
 						//Variable endet mit "_[0-9]"
 						if (word.matches("^.+?(_)\\d$")) { //$NON-NLS-1$
 							word = word.substring(0, word.length()-2);
+						}
+					}	
+					NodeName nodenameentry = Property.shapeIdstoClassnames.get(word);
+					if (nodenameentry != null) {
+						String nodename = nodenameentry.getName();
+						if (nodename != null) {
+							word = nodename;
 						}
 					}
 					words[i] = "<a href=\""+ j +"\">" + "["+ word + "]" + "</a>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
@@ -306,7 +325,7 @@ public class Property {
 		 * Sets the Id of an associated editPart-node.
 		 * If with that setting all variables of the property are assigned to a editpart node
 		 * the property will persisted as attribute for the associated diagram.
-		 * @param id - id of the associated editpart-node
+		 * @param id of the associated editpart-node
 		 */
 		public void setId(String id) {
 			if (this.id.isEmpty()) {
@@ -347,6 +366,11 @@ public class Property {
 		}
 	}
 
+
+	/**
+	 * Returns a list with all ids of variables. 
+	 * @return
+	 */
 	public List<String> getVariableIds() {
 		ArrayList<String> ids = new ArrayList<>();
 		for (Variable v : variables) {
