@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -342,7 +343,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		
 		HashMap<String, NodeName> shapeIdtoClassname = null;
 		if (allAttr != null) {
-			for (String propertyId : allAttr.keySet()) {
+			List<String> sortedKeys=new ArrayList<String>(allAttr.keySet());
+			Collections.sort(sortedKeys);
+			for (String propertyId : sortedKeys) {
 				//Id is an valid UUID?
 				if (propertyId.matches("property_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) { //$NON-NLS-1$
 					if (shapeIdtoClassname == null) {
@@ -352,6 +355,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				}
 			}
 		}
+		Property.setShapeIdstoClassnames(shapeIdtoClassname);
 		
 		properties.add(new Property());
 		tableColumPropertyTemplate.setText(NLSupport.StatementView_TableColumnText + diagramTitle);
@@ -466,12 +470,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 								}
 							}
 							Variable var = property.new Variable(classname + variableNumber, id);
-							String shapename = shapeIdtoClassname.get(id).getName();
-							if (shapename != null) {
-								words[i] = "$" + shapename; //$NON-NLS-1$
-							}else {
-								words[i] = "$" + words[i]; //$NON-NLS-1$
-							}
+							words[i] = "$" + id; //$NON-NLS-1$
 							vars.add(var);
 						}else {
 							words[i] = NLSupport.StatementView_ReplacementUnknownVariables1;
@@ -561,7 +560,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	/**
 	 * Stores the name and classname of an editpart
 	 */
-	private class NodeName {
+	protected class NodeName {
 		String classname;
 		String name;
 		
