@@ -32,19 +32,35 @@ public class PropertyViewComponent implements IComponent {
 	 */
 	private boolean finished = false;
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#finish()
+	 */
 	@Override
 	public void finish() {
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#hasFinished()
+	 */
 	@Override
 	public boolean hasFinished() {
 		return finished;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#init()
+	 */
 	@Override
 	public void init() {
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#invoke()
+	 */
 	@Override
 	public void invoke() throws ComponentException {
 		StatementView sv = StatementView.getInstance();
@@ -60,6 +76,10 @@ public class PropertyViewComponent implements IComponent {
 		finished = true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#transformInput(java.lang.Object)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void transformInput(Object inputSource) throws ComponentException {
@@ -94,11 +114,19 @@ public class PropertyViewComponent implements IComponent {
 		this.messages = (List<IAddonMessage>) v;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#transformOutput()
+	 */
 	@Override
 	public Object transformOutput() throws ComponentException {
 		return messages;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#getDescription(java.lang.String)
+	 */
 	@Override
 	public String getDescription(String abbreviation) {
 
@@ -115,24 +143,32 @@ public class PropertyViewComponent implements IComponent {
 		return str;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#isValid()
+	 */
 	@Override
 	public boolean isValid() {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#getDisplayName()
+	 */
 	@Override
 	public String getDisplayName() {
 		return "Property view display";
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#canLinkWith(org.bflow.toolbox.hive.addons.core.model.IComponent)
+	 */
 	@Override
 	public boolean canLinkWith(IComponent component) {
-		if (component instanceof ShellAnalysisComponent)
-			return true;
-
-		if (component instanceof FileAnalysisComponent)
-			return true;
-		
+		if (component instanceof ShellAnalysisComponent) return true;
+		if (component instanceof FileAnalysisComponent) return true;
 		return false;
 	}
 
@@ -141,6 +177,10 @@ public class PropertyViewComponent implements IComponent {
 		return false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComponent#setParams(java.lang.String)
+	 */
 	@Override
 	public void setParams(String param) {
 	}

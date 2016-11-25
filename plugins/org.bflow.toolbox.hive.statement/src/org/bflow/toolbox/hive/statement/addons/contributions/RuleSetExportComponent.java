@@ -9,8 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bflow.toolbox.hive.addons.components.DiagramExportComponent;
+import org.bflow.toolbox.hive.addons.components.PrologRunComponent;
+import org.bflow.toolbox.hive.addons.components.ToolAdapterComponent;
+import org.bflow.toolbox.hive.addons.components.ToolRunComponent;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
+import org.bflow.toolbox.hive.addons.core.model.IComposableComponent;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeViewPart;
 import org.bflow.toolbox.hive.statement.views.StatementView;
@@ -31,7 +35,7 @@ import org.eclipse.ui.PlatformUI;
  * 
  * @author Markus Schnädelbach
  */
-public class RuleSetExportComponent implements IComponent {
+public class RuleSetExportComponent implements IComponent, IComposableComponent {
 
 	/** The source. */
 	private File source;
@@ -220,6 +224,19 @@ public class RuleSetExportComponent implements IComponent {
 	@Override
 	public boolean canLinkWith(IComponent component) {
 		if (component instanceof DiagramExportComponent) return true;
+		return false;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.core.model.IComposableComponent#supportsSucceeder(org.bflow.toolbox.hive.addons.core.model.IComponent)
+	 */
+	@Override
+	public boolean supportsSucceeder(IComponent component) {
+		if (component instanceof DiagramExportComponent) return true;
+		if (component instanceof ToolAdapterComponent) return true;
+		if (component instanceof ToolRunComponent) return true;
+		if (component instanceof PrologRunComponent) return true;
 		return false;
 	}
 
