@@ -6,16 +6,17 @@ import org.bflow.toolbox.hive.addons.core.exceptions.ProtocolException;
 /**
  * Defines an interface for an add-on component.
  * 
- * @author Arian Storch
- * @since 29/09/09
- * @version 12/08/12
+ * @author Arian Storch (arian.storch@bflow.org)
+ * @since 29.09.09
+ * @version 12.08.12
  */
 public interface IComponent {
 	
 	/**
 	 * This method is called first when a new component will be processed. Use
 	 * this to do basic initial stuff.
-	 * @throws ProtocolException 
+	 * 
+	 * @throws ProtocolException
 	 */
 	public void init() throws ProtocolException;
 

@@ -10,6 +10,7 @@ import org.bflow.toolbox.hive.addons.components.ToolAdapterComponent;
 import org.bflow.toolbox.hive.addons.components.ToolRunComponent;
 import org.bflow.toolbox.hive.addons.core.exceptions.ComponentException;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
+import org.bflow.toolbox.hive.addons.core.model.IComposableComponent;
 import org.bflow.toolbox.hive.addons.core.model.Protocol;
 import org.bflow.toolbox.hive.addons.protocols.Standardprotocol;
 import org.bflow.toolbox.hive.addons.store.AddonStore;
@@ -291,8 +292,14 @@ public class AddonEditDialog extends Dialog {
 			if (i == 0) continue;
 			
 			IComponent prev = (IComponent) viewer.getElementAt(i - 1);
+			boolean canBeLinked = comp.canLinkWith(prev);
+			
+			if (prev instanceof IComposableComponent) {
+				IComposableComponent composable = (IComposableComponent) prev;
+				canBeLinked = composable.supportsSucceeder(comp);
+			}
 
-			if (!comp.canLinkWith(prev)) {
+			if (!canBeLinked) {
 				String message = String.format(NLSupport.AddonEditDialog_ChainErrorText, comp.getDisplayName(), prev.getDisplayName());
 				MessageDialog.openError(getShell(), NLSupport.AddonEditDialog_ErrorDialogTitle, message);
 				return false;
