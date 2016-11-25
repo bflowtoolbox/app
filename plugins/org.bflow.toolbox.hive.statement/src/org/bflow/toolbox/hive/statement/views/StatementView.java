@@ -51,7 +51,6 @@ import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.ui.*;
 import org.eclipse.swt.SWT;
 
-
 /**
  * Implements the view part to support the add-ons Statement View.
  * 
@@ -97,7 +96,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	
 	
 	/**
-	 * The constructor.
+	 * Creates a new instance.
 	 */
 	public StatementView() {
 		
@@ -112,8 +111,8 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	}
 	
 	/**
-	 * This is a callback that will allow us
-	 * to create the viewer and initialize it.
+	 * This is a callback that will allow us to create the viewer and initialize
+	 * it.
 	 */
 	public void createPartControl(Composite parent) {
 		
@@ -135,7 +134,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				if (currentColumn == 1) {
 					if (event.keyCode == SWT.SPACE ||event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION) {
 						if (!isLastProperty(currentProperty)) {
-							boolean bool = MessageDialog.openQuestion(viewer.getControl().getShell(), NLSupport.StatementView_RemoveDialogTitle, NLSupport.StatementView_RemoveDialogText1+ currentProperty.getTemplateString() + NLSupport.StatementView_RemoveDialogText2);
+							boolean bool = MessageDialog.openQuestion(viewer.getControl().getShell(), NLSupport.StatementView_RemoveDialogTitle, NLSupport.StatementView_RemoveDialogText1 + currentProperty.getTemplateString() + NLSupport.StatementView_RemoveDialogText2);
 							if (bool) {
 								attrFile.remove(diagramId, currentProperty.getId());
 								attrFile.save();
@@ -235,13 +234,13 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	}
 	
 	/**
-	 * Sets the resultFlag of a property.
-	 * true - property is satisfied
-	 * false  - property is not satisfied
-	 * null - property has an unknown satisfaction
+	 * Sets the resultFlag of a property. true - property is satisfied false -
+	 * property is not satisfied null - property has an unknown satisfaction
 	 * 
-	 * @param indexOfProperty the index of the related property 
-	 * @param result true, false or null
+	 * @param indexOfProperty
+	 *            the index of the related property
+	 * @param result
+	 *            true, false or null
 	 */
 	public void setResult(int indexOfProperty, Boolean result) {
 		for (Property p : properties) {
@@ -269,7 +268,8 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	/**
 	 * Checks if the given property is the last in the current view table
 	 * 
-	 * @param Property to check
+	 * @param Property
+	 *            to check
 	 * @return true if the given property is the last in the view table
 	 */
 	private boolean isLastProperty(Property property) {
@@ -288,7 +288,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		instance = this;
 	}
 	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.part.WorkbenchPart#dispose()
 	 */
 	@Override
@@ -299,8 +301,11 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		super.dispose();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui.IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.ISelectionListener#selectionChanged(org.eclipse.ui.
+	 * IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
 	 */
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
@@ -314,8 +319,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	}
 
 	/**
-	 * If the attributefile is changed, that method will be called and re-init
+	 * If the attributemfile is changed, that method will be called and re-init
 	 * the Statement-View
+	 * 
 	 * @see org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener#noticeAttributeFileChange(org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent)
 	 */
 	@Override
@@ -376,8 +382,8 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	}
 	
 	/**
-	 * Returns the value of the nameattribute of the given eObject.
-	 * If there is no such attribute it will return null 
+	 * Returns the value of the name attribute of the given eObject. If there is
+	 * no such attribute it will return null
 	 * 
 	 * @param eObj
 	 * @return String or null
@@ -405,10 +411,11 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	}
 	
 	/**
-	 * Returns the uuid of the current diagram 
+	 * Returns the UUID of the current diagram
 	 * 
-	 * @param activeEditorPart as DiagramEditor
-	 * @return the uuid 
+	 * @param activeEditorPart
+	 *            as DiagramEditor
+	 * @return the UUID
 	 */
 	private String getDiagramIdFromEditorPart(DiagramEditor activeEditorPart) {
 		DiagramEditor diagramEditor = activeEditorPart;
@@ -422,10 +429,15 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	/**
 	 * Returns a new property restored from an attribute.
 	 * 
-	 * @param templateString the name of the property
-	 * @param diagramId the associated diagramId
-	 * @param propertyId the unique property Id
-	 * @param shapeIdtoClassname list of editpart-classnames with referenced editpart id of the current diagram
+	 * @param templateString
+	 *            the name of the property
+	 * @param diagramId
+	 *            the associated diagramId
+	 * @param propertyId
+	 *            the unique property Id
+	 * @param shapeIdtoClassname
+	 *            list of edit part class names with referenced edit part id of
+	 *            the current diagram
 	 * @return Property the restored Property
 	 */
 	private Property getPropertyObjectfromAttribute(String templateString, String diagramId, String propertyId, HashMap<String, NodeName> shapeIdtoClassname) {
@@ -495,8 +507,10 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	}
 
 	/**
-	 * Returns all uuids:classnames of ShapeNodeEditParts contained in the activeEdidorPart
-	 * @return Hashmap with uuid and classname pairs of ShapeNodeEditParts
+	 * Returns all uuids:classnames of ShapeNodeEditParts contained in the
+	 * activeEdidorPart
+	 * 
+	 * @return Hash map with UUID and class name pairs of ShapeNodeEditParts
 	 */
 	private HashMap<String, NodeName> getShapeIdsAndClassnamesFromDiagram() {
 		HashMap<String, NodeName> shapeIdtoClassname = new HashMap<>();
@@ -551,6 +565,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	
 	/**
 	 * Returns the Id of the current opened diagram
+	 * 
 	 * @return id of the current diagram
 	 */
 	public String getDiagramId() {
@@ -558,7 +573,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	}
 	
 	/**
-	 * Stores the name and classname of an editpart
+	 * Stores the name and class name of an edit part
 	 */
 	protected class NodeName {
 		String classname;
