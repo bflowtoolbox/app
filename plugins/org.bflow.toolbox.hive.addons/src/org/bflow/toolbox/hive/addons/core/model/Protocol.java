@@ -1,5 +1,6 @@
 package org.bflow.toolbox.hive.addons.core.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -207,9 +208,8 @@ public abstract class Protocol implements Runnable {
 		for (int i = 0; i < components.size(); i++) {
 			IComponent link = components.get(i);
 			
-			link.init();
-
 			try {
+				link.init();
 				link.transformInput(output);
 
 				link.invoke();
