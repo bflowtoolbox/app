@@ -19,7 +19,13 @@ public class ColumnImageLabelProvider extends ColumnLabelProvider
 {	
 	private Image FUNCTION; 
 	
-	private Image EVENT; 
+	private Image EVENT;
+	
+	private Image XOR_SINGLE;
+	
+	private Image OR_SINGLE;
+	
+	private Image AND_SINGLE;
 	
 	private Image NONE;
 	
@@ -39,6 +45,18 @@ public class ColumnImageLabelProvider extends ColumnLabelProvider
 		EVENT = new Image(composite.getDisplay(), 
 				this.getClass().
 				getResourceAsStream(Constants.IMGPACKAGE+"event.png"));
+		
+		XOR_SINGLE = new Image(composite.getDisplay(), 
+				this.getClass().
+				getResourceAsStream(Constants.IMGPACKAGE+"xor_single_kind.gif"));
+		
+		OR_SINGLE = new Image(composite.getDisplay(), 
+				this.getClass().
+				getResourceAsStream(Constants.IMGPACKAGE+"or_single_kind.gif"));
+		
+		AND_SINGLE = new Image(composite.getDisplay(), 
+				this.getClass().
+				getResourceAsStream(Constants.IMGPACKAGE+"and_single_kind.gif"));
 		
 		NONE = new Image(composite.getDisplay(), 
 				this.getClass().
@@ -60,11 +78,7 @@ public class ColumnImageLabelProvider extends ColumnLabelProvider
 		
 		if(column > step.size()-1)
 				return null;
-		
-		if(type == ConnectorType.AND_SINGLE || type == ConnectorType.OR_SINGLE ||
-				type == ConnectorType.XOR_SINGLE)
-			return null;
-			
+					
 		Element el = step.get(column);
 		
 		if(el.getName().isEmpty())
@@ -72,6 +86,15 @@ public class ColumnImageLabelProvider extends ColumnLabelProvider
 		
 		if(el.getKind() == Kind.Event)
 			return EVENT;
+		
+		if(el.getKind() == Kind.XOR_Single)
+			return XOR_SINGLE;
+		
+		if(el.getKind() == Kind.OR_Single)
+			return OR_SINGLE;
+		
+		if(el.getKind() == Kind.AND_Single)
+			return AND_SINGLE;
 		
 		if(el.getKind() == Kind.Function)
 			return FUNCTION;
@@ -84,7 +107,7 @@ public class ColumnImageLabelProvider extends ColumnLabelProvider
 		
 		ProcessStep step = (ProcessStep)element;
 		ConnectorType type = step.getConnector().getConnectorType();
-		
+		//KANN WAHRSCHEINLICH SPÄTER ENTFERNT WERDEN, WENN KOMPLETT AUF SINGLE KONNEKTOREN ALS KIND UMGESTELLT IST
 		if(type == ConnectorType.AND_SINGLE || type == ConnectorType.OR_SINGLE ||
 				type == ConnectorType.XOR_SINGLE)
 			return Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);

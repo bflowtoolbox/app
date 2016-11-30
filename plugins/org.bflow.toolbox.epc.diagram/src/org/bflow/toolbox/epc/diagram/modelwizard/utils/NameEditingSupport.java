@@ -2,13 +2,17 @@ package org.bflow.toolbox.epc.diagram.modelwizard.utils;
 
 import java.util.Vector;
 
+import org.bflow.toolbox.epc.diagram.modelwizard.pages.ElementGeneratorWizardPage;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector.ConnectorType;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Element.Kind;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -41,7 +45,6 @@ public class NameEditingSupport extends EditingSupport
 	{
 		super(viewer);
 		
-		this.editor = new TextCellEditor(((TableViewer)viewer).getTable());
 		this.column = column;
 		this.steps = steps;
 		this.viewer = (TableViewer)viewer;
@@ -87,7 +90,6 @@ public class NameEditingSupport extends EditingSupport
 		
 		ProcessStep processStep = (ProcessStep)element;
 		Element el = processStep.get(column);
-		
 		if(((String)value).equalsIgnoreCase(el.getName())) // nur Änderungen werden berücksichtigt
 			return ;
 		
@@ -97,7 +99,7 @@ public class NameEditingSupport extends EditingSupport
 		
 		int row = steps.indexOf(processStep);
 		
-		if(row == steps.size()-1)	// letztes Element
+		if(row == steps.size()-1)	// letzter Prozessstep
 		{
 			ProcessStep newStep = new ProcessStep(processStep.getConnector());
 						
@@ -113,6 +115,15 @@ public class NameEditingSupport extends EditingSupport
 				getViewer().update(s, null);
 			
 			moveTo = steps.size()-1;
+		}else if (ElementGeneratorWizardPage.isLastElementInColumn(steps, processStep, column)) {
+			ProcessStep nextStep = steps.get(row + 1);
+			Kind kind = (el.getKind() == Kind.Event ? Kind.Function : Kind.Event);
+			nextStep.set(new Element("",kind), column);
+			
+			for(ProcessStep s:steps){
+				getViewer().update(s, null);
+			}
+			moveTo = row+1;
 		}
 		
 		moveCursor = true;
@@ -134,9 +145,18 @@ public class NameEditingSupport extends EditingSupport
 		}
 		
 		@Override
+		public void activate(ColumnViewerEditorActivationEvent activationEvent) {
+			super.activate();
+			if (activationEvent.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) {
+				this.text.setText(String.valueOf(activationEvent.character));
+
+			}
+		}
+		
+		@Override
 		public void deactivate() {
 			super.deactivate();
-			
+						
 			int col = column;
 			
 			if(moveCursor)
@@ -153,5 +173,26 @@ public class NameEditingSupport extends EditingSupport
 				if(viewer != null && steps != null && steps.size() > 0)
 						viewer.editElement(steps.get(moveTo), col*2+2);
 		}	
+		
+		@Override
+		protected void keyReleaseOccured(KeyEvent keyEvent) {
+			if (keyEvent.keyCode == 9) { // Tabulator
+				super.deactivate();
+				this.fireCancelEditor();
+			}
+			super.keyReleaseOccured(keyEvent);
+			if (keyEvent.keyCode == SWT.ESC) {
+				super.deactivate();
+				this.fireCancelEditor();
+			}
+		}
+		
+		@Override
+		protected void doSetFocus() {
+			super.doSetFocus();
+			if (text != null) {
+				text.clearSelection();
+			}
+		}
 	}
 }

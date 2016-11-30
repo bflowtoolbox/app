@@ -80,7 +80,23 @@ public class Element
 		/**
 		 * function flag
 		 */
-		Function;
+		Function,
+		
+		/**
+		 * xor_single flag
+		 */
+		XOR_Single,
+		
+		/**
+		 * xor_single flag
+		 */
+		OR_Single,
+		
+		/**
+		 * xor_single flag
+		 */
+		AND_Single;
+		
 		
 		/**
 		 * Returns the position of the element within the enumeration hierarchie.
@@ -125,6 +141,15 @@ public class Element
 		public int nextPosition()
 		{
 			return next().getPosition();
+		}
+		
+		/**
+		 * Returns true if is a single connector
+		 * @return boolean
+		 */
+		public boolean isSingleConnector()
+		{
+			return this == AND_Single || this == XOR_Single || this == OR_Single;
 		}
 	}
 	
