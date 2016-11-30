@@ -19,7 +19,7 @@ import org.bflow.toolbox.hive.statement.views.StatementView.NodeName;
 public class Property {
 
 	private static AttributeFile attrFile;
-	private static HashMap<String, NodeName> shapeIdstoClassnames;
+	private static HashMap<String, NodeName> shapeIdstoClassnames = new HashMap<>();
 	private String propertyString;
 	private String formulaString;
 	private List<Variable> variables = new ArrayList<>();
