@@ -347,14 +347,14 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		HashMap<String, String> allAttr = attrFile.get(diagramId);
 		properties.clear();
 		
-		HashMap<String, NodeName> shapeIdtoClassname = null;
+		HashMap<String, NodeName> shapeIdtoClassname = new HashMap<>();
 		if (allAttr != null) {
 			List<String> sortedKeys=new ArrayList<String>(allAttr.keySet());
 			Collections.sort(sortedKeys);
 			for (String propertyId : sortedKeys) {
 				//Id is an valid UUID?
 				if (propertyId.matches("property_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")) { //$NON-NLS-1$
-					if (shapeIdtoClassname == null) {
+					if (shapeIdtoClassname.isEmpty()) {
 						shapeIdtoClassname = getShapeIdsAndClassnamesFromDiagram();
 					}
 					properties.add(getPropertyObjectfromAttribute(allAttr.get(propertyId), diagramId, propertyId, shapeIdtoClassname));
