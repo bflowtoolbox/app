@@ -1,0 +1,1141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension point="org.eclipse.team.core.fileTypes" id="repo-ftype">
+      <?gmfgen generated="false"?>
+      <fileTypes type="text" extension="ood"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser" id="resource-factory">
+      <?gmfgen generated="false"?>
+      <parser
+         type="ood"
+         class="org.eclipse.gmf.runtime.emf.core.resources.GMFResourceFactory">
+      </parser>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors" id="gmf-editor">
+      <?gmfgen generated="false"?>
+      <editor
+         id="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramEditorID"
+         name="%editorName"
+         icon="icons/obj16/openome_modelDiagramFile.gif"
+         extensions="ood"
+         default="true"
+         class="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramEditor"
+         matchingStrategy="edu.toronto.cs.openome_model.diagram.part.Openome_modelMatchingStrategy"
+         contributorClass="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramActionBarContributor">
+      </editor>
+   </extension>
+   
+   <extension point="org.eclipse.ui.contexts" id="ui-context">
+      <?gmfgen generated="true"?>
+      <context
+         description="%context.description"
+         id="edu.toronto.cs.openome_model.diagram.ui.diagramContext"
+         name="%context.name"
+         parentId="org.eclipse.gmf.runtime.diagram.ui.diagramContext">
+      </context>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards" id="creation-wizard">
+      <?gmfgen generated="false"?>
+  	  <wizard
+           category="edu.toronto.cs.openome_model.editor.category"
+           class="edu.toronto.cs.openome_model.diagram.part.Openome_modelCreationWizard"
+           icon="icons/obj16/openome_modelDiagramFile.gif"
+           id="edu.toronto.cs.openome_model.diagram.part.Openome_modelCreationWizardID"
+           name="%newWizardName"
+           project="true">
+  	  	 <description>%newWizardDesc</description>  
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.popupMenus" id="init-diagram-action">
+      <?gmfgen generated="false"?>
+      <objectContribution
+            id="edu.toronto.cs.openome_model.diagram.InitDiagram"
+            nameFilter="*.oom"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               label="%initDiagramActionLabel"
+               class="edu.toronto.cs.openome_model.diagram.part.Openome_modelInitDiagramFileAction"
+               menubarPath="additions"
+               enablesFor="1"
+               id="edu.toronto.cs.openome_model.diagram.InitDiagramAction">
+         </action>
+      </objectContribution>
+   </extension>
+
+   	
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders" id="global-actions">
+      <?gmfgen generated="true"?>
+      <GlobalActionHandlerProvider
+         class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramGlobalActionHandlerProvider"
+         id="openome_modelPresentation">
+         <Priority name="Lowest"/>
+         <ViewId id="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="delete"/>
+            </ElementType>
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart">
+               <GlobalActionId actionId="save"/>
+            </ElementType>
+         </ViewId>
+      </GlobalActionHandlerProvider>
+      <GlobalActionHandlerProvider
+         class="org.eclipse.gmf.runtime.diagram.ui.providers.ide.providers.DiagramIDEGlobalActionHandlerProvider"
+         id="openome_modelPresentationIDE">
+         <Priority name="Lowest"/>
+         <ViewId id="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="bookmark"/>
+            </ElementType>
+         </ViewId>
+      </GlobalActionHandlerProvider>
+      <GlobalActionHandlerProvider
+            class="edu.toronto.cs.openome_model.diagram.part.Openome_modelGlobalActionHandlerProvider"
+            id="openome_modelRender">
+         <Priority name="Lowest"/>
+         <ViewId id="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="cut"/>
+               <GlobalActionId actionId="copy"/>
+               <GlobalActionId actionId="paste"/>
+            </ElementType>
+         </ViewId>
+      </GlobalActionHandlerProvider>
+   </extension>
+
+   
+
+   <extension point="org.eclipse.core.runtime.preferences" id="prefs">
+      <?gmfgen generated="true"?>
+      <initializer class="edu.toronto.cs.openome_model.diagram.preferences.DiagramPreferenceInitializer"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.preferencePages" id="prefpages">
+      <?gmfgen generated="false"?>
+      <page
+            id="edu.toronto.cs.openome_model.diagram.general"
+            name="%prefpage.edu.toronto.cs.openome_model.diagram.general"
+            class="edu.toronto.cs.openome_model.diagram.preferences.DiagramGeneralPreferencePage">
+      </page>
+      <page
+            id="edu.toronto.cs.openome_model.diagram.appearance"
+            name="%prefpage.edu.toronto.cs.openome_model.diagram.appearance"
+            category="edu.toronto.cs.openome_model.diagram.general"
+            class="edu.toronto.cs.openome_model.diagram.preferences.DiagramAppearancePreferencePage">
+      </page>
+      <page
+            id="edu.toronto.cs.openome_model.diagram.connections"
+            name="%prefpage.edu.toronto.cs.openome_model.diagram.connections"
+            category="edu.toronto.cs.openome_model.diagram.general"
+            class="edu.toronto.cs.openome_model.diagram.preferences.DiagramConnectionsPreferencePage">
+      </page>
+      <page
+            id="edu.toronto.cs.openome_model.diagram.printing"
+            name="%prefpage.edu.toronto.cs.openome_model.diagram.printing"
+            category="edu.toronto.cs.openome_model.diagram.general"
+            class="edu.toronto.cs.openome_model.diagram.preferences.DiagramPrintingPreferencePage">
+      </page>
+      <page
+            id="edu.toronto.cs.openome_model.diagram.rulersAndGrid"
+            name="%prefpage.edu.toronto.cs.openome_model.diagram.rulersAndGrid"
+            category="edu.toronto.cs.openome_model.diagram.general"
+            class="edu.toronto.cs.openome_model.diagram.preferences.DiagramRulersAndGridPreferencePage">
+      </page>
+      <page
+            id="edu.toronto.cs.openome_model.diagram.pathmaps"
+            name="%prefpage.edu.toronto.cs.openome_model.diagram.pathmaps"
+            category="edu.toronto.cs.openome_model.diagram.general"
+            class="org.eclipse.gmf.runtime.emf.ui.preferences.PathmapsPreferencePage">
+      </page>
+   </extension>
+
+   <extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor" id="prop-contrib">
+      <?gmfgen generated="true"?>
+      <propertyContributor
+            contributorId="edu.toronto.cs.openome_model.diagram"
+            labelProvider="edu.toronto.cs.openome_model.diagram.sheet.Openome_modelSheetLabelProvider">
+         <propertyCategory category="domain"/>
+         <propertyCategory category="visual"/>
+         <propertyCategory category="extra"/>
+      </propertyContributor>
+   </extension>
+
+   <extension point="org.eclipse.ui.views.properties.tabbed.propertyTabs" id="proptabs">
+      <?gmfgen generated="true"?>   
+      <propertyTabs contributorId="edu.toronto.cs.openome_model.diagram">
+         <propertyTab
+             category="visual"
+             id="property.tab.AppearancePropertySection"
+             label="%tab.appearance"/>
+          <propertyTab
+             category="visual"
+             id="property.tab.DiagramPropertySection"
+             label="%tab.diagram"/>
+          <propertyTab
+             category="domain"
+             id="property.tab.domain"
+             label="%tab.domain"/>
+      </propertyTabs>
+   </extension>
+
+   <extension point="org.eclipse.ui.views.properties.tabbed.propertySections" id="propsections">
+      <?gmfgen generated="true"?>   
+      <propertySections contributorId="edu.toronto.cs.openome_model.diagram">
+         <propertySection id="property.section.ConnectorAppearancePropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.ConnectionEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.ConnectionAppearancePropertySection" 
+            tab="property.tab.AppearancePropertySection">
+         </propertySection>
+         <propertySection id="property.section.ShapeColorAndFontPropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.ShapeEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.ShapeColorsAndFontsPropertySection" 
+            tab="property.tab.AppearancePropertySection">
+         </propertySection> 
+         <propertySection id="property.section.DiagramColorsAndFontsPropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.DiagramEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.DiagramColorsAndFontsPropertySection" 
+            tab="property.tab.AppearancePropertySection">
+         </propertySection>     
+         <propertySection id="property.section.RulerGridPropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.DiagramEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.grid.RulerGridPropertySection" 
+            tab="property.tab.DiagramPropertySection">
+         </propertySection>     
+         <propertySection
+            id="property.section.domain" 
+            tab="property.tab.domain"
+            class="edu.toronto.cs.openome_model.diagram.sheet.Openome_modelPropertySection">
+            <input type="org.eclipse.gmf.runtime.notation.View"/>
+            <input type="org.eclipse.gef.EditPart"/>
+            <input type="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelAbstractNavigatorItem"/>
+         </propertySection>
+      </propertySections>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.diagram.core.viewProviders" id="view-provider">
+      <?gmfgen generated="true"?>
+      <viewProvider class="edu.toronto.cs.openome_model.diagram.providers.Openome_modelViewProvider">
+         <Priority name="Lowest"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Diagram" semanticHints="openome_model"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Node" semanticHints="2001,2002,2003,2004,2005,2006,2007,2008,3001,3002,3003,3004,3005,3006,3007,3008,3009,3010,3011,3012,3013,3014,3015,3016"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Edge" semanticHints="4001,4002,4003,4005,4006,4007,4008,4009,4010,4011,4012,4013,4014,4015,4016,4017,4018,4019"/>
+      </viewProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders" id="ep-provider">
+      <?gmfgen generated="true"?>
+      <editpartProvider class="edu.toronto.cs.openome_model.diagram.providers.Openome_modelEditPartProvider">
+         <Priority name="Lowest"/>
+         <object class="org.eclipse.gmf.runtime.notation.Diagram" id="generated-diagram">
+            <method name="getType()" value="openome_model"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-nodes">
+            <method name="getType()" value="2001,2002,2003,2004,2005,2006,2007,2008,3001,3002,3003,3004,3005,3006,3007,3008,3009,3010,3011,3012,3013,3014,3015,3016"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Edge" id="generated-links">
+            <method name="getType()" value="4001,4002,4003,4005,4006,4007,4008,4009,4010,4011,4012,4013,4014,4015,4016,4017,4018,4019"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-labels">
+            <method name="getType()" value="5005,5010,5015,5020,5021,5041,5022,5042,5023,5043,5024,5044,5001,5025,5002,5026,5003,5027,5004,5028,5006,5029,5007,5030,5008,5031,5009,5032,5011,5033,5012,5034,5013,5035,5014,5036,5016,5037,5017,5038,5018,5039,5019,5040"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-compartments">
+            <method name="getType()" value="7001,7002,7003,7004"/>
+         </object>
+         <context views="generated-diagram,generated-nodes,generated-links,generated-labels,generated-compartments"/>
+      </editpartProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.emf.ui.modelingAssistantProviders" id="modelassist-provider">
+      <?gmfgen generated="true"?>
+      <modelingAssistantProvider class="edu.toronto.cs.openome_model.diagram.providers.Openome_modelModelingAssistantProvider">
+         <Priority name="Lowest"/>
+         <object class="edu.toronto.cs.openome_model.diagram.edit.parts.ModelEditPart" id="Model_1000"/>
+         <object class="edu.toronto.cs.openome_model.diagram.edit.parts.ActorEditPart" id="Actor_2001"/>
+         <object class="edu.toronto.cs.openome_model.diagram.edit.parts.AgentEditPart" id="Agent_2002"/>
+         <object class="edu.toronto.cs.openome_model.diagram.edit.parts.PositionEditPart" id="Position_2003"/>
+         <object class="edu.toronto.cs.openome_model.diagram.edit.parts.RoleEditPart" id="Role_2004"/>
+         <object class="edu.toronto.cs.openome_model.diagram.edit.parts.GoalEditPart" id="Goal_2005"/>
+         <object class="edu.toronto.cs.openome_model.diagram.edit.parts.SoftgoalEditPart" id="Softgoal_2006"/>
+         <object class="edu.toronto.cs.openome_model.diagram.edit.parts.TaskEditPart" id="Task_2007"/>
+         <object class="edu.toronto.cs.openome_model.diagram.edit.parts.ResourceEditPart" id="Resource_2008"/>
+         <context elements="Model_1000,Actor_2001,Agent_2002,Position_2003,Role_2004,Goal_2005,Softgoal_2006,Task_2007,Resource_2008"/>
+      </modelingAssistantProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.iconProviders" id="icon-provider">
+      <?gmfgen generated="true"?>
+      <IconProvider class="edu.toronto.cs.openome_model.diagram.providers.Openome_modelIconProvider">
+         <Priority name="Low"/>
+      </IconProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.parserProviders" id="parser-provider">
+      <?gmfgen generated="true"?>
+      <ParserProvider class="edu.toronto.cs.openome_model.diagram.providers.Openome_modelParserProvider">
+         <Priority name="Lowest"/>
+      </ParserProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.emf.type.core.elementTypes" id="element-types">
+      <?gmfgen generated="true"?>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.Model_1000"
+               name="%metatype.name.Model_1000"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Model"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.ModelEditHelper">
+            <param name="semanticHint" value="1000"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.Actor_2001"
+               name="%metatype.name.Actor_2001"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Actor"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.ActorEditHelper">
+            <param name="semanticHint" value="2001"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.Agent_2002"
+               name="%metatype.name.Agent_2002"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Agent"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.AgentEditHelper">
+            <param name="semanticHint" value="2002"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.Position_2003"
+               name="%metatype.name.Position_2003"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Position"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.PositionEditHelper">
+            <param name="semanticHint" value="2003"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.Role_2004"
+               name="%metatype.name.Role_2004"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Role"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.RoleEditHelper">
+            <param name="semanticHint" value="2004"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Goal_2005"
+               name="%metatype.name.Goal_2005"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Goal_3001"/>
+            <param name="semanticHint" value="2005"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Softgoal_2006"
+               name="%metatype.name.Softgoal_2006"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Softgoal_3002"/>
+            <param name="semanticHint" value="2006"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Task_2007"
+               name="%metatype.name.Task_2007"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Task_3004"/>
+            <param name="semanticHint" value="2007"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Resource_2008"
+               name="%metatype.name.Resource_2008"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Resource_3003"/>
+            <param name="semanticHint" value="2008"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.Goal_3001"
+               name="%metatype.name.Goal_3001"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Goal"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.GoalEditHelper">
+            <param name="semanticHint" value="3001"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.Softgoal_3002"
+               name="%metatype.name.Softgoal_3002"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Softgoal"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.SoftgoalEditHelper">
+            <param name="semanticHint" value="3002"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.Resource_3003"
+               name="%metatype.name.Resource_3003"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Resource"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.ResourceEditHelper">
+            <param name="semanticHint" value="3003"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.Task_3004"
+               name="%metatype.name.Task_3004"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Task"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.TaskEditHelper">
+            <param name="semanticHint" value="3004"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Goal_3005"
+               name="%metatype.name.Goal_3005"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Goal_3001"/>
+            <param name="semanticHint" value="3005"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Softgoal_3006"
+               name="%metatype.name.Softgoal_3006"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Softgoal_3002"/>
+            <param name="semanticHint" value="3006"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Resource_3007"
+               name="%metatype.name.Resource_3007"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Resource_3003"/>
+            <param name="semanticHint" value="3007"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Task_3008"
+               name="%metatype.name.Task_3008"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Task_3004"/>
+            <param name="semanticHint" value="3008"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Goal_3009"
+               name="%metatype.name.Goal_3009"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Goal_3001"/>
+            <param name="semanticHint" value="3009"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Softgoal_3010"
+               name="%metatype.name.Softgoal_3010"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Softgoal_3002"/>
+            <param name="semanticHint" value="3010"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Resource_3011"
+               name="%metatype.name.Resource_3011"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Resource_3003"/>
+            <param name="semanticHint" value="3011"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Task_3012"
+               name="%metatype.name.Task_3012"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Task_3004"/>
+            <param name="semanticHint" value="3012"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Goal_3013"
+               name="%metatype.name.Goal_3013"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Goal_3001"/>
+            <param name="semanticHint" value="3013"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Softgoal_3014"
+               name="%metatype.name.Softgoal_3014"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Softgoal_3002"/>
+            <param name="semanticHint" value="3014"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Resource_3015"
+               name="%metatype.name.Resource_3015"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Resource_3003"/>
+            <param name="semanticHint" value="3015"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <specializationType
+               id="edu.toronto.cs.openome_model.diagram.Task_3016"
+               name="%metatype.name.Task_3016"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="edu.toronto.cs.openome_model.diagram.Task_3004"/>
+            <param name="semanticHint" value="3016"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.Dependency_4001"
+               name="%metatype.name.Dependency_4001"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Dependency"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.DependencyEditHelper">
+            <param name="semanticHint" value="4001"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.AndDecomposition_4002"
+               name="%metatype.name.AndDecomposition_4002"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="AndDecomposition"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.AndDecompositionEditHelper">
+            <param name="semanticHint" value="4002"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.OrDecomposition_4003"
+               name="%metatype.name.OrDecomposition_4003"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="OrDecomposition"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.OrDecompositionEditHelper">
+            <param name="semanticHint" value="4003"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.HelpContribution_4005"
+               name="%metatype.name.HelpContribution_4005"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="HelpContribution"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.HelpContributionEditHelper">
+            <param name="semanticHint" value="4005"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.HurtContribution_4006"
+               name="%metatype.name.HurtContribution_4006"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="HurtContribution"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.HurtContributionEditHelper">
+            <param name="semanticHint" value="4006"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.MakeContribution_4007"
+               name="%metatype.name.MakeContribution_4007"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="MakeContribution"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.MakeContributionEditHelper">
+            <param name="semanticHint" value="4007"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.BreakContribution_4008"
+               name="%metatype.name.BreakContribution_4008"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="BreakContribution"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.BreakContributionEditHelper">
+            <param name="semanticHint" value="4008"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.SomePlusContribution_4009"
+               name="%metatype.name.SomePlusContribution_4009"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="SomePlusContribution"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.SomePlusContributionEditHelper">
+            <param name="semanticHint" value="4009"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.SomeMinusContribution_4010"
+               name="%metatype.name.SomeMinusContribution_4010"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="SomeMinusContribution"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.SomeMinusContributionEditHelper">
+            <param name="semanticHint" value="4010"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.UnknownContribution_4011"
+               name="%metatype.name.UnknownContribution_4011"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="UnknownContribution"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.UnknownContributionEditHelper">
+            <param name="semanticHint" value="4011"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.AndContribution_4012"
+               name="%metatype.name.AndContribution_4012"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="AndContribution"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.AndContributionEditHelper">
+            <param name="semanticHint" value="4012"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.OrContribution_4013"
+               name="%metatype.name.OrContribution_4013"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="OrContribution"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.OrContributionEditHelper">
+            <param name="semanticHint" value="4013"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.IsAAssociation_4014"
+               name="%metatype.name.IsAAssociation_4014"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="IsAAssociation"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.IsAAssociationEditHelper">
+            <param name="semanticHint" value="4014"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.CoversAssociation_4015"
+               name="%metatype.name.CoversAssociation_4015"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="CoversAssociation"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.CoversAssociationEditHelper">
+            <param name="semanticHint" value="4015"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.OccupiesAssociation_4016"
+               name="%metatype.name.OccupiesAssociation_4016"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="OccupiesAssociation"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.OccupiesAssociationEditHelper">
+            <param name="semanticHint" value="4016"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.IsPartOfAssociation_4017"
+               name="%metatype.name.IsPartOfAssociation_4017"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="IsPartOfAssociation"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.IsPartOfAssociationEditHelper">
+            <param name="semanticHint" value="4017"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.PlaysAssociation_4018"
+               name="%metatype.name.PlaysAssociation_4018"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="PlaysAssociation"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.PlaysAssociationEditHelper">
+            <param name="semanticHint" value="4018"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http:///edu/toronto/cs/openome_model.ecore">
+         <metamodelType
+               id="edu.toronto.cs.openome_model.diagram.INSAssociation_4019"
+               name="%metatype.name.INSAssociation_4019"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="INSAssociation"
+               edithelper="edu.toronto.cs.openome_model.diagram.edit.helpers.INSAssociationEditHelper">
+            <param name="semanticHint" value="4019"/>
+         </metamodelType>
+      </metamodel>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.emf.type.core.elementTypeBindings" id="element-types-bindings">
+      <?gmfgen generated="true"?>
+      <clientContext id="edu.toronto.cs.openome_model.diagram.TypeContext">
+         <enablement>
+            <test
+               property="org.eclipse.gmf.runtime.emf.core.editingDomain"
+               value="edu.toronto.cs.openome_model.diagram.EditingDomain"/>
+         </enablement>
+      </clientContext> 
+      <binding context="edu.toronto.cs.openome_model.diagram.TypeContext">
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Model_1000"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Actor_2001"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Agent_2002"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Position_2003"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Role_2004"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Goal_2005"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Softgoal_2006"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Task_2007"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Resource_2008"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Goal_3001"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Softgoal_3002"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Resource_3003"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Task_3004"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Goal_3005"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Softgoal_3006"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Resource_3007"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Task_3008"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Goal_3009"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Softgoal_3010"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Resource_3011"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Task_3012"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Goal_3013"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Softgoal_3014"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Resource_3015"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Task_3016"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.Dependency_4001"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.AndDecomposition_4002"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.OrDecomposition_4003"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.HelpContribution_4005"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.HurtContribution_4006"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.MakeContribution_4007"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.BreakContribution_4008"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.SomePlusContribution_4009"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.SomeMinusContribution_4010"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.UnknownContribution_4011"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.AndContribution_4012"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.OrContribution_4013"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.IsAAssociation_4014"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.CoversAssociation_4015"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.OccupiesAssociation_4016"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.IsPartOfAssociation_4017"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.PlaysAssociation_4018"/>
+         <elementType ref="edu.toronto.cs.openome_model.diagram.INSAssociation_4019"/>
+         <advice ref="org.eclipse.gmf.runtime.diagram.core.advice.notationDepdendents"/>
+      </binding>
+   </extension>
+	   <extension point="org.eclipse.core.expressions.propertyTesters" id="navigator-proptest.isURIEditorInput">
+      <?gmfgen generated="true"?>
+       <propertyTester
+           id="edu.toronto.cs.openome_model.diagram.URIEditorInputPropertyTester"
+           type="org.eclipse.emf.common.ui.URIEditorInput"
+           namespace="edu.toronto.cs.openome_model.diagram"
+           properties="isURIEditorInput"
+           class="edu.toronto.cs.openome_model.diagram.part.Openome_modelUriEditorInputTester">
+       </propertyTester>
+   </extension>
+
+	   
+	   <extension point="org.eclipse.ui.navigator.viewer" id="navigator-viewbinding">
+      <?gmfgen generated="true"?>
+      <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <contentExtension pattern="edu.toronto.cs.openome_model.diagram.resourceContent"/>
+			<contentExtension pattern="edu.toronto.cs.openome_model.diagram.domainResourceContent"/>
+            <contentExtension pattern="edu.toronto.cs.openome_model.diagram.navigatorLinkHelper"/>
+         </includes>
+      </viewerContentBinding>
+      <viewerActionBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <actionExtension pattern="edu.toronto.cs.openome_model.diagram.navigatorActionProvider"/>
+         </includes>
+      </viewerActionBinding>
+   </extension>
+
+   <extension point="org.eclipse.ui.navigator.navigatorContent" id="navigator-content">
+      <?gmfgen generated="false"?>
+      <navigatorContent
+            id="edu.toronto.cs.openome_model.diagram.resourceContent" 
+            name="%navigatorContentName" 
+            priority="normal" 
+            contentProvider="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelNavigatorContentProvider" 
+            labelProvider="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelNavigatorLabelProvider"
+            icon="icons/obj16/openome_modelDiagramFile.gif"
+            activeByDefault="true">
+         <triggerPoints>
+            <or>
+	           <and>
+    	          <instanceof value="org.eclipse.core.resources.IFile"/>
+        	      <test property="org.eclipse.core.resources.extension" value="ood"/>
+               </and>
+               <instanceof value="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelAbstractNavigatorItem"/>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <or>
+         	   <instanceof value="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelAbstractNavigatorItem"/>
+            </or>
+         </possibleChildren>
+         <commonSorter 
+               id="edu.toronto.cs.openome_model.diagram.navigatorSorter" 
+               class="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelNavigatorSorter">
+            <parentExpression>
+               <or>
+	              <and>
+    	             <instanceof value="org.eclipse.core.resources.IFile"/>
+        	         <test property="org.eclipse.core.resources.extension" value="ood"/>
+                  </and>
+                  <instanceof value="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelAbstractNavigatorItem"/>
+               </or>
+            </parentExpression>
+         </commonSorter>
+      </navigatorContent>
+      <navigatorContent
+            id="edu.toronto.cs.openome_model.diagram.domainResourceContent" 
+            name="%domainNavigatorContentName" 
+            priority="normal" 
+            contentProvider="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelDomainNavigatorContentProvider" 
+            labelProvider="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelDomainNavigatorLabelProvider"
+            icon="icons/obj16/openome_modelDiagramFile.gif"
+            activeByDefault="true">
+         <triggerPoints>
+            <or>
+	           <and>
+    	          <instanceof value="org.eclipse.core.resources.IFile"/>
+        	      <test property="org.eclipse.core.resources.extension" value="oom"/>
+               </and>
+               <instanceof value="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelDomainNavigatorItem"/>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <instanceof value="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelDomainNavigatorItem"/>
+         </possibleChildren>
+      </navigatorContent>
+      <actionProvider
+            id="edu.toronto.cs.openome_model.diagram.navigatorActionProvider"
+            class="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelNavigatorActionProvider">
+         <enablement>
+            <or>
+               <instanceof value="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelAbstractNavigatorItem"/>
+            </or>
+         </enablement>
+      </actionProvider>
+   </extension>
+   
+	   <extension point="org.eclipse.ui.navigator.linkHelper" id="navigator-linkhelper">
+      <?gmfgen generated="true"?>
+      <linkHelper
+            id="edu.toronto.cs.openome_model.diagram.navigatorLinkHelper"
+            class="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelNavigatorLinkHelper">
+         <editorInputEnablement>
+            <and>
+               <instanceof value="org.eclipse.emf.common.ui.URIEditorInput"/>
+               <test property="edu.toronto.cs.openome_model.diagram.isURIEditorInput"/>
+            </and>
+         </editorInputEnablement>
+         <selectionEnablement>
+            <instanceof value="edu.toronto.cs.openome_model.diagram.navigator.Openome_modelAbstractNavigatorItem"/>
+         </selectionEnablement>
+      </linkHelper>
+   </extension>
+   <extension point="org.eclipse.ui.commands" id="update-cmd">
+      <?gmfgen generated="true"?>
+      <command
+         categoryId="org.eclipse.ui.category.edit"
+         defaultHandler="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramUpdateCommand"
+         description="%update.diagram.description"
+         id="edu.toronto.cs.openome_model.diagram.updateDiagram"
+         name="%update.diagram.name"/>
+   </extension>
+   
+   <extension point="org.eclipse.ui.bindings" id="update-cmd-binding">
+      <?gmfgen generated="true"?>
+      <key 
+         commandId="edu.toronto.cs.openome_model.diagram.updateDiagram"
+         contextId="edu.toronto.cs.openome_model.diagram.ui.diagramContext"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         sequence="F5"/>
+   </extension>
+   <extension
+         point="org.eclipse.gmf.runtime.diagram.ui.layoutProviders">
+      <layoutProvider
+            class="edu.toronto.cs.openome_model.diagram.layout.provider.SquareLayoutProvider">
+         <Priority
+               name="Lowest">
+         </Priority>
+      </layoutProvider>
+   </extension>
+   <extension
+         point="org.eclipse.gmf.runtime.common.ui.services.action.contributionItemProviders">
+	  <?gmfgen generated="false"?>
+      <contributionItemProvider
+            checkPluginLoaded="true"
+            class="customsrc.OpenOMEActionProvider">
+         <Priority
+               name="Lowest">
+         </Priority>
+         <popupContribution
+               class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramContextMenuProvider">
+            <popupMenu
+                  id="IntentionGoalLabelTypeMenu"
+                  path="/additionsGroup">
+            </popupMenu>
+            <popupMenu
+                  id="IntentionTypeMenu"
+                  path="/additionsGroup">
+            </popupMenu>
+            <popupMenu
+                  id="HighlightAsMenu"
+                  path="/additionsGroup">
+            </popupMenu>
+            <popupStructuredContributionCriteria
+                  objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.AbstractBorderedShapeEditPart">
+            </popupStructuredContributionCriteria></popupContribution>
+         <popupContribution
+               class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramContextMenuProvider">
+            <popupAction
+                  id="StraightenLinesAction"
+                  path="/additionsGroup">
+            </popupAction>
+            <popupMenu
+                  id="ContributionLineTypeMenu"
+                  path="/additionsGroup">
+            </popupMenu>tParkContributionEditPart">
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.HelpContributionEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.HurtContributionEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.MakeContributionEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.OrContributionEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.SomeMinusContributionEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.SomePlusContributionEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.UnknownContributionEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.BreakContributionEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.AndContributionEditPart">
+            </popupStructuredContributionCriteria>
+         </popupContribution>
+         <popupContribution
+               class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramContextMenuProvider">
+            <popupAction
+                  id="StraightenLinesAction"
+                  path="/additionsGroup">
+            </popupAction>
+            <popupMenu
+                  id="DecompositionLineTypeMenu"
+                  path="/additionsGroup">
+            </popupMenu>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.DependencyEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.AndDecompositionEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.OrDecompositionEditPart">
+            </popupStructuredContributionCriteria>
+         </popupContribution>
+         <popupContribution
+               class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramContextMenuProvider">
+            <popupMenu
+                  id="ActorTypeMenu"
+                  path="/additionsGroup">
+            </popupMenu>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.ActorEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.AgentEditPart"></popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.RoleEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.PositionEditPart">
+            </popupStructuredContributionCriteria>
+         </popupContribution>
+         <popupContribution
+               class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramContextMenuProvider">
+            <popupAction
+                  id="StraightenLinesAction"
+                  path="/additionsGroup">
+            </popupAction>
+            <popupMenu
+                  id="AssociationLineTypeMenu"
+                  path="/additionsGroup">
+            </popupMenu>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.CoversAssociationEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.INSAssociationEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.IsAAssociationEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.IsPartOfAssociationEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.OccupiesAssociationEditPart">
+            </popupStructuredContributionCriteria>
+            <popupStructuredContributionCriteria
+                  objectClass="edu.toronto.cs.openome_model.diagram.edit.parts.PlaysAssociationEditPart">
+            </popupStructuredContributionCriteria>
+         </popupContribution>
+      </contributionItemProvider>
+   </extension>
+   
+   
+   <extension point="org.eclipse.gmf.runtime.diagram.ui.paletteProviders"> 
+  <paletteProvider class="org.eclipse.gmf.runtime.diagram.ui.providers.DefaultPaletteProvider">
+    <Priority name="High"/>
+      <contribution>
+     	<predefinedEntry id="standardGroup/zoomTool" remove="false"/>
+     	<predefinedEntry id="standardGroup/noteStack/noteTool" remove="false"/> 
+	<predefinedEntry id="standardGroup/noteStack/textTool" remove="false"/> 
+	<predefinedEntry id="standardGroup/noteStack/noteattachmentTool" remove="false"/>
+      </contribution>
+  </paletteProvider>
+</extension>
+<extension point="org.eclipse.ui.menus" id="context-menus">
+      <?gmfgen generated="true"?>
+      <!-- menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=">
+      </menuContribution>
+      <menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=">
+      </menuContribution -->
+      <menuContribution locationURI="popup:org.eclipse.gmf.runtime.diagram.ui.DiagramEditorContextMenu">
+         <command commandId="edu.toronto.cs.openome_model.diagram.LoadResourceAction">
+            <visibleWhen>
+               <and>
+                  <with variable="activePartId"><equals value="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramEditorID"/></with>
+                  <with variable="selection"><iterate ifEmpty="false"> 
+                     <instanceof value="edu.toronto.cs.openome_model.diagram.edit.parts.ModelEditPart"/>
+                  </iterate></with>
+               </and>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution locationURI="popup:org.eclipse.gmf.runtime.diagram.ui.DiagramEditorContextMenu">
+         <command commandId="edu.toronto.cs.openome_model.diagram.LoadResourceAction">
+            <visibleWhen>
+               <and>
+                  <with variable="activePartId"><equals value="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramEditorID"/></with>
+                  <with variable="selection"><iterate ifEmpty="false"> 
+                     <instanceof value="edu.toronto.cs.openome_model.diagram.edit.parts.ModelEditPart"/>
+                  </iterate></with>
+               </and>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+
+<extension point="org.eclipse.ui.commands" id="menu-commands">
+      <?gmfgen generated="true"?>
+      <category id="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramEditorID" name="%cmdcategory.name" description="%cmdcategory.desc"/>
+      <command id="edu.toronto.cs.openome_model.diagram.LoadResourceAction"
+         name="Load Resource"
+         categoryId="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramEditorID"
+         defaultHandler="edu.toronto.cs.openome_model.diagram.part.LoadResourceAction"/>
+      <command id="edu.toronto.cs.openome_model.diagram.LoadResourceAction"
+         name="Load Resource"
+         categoryId="edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramEditorID"
+         defaultHandler="edu.toronto.cs.openome_model.diagram.part.LoadResourceAction"/>
+   </extension>
+
+<extension point="org.eclipse.ui.handlers" id="menu-handlers">
+      <?gmfgen generated="true"?>
+   </extension>
+<extension
+      point="org.eclipse.ui.importWizards">
+   <category
+         id="edu.toronto.cs.openome_model.diagram.importWizards.sampleCategory"
+         name="OpenOME">
+   </category>
+   <wizard
+         category="edu.toronto.cs.openome_model.diagram.importWizards.sampleCategory"
+         class="edu.toronto.cs.openome_model.diagram.importWizards.ImportWizard"
+         icon="icons/sample.gif"
+         id="edu.toronto.cs.openome_model.diagram.importWizards.ImportWizard"
+         name="Import Q7 and iStarML files.">
+      <description>
+         Import a file from the local file system into the workspace.
+      </description>
+   </wizard>
+</extension>
+<extension
+      point="org.eclipse.ui.views">
+   <category
+         id="edu.toronto.cs.openome_model.diagram"
+         name="OpenOME">
+   </category>
+   <view
+         category="edu.toronto.cs.openome_model.diagram"
+         class="edu.toronto.cs.openome_model.diagram.views.tree.TreeView"
+         icon="icons/sample.gif"
+         id="edu.toronto.cs.openome_model.diagram.views.TreeView"
+         name="Tree View">
+   </view>
+</extension>
+<extension
+      point="org.eclipse.ui.perspectiveExtensions">
+   <perspectiveExtension
+         targetID="org.eclipse.ui.resourcePerspective">
+      <view
+            id="edu.toronto.cs.openome_model.diagram.views.TreeView"
+            ratio="0.7"
+            relationship="right"
+            relative="org.eclipse.ui.editorss">
+      </view>
+   </perspectiveExtension>
+</extension>
+
+   
+   
+   
+   
+</plugin>

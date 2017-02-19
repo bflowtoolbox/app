@@ -1,0 +1,7 @@
+# Tracing options for the edu.toronto.cs.openome_model.diagram plug-in
+
+# Common issues
+edu.toronto.cs.openome_model.diagram/debug=false
+
+# Visual IDs
+edu.toronto.cs.openome_model.diagram/debug/visualID=false

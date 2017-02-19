@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: edu.toronto.cs.openome_model.diagram; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: .
+Bundle-Activator: edu.toronto.cs.openome_model.diagram.part.Openome_modelDiagramEditorPlugin
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Export-Package: edu.toronto.cs.openome_model.diagram.edit.commands,
+ edu.toronto.cs.openome_model.diagram.edit.parts,
+ edu.toronto.cs.openome_model.diagram.part,
+ edu.toronto.cs.openome_model.diagram.providers
+Require-Bundle: org.eclipse.core.expressions,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.navigator,
+ org.eclipse.ui.navigator.resources,
+ org.eclipse.gmf.runtime.diagram.ui.properties,
+ org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide,
+ openome_model.figures,
+ org.eclipse.gmf.runtime.diagram.ui.render,
+ openome_model,
+ org.eclipse.gmf.runtime.diagram.ui.providers;bundle-version="1.7.0"
+Eclipse-LazyStart: true
+Import-Package: edu.toronto.cs.openome_model.diagram.edit.parts,
+ org.eclipse.gmf.runtime.notation
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
