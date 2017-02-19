@@ -1,0 +1,27 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/DeclStatement.op,v 1.7 2001/07/27 22:00:46 scgupta Exp $
+public operator DeclStatement extends Statement 
+    implements DripOperator, ForInitInterface
+{
+  syntax {
+    $mods:Modifiers type:Type vars:VariableDeclarators
+  }
+  
+  private static Token commatoken = new Delim(";");
+
+  public void unparseWrapper(IRNode node, JavaUnparser unparser) {
+    super.unparseWrapper(node,unparser);
+    IRNode p = tree.getParentOrNull(node);
+    /* Except for a ForStatement initializer, we add a semicolon. */
+    if (p == null || !(tree.getOperator(p) instanceof ForStatement)) {
+      unparser.getStyle().getNONE().emit(unparser,node);
+      commatoken.emit(unparser,node);
+    }
+  }
+
+  /** Create the control-flow component for a declaration statement.
+   * Just execute the initialization (child #1)
+   */
+  public Component createComponent(IRNode node) {
+    return new SimpleComponent(node,new int[]{1});
+  }
+}

@@ -1,0 +1,44 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/WhileStatement.op,v 1.6 1999/01/25 16:29:02 boyland Exp $
+public operator WhileStatement extends Statement implements DripOperator {
+  syntax {
+    "while" "(" <paren> cond:Expression </paren> ")" <while>
+      loop:Statement
+     </while>
+  }
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent subcond = 
+        new Subcomponent(comp,tree.childLocation(node,0),1,2,1);
+    Subcomponent subloop = 
+        new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+    ControlNode discardTrue = new ComponentFlow(comp,Boolean.TRUE);
+    ControlNode discardFalse = new ComponentFlow(comp,Boolean.FALSE);	
+    ControlNode beginMerge = new Merge();
+    ControlNode abruptMerge = new Merge();
+    ControlNode contMerge = new Merge();
+    ControlNode endMerge = new Merge();
+    ControlNode testBreak = new LabelTest(comp,new AnchoredBreakLabel(node));
+    ControlNode testCont = new LabelTest(comp,new AnchoredContinueLabel(node));
+
+    // connect up the condition
+    ControlEdge.connect(comp.getEntryPort(),beginMerge);
+    ControlEdge.connect(beginMerge,subcond.getEntryPort());
+    ControlEdge.connect(subcond.getNormalExitPort(),discardTrue);
+    ControlEdge.connect(discardTrue,subloop.getEntryPort());
+    ControlEdge.connect(subcond.getNormalExitPort(),discardFalse);
+    ControlEdge.connect(discardFalse,endMerge);
+    ControlEdge.connect(endMerge,comp.getNormalExitPort());
+    // connect up loop
+    ControlEdge.connect(subloop.getNormalExitPort(),contMerge);
+    ControlEdge.connect(contMerge,beginMerge);
+    ControlEdge.connect(subcond.getAbruptExitPort(),abruptMerge);
+    // continue & break
+    ControlEdge.connect(subloop.getAbruptExitPort(),testCont);
+    ControlEdge.connect(testCont,contMerge);
+    ControlEdge.connect(testCont,testBreak);
+    ControlEdge.connect(testBreak,endMerge);
+    ControlEdge.connect(testBreak,abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+    return comp;
+  }
+}

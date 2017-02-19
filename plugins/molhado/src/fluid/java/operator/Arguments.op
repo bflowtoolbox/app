@@ -1,0 +1,9 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/Arguments.op,v 1.7 1998/07/30 08:43:11 boyland Exp $
+public operator Arguments implements DripOperator {
+  syntax {
+    "(" <paren> arg:Expression */ ( <> "," <comma> ) </paren> ")"
+  }
+  public Component createComponent(IRNode node) {
+    return new SequenceComponent(node);
+  }
+}

@@ -1,0 +1,33 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ConditionalOrExpression.op,v 1.4 1999/01/25 16:23:56 boyland Exp $
+public operator ConditionalOrExpression extends BinopExpression 
+    implements DripOperator
+{
+  syntax {
+    cond1:Expression "||" cond2:Expression
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,2,1);
+    Subcomponent sub0 = 
+        new Subcomponent(comp,tree.childLocation(node,0),1,2,1);
+    Subcomponent sub1 = 
+        new Subcomponent(comp,tree.childLocation(node,1),1,2,1);
+    ControlNode trueMerge = new Merge();
+    ControlNode abruptMerge = new Merge();
+    ControlNode discardFalse = new ComponentFlow(comp,this);
+    // connect through true edges
+    ControlEdge.connect(sub0.getNormalExitPort(),trueMerge);
+    ControlEdge.connect(sub1.getNormalExitPort(),trueMerge);
+    ControlEdge.connect(trueMerge,comp.getNormalExitPort());
+    // connect false execute throughs
+    ControlEdge.connect(comp.getEntryPort(),sub0.getEntryPort());
+    ControlEdge.connect(sub0.getNormalExitPort(),discardFalse);
+    ControlEdge.connect(discardFalse,sub1.getEntryPort());
+    ControlEdge.connect(sub1.getNormalExitPort(),comp.getNormalExitPort());
+    // connect abrupt exits
+    ControlEdge.connect(sub0.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(sub1.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+    return comp;
+  }
+}

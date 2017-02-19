@@ -1,0 +1,4 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/CharType.op,v 1.2 1998/06/08 15:38:46 chance Exp $
+public operator CharType implements IntegralType {
+  syntax { "char" }
+}

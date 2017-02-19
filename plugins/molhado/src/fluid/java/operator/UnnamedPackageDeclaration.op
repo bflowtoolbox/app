@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/UnnamedPackageDeclaration.op,v 1.1 1997/07/30 11:19:50 boyland Exp $
+public operator UnnamedPackageDeclaration extends PackageDeclaration 
+  implements DripOperator
+{
+  syntax { }
+}

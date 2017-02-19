@@ -1,0 +1,151 @@
+<!-- $Header: /usr/local/refactoring/molhadoRef/src/fluid/tree/package.html,v 1.1 2006/03/21 23:20:54 dig Exp $ -->
+
+<BODY>
+<p> This package includes basic recursive data structures make up of
+intermediate representation (IR) nodes: trees and graphs.  The classes
+differ in whether edges are represented explicitly as nodes
+themselves, whether edges can be traversed in either direction,
+whether each node has a unique parent and whether nodes have operators
+which determine the number of children.  The name may include the
+following terms: <dl>
+<dt>Edge<dd> Edges are explicitly represented with IR nodes.
+		In this case it is possible to define attributes on edges.
+<dt>Symmetric<dd> Edges can be traversed in either direction.
+		Otherwise the structure can only be traversed in
+		the direction of the edges.
+<dt>Tree<dd> Each node has at most one parent (always symmetric as well)
+<dt>Syntax<dd> Each node has an operator.
+</dl>
+Not all combinations are implemented.
+</p>
+
+<p> The classes provide methods to add new nodes to the data structure
+and to attach these nodes in particular places.  When a node is added
+to a structure, the number of children is specified.  For a graph, the
+children of a node are the nodes that can be reached by following one
+directed edge.  The parents are those nodes for which this node is a
+child.  The number of parents is also specified when the node is added
+to the data structure.  In some cases, the number of children or
+parents may be specified by the client with an integer parameter, num: <dl>
+<dt>num &lt; 0<dd> the number is varying, starting with the one's
+		   complement (~num) elements (-1 means none, -2 means
+		   one etc).
+<dt>num   =  0<dd> none are permitted.
+<dt>num &gt; 0<dd> a fixed number are permitted.
+		At the beginning each is <em>undefined</em>,
+		requesting it raises the
+		{@link fluid.ir.SlotUndefinedException}
+		exception.</dl>
+In other cases, the number is determined in a different way.
+For example, trees have only one place for a parent, and syntax trees
+get the number of children from the operator.
+Trees and graphs may be immutable, mutable or versioned; the
+constructor takes a {@link fluid.ir.SlotFactory} that specifies
+what kind of slots to use.</p>
+
+<p> This package provides interfaces as well as classes.  The
+interfaces should be used by clients that only need to traverse and
+not add or modify structure.  Here is a list of classes and the
+corresponding interfaces: <dl>
+<dt>{@link fluid.tree.Digraph}<dd>{@link fluid.tree.DigraphInterface}
+<dt>{@link fluid.tree.EdgeDigraph}<dd>{@link fluid.tree.EdgeDigraphInterface}
+<dt>{@link fluid.tree.SymmetricDigraph}<dd>
+	{@link fluid.tree.SymmetricDigraphInterface}
+<dt>{@link fluid.tree.SymmetricEdgeDigraph}<dd>
+	{@link fluid.tree.SymmetricEdgeDigraphInterface}
+<dt>{@link fluid.tree.Tree}<dd>{@link fluid.tree.TreeInterface}</dl>
+Additionally there is an interface {@link fluid.tree.GraphLabel} for
+classes where each node has a label.  The class
+{@link fluid.tree.SyntaxTree} implements this interface. </p>
+
+<p> The nodes of a structure can be enumerated in at least two ways
+using classes in this package <dl>
+<dt>{@link fluid.tree.DepthFirstSearch}<dd> Starting from a particular node,
+	this node is returned and then the children are traversed.
+	If a node has already been traversed it is skipped, thus
+	ensuring termination.
+<dt>{@link fluid.tree.ConnectedNodes}<dd> (for symmetric structures only)
+	Starting from a particular node, return it and then all nodes
+	connected to it recursively.  Again, if a node has already
+	been visited, it is skipped. </dl>
+There is currently <b>no</b> way to enumerate all the nodes entered
+into a structure.  This capability would be incompatible with garbage
+collecting unconnected nodes. </p>
+
+<p> These classes can be <em>listened</em> to using the
+method <method>Digraph#addDigraphListener</method>.  There are
+a large variety of different events below {@link fluid.tree.DigraphEvent}
+that can be generated: <dl>
+<dt>{@link fluid.tree.NodeEvent}</dt><dd>Events about nodes. <dl>
+    <dt>{@link fluid.tree.NewNodeEvent}</dt><dd>a node is added to graph</dd>
+    <dt>{@link fluid.tree.ChildEvent}</dt><dd>children changed:<dl>
+	<dt>{@link fluid.tree.NewChildEvent}</dt><dd>a new child is added</dd>
+	<dt>{@link fluid.tree.RemoveChildEvent}</dt><dd>a child is removed</dd>
+	<dt>{@link fluid.tree.ChangedChildEvent}</dt><dd>a
+	    child is changed from one node to another</dd></dl></dd>
+    <dt>{@link fluid.tree.ParentEvent}</dt><dd>parents changed:<dl>
+	<dt>{@link fluid.tree.NewParentEvent}</dt><dd>a new parent is added</dd>
+	<dt>{@link fluid.tree.RemoveParentEvent}</dt><dd>a parent is removed</dd>
+	<dt>{@link fluid.tree.ChangedParentEvent}</dt><dd>a
+	    parent is changed from one node to another
+	    (Currently, this event is not generated).</dd></dl></dd>
+    <dt>{@link fluid.tree.NodeEdgeEvent}</dt><dd>a node's (reified)
+	incoming or outgoing edges change:<dl>
+        <dt>{@link fluid.tree.ChildEdgeEvent}</dt><dd>outgoing edges changed:<dl>
+	    <dt>{@link fluid.tree.NewChildEdgeEvent}</dt><dd>a new
+		outgoing edge is added</dd>
+	    <dt>{@link fluid.tree.RemoveChildEdgeEvent}</dt><dd>an outgoing
+		edge is removed</dd>
+	    <dt>{@link fluid.tree.ChangedChildEdgeEvent}</dt><dd>an
+	        outgoing edge is changed from one edge to 
+		another</dd></dl></dd>
+        <dt>{@link fluid.tree.ParentEvent}</dt><dd>incoming edges changed:<dl>
+	    <dt>{@link fluid.tree.NewParentEdgeEvent}</dt><dd>a new
+		incoming edge is added</dd>
+	    <dt>{@link fluid.tree.RemoveParentEdgeEvent}</dt><dd>an incoming
+		edge is removed</dd> 
+	    <dt>{@link fluid.tree.ChangedParentEdgeEvent}</dt><dd>an incoming
+	        edge is changed from one edge to another
+	        (Currently, this event is not generated).
+		</dd></dl></dd></dl></dd>
+    <dt>{@link fluid.tree.RemoveChildrenEvent}</dt><dd>all children
+	of the node are removed.</dd>
+    <dt>{@link fluid.tree.RemoveParentsEvent}</dt><dd>all parents of
+	the node are removed.
+	</dd></dl></dd>
+<dt>{@link fluid.tree.EdgeEvent}</dt><dd>Events about (reified) edges:<dl>
+    <dt>{@link fluid.tree.NewEdgeEvent}</dt><dd>A new edge is 
+	added to the graph.</dd>
+    <dt>{@link fluid.tree.EdgeNodeEvent}</dt><dd>An edge gets 
+	a new source or sink:<dl>
+	<dt>{@link fluid.tree.SourceEvent}</dt><dd>events about 
+	    changing sources:<dl>
+ 	    <dt>{@link fluid.tree.NewSourceEvent}</dt><dd>the 
+		source is defined</dd>
+	    <dt>{@link fluid.tree.ChangedSourceEvent}</dt><dd>a
+	        source is changed from one node to another
+	        (Currently, this event is not generated).</dd></dl></dd>
+	<dt>{@link fluid.tree.SinkEvent}</dt><dd>events about changing sinks:<dl>
+ 	    <dt>{@link fluid.tree.NewSinkEvent}</dt><dd>the 
+		sink is defined</dd>
+	    <dt>{@link fluid.tree.ChangedSinkEvent}</dt><dd>a
+	        sink is changed from one node to another</dd></dl></dd>
+		</dl></dd></dl></dd>
+</dd>
+</dl>
+</p>
+
+<p> The classes provide a way to create delegating versions of
+themselves.  Each class can be asked to express itself in the form of
+derived attributes, and each class has a constructor which takes
+attributes to which to delegate graph methods.  In other words, one
+can create (say) a directed graph, get this graph in the form of a
+``children'' attribute and then create a directed graph which implements
+methods by acting upon the attributes you give it.  In this way one
+gets a copy of the previous graph.  It is interesting because one may
+use wrappers around the attributes that are being used to express the
+graph methods.  The fit isn't complete; they are some operations that
+cannot be expressed as slot accesses; these are indicated in the
+<b>known bugs</b> section of each class.  </p> 
+
+</BODY>

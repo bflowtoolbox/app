@@ -1,0 +1,5 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/NamedType.op,v 1.7 1998/06/20 14:12:31 chance Exp $
+public operator NamedType implements ReferenceType, ImportNameInterface
+{
+  syntax { $type:Info }
+}

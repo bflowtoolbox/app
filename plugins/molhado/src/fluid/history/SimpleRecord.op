@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/history/SimpleRecord.op,v 1.2 1999/03/02 15:50:20 chance Exp $
+/** The class of all records without sub-operations.
+ */
+public operator SimpleRecord extends Record {
+  syntax { "SimpleRecord" next:Record }  
+}

@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/AndExpression.op,v 1.1 1997/08/04 08:39:01 boyland Exp $
+public operator AndExpression extends LogBinopExpression {
+  syntax {
+    op1:Expression "&" op2:Expression
+  }
+}

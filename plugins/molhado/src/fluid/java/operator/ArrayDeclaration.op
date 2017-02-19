@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ArrayDeclaration.op,v 1.4 1998/06/13 16:53:46 chance Exp $
+public operator ArrayDeclaration implements ReferenceType {
+  syntax {
+    $base:ConstantNode $dims:ConstantInt
+  }
+}

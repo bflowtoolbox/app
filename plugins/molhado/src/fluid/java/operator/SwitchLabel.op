@@ -1,0 +1,13 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/SwitchLabel.op,v 1.3 1998/02/24 12:06:05 boyland Exp $
+public operator SwitchLabel {
+  /** Go up the tree and return the switch statement that includes this
+   * label.  Returns null or throws UndefinedSlotException if not inside
+   * a switch block.
+   */
+  public static IRNode getSwitchStatement(IRNode node) {
+    while (node != null &&
+	   !(tree.getOperator(node) instanceof SwitchStatement))
+      node = tree.getParent(node);
+    return node;
+  }
+}

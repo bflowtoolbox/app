@@ -1,0 +1,38 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ConstructorCall.op,v 1.5 2002/03/25 20:52:35 elissa Exp $
+/** A very special form of call: legal only as the first statement
+ * of a constructor.  The object must be "this" or "super".
+ */
+public operator ConstructorCall extends Statement implements Call
+{
+  syntax {
+    object:ConstructionObject args:Arguments <> ";"
+  }
+  
+  public IRNode getActuals(IRNode node) {
+    return getArgs(node);
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent rec = new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+    Subcomponent sub = new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+
+    ControlNode impossible = new Abort();
+    ControlNode doCall = new ComponentChoice(comp,prototype);
+    ControlNode propagateExceptions = 
+      new AddLabel(new CallExceptionLabel(node));
+    ControlNode abruptMerge = new Merge();
+
+    ControlEdge.connect(comp.getEntryPort(),rec.getEntryPort());
+    ControlEdge.connect(rec.getNormalExitPort(),sub.getEntryPort());
+    ControlEdge.connect(rec.getAbruptExitPort(),impossible);
+    ControlEdge.connect(sub.getNormalExitPort(),doCall);
+    ControlEdge.connect(doCall,comp.getNormalExitPort());
+    ControlEdge.connect(sub.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(doCall,propagateExceptions);
+    ControlEdge.connect(propagateExceptions,abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+
+    return comp;
+  }  
+}

@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/SynchronizedStatement.op,v 1.2 1998/07/30 08:44:08 boyland Exp $
+public operator SynchronizedStatement extends Statement {
+  syntax {
+    "synchronized" "(" <paren> lock:Expression </paren> ")" block:BlockStatement
+  }
+}

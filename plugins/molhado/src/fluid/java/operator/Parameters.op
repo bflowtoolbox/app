@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/Parameters.op,v 1.5 1998/07/30 08:43:58 boyland Exp $
+public operator Parameters implements DripOperator {
+  syntax {
+    "(" <paren> formal:ParameterDeclaration */ ( <> "," <comma> ) </paren> ")"
+  }
+}

@@ -1,0 +1,19 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/UnopExpression.op,v 1.3 1998/02/24 12:05:55 boyland Exp $
+public operator UnopExpression extends Expression {
+  public static IRNode getOp(IRNode node) {
+    if (!(tree.getOperator(node) instanceof UnopExpression)) {
+      throw new IllegalArgumentException("node not UnopExpression");
+    }
+    return tree.getChild(node,0);
+  }
+
+  public Expression getOp() {
+    return (Expression)instantiate(tree.getChild(baseNode,0));
+  }
+  public boolean isPrefix() {
+    return true;
+  }
+  public int childPrecedence(int i) {
+    return unopPrec;
+  }
+}

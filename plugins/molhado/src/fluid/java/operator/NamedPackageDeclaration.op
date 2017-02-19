@@ -1,0 +1,4 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/NamedPackageDeclaration.op,v 1.6 2002/03/25 20:53:04 elissa Exp $
+public operator NamedPackageDeclaration extends PackageDeclaration {
+  syntax { "package" $name:Info <semi> ";" <br> }
+}

@@ -1,0 +1,7 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/RemExpression.op,v 1.2 1997/12/01 18:17:24 boyland Exp $
+public operator RemExpression extends DivRemExpression 
+{
+  syntax {
+    op1:Expression "%" op2:Expression
+  }
+}

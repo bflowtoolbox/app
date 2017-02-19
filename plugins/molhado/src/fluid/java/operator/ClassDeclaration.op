@@ -1,0 +1,51 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ClassDeclaration.op,v 1.9 1999/02/04 13:29:58 chance Exp $
+public operator ClassDeclaration implements TypeDeclInterface, DripOperator, FlowUnit 
+{
+  syntax {
+    $mods:Modifiers "class" $id:Info "extends" extension:NamedType
+        impls:Implements
+    body:ClassBody
+  }
+
+  /** Use the interface to determine what operators are legal:
+   */
+  public boolean includes(Operator other) {
+    return (other instanceof ClassDeclaration) ||
+	   (other instanceof NestedClassDeclaration);
+  }
+
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,0,0,0);
+
+    /* the class body executes the static initializer */
+    Subcomponent sub = new Subcomponent(comp,tree.childLocation(node,2),1,1,1);
+    ControlNode startNode = new ComponentSource(comp,null);
+    ControlNode endNode = new ComponentSink(comp,Boolean.TRUE);
+    ControlNode abruptNode = new ComponentSink(comp,Boolean.FALSE);
+
+    ControlEdge.connect(startNode,sub.getEntryPort());
+    ControlEdge.connect(sub.getNormalExitPort(),endNode);
+    ControlEdge.connect(sub.getAbruptExitPort(),abruptNode);
+
+    return comp;
+  }
+
+  public Source getSource(IRNode node) {
+    Component comp = JavaComponentFactory.prototype.getComponent(node);
+    Subcomponent sub = comp.getSubcomponent(tree.childLocation(node,2));
+    ControlEdge e = ((SubcomponentEntryPort)sub.getEntryPort()).getInput();
+    return (Source)e.getSource();
+  }
+  public Sink getNormalSink(IRNode node) {
+    Component comp = JavaComponentFactory.prototype.getComponent(node);
+    Subcomponent sub = comp.getSubcomponent(tree.childLocation(node,2));
+    ControlEdge e = ((SubcomponentNormalExitPort)sub.getNormalExitPort()).getOutput();
+    return (Sink)e.getSink();
+  }
+  public Sink getAbruptSink(IRNode node) {
+    Component comp = JavaComponentFactory.prototype.getComponent(node);
+    Subcomponent sub = comp.getSubcomponent(tree.childLocation(node,2));
+    ControlEdge e = ((SubcomponentAbruptExitPort)sub.getAbruptExitPort()).getOutput();
+    return (Sink)e.getSink();
+  }
+}

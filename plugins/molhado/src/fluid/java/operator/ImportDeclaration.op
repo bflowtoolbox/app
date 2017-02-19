@@ -1,0 +1,5 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ImportDeclaration.op,v 1.2 1998/10/22 18:07:29 boyland Exp $
+public operator ImportDeclaration {
+  syntax { "import" item:ImportName <> ";" }
+}
+

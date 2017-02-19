@@ -1,0 +1,8 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/StringConcat.op,v 1.2 2002/03/25 20:53:06 elissa Exp $
+public operator StringConcat extends ArithBinopExpression // FIX
+    implements DripOperator 
+{
+  syntax {
+    op1:Expression(addLeft) "+" op2:Expression(addRight)
+  }
+}

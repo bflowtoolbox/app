@@ -1,0 +1,36 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ArrayCreationExpression.op,v 1.6 1999/01/25 16:23:13 boyland Exp $
+public operator ArrayCreationExpression extends AllocationExpression 
+{
+  syntax {
+    "new" base:Type <> allocated:DimExprs <> $unallocated:DimInfo <>
+    init:OptArrayInitializer
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent subdims =
+      new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+    Subcomponent subinit =
+      new Subcomponent(comp,tree.childLocation(node,2),1,1,1);
+
+    ControlNode testDims = new ComponentChoice(comp,null);
+    ControlNode throwNegativeArraySizeException =
+      new AddLabel(PrimitiveExceptionLabel.primitiveNegativeArraySizeException);
+    ControlNode abruptMerge1 = new Merge();
+    ControlNode abruptMerge2 = new Merge();
+
+    ControlEdge.connect(comp.getEntryPort(),subdims.getEntryPort());
+    ControlEdge.connect(subdims.getNormalExitPort(),testDims);
+    ControlEdge.connect(testDims,subinit.getEntryPort());
+    ControlEdge.connect(subinit.getNormalExitPort(),comp.getNormalExitPort());
+
+    ControlEdge.connect(subdims.getAbruptExitPort(),abruptMerge1);
+    ControlEdge.connect(subinit.getAbruptExitPort(),abruptMerge1);
+    ControlEdge.connect(testDims,throwNegativeArraySizeException);
+    ControlEdge.connect(throwNegativeArraySizeException,abruptMerge2);
+    ControlEdge.connect(abruptMerge1,abruptMerge2);
+    ControlEdge.connect(abruptMerge2,comp.getAbruptExitPort());
+
+    return comp;
+  }
+}

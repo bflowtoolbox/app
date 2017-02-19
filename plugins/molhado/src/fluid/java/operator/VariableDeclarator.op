@@ -1,0 +1,37 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/VariableDeclarator.op,v 1.7 1999/02/15 19:45:09 boyland Exp $
+/** A variable or field declaration.
+ * We do not handle the case of [] appended to the end of the name.
+ */
+public operator VariableDeclarator extends VariableDeclaration
+	implements DripOperator 
+{
+  syntax {
+    $id:Info $dims:DimInfo init:OptInitialization
+  }
+  
+  public static IRNode getType(IRNode node) {
+    if (tree.getOperator(node) instanceof VariableDeclarator) {
+      return tree.getChild(tree.getParent(tree.getParent(node)),0);
+    } else {
+      throw new IllegalArgumentException("Not a VariableDeclarator " +
+					 tree.getOperator(node));
+    }
+  }
+
+  /** Create the control-flow component for a variable declaration.
+   * Execute the initialization (child #0), and then
+   * perform an initialization flow.
+   */
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent subinit = 
+        new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+    ControlNode performInit = new ComponentFlow(comp,null);
+    
+    ControlEdge.connect(comp.getEntryPort(),subinit.getEntryPort());
+    ControlEdge.connect(subinit.getNormalExitPort(),performInit);
+    ControlEdge.connect(performInit,comp.getNormalExitPort());
+    ControlEdge.connect(subinit.getAbruptExitPort(),comp.getAbruptExitPort());
+    return comp;
+  }
+}

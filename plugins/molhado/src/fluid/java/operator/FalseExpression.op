@@ -1,0 +1,8 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/FalseExpression.op,v 1.2 1997/09/22 10:06:37 chance Exp $
+public operator FalseExpression extends BooleanLiteral
+    implements DripOperator 
+{
+  syntax {
+    "false"
+  }
+}

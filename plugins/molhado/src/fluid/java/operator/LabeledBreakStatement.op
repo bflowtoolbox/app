@@ -1,0 +1,15 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/LabeledBreakStatement.op,v 1.2 2002/03/25 20:53:02 elissa Exp $
+public operator LabeledBreakStatement extends Statement {
+  syntax {
+    "break" $id:Info <semi> ";"
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,0,1);
+    ControlLabel label = new NamedBreakLabel(node);
+    ControlNode addBreak = new AddLabel(label);
+    ControlEdge.connect(comp.getEntryPort(),addBreak);
+    ControlEdge.connect(addBreak,comp.getAbruptExitPort());
+    return comp;
+  }
+}

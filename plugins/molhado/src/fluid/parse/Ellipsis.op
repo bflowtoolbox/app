@@ -1,0 +1,13 @@
+# $Header: /cvs/fluid/fluid/code/fluid/parse/Ellipsis.op,v 1.3 2002/04/18 19:53:50 chance Exp $
+public operator Ellipsis 
+  implements ClassBodyDeclInterface, ForInitInterface, ImportNameInterface,
+	OptArrayInitializerInterface, ReturnTypeInterface, StatementExpressionInterface,
+	TypeDeclInterface, TypeInterface
+{
+  syntax {
+    "..."	
+    child:JavaOperator *
+  }
+
+  public String name() { return "..."; }
+}

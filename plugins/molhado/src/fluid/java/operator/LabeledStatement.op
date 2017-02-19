@@ -1,0 +1,35 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/LabeledStatement.op,v 1.4 1997/12/01 19:08:32 boyland Exp $
+public operator LabeledStatement extends Statement {
+  syntax {
+    $label:Info ":" stmt:Statement
+  }
+  /** Get the label for an arbitrary statement by looking to
+   * see if the parent node is one of these kinds of nodes.
+   * @return the label (if any) or null
+   */
+  public static String getStatementLabel(IRNode stmt) {
+    IRNode p = tree.getParent(stmt);
+    if (tree.getOperator(p) instanceof LabeledStatement) {
+      return (String)getLabel(p);
+    } else {
+      return null;
+    }
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent sub = new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+
+    ControlNode testBreak = new LabelTest(comp,new NamedBreakLabel(node));
+    ControlNode endMerge = new Merge();
+
+    ControlEdge.connect(comp.getEntryPort(),sub.getEntryPort());
+    ControlEdge.connect(sub.getNormalExitPort(),endMerge);
+    ControlEdge.connect(endMerge,comp.getNormalExitPort());
+    ControlEdge.connect(sub.getAbruptExitPort(),testBreak);
+    ControlEdge.connect(testBreak,endMerge);
+    ControlEdge.connect(testBreak,comp.getAbruptExitPort());
+
+    return comp;
+  }
+}

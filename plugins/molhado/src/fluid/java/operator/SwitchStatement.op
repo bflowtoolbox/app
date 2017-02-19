@@ -1,0 +1,34 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/SwitchStatement.op,v 1.4 1999/01/25 16:28:04 boyland Exp $
+public operator SwitchStatement extends Statement {
+  syntax {
+    "switch" "(" <paren> expr:Expression </paren> ")" block:SwitchBlock
+  }
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent sube = 
+      new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+    Subcomponent subb =
+      new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+
+    ControlNode assignSwitch = new ComponentFlow(comp,this);
+    ControlNode testBreak = new LabelTest(comp,new AnchoredBreakLabel(node));
+    ControlNode endMerge = new Merge();
+    ControlNode abruptMerge = new Merge();
+
+    // connect normal execution:
+    ControlEdge.connect(comp.getEntryPort(),sube.getEntryPort());
+    ControlEdge.connect(sube.getNormalExitPort(),assignSwitch);
+    ControlEdge.connect(assignSwitch,subb.getEntryPort());
+    ControlEdge.connect(subb.getNormalExitPort(),endMerge);
+    ControlEdge.connect(endMerge,comp.getNormalExitPort());
+
+    // connect up abrupt termination (including testing for breaks)
+    ControlEdge.connect(sube.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(subb.getAbruptExitPort(),testBreak);
+    ControlEdge.connect(testBreak,endMerge);
+    ControlEdge.connect(testBreak,abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+
+    return comp;
+  }
+}

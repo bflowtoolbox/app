@@ -1,0 +1,215 @@
+<!-- $Header: /usr/local/refactoring/molhadoRef/src/fluid/control/package.html,v 1.1 2006/03/21 23:20:55 dig Exp $ -->
+<BODY>
+<p> This package includes classes for building control-flow graphs.
+While the basics were designed with Java in mind, the classes here are
+not specific to Java.  Java-specific additions to the classes are
+defined in {@link fluid.java.control} and in specific
+operator files in {@link fluid.java.operator}.  Java
+specific analyses using these nodes are defined in
+{@link fluid.java.analysis}</p>
+
+<h2>The Control-Flow Graph (CFG)</h2>
+
+<p> The control-flow graph is built with explicit nodes and edges
+and can be traversed in either direction.  (The alert reader may
+notice that this implies the structure is a symmetric edge directed graph.
+We are in the process of fitting the graph to the
+{@link fluid.tree.SymmetricEdgeDigraphInterface} interface.)
+The edges carry analysis information and inherit from
+{@link fluid.control.ControlEdge}. The nodes potentially affect analysis
+information flowing through them; they inherit from
+{@link fluid.control.ControlNode}.  Apart from ports (see below),
+all control nodes fall into one of five abstract classes
+depending on how many input edges and output edges they have, as
+pictorially represented in the following diagram:
+<pre>
+     			+-@--{@link fluid.control.Flow}--@-+
+     		       /      	      \
+     {@link fluid.control.Source}---@---{@link fluid.control.Split}	      	       {@link fluid.control.Join}---@---{@link fluid.control.Sink}
+		       \      	      /
+			+-----@------+
+</pre>
+(If one needs, say, a three way split, one must use two split nodes.)
+The actual class of node determines the semantic action.
+For example a {@link fluid.control.Merge} node (inheriting from
+{@link fluid.control.Join}) leads to the ``meeting'' of two lattice values in
+forward data-flow analysis.
+For a complete list of nodes other than ports, see 
+<a href="#node-types">below</a>.</p>
+
+<p> This package includes the capability to place two or more independent
+flows on the same edge.  For example a {@link fluid.control.TrackedMerge}
+node can be used to join two control flows into a single edge.
+Later in the graph, a {@link fluid.control.TrackedDemerge} node can be used to
+separate them.  A good example of using this for Java is for
+<tt>finally</tt> clauses of <tt>throw</tt> statements: no matter
+whether the try clause terminates normally or abruptly, the
+<tt>finally</tt> clause is always executed.  Rather than copy the
+finally clause for the two flows, or worse, to merge them, the
+control-flow graph gives each an independent flow of control through
+the finally clause.  When the clause terminates, the flows are
+separated again.  The ability to have independent flows on a single
+edge is also used to separate exception throws from control-flow
+caused by <tt>break</tt> or <tt>continue</tt>.  Internally each flow
+is named by a sequence (see {@link fluid.control.LabelList}) of control-flow
+<em>labels</em> (see {@link fluid.control.ControlLabel}). </p>
+
+<h3>Constructing the Control-Flow Graph</h3>
+
+<p> The control-flow graph is highly structured, following the
+abstract syntax of the program.  Each abstract syntax node has an
+associate control flow component (see {@link fluid.control.Component}).  All
+control flow enters or leaves a component only through a fixed
+number of ports (see {@link fluid.control.Port}).  That means even
+control flow caused by thrown exceptions or method returns must be
+directed through some port.  Each component has three ports, each of
+a different type: <dl>
+<dt> {@link fluid.control.EntryPort} 
+	<dd> Control flow enters here.
+<dt> {@link fluid.control.NormalExitPort} 
+	<dd> Normal control-flow exits here.
+<dt> {@link fluid.control.AbruptExitPort}
+	<dd> Abrupt termination (exceptions and non-local control
+	flow) uses this port. </dl>
+</p>
+
+<p> The control-flow graph is constructed by associating a fixed
+control-flow component with every syntax node participating in
+control-flow.  The association is carried out by an instance of
+{@link fluid.control.ComponentFactory}.
+If a node has children which participate in control
+flow, then its component includes <em>subcomponents</em> (see
+{@link fluid.control.Subcomponent}) which are in essence holes in the
+control-flow graph.  The subcomponent has ports that correspond to
+the ports of the component for the corresponding child.  The
+ports of the subcomponent are never directly connected to the ports of
+the component of the child.  Instead, the connection is computed whenever
+analysis comes up to a port.  For instance, if analysis
+follows control-flow out through a port of a subcomponent, the appropriate
+child node of the current node is found and its component determined.
+Then analysis continues with the appropriate port of this component.
+This all happens invisibly to individual analyses.
+This indirection enables the control-flow graph to be up-to-date at
+all times.
+</p>
+
+<p> Handling nodes with a varying number of children is more
+difficult.  All the children are linked together with a certain number
+of edges (specified by the component).  The component (which must be
+an instance of the class {@link fluid.control.VariableComponent}) also determines
+how control-flow enters and leaves the sequence and 
+for every child how the sequence edges connect up to its ports (or
+not). </p>
+
+<h3>Summary</h3>
+
+<p> <a name="node-types"></a>Here is a listing of all node types
+except for ports: <dl>
+<dt>{@link fluid.control.Source}<dd><ul>
+	<li> {@link fluid.control.Never} - control never flows from here
+	<li> {@link fluid.control.ComponentSource} 
+		- control comes from a language specific place</ul>
+<dt>{@link fluid.control.Sink}<dd><ul>
+	<li> {@link fluid.control.Abort} - control never goes here (we hope)
+	<li> {@link fluid.control.ComponentSink}
+		- control goes to a language specific place</ul>
+<dt>{@link fluid.control.Flow}<dd><ul>
+	<li> {@link fluid.control.NoOperation} - control simply flows through
+	<li> {@link fluid.control.AddLabel} 
+		- generate new longer label list for following edge
+	<li> {@link fluid.control.PendingLabelStrip}
+		- return to shorter label list for following edge
+	<li> {@link fluid.control.ComponentFlow}
+		- language specific changes to analysis information</ul>
+<dt>{@link fluid.control.Split}<dd><ul>
+	<li> {@link fluid.control.Fork} 
+		- control flow goes both ways (unused)
+	<li> {@link fluid.control.TrackedDemerge}
+		- split independent flows merged with <tt>TrackedMerge</tt>
+	<li> {@link fluid.control.LabelTest}
+		- split independent flows according to some condition
+		on the labels.
+	<li> {@link fluid.control.Choice}
+		- split control flow according to some condition (unused)
+	<li> {@link fluid.control.ComponentChoice}
+		- split control-flow according to a language-specific
+		condition. </ul>
+<dt>{@link fluid.control.Join}<dd><ul>
+	<li> {@link fluid.control.Merge}
+		- control flow comes from both places
+	<li> {@link fluid.control.TrackedMerge}
+		- merge independent control flows.</ul>
+</dl>
+See {@link fluid.control.Port} for a breakdown of the various port classes.
+</p>
+
+<h2>Control-Flow Analysis</h2>
+
+<p> This package also includes control-flow analysis template classes.
+The basic worklisting algorithm is specified in the abstract class
+{@link fluid.control.FlowAnalysis}.  This class is refined in
+{@link fluid.control.ForwardAnalysis} and {@link fluid.control.BackwardAnalysis}.
+These two classes must be parameterized by classes implementing
+{@link fluid.control.ForwardTransfer} and {@link fluid.control.BackwardTransfer}
+respectively.  The transfer classes implement the language-specific
+actions.  All other details are handled by these generic classes:
+ports, components, and labels.  We will discuss only labels here.
+</p>
+
+<p>An edge can have a different control-flow analysis value for any
+sequence of labels.  These sequences are affected by only three
+control-flow nodes: {@link fluid.control.AddLabel}, {@link fluid.control.LabelTest},
+and {@link fluid.control.PendingLabelStrip}.  The sequence is treated as a
+stack: we only make changes to the front, adding or removing the first
+label.  During analysis, the actual effect on the sequence is determined
+by the direction of analysis (forward or backward) and by language
+specific actions (as we shall see): <dl>
+<dt>AddLabel (push)<dd><dl>
+	<dt>forward<dd>
+		Prepend the specified label to the sequence.
+	<dt>backward<dd>
+		See if the first label of the sequence
+		<em>overlaps</em> the specific label.
+		In other words, see if the first label could have been
+		added at this point.  It is not a simple case of
+		equality, because of cases where we don't know
+		precisely the exception thrown of what abrupt
+		termination condition we are looking for (see use
+		of <tt>UnknownControlLabel</tt> in the discussion
+		of <tt>PendingLabelStrip</tt>).
+		The method <tt>testAddLabel</tt> in
+		{@link fluid.control.BackwardTransfer} does this operation.
+	</dl>
+<dt>LabelTest (if match then pop, continue(1) else continue(2))<dd><dl>
+	<dt>forward<dd>
+		Check if the first label is one being tested for,
+		and also check to see if the first label might <em>not</em>
+		be the one tested for.  If cases of uncertainty, we
+		may end up trying both ways.
+		The method <tt>transferLabelTest</tt> does the work here.
+	<dt>backward<dd>
+		If coming from the `true' side, add the label being
+		tested for and continue backwards, otherwise just continue
+		backwards.  (This is not as precise as it could be
+		in the second case.)
+	</dl>
+<dt>PendingLabelStrip (swap, if pop then nop else swap, pop endif)<dd><dl>
+	<dt>forward<dd>
+		Remove and save the first label.
+		Remove the next label, which must be a tracking label, if<dl>
+		<dt>true<dd>put back saved label
+		<dt>false<dd>drop next label and put back saved label</dl>
+	<dt>backward<dd>
+		Remove and save the first label.
+		Then generate two label lists for the incoming edge:<ol>
+		<li> One that adds the true tracking label and then
+		     adds the saved label
+		<li> One that adds an unknown label, then the false
+		     tracking label and then the saved label</ol>
+	</dl>
+This node is only used with {@link fluid.control.TrackedMerge} and
+{@link fluid.control.TrackedDemerge} nodes.  It is a complex operation, that
+perhaps should be expressed using more nodes, but doing so would simply
+result in a larger graph.
+</dl>
+</BODY>

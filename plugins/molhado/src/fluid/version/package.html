@@ -1,0 +1,179 @@
+<!-- $Header: /usr/local/refactoring/molhadoRef/src/fluid/version/package.html,v 1.1 2006/03/21 23:20:54 dig Exp $ -->
+
+<BODY>
+<p>The classes in this package implement a versioning system on top of
+the basic internal representation (IR) implemented in the
+{@link fluid.ir} package.  Class in this package introduce
+the concept of a ``version'' and a ``versioned slot'', whose value may
+differ between versions. </p>
+
+
+<h3>Versions</h3>
+
+<p> A <em>version</em> is an abstraction of a point in time as
+measured in modifications to <em>versioned slots</em>.  Such slots may
+be changed in the manner of simple slots, and as long as no other
+features of the versioning system are used, they behave in the much
+the same way as simple (mutable) slots.  However, at any point, one
+may query the current version.  Later, the state of the system can be
+returned to this version.  All mutations of versioned slots are
+conceptually rolled back to their values at this time.  The state of
+the system can be restored to <em>any</em> version that was requested,
+including ones that were left when restoring another version.  In
+other words, the system keeps track of a tree of versions representing
+multiple choices in ``time.''</p>
+
+<p> As far as the client of the versioning system is aware, a new
+version is created after every mutation of a versioned slot.  However,
+internally, the system only creates new versions as needed.  Thus if
+1000 mutations are performed and then the current version is
+requested, the system will at that point ``freeze'' the current
+version, which will be the first new version since before the
+mutations.  This optimization enables the number of versions to be
+dramatically curtailed. </p>
+
+<p> The most important entries to the versioning system are:<ul>
+<li> {@link fluid.version.Version#getVersion}
+Gets the current version (and freezes it).
+<li> {@link fluid.version.Version#setVersion}
+Sets the current version to version argument.
+If the change is only temporary, this call should be wrapped inside of
+calls to the following two methods:
+<li> {@link fluid.version.Version#saveVersion}
+Saves the current version on a private stack without freezing it.
+<li> {@link fluid.version.Version#restoreVersion}
+Sets the current version to the latest saved version that has not yet
+been restored.
+</ul>
+There are also methods to retrieve the initial version and to
+determine the relationship between two versions.
+See the {@link fluid.version.Version} class documentation.
+</p>
+
+<p> The ``current version'' may differ from thread to thread.
+Internally, the current version is stored in a
+{@link fluid.util.ThreadGlobal} variable.
+The {@link fluid.version.Version#saveVersion} and
+{@link fluid.version.Version#restoreVersion} methods are implemented using
+{@link fluid.util.ThreadGlobal#pushValue} and
+{@link fluid.util.ThreadGlobal#popValue} methods,
+respectively.
+As a result, while saves and restores within a single thread must be
+properly nested, they needed not be nested between threads.
+</p>
+
+<p> The version tree can be viewed as a tree (technically as a {@link
+fluid.tree.TreeInterface}).  Use {@link
+fluid.version.Version#getShadowTree()} to get the tree.
+The shadow node for a version can be obtained using
+{@link fluid.version.Version#getShadowNode()} and the version for a
+shadow node can be obtained using 
+{@link fluid.version.Version#getShadowVersion(IRNode)}.  The latter
+function will freeze the version.  If you use observers or listeners
+to observe changes in the version shadow tree, be very careful that
+you do not cause the current version to be frozen, or the number of
+versions will rise dramatically.
+</p>
+
+<p> <strong>The following class and its functionality are
+deprecated!</strong><br>
+<blockquote>
+The ``current version'' is conceptually updated whenever a
+mutation occurs to point to the newly created version.  This concept
+of an updateable version pointer is realized in the concept of a
+<em>version cursor</em>.  A version cursor refers to a particular
+version and is updated whenever this version is current and a mutation
+happens (thus creating a new version).  One may think of a version
+cursor as a growing tip on the version tree.  The method
+{@link fluid.version.VersionCursor#VersionCursor()} retrieves a
+cursor for the current version.
+See the class documentation for {@link fluid.version.VersionCursor} for more
+information.
+</blockquote>
+</p> 
+
+<h3>Versioned Slots</h3>
+
+<p> A mutable slot may be created that differs from version to
+version.  Such a slot is called a <em>versioned slot</em>.  
+A versioned slot may have an <em>initial value</em>, that is a value
+for the initial version (see {@link
+fluid.version.Version#getInitialVersion}).
+In previous instances of the Fluid IR, this initial value could be set
+by using ordinary mutation: an undefined slot would be defined in this
+manner.  This led to several technical and semantic difficulties and
+so the initial value can only be set on creation (or when reading IR
+from persistent store).
+</p>
+<p>
+As mentioned previously, every change in a versioned slot essentially
+creates a new version of the system.  Internally, we first call 
+{@link fluid.version.Version#bumpVersion()} which creates a new
+version child of the current version unless the current version is
+unknown (having never been requested by a client).  Then, we tell the
+versioned slot to save a new <i>(version,value)</i> pair.  When the
+value is requested, the current version is used to find the assignment
+for the nearest ancestor version.  There is no way to remove a pair.
+</p>
+
+<p> 
+As with simple and constant slots,
+versioned slots come individually, or can be packaged in attributes
+(slot infos) or sequences (both arrays and lists).
+The factory for versioned slots
+{@link fluid.version.VersionedSlotFactory} should be used to create versioned
+slots, attributes (which may either be predefined or undefined) or
+sequences.
+If you use <code>new
+IRList(VersionedSlotFactory.prototype,0)</code> instead of 
+<code>VersionedSlotFactory.prototype.newSequence(~0)</code>
+you will get an inefficient representation.  Similarly for attributes.
+</p>
+
+<p> A derived attribute which is expensive to compute and which depends
+upon versioned information may be conveniently declared as a subclass
+of {@link fluid.version.MemoedSlotInfo}.  Instances of this class keep track
+of all computed values indexed by node and by version.  The table can
+be cleared on demand to release space.
+</p>
+
+<p> A special kind of versioned slot used in
+{@link fluid.version.VersionedUnitSlotInfo} does not hold values, but instead
+simply records when it is set.  If an instance of this class is set
+whenever a change of a particular sort is performed to a node, then it
+can be used to determine whether two versions differ for the node with
+respect to the changes.  See the class documentation for more
+information.  This class is used to implement change bits on abstract
+syntax trees; see {@link fluid.version.TreeChanged}.  
+</p>
+
+<h3>Persistence</h3>
+
+<p> Versions are defined in terms of their {@link fluid.version.Era}:
+a forest of version subtrees sharing a single version root outside the
+era.  An Era keeps track of all versioned chunks that are assigned for
+versions in the era.  Individual versions cannot be saved except in
+relation to a saved era.
+</p>
+
+<p> Versioned slots can be saved and restored, usually in the form of
+versioned chunks (see {@link fluid.version.VersionedChunk}).
+One may save deltas (VCDs) or snapshots (VCS).  Snapshots save all the
+information at a particular version and can be large.  Deltas save
+only the changed information and can only be loaded if a delta or
+snapshot is already loaded for the root version of an era.
+</p>
+
+<p> If a value of a versioned slot is requested for a version whose
+chunk or snapshot has not yet been loaded, the system throws an
+{@link fluid.ir.SlotUnknownException} exception.
+</p>
+
+</BODY>
+
+
+<!--
+ LocalWords:  IR ir getVersion setVersion saveVersion restoreVersion updateable
+ LocalWords:  getCursor VersionCursor UndefinedConstantSlot MemoedSlotInfo
+ LocalWords:  VersionedSlotFactory VersionedUnitSlotInfo TreeChanged
+-->

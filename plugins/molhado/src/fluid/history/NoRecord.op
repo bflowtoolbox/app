@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/history/NoRecord.op,v 1.1 1999/03/02 15:24:32 chance Exp $
+/** The class of terminating records
+ */
+public operator NoRecord extends Record {
+  syntax { "NoMoreRecords" }  
+}

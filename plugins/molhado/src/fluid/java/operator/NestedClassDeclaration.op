@@ -1,0 +1,4 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/NestedClassDeclaration.op,v 1.2 1999/02/04 13:29:58 chance Exp $
+public operator NestedClassDeclaration extends ClassDeclaration implements ClassBodyDeclInterface
+{
+}

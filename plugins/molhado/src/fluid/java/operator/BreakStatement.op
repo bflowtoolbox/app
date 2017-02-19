@@ -1,0 +1,14 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/BreakStatement.op,v 1.2 2002/03/25 20:52:24 elissa Exp $
+public operator BreakStatement extends Statement {
+  syntax {
+    "break" <> ";"
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,0,1);
+    ControlNode addBreak = new AddLabel(BreakLabel.prototype);
+    ControlEdge.connect(comp.getEntryPort(),addBreak);
+    ControlEdge.connect(addBreak,comp.getAbruptExitPort());
+    return comp;
+  }
+}

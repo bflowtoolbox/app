@@ -1,0 +1,33 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ConditionalAndExpression.op,v 1.4 1999/01/25 16:23:45 boyland Exp $
+public operator ConditionalAndExpression extends BinopExpression 
+    implements DripOperator
+{
+  syntax {
+    cond1:Expression "&&" cond2:Expression
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,2,1);
+    Subcomponent sub0 = 
+        new Subcomponent(comp,tree.childLocation(node,0),1,2,1);
+    Subcomponent sub1 = 
+        new Subcomponent(comp,tree.childLocation(node,1),1,2,1);
+    ControlNode falseMerge = new Merge();
+    ControlNode abruptMerge = new Merge();
+    ControlNode discardTrue = new ComponentFlow(comp,this);
+    // connect through (first edge on a boolean port is the true edge).
+    ControlEdge.connect(comp.getEntryPort(),sub0.getEntryPort());
+    ControlEdge.connect(sub0.getNormalExitPort(),discardTrue);
+    ControlEdge.connect(discardTrue,sub1.getEntryPort());
+    ControlEdge.connect(sub1.getNormalExitPort(),comp.getNormalExitPort());
+    // connect false fall throughs
+    ControlEdge.connect(sub0.getNormalExitPort(),falseMerge);
+    ControlEdge.connect(sub1.getNormalExitPort(),falseMerge);
+    ControlEdge.connect(falseMerge,comp.getNormalExitPort());
+    // connect abrupt exits
+    ControlEdge.connect(sub0.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(sub1.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+    return comp;
+  }
+}

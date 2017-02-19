@@ -1,0 +1,4 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/DemandName.op,v 1.5 1998/10/22 18:06:56 boyland Exp $
+public operator DemandName implements ImportNameInterface {
+  syntax { $pkg:Info <> "." <> "*" }
+}

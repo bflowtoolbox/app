@@ -1,0 +1,58 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/StatementExpressionList.op,v 1.7 2002/08/09 19:48:22 chance Exp $
+/** Comma separated expressions used in for loops.
+ * It permits an empty list.
+ */
+public operator StatementExpressionList implements ForInitInterface {
+  syntax {
+    expr:StatementExpression */ ( <> "," )
+  }
+  public Component createComponent(IRNode node) {
+    /** execute each child in turn and discard its value. */
+    return new StatementExpressionListComponent(node);
+  }
+}
+
+class StatementExpressionListComponent extends VariableComponent {
+  public StatementExpressionListComponent(IRNode node) {
+    super(node,2,1,1,1);
+    ControlNode never = new Never();
+
+    ControlEdge startExec =
+      new VariableSubcomponentControlEdge(variable,0,false,entryPort);
+    ControlEdge startAbrupt =
+      new VariableSubcomponentControlEdge(variable,1,false,never);
+    
+    ControlEdge endExec =
+      new VariableSubcomponentControlEdge(variable,0,true,normalExitPort);
+    ControlEdge endAbrupt =
+      new VariableSubcomponentControlEdge(variable,1,true,abruptExitPort);
+  }
+  
+  protected VariableSubcomponent createVariableSubcomponent(IRLocation loc) {
+    return new StatementExpressionListSubcomponent(this,loc);
+  }
+}
+
+class StatementExpressionListSubcomponent extends VariableSubcomponent {
+  public StatementExpressionListSubcomponent(Component comp, IRLocation loc) {
+    super(comp,loc,2);
+    entryPort = new SubcomponentEntryPort(this);
+    normalExitPort = new SubcomponentNormalExitPort(this);
+    abruptExitPort = new SubcomponentAbruptExitPort(this);
+    ControlNode merge = new Merge();
+    ControlNode discard = new SubcomponentFlow(this,null);
+    
+    ControlEdge.connect(abruptExitPort,merge);
+    ControlEdge.connect(normalExitPort,discard);
+
+    ControlEdge normalEntry = 
+      new VariableSubcomponentControlEdge(this,0,true,entryPort);
+    ControlEdge abruptEntry =
+      new VariableSubcomponentControlEdge(this,1,true,merge);
+    ControlEdge normalExit =
+      new VariableSubcomponentControlEdge(this,0,false,discard);
+    ControlEdge abruptExit =
+      new VariableSubcomponentControlEdge(this,1,false,merge);
+  }
+}
+

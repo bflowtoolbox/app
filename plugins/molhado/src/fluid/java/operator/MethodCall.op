@@ -1,0 +1,47 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/MethodCall.op,v 1.8 1998/07/17 14:42:26 boyland Exp $
+public operator MethodCall extends PrimaryExpression
+    implements Call, DripOperator
+{
+  syntax { 
+    object:Expression <> "." <> $method:Info <> args:Arguments
+  }
+
+  public IRNode getActuals(IRNode node) {
+    return getArgs(node);
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent subobj = 
+      new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+    Subcomponent subarg = 
+      new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+    ControlNode abruptMerge1 = new Merge();
+    ControlNode abruptMerge2 = new Merge();
+    ControlNode abruptMerge3 = new Merge();
+    ControlNode throwNull = 
+      new AddLabel(PrimitiveExceptionLabel.primitiveNullPointerException);
+    ControlNode testOK = new ComponentChoice(comp,null);
+    ControlNode doCall = new ComponentChoice(comp,prototype);
+    ControlNode propagateExceptions = 
+      new AddLabel(new CallExceptionLabel(node));
+
+    ControlEdge.connect(comp.getEntryPort(),subobj.getEntryPort());
+    ControlEdge.connect(subobj.getAbruptExitPort(),abruptMerge1);
+    ControlEdge.connect(subobj.getNormalExitPort(),subarg.getEntryPort());
+    ControlEdge.connect(subarg.getAbruptExitPort(),abruptMerge1);
+    ControlEdge.connect(subarg.getNormalExitPort(),testOK);
+    ControlEdge.connect(testOK,doCall);
+    ControlEdge.connect(doCall,comp.getNormalExitPort());
+
+    ControlEdge.connect(testOK,throwNull);
+    ControlEdge.connect(throwNull,abruptMerge2);
+    ControlEdge.connect(doCall,propagateExceptions);
+    ControlEdge.connect(propagateExceptions,abruptMerge2);
+    ControlEdge.connect(abruptMerge1,abruptMerge3);
+    ControlEdge.connect(abruptMerge2,abruptMerge3);
+    ControlEdge.connect(abruptMerge3,comp.getAbruptExitPort());
+    return comp;
+  }
+  
+}

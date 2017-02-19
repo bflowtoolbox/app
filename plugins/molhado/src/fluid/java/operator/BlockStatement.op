@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/BlockStatement.op,v 1.4 1998/01/01 17:13:58 boyland Exp $
+public operator BlockStatement extends Statement implements DripOperator {
+  syntax { 
+    "{" <block> stmt:Statement */ <li> </block> "}"
+  }
+}

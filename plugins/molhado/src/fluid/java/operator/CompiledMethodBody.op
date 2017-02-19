@@ -1,0 +1,4 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/CompiledMethodBody.op,v 1.3 2000/03/29 18:05:12 boyland Exp $
+public operator CompiledMethodBody extends OptMethodBody {
+  syntax { $code:Code }
+}

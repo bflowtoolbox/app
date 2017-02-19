@@ -1,0 +1,58 @@
+<!-- $Header: /usr/local/refactoring/molhadoRef/src/fluid/util/package.html,v 1.1 2006/03/21 23:20:54 dig Exp $ -->
+<BODY>
+<p> This package includes utility classes used the ACT/Fluid project,
+that are independent of the IR.  They may be replaced by
+externally developed classes.  Some already have been replaced. </p>
+
+<p> Most of the classes here concern sets and control-flow analysis
+lattices.   The set classes include the ability to represent (some)
+infinite sets, and the ability to ensure sets with the same elements
+are represented with the same object.  Then object identity
+can be used to check equality. </p>
+
+<p> Thematic listing of classes: <ul>
+<li> Sets <ul>
+	<li> {@link fluid.util.ImmutableHashOrderSet}
+	<li> {@link fluid.util.SetException}
+	<li> {@link fluid.util.AbstractCachedSet} (abstract)
+	<li> {@link fluid.util.SetCache}
+	<li> {@link fluid.util.CachedSet} (unused) </ul>
+<li> Tables <ul>
+	<li> {@link fluid.util.IntegerTable}
+	<li> {@link fluid.util.Hashtable2}</ul>
+<li> Lattices <ul>
+	<li> {@link fluid.util.Lattice} (interface)
+	<li> {@link fluid.util.SetLattice} (abstract)
+	<li> {@link fluid.util.UnionLattice}
+	<li> {@link fluid.util.IntersectionLattice} 
+	<li> {@link fluid.util.BooleanLattice}
+	<li> {@link fluid.util.RecordLattice}
+	<li> {@link fluid.util.ArrayLattice}
+	<li> {@link fluid.util.ChainLattice}
+	<li> {@link fluid.util.FlatLattice}
+	<li> {@link fluid.util.BitsLattice}</ul>
+<li> Basic data structures <ul>
+	<li> {@link fluid.util.AssocList}
+	<li> {@link fluid.util.Stack} (being replaced by {@link java.util.Stack})
+	<li> {@link fluid.util.Queue} </ul>
+<li> Trivial classes <ul>
+	<li> {@link fluid.util.Pair}
+	<li> {@link fluid.util.Triple}
+	<li> {@link fluid.util.AppendEnumeration}
+	<li> {@link fluid.util.EmptyEnumeration}
+	<li> {@link fluid.util.SingletonEnumeration}
+	<li> {@link fluid.util.PairEnumeration}</ul>
+<li> Persistence-related <ul>
+	<li> {@link fluid.util.UniqueID}
+	<li> {@link fluid.util.FileLocator} (interface)
+	<li> {@link fluid.util.PathFileLocator}
+	<li> {@link fluid.util.ZipFileLocator}</ul>
+<li> Other <ul>
+	<li> {@link fluid.util.Profiler}
+	<li> {@link fluid.util.ThreadGlobal}</ul>
+</ul>
+There is a test suite for the set classes in a package private class.
+If you <tt>gmake test</tt> in the <tt>code/fluid/util</tt> directory,
+you will see it in operation.
+</p>
+</BODY>

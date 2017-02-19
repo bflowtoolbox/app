@@ -1,0 +1,41 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ArrayRefExpression.op,v 1.7 1999/02/20 16:40:27 boyland Exp $
+public operator ArrayRefExpression extends PrimaryExpression {
+  syntax {
+    array:Expression "[" index:Expression "]"
+  }
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent suba = 
+      new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+    Subcomponent subi = 
+      new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+    ControlNode abruptMerge1 = new Merge();
+    ControlNode abruptMerge2 = new Merge();
+    ControlNode abruptMerge3 = new Merge();
+    ControlNode testArray = new ComponentChoice(comp,"array");
+    ControlNode throwNullPointerException =
+      new AddLabel(PrimitiveExceptionLabel.primitiveNullPointerException);
+    ControlNode testIndex = new ComponentChoice(comp,"index");
+    ControlNode throwIndexOutOfBoundsException =
+      new AddLabel(PrimitiveExceptionLabel.primitiveIndexOutOfBoundsException);
+    ControlNode doLoad = new ComponentFlow(comp,null);
+    
+    ControlEdge.connect(comp.getEntryPort(),suba.getEntryPort());
+    ControlEdge.connect(suba.getAbruptExitPort(),abruptMerge1);
+    ControlEdge.connect(suba.getNormalExitPort(),subi.getEntryPort());
+    ControlEdge.connect(subi.getAbruptExitPort(),abruptMerge1);
+    ControlEdge.connect(subi.getNormalExitPort(),testArray);
+    ControlEdge.connect(testArray,testIndex);
+    ControlEdge.connect(testArray,throwNullPointerException);
+    ControlEdge.connect(testIndex,doLoad);
+    ControlEdge.connect(testIndex,throwIndexOutOfBoundsException);
+    ControlEdge.connect(doLoad,comp.getNormalExitPort());
+    ControlEdge.connect(throwNullPointerException,abruptMerge2);
+    ControlEdge.connect(throwIndexOutOfBoundsException,abruptMerge2);
+    ControlEdge.connect(abruptMerge1,abruptMerge3);
+    ControlEdge.connect(abruptMerge2,abruptMerge3);
+    ControlEdge.connect(abruptMerge3,comp.getAbruptExitPort());
+
+    return comp;
+  }
+}

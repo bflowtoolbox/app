@@ -1,0 +1,25 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/FieldRef.op,v 1.9 1998/07/16 18:25:22 wls Exp $
+public operator FieldRef extends PrimaryExpression implements DripOperator {
+  syntax {
+    object:Expression <> "." <> $id:Info
+  }
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent sub = new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+    ControlNode abruptMerge = new Merge();
+    ControlNode throwNull = 
+      new AddLabel(PrimitiveExceptionLabel.primitiveNullPointerException);
+    ControlNode testOK = new ComponentChoice(comp,null);
+    ControlNode useField = new ComponentFlow(comp,null);
+
+    ControlEdge.connect(comp.getEntryPort(),sub.getEntryPort());
+    ControlEdge.connect(sub.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(sub.getNormalExitPort(),testOK);
+    ControlEdge.connect(testOK,useField);
+    ControlEdge.connect(useField,comp.getNormalExitPort());
+    ControlEdge.connect(testOK,throwNull);
+    ControlEdge.connect(throwNull,abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+    return comp;
+  }
+}

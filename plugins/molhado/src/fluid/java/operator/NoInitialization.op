@@ -1,0 +1,10 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/NoInitialization.op,v 1.3 1999/01/28 15:55:31 boyland Exp $
+public operator NoInitialization extends OptInitialization 
+    implements DripOperator
+{
+  syntax { }
+
+  public Component createComponent(IRNode node) {
+    return new SimpleComponent(node, new ComponentFlow(null,this));
+  }
+}

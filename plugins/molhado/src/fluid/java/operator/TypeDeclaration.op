@@ -1,0 +1,14 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/TypeDeclaration.op,v 1.5 2002/10/18 13:03:41 chance Exp $
+public operator TypeDeclaration implements TypeDeclInterface {
+  // Used as the operator for the NullType
+
+  /** Use the interface to determine what operators are legal:
+   */
+  public boolean includes(Operator other) {
+    return (other instanceof TypeDeclInterface);
+  }
+  
+  public static String getName(IRNode type) {
+    return JavaNode.getInfo(type);
+  }
+}

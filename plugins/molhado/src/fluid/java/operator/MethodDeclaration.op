@@ -1,0 +1,45 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/MethodDeclaration.op,v 1.7 1999/02/22 20:13:20 boyland Exp $
+public operator MethodDeclaration extends ClassBodyDeclaration 
+    implements FlowUnit, DripOperator
+{
+  syntax {
+    $modifiers:Modifiers returnType:ReturnType 
+    $id:Info <> params:Parameters $dims:DimInfo
+    exceptions:Throws
+    body:OptMethodBody
+  }
+
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,0);
+    ControlEdge.connect(comp.getEntryPort(),comp.getNormalExitPort());
+
+    Subcomponent sub = new Subcomponent(comp,tree.childLocation(node,3),1,1,1);
+    ControlNode startNode = new ComponentSource(comp,null);
+    ControlNode returnNode = new ComponentSink(comp,Boolean.TRUE);
+    ControlNode abruptNode = new ComponentSink(comp,Boolean.FALSE);
+
+    ControlEdge.connect(startNode,sub.getEntryPort());
+    ControlEdge.connect(sub.getNormalExitPort(),returnNode);
+    ControlEdge.connect(sub.getAbruptExitPort(),abruptNode);
+    return comp;
+  }
+
+  public Source getSource(IRNode node) {
+    Component comp = JavaComponentFactory.prototype.getComponent(node);
+    Subcomponent sub = comp.getSubcomponent(tree.childLocation(node,3));
+    ControlEdge e = ((SubcomponentEntryPort)sub.getEntryPort()).getInput();
+    return (Source)e.getSource();
+  }
+  public Sink getNormalSink(IRNode node) {
+    Component comp = JavaComponentFactory.prototype.getComponent(node);
+    Subcomponent sub = comp.getSubcomponent(tree.childLocation(node,3));
+    ControlEdge e = ((SubcomponentNormalExitPort)sub.getNormalExitPort()).getOutput();
+    return (Sink)(e.getSink());
+  }
+  public Sink getAbruptSink(IRNode node) {
+    Component comp = JavaComponentFactory.prototype.getComponent(node);
+    Subcomponent sub = comp.getSubcomponent(tree.childLocation(node,3));
+    ControlEdge e = ((SubcomponentAbruptExitPort)sub.getAbruptExitPort()).getOutput();
+    return (Sink)(e.getSink());
+  }
+}

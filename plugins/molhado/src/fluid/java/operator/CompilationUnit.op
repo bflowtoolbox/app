@@ -1,0 +1,8 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/CompilationUnit.op,v 1.1 1997/08/01 12:24:34 boyland Exp $
+public operator CompilationUnit implements DripOperator {
+  syntax {
+    pkg:PackageDeclaration
+    imps:ImportDeclarations
+    decls:TypeDeclarations
+  }
+}

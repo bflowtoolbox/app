@@ -1,0 +1,14 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/VoidReturnStatement.op,v 1.2 2002/03/25 20:53:08 elissa Exp $
+public operator VoidReturnStatement extends Statement implements DripOperator {
+  syntax {
+    "return" <semi> ";"
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,0,1);
+    ControlNode addReturn = new AddLabel(ReturnLabel.prototype);
+    ControlEdge.connect(comp.getEntryPort(),addReturn);
+    ControlEdge.connect(addReturn,comp.getAbruptExitPort());
+    return comp;
+  }
+}

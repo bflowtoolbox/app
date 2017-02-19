@@ -1,0 +1,803 @@
+<project name="Fluid" default="dist">
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!--                                                                     -->
+  <!--  XXXXXXX   XX                         X    ANT BUILD SCRIPT         -->
+  <!--  X          X               X         X                             -->
+  <!--  X          X                         X    TYPICAL USAGE:           -->
+  <!--  X          X    X    X    XX     XXX X     a complete build        -->
+  <!--  XXXXXX     X    X    X     X    X   XX     > ant                   -->
+  <!--  X          X    X    X     X    X    X     derived file cleanup    -->
+  <!--  X          X    X    X     X    X    X     > ant clean             -->
+  <!--  X          X    X   XX     X    X   XX                             -->
+  <!--  X         XXX    XXX X    XXX    XXX X                             -->
+  <!--                                                                     -->
+  <!--  COTS REQUIREMENTS:                                                 -->
+  <!--   JDK, ant, perl (OS: Solaris, Linux, Windows or Mac)               -->
+  <!--   Make sure that "javac", "ant", and "perl" are in your path and    -->
+  <!--                                                                     -->
+  <!--  PROPERTIES FILE DETAILS:                                           -->
+  <!--   Either "fluid-build.properities" or ".fluid-build.properties"     -->
+  <!--   must exist in "user.home" (as defined by the JRE). Even under     -->
+  <!--   MS Windows use "/" as the directory separator.                    -->
+  <!--   Required Properties:                                              -->
+  <!--     "fluid.perl" The full path and name of the perl executable      -->
+  <!--                  be provided.                                       -->
+  <!--         Example (Linux):   fluid.perl=/usr/bin/perl                 -->
+  <!--         Example (Windows): fluid.perl=C:/Perl/bin/perl.exe          -->
+  <!--                                                                     -->
+  <!--   Optional Properties:                                              -->
+  <!--     "fluid.javadoc.dir" path to where to put the Javadoc            -->
+  <!--     "fluid.javadoc.params" additional parameters to the javadoc     -->
+  <!--                            processor.                               -->
+  <!--     "fluid.java.skip" a list of java files (in Ant excludes         -->
+  <!--                       format) to skip (ignore) during compile.      -->
+  <!--         Example (any OS):                                           -->
+  <!--           fluid.java.skip="fluid/ir/Persistent.java,**/tmp/**"      -->
+  <!--           (Skips "Persistent.java" and anything under any           -->
+  <!--            directory named "tmp")                                   -->
+  <!--     [Special properties for building "ppt9mon" source tree]         -->
+  <!--     "fluid.ms.visual.studio" path to Visual Studio                  -->
+  <!--     "fluid.ms.platform.sdk" path to Microsoft SDK                   -->
+  <!--     "fluid.ms.ppt.dir" path to PowerPoint                           -->
+  <!--                                                                     -->
+  <!--   Property File Location Redirection (**MS Windows**)               -->
+  <!--   The location of "fluid-build.properties" may be redirected from   -->
+  <!--   "user.home" (useful on Windows) by creating in "user.home" a      -->
+  <!--   "fluid-property-home.properties" file with the property           -->
+  <!--   "fluid.property.home" defined as the full path to where the       -->
+  <!--   "fluid-build.properities" or ".fluid-build.properties" file is.   -->
+  <!--     Example (Windows 2000/Windows XP):                              -->
+  <!--      fluid.property.home=C:/Documents and Settings/tim/My Documents -->
+  <!--                                                                     -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- set global properties for this build -->
+  <property name="src"     value="${basedir}"/>
+  <property name="classes" value="${basedir}"/>
+  <property name="dist"    value="${basedir}/../dist"/>
+
+  <!-- Filenames for properties files we are going to read -->
+  <property name="fph.p" value="fluid-property-home.properties"/>
+  <property name="fb.p"  value="fluid-build.properties"/>
+
+  <!-- Specific target directories needed for special builds -->
+  <property name="prop-lib"    value="${src}/../lib/properties"/>
+  <property name="perl-lib"    value="${src}/../lib/perl"/>
+  <property name="javacc-home" value="${src}/../lib/jars"/>
+  <property name="jars-home"   value="${src}/../lib/jars"/>
+
+  <!-- Target directories that require special handling -->
+  <property name="cc-dir"   value="${src}/cspace/client"/>
+  <property name="cs-dir"   value="${src}/cspace/server"/>
+  <property name="cmi-dir"  value="${src}/cspace/mail/imap"/>
+  <property name="cpo-dir"  value="${src}/cspace/ppt9/operator"/>
+  <property name="fjh-dir"  value="${src}/fluid/java/history"/>
+  <property name="fjo-dir"  value="${src}/fluid/java/operator"/>
+  <property name="fjp-dir"  value="${src}/fluid/java/parse"/>
+  <property name="fjpr-dir" value="${src}/fluid/java/promise"/>
+  <property name="fh-dir"   value="${src}/fluid/history"/>
+  <property name="fp-dir"   value="${src}/fluid/parse"/>
+  <property name="ftp-dir"  value="${src}/fluid/test/parse"/>
+  <property name="fep-dir"  value="${src}/fluid/eclipse/promise"/>
+  <property name="p9j-dir"  value="${src}/ppt9mon/vj"/>
+  <property name="p9b-dir"  value="${src}/ppt9mon/vb"/>
+  <property name="f2k-dir"  value="${src}/filemon"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="build-prop-dir">
+    <!-- Check "fluid-property-home.properties" for "user.home" redirection -->
+    <property file="${user.home}/${fph.p}"/>
+    <property name="prop-dir" value="${user.home}"/>
+    <available property="prop-dir" value="${fluid.property.home}"
+               file="${user.home}/${fph.p}"/>
+    <echo message="Property file directory '${prop-dir}'"/>
+
+    <!-- Check for existance of "fluid-build.properties" file -->
+    <available property="build-prop-file" value="${prop-dir}/${fb.p}"
+               file="${prop-dir}/${fb.p}"/>
+    <!-- or for ".fluid-build.properties" file (to be Unix friendly) -->
+    <available property="build-prop-file" value="${prop-dir}/.${fb.p}"
+               file="${prop-dir}/.${fb.p}"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="build-prop-file-exists"
+          depends="build-prop-dir"
+          unless="build-prop-file">
+    <fail message="No '${fb.p}' or '.${fb.p}' file in '${prop-dir}'"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="read-prop-file" depends="build-prop-file-exists">
+    <!-- Read the build properties file -->
+    <property file="${build-prop-file}"/>
+    <!-- Set optional property values to empty strings -->
+    <property name="fluid.javadoc.dir"      value="${src}/../javadoc/api"/>
+    <property name="fluid.javadoc.params"   value=""/>
+    <property name="fluid.java.skip"        value=""/>
+    <property name="fluid.ms.visual.studio" value=""/>
+    <property name="fluid.ms.platform.sdk"  value=""/>
+    <property name="fluid.ms.ppt.classpath" value="${src};${jars-home}/mso.jar"/>
+    <property name="fluid.ntfs.server"      value="lighter.fluid.cs.cmu.edu"/>
+    <property name="fluid.ppt.master.host"  value="127.0.0.1"/>
+    <property name="fluid.ppt.master.port"  value="8741"/>
+    <!-- Show the user what values we are using -->
+    <echo message="Using build property file '${build-prop-file}'"/>
+    <echo message="----------------------------------------------------------"/>
+    <echo message="--> [required] Perl interperter (fluid.perl) is '${fluid.perl}'"/>
+    <echo message="----------------------------------------------------------"/>
+    <echo message="--> [optional] Javadoc destination dir (fluid.javadoc.dir) is '${fluid.javadoc.dir}'"/>
+    <echo message="--> [optional] Javadoc parameters (fluid.javadoc.params) is '${fluid.javadoc.params}'"/>
+    <echo message="--> [optional] Java skip list (fluid.java.skip) is '${fluid.java.skip}'"/>
+    <echo message="--> [optional] MS Visual Studio (fluid.ms.visual.studio) is '${fluid.ms.visual.studio}'"/>
+    <echo message="--> [optional] MS Platform SDK (fluid.ms.platform.sdk) is '${fluid.ms.platform.sdk}'"/>
+    <echo message="--> [optional] Override for PPT classpath (fluid.ms.ppt.classpath) is '${fluid.ms.ppt.classpath}'"/>
+    <echo message="--> [optional] Server for NTFS (fluid.ntfs.server) is '${fluid.ntfs.server}'"/>
+    <echo message="--> [optional] Server for PPT (fluid.ppt.master.host) is '${fluid.ppt.master.host}'"/>
+    <echo message="--> [optional] Port for PPT (fluid.ppt.master.port) is '${fluid.ppt.master.port}'"/>
+    <echo message="----------------------------------------------------------"/>
+
+    <!-- Setup some properties for MS ppt9mon build -->
+    <property name="fluid.jvc"   value="${fluid.ms.visual.studio}/VJ98/jvc.exe"/>
+    <property name="fluid.vjreg" value="${fluid.ms.visual.studio}/VJ98/vjreg.exe"/>
+    <property name="fluid.vb6"   value="${fluid.ms.visual.studio}/VB98/vb6.exe"/>
+    <property name="fluid.cl"    value="${fluid.ms.visual.studio}/VC98/bin/cl.exe"/>
+
+    <available property="fluid.ppt9mon.present" file="${src}/ppt9mon" type="dir"/>
+    <available property="fluid.jvc.present"     file="${fluid.jvc}"/>
+    <available property="fluid.vjreg.present"   file="${fluid.vjreg}"/>
+    <available property="fluid.vb6.present"     file="${fluid.vb6}"/>
+    <available property="fluid.cl.present"      file="${fluid.cl}"/>
+    <available property="fluid.platform.sdk.present" file="${fluid.ms.platform.sdk}"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="init" depends="read-prop-file">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${classes}"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="cspace-client" depends="java">
+    <!-- Generate Java stub classes -->
+    <rmic classname="cspace.client.ClientSideRelay" base="${src}"/>
+    <rmic classname="cspace.client.CspaceClient" base="${src}"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="cspace-server" depends="java">
+    <!-- Generate Java stub classes -->
+    <rmic classname="cspace.server.ServerSideRelay" base="${src}"/>
+    <rmic classname="cspace.server.RelayFactory" base="${src}"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="cspace-mail-imap" depends="init">
+    <!-- Generate Java source code in cspace/mail/imap -->
+    <javacc target="${cmi-dir}/IMAP.jj" 
+            javacchome="${javacc-home}"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="filemon-config" depends="init">
+    <ant dir="${f2k-dir}" target="config" inheritAll="true" />
+  </target>
+
+  <target name="filemon" depends="init">
+    <ant dir="${f2k-dir}" inheritAll="true" />
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="cspace-ppt9-operator" depends="init">
+    <!-- Generate Java source code in cspace/ppt9/operator -->
+    <apply dir="${cpo-dir}" dest="${cpo-dir}" executable="${fluid.perl}"
+           skipemptyfilesets="true" parallel="false" >
+      <arg value="${perl-lib}/create-operator"/>
+      <arg value="-header=header"/>
+      <arg value="-nodetype=PptNode"/>
+      <arg value="-optype=PptOperator"/>
+      <arg value="-createmethod=create"/>
+      <arg value="Name:String"/>
+      <srcfile/>
+      <fileset dir="${cpo-dir}" includes="*.op"/>
+      <mapper type="glob" from="*.op" to="${cpo-dir}/*.java"/>
+    </apply>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="fluid-java-history" depends="init">
+    <!-- Generate Java source code in fluid/java/history -->
+    <apply dir="${fjh-dir}" dest="${fjh-dir}" executable="${fluid.perl}"
+           skipemptyfilesets="true" parallel="false" >
+      <arg value="${perl-lib}/create-operator"/>
+      <arg value="-header=header"/>
+      <arg value="-nodetype=HistoryNode"/>
+      <arg value="-optype=HistoryOperator"/>
+      <arg value="-createmethod=create"/>
+      <srcfile/>
+      <fileset dir="${fjh-dir}" includes="*.op"/>
+      <mapper type="glob" from="*.op" to="${fjh-dir}/*.java"/>
+    </apply>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="fluid-java-operator" depends="init">
+    <!-- Generate Java source code in fluid/java/operator -->
+    <apply dir="${fjo-dir}" dest="${fjo-dir}" executable="${fluid.perl}"
+           skipemptyfilesets="true" parallel="false" >
+      <arg value="${perl-lib}/create-operator"/>
+      <arg value="-header=header"/>
+      <arg value="-nodetype=JavaNode"/>
+      <arg value="-optype=JavaOperator"/>
+      <arg value="-unparse=true"/>
+      <arg value="-unparsetype=JavaUnparser"/>
+      <arg value="Info:String"/>
+      <arg value="DimInfo:int"/>
+      <arg value="Modifiers:int"/>
+      <arg value="Names:IRSequence"/>
+      <arg value="Op:JavaOperator"/>
+      <arg value="Code:Object"/>
+      <arg value="ForInit:ForInitInterface"/>
+      <arg value="ImportName:ImportNameInterface"/>
+      <arg value="StatementExpression:StatementExpressionInterface"/>
+      <arg value="OptArrayInitializer:OptArrayInitializerInterface"/>
+      <arg value="ConstantNode:IRNode"/>
+      <arg value="ConstantInt:int"/>
+      <srcfile/>
+      <fileset dir="${fjo-dir}" includes="*.op"/>
+      <mapper type="glob" from="*.op" to="${fjo-dir}/*.java"/>
+    </apply>
+    <!-- Check if the existing LoadOperator.java file is up to date -->
+    <uptodate property="fjo-uptodate"
+              targetfile="${fjo-dir}/LoadOperator.java">
+      <srcfiles dir="${fjo-dir}" includes="*.java"
+                excludesfile="${fjo-dir}/LoadOperator.java"/>
+    </uptodate>
+  </target>
+
+  <target name="fluid-java-operator-genloadclass" depends="fluid-java-operator"
+          unless="fjo-uptodate">
+    <exec dir="${fjo-dir}" executable="${fluid.perl}"
+          output="${fjo-dir}/LoadOperator.java">
+      <arg line="${perl-lib}/gen-loadopclasses fluid.java.operator LoadOperator"/>
+    </exec>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="fluid-java-parse" depends="init">
+    <!-- Generate Java source code in fluid/java/parse -->
+    <jjtree target="${fjp-dir}/JavaX.jjt" javacchome="${javacc-home}"/>
+    <copy file="${fjp-dir}/JavaX.jj" tofile="${fjp-dir}/Java.jj" overwrite="no"/>
+    <!-- Check if we really need to run the JavaCC -->
+    <uptodate property="fjp-uptodate" targetfile="${fjp-dir}/JavaParser.java">
+      <srcfiles dir="${fjp-dir}" includes="Java.jj"/>
+    </uptodate>
+  </target>
+
+  <target name="fluid-java-parse-javacc" depends="fluid-java-parse"
+          unless="fjp-uptodate">
+    <javacc target="${fjp-dir}/Java.jj" javacchome="${javacc-home}"/>
+    <delete file="${fjp-dir}/Node.java"/>
+    <delete file="${fjp-dir}/Token.java"/>
+    <delete file="${fjp-dir}/ParseException.java"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="fluid-java-promise" depends="init">
+    <!-- Generate Java source code in fluid/java/promise -->
+    <apply dir="${fjpr-dir}" dest="${fjpr-dir}" executable="${fluid.perl}"
+           skipemptyfilesets="true" parallel="false" >
+      <arg value="${perl-lib}/create-operator"/>
+      <arg value="-header=header"/>
+      <arg value="-nodetype=JavaPromise"/>
+      <arg value="-optype=JavaPromiseOperator"/>
+      <arg value="-createmethod=createPromise"/>
+      <arg value="-unparse=true"/>
+      <arg value="-unparsetype=JavaUnparser"/>
+      <arg value="Info:String"/>
+      <arg value="Modifiers:int"/>
+      <arg value="IsWrite:boolean"/>
+      <srcfile/>
+      <fileset dir="${fjpr-dir}" includes="*.op"/>
+      <mapper type="glob" from="*.op" to="${fjpr-dir}/*.java"/>
+    </apply>
+    <!-- Check if the existing LoadPromises.java file is up to date -->
+    <uptodate property="fjp-uptodate"
+              targetfile="${fjpr-dir}/LoadPromises.java">
+      <srcfiles dir="${fjpr-dir}" includes="*.java"
+                excludesfile="${fjpr-dir}/LoadPromises.java"/>
+    </uptodate>
+  </target>
+
+  <target name="fluid-java-promise-genloadclass" depends="fluid-java-promise"
+          unless="fjp-uptodate">
+    <exec dir="${fjpr-dir}" executable="${fluid.perl}"
+          output="${fjpr-dir}/LoadPromises.java">
+      <arg line="${perl-lib}/gen-loadopclasses fluid.java.promise LoadPromises"/>
+    </exec>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="fluid-history" depends="init">
+    <!-- Generate Java source code in fluid/history -->
+    <apply dir="${fh-dir}" dest="${fh-dir}" executable="${fluid.perl}"
+           skipemptyfilesets="true" parallel="false" >
+      <arg value="${perl-lib}/create-operator"/>
+      <arg value="-header=header"/>
+      <arg value="-nodetype=HistoryNode"/>
+      <arg value="-optype=HistoryOperator"/>
+      <arg value="-createmethod=create"/>
+      <srcfile/>
+      <fileset dir="${fh-dir}" includes="*.op"/>
+      <mapper type="glob" from="*.op" to="${fh-dir}/*.java"/>
+    </apply>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="fluid-parse" depends="init">
+    <!-- Generate Java source code in fluid/parse -->
+    <apply dir="${fp-dir}" dest="${fp-dir}" executable="${fluid.perl}"
+           skipemptyfilesets="true" parallel="false" >
+      <arg value="${perl-lib}/create-operator"/>
+      <arg value="-header=header"/>
+      <arg value="-nodetype=JavaNode"/>
+      <arg value="-optype=JavaOperator"/>
+      <arg value="-unparse=true"/>
+      <arg value="-unparsetype=JavaUnparser"/>
+      <arg value="Info:String"/>
+      <arg value="DimInfo:int"/>
+      <arg value="Modifiers:int"/>
+      <arg value="Names:IRSequence"/>
+      <arg value="Op:JavaOperator"/>
+      <arg value="Code:Object"/>
+      <arg value="ConstantNode:IRNode"/>
+      <arg value="ConstantInt:int"/>
+      <srcfile/>
+      <fileset dir="${fp-dir}" includes="*.op"/>
+      <mapper type="glob" from="*.op" to="${fp-dir}/*.java"/>
+    </apply>
+    <!-- Check if the existing LoadParseOp.java file is up to date -->
+    <uptodate property="fp-uptodate"
+              targetfile="${fp-dir}/LoadParseOp.java">
+      <srcfiles dir="${fp-dir}" includes="*.java"
+                excludesfile="${fp-dir}/LoadParseOp.java"/>
+    </uptodate>
+  </target>
+
+  <target name="fluid-parse-genloadclass" depends="fluid-parse"
+          unless="fp-uptodate">
+    <exec dir="${fp-dir}" executable="${fluid.perl}"
+          output="${fp-dir}/LoadParseOp.java">
+      <arg line="${perl-lib}/gen-loadopclasses fluid.parse LoadParseOp"/>
+    </exec>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="fluid-test-parse" depends="init">
+    <!-- Generate Java source code in fluid/test/parse -->
+    <jjtree target="${ftp-dir}/RDL.jjt" javacchome="${javacc-home}" />
+    <replace file="${ftp-dir}/RDL.jj" token="SimpleNode" value="RDLNode" />
+    <!-- Check if we really need to run the JavaCC -->
+    <uptodate property="ftp-uptodate" targetfile="${ftp-dir}/RDLParser.java">
+      <srcfiles dir="${ftp-dir}" includes="RDL.jj"/>
+    </uptodate>
+  </target>
+
+  <target name="fluid-test-parse-javacc" depends="fluid-test-parse"
+          unless="ftp-uptodate">
+    <javacc target="${ftp-dir}/RDL.jj" javacchome="${javacc-home}"/>
+    <delete file="${ftp-dir}/Node.java"/>
+    <delete file="${ftp-dir}/SimpleNode.java"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="fluid-eclipse-promise" depends="init">
+    <!-- Generate Java source code in fluid/eclipse/promise -->
+    <jjtree target="${fep-dir}/PromiseX.jjt" javacchome="${javacc-home}"/>
+    <copy file="${fep-dir}/PromiseX.jj" tofile="${fep-dir}/Promise.jj" overwrite="no"/>
+    <!-- Check if we really need to run the JavaCC -->
+    <uptodate property="fep-uptodate" targetfile="${fep-dir}/PromiseParser.java">
+      <srcfiles dir="${fep-dir}" includes="Promise.jj"/>
+    </uptodate>
+  </target>
+
+  <target name="fluid-eclipse-promise-javacc" depends="fluid-eclipse-promise"
+          unless="fep-uptodate">
+    <javacc target="${fep-dir}/Promise.jj" javacchome="${javacc-home}"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="ppt9mon-config" depends="init" if="fluid.ppt.master.host">
+    <copy file="${prop-lib}/ppt.properties" tofile="${p9j-dir}/ppt.properties"/>
+    <replace file="${p9j-dir}/ppt.properties" token="MASTERHOST" value="${fluid.ppt.master.host}" />
+    <replace file="${p9j-dir}/ppt.properties" token="MASTERPORT" value="${fluid.ppt.master.port}" />
+  </target>
+
+  <target name="ppt9mon-vj-cl" depends="cspace-ppt9-operator" if="fluid.jvc.present">
+    <!-- Use the MSVJ compiler to deal w/ special COM directives -->
+    <exec dir="${p9j-dir}" executable="${fluid.jvc}">
+      <arg value="/cp:p"/>
+      <arg value="${fluid.ms.ppt.classpath}"/>
+      <arg value="/x-"/>
+      <arg value="/g"/>
+      <arg value="Command.java"/>
+      <arg value="Enumeration_.java"/>
+      <arg value="Relay.java"/>
+      <arg value="Selection_.java"/>
+      <arg value="Shadow.java"/>
+      <arg value="Slave.java"/>
+      <arg value="TextAreaWriter.java"/>
+    </exec>
+  </target>
+
+  <target name="ppt9mon-vj-unjar" depends="cspace-ppt9-operator" if="fluid.ppt9mon.present" unless="fluid.jvc.present">
+    <unjar src="${p9j-dir}/FluidCommand.jar" dest="${p9j-dir}" />
+  </target>
+
+  <target name="ppt9mon-vj-build" depends="ppt9mon-vj-cl,ppt9mon-vj-unjar">
+    <echo message="Created classes for ppt9mon-vj" />
+  </target>
+
+  <target name="ppt9mon-vj-regedit" depends="ppt9mon-vj-build" if="fluid.ppt9mon.present" unless="fluid.vjreg.present">
+    <copy file="${p9j-dir}/FluidCommand.tlb" tofile="${p9j-dir}/FluidCommand2.tlb"/>
+
+    <echo message="Replacing registry files with ${src}"/>
+    <copy file="${p9j-dir}/FluidCommand.reg" tofile="${p9j-dir}/temp.reg"/>
+    <replace file="${p9j-dir}/temp.reg" token="C:\work\fluid\code" value="${src}" />
+
+    <exec executable="regedit" os="Windows 2000">
+      <!-- Silently update -->
+      <arg line="/s ${p9j-dir}/temp.reg" />
+    </exec>
+  </target>
+
+  <target name="ppt9mon-vj-vjreg" depends="ppt9mon-vj-build" if="fluid.vjreg.present">
+    <!-- Registers the Java code with COM -->
+    <exec dir="${p9j-dir}" executable="${fluid.vjreg}">
+      <arg value="/cp:p"/>
+      <arg value="${fluid.ms.ppt.classpath}"/>
+      <arg value="/typelib"/>
+      <arg value="FluidCommand2.tlb"/>
+      <arg value="/name"/>
+      <arg value="FluidCommand2"/>
+      <arg value="/description"/>
+      <arg value="CspaceSpy"/>
+      <arg value="Command"/>
+    </exec>
+  </target>
+
+  <target name="ppt9mon-vj" depends="ppt9mon-vj-regedit,ppt9mon-vj-vjreg">
+    <echo message="Built and registered ppt9mon-vj" />
+  </target>
+
+  <target name="ppt9mon-vj-jar" depends="ppt9mon-vj-regedit,ppt9mon-vj-vjreg">
+    <jar jarfile="${p9j-dir}/Command.jar"
+         basedir="${p9j-dir}"
+         includes="*.class"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="ppt9mon-vb-build" depends="ppt9mon-vj" if="fluid.vb6.present">
+    <echo message="Building CSpaceSpy.dll"/>
+
+    <!-- Use the MSVB compiler to compile and register the code -->
+    <exec dir="${p9b-dir}" executable="${fluid.vb6}">
+      <arg line="/makedll CSpaceSpy.vbp"/>
+    </exec>
+  </target>
+
+  <target name="ppt9mon-vb-copy" depends="ppt9mon-vj" if="fluid.ppt9mon.present" unless="fluid.vb6.present">
+    <copy file="${p9b-dir}/CSpaceSpy_bak.dll" tofile="${p9b-dir}/CSpaceSpy.dll"/>
+
+    <echo message="Replacing registry files with ${src}"/>
+    <copy file="${p9b-dir}/CSpaceSpy.reg" tofile="${p9b-dir}/temp.reg"/>
+    <replace file="${p9b-dir}/temp.reg" token="C:\work\fluid\code" value="${src}" />
+
+    <exec executable="regedit" os="Windows 2000">
+      <arg line="/s ${p9b-dir}/temp.reg" />
+    </exec>
+  </target>
+
+  <target name="ppt9mon-vb" depends="ppt9mon-vb-build,ppt9mon-vb-copy">
+    <echo message="Created CSpaceSpy.dll"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="build-src" depends="cspace-mail-imap,cspace-ppt9-operator,
+    fluid-java-history,fluid-java-operator-genloadclass,fluid-java-parse-javacc,
+    fluid-java-promise-genloadclass,fluid-history,fluid-parse-genloadclass,
+    fluid-test-parse-javacc, fluid-eclipse-promise-javacc">
+    <echo message="All source code created..."/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="java">
+    <!-- Compile the Java source code from ${src} into ${classes} -->
+    <javac srcdir="${src}"
+           destdir="${classes}"
+           excludes="ppt9mon/**,cspace/ppt9/**,fluid/eclipse/ui/**,sc/**,
+             ${fluid.java.skip}"
+           debug="yes"
+           deprecation="on"
+           verbose="no"
+           fork="yes"
+           memoryMaximumSize="256m">
+      <classpath>
+        <fileset dir="../lib/jars">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="java-ppt9" depends="java">
+    <javac srcdir="${src}/cspace/ppt9"
+           destdir="${classes}"
+	   target="1.1"
+           debug="yes"
+           deprecation="on"
+           verbose="no"
+           fork="yes"
+           memoryMaximumSize="256m">
+      <classpath>
+        <fileset dir="../lib">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="ntfs" depends="build-src,java,cspace-client,cspace-server">
+    <echo message="Build competed for NTFS..."/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="ppt9" depends="build-src,java-ppt9,ppt9mon-vj,ppt9mon-vb">
+    <echo message="Build competed for PPT9..."/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="build-all" depends="build-src,java,ppt9,ntfs">
+    <echo message="All source code compiled..."/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- BUILD THE JAVADOC: all the source code must be generated first -->    
+  <target name="javadoc" depends="build-src">
+    <delete dir="${fluid.javadoc.dir}"/>
+    <javadoc sourcepath="${src}"
+             packagenames="sun.ui.*"
+             classpath="${fluid.build.cp}"
+             access="private"
+             use="yes"
+             author="yes"
+             splitindex="yes"
+             nodeprecated="no"
+             nodeprecatedlist="no"
+             destdir="${fluid.javadoc.dir}"
+             maxmemory="256m"
+             useexternalfile="yes"
+             additionalparam="-breakiterator -linksource 
+             -subpackages fluid:cspace         
+             -exclude fluid.eclipse:fluid.eclipse.adapter:fluid.eclipse.bind:fluid.eclipse.promise:fluid.demo
+             -tag capabilities:a:&quot;Capabilities:&quot;
+             -tag fluid:a:&quot;Fluid:&quot;
+             -tag functional:a:&quot;Functional:&quot;
+             -tag invariant:a:&quot;Invariant:&quot;
+             -tag postcondition:a:&quot;Postcondition:&quot;
+             -tag precondition:a:&quot;Precondition:&quot;
+             -tag pure:a:&quot;Pure:&quot;
+             -tag read:a:&quot;Read:&quot;
+             -tag structure:a:&quot;Structure:&quot;
+             -tag type:a:&quot;Type:&quot;
+             -tag typeparam:a:&quot;Type Parameter:&quot;
+             -tag write:a:&quot;Write:&quot;
+             -tag borrowed:a:&quot;Borrowed:&quot;
+             -tag unshared:a:&quot;Unshared:&quot;
+             -tag unique:a:&quot;Unique:&quot;             
+             -tag writes:a:&quot;Write:&quot;                          
+             -tag reads:a:&quot;Read:&quot;                 
+             ${fluid.javadoc.params}"
+             >
+      <classpath>
+        <fileset dir="../lib">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javadoc>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <!-- target name="snapshot" depends="build-all" -->
+  <target name="snapshot">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}/snapshot"/>
+
+    <!-- Put everything in ${classes} into the FluidAll-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/snapshot/FluidAll-${DSTAMP}.jar"
+         basedir="${src}"
+         includes="**"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="dist" depends="build-all,javadoc">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}/lib"/>
+
+    <!-- Put everything in ${classes} into the Fluid-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/lib/Fluid-${DSTAMP}.jar"
+         basedir="${classes}"
+         includes="**/*.class,**/*.gif"/>
+    <!-- Put everything in ${fluid.javadoc.dir} into the FluidJavadoc-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/lib/FluidJavadoc-${DSTAMP}.jar"
+         basedir="${fluid.javadoc.dir}"
+         includes="**"/>
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+  <target name="fluid-eclipse-promise-clean" depends="read-prop-file">
+    <!-- Delete generated files in fluid/eclipse/promise -->
+    <echo message="Cleaning up in ${fep-dir}"/>
+    <delete file="${fep-dir}/PromiseX.jj"/>
+    <delete file="${fep-dir}/Promise.jj"/>
+    <delete file="${fep-dir}/PromiseParserTreeConstants.java"/>
+    <delete file="${fep-dir}/PromiseParser.java"/>
+    <delete file="${fep-dir}/PromiseParserConstants.java"/>
+    <delete file="${fep-dir}/PromiseParserTokenManager.java"/>
+  </target>
+
+  <target name="clean" depends="read-prop-file">
+    <!-- Clean up the ${classes} tree and delete the ${dist} and ${fluid.javadoc.dir} tree -->
+    <delete>
+      <fileset dir="${classes}" includes="**/*.class"/>
+    </delete>
+    <delete dir="${dist}"/>
+    <delete dir="${fluid.javadoc.dir}"/>
+
+    <!-- Clean up ".java" and temporary files created in the source tree -->
+
+    <!-- Delete generated files in cspace/mail/imap -->
+    <echo message="Cleaning up in ${cmi-dir}"/>
+    <delete file="${cmi-dir}/IMAP.java"/>
+    <delete file="${cmi-dir}/IMAPConstants.java"/>
+    <delete file="${cmi-dir}/IMAPTokenManager.java"/>
+    <delete file="${cmi-dir}/ParseException.java"/>
+    <delete file="${cmi-dir}/SimpleCharStream.java"/>
+    <delete file="${cmi-dir}/Token.java"/>
+    <delete file="${cmi-dir}/TokenMgrError.java"/>
+
+    <!-- Delete generated files in cspace/ppt9/operator -->
+    <echo message="Cleaning up in ${cpo-dir}"/>
+    <exec dir="${cpo-dir}" executable="${fluid.perl}">
+      <arg line="${perl-lib}/clean-op2java"/>
+    </exec>
+
+    <!-- Delete generated files in fluid/java/history -->
+    <echo message="Cleaning up in ${fjh-dir}"/>
+    <exec dir="${fjh-dir}" executable="${fluid.perl}">
+      <arg line="${perl-lib}/clean-op2java"/>
+    </exec>
+
+    <!-- Delete generated files in fluid/java/operator -->
+    <echo message="Cleaning up in ${fjo-dir}"/>
+    <exec dir="${fjo-dir}" executable="${fluid.perl}">
+      <arg line="${perl-lib}/clean-op2java"/>
+    </exec>
+    <delete file="${fjo-dir}/LoadOperator.java"/>
+
+    <!-- Delete generated files in fluid/java/parse -->
+    <echo message="Cleaning up in ${fjp-dir}"/>
+    <delete file="${fjp-dir}/Java.jj"/>
+    <delete file="${fjp-dir}/JavaCharStream.java"/>
+    <delete file="${fjp-dir}/JavaParser.java"/>
+    <delete file="${fjp-dir}/JavaParserConstants.java"/>
+    <delete file="${fjp-dir}/JavaParserTokenManager.java"/>
+    <delete file="${fjp-dir}/JavaParserTreeConstants.java"/>
+    <delete file="${fjp-dir}/JavaX.jj"/>
+    <delete file="${fjp-dir}/TokenMgrError.java"/>
+
+    <!-- Delete generated files in fluid/java/promise -->
+    <echo message="Cleaning up in ${fjpr-dir}"/>
+    <exec dir="${fjpr-dir}" executable="${fluid.perl}">
+      <arg line="${perl-lib}/clean-op2java"/>
+    </exec>
+    <delete file="${fjpr-dir}/LoadPromises.java"/>
+
+    <!-- Delete generated files in fluid/history -->
+    <echo message="Cleaning up in ${fh-dir}"/>
+    <exec dir="${fh-dir}" executable="${fluid.perl}">
+      <arg line="${perl-lib}/clean-op2java"/>
+    </exec>
+
+    <!-- Delete generated files in fluid/parse -->
+    <echo message="Cleaning up in ${fp-dir}"/>
+    <exec dir="${fp-dir}" executable="${fluid.perl}">
+      <arg line="${perl-lib}/clean-op2java"/>
+    </exec>
+    <delete file="${fp-dir}/LoadParseOp.java"/>
+
+    <!-- Delete generated files in fluid/test/parse -->
+    <echo message="Cleaning up in ${ftp-dir}"/>
+    <delete file="${ftp-dir}/ParseException.java"/>
+    <delete file="${ftp-dir}/RDL.jj"/>
+    <delete file="${ftp-dir}/RDLParser.java"/>
+    <delete file="${ftp-dir}/RDLParserConstants.java"/>
+    <delete file="${ftp-dir}/RDLParserTokenManager.java"/>
+    <delete file="${ftp-dir}/RDLParserTreeConstants.java"/>
+    <delete file="${ftp-dir}/SimpleCharStream.java"/>
+    <delete file="${ftp-dir}/Token.java"/>
+    <delete file="${ftp-dir}/TokenMgrError.java"/>
+
+    <!-- Delete generated files in fluid/eclipse/promise -->
+    <echo message="Cleaning up in ${fep-dir}"/>
+    <delete file="${fep-dir}/JavaCharStream.java"/>
+    <delete file="${fep-dir}/Node.java"/>
+    <delete file="${fep-dir}/ParseException.java"/>
+    <delete file="${fep-dir}/Promise.jj"/>
+    <delete file="${fep-dir}/PromiseParser.java"/>
+    <delete file="${fep-dir}/PromiseParserConstants.java"/>
+    <delete file="${fep-dir}/PromiseParserTokenManager.java"/>
+    <delete file="${fep-dir}/PromiseParserTreeConstants.java"/>
+    <delete file="${fep-dir}/PromiseX.jj"/>
+    <delete file="${fep-dir}/Token.java"/>
+    <delete file="${fep-dir}/TokenMgrError.java"/>
+
+    <!-- Delete generated files in ppt9mon/vj -->
+    <echo message="Cleaning up in ${p9j-dir}"/>
+    <delete file="${p9j-dir}/FluidCommand2.tlb"/>
+    <delete file="${p9j-dir}/Command.jar"/>
+
+    <!-- Delete generated files in ppt9mon/vb -->
+    <echo message="Cleaning up in ${p9b-dir}"/>
+    <delete file="${p9b-dir}/CSpaceSpy.lib"/>
+    <delete file="${p9b-dir}/CSpaceSpy.exp"/>
+    <delete file="${p9b-dir}/CSpaceSpy.dll"/>
+  </target>
+	
+  <!-- Clean java-operator -->
+  <target name="clean-java-operator" depends="read-prop-file">
+    <!-- Delete generated files in fluid/java/operator -->
+    <echo message="Cleaning up in ${fjo-dir}"/>
+    <exec dir="${fjo-dir}" executable="${fluid.perl}">
+      <arg line="${perl-lib}/clean-op2java"/>
+    </exec>
+    <delete file="${fjo-dir}/LoadOperator.java"/>    
+  </target>
+  
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+</project>

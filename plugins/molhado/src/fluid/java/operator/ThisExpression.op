@@ -1,0 +1,9 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ThisExpression.op,v 1.3 1997/11/15 14:38:51 boyland Exp $
+/**
+ * Java's "this" expression.
+ */
+public operator ThisExpression extends ConstructionObject
+    implements DripOperator
+{
+  syntax { "this" }
+}

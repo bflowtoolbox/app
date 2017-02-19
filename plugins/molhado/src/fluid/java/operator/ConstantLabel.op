@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ConstantLabel.op,v 1.2 2002/03/25 20:52:32 elissa Exp $
+public operator ConstantLabel extends SwitchLabel {
+  syntax {
+    "case" expr:Expression <> ":"
+  }
+}

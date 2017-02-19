@@ -1,0 +1,8 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/MulExpression.op,v 1.2 1998/01/01 17:14:37 boyland Exp $
+public operator MulExpression extends ArithBinopExpression 
+    implements DripOperator 
+{
+  syntax {
+    op1:Expression(mulLeft) "*" op2:Expression(mulRight)
+  }
+}

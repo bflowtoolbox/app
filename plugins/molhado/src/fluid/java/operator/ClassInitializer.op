@@ -1,0 +1,12 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ClassInitializer.op,v 1.2 1998/03/16 16:09:45 boyland Exp $
+public operator ClassInitializer extends ClassBodyDeclaration {
+  syntax {
+    $modifiers:Modifiers block:BlockStatement
+  }
+  
+  /** Create a component for this node.  Just execute the block.
+   */
+  public Component createComponent(IRNode node) {
+    return new SimpleComponent(node);
+  }  
+}

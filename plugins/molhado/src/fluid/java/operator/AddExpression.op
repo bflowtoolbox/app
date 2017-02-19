@@ -1,0 +1,8 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/AddExpression.op,v 1.3 1997/11/07 17:15:55 boyland Exp $
+public operator AddExpression extends ArithBinopExpression 
+    implements DripOperator 
+{
+  syntax {
+    op1:Expression(addLeft) "+" op2:Expression(addRight)
+  }
+}

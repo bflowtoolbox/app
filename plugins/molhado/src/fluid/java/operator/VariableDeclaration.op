@@ -1,0 +1,11 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/VariableDeclaration.op,v 1.3 1999/02/15 19:44:56 boyland Exp $
+public operator VariableDeclaration extends Declaration {
+  public static String getId(IRNode node) {
+    if (tree.getOperator(node) instanceof VariableDeclaration) {
+      return JavaNode.getInfo(node);
+    } else {
+      throw new IllegalArgumentException("Not a VariableDeclaration " +
+					 tree.getOperator(node));
+    }
+  }
+}

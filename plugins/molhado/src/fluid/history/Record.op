@@ -1,0 +1,86 @@
+# $Header: /cvs/fluid/fluid/code/fluid/history/Record.op,v 1.7 2000/07/24 16:43:42 scgupta Exp $
+/** The base class of all design records.
+ */
+public operator Record {
+  syntax { "AbstractRecord" op:Record */ }
+  
+  // includes the next record
+  public static final Enumeration getOps(IRNode here) {
+    return getOpEnumeration(here);
+  }
+  // i.e., the last node
+  public static final IRNode nextRecord(IRNode here) {
+    int num = tree.numChildren(here);
+    if (num <= 0) {
+      return null;
+    }
+    else return getOp(here, num - 1);
+  }
+  public static final void setNextRecord(IRNode here, IRNode next) {
+    int num = tree.numChildren(here); 
+    if (num <= 0) {
+      tree.appendSubtree(here, next);
+    }
+    else tree.setChild(here, num - 1, next);
+  }
+
+  public static final Template getTemplate(IRNode here) {
+    return (Template) here.getSlotValue(templateSI);
+  } 
+
+  public static final void setTemplate(IRNode here, Template t) {
+    here.setSlotValue(templateSI, t);
+  } 
+  private static final SlotInfo templateSI = 
+	JavaNode.getConstantSlotInfo("historyTemplate", TemplateType.t);
+
+  public static final Version getVersion(IRNode here) {
+    return (Version) here.getSlotValue(versionSI);
+  } 
+
+  public static final void setVersion(IRNode here, Version t) {
+    here.setSlotValue(versionSI, t);
+  } 
+  private static final SlotInfo versionSI = 
+	JavaNode.getConstantSlotInfo("historyVersion", 
+				     new IRType() {
+				       public boolean isValid(Object value) {
+					 return (value instanceof Version);
+				       }
+
+				       public void writeValue(Object value, 
+							      IROutput out) 
+				       throws IOException {
+				       }
+				       
+				       public Object readValue(IRInput in) 
+				       throws IOException {
+					 return null;
+				       }
+
+				       public void writeType(IROutput out) 
+				       throws IOException {
+				       }
+
+				       public IRType readType(IRInput in) 
+				       throws IOException {
+					 return null;
+				       }
+				       public Comparator getComparator() {
+					 return null;
+				       }
+                                       public Object fromString(String s) {
+					 return null;
+                                       }
+                                       public String toString(Object o) {
+					 return null;
+                                       }
+				     });
+}
+
+
+
+
+
+
+

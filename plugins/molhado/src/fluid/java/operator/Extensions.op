@@ -1,0 +1,8 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/Extensions.op,v 1.1 1997/08/04 08:45:27 boyland Exp $
+/** Extends clause for interfaces.
+ */
+public operator Extensions {
+  syntax {
+    ( "extends" superInterface:Type +/ "," ) ?
+  }
+}

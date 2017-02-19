@@ -1,0 +1,7 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/SwitchStatements.op,v 1.2 1997/12/01 18:18:52 boyland Exp $
+public operator SwitchStatements {
+  syntax { stmts:Statement * }
+  public Component createComponent(IRNode node) {
+    return new SequenceComponent(node);
+  }
+}

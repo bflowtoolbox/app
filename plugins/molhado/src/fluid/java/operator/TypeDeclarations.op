@@ -1,0 +1,4 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/TypeDeclarations.op,v 1.1 1997/07/30 11:19:39 boyland Exp $
+public operator TypeDeclarations implements DripOperator {
+  syntax { types:TypeDeclaration * }
+}

@@ -1,0 +1,104 @@
+<!-- $Header: /usr/local/refactoring/molhadoRef/src/fluid/ir/package.html,v 1.1 2006/03/21 23:20:54 dig Exp $ -->
+<BODY>
+<p> This package includes the basic classes for the intermediate
+representation (IR) used in the fluid project.  There are basic
+facilities for nodes, attributes (known as slot infos), slots and
+compound data structures (homogenous sequences and heterogenous
+records).  For more complex data structures, graphs and trees, see
+{@link fluid.tree}.  For versioning of slots; see
+{@link fluid.version} </p>
+
+<p> The basis of the IR are a large number of nodes with identity.
+There are also a number of attributes, some named, registered and
+potentially persistent, others anonymous and transient.  An attribute
+that is/will be persistent must have a declared type.  An attribute
+may have a value for any and all nodes.  This value may be stored in a
+slot.  All information about a node is represented in
+its attribute values.  For example, in a Java parse node in the IR,
+the kind of node, its parent and children as well as binding and type
+information is all in its attribute values. </p>
+
+<p> Here is a thematic list of the classes and interfaces in this
+package: <ul>
+  <li> Classes implementing IR nodes: <ul>
+	<li> {@link fluid.ir.IRNode} (interface)
+	<li> {@link fluid.ir.PlainIRNode}
+	<li> {@link fluid.ir.ProxyNode} </ul>
+  <li> Classes implementing attributes are called slot info classes.
+There are two kinds of attributes: stored attributes which have a value
+until changed to another value, and immutable derived attributes whose
+values are computed (potentially from other slots). Stored attributes
+keep their slots in a table of slots<ul>
+	<li> {@link fluid.ir.SlotInfo} (abstract)
+	<li> {@link fluid.ir.DerivedSlotInfo} (abstract)
+	<li> {@link fluid.ir.StoredSlotInfo} (abstract)
+	<li> {@link fluid.ir.InfoStoredSlotInfo} 
+	<li> {@link fluid.ir.SimpleSlotInfo}
+	<li> {@link fluid.ir.ConstantSlotInfo}
+	<li> {@link fluid.ir.SlotAlreadyRegisteredException}
+	<li> {@link fluid.ir.SlotNotRegisteredException}
+	<li> {@link fluid.ir.Slots} (abstract)
+	<li> {@link fluid.ir.ListSlots}
+	<li> {@link fluid.ir.HashedSlots}</ul>
+  <li> Classes implementing slots, containers for attribute values.  A
+slot may be <em>undefined</em> (no value yet) or <em>constant</em>
+(the value is <em>immutable</em>, that is, may not be changed).  When
+a slot is assigned a value, it is permitted to change its class (and
+identity).  <em>Predefined</em> slots are slots that have a value but
+may be shared (say as the default slot for an attribute).  These slots
+always mutate into a new slot when the value is changed.  Predefined
+slots implement a copy-on-write sharing policy that permits slots to
+be shared invisibly.  <em>Simple</em> slots are mutable containers of
+values.  The {@link fluid.version} package defines new
+slots so that the values are versioned. <ul>
+	<li> {@link fluid.ir.Slot} (interface)
+	<li> {@link fluid.ir.UndefinedSlot} (abstract)
+	<li> {@link fluid.ir.PredefinedSlot} (abstract)
+	<li> {@link fluid.ir.UndefinedConstantSlot}
+	<li> {@link fluid.ir.ConstantSlot}
+	<li> {@link fluid.ir.UndefinedSimpleSlot}
+	<li> {@link fluid.ir.PredefinedSimpleSlot}
+	<li> {@link fluid.ir.SimpleSlot}
+	<li> {@link fluid.ir.SlotUndefinedException}
+	<li> {@link fluid.ir.SlotImmutableException} </ul>
+  <li> Classes describing types of attributes.  Eventually these
+classes will include information on how to persistently store values
+of the type.  A named stored attribute is required to have a type: <ul>
+	<li> {@link fluid.ir.IRType} (interface)
+	<li> {@link fluid.ir.IRNodeType}
+	<li> {@link fluid.ir.IRIntegerType}
+	<li> {@link fluid.ir.IRStringType}
+	<li> {@link fluid.ir.IRSequenceType}
+	<li> {@link fluid.ir.IRRecordType}
+	<li> {@link fluid.ir.IRLocationType} </ul>
+  <li> Homogenous sequences come in a variety of types: fixed size and
+variable size as well as empty sequences as a special case of fixed
+size sequences.  The elements of any sequence can be enumerated and it
+is also possible to name the location within a sequence.  For fixed
+size sequences, these names are isomorphic to integers; for variable
+size sequences the name is sticky, no matter how the sequence changes,
+a location remains the same.  When creating a sequence, it is
+necessary to specify the kind of slots desired (constant, simple, or
+versioned); a slot factory is used to name a family of slot classes.<ul>
+	<li> {@link fluid.ir.IRSequence} (interface)
+	<li> {@link fluid.ir.EmptyIRSequence}
+	<li> {@link fluid.ir.IRArray} fixed size
+	<li> {@link fluid.ir.IRList} variable size
+	<li> {@link fluid.ir.IRLocation} (interface)
+	<li> {@link fluid.ir.IRSequenceEnumeration}
+	<li> {@link fluid.ir.SlotFactory} (interface)
+	<li> {@link fluid.ir.ConstantSlotFactory}
+	<li> {@link fluid.ir.SimpleSlotFactory} 
+	<li> {@link fluid.version.VersionedSlotFactory}</ul>
+  <li> Persistence of the IR is accomplished in <em>regions</em>,
+<em>bundles</em> and <em>chunks</em>.  The persistence system is extended
+in the {@link fluid.version} package.
+More information is available in the following classes:<ul>
+	<li> {@link fluid.ir.IRPersistent}
+	<li> {@link fluid.ir.IRRegion}
+	<li> {@link fluid.ir.Bundle}
+	<li> {@link fluid.ir.IRChunk}
+	<li> {@link fluid.ir.IROutput} (interface)
+	<li> {@link fluid.ir.IRInput} (interface)</ul>
+</ul></p>
+</BODY>

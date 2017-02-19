@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/DefaultLabel.op,v 1.2 2002/03/25 20:52:38 elissa Exp $
+public operator DefaultLabel extends SwitchLabel {
+  syntax {
+    "default" <> ":"
+  }
+}

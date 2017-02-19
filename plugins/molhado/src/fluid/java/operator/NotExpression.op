@@ -1,0 +1,26 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/NotExpression.op,v 1.2 1999/01/25 16:26:12 boyland Exp $
+public operator NotExpression extends UnopExpression {
+  syntax {
+    "!" op:Expression
+  }
+
+  /** Create CFG component by reversing boolean port values.
+   * We have to use an auxiliary node because of the way
+   * connect must be called.
+   */
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,2,1);
+    Subcomponent sub = new Subcomponent(comp,tree.childLocation(node,0),1,2,1);
+
+    ControlNode nop = new NoOperation();
+    
+    ControlEdge.connect(comp.getEntryPort(),sub.getEntryPort());
+    ControlEdge.connect(sub.getNormalExitPort(),nop);
+    ControlEdge.connect(sub.getNormalExitPort(),comp.getNormalExitPort());
+    ControlEdge.connect(nop,comp.getNormalExitPort());
+    ControlEdge.connect(sub.getAbruptExitPort(),comp.getAbruptExitPort());
+
+    return comp;
+  }
+    
+}

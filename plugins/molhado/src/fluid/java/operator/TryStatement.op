@@ -1,0 +1,44 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/TryStatement.op,v 1.3 1998/01/21 17:31:02 boyland Exp $
+public operator TryStatement extends Statement {
+  syntax {
+    "try" block:BlockStatement
+    catchPart:CatchClauses
+    finallyPart:OptFinally
+  }
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent subblock = 
+      new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+    Subcomponent subcatch = 
+      new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+    Subcomponent subfinal = 
+      new Subcomponent(comp,tree.childLocation(node,2),1,1,1);
+
+    ControlNode endMerge = new Merge();
+    ControlNode addTrack = new TrackedMerge();
+    ControlNode checkTrack = new TrackedDemerge();
+    ControlNode stripLabel = new PendingLabelStrip();
+    ControlNode abruptMerge = new Merge();
+    
+    // Connect up normal execution
+    ControlEdge.connect(comp.getEntryPort(),subblock.getEntryPort());
+    ControlEdge.connect(subblock.getNormalExitPort(),endMerge);
+    ControlEdge.connect(endMerge,addTrack);
+    ControlEdge.connect(addTrack,subfinal.getEntryPort());
+    ControlEdge.connect(subfinal.getNormalExitPort(),checkTrack);
+    ControlEdge.connect(checkTrack,comp.getNormalExitPort());
+
+    // Connect catch clauses
+    ControlEdge.connect(subblock.getAbruptExitPort(),subcatch.getEntryPort());
+    ControlEdge.connect(subcatch.getNormalExitPort(),endMerge);
+    ControlEdge.connect(subcatch.getAbruptExitPort(),addTrack);
+
+    // Get labels right for abrupt termination of try statement
+    ControlEdge.connect(checkTrack,abruptMerge);
+    ControlEdge.connect(subfinal.getAbruptExitPort(),stripLabel);
+    ControlEdge.connect(stripLabel,abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+    
+    return comp;
+  }
+}

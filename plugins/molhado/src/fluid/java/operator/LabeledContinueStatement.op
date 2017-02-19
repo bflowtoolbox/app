@@ -1,0 +1,15 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/LabeledContinueStatement.op,v 1.2 2002/03/25 20:53:04 elissa Exp $
+public operator LabeledContinueStatement extends Statement {
+  syntax {
+    "continue" $id:Info <semi> ";"
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,0,1);
+    ControlLabel label = new NamedContinueLabel(node);
+    ControlNode addContinue = new AddLabel(label);
+    ControlEdge.connect(comp.getEntryPort(),addContinue);
+    ControlEdge.connect(addContinue,comp.getAbruptExitPort());
+    return comp;
+  }
+}

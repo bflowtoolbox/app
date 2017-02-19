@@ -1,0 +1,5 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/NoArrayInitializer.op,v 1.3 1999/01/25 16:25:48 boyland Exp $
+public operator NoArrayInitializer extends OptArrayInitializer
+{
+  syntax { }
+}

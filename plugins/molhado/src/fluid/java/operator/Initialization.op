@@ -1,0 +1,10 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/Initialization.op,v 1.2 1999/01/28 15:55:03 boyland Exp $
+public operator Initialization extends OptInitialization {
+  syntax {
+    "=" value:Initializer
+  }
+  
+  public Component createComponent(IRNode node) {
+    return new SimpleComponent(node);
+  }
+}

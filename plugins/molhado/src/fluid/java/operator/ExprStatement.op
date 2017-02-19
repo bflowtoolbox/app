@@ -1,0 +1,10 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ExprStatement.op,v 1.5 1999/01/25 16:24:22 boyland Exp $
+public operator ExprStatement extends Statement implements DripOperator {
+  syntax { 
+    expr:StatementExpression <> ";"
+  }
+  
+  public Component createComponent(IRNode node) {
+    return new SimpleComponent(node,new ComponentFlow(null,this));
+  }
+}

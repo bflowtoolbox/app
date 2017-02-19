@@ -1,0 +1,46 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/AssignExpression.op,v 1.8 2000/02/21 22:09:33 boyland Exp $
+public operator AssignExpression extends BinopExpression
+    implements Assignment, DripOperator
+{
+  syntax {
+    lhs:Expression "=" rhs:Expression
+  }
+
+  public IRNode getSource(IRNode node) {
+    return getRhs(node);
+  }
+  public IRNode getTarget(IRNode node) {
+    return getLhs(node);
+  }
+
+  /** Create the control-flow graph component for
+   * an assignment expression.
+   */
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent sublhs = 
+        new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+    Subcomponent subrhs = 
+        new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+    ControlNode doAssign = new ComponentChoice(comp,null);
+    ControlNode throwArrayStoreException =
+      new AddLabel(PrimitiveExceptionLabel.primitiveArrayStoreException);
+    ControlNode abruptMerge1 = new Merge();
+    ControlNode abruptMerge2 = new Merge();
+
+    // normal control flow:
+    ControlEdge.connect(comp.getEntryPort(),sublhs.getEntryPort());
+    ControlEdge.connect(sublhs.getNormalExitPort(),subrhs.getEntryPort());
+    ControlEdge.connect(subrhs.getNormalExitPort(),doAssign);
+    ControlEdge.connect(doAssign,comp.getNormalExitPort());
+    // connect up all possible abrupt edges.
+    ControlEdge.connect(sublhs.getAbruptExitPort(),abruptMerge1);
+    ControlEdge.connect(subrhs.getAbruptExitPort(),abruptMerge1);
+    ControlEdge.connect(abruptMerge1,abruptMerge2);
+    ControlEdge.connect(doAssign,throwArrayStoreException);
+    ControlEdge.connect(throwArrayStoreException,abruptMerge2);
+    ControlEdge.connect(abruptMerge2,comp.getAbruptExitPort());
+    
+    return comp;
+  }  
+}

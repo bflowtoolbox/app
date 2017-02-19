@@ -1,0 +1,12 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/OptArrayInitializer.op,v 1.4 1999/01/25 16:26:30 boyland Exp $
+public operator OptArrayInitializer implements OptArrayInitializerInterface {
+  public boolean includes(Operator op) {
+    return op instanceof OptArrayInitializerInterface;
+  }
+
+  /** Create the control-flow component for the initializer
+   */
+  public Component createComponent(IRNode node) {
+    return new SimpleComponent(node);
+  }
+}

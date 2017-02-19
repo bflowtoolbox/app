@@ -1,0 +1,13 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/Statement.op,v 1.1 1997/07/30 11:19:16 boyland Exp $
+public operator Statement {
+  /** Create a component for this node.  By default we just
+   * execute the children in succession.
+   */
+  public Component createComponent(IRNode node) {
+    if (variableOperator() != null) {
+      return new SequenceComponent(node);
+    } else {
+      return new SimpleComponent(node);
+    }
+  }
+}

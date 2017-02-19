@@ -1,0 +1,11 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/FieldDeclaration.op,v 1.6 1998/07/17 14:41:59 boyland Exp $
+public operator FieldDeclaration extends ClassBodyDeclaration
+    implements DripOperator 
+{
+  syntax { 
+    $mods:Modifiers type:Type vars:VariableDeclarators <> ";"
+  }
+  public Component createComponent(IRNode node) {
+    return new SimpleComponent(node,new int[]{1});
+  }
+}

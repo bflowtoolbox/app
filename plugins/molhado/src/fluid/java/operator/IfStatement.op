@@ -1,0 +1,33 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/IfStatement.op,v 1.7 1999/01/25 16:25:03 boyland Exp $
+public operator IfStatement extends Statement implements DripOperator {
+  syntax {
+    "if" "(" <paren> cond:Expression </paren> ")" <then>
+      thenpart:Statement
+     </then>
+   }
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent subcond = 
+        new Subcomponent(comp,tree.childLocation(node,0),1,2,1);
+    Subcomponent subthen = 
+        new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+    ControlNode discardTrue = new ComponentFlow(comp,Boolean.TRUE);
+    ControlNode discardFalse = new ComponentFlow(comp,Boolean.FALSE);
+    ControlNode endMerge = new Merge();
+    ControlNode abruptMerge = new Merge();
+    // connect up the condition
+    ControlEdge.connect(comp.getEntryPort(),subcond.getEntryPort());
+    ControlEdge.connect(subcond.getNormalExitPort(),discardTrue);
+    ControlEdge.connect(discardTrue,subthen.getEntryPort());
+    ControlEdge.connect(subcond.getNormalExitPort(),discardFalse);
+    ControlEdge.connect(discardFalse,endMerge);
+    // connect up final merge
+    ControlEdge.connect(subthen.getNormalExitPort(),endMerge);
+    ControlEdge.connect(endMerge,comp.getNormalExitPort());
+    // connect abrupt exits
+    ControlEdge.connect(subcond.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(subthen.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+    return comp;
+  }
+}

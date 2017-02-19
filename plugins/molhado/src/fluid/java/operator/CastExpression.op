@@ -1,0 +1,25 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/CastExpression.op,v 1.3 1998/07/30 08:43:27 boyland Exp $
+public operator CastExpression extends Expression {
+  syntax {
+    "(" <paren> type:Type </paren> ")" expr:Expression
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent sub = new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+    ControlNode abruptMerge = new Merge();
+    ControlNode throwClassCastException = 
+      new AddLabel(PrimitiveExceptionLabel.primitiveClassCastException);
+    ControlNode testOK = new ComponentChoice(comp,null);
+
+    ControlEdge.connect(comp.getEntryPort(),sub.getEntryPort());
+    ControlEdge.connect(sub.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(sub.getNormalExitPort(),testOK);
+    ControlEdge.connect(testOK,comp.getNormalExitPort());
+    ControlEdge.connect(testOK,throwClassCastException);
+    ControlEdge.connect(throwClassCastException,abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+    
+    return comp;
+  }
+}

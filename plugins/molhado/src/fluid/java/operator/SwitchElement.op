@@ -1,0 +1,15 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/SwitchElement.op,v 1.4 1998/03/16 16:11:23 boyland Exp $
+public operator SwitchElement {
+  syntax {
+    label:SwitchLabel stmts:SwitchStatements
+  }
+  /** Create the control-flow graph component for a label and optional
+   * following statements.  Control only enters the component
+   * if the statements will be executed.  Testing the various labels
+   * is done in the SwitchBlockSubcomponent.
+   * Currently, we don't execute the labels themselves.
+   */
+  public Component createComponent(IRNode node) {
+    return new SimpleComponent(node,new int[]{1});
+  }
+}

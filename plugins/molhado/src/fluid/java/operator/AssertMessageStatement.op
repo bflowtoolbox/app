@@ -1,0 +1,44 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/AssertMessageStatement.op,v 1.2 2002/08/01 21:29:59 boyland Exp $
+public operator AssertMessageStatement extends Statement implements DripOperator {
+  syntax {
+    "assert" assertion:Expression ":" message:Expression <> ";"
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent subcond = 
+        new Subcomponent(comp,tree.childLocation(node,0),1,2,1);
+    Subcomponent submesg = 
+        new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+    ControlNode checkEnabled = new ComponentChoice(comp,this);
+    ControlNode discardTrue = new ComponentFlow(comp,Boolean.TRUE);
+    ControlNode discardFalse = new ComponentFlow(comp,Boolean.FALSE);
+    ControlNode okMerge = new Merge();
+    ControlNode abruptMerge1 = new Merge();
+    ControlNode abruptMerge2 = new Merge();
+    ControlNode addError = 
+	new AddLabel(PrimitiveExceptionLabel.assertionError);
+
+    // connect up the condition
+    ControlEdge.connect(comp.getEntryPort(),checkEnabled);
+    ControlEdge.connect(checkEnabled,subcond.getEntryPort());
+    // if assertion succeeds, we are done (after ignoring the condition)
+    ControlEdge.connect(subcond.getNormalExitPort(),discardTrue);
+    ControlEdge.connect(discardTrue,okMerge);
+    // if assertion fails, we evaluate detail message
+    ControlEdge.connect(subcond.getNormalExitPort(),discardFalse);
+    ControlEdge.connect(discardFalse,submesg.getEntryPort());
+    ControlEdge.connect(submesg.getNormalExitPort(),addError);
+
+    // connect up final merge
+    ControlEdge.connect(checkEnabled,okMerge); // if not enabled, terminate
+    ControlEdge.connect(okMerge,comp.getNormalExitPort());
+    // connect abrupt exits
+    ControlEdge.connect(subcond.getAbruptExitPort(),abruptMerge1);
+    ControlEdge.connect(submesg.getAbruptExitPort(),abruptMerge1);
+    ControlEdge.connect(abruptMerge1,abruptMerge2);
+    ControlEdge.connect(addError,abruptMerge2);
+    ControlEdge.connect(abruptMerge2,comp.getAbruptExitPort());
+    return comp;
+  }
+}

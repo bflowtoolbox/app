@@ -1,0 +1,8 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/DivExpression.op,v 1.2 1997/12/01 18:04:04 boyland Exp $
+public operator DivExpression extends DivRemExpression 
+    implements DripOperator 
+{
+  syntax {
+    op1:Expression "/" op2:Expression
+  }
+}

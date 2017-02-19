@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/UnsignedRightShiftExpression.op,v 1.1 1997/08/04 09:00:36 boyland Exp $
+public operator UnsignedRightShiftExpression extends ShiftExpression {
+  syntax {
+    op1:Expression ">>>" op2:Expression
+  }
+}

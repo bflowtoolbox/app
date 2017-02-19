@@ -1,0 +1,9 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/Throws.op,v 1.3 2002/03/25 20:53:07 elissa Exp $
+/** List of exceptions thrown by a method or constructor.
+ * (For Drip, the list should be empty.)
+ */
+public operator Throws implements DripOperator {
+  syntax {
+    ( "throws" type:Type +/ <comma> "," ) ?
+  }
+}

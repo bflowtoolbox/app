@@ -1,0 +1,5 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/LogBinopExpression.op,v 1.1 1997/07/31 20:07:04 boyland Exp $
+public operator LogBinopExpression extends BinopExpression 
+    implements LogExpression
+{
+}

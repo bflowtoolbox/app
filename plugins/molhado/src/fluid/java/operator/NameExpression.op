@@ -1,0 +1,5 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/NameExpression.op,v 1.2 1998/06/20 14:12:31 chance Exp $
+public operator NameExpression extends PrimaryExpression implements IllegalCode
+{
+  syntax { $name:Info }
+}

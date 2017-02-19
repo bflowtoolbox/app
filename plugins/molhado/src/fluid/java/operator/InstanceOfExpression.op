@@ -1,0 +1,20 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/InstanceOfExpression.op,v 1.3 1999/01/25 16:25:23 boyland Exp $
+public operator InstanceOfExpression extends Expression {
+  syntax {
+    value:Expression "instanceof" type:Type
+  }
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,2,1);
+    Subcomponent obj = new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+
+    ControlNode doTest = new ComponentChoice(comp,null);
+
+    ControlEdge.connect(comp.getEntryPort(),obj.getEntryPort());
+    ControlEdge.connect(obj.getNormalExitPort(),doTest);
+    ControlEdge.connect(doTest,comp.getNormalExitPort()); // true part
+    ControlEdge.connect(doTest,comp.getNormalExitPort()); // false part
+    ControlEdge.connect(obj.getAbruptExitPort(),comp.getAbruptExitPort());
+
+    return comp;
+  }
+}

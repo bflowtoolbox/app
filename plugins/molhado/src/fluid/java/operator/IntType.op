@@ -1,0 +1,4 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/IntType.op,v 1.3 1998/06/08 15:38:46 chance Exp $
+public operator IntType implements IntegralType, DripOperator {
+  syntax { "int" }
+}

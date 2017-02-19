@@ -1,0 +1,21 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ReturnStatement.op,v 1.6 1999/01/25 16:27:35 boyland Exp $
+public operator ReturnStatement extends Statement implements DripOperator {
+  syntax {
+    "return" value:Expression <> ";"
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,0,1);
+    Subcomponent sub = new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+    ControlNode assignReturn = new ComponentFlow(comp,this);
+    ControlNode addReturn = new AddLabel(ReturnLabel.prototype);
+    ControlNode abruptMerge = new Merge();
+    ControlEdge.connect(comp.getEntryPort(),sub.getEntryPort());
+    ControlEdge.connect(sub.getNormalExitPort(),assignReturn);
+    ControlEdge.connect(assignReturn,addReturn);
+    ControlEdge.connect(sub.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(addReturn,abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+    return comp;
+  }
+}

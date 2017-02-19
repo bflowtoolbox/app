@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/Dims.op,v 1.4 2002/03/11 22:34:58 thallora Exp $
+public operator Dims {
+  syntax {
+    $dims:DimInfo
+  }
+}

@@ -1,0 +1,34 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/NewExpression.op,v 1.9 1999/02/18 18:13:25 boyland Exp $
+public operator NewExpression extends AllocationExpression 
+    implements Call, DripOperator
+{
+  syntax {
+    "new" type:NamedType args:Arguments
+  }
+
+  public IRNode getActuals(IRNode node) {
+    return getArgs(node);
+  }
+
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent sub = new Subcomponent(comp,tree.childLocation(node,1),1,1,1);
+
+    ControlNode doAlloc = new ComponentFlow(comp,prototype);
+    ControlNode doCall = new ComponentChoice(comp,prototype);
+    ControlNode propagateExceptions = 
+      new AddLabel(new CallExceptionLabel(node));
+    ControlNode abruptMerge = new Merge();
+
+    ControlEdge.connect(comp.getEntryPort(),doAlloc);
+    ControlEdge.connect(doAlloc,sub.getEntryPort());
+    ControlEdge.connect(sub.getNormalExitPort(),doCall);
+    ControlEdge.connect(doCall,comp.getNormalExitPort());
+    ControlEdge.connect(sub.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(doCall,propagateExceptions);
+    ControlEdge.connect(propagateExceptions,abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+
+    return comp;
+  }
+}

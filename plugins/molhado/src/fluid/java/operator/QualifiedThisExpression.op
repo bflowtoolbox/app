@@ -1,0 +1,7 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/QualifiedThisExpression.op,v 1.3 2002/08/02 21:24:41 thallora Exp $
+public operator QualifiedThisExpression extends PrimaryExpression
+{
+  syntax {
+    type:TypeExpression <> "." <> "this"
+  }
+}

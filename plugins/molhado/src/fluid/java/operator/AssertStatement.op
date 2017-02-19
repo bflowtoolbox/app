@@ -1,0 +1,38 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/AssertStatement.op,v 1.2 2002/08/01 21:29:59 boyland Exp $
+public operator AssertStatement extends Statement implements DripOperator {
+  syntax {
+    "assert" assertion:Expression <> ";"
+  }
+  
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent subcond = 
+        new Subcomponent(comp,tree.childLocation(node,0),1,2,1);
+    ControlNode checkEnabled = new ComponentChoice(comp,this);
+    ControlNode discardTrue = new ComponentFlow(comp,Boolean.TRUE);
+    ControlNode discardFalse = new ComponentFlow(comp,Boolean.FALSE);
+    ControlNode okMerge = new Merge();
+    ControlNode abruptMerge = new Merge();
+    ControlNode addError = 
+	new AddLabel(PrimitiveExceptionLabel.assertionError);
+
+    // connect up the condition
+    ControlEdge.connect(comp.getEntryPort(),checkEnabled);
+    ControlEdge.connect(checkEnabled,subcond.getEntryPort());
+    // if assertion succeeds, we are done (after ignoring the condition)
+    ControlEdge.connect(subcond.getNormalExitPort(),discardTrue);
+    ControlEdge.connect(discardTrue,okMerge);
+    // if assertion fails, we throw an error
+    ControlEdge.connect(subcond.getNormalExitPort(),discardFalse);
+    ControlEdge.connect(discardFalse,addError);
+
+    // connect up final merge
+    ControlEdge.connect(checkEnabled,okMerge); // if not enabled, terminate
+    ControlEdge.connect(okMerge,comp.getNormalExitPort());
+    // connect abrupt exits
+    ControlEdge.connect(subcond.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(addError,abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+    return comp;
+  }
+}

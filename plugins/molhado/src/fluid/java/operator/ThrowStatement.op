@@ -1,0 +1,21 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ThrowStatement.op,v 1.4 1999/01/25 16:28:22 boyland Exp $
+public operator ThrowStatement extends Statement implements DripOperator {
+  syntax {
+    "throw" value:Expression <> ";"
+  }
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,0,1);
+    Subcomponent sub = new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+    ControlLabel lab = new ThrownExceptionLabel(node);
+    ControlNode assignThrow = new ComponentFlow(comp,this);
+    ControlNode addThrow = new AddLabel(lab);
+    ControlNode abruptMerge = new Merge();
+    ControlEdge.connect(comp.getEntryPort(),sub.getEntryPort());
+    ControlEdge.connect(sub.getNormalExitPort(),assignThrow);
+    ControlEdge.connect(assignThrow,addThrow);
+    ControlEdge.connect(sub.getAbruptExitPort(),abruptMerge);
+    ControlEdge.connect(addThrow,abruptMerge);
+    ControlEdge.connect(abruptMerge,comp.getAbruptExitPort());
+    return comp;
+  }
+}

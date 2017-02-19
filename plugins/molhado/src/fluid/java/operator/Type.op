@@ -1,0 +1,8 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/Type.op,v 1.3 1998/06/08 15:38:46 chance Exp $
+public operator Type implements TypeInterface {
+  /** Use the interface to determine what operators are legal:
+   */
+  public boolean includes(Operator other) {
+    return (other instanceof TypeInterface);
+  }
+}

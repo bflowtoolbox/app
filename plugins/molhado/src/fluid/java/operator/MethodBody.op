@@ -1,0 +1,28 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/MethodBody.op,v 1.7 1999/02/22 20:13:03 boyland Exp $
+public operator MethodBody extends OptMethodBody 
+	implements DripOperator
+{
+  syntax {
+    block:BlockStatement
+  }
+  public Component createComponent(IRNode node) {
+    Component comp = new Component(node,1,1,1);
+    Subcomponent sub = new Subcomponent(comp,tree.childLocation(node,0),1,1,1);
+    ControlNode doInit = new ComponentFlow(comp,comp.getEntryPort());
+    ControlNode returnTest = new LabelTest(comp,ReturnLabel.prototype);
+    ControlNode returnMerge = new Merge();
+    ControlNode doReturn = new ComponentFlow(comp,comp.getNormalExitPort());
+    ControlNode doThrow = new ComponentFlow(comp,comp.getAbruptExitPort());
+
+    ControlEdge.connect(comp.getEntryPort(),doInit);
+    ControlEdge.connect(doInit,sub.getEntryPort());
+    ControlEdge.connect(sub.getNormalExitPort(),returnMerge);
+    ControlEdge.connect(returnMerge,doReturn);
+    ControlEdge.connect(doReturn,comp.getNormalExitPort());
+    ControlEdge.connect(sub.getAbruptExitPort(),returnTest);
+    ControlEdge.connect(returnTest,returnMerge);
+    ControlEdge.connect(returnTest,doThrow);
+    ControlEdge.connect(doThrow,comp.getAbruptExitPort());
+    return comp;
+  }
+}

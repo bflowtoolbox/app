@@ -1,0 +1,4 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/ImportDeclarations.op,v 1.2 1998/10/22 18:07:42 boyland Exp $
+public operator ImportDeclarations implements DripOperator {
+  syntax { ( imps:ImportDeclaration <br> ) * }
+}

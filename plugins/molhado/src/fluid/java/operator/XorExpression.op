@@ -1,0 +1,6 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/XorExpression.op,v 1.1 1997/08/04 09:01:25 boyland Exp $
+public operator XorExpression extends LogBinopExpression {
+  syntax {
+    op1:Expression "^" op2:Expression
+  }
+}

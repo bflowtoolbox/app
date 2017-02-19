@@ -1,0 +1,8 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/IntLiteral.op,v 1.5 1997/09/22 10:06:37 chance Exp $
+public operator IntLiteral extends PrimLiteral
+    implements DripOperator
+{
+  syntax {
+    $token:Info
+  }
+}

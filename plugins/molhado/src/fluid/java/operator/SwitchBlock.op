@@ -1,0 +1,121 @@
+# $Header: /cvs/fluid/fluid/code/fluid/java/operator/SwitchBlock.op,v 1.3 1998/03/16 16:11:04 boyland Exp $
+public operator SwitchBlock {
+  syntax {
+    "{" element:SwitchElement * "}"
+  }
+  /** Create the control-flow graph component for a (possibly empty)
+   * series of switch block elements.  Each switch element is wrapped
+   * in a variable subcomponent that gives each switch element a chance
+   * to execute under specific conditions.  We have four edges between
+   * variable subcomponents: <ul>
+   * <li> 0 - execution before a label is found.  Looking for an exact match
+   * <li> 1 - execution before default is found.  
+   *          Looking for default, if it exists
+   * <li> 2 - execution of regular statements in the sequence.
+   * <li> 3 - collection of abrupt termination.</ul>
+   */
+  public Component createComponent(IRNode node) {
+    return new SwitchBlockComponent(node);
+  }
+}
+
+class SwitchBlockComponent extends VariableComponent {
+  public SwitchBlockComponent(IRNode node) {
+    super(node,4,1,1,1);
+
+    ControlNode endMerge = new Merge();
+    ControlNode never2 = new Never();
+    ControlNode never3 = new Never();
+    ControlNode nop = new NoOperation();
+
+    ControlEdge startSearch =
+      new VariableSubcomponentControlEdge(variable,0,false,entryPort);
+    ControlEdge findDefault =
+      new VariableSubcomponentControlEdge(variable,1,false,nop);
+    ControlEdge execIn =
+      new VariableSubcomponentControlEdge(variable,2,false,never2);
+    ControlEdge abruptIn =
+      new VariableSubcomponentControlEdge(variable,3,false,never3);
+
+    ControlEdge endSearch =
+      new VariableSubcomponentControlEdge(variable,0,true,nop);
+    ControlEdge noDefault =
+      new VariableSubcomponentControlEdge(variable,1,true,endMerge);
+    ControlEdge endStmts =
+      new VariableSubcomponentControlEdge(variable,2,true,endMerge);
+    ControlEdge abruptOut =
+      new VariableSubcomponentControlEdge(variable,3,true,abruptExitPort);
+
+    ControlEdge.connect(endMerge,normalExitPort);
+  }
+
+  public VariableSubcomponent createVariableSubcomponent(IRLocation loc) {
+    return new SwitchSubcomponent(this,loc);
+  }
+}
+
+/** The wrapper in a switch statement around each element.
+ * There are four edges into each instance: <ul>
+ * <li> 0 - execution before a label is found.  Looking for an exact match
+ * <li> 1 - execution before default is found.  
+ *          Looking for default, if it exists
+ * <li> 2 - execution of regular statements in the sequence.
+ * <li> 3 - collection of abrupt termination.</ul>
+ */
+class SwitchSubcomponent extends VariableSubcomponent {
+  public SwitchSubcomponent(Component comp, IRLocation loc) {
+    super(comp,loc,4);
+    entryPort = new SubcomponentEntryPort(this);
+    normalExitPort = new SubcomponentNormalExitPort(this);
+    abruptExitPort = new SubcomponentAbruptExitPort(this);
+    
+    ControlNode checkConstant = new DynamicSplit() {
+      public boolean test(boolean flag) {
+	IRNode label = SwitchElement.getLabel(getSyntax());
+	return flag == (JavaNode.tree.getOperator(label) == ConstantLabel.prototype);
+      }
+    };
+
+    ControlNode checkDefault = new DynamicSplit() {
+      public boolean test(boolean flag) {
+	IRNode label = SwitchElement.getLabel(getSyntax());
+	return flag == (JavaNode.tree.getOperator(label) == DefaultLabel.prototype);
+      }
+    };
+
+    ControlNode testConstant =
+      new SubcomponentChoice(this,ConstantLabel.prototype);
+
+    ControlNode foundMerge = new Merge();
+    ControlNode execMerge = new Merge();
+    ControlNode notFoundMerge = new Merge();
+    ControlNode abruptMerge = new Merge();
+
+    ControlEdge findLabel =
+      new VariableSubcomponentControlEdge(this,0,true,checkConstant);
+    ControlEdge findDefault =
+      new VariableSubcomponentControlEdge(this,1,true,checkDefault);
+    ControlEdge startExec =
+      new VariableSubcomponentControlEdge(this,2,true,execMerge);
+    ControlEdge abruptEntry =
+      new VariableSubcomponentControlEdge(this,3,true,abruptMerge);
+
+    ControlEdge.connect(checkConstant,testConstant);
+    ControlEdge.connect(checkConstant,notFoundMerge);
+    ControlEdge.connect(testConstant,foundMerge);
+    ControlEdge.connect(testConstant,notFoundMerge);
+    ControlEdge.connect(checkDefault,foundMerge);
+    ControlEdge.connect(foundMerge,execMerge);
+    ControlEdge.connect(execMerge,entryPort);
+    ControlEdge.connect(abruptExitPort,abruptMerge);
+
+    ControlEdge notLabel =
+      new VariableSubcomponentControlEdge(this,0,false,notFoundMerge);
+    ControlEdge notDefault =
+      new VariableSubcomponentControlEdge(this,1,false,checkDefault);
+    ControlEdge stopExec =
+      new VariableSubcomponentControlEdge(this,2,false,normalExitPort);
+    ControlEdge abruptExit =
+      new VariableSubcomponentControlEdge(this,3,false,abruptMerge);
+  }
+}
