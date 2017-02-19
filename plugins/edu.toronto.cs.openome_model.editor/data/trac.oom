@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ASCII"?>
+<edu.toronto.cs.openome_model:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:edu.toronto.cs.openome_model="http:///edu/toronto/cs/openome_model.ecore" name="/home/nernst/runtime-workspaces/runtime-New_configuration/Examples/q7/molhado/trac.oom">
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Support S/W Development Projects" rule="//@contributions.4" exclusive="false" sequential="false" decompositions="//@decompositions.0 //@decompositions.1">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Support Established Dev. Projects" exclusive="false" sequential="false" decompositions="//@decompositions.2 //@decompositions.3 //@decompositions.4" parentDecompositions="//@decompositions.0">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Provide Access to SVN" rule="//@contributions.0" exclusive="false" sequential="false" parentDecompositions="//@decompositions.2">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Softgoal" name="Don't Interfere" exclusive="false" sequential="false">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Web-based" rule="//@contributions.1" exclusive="false" sequential="false" parentDecompositions="//@decompositions.3">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Softgoal" name="Minimalistic Approach" exclusive="false" sequential="false">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Issue Tracking" exclusive="false" sequential="false" parentDecompositions="//@decompositions.4">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Overview Project" exclusive="false" sequential="false" decompositions="//@decompositions.5 //@decompositions.6" parentDecompositions="//@decompositions.1">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Enhanced Wiki" exclusive="false" sequential="false" decompositions="//@decompositions.7 //@decompositions.8" parentDecompositions="//@decompositions.5">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Allow Wiki Markup in Text Fields" exclusive="false" sequential="false" parentDecompositions="//@decompositions.7">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Link Bugs, Wiki, Source" rule="//@contributions.2" exclusive="false" sequential="false" parentDecompositions="//@decompositions.8">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Softgoal" name="Usability" exclusive="false" sequential="false">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Track Progress" exclusive="false" sequential="false" decompositions="//@decompositions.9 //@decompositions.10" parentDecompositions="//@decompositions.6">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Show Dev Events in Time" exclusive="false" sequential="false" parentDecompositions="//@decompositions.9">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Convenient Reporting Facilities" rule="//@contributions.3" exclusive="false" sequential="false" parentDecompositions="//@decompositions.10">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Softgoal" name="Write Great Software" exclusive="false" sequential="false">
+    <label xsi:type="edu.toronto.cs.openome_model:UnknownLabel"/>
+  </intentions>
+  <contributions xsi:type="edu.toronto.cs.openome_model:HelpContribution" target="//@intentions.3" source="//@intentions.2"/>
+  <contributions xsi:type="edu.toronto.cs.openome_model:HelpContribution" target="//@intentions.5" source="//@intentions.4"/>
+  <contributions xsi:type="edu.toronto.cs.openome_model:HelpContribution" target="//@intentions.11" source="//@intentions.10"/>
+  <contributions xsi:type="edu.toronto.cs.openome_model:HelpContribution" target="//@intentions.11" source="//@intentions.14"/>
+  <contributions xsi:type="edu.toronto.cs.openome_model:HelpContribution" target="//@intentions.15" source="//@intentions.0"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.0" target="//@intentions.1"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.0" target="//@intentions.7"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.1" target="//@intentions.2"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.1" target="//@intentions.4"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.1" target="//@intentions.6"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.7" target="//@intentions.8"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.7" target="//@intentions.12"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.8" target="//@intentions.9"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.8" target="//@intentions.10"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.12" target="//@intentions.13"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.12" target="//@intentions.14"/>
+</edu.toronto.cs.openome_model:Model>

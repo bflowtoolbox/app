@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ Copyright 2001-2008 University of Toronto
+
+ $Id$
+-->
+
+<plugin>
+
+
+  <extension
+    point = "org.eclipse.ui.newWizards">
+    <category
+          id="edu.toronto.cs.openome_model.editor.category"
+          name="%_UI_Wizard_category">
+    </category>
+    <wizard
+          category="edu.toronto.cs.openome_model.editor.category"
+          class="edu.toronto.cs.openome_model.presentation.openome_modelModelWizard"
+          icon="icons/full/obj16/openome_modelModelFile.gif"
+          id="edu.toronto.cs.openome_model.presentation.openome_modelModelWizardID"
+          name="%_UI_openome_modelModelWizard_label"
+          project="false">
+      <description>%_UI_openome_modelModelWizard_description</description>
+      <selection class = "org.eclipse.core.resources.IResource" />
+    </wizard>
+  </extension>
+
+  <extension point = "org.eclipse.ui.editors">
+    <editor
+        id = "edu.toronto.cs.openome_model.presentation.openome_modelEditorID"
+        name = "%_UI_openome_modelEditor_label"
+        icon = "icons/full/obj16/openome_modelModelFile.gif"
+        extensions = "oom"
+        class = "edu.toronto.cs.openome_model.presentation.openome_modelEditor" 
+        contributorClass="edu.toronto.cs.openome_model.presentation.openome_modelActionBarContributor" >
+    </editor>
+  </extension>  
+</plugin>
