@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ Copyright 2001-2008 University of Toronto
+
+ $Id$
+-->
+
+<plugin>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package 
+       uri = "http:///edu/toronto/cs/openome_model.ecore" 
+       class = "edu.toronto.cs.openome_model.openome_modelPackage" />
+  </extension>
+
+</plugin>
