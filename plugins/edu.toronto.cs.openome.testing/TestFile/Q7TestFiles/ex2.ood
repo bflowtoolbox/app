@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:edu.toronto.cs.openome_model="http:///edu/toronto/cs/openome_model.ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation">
+  <notation:Diagram xmi:id="_cOF-MM80EeCXFpbuXUNaJg" type="openome_model" element="_cOGlQM80EeCXFpbuXUNaJg" measurementUnit="Pixel">
+    <children xmi:type="notation:Shape" xmi:id="_cOHzYM80EeCXFpbuXUNaJg" type="2005" element="_cOGlQc80EeCXFpbuXUNaJg" fontName="Ubuntu">
+      <children xmi:type="notation:DecorationNode" xmi:id="_cOHzYs80EeCXFpbuXUNaJg" type="5021"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_cOHzY880EeCXFpbuXUNaJg" type="5041">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_cOHzZM80EeCXFpbuXUNaJg" y="5"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_cOHzYc80EeCXFpbuXUNaJg" x="120" y="144"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_cOJBgM80EeCXFpbuXUNaJg" type="2005" element="_cOGlQs80EeCXFpbuXUNaJg" fontName="Ubuntu">
+      <children xmi:type="notation:DecorationNode" xmi:id="_cOJokM80EeCXFpbuXUNaJg" type="5021"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_cOJokc80EeCXFpbuXUNaJg" type="5041">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_cOJoks80EeCXFpbuXUNaJg" y="5"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_cOJBgc80EeCXFpbuXUNaJg" x="24" y="24"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_cOJok880EeCXFpbuXUNaJg" type="2005" element="_cOGlQ880EeCXFpbuXUNaJg" fontName="Ubuntu">
+      <children xmi:type="notation:DecorationNode" xmi:id="_cOKPoM80EeCXFpbuXUNaJg" type="5021"/>
+      <children xmi:type="notation:DecorationNode" xmi:id="_cOKPoc80EeCXFpbuXUNaJg" type="5041">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_cOKPos80EeCXFpbuXUNaJg" y="5"/>
+      </children>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_cOJolM80EeCXFpbuXUNaJg" x="204" y="24"/>
+    </children>
+    <styles xmi:type="notation:DiagramStyle" xmi:id="_cOF-Mc80EeCXFpbuXUNaJg"/>
+    <edges xmi:type="notation:Connector" xmi:id="_cOKPo880EeCXFpbuXUNaJg" type="4002" element="_cOGlRM80EeCXFpbuXUNaJg" source="_cOJBgM80EeCXFpbuXUNaJg" target="_cOHzYM80EeCXFpbuXUNaJg">
+      <styles xmi:type="notation:FontStyle" xmi:id="_cOKPpM80EeCXFpbuXUNaJg" fontName="Ubuntu"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_cOKPpc80EeCXFpbuXUNaJg" points="[0, 29, -88, -89]$[69, 89, -19, -29]"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_cOK2sM80EeCXFpbuXUNaJg" type="4002" element="_cOGlRc80EeCXFpbuXUNaJg" source="_cOJok880EeCXFpbuXUNaJg" target="_cOHzYM80EeCXFpbuXUNaJg">
+      <styles xmi:type="notation:FontStyle" xmi:id="_cOK2sc80EeCXFpbuXUNaJg" fontName="Ubuntu"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_cOK2ss80EeCXFpbuXUNaJg" points="[0, 29, 89, -89]$[-69, 89, 20, -29]"/>
+    </edges>
+  </notation:Diagram>
+  <edu.toronto.cs.openome_model:Model xmi:id="_cOGlQM80EeCXFpbuXUNaJg" name="/host/yy66/research/istar/openome-trunk/runtime-EclipseApplication/Examples/q7/top-down-reasoning/ex2.oom">
+    <intentions xmi:type="edu.toronto.cs.openome_model:Goal" xmi:id="_cOGlQc80EeCXFpbuXUNaJg" name="c" exclusive="false" sequential="false" parentDecompositions="_cOGlRM80EeCXFpbuXUNaJg _cOGlRc80EeCXFpbuXUNaJg" QualitativeReasoningCombinedLabel="Satisfied"/>
+    <intentions xmi:type="edu.toronto.cs.openome_model:Goal" xmi:id="_cOGlQs80EeCXFpbuXUNaJg" name="c1" exclusive="false" sequential="false" decompositions="_cOGlRM80EeCXFpbuXUNaJg"/>
+    <intentions xmi:type="edu.toronto.cs.openome_model:Goal" xmi:id="_cOGlQ880EeCXFpbuXUNaJg" name="c2" exclusive="false" sequential="false" decompositions="_cOGlRc80EeCXFpbuXUNaJg"/>
+    <decompositions xmi:type="edu.toronto.cs.openome_model:AndDecomposition" xmi:id="_cOGlRM80EeCXFpbuXUNaJg" source="_cOGlQs80EeCXFpbuXUNaJg" target="_cOGlQc80EeCXFpbuXUNaJg"/>
+    <decompositions xmi:type="edu.toronto.cs.openome_model:AndDecomposition" xmi:id="_cOGlRc80EeCXFpbuXUNaJg" source="_cOGlQ880EeCXFpbuXUNaJg" target="_cOGlQc80EeCXFpbuXUNaJg"/>
+  </edu.toronto.cs.openome_model:Model>
+</xmi:XMI>
