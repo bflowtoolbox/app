@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ASCII"?>
+<edu.toronto.cs.openome_model:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:edu.toronto.cs.openome_model="http:///edu/toronto/cs/openome_model.ecore" name="/host/yy66/research/istar/openome-trunk/runtime-EclipseApplication/Examples/q7/top-down-reasoning/ex2.oom">
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="c" exclusive="false" sequential="false" parentDecompositions="//@decompositions.0 //@decompositions.1" QualitativeReasoningCombinedLabel="Satisfied"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="c1" exclusive="false" sequential="false" decompositions="//@decompositions.0"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="c2" exclusive="false" sequential="false" decompositions="//@decompositions.1"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.1" target="//@intentions.0"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.2" target="//@intentions.0"/>
+</edu.toronto.cs.openome_model:Model>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension point="core.convertor">
+      <convertor id="Q7 to Goal Model" 
+      		class="edu.toronto.cs.openome.conversion.convertor.Q7_GoalModel"
+            input="q7" output="oom"/>
+   </extension>
+  <extension point="org.eclipse.ui.popupMenus">
+	<objectContribution
+		objectClass="org.eclipse.core.resources.IFile"
+		nameFilter="*.q7"
+		id="q7">
+		<menu label="Convert the Q7 representation into" path="additions" id="menu1">
+			<separator name="group1"> </separator>
+        </menu>
+        <action
+               class="edu.toronto.cs.openome.conversion.action.Q7_GoalModel"
+               icon="icons/goal.gif"
+               id="GoalModelAction"
+               label="OpenOME Model"
+               menubarPath="menu1/group1"
+               tooltip="openOME Model">
+		</action>         
+	</objectContribution>
+ <objectContribution
+       id="edu.toronto.cs.openome.conversion.contribution1"
+       nameFilter="*.istarml"
+       objectClass="org.eclipse.core.resources.IFile">
+    <menu
+          id="edu.toronto.cs.openome.conversion.menu1"
+          label="Convert the iStarML representation into"
+          path="additions">
+       <separator
+             name="group1">
+       </separator>
+    </menu>
+    <action
+          class="edu.toronto.cs.openome.conversion.convertor.IStarML_GoalModel"
+          id="edu.toronto.cs.openome.conversion.newAction"
+          label="OpenOME"
+          menubarPath="edu.toronto.cs.openome.conversion.menu1/group1"
+          tooltip="OpenOME Model">
+    </action>
+ </objectContribution>
+
+   </extension>
+
+</plugin>

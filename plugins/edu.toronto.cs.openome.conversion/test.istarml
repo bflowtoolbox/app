@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<istarml version="1.0">
+    <diagram name="My new i* diagram">
+        <actor id="AA01" name="a"/>
+        <actor id="AA02" name="b"/>
+        <ielement name="c" type="resource">
+            <dependency>
+                <depender aref="AA01"/>
+                <dependee aref="AA02"/>
+            </dependency>
+        </ielement>
+    </diagram>
+</istarml>

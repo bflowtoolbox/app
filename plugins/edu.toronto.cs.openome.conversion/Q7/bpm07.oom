@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edu.toronto.cs.openome_model:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:edu.toronto.cs.openome_model="http:///edu/toronto/cs/openome_model.ecore" name="/host/yy66/research/istar/openome-trunk/runtime-EclipseApplication/Examples/q7/bpel/componenx.oom">
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Sell to Customer" exclusive="false" parentDecompositions="//@decompositions.0 //@decompositions.1" QualitativeReasoningCombinedLabel="Satisfied"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Get Customer Order" exclusive="false" sequential="false" decompositions="//@decompositions.0" parentDecompositions="//@decompositions.2 //@decompositions.3 //@decompositions.4"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Get Phone Order" exclusive="false" sequential="false" decompositions="//@decompositions.2"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Get Fax Order" exclusive="false" sequential="false" decompositions="//@decompositions.3"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Get Online Order" exclusive="false" sequential="false" decompositions="//@decompositions.4"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Process Customer Order" exclusive="false" sequential="false" decompositions="//@decompositions.1" parentDecompositions="//@decompositions.5 //@decompositions.6"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Bill, Build, then Ship" exclusive="false" decompositions="//@decompositions.5" parentDecompositions="//@decompositions.7 //@decompositions.8 //@decompositions.9 //@decompositions.10" contributesTo="//@contributions.0 //@contributions.2"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Bill" exclusive="false" sequential="false" decompositions="//@decompositions.7"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Collect Payment" exclusive="false" sequential="false" decompositions="//@decompositions.8"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Build and Package Order" exclusive="false" sequential="false" decompositions="//@decompositions.9 //@decompositions.11"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Ship Order" exclusive="false" sequential="false" decompositions="//@decompositions.10 //@decompositions.21"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Build, then Ship and Bill" exclusive="false" decompositions="//@decompositions.6" parentDecompositions="//@decompositions.11 //@decompositions.12 //@decompositions.13" contributesTo="//@contributions.1"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Apply Process To Customer" exclusive="false" sequential="false" decompositions="//@decompositions.12" parentDecompositions="//@decompositions.14 //@decompositions.15"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Apply to Any Customer" exclusive="false" sequential="false" decompositions="//@decompositions.14" parentDecompositions="//@decompositions.16" contributesTo="//@contributions.3"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Approve Order" exclusive="false" sequential="false" decompositions="//@decompositions.16 //@decompositions.17"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Apply to Trusted Customer" exclusive="false" decompositions="//@decompositions.15" parentDecompositions="//@decompositions.17 //@decompositions.18" contributesTo="//@contributions.4"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Determine Trustworthiness of Customer" exclusive="false" sequential="false" decompositions="//@decompositions.18" parentDecompositions="//@decompositions.19 //@decompositions.20"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Check if Return Customer" exclusive="false" sequential="false" decompositions="//@decompositions.19"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Check Credit Rating" exclusive="false" sequential="false" decompositions="//@decompositions.20"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Ship and Bill" exclusive="false" sequential="false" parallel="true" decompositions="//@decompositions.13" parentDecompositions="//@decompositions.21 //@decompositions.22"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="Bill and Collect Payment" exclusive="false" sequential="false" decompositions="//@decompositions.22"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Softgoal" name="Minimize Risk" exclusive="false" sequential="false" contributesFrom="//@contributions.2 //@contributions.3 //@contributions.4"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Softgoal" name="Customer Satisfaction" exclusive="false" sequential="false" contributesFrom="//@contributions.0 //@contributions.1"/>
+  <contributions xsi:type="edu.toronto.cs.openome_model:HurtContribution" target="//@intentions.22" source="//@intentions.6"/>
+  <contributions xsi:type="edu.toronto.cs.openome_model:HelpContribution" target="//@intentions.22" source="//@intentions.11"/>
+  <contributions xsi:type="edu.toronto.cs.openome_model:MakeContribution" target="//@intentions.21" source="//@intentions.6"/>
+  <contributions xsi:type="edu.toronto.cs.openome_model:HurtContribution" target="//@intentions.21" source="//@intentions.13"/>
+  <contributions xsi:type="edu.toronto.cs.openome_model:HelpContribution" target="//@intentions.21" source="//@intentions.15"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.1" target="//@intentions.0"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.5" target="//@intentions.0"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.2" target="//@intentions.1"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.3" target="//@intentions.1"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.4" target="//@intentions.1"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.6" target="//@intentions.5"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.11" target="//@intentions.5"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.7" target="//@intentions.6"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.8" target="//@intentions.6"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.9" target="//@intentions.6"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.10" target="//@intentions.6"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.9" target="//@intentions.11"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.12" target="//@intentions.11"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.19" target="//@intentions.11"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.13" target="//@intentions.12"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.15" target="//@intentions.12"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.14" target="//@intentions.13"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.14" target="//@intentions.15"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.16" target="//@intentions.15"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.17" target="//@intentions.16"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.18" target="//@intentions.16"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.10" target="//@intentions.19"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.20" target="//@intentions.19"/>
+</edu.toronto.cs.openome_model:Model>
