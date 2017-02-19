@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.3"?>
+<plugin>
+   
+     <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="edu.toronto.cs.openome.versioning.handlers.EditorCommitHandler"
+            id="openome_commit4_cmd"
+            name="openome_commit4_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.versioning.handlers.DiagramCommitHandler"
+            id="openome_commit5_cmd"
+            name="openome_commit5_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.versioning.handlers.CheckoutLatestHandler"
+            id="openome_checkout_latest_cmd"
+            name="openome_checkout_latest_cmd">
+      </command>
+      </extension>
+
+
+</plugin>

@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Versioning Plug-in
+Bundle-SymbolicName: edu.toronto.cs.openome.versioning;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: edu.toronto.cs.openome.versioning.Activator
+Require-Bundle: molhado,
+ edu.toronto.cs.openome_model.editor,
+ edu.toronto.cs.openome_model.diagram,
+ org.eclipse.gmf.runtime.diagram.ui,
+ org.apache.log4j;bundle-version="1.2.13";resolution:=optional,
+ org.eclipse.gmf.runtime.diagram.ui.resources.editor;bundle-version="1.7.0"
+Eclipse-LazyStart: true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
