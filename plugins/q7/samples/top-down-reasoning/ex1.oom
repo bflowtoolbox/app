@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ASCII"?>
+<edu.toronto.cs.openome_model:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:edu.toronto.cs.openome_model="http:///edu/toronto/cs/openome_model.ecore" name="/host/yy66/research/istar/openome-trunk/runtime-EclipseApplication/Examples/q7/top-down-reasoning/ex1.oom">
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="a" exclusive="false" sequential="false" parentDecompositions="//@decompositions.0 //@decompositions.1" QualitativeReasoningCombinedLabel="Satisfied"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="b" exclusive="false" sequential="false" decompositions="//@decompositions.0" parentDecompositions="//@decompositions.2 //@decompositions.3"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="b1" exclusive="false" sequential="false" decompositions="//@decompositions.2"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="b2" exclusive="false" sequential="false" decompositions="//@decompositions.3"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="c" exclusive="false" sequential="false" decompositions="//@decompositions.1" parentDecompositions="//@decompositions.4 //@decompositions.5"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="c1" exclusive="false" sequential="false" decompositions="//@decompositions.4"/>
+  <intentions xsi:type="edu.toronto.cs.openome_model:Goal" name="c2" exclusive="false" sequential="false" decompositions="//@decompositions.5"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.1" target="//@intentions.0"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.4" target="//@intentions.0"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.2" target="//@intentions.1"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:OrDecomposition" source="//@intentions.3" target="//@intentions.1"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.5" target="//@intentions.4"/>
+  <decompositions xsi:type="edu.toronto.cs.openome_model:AndDecomposition" source="//@intentions.6" target="//@intentions.4"/>
+</edu.toronto.cs.openome_model:Model>

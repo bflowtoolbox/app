@@ -1,0 +1,33 @@
+<"Role Manager">::ManageMoney { AND
+  OpenAccount { AND
+	  CreateAccount { AND
+	     CreateAuthorization
+	     IssueCard
+	  } 
+  }
+  ManageAccount { AND
+	AuthorizeCard
+  } 
+}
+<"Role Customer">::Banking { OR
+  DepositAccount { OR
+    OpenAccount { AND
+	  ProvidePersonalInfo 
+	  ChangeBalance => ++ Security
+    }
+    Deposit { AND
+      ProvideCard
+	  ChangeBalance => ++ Security
+    }
+  }
+  WithdrawAccount { AND
+	  ProvideCard
+      ChangeBalance => ++ Security
+  }
+}
+<"Role Manager">::CreateAccount => ~<"Role Customer">::InitialDeposit
+<"Role Manager">::CheckCredit => ~<"Role Customer">::ProvidePersonalInfo
+<"Role Manager">::AuthorizeCard  => ~<"Role Customer">::ProvideCard
+<"Role Manager">::ManageAccount=> ~<"Role Customer">::ChangeBalance
+<"Role Customer">::ProvideCard => ~<"Role Manager">::IssueCard
+ 

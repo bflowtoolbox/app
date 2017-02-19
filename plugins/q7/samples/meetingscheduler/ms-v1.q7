@@ -1,0 +1,7 @@
+"Collect Timetables" { OR
+    ".. By Person" =ctbp
+    ".. By System" =ctbs 
+}
+ctbp => - mec
+ctbs => + mec
+  

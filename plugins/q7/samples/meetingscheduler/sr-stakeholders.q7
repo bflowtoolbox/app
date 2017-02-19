@@ -1,0 +1,54 @@
+<scheduler>::"schedule meeting" { AND
+  "find participants" { OR
+      ".. by matching interests" { AND
+         "gather topics" => ~<initiator>::"provide topics"
+         "gather interests" => ~<participant>::"provide interests"
+      } => + "minimal effort for collection" AS mec
+      ".. by picking participants" => -mec, ~<initiator>::"choose participants"
+      ".. by adding participant" => - mec, ~<participant>::"choose meeting"
+  }
+  "collect timetables" { OR
+    ".. by person" => -mec
+    ".. by system" { OR
+      ".. from agents" =>
+          + "minimal disturbance" AS md,
+          - "accurate constraints" AS ac
+      ".. from users" { AND
+          "send request"
+          "receive response"
+      } => - md, + ac
+    } => +mec
+  }
+  "choose schedule" { OR
+     ".. manually" => -"minimal effort for matching" AS mem, 
+                      - "minimal conflict" AS mc, 
+                      + "good participation" AS gp
+     ".. automatically" =>+ mem, +mc, -gp
+  }
+} => ~<initiator>::"provide constraints", ~<participant>::"provide constraints"
+
+"minimal effort" { AND mec mem }
+
+"good quality schedule" { AND mc gp }
+
+<initiator>::"organize meeting" { AND
+  "provide meeting info." { AND
+     "provide time and location"
+     "call for participation" { OR
+      "provide topics" => +mec
+      "choose participants" => -mec
+     }
+  }
+  "find schedule" => ~<scheduler>::"schedule meeting"
+}
+
+<participant>::"attend meeting" { AND
+  "provide constraints" { AND
+     "provide available time and location"
+     "find meeting" { OR
+        "provide interests" => +mec
+        "choose meeting" => -mec
+     }
+  }
+  "book schedule" => ~<scheduler>::"schedule meeting"
+}

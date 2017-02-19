@@ -1,0 +1,39 @@
+<"Aspect Security [system]">::"May Security" [system] { &
+  "May Confidentiality" [credentials] <= +*[page] {&
+     "Do Redirect" [login]
+  }
+  "May Security" ["information flow"] <= +*[account] { &
+     "Do SSL" [connection]
+  }
+}
+<"Aspect Usability">::Usability [language] { &
+      Customization [language] <= + * [page] { &
+        "Do Translate" [language, "NLS(*)"]
+      }
+      Customization [currency] <= + *[product] { &
+        "Do Convert" [currency, "amount(*)"]
+      }      
+}
+Front [page] { &
+  Informing [page] { &
+    Reporting [page] { &
+      "Do Reporting" [account]
+      "Do Reporting" [product]
+      "Do Reporting" [stock]
+    }
+    Finding [page] { |
+      "Do Navigating" [stock]
+      "Do Searching" [stock]
+    }
+  }
+  Managing [page] { |
+    "Do Managing" [account]
+    "Do Managing" [product]
+    "Do Managing" [stock]
+  }
+  Shopping [page] { &
+    "Do Preparing" [cart,product]
+    "Do Getting" [account]
+    "Do CheckingOut" [cart,product,account,stock]
+  }
+}

@@ -1,0 +1,136 @@
+"May Attract" ["Ticket Buyers"] => ~<MJF>::"May Attract People"
+"Promotion Be Gained through Affiliation and Event Sponsorship" => ~<MJF>::"Do Provide Promotion through Affilation and Event Sponsorship"
+"Provide: Advertising Space" => ~<MJF>::"Do Provide Advertising Space"
+"Provide: Exclusive Rights" => ~<MJF>::"Do Give Exclusive Rights"
+"Provide: Free Concert Entry" => ~<MJF>::"Do Provide Free Tickets to Volunteers"
+"Provide: Free Tickets" => ~<MJF>::"Do Provide Free Tickets to Sponsors"
+"Provide: MJF Venue" => ~<MJF>::"Do Set Up MJF Venues"
+"Provide: Payment" ["Musical Revenue and Management"] => ~<MJF>::"Do Pay for Musical Equipment_and Management"
+"Provide: Payment" [Concerts] => ~<MJF>::"Do Pay Artists"
+"Provide: Payment" [Infrastructure] => ~<MJF>::"Do Pay for Other Infrastructure"
+"Provide: Permission to Use MJF Brand and Franchise" => ~<MJF>::"Do Give Permission for Affiliated Festivals"
+"Provide: Recordings" => ~<MJF>::"Do Provide Recordings to Montreux Sounds"
+"Provide: Revenue" [Products] => ~<MJF>::"Do Pay for Products"
+"Provide: Technical Music Equipment" => ~<MJF>::"Provide: Technical Musical Equipment"
+"Provide: Wage/Salary" => ~<MJF>::"Do Pay Wage/Salary"
+"Technical Music Aspects Be Managed" => ~<MJF>::"Technical Music Apects Be Managed"
+<"Role MJF Artists">::"May Attractive" ["MJF Venue"] ==> <MJF>
+<"Role MJF Artists">::"May Effective Technical Equipment_and Management" ==> <MJF>
+<"Role MJF Artists">::"Provide: Revenue" [Recordings] ==> <"Montreux Sounds">
+<"Role MJF Artists">::"Technical Music Aspects Be Managed" ==> <"Role Musical Partners">
+<"Role MJF Covering Media">::"Do Play 'On' Festival Events" ==> <"Role MJF Artists">
+<"Role MJF Covering Media">::"Do Play Off Festival Events" ==> <"Role MJF Artists">
+<"Role MJF Covering Media">::"Do Put on 'On' Festival Events" ==> <MJF>
+<"Role MJF Visitor">::"Do Play 'On' Festival Events" ==> <"Role MJF Artists">
+<"Role MJF Visitor">::"Do Play Off Festival Events" ==> <"Role MJF Artists">
+<"Role MJF Visitor">::"Do Put on 'On' Festival Events" ==> <MJF>
+<"Role MJF Visitor">::"May Attractive" ["MJF Venue"] ==> <MJF>
+<"Role MJF Visitor">::"May Good" [Performance] ==> <"Role MJF Artists">
+<"Role MJF Visitor">::"May Positive" ["Atmosphere and Experience"] ==> <MJF>
+<MJF>::"Do Acquire Sponsors" { &
+  "Do Provide Advertising Space" => +"May Attract Sponsors"
+  "Do Provide Free Tickets to Sponsors" => -"May Increase" ["Profit from Visitors"]
+  "Do Provide Promotion through Affilation and Event Sponsorship" => +"May Attract Sponsors"
+  "Do Receive Revenue for Sponsorship" => +"May Increase" ["Sponsorship Profit"], ~"Provide: Revenue" ["MJF Sponsorship"]
+  "Sponsors Be Contracted" => ~"Sponsors Be Contracted to MJF"
+} => +"May Increase" ["Sponsorship Profit"]
+<MJF>::"Do Collect Food and Beverage Revenue" { &
+  "Food and Beverage Be Provided" ==> <"Role MJF Food and Beverage Provider">
+  "Keep Track of Revenue from MJF" { |
+    "Do Use Jazz for Currency" => ~"Jazz Be Used"
+  }
+} => +"May Increase" ["Profit from Visitors"]
+<MJF>::"Do Collect Merchandise Revenue" { &
+  "Keep Track of Revenue from MJF" { |
+    "Do Use Jazz for Currency" => ~"Jazz Be Used"
+  }
+} => +"May Increase" ["Profit from Visitors"]
+<MJF>::"Do Put on Events" { &
+  "Do Put on 'On' Festival Events" { &
+    "Artists Be Contracted" => ~"Artists be Contracted to MJF"
+    "Do Acquire Infrastructure" { &
+      "Do Acquire Technical Musical Infrastructure" { &
+        "Do Pay for Musical Equipment_and Management" => -"May Reduce Expenses"
+        "Provide: Technical Musical Equipment" ==> <"Role Musical Partners">
+        "Technical Music Apects Be Managed" => ~"Technical Music Aspects Be Managed"
+      }
+      "Do AcquireOther Infrastructure" { &
+        "Do Acquire Free Services from Montreux" => +"May Reduce Expenses", ~"Provide: Free Services"
+        "Do Pay for Other Infrastructure" => -"May Reduce Expenses"
+        "Do Set Up MJF Venues"
+      } => ~"Provide: Infrastructure"
+      "Do Manage General Festival Partners" { &
+        "Do Give Exclusive Rights"
+        "Do Purchase Products" { &
+          "Do Pay for Products" => -"May Reduce Expenses"
+        } => ~"Provide: Products"
+        "May Partners Follow Conditions" => ~"May Follow Conditions"
+      } => +"May Reduce Expenses"
+      "Do Manage Staff" { &
+        "Do Pay Wage/Salary" => -"May Reduce Expenses"
+        "Required Tasks Be Performed" => ~"MJF Tasks Be Performed"
+      }
+      "Do Manage Volunteers" { &
+        "Do Provide Free Tickets to Volunteers" => -"May Increase" ["Profit from Visitors"]
+        "Required Tasks Be Performed" => ~"MJF Tasks Be Performed"
+      } => +"May Reduce Expenses"
+      "Food and Beverage Be Provided" ==> <"Role MJF Food and Beverage Provider">
+    }
+    "Do Artists Play On Festival Events" => ~"Do Play 'On' Festival Events"
+    "Do Collect Ticket Revenue" => +"May Increase" ["Profit from Visitors"], ~"Provide: Revenue" [Tickets]
+    "Do Pay Artists"
+    "Tickets Be Sold" => ~"Tickets Be Provided"
+  }
+  "Do Put on Off Festival Events" { &
+    "Do Acquire Infrastructure" { &
+      "Do Acquire Technical Musical Infrastructure" { &
+        "Do Pay for Musical Equipment_and Management" => -"May Reduce Expenses"
+        "Provide: Technical Musical Equipment" ==> <"Role Musical Partners">
+        "Technical Music Apects Be Managed" => ~"Technical Music Aspects Be Managed"
+      }
+      "Do AcquireOther Infrastructure" { &
+        "Do Acquire Free Services from Montreux" => +"May Reduce Expenses", ~"Provide: Free Services"
+        "Do Pay for Other Infrastructure" => -"May Reduce Expenses"
+        "Do Set Up MJF Venues"
+      } => ~"Provide: Infrastructure"
+      "Do Manage General Festival Partners" { &
+        "Do Give Exclusive Rights"
+        "Do Purchase Products" { &
+          "Do Pay for Products" => -"May Reduce Expenses"
+        } => ~"Provide: Products"
+        "May Partners Follow Conditions" => ~"May Follow Conditions"
+      } => +"May Reduce Expenses"
+      "Do Manage Staff" { &
+        "Do Pay Wage/Salary" => -"May Reduce Expenses"
+        "Required Tasks Be Performed" => ~"MJF Tasks Be Performed"
+      }
+      "Do Manage Volunteers" { &
+        "Do Provide Free Tickets to Volunteers" => -"May Increase" ["Profit from Visitors"]
+        "Required Tasks Be Performed" => ~"MJF Tasks Be Performed"
+      } => +"May Reduce Expenses"
+      "Food and Beverage Be Provided" ==> <"Role MJF Food and Beverage Provider">
+    }
+    "Do Artists Play Off Festival Events" => ~"Do Play Off Festival Events"
+  }
+  "Do Record Events" { &
+    "Do Acquire Permission to Record" => ~"Provide: Permission to Record Concerts"
+    "Do Acquire Revenue from Recordings" => +"May Increase" ["Recordings Profit"], ~"Provide: Revenue" [Recordings]
+    "Do Provide Recordings to Montreux Sounds"
+  }
+}
+<MJF>::"May Attract People" => +"May Attract Sponsors", ++"May Increase" ["Profit from Visitors"]
+<MJF>::"May Attract Sponsors" => +"May Increase" ["Sponsorship Profit"]
+<MJF>::"May Attractive" ["MJF Venue"] => +"May Attract People", +"May Contract Stars", +"May Positive" ["MJF Brand and Franchise"]
+<MJF>::"May Contract Stars" => +"May Attract People", +"May Positive" ["MJF Brand and Franchise"]
+<MJF>::"May Effective Technical Equipment_and Management" => +"May Contract Stars", ~"May Effective Techical Equipment_and Management"
+<MJF>::"May Good" [Performances] => +"May Attract People", +"May Positive" ["MJF Brand and Franchise"], ~"May Good" [Performance]
+<MJF>::"May Increase" ["Profit from Visitors"] => +"May Profit"
+<MJF>::"May Increase" ["Recordings Profit"] => +"May Profit"
+<MJF>::"May Increase" ["Sponsorship Profit"] => +"May Profit"
+<MJF>::"May Positive" ["Atmosphere and Experience"] => +"May Attract People", +"May Contract Stars", +"May Positive" ["MJF Brand and Franchise"]
+<MJF>::"May Positive" ["MJF Brand and Franchise"] => +"May Attract People", +"May Attract Sponsors", +"May Increase" ["Recordings Profit"]
+<MJF>::"May Profit" => ++"May Enough Money for Future MJFs"
+<MJF>::"May Promote" [MJF] => +"May Attract People", +"May Positive" ["MJF Brand and Franchise"], ~"May Promotion" ["MJF Brand and Franchise"], ~"Provide: MJF Advertising"
+<MJF>::"May Reduce Expenses" => +"May Profit"
+<MJF>::"Merchandise Be Provided" ==> <"Role MJF Merchant">
+<MJF>::"Provide MJF Information" => +"May Attract People"

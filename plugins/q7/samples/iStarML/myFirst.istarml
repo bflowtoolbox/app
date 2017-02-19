@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<istarml version="1.0">
+   <diagram name="">
+      <graphic content="SVG"/>
+      <ielement type="softgoal" id="_eondUceIEeCGwI-I2xY10A"
+                name="Allow peer-to-peer technology"
+                QualitativeReasoningCombinedLabel="Satisfied">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_eondYceIEeCGwI-I2xY10A" aref="_eondYMeIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_eondX8eIEeCGwI-I2xY10A" aref="_eondXMeIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_eondUseIEeCGwI-I2xY10A" name="Pirated PC Product"
+                QualitativeReasoningCombinedLabel="Satisfied">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_eondZseIEeCGwI-I2xY10A" aref="_eondYseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_eondYceIEeCGwI-I2xY10A" aref="_eondYMeIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <actor type="role" id="_eondXMeIEeCGwI-I2xY10A" name="PC Product Provider">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="24" ypos="24" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="task" id="_eondXceIEeCGwI-I2xY10A" name="Sell PC Product for Profit"
+                      QualitativeReasoningCombinedLabel="Conflict">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_eondXseIEeCGwI-I2xY10A" name="Profit"
+                      QualitativeReasoningCombinedLabel="Conflict">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="decomposition" value="and" iref="_eondXceIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_eondX8eIEeCGwI-I2xY10A"
+                      name="Allow peer-to-peer technology"
+                      QualitativeReasoningCombinedLabel="Satisfied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_eondXseIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_eondYMeIEeCGwI-I2xY10A" name="Data Pirate">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="540" ypos="24" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="task" id="_eondYceIEeCGwI-I2xY10A"
+                      name="Make Contents available peer-to-peer"
+                      QualitativeReasoningCombinedLabel="Satisfied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_eondYseIEeCGwI-I2xY10A" name="Pc User">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="1056" ypos="156" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="goal" id="_eondY8eIEeCGwI-I2xY10A" name="PC Product be obtained"
+                      QualitativeReasoningCombinedLabel="Satisfied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_eondZMeIEeCGwI-I2xY10A" name="Purchase PC Product"
+                      QualitativeReasoningCombinedLabel="Denied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="hurt" iref="_eondZceIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_eondY8eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_eondZceIEeCGwI-I2xY10A" name="Affordable PC Product"
+                      QualitativeReasoningCombinedLabel="Denied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_eondZseIEeCGwI-I2xY10A"
+                      name="Obtain Pc Product from Data Pirate"
+                      QualitativeReasoningCombinedLabel="Satisfied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_eondZceIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+   </diagram>
+</istarml>

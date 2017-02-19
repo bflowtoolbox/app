@@ -1,0 +1,95 @@
+<scheduler>::"Schedule Meeting" { |
+   "Create Initial Meeting Plan" { &
+      "Create Meeting Request from Anywhare"
+      "Have Updated Addresses of Participants"
+      "Gather Constraints" { &
+      	"Gather Date Range from Initiator"
+      	"Gather Participants Profiles" [ "Status and Priority" ]
+      	"Gather Equipment and Location Constraints" { &
+      		"Repeat: Have Updated Database of Location and Equipment"
+      	}
+      	"Gather Constraints Information from Participants" { &
+      		"Gather Dependencies Among Dates and Locations"
+      		"Gather Information from Participants" { |
+      			"Request-based" { &
+      				"Communicate Request" { &
+      					"Prepare Request Message" { |
+      						Formal => +Formality
+      						Informal 
+      					}
+      					"Generate Message" { |
+      						"Generate Voice Request Message" { |
+      							"Record Message"
+      							"Generate From Text"
+      						}
+      						"Generate Text Request Message" 
+      					}
+      					"Send Message" { |
+      						Synchronously => -- "Avoid Communication Disturbance" AS acd
+      									   , ++ "Quick Constraint Processing" AS qcp
+      						Asynchronously => - qcp
+      						"Semi-synchronously" => - acd
+      					}
+      				}
+      				"Send Reminder Message" { &
+      					"Set Reminder Policy" { |
+      						"Intensive Reminding" => + qcp, -- acd
+      						"Subtle Reminding" => - acd
+      						"No Reminding"=> + acd, - qcp
+      					}
+      					"Prepare Message"
+      					"Send Reminder" { |
+      						Synchronously => -- acd, + qcp
+      						Asynchronously => - qcp
+      						"Semi-synchronously" => -acd
+      					}	
+      				}
+      				"Receive Response" { &
+      					"Get Exclusion Set"
+      					"Get Preference Set" { |
+      						"Simple Intervals" => +Usability, - "Convenience of Data" AS cd
+      						"Prioritized" => - Usability, + cd
+      					}
+      					"Gather Location Constraints from Important Participants"
+      					"Gather Equipment Constraints from Active Participants"
+      				}
+      				"Broadcast Individual Constraints" { |
+      					Do => +"Schedule Effectiveness", -Privacy, +"Meeting Openness" AS mo, 
+							+"Equal Participant Fairness"
+      					"Do not"=> +Privacy, -mo
+      				}
+      			}
+      			"Passive Collection" { &
+      				"Users Maintain Exclusion List"
+      				"Get Exclusion Set Given the Location"
+      			} => ++acd, -- qcp
+      		}
+      	}
+      }
+      "Plan Meeting Under Constraints" { |
+      	"Plan Meeting Manually" => - "Reduce overhead of Scheduling the Meeting"
+      	"Plan Meeting Automatically" { |
+      		"Important Participant Biased" => -- "Equal Participant Fairness"
+      		"Travel Cost Minimization Biased" => + "Convenience of Location"
+      		"Number of Conflicts Optimized" => + "Convenience of Date"
+      	} => + "Reduce overhead of Scheduling the Meeting"
+      }
+      "Process the Outcome of the Planning" { |
+      	"Resolve Conflict"
+      	"Inform Participants of the Meeting Date" { &
+      		"Generate Announcement Message"
+      		"Send Message" { |
+  				Synchronously => ++"Quick Scheduling Result Awareness", --acd
+  				Asynchronously 
+  				"Semi-synchronously" => + "Quick Scheduling Result Awareness", - acd
+  				"Do not Send Message" => -- qcp
+      		}
+      	}
+      }
+      "Book Rooms and Equipments"
+   }
+   "Replan Dynamically"  { &
+   	"Gather Constraint Changes"
+   	"Plan Meeting Under Constraints"
+   }
+}

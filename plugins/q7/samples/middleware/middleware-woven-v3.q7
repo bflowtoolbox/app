@@ -1,0 +1,127 @@
+"middleware[services]" { &
+  "inter-program" [communication] { |
+  	"inter-network" [communication] { &
+  		("network notification")=> 
+  			<sender>::"inter-network send" ["request, response, byte_packets"]
+  		("message arrives at send queue")=> 
+  			<receiver>::"inter-network receive" ["byte_packets, request"] 
+  		("formatted request arrives dispatcher")=> 
+  			<dispatcher>::dispatch ["request, target_service"] 
+  		<user_app>::process["request, response"]
+  	}
+  	<dispatcher>::"inter-process" [communication] 
+  }
+  "program model" => ++ "invocation style support", ++  "remote invocation style", ++ "Data representation"
+} => + usability, + flexibility, + efficiency, +"fault tolerance", +"ease of programming"
+
+    "invocation style support" { |
+		RPC[services] { |
+			"passing by reference"
+		    "passing by value"	
+		}	=> +"coupling [temporal]", +"coupling [identity]"
+	  	"Publish/Subscribe" [services] 
+	  		=> -"coupling [temporal]", -"coupling [identity]"
+	  	"Peer to peer"
+	}
+
+    "remote invocation style" { |
+	  	DII
+	  	DSI
+	  	Any
+	  	"Dynamic any"
+	  	static
+	    "type code"
+	}
+	"Data representation" { |
+  		  integer string double fixed float long 
+  		  "wide char" "wide string"
+	}
+
+
+/* SupportIdentityProperty */ 
+coupling [identity] { | 
+   "Explicit Binding" 
+   "Group Binding" { |
+     "Via Group Gateway" [Binding]
+     "Via TE" [Binding]
+   }
+   "Peer Binding"
+   Anonymous
+}
+
+
+coupling [temporal] { |
+	"Stringent synchronous"
+	"Normal synchronous" /* soft real time */
+	asynchronous
+}
+
+   efficiency { |
+	   caching
+	   "predictable communication"
+	   "collocation optimization"
+   }
+   "ease of programming" { |
+   	 "expose internal mechanism"
+   	 "dynamic info processing"
+	 "interface repository"
+   	 "object disposal"
+   }
+   flexibility { |
+	   policies
+	   "implementation repository"
+	   interceptors
+   }
+   usability { |
+       locale
+       "encoding conversion"
+   }
+
+   "predictable communication" { &
+	   	<priority_based_sender>::"encode priority info"
+	   	<priority_based_receiver>::"decode priority info"
+   }
+   
+   "Explicit Binding" { &
+   	(service_start) => 
+   		<identity_publisher>::"publish identity" [ "service identifier" ]
+   	(request_start) => 
+   		<identity_admissor>:: "admit identity" ["identifier service_stub"]
+   } 
+   
+     "Via Group Gateway" [Binding] { &
+        (group_identity_changed)=> 
+        	<identity_admissor>::admit_identity[identity]
+     	(group_identity_changed)=> 
+     		<identity_publisher>::update_group_identity["service identifier"]
+     	(group_join_request)=> 
+     		<group_gateway>::join_group["service group_identity_changed"]
+     }
+   
+     "Via TE" [Binding] {  &
+     	<request_resender>::TransparentEntries { &
+     		control_sender
+     		(send_failed) => 
+     			<request_resender>::resend_request["request byte_packets"]
+     	}
+     	<identity_publisher>::GroupIdentityUpdate
+     }
+   
+	"Stringent synchronous" /* hard real time */ { &
+		"realtime specification" { &
+			deadline
+			priority
+		}
+		"roundtrip prediction" { &
+		    "limit programmability"
+		    "predictable memory mgmt" { &
+		    	(new_memory_request)=><realtime_mem_mgr>::allocate_thread_specific_memory
+		    	(middleware_initialization)=><realtime_mem_mgr>::allocate_memory_pool
+		    	(data_arrive_at_special_interface)=><zerocopy_agent>::zerocopy_data
+		    } 
+		    "predictable comm_sched" 
+		    "predictable dispatching"
+		}=> +predictability
+		"predict roundtrip time" ["execution calibration"]
+		admission
+	}    

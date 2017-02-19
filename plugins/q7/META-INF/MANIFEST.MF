@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Q7 Plug-in
+Bundle-SymbolicName: q7;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Yijun Yu
+Bundle-Localization: plugin
+Require-Bundle: util,
+ org.eclipse.emf.ecore,
+ core,
+ org.eclipse.core.resources,
+ org.eclipse.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.core.runtime,
+ edu.toronto.cs.openome_model.diagram;bundle-version="1.0.0"
+Eclipse-LazyStart: true
+Export-Package: action,
+ codegen,
+ convertor,
+ model,
+ parser
+

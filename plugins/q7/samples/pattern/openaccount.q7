@@ -1,0 +1,36 @@
+<Manager>::ManageMondey {AND
+	ChangeBalance
+}
+<Manager>::ChangeBalance => ~<Customer>::ChangeBalance
+<Customer>::ChangeBalance => ++<Customer>::Security
+
+/* <Manager>::ManageMoney { AND
+  OpenAccount { AND
+	  CheckCredit => ~<Customer>::ProvidePersonalInfo
+	  CreateAccount { AND
+	     CreateAuthorization
+	     IssueCard
+	  } => ~<Customer>::InitialDeposit 
+  }
+  ManageAccount { OR
+	AuthorizeCard => ~<Customer>::ProvideCard
+	ChangeBalance => ~<Customer>::ChangeBalance
+  } 
+}
+<Customer>::Bank { OR
+  DepositAccount { OR
+    OpenAccount { AND
+	  ProvidePersonalInfo 
+	  ChangeBalance => ++ Security
+    }
+    Deposit { AND
+          ProvideCard=> ~<Manager>::IssueCard
+	  ChangeBalance => ++ Security
+    }
+  }
+  WithdrawAccount { AND
+	  ProvideCard=> ~<Manager>::IssueCard
+          ChangeBalance => ++ Security
+  }
+}
+*/

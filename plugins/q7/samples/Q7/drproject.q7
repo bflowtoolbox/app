@@ -1,0 +1,29 @@
+"Support S/W Development Projects" { AND
+  "Support Established Dev. Projects" { AND
+  	"Provide Access to SVN" => + "Minimal Interference"
+  	"Web-based" { AND
+  	  "Web Admin is supported"
+  	} => + Simplicity [Interface]
+  	"Issues are tracked"
+  	"Provide Mailing Integration"
+  }
+  "Project Overview Provided" {AND
+    "Wiki is Enhanced" { AND
+	    "Wiki Syntax in Text Fields is Supported" 
+	    "Bugs, Wiki, Source are Linked" => + Usability [System]
+	}    
+    "Progress is tracked" { AND
+      "Temporal List of Dev Events supported"
+      "Reporting facilities are convenient" => + Usability
+      "Student Progress is Displayed"
+    } 
+  }
+  "Uni. Practices are supported" { AND
+    "Trac is simplified" { AND
+      "Code is simplified" => + Maintainability [Code]
+      "UI is simplified"
+    }
+    "Group work supported"
+    "Support custom authentication" => + Security
+  }
+} => + Quality [Software]

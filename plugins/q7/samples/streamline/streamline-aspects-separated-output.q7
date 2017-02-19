@@ -1,0 +1,18 @@
+<car>::design { &
+  design [wheels]
+  design [shape] { &
+    design [head]
+    design [body]
+    design [tail]
+  }
+  design [engine]
+}
+speed <= +design { &
+  streamline <= ++* [shape]
+  powerful <= ++* [engine]
+}
+streamline { &
+  widening <= ++* [head]
+  constant <= ++* [body]
+  narrowing <= ++* [tail]
+} => ++beauty

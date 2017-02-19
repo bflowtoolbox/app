@@ -1,0 +1,25 @@
+"Schedule Meeting" { AND
+  "Collect Timetables" { OR
+    ".. By Person" =ctbp
+    ".. By System" =ctbs { OR
+      ".. from Agents" =ctbsfa
+      ".. from Users" =ctbsfu { AND
+          "Send Request" 
+          "Receive Response"
+  } } }
+  "Choose Schedule" { OR
+     ".. Manually" = csm
+     ".. Automatically" = csa
+} }
+"Minimal effort" { AND ".. for Collection" = mec
+                        ".. for Matching" = mem }
+"Good quality schedule" { AND "Minimal conflicts" = mc
+                           "Good participation" = gp }
+ctbsfa => + "Minimal disturbance" = md,
+          - "Accurate Constraints" = ac
+ctbsfu => - md, + ac
+csm => - mem, - mc, + gp
+csa => + mem, + mc, - gp
+ctbp => - mec
+ctbs => + mec
+  

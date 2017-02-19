@@ -1,0 +1,1206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<istarml version="1.0">
+   <diagram name="">
+      <graphic content="SVG"/>
+      <ielement type="resource" id="_RQa3sceJEeCGwI-I2xY10A" name="Renewable Energy">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_RQbfC8eJEeCGwI-I2xY10A" aref="_RQbfCseJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_RQbfCceJEeCGwI-I2xY10A" aref="_RQbfCMeJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_RQa3sseJEeCGwI-I2xY10A" name="Renewable Energy">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_RQbfEMeJEeCGwI-I2xY10A" aref="_RQbfD8eJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_RQbfCceJEeCGwI-I2xY10A" aref="_RQbfCMeJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_RQa3s8eJEeCGwI-I2xY10A" name="Renewable Energy">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_RQcF08eJEeCGwI-I2xY10A" aref="_RQcF0ceJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_RQbfCceJEeCGwI-I2xY10A" aref="_RQbfCMeJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_RQa3tMeJEeCGwI-I2xY10A" name="Nuclear Energy">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_RQbfEseJEeCGwI-I2xY10A" aref="_RQbfD8eJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_RQcF5MeJEeCGwI-I2xY10A" aref="_RQcF4seJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_RQa3tceJEeCGwI-I2xY10A" name="Nuclear Energy">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_RQcF0seJEeCGwI-I2xY10A" aref="_RQcF0ceJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_RQcF5MeJEeCGwI-I2xY10A" aref="_RQcF4seJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_RQa3tseJEeCGwI-I2xY10A" name="Sufficient power">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_RQcF88eJEeCGwI-I2xY10A" aref="_RQcF8seJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_RQcF4ceJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_RQa3t8eJEeCGwI-I2xY10A"
+                name="Avoid impending energy crisis">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_RQcF-seJEeCGwI-I2xY10A" aref="_RQcF8seJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_RQcF4ceJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_RQa3uMeJEeCGwI-I2xY10A" name="Plastic from fossil fuels">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_RQcGAseJEeCGwI-I2xY10A" aref="_RQcF8seJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_RQcs48eJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_RQa3uceJEeCGwI-I2xY10A" name="Fossil Fuels">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_RQcs48eJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_RQcs4seJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_RQa3useJEeCGwI-I2xY10A" name="Fossil Fuel">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_RQcF5ceJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <depender aref="_RQcF5seJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_RQcs4seJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_RQa3u8eJEeCGwI-I2xY10A" name="Fossil Fuels">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_RQcGE8eJEeCGwI-I2xY10A" aref="_RQcGD8eJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_RQcF4MeJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_RQa3vMeJEeCGwI-I2xY10A" name="Numbers">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_RQcF_8eJEeCGwI-I2xY10A" aref="_RQcF8seJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <depender iref="_RQcGCceJEeCGwI-I2xY10A" aref="_RQcF8seJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_RQbfBceJEeCGwI-I2xY10A" aref="_RQbfA8eJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_RQa3vceJEeCGwI-I2xY10A" name="Correct Arguments">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_RQcGBseJEeCGwI-I2xY10A" aref="_RQcF8seJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_RQbfBMeJEeCGwI-I2xY10A" aref="_RQbfA8eJEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <actor type="role" id="_RQbfA8eJEeCGwI-I2xY10A" name="Source">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="2064" ypos="540" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_RQbfBMeJEeCGwI-I2xY10A" name="Make Point">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="goal" id="_RQbfBceJEeCGwI-I2xY10A" name="User Number">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQbfBMeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_RQbfBseJEeCGwI-I2xY10A" name="Obfuscate numbers">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="decomposition" value="or" iref="_RQbfBceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_RQbfB8eJEeCGwI-I2xY10A" name="Be truthful">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="decomposition" value="or" iref="_RQbfBceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_RQbfCMeJEeCGwI-I2xY10A" name="Renewable Power Producer">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQcF4ceJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+         <boundary>
+            <graphic content="basic" xpos="4476" ypos="540" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="task" id="_RQbfCceJEeCGwI-I2xY10A" name="Produce Power Using Renewables">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_RQbfCseJEeCGwI-I2xY10A" name="Pro Renewable">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQbfA8eJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+         <boundary>
+            <graphic content="basic" xpos="24" ypos="24" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="task" id="_RQbfC8eJEeCGwI-I2xY10A" name="Use renewable resources">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="make" iref="_RQbfDseJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="and" iref="_RQbfDMeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="goal" id="_RQbfDMeJEeCGwI-I2xY10A"
+                      name="Cut greenhouse gasses 60% by 2050">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="some+" iref="_RQbfDceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQbfDceJEeCGwI-I2xY10A"
+                      name="Cut greenhouse gas emissions">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQbfDseJEeCGwI-I2xY10A"
+                      name="Ensure access to reliable sources of energy">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_RQbfD8eJEeCGwI-I2xY10A" name="Pro Nuclear">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQbfA8eJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+         <boundary>
+            <graphic content="basic" xpos="540" ypos="24" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="task" id="_RQbfEMeJEeCGwI-I2xY10A" name="Use renewable resources">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="unknown" iref="_RQbfEceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="unknown" iref="_RQbfE8eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="make" iref="_RQcF0MeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQbfEceJEeCGwI-I2xY10A" name="Fill the energry gap">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_RQbfEseJEeCGwI-I2xY10A" name="Use Nuclear">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="make" iref="_RQbfEceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="make" iref="_RQbfE8eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQbfE8eJEeCGwI-I2xY10A"
+                      name="Cut greenhouse gas emissions">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF0MeJEeCGwI-I2xY10A"
+                      name="Ensure access to reliable sources of energy">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_RQcF0ceJEeCGwI-I2xY10A" name="Tepidly Pro Nuclear">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQbfA8eJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+         <boundary>
+            <graphic content="basic" xpos="1056" ypos="24" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="task" id="_RQcF0seJEeCGwI-I2xY10A" name="User Nuclear">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF1ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="hurt" iref="_RQcF1MeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_RQcF08eJEeCGwI-I2xY10A" name="Use renewables">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF1MeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="unknown" iref="_RQcF1ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="hurt" iref="_RQcF1seJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF1MeJEeCGwI-I2xY10A" name="Long-term solution">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF1ceJEeCGwI-I2xY10A" name="Short-term solution">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF1seJEeCGwI-I2xY10A"
+                      name="Establish Sustainable Development">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_RQcF18eJEeCGwI-I2xY10A" name="Politician">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQbfA8eJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="role" id="_RQcF2MeJEeCGwI-I2xY10A" name="Economist">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQbfA8eJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="role" id="_RQcF2ceJEeCGwI-I2xY10A" name="Physicist">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQbfA8eJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="agent" id="_RQcF2seJEeCGwI-I2xY10A" name="Ecological Movement">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="4620" ypos="24" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_RQcF28eJEeCGwI-I2xY10A" name="Do something urgently">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF3MeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF3MeJEeCGwI-I2xY10A" name="Avoid climate crisis">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_RQcF3ceJEeCGwI-I2xY10A" name="Media">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQbfA8eJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="role" id="_RQcF3seJEeCGwI-I2xY10A" name="Campaigners">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQbfA8eJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="agent" id="_RQcF38eJEeCGwI-I2xY10A" name="Future Generations">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+      </actor>
+      <actor type="agent" id="_RQcF4MeJEeCGwI-I2xY10A" name="Untrustworthy foreigners">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+      </actor>
+      <actor type="role" id="_RQcF4ceJEeCGwI-I2xY10A" name="Power Producer">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+      </actor>
+      <actor type="role" id="_RQcF4seJEeCGwI-I2xY10A" name="Nuclear Power Producer">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQcF4ceJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+         <boundary>
+            <graphic content="basic" xpos="4980" ypos="540" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="goal" id="_RQcF48eJEeCGwI-I2xY10A" name="Expand Nuclear Power">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_RQcF5MeJEeCGwI-I2xY10A" name="Produce power using Nuclear">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_RQcF5ceJEeCGwI-I2xY10A" name="Coal Power Producer">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQcF4ceJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="role" id="_RQcF5seJEeCGwI-I2xY10A" name="Oil Power Producer">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQcF4ceJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="role" id="_RQcF58eJEeCGwI-I2xY10A" name="Company">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_RQbfA8eJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+         <boundary>
+            <graphic content="basic" xpos="4104" ypos="24" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_RQcF6MeJEeCGwI-I2xY10A" name="Positive Branding">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF6ceJEeCGwI-I2xY10A"
+                      name="Be seen as environmentally friendly">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF6MeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="goal" id="_RQcF6seJEeCGwI-I2xY10A" name="Adress environmental concerns">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_RQcF68eJEeCGwI-I2xY10A" name="Greenwash">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="some+" iref="_RQcF6ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_RQcF6seJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_RQcF7MeJEeCGwI-I2xY10A" name="Actually address concerns">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="some+" iref="_RQcF6ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_RQcF6seJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_RQcF7ceJEeCGwI-I2xY10A" name="Skeptic">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="5640" ypos="24" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_RQcF7seJEeCGwI-I2xY10A" name="Deny the energy crisis">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_RQcF78eJEeCGwI-I2xY10A"
+                      name="Argue CO2 flows are insignificant">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF7seJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_RQcF8MeJEeCGwI-I2xY10A" name="Arugue C02 is nature">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF7seJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_RQcF8ceJEeCGwI-I2xY10A"
+                      name="Argue livestock produces much CO2">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF7seJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="agent" id="_RQcF8seJEeCGwI-I2xY10A" name="Society (us)">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="4740" ypos="1560" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="goal" id="_RQcF88eJEeCGwI-I2xY10A" name="Live modern lifestyle">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_RQcF9MeJEeCGwI-I2xY10A" name="Choosing energy sources">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="decomposition" value="and" iref="_RQcF88eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_RQcF9ceJEeCGwI-I2xY10A" name="Use fossil fuels">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="hurt" iref="_RQcF98eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcF-ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="hurt" iref="_RQcGA8eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="hurt" iref="_RQcF_ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="break" iref="_RQcGDMeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_RQcF9MeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_RQcF9seJEeCGwI-I2xY10A" name="Use Nuclear">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF98eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="hurt" iref="_RQcF-ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcGA8eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcF_ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_RQcF9MeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF98eJEeCGwI-I2xY10A" name="Avoid oil crisis">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF-seJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_RQcF-MeJEeCGwI-I2xY10A" name="Use renewables">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF98eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcF-ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcGA8eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcF_ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_RQcF9MeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF-ceJEeCGwI-I2xY10A" name="Avoid nuclear energy crisis">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF-seJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF-seJEeCGwI-I2xY10A" name="Avoid energy crisis">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF-8eJEeCGwI-I2xY10A" name="Minimize risks">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF_MeJEeCGwI-I2xY10A" name="Minimize social cost">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF_ceJEeCGwI-I2xY10A"
+                      name="Reduce greenhouse gas emissions">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcGCseJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF_seJEeCGwI-I2xY10A" name="Analyze energy alternatives">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcGBMeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcF_8eJEeCGwI-I2xY10A" name="need factual numbers ">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF_seJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcGBMeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcGDceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGAMeJEeCGwI-I2xY10A" name="Handle energy needs">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGAceJEeCGwI-I2xY10A" name="Minimize economic cost">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_RQcGAseJEeCGwI-I2xY10A" name="Use plastic">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="decomposition" value="and" iref="_RQcF88eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGA8eJEeCGwI-I2xY10A"
+                      name="Preserve fossil fuels for plastics">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGBMeJEeCGwI-I2xY10A" name="Make good energy decisions">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF-seJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcF-8eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcF_MeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcGAceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGBceJEeCGwI-I2xY10A" name="Avoid climate change">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcGC8eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGBseJEeCGwI-I2xY10A" name="Need correct arguments">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGB8eJEeCGwI-I2xY10A"
+                      name="Assign responsibility for past and current emissions">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="some+" iref="_RQcGCMeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGCMeJEeCGwI-I2xY10A"
+                      name="Assign responsibility for reduction of future emissions">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF_ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="resource" id="_RQcGCceJEeCGwI-I2xY10A"
+                      name="By country per capita historical emissions">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="make" iref="_RQcGB8eJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGCseJEeCGwI-I2xY10A"
+                      name="Avoid increasing CO2 concentrations">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcGBceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGC8eJEeCGwI-I2xY10A" name="Habitable climate">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="goal" id="_RQcGDMeJEeCGwI-I2xY10A" name="Do not use fossil fuels">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="some+" iref="_RQcF_ceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGDceJEeCGwI-I2xY10A"
+                      name="Dont confuse facts with ethical assertions">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcF_seJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="agent" id="_RQcGDseJEeCGwI-I2xY10A" name="China">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_part_of" aref="_RQcF8seJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+         <actorLink type="is_part_of" aref="_RQcs4seJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="agent" id="_RQcGD8eJEeCGwI-I2xY10A" name="Britain">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_part_of" aref="_RQcF8seJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+         <actorLink type="is_part_of" aref="_RQcs4seJEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+         <boundary>
+            <graphic content="basic" xpos="4488" ypos="1056" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_RQcGEMeJEeCGwI-I2xY10A" name="Handle energy needs">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="goal" id="_RQcGEceJEeCGwI-I2xY10A"
+                      name="Create sustainable development strategy">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_RQcGEseJEeCGwI-I2xY10A" name="Get fossil fuels locally">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="make" iref="_RQcGFceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_RQcGFMeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_RQcGE8eJEeCGwI-I2xY10A"
+                      name="Get fossil fuels from foreigners">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="some-" iref="_RQcGFceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_RQcGFMeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="goal" id="_RQcGFMeJEeCGwI-I2xY10A" name="Get fossil fuels">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_RQcGFceJEeCGwI-I2xY10A" name="Security of energy supply">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="resource" id="_RQcs4MeJEeCGwI-I2xY10A" name="British Fossil Fuels">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="decomposition" value="and" iref="_RQcGEseJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="resource" id="_RQcs4ceJEeCGwI-I2xY10A" name="Old power stations">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_RQcGEMeJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_RQcGFceJEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="agent" id="_RQcs4seJEeCGwI-I2xY10A" name="Planet">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+      </actor>
+      <actor type="agent" id="_RQcs48eJEeCGwI-I2xY10A" name="Plastic Producer">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+      </actor>
+   </diagram>
+</istarml>

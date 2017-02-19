@@ -1,0 +1,123 @@
+"Via Group Gateway" [Binding] { &
+        ("group identity changed")=> 
+        	<"identity admissor">::"admit identity"[identity]
+     	("group identity changed")=> 
+     		<"identity publisher">::"update group identity"["service identifier"]
+     	("group join request")=> 
+     		<"group gateway">::"join group"["service group identity changed"]
+}
+<Middleware>::"middleware[services]" { &
+  "inter-program" [communication] { |
+  	"inter-network" [communication] { &
+  		("network notification")=> 
+  			<sender>::"inter-network send" ["request, response, byte packets"]
+  		("message arrives at send queue")=> 
+  			<receiver>::"inter-network receive" ["byte packets, request"] 
+  		("formatted request arrives dispatcher")=> 
+  			<dispatcher>::dispatch ["request, target service"] 
+  		<"user app">::process["request, response"]
+  	}
+  	<dispatcher>::"inter-process" [communication] 
+  }
+} => + usability, + flexibility, + efficiency, +"fault tolerance", +"ease of programming"
+"invocation style support" { |
+		RPC[services] { |
+			"passing by reference"
+		        "passing by value"	
+		}	=> +coupling [temporal], +coupling [identity]
+	  	"Publish/Subscribe" [services] 
+	  		=> -coupling [temporal], -coupling [identity]
+	  	"Peer to peer"
+}
+"remote invocation style" { |
+	  	DII
+	  	DSI
+	  	Any
+	  	"Dynamic any"
+	  	static
+	    "type code"
+}
+"Data representation" { |
+  		  integer string double fixed float long 
+  		  "wide char" "wide string"
+}
+coupling [identity] { | 
+   "Explicit Binding" 
+   "Group Binding" { |
+	   "Via Group Gateway" [Binding] { &
+        ("group identity changed")=> 
+        	<"identity admissor">::"admit identity"[identity]
+     	("group identity changed")=> 
+     		<"identity publisher">::"update group identity"["service identifier"]
+     	("group join request")=> 
+     		<"group gateway">::"join group"["service group identity changed"]
+	   }  
+	   "Via TE" [Binding] {  &
+     	<"request resender">::TransparentEntries { &
+     		"control sender"
+     		("send failed") => 
+     			<"request resender">::"resend request"["request byte packets"]
+     	}
+     	<"identity publisher">::GroupIdentityUpdate
+		}
+	}
+   "Peer Binding"
+   Anonymous
+}
+coupling [temporal] { |
+	"Stringent synchronous"
+	"Normal synchronous" /* soft real time */
+	asynchronous
+}
+efficiency { |
+	   caching
+	   "predictable communication" { &
+	   	<"priority based sender">::"encode priority info"
+	   	<"priority based receiver">::"decode priority info"
+	   }
+	   "collocation optimization"
+}
+"ease of programming" { |
+   	 "expose internal mechanism"
+   	 "dynamic info processing"
+	 "interface repository"
+   	 "object disposal"
+	  "program model" { &
+		"invocation style support"  
+		"remote invocation style" 
+		"Data representation"
+	  }
+}
+flexibility { |
+	   policies
+	   "implementation repository"
+	   interceptors
+}
+usability { |
+       locale
+       "encoding conversion"
+}
+"Explicit Binding" { &
+   	("service start") => 
+   		<"identity publisher">::"publish identity" [ "service identifier" ]
+   	("request start") => 
+   		<"identity admissor">:: "admit identity" ["identifier service stub"]
+} 
+"Stringent synchronous" /* hard real time */ { &
+		"realtime specification" { &
+			deadline
+			priority
+		}
+		"roundtrip prediction" { &
+		    "limit programmability"
+		    "predictable memory mgmt" { &
+		    	("new memory request")=><"realtime mem mgr">::"allocate thread specific memory"
+		    	("middleware initialization")=><"realtime mem mgr">::"allocate memory pool"
+		    	("data arrive at special interface")=><"zerocopy agent">::"zerocopy data"
+		    } 
+		    "predictable comm sched" 
+		    "predictable dispatching"
+		}
+		"predict roundtrip time" ["execution calibration"]
+		<"identity admissor">::admission
+}

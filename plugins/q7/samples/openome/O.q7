@@ -1,0 +1,6 @@
+<engineer>::develop { &
+    <foo>::task
+}
+<user>::use { &
+    <foo>::task
+}

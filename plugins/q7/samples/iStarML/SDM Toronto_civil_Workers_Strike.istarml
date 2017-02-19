@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<istarml version="1.0">
+   <diagram name="">
+      <graphic content="SVG"/>
+      <ielement type="softgoal" id="_tpn-YMeIEeCGwI-I2xY10A" name="Strike will be soon over">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-iceIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-kMeIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="goal" id="_tpn-YceIEeCGwI-I2xY10A"
+                name="Legislate Civil Workers back to Work">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-iseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-hseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_tpn-YseIEeCGwI-I2xY10A" name="Necessary (Upopular) Strike">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-jceIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-jseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_tpn-Y8eIEeCGwI-I2xY10A" name="Garbage Pile Up">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-kMeIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-jseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+            <dependee aref="_tpn-h8eIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_tpn-ZMeIEeCGwI-I2xY10A" name="Fair Treatment"
+                QualitativeReasoningCombinedLabel="PartiallyDenied">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-kMeIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-h8eIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+            <dependee aref="_tpn-hseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="goal" id="_tpn-ZceIEeCGwI-I2xY10A" name="sd">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-kMeIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-h8eIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="goal" id="_tpn-ZseIEeCGwI-I2xY10A" name="Contract Talks_2">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-i8eIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-h8eIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_tpn-Z8eIEeCGwI-I2xY10A" name="Workers should cave">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-h8eIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-kMeIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_tpn-aMeIEeCGwI-I2xY10A" name="Unions should cave">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-h8eIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-i8eIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_tpn-aceIEeCGwI-I2xY10A" name="City Should Cave">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-kMeIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-h8eIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="goal" id="_tpn-aseIEeCGwI-I2xY10A"
+                name="Concessions on Sick Pay Benefits">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-kMeIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-h8eIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_tpn-a8eIEeCGwI-I2xY10A"
+                name="Chances in Case of Mediation">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender aref="_tpn-kMeIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee aref="_tpn-h8eIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <actor type="role" id="_tpn-hseIEeCGwI-I2xY10A" name="Provice Legislation">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+      </actor>
+      <actor type="role" id="_tpn-h8eIEeCGwI-I2xY10A" name="City of Toronto">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+      </actor>
+      <actor type="agent" id="_tpn-iMeIEeCGwI-I2xY10A" name="Major David Miller">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_part_of" aref="_tpn-h8eIEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="agent" id="_tpn-iceIEeCGwI-I2xY10A" name="City Manager Joe Pennachetti">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_part_of" aref="_tpn-h8eIEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="role" id="_tpn-iseIEeCGwI-I2xY10A" name="Business Lobbyists">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+      </actor>
+      <actor type="role" id="_tpn-i8eIEeCGwI-I2xY10A" name="Unions">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+      </actor>
+      <actor type="role" id="_tpn-jMeIEeCGwI-I2xY10A"
+             name="Not-United Striking Civil Workers">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_tpn-kMeIEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+         <actorLink type="is_a" aref="_tpn-j8eIEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="agent" id="_tpn-jceIEeCGwI-I2xY10A"
+             name="Mark Ferguson Head of Outside Workers">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_tpn-j8eIEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+         <actorLink type="is_a" aref="_tpn-jMeIEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor type="agent" id="_tpn-jseIEeCGwI-I2xY10A" name="General Pbulic">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+      </actor>
+      <actor type="role" id="_tpn-j8eIEeCGwI-I2xY10A" name="United Striking Civil Workers">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_a" aref="_tpn-kMeIEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+      <actor id="_tpn-kMeIEeCGwI-I2xY10A" name="Striking Civil Workers">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+      </actor>
+      <actor type="agent" id="_tpn-kceIEeCGwI-I2xY10A" name="Ann Dembinski">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <actorLink type="is_part_of" aref="_tpn-kMeIEeCGwI-I2xY10A">
+            <graphic content="SVG"/>
+         </actorLink>
+      </actor>
+   </diagram>
+</istarml>

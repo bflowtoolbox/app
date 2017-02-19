@@ -1,0 +1,917 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<istarml version="1.0">
+   <diagram name="">
+      <graphic content="SVG"/>
+      <ielement type="softgoal" id="_PBB9EceLEeCGwI-I2xY10A" name="Conference be successful">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBCkLceLEeCGwI-I2xY10A" aref="_PBCkLMeLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBB9eMeLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9EseLEeCGwI-I2xY10A"
+                name="Successful sponsor relationsihp">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBB9kMeLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkL8eLEeCGwI-I2xY10A" aref="_PBCkLseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9E8eLEeCGwI-I2xY10A" name="Find many sponsors">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBB9iceLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkL8eLEeCGwI-I2xY10A" aref="_PBCkLseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9FMeLEeCGwI-I2xY10A" name="Support sustainable effort">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBCkJ8eLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkMceLEeCGwI-I2xY10A" aref="_PBCkMMeLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9FceLEeCGwI-I2xY10A" name="Effective advertising">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBB9j8eLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkM8eLEeCGwI-I2xY10A" aref="_PBCkMseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9FseLEeCGwI-I2xY10A" name="Affordable venue">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBB9i8eLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkNceLEeCGwI-I2xY10A" aref="_PBCkNMeLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9F8eLEeCGwI-I2xY10A" name="Quality Venue">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBB9iseLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkNceLEeCGwI-I2xY10A" aref="_PBCkNMeLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9GMeLEeCGwI-I2xY10A" name="Well-structured program">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBB9fseLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkN8eLEeCGwI-I2xY10A" aref="_PBCkNseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9GceLEeCGwI-I2xY10A" name="Good keynotes">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBB9g8eLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkN8eLEeCGwI-I2xY10A" aref="_PBCkNseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9GseLEeCGwI-I2xY10A" name="Good papers">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBB9gseLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkN8eLEeCGwI-I2xY10A" aref="_PBCkNseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9G8eLEeCGwI-I2xY10A"
+                name="readily available publications">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBB9hceLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkOceLEeCGwI-I2xY10A" aref="_PBCkOMeLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9HMeLEeCGwI-I2xY10A"
+                name="Quality Workshops/ Tutorials">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBB9fMeLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkO8eLEeCGwI-I2xY10A" aref="_PBCkOseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9HceLEeCGwI-I2xY10A" name="Provide sustainability">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBCkPceLEeCGwI-I2xY10A" aref="_PBCkPMeLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBB9eseLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9HseLEeCGwI-I2xY10A" name="Personal Success">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBCkP8eLEeCGwI-I2xY10A" aref="_PBCkPseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBB9eceLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9H8eLEeCGwI-I2xY10A" name="Prestige/Reputation">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBCkP8eLEeCGwI-I2xY10A" aref="_PBCkPseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBB9d8eLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_PBB9IMeLEeCGwI-I2xY10A" name="publish in reputable source">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_PBB9hMeLEeCGwI-I2xY10A" aref="_PBB9dseLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_PBCkOceLEeCGwI-I2xY10A" aref="_PBCkOMeLEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <actor type="role" id="_PBB9dseLEeCGwI-I2xY10A" name="General Chair">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="0" ypos="0" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_PBB9d8eLEeCGwI-I2xY10A" name="Prestige/ Reputation">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9eMeLEeCGwI-I2xY10A" name="Successful Conference">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9d8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_PBB9eceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9eceLEeCGwI-I2xY10A" name="Personal Success">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9eseLEeCGwI-I2xY10A" name="Sustainability">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9eMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="hurt" iref="_PBB9gceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_PBB9f8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9e8eLEeCGwI-I2xY10A" name="Quality conference content">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9eMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_PBB9f8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9fMeLEeCGwI-I2xY10A"
+                      name="Quality workshops/ tutorials">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9eMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_PBB9f8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9fceLEeCGwI-I2xY10A" name="Quality publications">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9eMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9fseLEeCGwI-I2xY10A" name="Well-structured program">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9eMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_PBB9f8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9f8eLEeCGwI-I2xY10A" name="Satisfied Attendees">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9eMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9gMeLEeCGwI-I2xY10A" name="Involvement of Industry">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9eMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_PBB9gceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9gceLEeCGwI-I2xY10A" name="Financial Success">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9eMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9gseLEeCGwI-I2xY10A" name="Good papers">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9e8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9g8eLEeCGwI-I2xY10A" name="Good Keynotes">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9e8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9hMeLEeCGwI-I2xY10A" name="Publish in Reputable source">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9fceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9hceLEeCGwI-I2xY10A"
+                      name="Readily available publications">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9fceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9hseLEeCGwI-I2xY10A" name="Good hotel/ venue">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9f8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_PBB9iMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9h8eLEeCGwI-I2xY10A" name="Good location">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9f8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_PBB9iMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9iMeLEeCGwI-I2xY10A" name="Many/Quality Attendees">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9gceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_PBB9iceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9iceLEeCGwI-I2xY10A" name="Many Sponsors">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9gceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9iseLEeCGwI-I2xY10A" name="Quality venue/ hotel">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9hseLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9i8eLEeCGwI-I2xY10A" name="Affordable venue/ hotel">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9hseLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9jMeLEeCGwI-I2xY10A" name="Atractive/nice location">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9h8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9jceLEeCGwI-I2xY10A" name="Central location">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9h8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9jseLEeCGwI-I2xY10A" name="Affordable location">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9h8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9j8eLEeCGwI-I2xY10A" name="Effective advertising">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9iMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBB9kMeLEeCGwI-I2xY10A"
+                      name="Successful sponsor relationship">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9iceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_PBCkIMeLEeCGwI-I2xY10A" name="Well-connected hotel/ venue">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9hseLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_PBCkIceLEeCGwI-I2xY10A" name="Organize Conference">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_PBCkIseLEeCGwI-I2xY10A" name="Select Location">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9h8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="and" iref="_PBCkIceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_PBCkI8eLEeCGwI-I2xY10A"
+                      name="Act as figurehead/Representative for Conference">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9d8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="and" iref="_PBCkIceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_PBCkJMeLEeCGwI-I2xY10A"
+                      name="Delegate many tasks/responsibilities">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="decomposition" value="and" iref="_PBCkIceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_PBCkJceLEeCGwI-I2xY10A" name="Deal with Sponsor Relationships">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="decomposition" value="and" iref="_PBCkIceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_PBCkJseLEeCGwI-I2xY10A" name="Speak at conference">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_PBCkJ8eLEeCGwI-I2xY10A"
+                      name="Remind attendees about green goals/ instructions">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9eseLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="and" iref="_PBCkJseLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="goal" id="_PBCkKMeLEeCGwI-I2xY10A" name="Select Venue/ HOtel">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="decomposition" value="and" iref="_PBCkIceLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_PBCkKceLEeCGwI-I2xY10A" name="Select Green Venue/ hotel">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9iseLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="hurt" iref="_PBB9i8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_PBCkKMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_PBCkKseLEeCGwI-I2xY10A"
+                      name="select cheapest/ nicest venue/ hotel">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_PBB9iseLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_PBB9i8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_PBCkKMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_PBCkK8eLEeCGwI-I2xY10A"
+                      name="Select well-connected venue/ hotel">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="hurt" iref="_PBB9i8eLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="make" iref="_PBCkIMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_PBCkKMeLEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_PBCkLMeLEeCGwI-I2xY10A" name="Sponsor">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="0" ypos="0" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="goal" id="_PBCkLceLEeCGwI-I2xY10A" name="">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_PBCkLseLEeCGwI-I2xY10A" name="Sponsorship">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="0" ypos="0" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_PBCkL8eLEeCGwI-I2xY10A" name="">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_PBCkMMeLEeCGwI-I2xY10A" name="Attendeese">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="0" ypos="0" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_PBCkMceLEeCGwI-I2xY10A" name="">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_PBCkMseLEeCGwI-I2xY10A" name="Publicity">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="0" ypos="0" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_PBCkM8eLEeCGwI-I2xY10A" name="">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="agent" id="_PBCkNMeLEeCGwI-I2xY10A" name="Local organizers">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="0" ypos="0" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_PBCkNceLEeCGwI-I2xY10A" name="">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="agent" id="_PBCkNseLEeCGwI-I2xY10A" name="Program Committee">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="0" ypos="0" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_PBCkN8eLEeCGwI-I2xY10A" name="">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_PBCkOMeLEeCGwI-I2xY10A" name="PUblication Chair">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="0" ypos="0" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_PBCkOceLEeCGwI-I2xY10A" name="">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_PBCkOseLEeCGwI-I2xY10A" name="Workshop/ Tutorial Organizer">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="0" ypos="0" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_PBCkO8eLEeCGwI-I2xY10A" name="">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="agent" id="_PBCkPMeLEeCGwI-I2xY10A" name="Sustainability Chair">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="0" ypos="0" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="goal" id="_PBCkPceLEeCGwI-I2xY10A" name="">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="agent" id="_PBCkPseLEeCGwI-I2xY10A" name="Actual Chair">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="0" ypos="0" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="goal" id="_PBCkP8eLEeCGwI-I2xY10A" name="">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+         </boundary>
+      </actor>
+   </diagram>
+</istarml>

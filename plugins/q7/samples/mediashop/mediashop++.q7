@@ -1,0 +1,106 @@
+Front [shop] { &
+  Managing [shop] { &
+    Managing [account]
+    Managing [product]
+    Infobox [font] => ++Usability [font]
+    Customization [language] { |
+      Customizing [English] => ++Usability [language]
+    }
+    Transaction [product] { |
+      "Database Table" [transaction] => ++Integrity [data]
+    }
+    Transaction [stock] { |
+      "Database Table" [transaction] => ++Integrity [data]
+    }
+    Transaction [account] { |
+      "Database Table" [transaction] => ++Integrity [data]
+    }
+    Managing [stock]
+    "Page Layout" [gui] => ++Usability [layout]
+    SSL [protocol] => ++"Info. flow Security" [system]
+  }
+  Informing [shop] { &
+    Searching [shop] { &
+      Customization [language] { |
+        Customizing [English] => ++Usability [language]
+      }
+      Transaction [stock] { |
+        "Database Table" [transaction] => ++Integrity [data]
+      }
+      Navigating [stock]
+      Searching [stock]
+      "Page Layout" [gui] => ++Usability [layout]
+      Infobox [font] => ++Usability [font]
+    }
+    Reporting [shop] { &
+      Customization [language] { |
+        Customizing [English] => ++Usability [language]
+      }
+      Infobox [font] => ++Usability [font]
+      Transaction [stock] { |
+        "Database Table" [transaction] => ++Integrity [data]
+      }
+      Transaction [product] { |
+        "Database Table" [transaction] => ++Integrity [data]
+      }
+      Transaction [account] { |
+        "Database Table" [transaction] => ++Integrity [data]
+      }
+      Reporting [stock]
+      "Page Layout" [gui] => ++Usability [layout]
+      Reporting [account]
+      Reporting [product]
+    }
+  }
+  Shopping [shop] { &
+    "Checking Out" [cart,product,account,stock] { &
+      Clearing [cart]
+      Updating [account,product]
+      Customization [language] { |
+        Customizing [English] => ++Usability [language]
+      }
+      Updating [product,stock]
+      Infobox [font] => ++Usability [font]
+      "Page Layout" [gui] => ++Usability [layout]
+      Transaction [cart] { |
+        "Session Cookie" [transaction] => ++Responsiveness [transaction]
+      }
+      Transaction [account] { |
+        "Database Table" [transaction] => ++Integrity [data]
+      }
+      Transaction [product] { |
+        "Database Table" [transaction] => ++Integrity [data]
+      }
+      Transaction [stock] { |
+        "Database Table" [transaction] => ++Integrity [data]
+      }
+      "Login/Logout" [account]
+      "Password Protection" [account] => ++Confidentiality [system]
+      SSL [protocol] => ++"Info. flow Security" [system]
+    }
+    Getting [account]
+    Preparing [cart,product] { &
+      Selecting [item,cart]
+      Adding [item,cart]
+      Transaction [cart] { |
+        "Session Cookie" [transaction] => ++Responsiveness [transaction]
+      }
+      Customization [language] { |
+        Customizing [English] => ++Usability [language]
+      }
+      Infobox [font] => ++Usability [font]
+      "Page Layout" [gui] => ++Usability [layout]
+    }
+  }
+}
+Security [system] { &
+  Confidentiality [system]
+  "Info. flow Security" [system]
+}
+Usability [ui] { &
+  Usability [language]
+  Usability [gui] { &
+    Usability [font]
+    Usability [layout]
+  }
+}

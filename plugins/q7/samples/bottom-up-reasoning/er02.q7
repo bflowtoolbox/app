@@ -1,0 +1,43 @@
+/**
+Paolo Giorgini, John Mylopoulos, Eleonora Nicchiarelli, Roberto Sebastiani: Reasoning with Goal Models. ER 2002: 167-181.
+ */
+"Japanese interest rate rise" => + 0.6 "Yen rises", - 0.8 "lower Jap. interest rates"
+"US gas price rises" => + 0.6 "gas price rises"
+"improve car quality" => + 0.8 "increase customer loyalty"
+"Japanese gas price rises" => + 0.6 "gas price rises"
+"Yen rises" => - 0.4 "Japanese gas price rises"
+"gas price rises" => - 0.8 "lower gas price"
+"improve car services" => + 0.7 "increase customer loyalty"
+"increase Toyota sales" => - 0.6 "increase VW sales"
+"increase VW sales" => - 0.6 "increase sales volume"
+"increase customer loyalty" => + 0.4 "increase sales volume"
+"increase return on investment (GM)" { &
+  "increase profit per vehicle" { |
+    "increase foreign earnings" @0, 0.9@
+    "increase high margin sales" @0, 0.6@
+    "increase sales price" @0, 0.5@=> + 0.3 "improve car services", --"lower sales price", - 0.5 "increase customer loyalty"
+    "lower production costs" { &
+      "improve economies of production" { |
+        "outsource units of production"
+        "reduce raw materials costs"
+      }
+      "keep labour costs low"@0, 0.9@
+    }
+  }
+  "increase sales volume" { |
+    "expand markets" @ 0.3 , 0 @
+    "increase consumer appeal" { |
+      "lower environment impact" @0.9, 0@=> + 0.4 "increase customer loyalty"
+      "lower purchase costs" { |
+        "lower loan interest rates"
+        "lower sales price" @0.8, 0@=> --"increase sales price"
+        "offer rebates"@0.3, 0@
+      }
+      "reducing operating costs" { |
+        "improve mileage"
+        "lower gas price"@0.8, 0@
+      }
+    }
+  } => - 0.6 "increase Toyota sales"
+}
+"lower Jap. interest rates" => + 0.6 "lower sales price"

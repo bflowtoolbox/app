@@ -1,0 +1,19 @@
+/**
+ * Julio Cesar Sampaio do Prado Leite et al. Goal-based Software Reuse. CAiSE'05.
+ * http://www.cs.toronto.edu/~yijun/literature/paper/leite05caise.pdf
+ */
+"Cost saved" => ++<"Aspect Reduce cost of training by 50% over next year">::"May Reduce cost of training by 50% over next year", +<"Aspect Learners Satisfied">::"May Learners Satisfied"
+"May High dropout rates" => -<"Aspect Earn $200,000 By Selling Courses">::"May Earn $200,000 By Selling Courses"
+"May Learners satisfied" => +<"Aspect Earn $200,000 By Selling Courses">::"May Earn $200,000 By Selling Courses"
+"More efforts" => -<"Aspect Reduce cost of training by 50% over next year">::"May Reduce cost of training by 50% over next year"
+<"Aspect Reduce cost of training by 50% over next year">::"May Reduce cost of training by 50% over next year" => +<"Aspect Earn $200,000 By Selling Courses">::"May Earn $200,000 By Selling Courses"
+<"Role Instructor [eCourse]">::"Do Give instructions/feedbacks" ==> <"Role Learner [eCourse]">
+<"Role Instructor [eCourse]">::"Do Lead the eCourse" ==> <"Role Learner [eCourse]">
+<"Role Knowledge Provider [CourseContent]">::"Provide: Course materials" ==> <"Role Provider [eCourse]">
+<"Role Learner [eCourse]">::Attendance ==> <"Role Provider [eCourse]">
+<"Role Pedagogical knowledge Provider">::"Do Provide pedagorgical principles and processes" ==> <"Role Provider [eCourse]">
+<"Role Provider [eCourse]">::"Be employed" ==> <"Role Instructor [eCourse]">
+<"Role Provider [eCourse]">::"May Business opportunity" ==> <"WBT/eLearning consultant">
+<"Role Provider [eCourse]">::"May Provide interesting eCourse education" ==> <"Role Learner [eCourse]">
+<"Role Technology Provider [Web,DB]">::"Do Provide technical support" ==> <"Role Provider [eCourse]">
+<"WBT/eLearning consultant">::"Provide: WBT design knowledge" ==> <"Role Provider [eCourse]">

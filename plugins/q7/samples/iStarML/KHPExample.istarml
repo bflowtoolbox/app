@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<istarml version="1.0">
+   <diagram name="">
+      <graphic content="SVG"/>
+      <ielement type="softgoal" id="_Ny9u0ceIEeCGwI-I2xY10A"
+                name="Help as Many Kids as possible">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_Ny-V5ceIEeCGwI-I2xY10A" aref="_Ny9vCseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_Ny-V8seIEeCGwI-I2xY10A" aref="_Ny-V7seIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="softgoal" id="_Ny9u0seIEeCGwI-I2xY10A" name="High Quality Counselling">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_Ny-V5MeIEeCGwI-I2xY10A" aref="_Ny9vCseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_Ny-V8MeIEeCGwI-I2xY10A" aref="_Ny-V7seIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="task" id="_Ny9u08eIEeCGwI-I2xY10A"
+                name="Provide counseling via text message">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_Ny-V4ceIEeCGwI-I2xY10A" aref="_Ny9vCseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_Ny-V9ceIEeCGwI-I2xY10A" aref="_Ny-V7seIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="task" id="_Ny9u1MeIEeCGwI-I2xY10A"
+                name="Provide counseling via Cyber Cafe/Portal/Chat Room">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_Ny-V4seIEeCGwI-I2xY10A" aref="_Ny9vCseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_Ny-V9seIEeCGwI-I2xY10A" aref="_Ny-V7seIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_Ny9u1ceIEeCGwI-I2xY10A" name="Text Messaging Service">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_Ny-V7ceIEeCGwI-I2xY10A" aref="_Ny-V5seIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_Ny-V4ceIEeCGwI-I2xY10A" aref="_Ny9vCseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <ielement type="resource" id="_Ny9u1seIEeCGwI-I2xY10A"
+                name="Cyber Cafe/Portal/Chat Room Service">
+         <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <dependency>
+            <depender iref="_Ny-V7MeIEeCGwI-I2xY10A" aref="_Ny-V5seIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </depender>
+            <dependee iref="_Ny-V4seIEeCGwI-I2xY10A" aref="_Ny9vCseIEeCGwI-I2xY10A">
+               <graphic content="SVG"/>
+            </dependee>
+         </dependency>
+      </ielement>
+      <actor type="agent" id="_Ny9vCseIEeCGwI-I2xY10A" name="Organization">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="24" ypos="660" width="469" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="goal" id="_Ny9vC8eIEeCGwI-I2xY10A"
+                      name="Provide Online Counseling Services">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_Ny9vDMeIEeCGwI-I2xY10A" name="Help Kids">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_Ny9vDceIEeCGwI-I2xY10A" name="Increase Funds">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny-V5ceIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_Ny9vDseIEeCGwI-I2xY10A" name="Avoid Scandal">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny9vDceIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_Ny-V4MeIEeCGwI-I2xY10A" name="Anonymity [Serivces]"
+                      QualitativeReasoningCombinedLabel="PartiallySatisfied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny9vDseIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_Ny-V4ceIEeCGwI-I2xY10A" name="Use Text Messaging"
+                      QualitativeReasoningCombinedLabel="Satisfied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny-V4MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="break" iref="_Ny-V5MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="hurt" iref="_Ny-V48eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_Ny9vC8eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_Ny-V4seIEeCGwI-I2xY10A" name="Use Cyber Cafe/Portal/Chat Room"
+                      QualitativeReasoningCombinedLabel="Denied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="hurt" iref="_Ny-V4MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="hurt" iref="_Ny-V5MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_Ny-V48eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_Ny9vC8eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_Ny-V48eIEeCGwI-I2xY10A" name="Immediacy [Services]">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny-V5MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_Ny-V5MeIEeCGwI-I2xY10A" name="High Quality Counseling">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny9vDMeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_Ny9vDceIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_Ny-V5ceIEeCGwI-I2xY10A"
+                      name="Help as many kids as possible">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny9vDMeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="agent" id="_Ny-V5seIEeCGwI-I2xY10A" name="Kids and Youth">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="84" ypos="36" width="469" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_Ny-V58eIEeCGwI-I2xY10A" name="Get Effective Help">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_Ny-V6MeIEeCGwI-I2xY10A"
+                      name="Comfortableness with Service">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny-V58eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_Ny-V6ceIEeCGwI-I2xY10A" name="Immedicacy [Service]">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny-V58eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_Ny-V6seIEeCGwI-I2xY10A" name="Anonymity">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny-V58eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_Ny-V6MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="goal" id="_Ny-V68eIEeCGwI-I2xY10A" name="Help be acquired">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_Ny-V7MeIEeCGwI-I2xY10A"
+                      name="Kids use Cyber Cafe/Portal/Chat Room">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="make" iref="_Ny-V6ceIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="hurt" iref="_Ny-V6seIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_Ny-V6MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_Ny-V68eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_Ny-V7ceIEeCGwI-I2xY10A" name="Use Text Messaging">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="hurt" iref="_Ny-V6ceIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_Ny-V6MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_Ny-V6seIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_Ny-V68eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+      <actor type="role" id="_Ny-V7seIEeCGwI-I2xY10A" name="Counsellors">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="1032" ypos="228" width="0" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_Ny-V78eIEeCGwI-I2xY10A" name="Happiness [Counsellors]">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny-V8MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_Ny-V8MeIEeCGwI-I2xY10A" name="High Quality Counselling">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny-V78eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_Ny-V8ceIEeCGwI-I2xY10A" name="Avoid Burnout">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny-V78eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_Ny-V8seIEeCGwI-I2xY10A"
+                      name="Hlep as many kids as possible">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="hurt" iref="_Ny-V8MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="hurt" iref="_Ny-V8ceIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="help" iref="_Ny-V78eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_Ny-V88eIEeCGwI-I2xY10A" name="Listen for cues">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny-V8MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="goal" id="_Ny-V9MeIEeCGwI-I2xY10A"
+                      name="Provide Online Counselling Services">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_Ny-V8seIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_Ny-V9ceIEeCGwI-I2xY10A" name="Use Text Messaging">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="break" iref="_Ny-V88eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_Ny-V9MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_Ny-V9seIEeCGwI-I2xY10A" name="Use Cyber Cafe/Portal/Chat Room">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="hurt" iref="_Ny-V88eIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_Ny-V9MeIEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+   </diagram>
+</istarml>

@@ -1,0 +1,28 @@
+<middleware>::"inter-program" [communication] { OR
+    "inter-network" [communication] { AND
+        (++ "network notification")=>
+//            <sender>::"inter-network send"
+//                [request, response, "byte packets"]
+		  <"priority-based sender">::"inter-network send"
+		        [request, response, "byte packets"] { AND
+		    <sender>::"inter-network send"
+		    <"Aspect priority">::"encode priority info"
+		  } => + "predictable communications"
+        (++ "message arrives at send queue")=>
+//            <receiver>::"inter-network receive"
+//                ["byte packets", request]
+		  <"priority-based receiver">::"inter-network receive"
+		        ["byte packets", request] { AND
+		    <"Aspect priority">::"decode priority info"
+		    <receiver>::"inter-network receive"
+		  } => + "predictable communications"                
+        (++ "formatted request arrives dispatcher")=>
+            <dispatcher>::dispatch
+                [request, "target service"]
+        <"user app">::process[request, response]
+    }
+    <dispatcher>::"inter-process" [communication]    
+} => + usability, + flexibility, 
+      + "fault tolerance", +"ease of programming"
+<"Aspect predictable communications">::"predictable communications" => +efficiency
+      

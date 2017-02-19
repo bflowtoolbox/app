@@ -1,0 +1,532 @@
+/**
+ * @author Yijun Yu
+ * @date   created Oct 17, 2004
+ * @date   last modified Sep 6, 2005
+ */
+options {
+  JAVA_UNICODE_ESCAPE = true;
+  FORCE_LA_CHECK = true;
+  // static parser has problems in JavaCC generated code
+  // STATIC = false;
+}
+PARSER_BEGIN(Q7)
+package edu.toronto.cs.q7.parser;
+import edu.toronto.cs.q7.model.Advice;
+import edu.toronto.cs.q7.model.Effect;
+import edu.toronto.cs.q7.model.How;
+import edu.toronto.cs.q7.model.Pointcut;
+import edu.toronto.cs.q7.model.Entity;
+import java.util.Hashtable;
+
+public class Q7 {
+  static Q7 parser;
+  static String comment;
+  static void initialize_parser(java.io.InputStream in) {
+      if (parser == null)
+	      parser = new Q7(in);
+	  else
+	  	  Q7.ReInit(in);
+  }
+  public static java.util.ArrayList a = null;
+  public static void main(String args[]) {
+      try {
+	    initialize_parser(new java.io.FileInputStream(args[0]));
+      } catch (java.io.FileNotFoundException e) {
+        return;
+      }
+    a = null;
+    try {
+      Entity.aliases = new Hashtable();
+	  a = Q7.Advices();
+    } catch (ParseException e) {
+      System.out.println("Q7 Parser Version 0.1:  Encountered errors during parse.");
+      e.printStackTrace();
+    }
+  }
+}
+PARSER_END(Q7)
+
+SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+//SPECIAL_TOKEN : /* COMMENTS */
+//{
+//  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")> 
+//| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/"> 
+//| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/"> 
+//}
+
+/* COMMENTS */
+
+MORE :
+{
+  "//" : IN_SINGLE_LINE_COMMENT
+|
+  <"/**" ~["/"]> { input_stream.backup(1); } : IN_FORMAL_COMMENT
+|
+  "/*" : IN_MULTI_LINE_COMMENT
+}
+
+<IN_SINGLE_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "\n" | "\r" | "\r\n" > : DEFAULT
+}
+
+<IN_FORMAL_COMMENT>
+SPECIAL_TOKEN :
+{
+  <FORMAL_COMMENT: "*/" > : DEFAULT
+}
+
+<IN_MULTI_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <MULTI_LINE_COMMENT: "*/" > { 
+  	if (Q7.comment==null)
+  		Q7.comment = ""+ matchedToken;
+  	else
+  		Q7.comment += matchedToken;
+  } : DEFAULT 
+}
+
+<IN_SINGLE_LINE_COMMENT,IN_FORMAL_COMMENT,IN_MULTI_LINE_COMMENT>
+MORE :
+{
+  < ~[] >
+}
+ 
+TOKEN : /* RESERVED WORDS AND LITERALS */
+{
+  < TRUE: "true" >
+| < FALSE: "false" >
+}
+
+TOKEN : /* LITERALS */
+{
+  < INTEGER_LITERAL:
+        ("-")? <DECIMAL_LITERAL> (["l","L"])?
+      | ("-")? <HEX_LITERAL> (["l","L"])?
+      | ("-")? <OCTAL_LITERAL> (["l","L"])?
+  >
+|
+  < #DECIMAL_LITERAL:  ["1"-"9"] (["0"-"9"])* >
+|
+  < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
+|
+  < #OCTAL_LITERAL: "0" (["0"-"7"])* >
+|
+  < NON_NEGATIVE_FLOATING_POINT_LITERAL:
+        (["0"-"9"])+ "." (["0"-"9"])*>
+|
+  < FLOATING_POINT_LITERAL:
+        ("-")? (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | ("-")? "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | ("-")? (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | ("-")? (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+  >
+|
+  < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+|
+  < CHARACTER_LITERAL:
+      "'"
+      (   (~["'","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )
+      "'"
+  >
+|
+  < STRING_LITERAL:
+      "\""
+      (   (~["\"","\\"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\""
+  >
+}
+
+
+TOKEN : /* SEPARATORS */
+{
+  < LEFT_BRACKET: "[" >
+| < RIGHT_BRACKET: "]" >
+| < LEFT_BR: "<" >
+| < RIGHT_BR: ">" >
+| < LEFT_BRACE: "{" >
+| < RIGHT_BRACE: "}" >
+| < LEFT_PAR: "(" >
+| < RIGHT_PAR: ")" >
+| < WEAVES: "<=" >
+| < AT: "@" >
+| < IMPLIES: "=>" >
+| < DEPENDS: "==>" >
+| < MAKE: "++" >
+| < HELP: "+" >
+| < HURT: "-" >
+| < BREAK: "--" >
+| < AND: "AND" >
+| < OR: "OR" >
+| < ANDSYMB: "&" >
+| < ORSYMB: "|" >
+| < SCOPE: "::" >
+| < COMMA: "," >
+| < SEMICOLON: ";" >
+| < PARALLEL: "||" >
+| < STAR: "*" >
+| < SLASH: "/" >
+| < DEP: "~" >
+| < AS: "=" >
+| < ALIAS: "AS" >
+}
+
+TOKEN : /* IDENTIFIERS */
+{
+  < LABEL_FS: "FS">/* fully satisficed */
+| < LABEL_PS: "PS">/* partially satisficed */
+| < LABEL_PD: "PD">/* partially denied */
+| < LABEL_FD: "FD">/* fully denied */
+| < LABEL_CF: "CF">/* conflicted */
+| < LABEL_UN: "UN">/* undecided */
+| < ID: <LETTER> (<LETTER>|<DIGIT>)* >
+|
+  < #LETTER:
+      [
+       "\u0024",
+       "\u0041"-"\u005a",
+       "\u005f",
+       "\u0061"-"\u007a",
+       "\u00c0"-"\u00d6",
+       "\u00d8"-"\u00f6",
+       "\u00f8"-"\u00ff",
+       "\u0100"-"\u1fff",
+       "\u3040"-"\u318f",
+       "\u3300"-"\u337f",
+       "\u3400"-"\u3d2d",
+       "\u4e00"-"\u9fff",
+       "\uf900"-"\ufaff"
+      ]
+  >
+|
+  < #DIGIT:
+      [
+       "\u0030"-"\u0039",
+       "\u0660"-"\u0669",
+       "\u06f0"-"\u06f9",
+       "\u0966"-"\u096f",
+       "\u09e6"-"\u09ef",
+       "\u0a66"-"\u0a6f",
+       "\u0ae6"-"\u0aef",
+       "\u0b66"-"\u0b6f",
+       "\u0be7"-"\u0bef",
+       "\u0c66"-"\u0c6f",
+       "\u0ce6"-"\u0cef",
+       "\u0d66"-"\u0d6f",
+       "\u0e50"-"\u0e59",
+       "\u0ed0"-"\u0ed9",
+       "\u1040"-"\u1049"
+      ]
+  >
+}
+/*****************************************
+ * THE TELOS LANGUAGE GRAMMAR STARTS HERE *
+ *****************************************/
+
+/*
+ * Program structuring syntax follows.
+ */
+java.util.ArrayList Advices() :
+{ Advice t; 
+  java.util.ArrayList a = new java.util.ArrayList();
+}
+{
+  ( t = Advice() { a.add(t); } )*
+  {return a;}
+}
+
+Advice Advice() :
+{
+    String op = null;
+	String when = null;
+	String who = null;
+	String why = null;
+	String what = null;
+	String alias = null;
+	java.util.ArrayList where = null;
+	How how = null;
+	java.util.ArrayList how_much = null;
+	String label = null;
+}
+{
+  ([ <LEFT_PAR> op = Op() when = When() <RIGHT_PAR> <IMPLIES> ]
+  ( 
+  [ LOOKAHEAD(3) (<LEFT_BR> who=Who() <RIGHT_BR> <SCOPE>) ] why=Why()
+  [ <LEFT_BRACKET> what=What() <RIGHT_BRACKET> ]
+  [ (<ALIAS> | <AS>) alias = Alias() ]
+  [ <WEAVES> where=Where() ]
+  | LOOKAHEAD(3) (<LEFT_BR> who=Who() <RIGHT_BR> ))
+  [ <LEFT_BRACE> how=How() <RIGHT_BRACE> ]
+  [ <AT> label = Label() <AT> ] [ ( <IMPLIES> how_much = HowMuch() | <DEPENDS> how_much = Agents() /* shorthand */) ]
+  )
+ { 
+ 	Advice a = new Advice(op!=null? op + ":" + when: when, who, why, what, alias, where, how, how_much, Q7.comment==null?null: (""+Q7.comment), label);
+ 	Q7.comment = null;
+ 	return a; 
+ }
+}
+
+String When():
+{
+  Token  condition = null;
+}
+{
+  (condition= <ID> | condition= <STRING_LITERAL> | condition = <TRUE> | condition = <FALSE>)
+  { return condition.toString(); }
+}
+
+String Who():
+{
+  Token  agent = null;
+  String who = null;
+}
+{
+  (agent = <ID> | agent = <STRING_LITERAL>) [ who = Who() ]
+  {
+    return  agent.toString() + (who!=null? who: "");
+  }
+}
+
+String Why():
+{
+  Token  goal = null;
+}
+{
+  (goal = <ID> | goal = <STRING_LITERAL>) 
+  {
+    return goal.toString();
+  }
+}
+
+String Alias():
+{
+  Token  alias = null;
+}
+{
+  (alias = <ID> | alias = <STRING_LITERAL>) 
+  {
+    return alias.toString();
+  }
+}
+
+
+String Label():
+{
+  Token label = null;
+  String l = null;
+}
+{
+  ( label = <LABEL_FS> 
+  | label = <LABEL_PS>
+  | label = <LABEL_PD>
+  | label = <LABEL_FD>
+  | label = <LABEL_CF>
+  | label = <LABEL_UN>
+  | l = LabelList()
+  ) 
+  {
+    return (label==null && l!=null) ? l: label.toString();
+  }
+}
+
+String LabelList():
+{
+  String r = null;
+  Token l1 = null;
+  String l2 = null;
+}
+{
+  (l1 = <NON_NEGATIVE_FLOATING_POINT_LITERAL> | l1 = <INTEGER_LITERAL>) {
+    if (l1==null) return null;
+  }
+  ( <COMMA> (l2 = LabelList()))? {
+     if (l2==null) return l1.toString();
+     return l1.toString() + ", " + l2;
+  }
+}
+
+String What():
+{
+  Token topic = null;
+  String what = null;
+}
+{
+  (topic = <ID> | topic = <STRING_LITERAL>) [ <COMMA> what = What() ]
+  {
+    if (what == null) 
+	    return topic.toString();
+	return topic.toString().trim() + "," + what;
+  }
+}
+
+java.util.ArrayList Where():
+{
+  java.util.ArrayList where = null;
+  java.util.ArrayList pointcuts;
+  Pointcut pointcut = null;
+}
+{
+  pointcut = Pointcut() [<COMMA> where = Where() ]
+  {
+  	if (where == null)
+  		pointcuts = new java.util.ArrayList();
+  	else
+  		pointcuts = where;
+  	pointcuts.add(pointcut);
+  	return pointcuts;
+  }
+}
+
+java.util.ArrayList HowMuch():
+{
+  java.util.ArrayList effects;
+  java.util.ArrayList howmuch = null;
+  Effect effect = null;
+}
+{
+  effect = Effect() [ <COMMA> howmuch = HowMuch() ]
+  {
+    if (howmuch==null)
+    	effects = new java.util.ArrayList();
+    else
+	    effects = howmuch;
+    effects.add(effect);
+    return effects;
+  }
+}
+
+
+java.util.ArrayList Agents():
+{
+  java.util.ArrayList effects;
+  java.util.ArrayList howmuch = null;
+  Effect effect = null;
+}
+{
+  effect = DepEffect() [ <COMMA> howmuch = Agents() ]
+  {
+    if (howmuch==null)
+    	effects = new java.util.ArrayList();
+    else
+	    effects = howmuch;
+    effects.add(effect);
+    return effects;
+  }
+}
+
+
+String Op():
+{
+	Token op = null;	
+	Token degree = null;
+}
+{
+	(op = <HELP> | op = <HURT> | op = <BREAK> | op = <MAKE> | op = <DEP> ) 
+	(degree = <NON_NEGATIVE_FLOATING_POINT_LITERAL> | degree = <INTEGER_LITERAL> )?
+	{
+		return op.toString() + (degree!=null? " " + degree.toString():"");
+	}
+}
+
+Effect Effect():
+{
+  String op = null;
+  String who = null;
+  String why = null;
+  String what = null;
+  String alias = null;
+}
+{
+  op = Op() [<LEFT_BR> who = Who() <RIGHT_BR> <SCOPE> ] (why=Why()) [ <LEFT_BRACKET> what=What() <RIGHT_BRACKET> ] 
+  [(<ALIAS> | <AS>) alias = Alias()]
+  {
+    return new Effect(op == null? "~": op, who, why, what, alias);
+  }
+}
+
+
+Effect DepEffect():
+{
+  String who = null;
+}
+{
+  <LEFT_BR> who = Who() <RIGHT_BR> 
+  {
+    return new Effect("~", who, null, null, null);
+  }
+}
+
+
+/* currently, Pointcut are the same as Effect,
+   except that the string can be replaced by
+   wildcards */
+Pointcut Pointcut():
+{
+  String op1 = null;
+  Token op = null;
+  String who = null;
+  String why = null;
+  String what = null;
+  String alias = null;
+}
+{
+  (op1 = Op() | op = <AND> | op = <OR> | op = <ANDSYMB> | op = <ORSYMB> 
+  /* Note. Here we also allow the 
+     AND/OR rule to be weaved to accomodate some who believe that 
+     aspects can also be functional */ ) 
+    [<LEFT_BR> (<STAR> | who = Who()) <RIGHT_BR> <SCOPE> ] 
+    (<STAR> | why=Why())
+    [<LEFT_BRACKET> (<STAR> | what=What()) <RIGHT_BRACKET> ]  
+    [(<ALIAS> | <AS>) alias = Alias() ]
+  {
+    return new Pointcut(op1==null?"~": 
+    					(op!=null?(op.toString().equals("AND")?"&":
+		     					   (op.toString().equals("OR") ? "|":op1)):
+    					  op1), 
+    		who==null? "*": who.toString(), 
+    		why==null? "*" : why.toString(), 
+    		what==null?"*":what.toString(),
+    		alias==null?"*":alias.toString());
+  }
+}
+
+How How():
+{
+  Token rule = null;
+  Token enrich = null;
+  java.util.ArrayList advices = null;
+}
+{
+  (rule = <AND> | rule = <OR> | rule = <ANDSYMB> | rule = <ORSYMB> ) [ (enrich = <SEMICOLON> | enrich = <PARALLEL> | enrich = <ORSYMB> | enrich = <SLASH> ) ]
+  advices = Advices()
+  {
+    return new How(rule.toString().equals("AND")?"&":
+    				(rule.toString().equals("OR")?"|":
+    				 rule.toString())
+	    , enrich==null? null: enrich.toString(),  advices);
+  }
+}

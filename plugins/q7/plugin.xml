@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension point="core.example">
+      <example
+            file="Models/Application.ood">
+      </example>
+      <example
+            file="Models/ClimateIntroMacKaySR.ood">
+      </example>
+      <example
+            file="Models/MacKayIntroSR.ood">
+      </example>
+      <example
+            file="Models/Model1_ExperienceChair.ood">
+      </example>
+      <example
+            file="Models/TCExample.ood">
+      </example>
+      <example
+            file="iStarML/Application.istarml">
+      </example>
+      <example
+            file="iStarML/ClimateIntroMacKaySR.istarml">
+      </example>
+      <example
+            file="iStarML/myFirst.istarml">
+      </example>
+      <example
+            file="iStarML/MacKayIntroSR.istarml">
+      </example>
+      <example
+            file="iStarML/KHPExample.istarml">
+      </example>
+      <example
+            file="iStarML/KHPSmall.istarml">
+      </example>
+      <example
+            file="Q7/ex1.q7">
+      </example>
+      <example
+            file="Q7/ex2.q7">
+      </example>
+      <example
+            file="Q7/ex3.q7">
+      </example>
+      <example
+            file="Q7/example.q7">
+      </example>
+      <example
+            file="Q7/mediashop.q7">
+      </example>
+      <example
+            file="Q7/drproject.q7">
+      </example>
+      <example
+            file="Q7/componenx.q7">
+      </example>
+   </extension>    
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IFile"
+            nameFilter="*.q7"
+            id="contribution1">
+         <menu
+               label="Convert the Q7 representation into"
+               path="additions"
+               id="menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               class="action.Telos"
+               icon="icons/telos.gif"
+               id="TelosAction"
+               label="Telos"
+               menubarPath="menu1/group1"
+               tooltip="i* model">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="core.convertor">
+  		<convertor id="Q7 to Telos" class="convertor.Q7_Telos"
+            input="q7" output="tel"/>
+      	<convertor id="Q7 to EMF" class="convertor.q7emf"
+            input="q7" output="q7dsl"/>
+   </extension>
+<!--see svn history for more converter actions --> 
+</plugin>

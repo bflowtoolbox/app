@@ -1,0 +1,106 @@
+<"Aspect Security [system]">::"May Security" [system] { &
+  "May Confidentiality" [system]
+  "May Info. flow Security" [system]
+}
+<"Aspect Usability [ui]">::"May Usability" [ui] { &
+  "May Usability" [gui] { &
+    "May Usability" [font]
+    "May Usability" [layout]
+  }
+  "May Usability" [language]
+}
+Front [shop] { &
+  Informing [shop] { &
+    Reporting [shop] { &
+      "Page Layout" [gui] => ++<"Aspect Usability [ui]">::"May Usability" [layout]
+      Customization [language] { |
+        Customizing [English] => ++<"Aspect Usability [ui]">::"May Usability" [language]
+      }
+      Infobox [font] => ++<"Aspect Usability [ui]">::"May Usability" [font]
+      Reporting [account]
+      Reporting [product]
+      Reporting [stock]
+      Transaction [account] { |
+        "Database Table" [transaction] => ++<"Aspect Integrity [data]">::"May Integrity" [data]
+      }
+      Transaction [product] { |
+        "Database Table" [transaction] => ++<"Aspect Integrity [data]">::"May Integrity" [data]
+      }
+      Transaction [stock] { |
+        "Database Table" [transaction] => ++<"Aspect Integrity [data]">::"May Integrity" [data]
+      }
+    }
+    Searching [shop] { &
+      "Page Layout" [gui] => ++<"Aspect Usability [ui]">::"May Usability" [layout]
+      Customization [language] { |
+        Customizing [English] => ++<"Aspect Usability [ui]">::"May Usability" [language]
+      }
+      Infobox [font] => ++<"Aspect Usability [ui]">::"May Usability" [font]
+      Navigating [stock]
+      Searching [stock]
+      Transaction [stock] { |
+        "Database Table" [transaction] => ++<"Aspect Integrity [data]">::"May Integrity" [data]
+      }
+    }
+  }
+  Managing [shop] { &
+    "Page Layout" [gui] => ++<"Aspect Usability [ui]">::"May Usability" [layout]
+    Customization [language] { |
+      Customizing [English] => ++<"Aspect Usability [ui]">::"May Usability" [language]
+    }
+    Infobox [font] => ++<"Aspect Usability [ui]">::"May Usability" [font]
+    Managing [account]
+    Managing [product]
+    Managing [stock]
+    SSL [protocol] => ++<"Aspect Security [system]">::"May Info. flow Security" [system]
+    Transaction [account] { |
+      "Database Table" [transaction] => ++<"Aspect Integrity [data]">::"May Integrity" [data]
+    }
+    Transaction [product] { |
+      "Database Table" [transaction] => ++<"Aspect Integrity [data]">::"May Integrity" [data]
+    }
+    Transaction [stock] { |
+      "Database Table" [transaction] => ++<"Aspect Integrity [data]">::"May Integrity" [data]
+    }
+  }
+  Shopping [shop] { &
+    "Checking Out" [cart,product,account,stock] { &
+      "Login/Logout" [account]
+      "Page Layout" [gui] => ++<"Aspect Usability [ui]">::"May Usability" [layout]
+      "Password Protection" [account] => ++<"Aspect Security [system]">::"May Confidentiality" [system]
+      Clearing [cart]
+      Customization [language] { |
+        Customizing [English] => ++<"Aspect Usability [ui]">::"May Usability" [language]
+      }
+      Infobox [font] => ++<"Aspect Usability [ui]">::"May Usability" [font]
+      SSL [protocol] => ++<"Aspect Security [system]">::"May Info. flow Security" [system]
+      Transaction [account] { |
+        "Database Table" [transaction] => ++<"Aspect Integrity [data]">::"May Integrity" [data]
+      }
+      Transaction [cart] { |
+        "Session Cookie" [transaction] => ++<"Aspect Responsiveness [transaction]">::"May Responsiveness" [transaction]
+      }
+      Transaction [product] { |
+        "Database Table" [transaction] => ++<"Aspect Integrity [data]">::"May Integrity" [data]
+      }
+      Transaction [stock] { |
+        "Database Table" [transaction] => ++<"Aspect Integrity [data]">::"May Integrity" [data]
+      }
+      Updating [account,product]
+      Updating [product,stock]
+    }
+    Getting [account]
+    Preparing [cart,product] { &
+      "Page Layout" [gui] => ++<"Aspect Usability [ui]">::"May Usability" [layout]
+      Adding [item,cart]
+      Customization [language] { |
+        Customizing [English] => ++<"Aspect Usability [ui]">::"May Usability" [language]
+      }
+      Infobox [font] => ++<"Aspect Usability [ui]">::"May Usability" [font]
+      Selecting [item,cart]
+      Transaction [cart] { |
+        "Session Cookie" [transaction] => ++<"Aspect Responsiveness [transaction]">::"May Responsiveness" [transaction]
+      }
+    }
+  }
+}

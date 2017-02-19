@@ -1,0 +1,18 @@
+OpenOME { &
+  "Feature model editor"@FS@ => ++<"Aspect Support variability analysis">::"May Support variability analysis"
+  "Goal reasoning tool" => ++<"Aspect Support goal analysis">::"May Support goal analysis"
+  "Ontology editor" => ++<"Aspect Support semantics analysis">::"May Support semantics analysis"
+  "Ontology query tool" => ++<"Aspect Support interactive semantics analysis">::"May Support interactive semantics analysis"
+  "PNG Java painter"@FS@ => +<"Aspect Usability">::"May Usability"
+  "goal model editor" { &
+    controller@FS@
+    model@FS@
+    view@FS@
+  }@FS@ => ++<"Aspect Support Requirements Engineering">::"May Support Requirements Engineering"
+  "graph layout tool"@FS@ => +<"Aspect Usability">::"May Usability"
+  "graph representation" { | |
+    "Q7 language parser and i* code generator"@FS@ => ++<"Aspect Conciseness">::"May Conciseness"
+    "Telos parser and knowledge base" => ++<"Aspect Backward compatibility">::"May Backward compatibility"
+    "XML representation" => ++<"Aspect Extensiblity">::"May Extensiblity"
+  }@FS@
+}@FS@

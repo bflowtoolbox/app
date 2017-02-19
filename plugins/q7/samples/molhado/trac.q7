@@ -1,0 +1,17 @@
+"Support S/W Development Projects" { AND
+  "Support Established Dev. Projects" { AND
+  	"Provide Access to SVN" => + "Don't Interfere"
+  	"Web-based" => + "Minimalistic Approach"
+  	"Issue Tracking"
+  }
+  "Overview Project" {AND
+    "Enhanced Wiki" { AND
+	    "Allow Wiki Markup in Text Fields" 
+	    "Link Bugs, Wiki, Source" => + Usability
+	}    
+    "Track Progress" { OR
+      "Show Dev Events in Time"
+      "Convenient Reporting Facilities" => + Usability
+    } 
+  }
+} => + "Write Great Software" 

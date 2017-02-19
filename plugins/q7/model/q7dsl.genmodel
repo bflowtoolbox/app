@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/q7.dsl/src"
+    modelPluginID="q7.dsl" modelName="Q7dsl" importerID="org.eclipse.emf.importer.ecore">
+  <foreignModel>q7dsl.ecore</foreignModel>
+  <genPackages prefix="Q7dsl" disposableProviderFactory="true" ecorePackage="q7dsl.ecore#/">
+    <genEnums ecoreEnum="q7dsl.ecore#//Op">
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Op/HELP"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Op/HELP2"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Op/HURT"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Op/HURT2"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Op/MAKE"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Op/MAKE2"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Op/BREAK"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Op/BREAK2"/>
+    </genEnums>
+    <genEnums ecoreEnum="q7dsl.ecore#//DecompositionType">
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//DecompositionType/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//DecompositionType/AND1"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//DecompositionType/OR"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//DecompositionType/OR1"/>
+    </genEnums>
+    <genEnums ecoreEnum="q7dsl.ecore#//Enrichment">
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Enrichment/SEQUENTIAL"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Enrichment/SEQUENTIAL1"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Enrichment/PARALLEL"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Enrichment/PARALLEL1"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Enrichment/XOR"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//Enrichment/XOR1"/>
+    </genEnums>
+    <genEnums ecoreEnum="q7dsl.ecore#//LabelEnumerator">
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//LabelEnumerator/FULLY_SATISFIED"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//LabelEnumerator/PARTIALLY_SATISFIED"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//LabelEnumerator/FULLY_DENIED"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//LabelEnumerator/PARTIALLY_DENIED"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//LabelEnumerator/CONFLICT"/>
+      <genEnumLiterals ecoreEnumLiteral="q7dsl.ecore#//LabelEnumerator/UNKNOWN"/>
+    </genEnums>
+    <genClasses ecoreClass="q7dsl.ecore#//Model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Model/advices"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//Advice">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Advice/how"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//Advice/who"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Advice/when"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Advice/why"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Advice/label"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Advice/what"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Advice/where"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Advice/whom"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Advice/howmuch"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//Who">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Who/actor"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//Actor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//Actor/name"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//When">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//When/expr"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//Why">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//Why/name"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//What">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//What/topics"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//Topic">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//Topic/name"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//Where">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Where/topics"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Where/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//Where/op"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//How">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//How/op"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//How/enrich"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//How/advices"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//HowMuchRules">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//HowMuchRules/howmuch"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//HowMuch">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//HowMuch/strength"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//HowMuch/why"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//HowMuch/who"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//HowMuch/trust"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//HowMuch/what"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//HowMuch/op"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//Label">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//Label/label"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Label/den"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference q7dsl.ecore#//Label/sat"/>
+    </genClasses>
+    <genClasses ecoreClass="q7dsl.ecore#//FLOAT">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//FLOAT/integral"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute q7dsl.ecore#//FLOAT/decimal"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

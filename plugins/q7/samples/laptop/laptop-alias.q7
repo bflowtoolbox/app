@@ -1,0 +1,26 @@
+"Multimedia-laptops" { | 
+"main-streams" { |
+      "Apple Powerbook G4" => 
+                        ++"high connectivity" AS n, 
+				-"long battery life" = b, 
+                        +"light weight"=w, 
+                        -"high multimedia performance"=p, 
+                        -"low cost"=c
+      "Fujitsu LifeBook N3510" => -p, -b, -w, ++c, -n
+      "HP Pavillion dv4000" => +w, ++c, +p, +b, +n
+      "Sony VAIO VGN-FS570" => +p, +w, -b, ++n, -c 
+      "Toshiba Satellite A75-S231" => +p, ++c, +n, --w, --b
+  } => +n, +p, +w, +c, +b
+"high-end" { |
+     "Dell Insprion 9300" => ++p, +n, --c, +b, -w
+     "Fujitsu LifeBook N6010" => +p, ++n, --w, -b, -c
+     "Gateway M680XL" => ++b, ++p, +n, -w, -c
+     "Sony VAIO VGN-A690" => +p, --c, -w, -b, +n
+     "Toshiba Qosmio G25-AV513" => ++p, ++n, --b, -w, --c
+  } => ++p, ++n, --c, --w, --b
+"mini" { |
+      "Fujitsu LifeBook P1000" => +w, +b, -n, --p, +c
+      "OQO model 01" => ++w, --p, -n, -c
+      "Toshiba libretto U100" => +p, +n, +w, -c, ++b
+  } => ++w, ++b, -n, -p, -c
+}

@@ -1,0 +1,59 @@
+"Model Requirements" { AND
+   Manage [project] { AND
+   	Create [project]
+	Exclude [project]
+	"Save as"[project] 
+	"Link with" [user, project]
+	"Unlink with" [user, project]
+	insert [user]
+	export [project]
+	import [project]
+	generate [graph]
+	edit [project]
+   }
+   Remember [password]
+   Register [user] => ++ Security
+   install [CeL]
+   uninstall [CeL]
+} => + persistence, + Reliability
+
+
+Security { AND
+  Confidentiality { AND
+    Cryptography { AND
+  	Encrypt [data]
+	Send [data]
+	Decrypt [data]
+    }
+    Authentication { AND
+        Get [data]
+	Validate [data]
+	Set [permission]
+	Control [access]
+    }
+  }
+  Integrity 
+  Availability
+}
+
+Persistence { AND 
+  "Persistence in" [DB] { AND
+  	"initiate [DB]"
+	"verify if is connected"[DB] 
+	Connect [DB]
+	Disconnect [DB]
+  } => + mro
+  "Make registry operations" { AND
+  	include [data]
+	select [data]
+	delete [data]
+	update [data]
+  }
+  "Persistence in" [file] => + "Make registry operations"
+} => + Authentication
+
+Reliability <= + Authentication { AND
+  Robustness <= + Cryptography { AND
+  	Handling [exception] <= + "Model Requirements"
+  }  
+}

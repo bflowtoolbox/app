@@ -1,0 +1,41 @@
+"Multimedia-laptops" {
+  "main-streams" {
+    "Apple Powerbook G4" => ++"high connectivity", -"long battery life", +"light weight", -"high multimedia performance", -"low cost"
+    "Fujitsu LifeBook N3510" => -"high multimedia performance", -"long battery life", -"light weight", ++"low cost", -"high connectivity"
+    "HP Pavillion dv4000" => +"light weight", ++"low cost", +"high multimedia performance", +"long battery life", +"high connectivity"
+    "Sony VAIO VGN-FS570" => +"high multimedia performance", +"light weight", -"long battery life", ++"high connectivity", -"low cost"
+    "Toshiba Satellite A75-S231" => +"high multimedia performance", ++"low cost", +"high connectivity", --"light weight", --"long battery life"
+
+
+
+
+
+  } => +"high connectivity", +"high multimedia performance", +"light weight", +"low cost", +"long battery life"
+  "high-end" {
+    "Dell Insprion 9300" => ++"high multimedia performance", +"high connectivity", --"low cost", +"long battery life", -"light weight"
+    "Fujitsu LifeBook N6010" => +"high multimedia performance", ++"high connectivity", --"light weight", -"long battery life", -"low cost"
+    "Gateway M680XL" => ++"long battery life", ++"high multimedia performance", +"high connectivity", -"light weight", -"low cost"
+    "Sony VAIO VGN-A690" => +"high multimedia performance", --"low cost", -"light weight", -"long battery life", +"high connectivity"
+    "Toshiba Qosmio G25-AV513" => ++"high multimedia performance", ++"high connectivity", --"long battery life", -"light weight", --"low cost"
+
+
+
+
+
+  } => ++"high multimedia performance", ++"high connectivity", --"low cost", --"light weight", --"long battery life"
+  "mini" {
+    "Fujitsu LifeBook P1000" => +"light weight", +"long battery life", -"high connectivity", --"high multimedia performance", +"low cost"
+    "OQO model 01" => ++"light weight", --"high multimedia performance", -"high connectivity", -"low cost"
+    "Toshiba libretto U100" => +"high multimedia performance", +"high connectivity", +"light weight", -"low cost", ++"long battery life"
+
+
+
+
+
+  } => ++"light weight", ++"long battery life", -"high connectivity", -"high multimedia performance", -"low cost"
+}
+"light weight"
+"long battery life"
+"high connectivity"
+"high multimedia performance"
+"low cost"

@@ -1,0 +1,34 @@
+"Sell to Customer" { & ;
+ "Get Customer Order" { |
+   "Get Phone Order"
+   "Get Fax Order"
+   "Get Online Order"
+ }
+ "Process Customer Order" { |
+   "Bill, Build, then Ship" { & ;
+     "Bill"
+     "Collect Payment"
+     "Build and Package Order"
+     "Ship Order"
+   } => ++"Minimize Risk", -"Customer Satisfaction"
+   "Build, then Ship and Bill" { & ;
+     "Apply Process To Customer" { |
+       "Apply to Any Customer" { &
+         "Approve Order"
+       } => -"Minimize Risk"
+       "Apply to Trusted Customer" { & ;
+         "Determine Trustworthiness of Customer" { |
+           "Check if Return Customer"
+           "Check Credit Rating"
+         }
+         "Approve Order"
+       } => +"Minimize Risk"
+     }
+     "Build and Package Order"
+     "Ship and Bill" { & ||
+       "Ship Order"
+       "Bill and Collect Payment"
+     }
+   } => +"Customer Satisfaction"
+ }
+}

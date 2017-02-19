@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<istarml version="1.0">
+   <diagram name="">
+      <graphic content="SVG"/>
+      <actor type="agent" id="_28V1CseKEeCGwI-I2xY10A" name="Application">
+         <graphic content="basic" xpos="0" ypos="0" width="100" height="100" unit="pt"
+                  bgcolor="FFFFFF"
+                  fontfamily="Ubuntu"
+                  fontcolor="000000"
+                  fontsize="12"/>
+         <boundary>
+            <graphic content="basic" xpos="24" ypos="24" width="517" height="0" shape="ellipse"
+                     unit="pt"
+                     bgcolor="FFFFFF"
+                     fontfamily="Ubuntu"
+                     fontcolor="000000"
+                     fontsize="12"/>
+            <ielement type="softgoal" id="_28V1C8eKEeCGwI-I2xY10A" name="Attract Users"
+                      QualitativeReasoningCombinedLabel="PartiallySatisfied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="softgoal" id="_28V1DMeKEeCGwI-I2xY10A" name="Security"
+                      QualitativeReasoningCombinedLabel="Satisfied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_28V1C8eKEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="softgoal" id="_28V1DceKEeCGwI-I2xY10A" name="Usability"
+                      QualitativeReasoningCombinedLabel="Conflict">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_28V1C8eKEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="goal" id="_28V1DseKEeCGwI-I2xY10A" name="Implement Password System"
+                      QualitativeReasoningCombinedLabel="Satisfied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+            </ielement>
+            <ielement type="task" id="_28V1D8eKEeCGwI-I2xY10A" name="Restrict Structure of Password"
+                      QualitativeReasoningCombinedLabel="Satisfied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="hurt" iref="_28V1DceKEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="contribution" value="make" iref="_28V1DMeKEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_28V1DseKEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+            <ielement type="task" id="_28V1EMeKEeCGwI-I2xY10A" name="Ask for Secret Question"
+                      QualitativeReasoningCombinedLabel="Satisfied">
+               <graphic content="basic" xpos="0" ypos="0" width="120" height="55" unit="pt"
+                        bgcolor="FFFFFF"
+                        fontfamily="Ubuntu"
+                        fontcolor="000000"
+                        fontsize="12"/>
+               <ielementLink type="contribution" value="help" iref="_28V1DceKEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+               <ielementLink type="decomposition" value="or" iref="_28V1DseKEeCGwI-I2xY10A">
+                  <graphic content="SVG"/>
+               </ielementLink>
+            </ielement>
+         </boundary>
+      </actor>
+   </diagram>
+</istarml>

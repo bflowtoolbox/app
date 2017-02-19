@@ -1,0 +1,44 @@
+<"Actor Counselling Management">::"!A Training Computer Be Present" ==> <"Position IT Department">
+<"Actor Counselling Management">::"!An IT Trainer Be Present" ==> <"Position IT Department">
+<"Actor Counselling Management">::"!Calls Be Recorded into a Data Base" ==> <"Position IT Department">
+<"Actor Counselling Management">::"!Performance Review Information Be Collected in Data Base" ==> <"Position IT Department">
+<"Actor Counselling Management">::"May *Increase" ["IT Training for Counsellors"] ==> <"Position IT Department">
+<"Actor Counselling Management">::"May Improve" ["Call Recording Equipment"] ==> <"Position IT Department">
+<"Actor Counselling Management">::"May Increase IT Methods to Acquire Feedback" ==> <"Position IT Department">
+<"Actor Counselling Management">::"May Support Analysis" ["Counsellors Time"] ==> <"Position IT Department">
+<"Actor Counselling">::"!IT Systems Be Integrated" ==> <"Position IT Department">
+<"Actor Counselling">::"Do *Implement Bulletin Board" ==> <"Position IT Department">
+<"Actor Counselling">::"Do *Implement Categorization Tool" ==> <"Position IT Department">
+<"Actor Counselling">::"Do *Implement Email for Counsellors" ==> <"Position IT Department">
+<"Actor Counselling">::"May *Increase" ["IT Training for Counsellors"] ==> <"Position IT Department">
+<"Actor Counselling">::"May Decrease Clumsiness" [Technology] ==> <"Position IT Department">
+<"Actor Counselling">::"May Easily Accessable Technology Instructions" ==> <"Position IT Department">
+<"Actor Counselling">::"May Improve Quality Assurance Technology" ==> <"Position IT Department">
+<"Actor Counselling">::"May Improve" ["Call Recording Equipment"] ==> <"Position IT Department">
+<"Actor Counselling">::"May Increase IT Methods to Acquire Feedback" ==> <"Position IT Department">
+<"Actor Counselling">::"May Simple" [Technology] ==> <"Position IT Department">
+<"Actor FD and M">::"Do ! Provide compiled call data" ==> <"Position IT Department">
+<"Actor FD and M">::"Do Get web event technology" ==> <"Position IT Department">
+<"Actor FD and M">::"Do Provide Document Library System" ==> <"Position IT Department">
+<"Actor FD and M">::"Do Provide Online Donor Technology" ==> <"Position IT Department">
+<"Actor FD and M">::"May Increase Access Speed" ["Regional Offices to DL"] ==> <"Position IT Department">
+<"Actor FD and M">::"Provide: Donor/Accounting Data Base" ==> <"Position IT Department">
+<"Actor KHP Services">::"Do !Implement Phone Feedback" ==> <"Position IT Department">
+<"Actor KHP Services">::"Do Put Content Onto Website" ==> <"Position IT Department">
+<"Actor KHP Services">::"Provide: Feedback Form Software" ==> <"Position IT Department">
+<"Actor KHP Services">::"Provide: Web Server" ==> <"Position IT Department">, <"Role IT Company">
+<"Actor KHP Services">::"Provide: Web Software" ==> <"Position IT Department">
+<"Actor KHP Services">::"Telephony Be Implemented and Managed" ==> <"Position IT Department">
+<"Position IT Department">::"KHP Be Not for Profit" ==> <KHP>
+<"Position IT Department">::"May Increase IT Resources" ==> <KHP>
+<"Position IT Department">::"May Increased Emphasis on IT in Hiring Process" ["of Counsellors"] ==> <"Actor Counselling Management">
+<"Position IT Department">::"Provide: Free Software" ==> <"Role Pro Bono Company">
+<"Position IT Department">::"Provide: Free Upgrades" ==> <"Role Pro Bono Company">
+<"Position IT Department">::"Provide: Free Web Server" ==> <"Role Pro Bono Company">
+<"Position IT Department">::"Provide: Hardware" ==> <"Role IT Company">
+<"Position IT Department">::"Provide: IT Resources" ==> <KHP>
+<"Position IT Department">::"Provide: Oracle" ==> <"Role Pro Bono Company">
+<"Position IT Department">::"Provide: Software" ==> <"Role IT Company">
+<"Position IT Department">::"Provide: Upgrades" ==> <"Role IT Company">
+<"Position IT Department">::"Provide: Web Server" ==> <"Position IT Department">, <"Role IT Company">
+<KHP>::"May Properly and Suitably Equipped in IT" ["to Accomplish KHP Needs"] ==> <"Position IT Department">

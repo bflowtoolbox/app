@@ -1,0 +1,66 @@
+<User>::"Goal-oriented Requirements Engineering" { AND
+ "Install the tool" { OR
+   "Install as a RCP standalone application" => + "Easy [integration]"
+   "Install as a Java standalone application" => + Compatibility
+   "Install as a plugin for Eclipse" => + "Easy [integration]", 
+					+ "Easy [upgrading]"
+   "Install as a plugin for Protege" => + "Easy [integration]"
+   "Install the SDK (include all the above)" => + "Easy [development]"
+ } => + "Easy [installation]"
+ "Create a new model" { OR
+   "Import a model" { OR
+      "Import from a file (.tel, .q7, .xml)" => + Interoperability, + Compatibility
+      "Import from a URL link" => + "Easy [knowledge sharing]"
+   }
+   "Create a model from scratch" { OR
+      "Create a meta model (i*, NFR, GRL, etc)" => +Extensibility
+      "Create an graph model" { OR
+         "Create an i* SD/SR model"
+         "Create a GRL model"
+         "Create a NFR (vgraph) model"
+      }
+   }
+ } "Edit a model" { OR
+   "Edit a model graphically" { OR
+      "Edit an element's attributes"
+      "Edit a link's attributes"
+      "Edit a label" 
+      "Remove/push an element into an expandable element"
+      "Expand/contract"
+      "Select/unSelect"
+      "Hide/unhide"
+      "Highlight/unhighlight"
+      "Copy/Paste/Delete"
+   } => + Usability
+   "Edit a model textually (.tel, .q7,. xml)" 
+     => + Efficiency, + Scalability
+ } "Save a model" { OR
+    "Save the model"
+    "Save as a model" => + Interoperability
+ } "View a model" { OR
+    "2D Scrolling"
+    "Zoom in-out"
+    "Layout"
+    "Search"
+    "Bird's eye view"
+    "Thumbnail view"
+ } => + Usability
+ "Analyze a model" { OR
+    "Reasoning" { OR
+       "Assign quantitative value"
+       "Assign qualitative value"
+       "Bottom-up reasoning"
+       "Top-down reasoning"
+    } "Ontology Analysis" { AND
+       "Covert a goal model into ontology description"
+       "Create ontology queries"
+       "Present the result"
+       "Populate the result back into the goal model"
+    }
+  }
+}
+
+"Easy [installation]" => + Usability
+"Easy [upgrading]" => + Usability
+"Easy [development]" => + Usability
+

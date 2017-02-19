@@ -1,0 +1,17 @@
+<"Aspect speed">::"May speed" { &
+  "May powerful"
+  "May streamline" { &
+    "May constant"
+    "May narrowing"
+    "May widening"
+  } => ++<"Aspect beauty">::"May beauty"
+}
+<car>::design { &
+  design [engine] => +"May speed", ++"May powerful"
+  design [shape] { &
+    design [body] => +"May speed", ++"May constant"
+    design [head] => +"May speed", ++"May widening"
+    design [tail] => +"May speed", ++"May narrowing"
+  } => +"May speed", ++"May streamline"
+  design [wheels] => +"May speed"
+} => +"May speed"
