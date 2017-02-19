@@ -361,22 +361,22 @@ public class AddonsPlugin extends AbstractUIPlugin {
 		IConfigurationElement[] config = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(EXTENSION_ID_ADDON_PREFERENCEPAGECONTAINER);
 		
-		if(config == null || config.length == 0) return;
+		if (config == null || config.length == 0) return;
 		IConfigurationElement contribution = config[0];
 		String pageId = contribution.getAttribute("pageId");
-		if(StringUtils.isBlank(pageId)) return;
+		if (StringUtils.isBlank(pageId)) return;
 		
 		PreferenceManager mgr = PlatformUI.getWorkbench().getPreferenceManager();
 		
 		IPreferenceNode appNode = mgr.find(pageId);
-		if(appNode == null) return;
+		if (appNode == null) return;
 		
 		// Remove the hive node
 		IPreferenceNode hiveNode = mgr.find("org.bflow.toolbox.addons.preferences.MainPage");
 		mgr.remove(hiveNode);
 		
 		// Add the hive children to the app node
-		for(IPreferenceNode hiveChild:hiveNode.getSubNodes()) {
+		for (IPreferenceNode hiveChild:hiveNode.getSubNodes()) {
 			appNode.add(hiveChild);
 		}
 	}
