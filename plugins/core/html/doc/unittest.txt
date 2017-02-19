@@ -1,0 +1,62 @@
+I did the following to make unit tests easier:
+
+Suppose you want to unit test a class, say "TelosLink.java". You
+can do the followings:
+1) Right click at "edu.toronto.cs.ome.model/TelosLink.java"
+2) Choose "New, Junit Test Case"
+3) In the dialog, fill in the target "Package":
+   "edu.toronto.cs.ome.model.test"
+
+NOTE. We prefer to separate the test cases from the original package.
+
+4) Press "Next", then check all the method except for
+   those of its classes
+5) Press "Finish"
+
+In the generated unit test case, you can do the following
+refactorings:
+1) For the package-specific test case, create a package root test
+   class, such as "ModelTest", then extend it from ModelTest
+2) For the general-kind of test case, such as FileBasedTest,
+   extend it from the FileBasedTest,
+
+3) In the FileBasedTest in "util" project, some common function are
+provided to search for all the files under the test directory
+(specified in the constructor) for any file name ends with
+"-expected.tel", say "foo-expected.tel"
+
+4) then the input file, output file names are calculated as
+"foo.tel", "foo-output.tel" and passed to the "transformer" that
+must be defined in your test case.
+
+NOTE. you can override the "expected" with the "output" if you
+believe it is the correct one, for the first time. Later, the
+new output will be compared with the expected one to see if
+any violation happens.
+
+NOTE. Here you see the adv. of using file i/o to emit intermediate
+results, as it can help the unit test to verify the results easily.
+Of course, you can design the unit test case to check the
+data structure in memory, but that kind of test case can not
+be easily reused if the data structures are different.
+
+5) the transformer produces the output file and compare it with the
+expected file to see if anything wrong might happen
+6) if there is a difference, an assertion failure will be fired to
+signal the failure of the test.
+
+I used the above framework to do regression test whenever a bug is
+fixed.
+To do a thorough regression test, you can
+1) right click at the project name, such as "OpenOME"
+2) in the "Run As" menu, pick "Junit Test"
+Then all the prepared junit test cases will run.
+If you click at the individual test case class, then do (2), only the
+test case will be run...
+
+Currently we don't have many real test cases yet, but at least the
+number is increasing. It may take a few minutes to create test cases,
+but I believe that worths the effort as it catches the error when
+anything unexpected happens.
+
+You can extend the above idea as well ...

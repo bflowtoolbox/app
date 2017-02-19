@@ -1,0 +1,82 @@
+============================ setup SDK
+download and extract
+  eclipse sdk 3.1 => ECLIPSE_HOME
+  jre 1.5.0_04  => JAVA_HOME
+  openome sdk 0.14 => OME_HOME
+
+move JAVA_HOME to ECLIPSE_HOME/jre
+  to make sure eclipse runs with the recent JRE
+
+Run eclipse with the workspace at
+  OME_HOME/workspaces/OpenOME
+
+The projects in the workspace are shown in this order:
+  captainfeature
+  doc
+  GR-tool
+  ome4eclipse
+  ome4eclipse.feature
+  OpenOME
+  png
+  protege_querytab
+  q7
+  update.ome4eclipse
+
+As we discussed before, not all these projects are relevant
+to all developers. 
+
+For OME development:
+   OpenOME
+   q7
+   png
+   GR-tool
+   captainfeature
+
+For OME/protege development
+   protege_querytab
+
+For OME/Eclipse development
+   ome4eclipse             => plugin
+   ome4eclipse.features    => feature
+   update.ome4eclipse      => update site
+
+Every project has similar structure:
+   .project => project descriptions
+   .classpath => class paths
+   build.xml => ant build script
+   src/   => source code
+   bin/   => class files
+   .cvsignore => ignore patterns for cvs sync
+   plugin.xml => plugin description
+   feature.xml => feature description
+   site.xml => update site description
+
+========================== CVS
+   
+If there is any change to commit to the cvs,
+the student need to apply a unix name at the sourceforge.net
+then let me know.
+I will add the name to the developer list of the openome project
+at sourceforge.
+You can also apply one and I will assign the admin rights to you
+so that  you can also add the unix name of future students.
+
+Now, suppose the unix name is "linda", then you can open the
+"CVS repository" perspective in the running Eclipse.
+
+"New a location" with following parameters (through a wizard):
+ :extssh:linda@cvs.sf.net:/cvsroot/openome
+ :pserver:linda@cvs.sf.net:/cvsroot/openome
+The first one is for developer, with commit rights;
+the second one is for viewer, with read only rights.
+
+After that is done, you will be able check out projects.
+
+Note. The workspace of the sdk package contains two example repository
+with my unix name (yijunsf) associated.
+
+Once that is done, in the "Java" perspective, at the package explorer, you will
+be able to right click at any item that is in sync with the cvs repository, and
+choose "Team" sub menu to apply cvs commands through various wizards.
+
+========================= 

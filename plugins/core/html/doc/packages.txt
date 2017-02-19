@@ -1,0 +1,41 @@
+Currently, all the source code are located in the SDK package.
+You need to get it into Eclipse as one workspace.
+Inside the SDK, the source code are arranged into several "parallel"
+projects, including:
+* OME projects and Protege integration
+  OpenOME: the graph editor, which has several packages such
+	as model, view, controller, util, undo
+	The main function is in "OMETab.java", which has the 
+        wrapper for the Protege plugin.
+    For most part of this module, it is very close to the original OME
+    implementation, except for several major changes:
+      - file/new open close. menu in place of the project manager in OME
+      - ModelManager and JTelosUtils has made quite some changes to 
+        circumvent the jtelos.dll component that was platform dependent.
+      - some file conversion methods to support various formats
+      - a method to invoke protege's API to populate its knowledge base 
+      - XSLT support for importing any  XML file (including VDX for
+        Visio) into Telos
+  query_tab: the Protege queries tab modified to feed back the results
+        into OpenOME
+  q7: the Q7 language parser and code generators for i*, etc.
+  png: the PNG export component
+  feature: the captain feature tool
+  	
+  Each of these projects exports one or more JAR files to serve as
+  the library for other projects. But the coupling between these
+  componentized projects are under control.
+* Eclipse plugin projects
+  ** ome4protege: the plugin project that is able to generate a
+     plugin for Eclipse
+  ** ome4eclipse.feature: the feature project that is able to 
+     package the OpenOME as a feature for Eclipse
+  ** update.openome: the update site project to prepare files to
+     create online update web site.
+* update
+  This directory contains files to be packed for release the various
+  products.
+  Since there are common files for many of these projects, I use 
+  the symbolic link trick to avoid inconsistencies whenever a
+  JAR file is updated. You can see that the "sdk_install.sh" does that.
+

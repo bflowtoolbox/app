@@ -1,0 +1,45 @@
+<FAQ>
+<Q>
+How to create a new Telos (GRL, i*, ER, vgraph) Model?
+How to create an empty Telos (GRL, i*, ER, v) graph?
+</Q>
+<A>
+1. The Meta-Models are expressed in Telos. They are stored in the
+   directory specified by the system property: "java.libary.path",
+   that is:	plugins/edu.toronto.cs.ome, where the components
+   such as OpenOME.jar resides. All the files "*.tel" are treated
+   as a metamodel, or templates, for the new models.
+   
+2. In File/New menu command, a dialog prompts for the name of metamodel
+   by a list of checkboxes.
+   Since some of these metamodels have overlapped class definitions,
+   usually we use one of these metamodels. However, since the
+   metamodel can be splitted into multiple files, it is possible to
+   merge them by checking multiple files.
+
+3. After the metamodel(s) is (are) checked, a SaveFile dialog prompts
+   for the name of the Telos model. 
+   Entering the name of the Telos model.
+   The resulting Telos model is initially exactly the same as the 
+   selected metamodels.
+   It will be loaded into the editor.
+
+Note 1. On the terms. Here we use "metamodel", "template" and "frameworks" 
+as synonyms, regarding the Telos files in the library directory.
+Because:
+(1) the files usually do not have any instance level entities 
+    (pure metamodel). Thus the metamodel will be shown as an empty
+    graph.
+(2) the files usually provides a template for the editor for the models
+(3) the files can be merged into reusable knowledge for the extensions
+However, one can put non-empty files into the folder if they serve good
+purposes. Thus, in the future, we may want to standardize the term as
+"template" to be broader.
+
+Note 2. For creating an empty i* graph, one can create an empty Q7 file, 
+which will generate an i* metamodel according to the istar.tel template.
+
+</A>
+
+
+</FAQ>

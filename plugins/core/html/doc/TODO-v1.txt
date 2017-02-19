@@ -1,0 +1,203 @@
+[Reengineering plan for the OpenOME development]
+
+GENERAL REQUIREMENETS
+=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
+General objective is to turn OpenOME into a tool with abilities to 
+* support RE by multiple conceptual modelling frameworks, 
+  and multiple stakeholders, possibly Agent-oriented 
+* support domain engineering: RE <=> ontology
+* support forward engineering, RE => SE => code
+* support reverse engineering, code => SE => RE
+
+We do not want to reinvent the wheel, thus we'd like to 
+interexchange with other (more) advanced tools.
+We have several major integration threads:
+(1) Eclipse/UML. Mainly for software engineering tasks
+  ** OpenOME must be a plugin to be part of the development toolchain
+(2) Protege/Ontology. Mainly for domain engineering tasks
+  ** OpenOME must be a plugin to share results with other tools
+(3) Jack. Another way to from goal model to software engineering 
+    is agent-orientation..
+  ** Kolp and MetaCASE?
+(4) Various presentation/visualization purposes
+
+CONCRETE REQUIREMENTS
+=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
+
+fulfilment/tasks and operationalized softgoals
+
+Fulfilment numbers are qualitative:
+0.0 => not started yet
+0.1 => towards a solution
+0.5/0.6 => solution found, not fully carried out yet
+0.9 => almost done
+
+Product category NFR are quality for the released software,
+while process category NFR are quality for the maintanance.
+
+[We shall also evaluate the research value of the proposal
+to decide on their priority.]
+
+=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
+
+0.9: simplify build architecture
+  category: process/NFR/performance
+  goal: automating everying through a build script
+  input: all artifacts
+  output: a Makefile or build.xml to perform the automation
+         tasks
+  reference: make, ant, Eclipse
+
+0.3: refactoring 
+  category: process/NFR/reusability
+  goal: to abstract or factor out common parts
+  input: code
+  output: refined code with less redundancy
+  reference: design patterns, refactoring, Eclipse
+
+0.9: componentization 
+  category: process/NFR/modularity for crosscutting changes
+  goal: to create packages that reduce coupling and increase
+	ownerships
+  input: code
+  output: packages the code into a set of JARS and Eclipse plugins
+  reference: FASE'05, jrmtool, jdepend
+
+0.01: using aspects 
+  category: process/NFR/modularity for crosscutting changes
+  goal: to separate crosscutting parts into a separate module
+  input: code
+  output: a set of aspects and refined code
+  reference: aspectj, ajdt, Eclipse
+
+=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
+
+0.1: unit tests
+  category: product/NFR/correctness
+  goal: regression test to avoid a fixed error re-occurs
+  input: when a bug is fixed, what's input and expected output
+  output: generate a junit test case to compare the output
+          with expected output
+  reference: junit, Eclipse
+
+0.1: profiling
+  category: product/NFR/performance
+  goal: to find bottleneck of the program
+  input: code
+  output: a set of functions that slows down the execution
+  reference: java -p, HPJmeter, Optimizeit, Hyades (Eclipse) 
+
+0.1: tuning
+  category: product/NFR/performance
+  goal: to improve the speed of the execution
+  input: code and a set of bottleneck functions
+  output: changed code (algorithm, data structures) to
+         improve the speed without creating errors
+  reference: junit, junitperf
+
+0.0: zoom in/out
+  category: product/NFR/usability
+  goal: have two buttons, +/-, for zoom in/out respectively
+  input: mouse click, or keys ^+, ^-, or a pull-down menu to
+         pick predefined size
+  output: increase/decrease the size ratio by 10%
+  exceptions: a range of ratio is respected
+  reference: isv
+
+0.1: undo/redo
+  category: product/NFR/usability
+  goal: to reduce the mistakes user can make
+  input: ^Z for undo, ^Y for redo
+  output: two queues of undo and redo are enqueued/dequeued
+          when an editing action or an undo/redo action is taken
+  exceptions: initially, both queues are empty
+  mechanism: see the ome.undo package and some examples
+  reference: isv
+
+0.3: simplify installation process
+  category: product/NFR/usability
+  goal: create a wizard-like installation package
+  input: several easy questions
+  ouptut: the system is installed, independent of the platform
+  reference: zero installation, java web start, Eclipse updates
+
+0.5: integration with various tools
+  category: product/NFR/interchangeability
+  goal: interchange data to various tools
+  input: Telos format
+  output: a new format/API ..
+ list of possible formats, and references:
+ 1.0: Otelos
+ 1.0: PNG
+ 0.9: Postscript, SVG (though graphviz)
+ 0.9: q7 (integrated, see CAiSE'05, RE'04 paper)
+ 0.9: GR-tool DAT (older version, see ER'02 paper)
+ 0.8: Visio VDX (still some bugs, CASCON'04 demo)
+ 0.8: OWL (through Protege, CASCON'04 demo)
+ 0.5: XML (from q7 actually, csc408 summer course)
+ 0.2: variability goal models (DEAS'05 paper)
+ 0.1: refactored goal models (through q7, RE'05 paper)
+ 0.1: Excel (Bruno's RE'04 paper)
+ 0.0: Creole, Jambalaya (Neil's references)
+ 0.0: Objectiver (KAOS)
+ 0.0: XMI (EMF, model-driven)
+   0.0: UML, Rational Rose
+   0.0: Rhapsody (I-logix, statecharts of Harel..)
+ 0.0: model checking tools (RE'03).
+ 0.0: Lexicon, exemplar (Luiz and Julio ..)
+
+0.1: development documentation
+  category: product/NFR/maintainbility
+  goal: keep track of the changes and their rationale
+  input: code
+  output: comments, and reports as measurements
+  reference: javadoc, xdoclet, jdepend, Eclipse
+
+0.1: user documentation
+  category: product/NFR/usability
+  goal: provide on-line help/tutorial
+  input: code
+  output: web site
+  reference: RSS/XML/XSLT, Eclipse help plugin
+
+0.5: collecting examples
+  category: product/NFR/usability
+            process/NFR/test-coverage
+  goal: provide examples
+  input: users
+  output: a server of collected examples
+	  classify them into categories
+	  an on-line package of examples
+  reference: NFR framework, various i* related papers
+
+0.5: sharing examples online
+  category: product/NFR/extensibility
+  goal: sharing/discussing examples
+  input: users at the same time
+  output: a web-service/database, a modified client
+  reference: ece450
+
+0.1: sharing examples offline
+  category: product/NFR/extensibility
+  goal: sharing/discussing examples
+  input: users
+  output: a server of collected examples that generates URLs
+	  File/open with an URL.
+  reference: InputStream
+
+0.01: model-driven generation of OME plugins
+  category: product/NFR/extensibility
+  goal: make it easy to create more versatile models 
+  input: users's metamodel in certain XMI format
+  output: an OME plugin, with the Java code and a 
+          Telos metamodel
+  reference: Eclipse/EMF
+
+0.5: Ontology-based queries
+  category: product/NFR/extensibility
+  goal: make it easy to create more versatile models 
+  input: prepare a set of ontology queries 
+  output: reflect the search results in the OME graph
+	 by modified Protege query plugins
+  reference: Protege: QueriesTab, EzPAL, PAL Queries, Jambalaya
+

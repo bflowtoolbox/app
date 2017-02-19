@@ -1,0 +1,18 @@
+<extensions>
+	<tocOrder>
+		<toc id="/core/helpToc.xml" />
+	</tocOrder>
+	<hidden>
+		<toc id="/org.eclipse.emf.doc/toc.xml" />
+		<toc id="/org.eclipse.gmf.doc/toc.xml" />
+		<toc id="/org.eclipse.jdt.doc/toc.xml" />
+		<toc id="/org.eclipse.jdt.doc.isv/toc.xml" />
+		<toc id="/org.eclipse.jdt.doc.user/toc.xml" />
+		<toc id="/org.eclipse.pde.doc.user/toc.xml" />
+		<toc id="/org.eclipse.platform.doc.isv/toc.xml" />
+		<toc id="/org.eclipse.xsd.doc/toc.xml" />
+		<toc id="/org.eclipse.platform.doc.user/toc.xml" />
+		<toc id="/org.eclipse.platform.doc.isv/toc.xml" />
+		<toc id="/org.tigris.subversion.subclipse.doc/toc.xml" />
+	</hidden>
+</extensions>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.3"?>
+<plugin>
+   <extension-point 
+   	id="convertor" 
+   	name="Convertor Extension Point" 
+   	schema="schema/convertor.exsd"/>
+   <extension-point 
+   	id="example" 
+   	name="Convertor Extension Point" 
+   	schema="schema/example.exsd"/>
+   <extension-point 
+   	id="generator" 
+   	name="Generator Extension Point" 
+   	schema="schema/generator.exsd"/>
+   
+   <extension point="org.eclipse.help.toc">
+      <toc file="help.xml"/>
+      <toc file="helpToc.xml" primary="true"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="edu.toronto.cs.openome.core.action.CreateExamplesHandler"
+            id="openome_example_cmd"
+            name="openome_example_cmd">
+      </command>
+      
+      </extension>
+     
+	<extension 
+		id="openome_main_menu_extension"
+		point="org.eclipse.ui.menus">
+		<?gmfgen generated="false"?>
+      	<menuContribution
+            	locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+        	<menu
+               icon="icons/goal.gif"
+               id="openome_top_menu"
+               label="OpenOME"
+               mnemonic="O">
+            <command
+                  commandId="org.eclipse.ui.browser.openBrowser"
+                  id="openome_gethelp_menu"
+                  label="Get OpenOME Help">
+               <parameter
+                     name="url"
+                     value="https://se.cs.toronto.edu/trac/ome/">
+               </parameter>
+            </command>
+         	<command
+                commandId="openome_example_cmd"
+                disabledIcon="icons/soccer-disabled.gif"
+                icon="icons/example.gif"
+                id="openome_example_menu"
+                label="Generate Example Project">
+         	</command>
+          </menu>
+		</menuContribution>
+       <menuContribution
+             locationURI="popup:common.new.menu?after=additions">
+          <command
+                commandId="org.eclipse.ui.newWizard"
+                label="OpenOME Diagram"
+                style="push">
+             <parameter
+                   name="newWizardId"
+                   value="edu.toronto.cs.openome_model.diagram.part.Openome_modelCreationWizardID">
+             </parameter>
+          </command>
+       </menuContribution>
+       <menuContribution
+             locationURI="menu:new?after=additions ">
+          <command
+                commandId="org.eclipse.ui.newWizard"
+                label="OpenOME Diagram"
+                style="push">
+             <parameter
+                   name="newWizardId"
+                   value="edu.toronto.cs.openome_model.diagram.part.Openome_modelCreationWizardID">
+             </parameter>
+          </command>
+       </menuContribution>
+       <menuContribution
+             locationURI="menu:help?before=intro">
+          <command
+                commandId="org.eclipse.ui.browser.openBrowser"
+                id="openome_gethelp2_menu"
+                label="Get OpenOME Help"
+                style="push">
+             <parameter
+                   name="url"
+                   value="https://se.cs.toronto.edu/trac/ome/">
+             </parameter>
+          </command>
+       </menuContribution>
+	</extension>
+   <extension point="org.eclipse.ui.actionSets">
+      <actionSet label="Actions"
+            visible="true"
+            id="action.actionSet">
+<!--
+         <menu id="menu1" label="Developer">
+            <separator name="group1"/>
+         </menu>
+         <menu id="menu2" label="User">
+            <separator name="group2"/>
+         </menu>
+-->         
+<!-- (outdated) creates an examples project
+         <action
+               class="edu.toronto.cs.openome.core.action.CreateExamplesAction"
+               icon="icons/example.gif"
+               id="action1"
+               label="Examples"
+               toolbarPath="group"
+               tooltip="Create the Examples project">
+         </action>
+-->         
+      </actionSet>
+   </extension>
+	
+ <extension
+       id="openome"
+       point="org.eclipse.core.runtime.products">
+    <product
+          application="org.eclipse.ui.ide.workbench"
+          name="Core">
+       <property
+             name="aboutText"
+             value="An open-source requirements engineering tool">
+       </property>
+       <property
+             name="aboutImage"
+             value="icons/eclipse_lg.gif">
+       </property>
+       <property
+             name="appName"
+             value="Core">
+       </property>
+    </product>
+ </extension>
+ <extension
+       id="openre"
+       point="org.eclipse.core.runtime.products">
+    <product
+          application="org.eclipse.ui.ide.workbench"
+          name="ProblemFrames">
+       <property
+             name="appName"
+             value="ProblemFrames">
+       </property>
+       <property
+             name="preferenceCustomization"
+             value="plugin_customization.ini">
+       </property>
+    </product>
+ </extension>
+
+</plugin>

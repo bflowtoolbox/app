@@ -1,0 +1,299 @@
+[Reengineering plan for the OpenOME development]
+
+GENERAL REQUIREMENETS
+=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
+General objective is to turn OpenOME into a tool with abilities to 
+* support requirements engineering (RE): goal/agent/aspect oriented 
+* support domain engineering: RE <=> ontology
+* support forward software engineering, RE => FSE => code
+* support reverse software engineering, code => RSE => RE
+
+We do not want to reinvent the wheel, thus we'd like to 
+interexchange with other (more) advanced tools.
+We have several major integration threads:
+(1) Eclipse/UML. Mainly for software engineering tasks
+  ** OpenOME must be a plugin to be part of the development toolchain
+(2) Protege/Ontology. Mainly for domain engineering tasks
+  ** OpenOME must be a plugin to share results with other tools
+  *** PAL for query
+    Note. Protege query returns instances
+  *** Jambalaya for visualization
+(3) Jack. Another way to from goal model to software engineering 
+    is agent-orientation..
+  [Kolp, MetaCASE]
+(4) Various presentation/visualization purposes
+  [Graphviz/Ontoviz, 
+   Protege/jambalaya, 
+   Eclipse/creole]
+
+CONCRETE REQUIREMENTS
+=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
+
+fulfilment/tasks and operationalized softgoals
+
+Fulfilment numbers are qualitative:
+0.0 => not started yet
+0.1 => towards a solution
+0.5/0.6 => solution found, not fully carried out yet
+0.9 => almost done
+
+I.  Product category NFR are quality for the release,
+    [User perceived quality]
+II. Process category NFR are quality for the maintenance.
+    [Developer perceived quality]
+
+=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
+II. Every developer should do these tasks:
+
+0.5: Change management
+  CVS used by students for sharing in teams
+  SVN will be used to incrementally share binaries 
+
+0.9: simplify build architecture
+  category: process/NFR/performance
+  goal: automating everying through a build script to support
+        agile development
+  input: all artifacts
+  output: a Makefile or build.xml to perform the automation
+         tasks
+  reference: make, ant, Eclipse
+
+0.3: refactoring 
+  category: process/NFR/reusability
+  goal: to abstract or factor out common parts
+  input: code
+  output: refined code with less redundancy
+  reference: design patterns, refactoring, Eclipse
+
+0.9: componentization 
+  category: process/NFR/modularity for crosscutting changes
+  goal: to create packages that reduce coupling and increase
+	ownerships
+  input: code
+  output: packages the code into a set of JARS and Eclipse plugins
+  reference: FASE'05, jrmtool, jdepend, the rejected paper for SPLC'05 
+
+0.01: using aspects 
+  category: process/NFR/modularity for crosscutting changes
+  goal: to separate crosscutting parts into a separate module
+  input: code
+  output: a set of aspects and refined code
+  reference: aspectj, ajdt, Eclipse
+  [ E.g. Mark graph view elements as "dirty" when any editing action
+   is performed to improve the refresh performance..
+   Kiczales uses it as a classic AOP example.]
+
+0.1: unit tests
+  category: product/NFR/correctness
+  goal: regression test to avoid a fixed error re-occurs
+  input: when a bug is fixed, what's input and expected output
+  output: generate a junit test case to compare the output
+          with expected output
+	  define test cases for each method in each class
+  reference: junit, Eclipse
+  [ so far not well tested ]
+
+=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~
+I. Can be separate into components
+
+/** Tasks #3.1, 3.3 **/
+0.1: profiling
+  category: product/NFR/performance
+  goal: to find bottleneck of the program
+  input: code
+  output: a set of functions that slows down the execution
+  reference: java -p, HPJmeter, Optimizeit, Hyades (Eclipse) 
+
+/** Task #3.2 **/
+0.1: tuning
+  category: product/NFR/performance
+  goal: to improve the speed of the execution
+  input: code and a set of bottleneck functions
+  output: changed code (algorithm, data structures) to
+         improve the speed without creating errors
+  reference: junit, junitperf
+
+/** Tasks #4.1 **/
+0.0: zoom in/out
+  category: product/NFR/usability
+  goal: have two buttons, +/-, for zoom in/out respectively
+  input: mouse click, or keys ^+, ^-, or a pull-down menu to
+         pick predefined size
+  output: increase/decrease the size ratio by 10%
+  exceptions: a range of ratio is respected
+  reference: isv [jvlc'01]
+
+/** Tasks #4.2 **/
+0.0: Thumbnail view
+  category: product/NFR/usability
+  goal: to have a bird's eye view of the large scale graph
+  input: the graph
+  output: a 1/10 size thumbnail of the large graph including
+          the unvisible elements (in a separate window)
+          A box in the thumbnail shows the visible area in the
+          graph window
+  reference: dotty of graphviz tool
+          
+/** Tasks #4.3 **/
+0.0: 2D scrolling
+  category: product/NFR/usability
+  goal: to scroll the graph using a "handle" metaphor
+  input: (dx, dy) in mouse position
+  output: horizontal/vertical scroll at the same time
+  reference: Acrobat Reader 
+
+/** Tasks #4.4 **/
+0.1: undo/redo
+  category: product/NFR/usability
+  goal: to reduce the mistakes user can make
+  input: ^Z for undo, ^Y for redo
+  output: two queues of undo and redo are enqueued/dequeued
+          when an editing action or an undo/redo action is taken
+  exceptions: initially, both queues are empty
+  mechanism: see the ome.undo package and some examples
+  reference: iteration space visualizer [jvlc'01]
+  [ * past done by Zhifeng Liu
+    * need to identify each pair of inverse editing operations, e.g.
+    Move/Move
+    Insert/Delete
+    Rename/Rename
+    Hide/Show
+    ...
+    * record/replay if serialized, 
+    * incremental editing will be supported...
+  ]
+
+/** Tasks #4.5 **/
+0.3: simplify installation process
+  category: product/NFR/usability
+  goal: create a wizard-like installation package
+  input: several easy questions
+  ouptut: the system is installed, 
+          independent of the platform
+  reference: zero installation, 
+             java web start, 
+             Eclipse updates [done]
+
+0.5: integration with various tools [open-ended] 
+  category: product/NFR/interchangeability
+  goal: interchange data to various tools
+  input: Telos format
+  output: a new format/API ..
+ list of possible formats, and references:
+ 1.0: Otelos
+ 1.0: PNG
+ 0.9: Postscript, SVG (though graphviz)
+ 0.9: q7 (integrated, see CAiSE'05, RE'04 paper)
+ 0.9: GR-tool DAT (older version, see ER'02 paper)
+ 0.8: Visio VDX (still some bugs, CASCON'04 demo)
+ 0.8: OWL (through Protege, CASCON'04 demo)
+ 0.5: XML (from q7 actually, csc408 summer course)
+ 0.2: variability goal models (DEAS'05 paper)
+ 0.1: refactored goal models (through q7, RE'05 paper)
+ 0.1: Excel (Bruno's RE'04 paper)
+ 0.0: Creole, Jambalaya (Neil's references)
+ 0.0: Objectiver (KAOS)
+ 0.0: XMI (EMF, model-driven)
+   0.0: UML, Rational Rose
+   0.0: Rhapsody (I-logix, statecharts of Harel..)
+ 0.0: model checking tools (RE'03).
+ 0.0: Lexicon, exemplar (Luiz and Julio ..)
+
+/** Task #1.2 **/
+[Document this part well-enough so that 
+ other people can implement the interface]
+
+/** Task #1.3 **/
+0.1: development documentation
+  category: product/NFR/maintainbility
+  goal: keep track of the changes and their rationale
+  input: code
+  output: comments, and reports as measurements
+  reference: javadoc, xdoclet, jdepend, Eclipse
+	 existing document of OME
+
+/** Task #1.1 **/
+0.1: user documentation
+  category: product/NFR/usability
+  goal: provide on-line help/tutorial
+  input: code
+  output: web site
+  reference: RSS/XML/XSLT, Eclipse help plugin
+
+/** Tasks #5.1 **/
+0.5: collecting examples
+  category: product/NFR/usability
+            process/NFR/test-coverage
+  goal: provide examples
+  input: users
+  output: a server of collected examples
+	  classify them into categories
+	  an on-line package of examples
+   [import. mechanism for upload, Xavier
+    not import. to upload examples ourselves...
+	web-based: Java-applet => too big demand for clients
+                Java applications -- but need easier installation]
+  reference: NFR framework, various i* related papers
+
+/** Tasks #5.2, 5.3 **/
+0.5: sharing models online: distributed collaboration
+  category: product/NFR/extensibility
+  goal: sharing/discussing examples
+  input: users at the same time
+  output: a web-service/database, a modified client
+  reference: ece450 [10 reference implementations, 
+		     some P2P: no central server]
+
+/** Tasks #5.1 **/
+0.1: sharing examples offline
+  category: product/NFR/extensibility
+  goal: sharing/discussing examples
+  input: users
+  output: a server of collected examples that generates URLs
+	  File/open with an URL (similar to UDDI).
+          File sharing by up/down load via server
+  reference: InputStream
+
+0.01: model-driven generation of OME plugins [future]
+  category: product/NFR/extensibility
+  goal: make it easy to create more versatile models 
+	versus hand-coding plugins
+  input: users's metamodel in certain XMI format
+  output: an OME plugin, with the Java code and a 
+          Telos metamodel
+  reference: Eclipse/EMF (de facto standard)
+	     template-based and generative programming
+
+/** Tasks #2.1, 2.2, 2.3, 2.5 **/
+0.5: Ontology-based queries
+  category: product/NFR/extensibility
+  goal: selective views
+  input: prepare a set of ontology queries 
+  output: reflect the search results in the OME graph
+	 by modified Protege query plugins
+  reference: 
+       Protege: QueriesTab [cascon'04 demo], 
+          PAL Queries: logical formula
+          EzPAL, make it easier to generate logical formula
+                 based on templates stored in the ontology
+          Jambalaya: pick what to visualize?
+       Zheng You's master thesis: views defined in Otelos
+	  convert some of them into PAL queries and feedback
+          into OpenOME
+       Macel's slicing views 
+
+/** Task #2.4 **/
+0.0: Instant update from OME views to another views in Protege
+   goal: when user change the ontology, it shall be synchronized into
+         the goal graphs
+   input: editing operation on Protege knowledge base
+   output: updating the OME graphs accordingly 
+
+0.0: Version control [future: after ontology based queries are done]
+   goal: fine-grain version control
+         on the graph elements to support:
+	 * model evolutions
+         * change managements
+         * viewpoint merges
+   reference:
+	change the metamodel to include timestamps 

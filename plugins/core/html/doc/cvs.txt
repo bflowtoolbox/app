@@ -1,0 +1,18 @@
+setenv CVS_RSH ssh
+setenv OME_SDK $HOME/openome-sdk/workspaces/OpenOME
+mkdir -p $OME_SDK
+cvs -z3 -d:ext:yijunsf@cvs.sourceforge.net:/cvsroot/openome co -P .
+
+New/Project/Simple Project
+	protege
+	OpenOME
+Team/Share Project
+	OpenOME
+
+Run/Run As/Java Application/New
+   Main/Main Class: Search/OMETab
+   Arguments/Program arguments/VM: 
+	test/edu.toronto.cs.ome.controller.GRTest/er02.tel
+   VM arguments: 
+	-Djava.library.path=plugins/edu.toronto.cs.ome -DtmpDot=tmp.dot -DtestDot=test.dot 
+   Run

@@ -1,0 +1,104 @@
+[Task allocation for reengineering OpenOME]
+
+The requirements of OpenOME have been brainstormed between Eric and
+me (see the other attachement (TODO-v2.txt Jun 28) for discussion notes).  Based on the
+cost/effect factors (amount of work versus importance), we have formulated an initial
+task plan in terms of 5 work packages.
+Package 0 is something that all developers should do.  We suggest that each person
+will do some portions of Package 0 before starting on one of the other packages.
+
+If there are 4 people, one way to organize is to have two teams.
+Team A:  package 0, 1, 2
+Team B:  package 0, 3
+Leave package 4 as future work.  It would be too ambitious to include.
+
+((The numbering of the items in each package is not in sequence, because i rearranged
+them from what Yijun had. -ey.))
+
+[Package#0] Documentation help
+/* It can help the new developer understand the existing 
+   design before doing new design tasks. */
+1.1 User's guide
+   Provide use cases and scenarios and record abnormalities
+   that does not meet the user's expections.
+   The user's guide should be tutorial-based, that is, showing
+   how a task is performed step-by-step, rather than exhausively
+   enumerating all menu/toolbar functions.
+1.2 Extension developer's guide
+   OpenOME is an effort to integrate with other tools. 
+   Currently, various file formats are supported. We need to
+   document *how* a format is treated in OpenOME so that other
+   tool developers can integrate with our tool, by learning 
+   the documentation.
+1.3 Comments the code using Javadoc
+   The comment should explain the purpose of the method and
+   expected input/output (@param). 
+   The comments will be used to generate HTML documentation of
+   the API and guide the unit test construction.
+
+
+[Package#1] Performance 
+3.1 Profiling the OpenOME on various input sizes to find
+    bottleneck of the performance: obtain the computational
+    complexity of the method over the input size
+3.2 When a bottleneck is found, tune it by
+    * remove extra/unnecessary computations
+      For example
+        ** by remove dead computations
+	** by caching intermediate results
+    * use more efficient data structures and algorithms
+      For example
+        ** insert-sort => quicksort
+        ** linked list => hash table
+3.3 If the performance is not good enough, goto 3.1
+
+
+[Package#2] Usability
+
+4.5 Simplify installation process
+4.6 Highlight (eg make bold) element (link, node) on hover
+      option: on hovering on node, highlight all links connected to it
+4.1 Zoom in/out
+4.2 Thumbnail/bird's eye view
+4.3 2D scrolling
+4.4 Undo/redo
+
+See TODO-v2.txt for details.
+
+
+[Package#3] Ontology-based queries
+
+2.1 Using Protege query plugins to construct meaningful views
+    of existing OME graphs  [OpenOME]
+2.2 Create queries through examples and logic formla
+    [Query, Pal Query]
+2.3 Finding commonalities (patterns) of the queries and create
+    templates [EzPAL]
+2.4 Modify source code of Protege to invoke OpenOME API when 
+    there is a change through a synchronizing button. [currently
+    OMETab -> Protege is implemented through SaveAction, 
+    Protege->OMETab shall be done through OpenAction]
+2.5 Generalize the data structure needed for any Protege plugin
+    to be synchronized with OMETab.
+2.6 When generating selective views of the models, offer the following options
+     i) selected elements appear, unselected elements disappear  (existing default)
+     ii) selected elements appear, unselected elements appear slightly greyed out
+         but still legible
+      [this may be done as part of Package#2 Usability]
+
+
+
+
+
+[Package#4] Web-based knowledge base
+
+5.1 Create a database-based web server to
+    upload/download example models
+5.2 Modify OpenOME client's file/open and file/save actions
+    to allow upload/download of the graph in the buffer
+5.3 Using web service to standardize the service's protocol.
+
+See TODO-v2.txt for details.
+
+# vim:tw=69:
+

@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Table of Contents</title>
+</head>
+
+<body>
+<h1>Overview of OpenOME</h1>
+
+The official web site of the tool is at <a href="http://www.cs.toronto.edu/km/openome">http://www.cs.toronto.edu/km/openome</a>.
+		
+<h2>Members</h2>
+<pre>
+Prof. Eric S.K. Yu
+Dr. Yijun Yu
+Prof. Lin Liu
+Prof. John Mylopoulos
+Prof. Julio C.S.P Leite
+Prof. Jianguo Lu
+Sotirios Liaskos
+Alexei Lapouchnian
+Yiqiao Wang
+Neil Ernst
+Xiaoxue Deng
+Jennifer Horkoff
+</pre>
+
+<a href="http://www.cs.toronto.edu/km/openome/ChangeLog">ChangeLogs</a>
+
+<h2>Stakeholder goals</h2>
+
+The OpenOME is an <em>assistant</em> to a <b>requirements engineer</b> using
+a goal-oriented and agent-oriented modeling language: <b>stakeholder</b>
+requirements are modelled as the strategic dependencies and rationale.
+<b>Business analysts</b> can model the business requirements into the 
+stategic model. In software business, <b>potential users</b> can express their
+early requirements into a concise form; <b>software developers</b> can verify the 
+design alternatives against the early requirements using the explicit design rationale to 
+detect faults at a very early stage; <b>Software testers</b> and <b> quality analysts</b> 
+can validate the end-product against the early requirements to see whether it can be released 
+with good-enough quality. 
+<b>Researchers</b> on requirements engineering can share their understanding
+of functional and non-functional requirements and publish the results
+in high quality that are accessible by the <b>peer reviewers</b>.
+
+<h2>System requirements</h2>
+<pre>
+Hardware requirements:
+   A desktop or laptop workstation
+Software requirements:
+   Operating system: Windows 2000/XP, Linux
+   Programming language: Java runtime 1.5x
+</pre>
+<h2>Features to support the stakeholders goals </h2>
+<pre>
+Graph editing and visualization  =&gt; ++ requirements engineer::graphical modeling
+   Graph manipulations
+   		Select 
+   		Move 
+   		Insert 
+   		Delete 
+   		Copy 
+   		Paste
+   Search
+   Anti-alias display
+   Layout
+   Zoomin/out
+   2D Scrolling
+   Undo/Redo
+Graph querying                    =&gt; + peer::review
+   Ontology generation
+   Ontology query
+Graph sharing                     =&gt; ++ peer::review
+   Web services wrapper
+Graph publishing                  =&gt; ++ researcher::presentation
+   Scalable vector graphics (SVG)
+   Portable network graph (PNG)      
+Goal-oriented/Agent-oriented Modeling languages =&gt; ++ requirements engineer::modeling
+   Telos (vgraph, i*, GRL), OTelos (SML), text (Q7), etc.
+Goal satisfiability reasoning       =&gt; ++ developers::tradeoff
+   Bottom-up label propagation
+	  Qualitative logic 
+	  Quantitative probabilistic network  =&gt; ++ tester::monitor quality achievements
+   Top-down satisfiability
+Quality requirements analysis       =&gt; ++ tester::monitor quality achievements
+   Non-functional requirements
+   Quality metrics
+Early Aspects elicitation         =&gt; ++ modeler::separate crosscutting concerns
+   Goal aspect separation
+   Pointcuts Definition
+   Weaving
+Forward engineering               =&gt; ++ software engineer::provide traceability of rationale
+   Feature model generation
+   Statecharts generation
+   Component/Connector view generation 
+Reverse engineering               =&gt; ++ reverse engineer::find programmers intentions
+   Statechart refactoring
+   Refactoring to goal model
+Eclipse integration				  =&gt; ++ ease of installation, upgrading and tool extensibility
+   Plugin update site
+   Rich client platform
+</pre>
+<h2>Architecture</h2>
+
+<h3>Modules interconnection</h3>   
+<pre>
+  update.ome4eclipse
+      |
+  ome4eclipse.feature
+      |
+  ome4eclipse
+      |
+  OpenOME
+      |
+   ------------------------------------------------------------------------------------------------------------------------------------------------
+   |      |        |         |      |          |            |                    |              |               |            |                    |
+  png    GR-tool  querytab   q7     OME*       |       AST refactoring       statecharts       BPEL           feature      OmniGraphEditor    QoS monitoring
+  batik  SAT4J    protege  aspectX  telos   graphviz      JDT             ABO statecharts     WBI modeler     FMT          AXIS web services  Webservice composition
+  100%   100%     100%      90%     100%      100%         20%               20%               20%             50%          60%                 40%
+                             ^                             ^                 ^                  ^              ^             ^                   ^
+                        goal2aspect                     AST-q7            q7-statechart      q7-bpel      q7-feature        ECE450              WIRI
+ 									 	      literate programming-q7
+* OME was reengineered (componentized) into three packages following the model-view-controller design pattern.
+^ These are things to do in the near future, the percentage shows how much work has been done.
+</pre>
+<h3> Components supports the features </h3>
+
+<pre>
+Graph editing and visualization  &lt;= ++ OME
+   Graph manipulations
+   		Select               
+   		Move 
+   		Insert 
+   		Delete 
+   		Copy 
+   		Paste
+   Search 
+   Anti-alias display
+   Layout					     &lt;= ++ graphviz
+   Zoomin/out
+   2D Scrolling
+   Undo/Redo
+Graph querying                   &lt;= ++ protege
+   Ontology generation              &lt;= ++ ome::ometab
+   Ontology query                   &lt;= ++ ome::query_tab
+Graph sharing                    
+   Web services wrapper			  &lt;= + OmniGraphEditor
+Graph publishing                  &lt;= ++ OME
+   Scalable vector graphics (SVG)   &lt;= +batik
+   Portable network graph (PNG)     &lt;= +png  
+Goal-oriented/Agent-oriented Modeling languages &lt;= ++ telos, q7
+   Telos (vgraph, i*, GRL), OTelos (SML), text (Q7), etc.
+Goal satisfiability reasoning      
+   Bottom-up label propagation      &lt;= ++ GR-tool
+	  Qualitative logic 
+	  Quantitative probabilistic network 
+   Top-down satisfiability          &lt;= ++ SAT4J
+Quality requirements analysis
+   Non-functional requirements      
+   Quality metrics					&lt;= + metrics
+Early Aspects elicitation         &lt;= ++ q7
+   Goal aspect separation
+   Pointcuts Definition
+   Weaving							&lt;= ++ "q7 -> i* generation"
+Forward engineering               &lt;= + q7
+   Feature model generation           &lt;= ++ q7 - feature
+   Statecharts generation             &lt;= ++ q7 - ABO statecharts
+   Component/Connector view generation  &lt;= ++ q7 - koala
+Reverse engineering               &lt;= + q7
+   Statechart refactoring            &lt;= ++ Eclipse2q7
+   Refactoring to goal model         &lt;= ast2q7
+Eclipse integration				  &lt;= ++ ome4eclipse
+   Plugin development				&lt;= ++ ome4eclipse, ome4protege
+   Feature development				&lt;= ++ ome4eclipse.feature
+   Plugin update site               &lt;= ++ update.ome4eclipse
+   Rich client platform				&lt;= ++ ome4eclipse/openome.product
+</pre>
+</body>
+</html>

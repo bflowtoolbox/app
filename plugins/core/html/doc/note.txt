@@ -1,0 +1,1 @@
+java -cp "c:\Program Files\eclipse\plugins\org.junit_3.8.1\junit.jar";bin;plugins/edu.toronto.cs.ome/OpenOME.jar;lib/junitperf-1.9.1.jar edu.toronto.cs.ome.view.test.GraphicViewCanvasTest

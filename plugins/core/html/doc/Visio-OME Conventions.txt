@@ -1,0 +1,6 @@
+The following conventions apply when converting a Visio diagram to an OpenOME diagram:
+1. Make sure a label is connected to the element it evaluates.
+2. Make sure a boudary is connected to the actor/agent/role/position it belongs to.
+3. If you want to expand the width of a boundary, please expand it along the X axis.
+
+-- Xiaoxue Deng

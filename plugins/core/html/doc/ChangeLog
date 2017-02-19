@@ -1,0 +1,626 @@
+** ChangeLogs **
+TIME			  AUTHOR     MAINTENANCE TYPE:NFR TYPE:COMPONENT NAME
+=============   ==========   ========================================
+Feb 15, 2006      Yijun Yu
+
+-- Kick off next agile RE iteration
+   To collect requirements from users
+-- Update the installation documents
+
+Dec 18, 2005      Yijun Yu
+
+-- Release of version 0.14
+-- Merge the packages back into the plugin to ease the build process 
+   (componentization is necessary only when there are really parallel developments !)
+
+Dec 17, 2005      Yijun Yu
+
+-- Release of version 0.13
+-- Runtime-Or (whose alternatives has no correlations with any softgoals) 
+      can be treated as AND for generating a business process model
+      We use "ome.reasoning.topdown.runtime_or" property to indicate such usage.
+      By default, this property is false.
+
+Nov 15, 2005      Neil Ernst  
+-- visualizing the quantitative labels of a node using a continuous
+   coloring scheme. For a simplest understanding:
+  - blue => satisficing
+  - red => denial
+  - green => conflicting   
+  Later we will make it a flexible feature to add the color scheme.
+
+Nov 12, 2005      XD
+-- reuse COPY and DELETE operation to create the CUT operation
+-- add the create link group type dialog
+
+Nov 5, 2005       YY
+-- restore the generic types to allow jdk 1.4 to run the plugin ( reported by Lei Jiang)
+-- XD: fixed the bug reported by YY on pasted a deleted element from the clipboard
+
+Nov 3, 2005       XD
+-- bugfix by Xiaoxue Deng
+ * GraphicViewElement::getExpandedBounds ->solve the problem of an expandable
+                                           element without child cannot expand
+ * TelosElement::iterator and Telusmodel::getElement -> solve the problem of a
+                     pasted element which become a child cannot be deleted
+ * OMEDefaultPlugin::getMenubarMethod -> temporarily remove the cut/redo/undo command  
+
+Nov 2, 2005       YY
+
+-- populate the preference page with the system properties that
+   have prefix of the plugin.
+
+Oct 30, 2005      YY
+-- improve the headless build process     					maintainability
+-- Fixed a bug when setting label through the pop-up menu
+   to the selected elements, it was not converted into GR-tool (S,D) label 
+   Reported by Neil Ernst.
+The following are fixes for usability bugs
+-- move the generated tmp files into a tmp directory		
+   reduce two configuration items into one (tmpDot, testDot => tmpDir)
+-- use two different icons for top/down and bottom/up reasoning
+-- reduce the number of metamodels for i* to 1
+-- separate the funtionality for staighten All/Selected links
+-- reduce the detailed property methods
+-- renamed "ExpandAll" method
+-- create a border for the text editor when an element is created/renamed 
+-- add the search method to the edit menu
+-- allow accelerator without modifier prefixes
+-- restore the status bar
+-- prompt user at which mode he is viewing
+-- prompt the save file dialog when exiting the window (this saves into Telos files)
+-- set the 2D scroll the distance right
+    
+Oct 17, 2005      AL
+
+--  make the output branch name shorter     wbimodel generation
+
+Oct 13, 2005      YY
+
+-- Integration with WBI modeler is done on time (before the CASCON demo).
+   "Save As..." into "WBI model, .xml" format. The XML format can be imported into
+   an empty WBI modeler project as the business process model.
+   This flips the version number of the Eclispe plugin to 0.0.10 :)
+
+Oct 11, 2005      YY
+
+-- bugreport by Eric Yu mainly on usability
+   I will handle them later with Xiaoxue.
+- Open a model with previous layout
+- SR/SD/SR+SD mode should be prompt to the user
+- No border to the text edit widget when creating an element 
+  Undocumented how to escape the text editing widget
+- In GRL model, it does not prompt all possible link types
+- 2D dragging only half-way
+- setting zoomin/zoomout distance/text etc seems unnecessary
+- property method does not toggle the marks in the view menu
+- straighten the selected links actually straighten all the links
+- there is no warning to the save dialog when the model is changed
+Oct 6, 2005		  YY
+
+- WBI model generation
+	 * Traverse the goal model to output the WBI model
+	 * There are five rules:
+	 *   1. A leaf goal is converted into a task, the start/stop are the same
+	 *   2. A sequentially decomposed AND goal is converted into a sequence of tasks, the start of the 
+	 *       parent goal is the first child task's start, and the stop of the parent goal is the last child task's
+	 *       stop. A child task's stop is connected with the next child task's start
+	 *   3. A parallelly decomposed AND goal is converted into a fork of the child tasks and join them:
+	 *       The start of the parent goal is the fork, the stop of the parent goal is the join;
+	 *       The fork is connected with the start of each child task and the join is connected with the
+	 *       stop of each child task
+	 *   4. A runtime decomposed OR goal is converted into an decision task followed by a branch to 
+	 *      the child tasks.
+	 *      The start of the parent goal is the decision task, the stop of the parent goal is the join;
+	 *      The decison task is connected with the branch; the branch is connected with each child task's start;
+	 *      each child task's stop is connected with the join;
+	 *   5. A singleton AND or OR decomposed goal is simply skipped:
+	 *      The start/stop of the parent goal is simply that of its child task. 
+	 
+Oct 5, 2005
+- bugfix:         YY
+  simplify the batch run for standalone version
+- bugfix:         YY
+  reported by AL on Sept 30
+
+Sep 30,  2005  
+
+- bugreport: Alexei Lapouchnian
+  In the saved Q7, the subgoals should be output from left to right
+
+Sep 24, 2005    YY
+
+- bugfix, for reasoning, encode hard goal FS and FD by different propositions
+- bugfix, for reasoning, do not allow input partially labels for the hard goals
+
+Sept 22, 2005   YY
+- bugfix, refer to - Sep. 19, 2005 TODO: (proposed by Alexei)
+  make sure the actor element always sits on the boundary
+- bugfix, limit the file open dialog file types to "tel, q7, vdx"
+- bugfix (as requested by Nicola Mayer), 
+         remove init_layout when the opened file does not have q7 extension
+- bugfix: start open file dialog when no command line argument is provided
+		 
+Sep 21, 2005    YY
+
+- 													maintainability:properties
+  Put the Q7 system properties into a separate Q7.properties file so that it 
+  can be customized without hardcoding the program
+
+- bugfix: Task shape display minimal width should not be smaller a fixed size
+
+- TODO(proposed by Alexei)   correctness:semantics of goal reasoning:Q7
+  separating the goals/tasks with the same names in generating the goal model from Q7
+  Because when the goal is reasoned in different contexts, the label assigned to
+  the goal may be different.
+  
+Sept 20, 2005   YY
+
+- towards headless build
+http://www.eclipse.org/articles/Article-PDE-Automation/automation.html
+
+- Whenever update the version number of the ome.eclipse.plugin, 
+  make sure both plugin.xml and the Manifest.mf get updated.
+
+Sept 19, 2005
+
+- TODO: (proposed by Alexei)
+  need to make sure the actor element sits on the boundary.
+
+Sept 17, 2005	YY
+
+- bugfix: GraphViewElement
+  The boundary of actor elements are recalculated
+    
+- bugfix (refer to the one reported by Nicolas Mayer)
+   The causes are:
+   1) the missing creation of the new file in the "new" call back process
+   2) the extraneous call in the resize event process
+   They are fixed for the standalone version now. 
+   
+Sept 16, 2005   YY
+							  bug (reported by Mayer)
+- New project from a framework is not shown in the editor
+
+							  bugfix (reported by Zhu Manling)
+-  problem: when starting ome4protege as standalone application, OMETab is not shown
+   solution: the looks.jar added to the classpath : protege.bat   
+							 maintainability/extensibility:q7 to emf model
+- the EMF goal model is populated from simplified Q7 : GoalModelCodeGenerator.java 
+- the Q7, util components are reengineered into an Eclipse plugin by themselves
+
+Sept 6, 2005    YY 	
+							 maintainability/extensibility:q7 to emf model
+- the EMF goal/feature/statecharts/components models are created
+							 maintainability:rename the projects
+- projects are renamed by their main package name		
+ 							 bug fix:correctness:q7
+- fixing the error in parsing the pointcuts (a bug introduced by
+  pointcutting through AND/OR operators)
+
+Aug 24, 2005    YY
+
+Finally the marking for CSC408 has been done.. I will integrate
+some of their project work back into OpenOME.
+
+- Though converting AND-decomposition and leaf goals into task is considered 
+  the strict i* syntax, many users still want a similar view, that is to 
+  do not distinguish goals and tasks in the rationale model. Thus I made this
+  an alternative feature.
+
+- For better maintenance, log4j will have to be used gradually into the program.
+
+Aug 21, 2005    YY
+
+- use +/- keys for zoomin/zoomout
+- only layout the visible elements
+
+Aug 20, 2005	Yijun
+
+- changed the algorithm to calculate the minimal bounding box of the actors
+- fixed a bug in q7 to i* generation, where a cyclic SD link was created from == to 
+- fixed a bug to that empty goal hierarchy was not generated into Q7
+- FilebasedTest refactored to use reflection to add test cases
+
+							 usability:string-based search:ome
+- adding more keyboard events:
+   SLASH search the name, select the matched node and let it be the center of the window
+
+							 correctness:scrolling:ome
+- the UP/DOWN key are inverted 
+							 
+							 correctness:i* generation:q7
+- Eric told me: strictly speaking in the i* modeling language, the
+  decomposition links (AND) are associated with Tasks, and the
+  means-ends links (OR) are associated with Goals. Thus the q7 to i*
+  conversion needs to create the tasks accordingly
+							 
+Aug 19, 2005	Yijun
+								usability:ome
+- fixing error in 2d scrolling
+- adding more keyboard events:
+   PAGEUP/DOWN scroll vertically
+   UP/DOWN	scroll vertically slower
+   LEFT/RIGHT scroll horizontally
+   
+								performance + quality of presentation: ome
+- the shapes are drawn as vector graph into SVG
+  - for i* agent
+  - for i* goals
+  - for i* tasks
+Aug 18, 2005	Yijun
+							 
+							 perfective:usability/zoom:ome
+- merged the update from Kaimo Hu
+- improve by scale font when zoomin/zoomout
+- improve by scale (x,y) when zoomin/zoomout
+
+Aug 1, 2005    Kaimo, Zhu
+							 perfective:performance:ome													 
+- LinkedList => Vector(10,10)
+							 perfective:usability/zoom:ome
+- a new editing mode
+- zoomin/out
+
+Aug 17, 2005     YY          
+							 perfective:usability/svg:ome
+- export the graph into SVG format through the batik library
+							 perfective:maintainability/refactoring/saveas:ome 
+- merge the ExportMethod, SaveAsXXXMethod into SaveAsMethod
+
+Aug 16, 2005    YY
+							 perfective:usability/selection:ome
+  - Allow shortcut key to be used to select part of the goal model:
+   T select top level goals
+   B select bottom level goals 
+
+Aug 15, 2005	YY			
+							 perfective:reasoning/top-down:ome
+- Use SAT4J to encode the goal model and perform
+  the top-down reasoning, based on the CSC408 students input:
+  
+  							 perfective:consistency/features:ome
+- Refactored the set property method for the view menu
+  so that the features of the software can be controlled by the GUI
+  consistently using the Java property
+  
+Aug 13, 2005    YY		
+							 perfective:usability/(de)select:ome
+- when clicking at an element, deselect it if it is already selected							 
+							 perfective:reasoning/quantitative:ome,q7
+- support quantitative reasoning:
+  - Introducing quantitative degree to the contribution links as an optional 
+     number "+ 0.3 ...".  add optional value to the right of "Op" in Q7
+  - Introducing quantitative (S, D) degree to the intentional elements (TelosElement)
+    q7 label can be quantitative as well: @ <s>, <d> @
+    
+							 perfective:performance/refresh:ome
+- GraphView.java	the repaint needs to be limited to the dirtybounds
+  when an element is moved
+							perfective:extensibility, usability:ome
+- Introducing priority rank to the intentional elements
+  - draw (S,D) Degree to the right of the element
+  - draw Priority rank to the up-right corner of the element
+  - decrease the size of qualitative labels
+  - Allow shortcut key to be used to annotate the goal model:
+   R increase priority
+   Q decrease priority
+							
+Aug 8, 2005     Yijun Yu
+							 corrective:warning script:dot
+- use -q option	to avoid warning and non-stop dot command
+- this requires a newer version of graphviz
+							 corrective:i* codegen/null when/q7
+							 perfective:usability/language:q7							 							
+
+Aug 5, 2005		Yijun Yu
+							 perfective:goal reasoning:ome
+- Claim softgoals are allowed to propagate labels
+- saves istar into Q7 with when clauses
+
+							 perfective:usability/shortcutkey:ome
+- Allow shortcut key to be used to annotate the goal model:
+   H  toggle highlighted
+   S  select highlighted nodes
+   C  clear annotations: labels 
+							 perfective:performance:ome
+- use system property "protege" to enable the save as protege procedure
+							 perfective:usability/shortcutkey:ome
+- Allow shortcut key to be used to annotate the goal model:
+   1  Fully satisficed
+   2  Fully Denied
+   3  Weakly Satisficed
+   4  Weakly Denied
+   5  Undecided
+   6  Conflict
+   P  Parallel
+   ;  Sequential
+   O  Optional
+   A  Alternative   
+							 perfective:input claim:q7
+- (op when)=> why 
+  defines a claim "when" which contributes through the "op" rule to the goal "why"							 
+							 corrective:usability/input:q7
+- the inherited name needs to be preprocessed before aliases are used
+
+Aug 4, 2005    Yijun Yu
+							 perfective:usability:ome4eclipse
+- reflect the resource change to the opened editor
+   + MyResourceChangeReporter.java
+   * Editor.java
+							 perfective:performance:ome
+- to update the graphicview rather than create a new graphicviewframe
+- change graphicview to singleton and update the model through view.getModel in setView function
+							 perfective:usability:q7
+- inherit the parent's goal name in the child goal using ".." abbreviation
+							 perfective:usability:util
+- make D.o more extensible to accept any Object parameters
+							 corrective:usability:ome
+- do not allow select the expandable element when the to_expand mode is 2 (SR only)
+
+Aug 2, 2005    Yijun Yu    	 
+							 corrective:ome:changelinktype
+- fixed the bug in changing link type							 
+							 corrective:maintenance:ome
+- created separate testing packages and refactored the test cases							 
+Aug 1, 2005    Yijun Yu    	 
+							 corrective:ome
+- An unnamed contribution link has a too big icon
+  fix: change istar.tel
+  							 detective:ome:changelinktype
+- an error happens when a link type is changed  							 
+							 perfective:usability:ome:default=expanded
+- make sure the graph is initially expanded
+							 perfective:usability:ome:default=expanded
+- reduce the aspect icon size							 
+
+July 31, 2005  Yijun Yu      perfective:usability:q7
+- introduce aliases (=<alias>) to goals so that an defined 
+  alias can be used in place of the goals
+ 							 perfective:usability:layout
+- introduce hidden links in the generated dot file to make sure
+  the sorted subgoals are layouted from left to right
+  @see test.dot
+							 corrective:usability:xmlcodegenerator
+- remove the "" in generated goal name attributes
+							 perfective:maintainability:refactoring
+- Codegenerators in the Q7 package are refactored
+							 perfective:maintainability:refactoring
+- Unit test cases are refactored, creating an abstract class 
+  FileBasedTest
+
+July 10, 2005    Yijun Yu    corrective:integration:protege editor
+- PluginUtilities.java. Make sure protege editor try a different
+  "protege-plugins" directory first, rather than conflicting with 
+  the Eclipse product's default "plugins" directory.
+July 10, 2005    Yijun Yu    corrective:integration:protege editor
+- The Eclipse frame must wait until Protege has finished starting up its frame
+  before putting it into the SWT window.
+July 10, 2005    Yijun Yu    adaptive:integration:protege editor
+- Make sure it uses the Protege editor's menubar
+- since we do not change protege's source code, it
+  is inevitable to have a temporary window opened,
+  but soon this window will be embedded into Eclipse.
+July 10, 2005    Yijun Yu    corrective:integration:ome4eclipse
+- Fixing a problem to load the Protege editor in the RCP
+  similar to July 8's mods.
+July 9, 2005     Yijun Yu    adaptive:usability:button size
+- default to reduce the button size to save screen space, 
+  the large button setting can revert by setting the property 
+  "openome.toolbar.tooltip" in GraphViewCanvas.java
+July 8, 2005     Yijun Yu    corrective:ECLIPSE_HOME missing
+- Editor.java: the ECLIPSE_HOME environment variable is
+  missing in 3.1. Use Platform.getInstallLocation() instead
+July 7, 2005     Yijun Yu    adaptive:integration:Eclipse
+- Eclipse RCP application
+June 30, 2005    Yijun Yu    update:version:Eclipse
+- Updated from Eclipse 3.1RC3 to Eclipse 3.1
+June 30, 2005    Yijun Yu    corrective:Q7 to XML generation
+- q7::XMLCodeGenerator.java
+June 30, 2005    Yijun Yu    corrective:integration:protege
+- Replaces Queries Tab plugin with the OpenOME plugin
+June 30, 2005    Yijun Yu    update:version:Protege
+- Updated Protege from 2.1.2 to 3.1beta
+June 30, 2005    Yijun Yu    update:document:user's guide
+- Updated the user's guide for the Eclipse plugin
+June 23, 2005    Yijun Yu    adaptive:integration:Eclipse
+- Eclipse plugin, feature and update site generations
+June 10, 2005    Yijun Yu    corrective
+- For the model generated from Visio, the i* claim button 
+  does not have its picture
+  Reported by: Yijun Yu
+  Cause: VDX.xsl does not add the Claim simple class to the template
+  Fixed by: Yijun Yu
+  (1) copy the corresponding part in the istar.tel metamodel to vdx.xsl.
+June 10, 2005    Yijun Yu    adaptive:integration:Eclipse
+- Automatically build the Eclipse plugin ZIP file
+  Done by: Yijun Yu
+  (1) right click plugin.xml, choose PDE tools, generate build.xml
+  (2) right click build.xml, choose Ant build task "zip.plugin".
+June 9, 2005     Yijun Yu    adaptive:q7 to xml conversion
+- Q7 package changed to include a new XMLCodeGenerator
+  for the CSC408 course project and also possibly the IBM WBI modeler
+  integration project.
+June 9, 2005     Yijun Yu    corrective:compatibility
+- The i* plugin toolbar does not contain the "i* contribution links"
+  as the ome3 does
+  Reported by: Hongji Li
+  Cause: the i* plugin is changed in the ome.plugin component ...
+June 9, 2005     Yijun Yu    corrective:compatibility
+- The file/new action does not pop up a dialog to choose the
+  metamodel.
+  Reported by: Hongji Li
+  Cause: in ome3, there is a way to select a metamodel.
+June 9, 2005     Yijun Yu    corrective:usability
+- The save as dialog does not know the default file extension.
+  Fixed by: Mindz team in ECE450 course
+  (1) getSaveFileAndDirectory(String ext) ...
+  (2) OMEDefaultPlugin.java: save as actions
+June 9, 2005     Yijun Yu    corrective:correctness
+   Component: OpenOME graph editor 
+   Scenario:   in i* graph, right click an intentional element,
+     then push it into an actor will evict the first element of the
+     actor out of its boundary, while logically that wrongly "detached"
+     element is still a children of the actor because it is hidden together
+     with the actor.
+June 8, 2005     Yijun Yu    corrective:compatibility:Eclipse
+   Scenario: the plugin's buttons do not appear in the toolbar
+   Cause: The file OpenOME.jar couldn't be opened by the plugin.
+   Fixed by: Yijun Yu
+   (1) Since the OpenOME.jar is deployed to user's Eclipse plugins 
+   installation directory, it can only be found using the ECLIPSE_HOME
+   variable through the API JavaCore.getClasspathVariable.
+   (2) the Manifest file needs to export the packages and
+   (3) the plugin.xml needs to export ome4eclipse and its libraries.
+May 30, 2005     Xiaoxue Deng adaptive:completeness:visio conversion
+- Adding the boundaries from i* graphs into generated Visio document
+- Preserving the geometric locations of OME in the generated visio models
+- Mapping labels from Visio to OME
+  + ModelManager.java
+  + jtelosutil.java
+  + istarvdx (new: stencil file)
+- Fixed a bug for loading
+  + GraphView.java 
+  + GraphViewElement.java
+Mar 24, 2005     Yijun Yu  corrective:highlighted object 
+  - highlight object deletion bug: a deleted object
+    remains highlighted 
+    reported by: X team of the ECE450 course
+Mar 23, 2005     Yijun Yu  corrective:new elements
+  - when creating new element, the old links will change their
+    connection to the new element
+Mar 23, 2005     Yijun Yu  adaptive:componentization  
+  - Partitioned the software into the following components:
+    OpenOME, Q7, PNG, QueryTab, GR-tool, CaptainFeature
+  - Protege, Grappa and JTelos are tightly coupled with the rest of 
+    functionality, we shall think of refactoring
+Mar 22, 2005     Yijun Yu  adaptive:q7 syntax:enrichments
+- In Q7, a feature enrichment for the "How" decomposition is created: 
+  "|" = XOR, "/" = "optional"
+- implemented the Q7 to Feature model generation, through the integration of 
+  the captain feature tool. This tool support is useful for the generation of
+  high-variability design views
+- In Q7, a control enrichment for the "How" decomposition is created: 
+  ";" = sequential, "||" = "parallel"
+- The second enrichment should be used to generate statecharts view
+Mar 16, 2005 Yijun Yu and Xiaoxue Deng
+- fully integrated with the Trento's goal reasoning tool version 1.0 (bottom-up
+  label propagation)
+Mar 10, 2005 Yijun Yu
+- introducing "==>" pattern into Q7 to represent the Strategic Dependency among two agents
+	  <A>::a ==> <B>
+  as a short hand for two rules:
+	  <A>::a => ~a
+	  ~a => ~<B>:a
+Mar 9, 2005 Xiaoxue
+  The visio to i* is done.
+Mar 9, 2005 Yijun Yu
+  An initial integration with Giorgini's goal reasoning tool is done. 
+Mar 8, 2005 Yijun Yu
+- introducing a dependency rule "~" into Q7
+- i* to Q7 such that they are round-trip translation to each other
+- aspects expressed in Q7 to i* translation
+- implemented the translation patterns to generate dep. rules from inter-agent
+  contribution/correlation links
+- candidate aspect identification for the root softgoals
+The above features are tested with the 7 examples in the "test" directory 
+using junit (3 test cases: Q2Q, Q2I, I2Q for each example)
+
+Feb 25, 2005 Yijun Yu
+
+vgraph to Q7 generation
+visio to i* done
+layout bug fixed
+adding an aspectJ tracing aspect
+
+Feb 6, 2005 Yijun Yu
+
+New features for better usability:
+* Moving group of elements together
+* Initial frame size is preferred to be 1024, 800
+* Quicker input:
+	* Q7 to vgraph generation
+	* Q7 to i* generation
+* run.bat can start with a file specified by an argument 
+          such that you can associate a file type (.tel, .q7) 
+	  with OpenOME in the explorer
+
+Jan 31, 2005 Yijun Yu
+
+Major new features since OME, thanks to Zhifeng, Xiaoxue, Marcel, Julio ...
+    * Eclipse development
+    * Cut/Paste (with Zhifeng Liu)
+    * Save to Protege
+    * Load Visio model (with Marcel)
+    * Load/Save without jtelos.dll (with Xiaoxue Deng)
+    * Layout through graphviz (with Xiaoxue Deng)
+    * reengineering to conform to MVC pattern
+    * Q7 representations (based on discussions with Julio)
+
+TODO (not ordered by their priorities):
+    * adding unit test for every function. That means to know the
+      exact meaning of the functions and make sure it is implemented correctly
+      (with the students of ECE450)
+    * finish the visio support (with Xiaoxue)
+    * using GEF or other visualizing widgets by UVic to improve the
+      layout of OpenOME (with Neil)
+    * using EMF to reengineer the "model" part of OpenOME
+      into UML (with Luiz Marcio?, Yiqiao )
+    * adding group editing support through web service 
+      (with the students of ECE450), and potentially useful
+      for viewpoint synchronization (with KHP group)
+    * adding advanced query through Protege to support ideas
+      such as the "top-down slicing" of the model (with KHP)
+    * support i* translation from Q7
+    * integrate the goal reasoning tool (with John and Trento people)
+
+Dec 10, 2004 Yijun Yu
+   OpenOME knowledge base has been redesigned to support
+parsing and querying, using a JavaCC based parser. It can
+run on Linux now!
+
+May 25, 2004. Yijun Yu.
+OME is first modified to allow integration into Protege as its Tab
+plugin. The current limitations are:
+ - "jtelos.dll" must be provided in a directory specified by
+   "-Djava.library.path=<path>" option when Java is started.
+ - The property "java.libary.path" is also used to identify the
+   "OpenOME.jar" to load the OME's own plugin classes dynamically.
+ - The OpenOME.jar must be in the classpath
+ - In the "META-INF/Manifest.mf" file, Class-Path must be set to indicate 
+   the "jtelos.jar" and "../protege.jar" through relative path to
+   the "ome-plugin.jar".
+ - An initial model is loaded by the property "-Dmodel=<model.tel>"
+The major changes are:
+ - "edu.toronto.cs.ome.OMETab.class" provides an interface to Protege,
+   as well as a "main" method to start as an standalone application.
+    - "run_protege.bat" run the OME as a plugin of Protege.
+    - "plugins/edu.toronto.cs.ome/run.bat" run the plugin as an application.
+ - OME's implementations are moved to "edu.toronto.cs.ome.OME" package
+ - OME's own "plugins" are moved to "edu.toronto.cs.ome.plugins"
+   package.
+ - The project managing classes are no longer needed, but they are 
+   still there to allow the backward compatibility.
+ - The "images" are moved into the JAR file as "resources".
+   Correspondingly, the ImageIcons are loaded through:
+   new ImageIcon(this.getClass().getResource("/resources/image.gif"));
+ - Telos files can be exchanged with OWL or Protege OKBC files;
+ - Techne proprietory "jtelos.dll" and "jtelos.jar" can be replaced
+   by our own parser;
+ - TelosFramework refactored into an KBFramework interface, and implement a 
+   ProtegeFramework such that it has a controlled interface with any KB.
+    - Step 1. To save the OME data structure into Protege data
+              structure.
+    - Step 2. Whenever the OME model is changed, it is saved into the
+              the protege project.
+    - Step 3. Update the OME data structure whenever the protege model
+              data structure is changed without changing the meta-model.
+    - Step 4. Make sure the Protege meta-model is equivalent to the 
+              OME meta-model.
+    - Step 5. A round-trip testing to show that both direction are
+              complete.
+ - Through this plugin, Protege community will have an
+   excellent way of visualizing the dependence graph at the 
+   instance-level. It is different from OntoViz in that the visualized
+   model are more concise because of richer symbols.
+
