@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.activities">
+      <activity
+            description="Disable unwanted eclipse UI"
+            id="com.test.ui.disable"
+            name="Disable">
+      </activity>
+   <activityPatternBinding
+   activityId="com.test.ui.disable"
+   pattern="edu\.toronto\.cs\.openome_model\.editor/edu\.toronto\.cs\.openome_model\.presentation\.openome_modelModelWizardID">
+   </activityPatternBinding>
+   </extension>
+
+
+   <extension point="core.generator">
+      <generator id="EMF model generation" 
+      	class="codegen.EMFProjectsGeneration"/>
+      <generator id="GMF diagram generation" 
+      	class="codegen.GMFProjectGeneration"/>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            id="openome_model.intro"/>
+      <introProductBinding
+            introId="openome_model.intro"
+            productId="openome_model.product"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            content="introContent.xml"
+            id="openome_model.introConfigId"
+            introId="openome_model.intro">
+         <presentation
+               home-page-id="root"
+               standby-page-id="root2">
+            <implementation
+                  kind="html"
+                  os="win32,linux,macosx"
+                  style="content/shared.css"/>
+         </presentation>
+      </config>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.ui.ide.workbench"
+            name="OpenOME">
+         <property
+               name="aboutText"
+               value="OpenOME, an open-source requirements engineering tool.">
+         </property>
+         <property
+               name="appName"
+               value="OpenOME">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+         <property
+               name="windowImages"
+               value="eclipse.gif,eclipse32.gif,eclipse48.gif,eclipse_lg.gif,eclipse_lg.gif">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="8000FF">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="7,252,445,20">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="5,275,445,15">
+         </property>
+      </product>
+   </extension>
+</plugin>

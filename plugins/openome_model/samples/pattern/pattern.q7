@@ -1,0 +1,2 @@
+<"Role A">::"G1"  => ~<"Role B">::"G2"
+<"Role B">::"G2" => ++<"Role B">::"Security"

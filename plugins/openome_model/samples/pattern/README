@@ -1,0 +1,58 @@
+This folder is experimental for security patterns using ATL.
+======================================================   
+System Requirements
+   + You need to download the ATL Bundle.
+     and Place it under a folder, 
+         e.g. /IDE/atl/ATLBundle-20080109
+   + Create the "links" folder of your openome
+     and add a file "atl.link" with the following line:
+path=/IDE/atl/ATLBundle-20080109
+   + restart the openome launcher   
+======================================================   
+
+security.atl transforms an instance of the openome_model.ecore
+by applying a security pattern. 
+
+To use the example, you need to first modify the .project
+description of Examples, to include the following buildSpec
+(You need to switch to the Resource perspective to be able
+to edit the file):
+
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>Examples</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.atl.eclipse.adt.builder.atlBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.atl.eclipse.adt.builder.atlNature</nature>
+	</natures>
+</projectDescription>
+
+After refresh the project, you will get a compiled file 
+"security.asm".
+
+Then right click at the openome_model.ecore file to register the 
+metamodel.
+
+Finally, create a new Run As dialog to run the project as a new ATL transformation.
+Inside the dialog, fill in the following parameters:
+
+Configuration name: New Configuration
+Project Name: Example
+ATL file: security.atl
+F:  /Examples/openome_model/pattern/openome_model.ecore
+G: /Examples/openome_model/pattern/openome_model.ecore
+IN: /Examples/openome_model/pattern/openaccount.oom 
+OUT: /Examples/openome_model/pattern/openaccount-after.oom
+
+Apply the transformation, you will obtain the openaccount-after.oom
+as a result.
+

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmftool:ToolRegistry xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gmftool="http://www.eclipse.org/gmf/2005/ToolDefinition">
+  <palette
+      title="openome_modelPalette">
+    <tools
+        xsi:type="gmftool:CreationTool"
+        title="Actor"
+        description="Create new Actor">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/actor.gif"
+          bundle="openome_model"/>
+      <largeIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/actor.gif"
+          bundle="openome_model"/>
+    </tools>
+    <tools
+        xsi:type="gmftool:CreationTool"
+        title="Agent"
+        description="Create new Agent">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/agent.gif"
+          bundle="openome_model"/>
+      <largeIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/agent.gif"
+          bundle="openome_model"/>
+    </tools>
+    <tools
+        xsi:type="gmftool:CreationTool"
+        title="Position"
+        description="Create new Position">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/position.gif"
+          bundle="openome_model"/>
+      <largeIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/position.gif"
+          bundle="openome_model"/>
+    </tools>
+    <tools
+        xsi:type="gmftool:CreationTool"
+        title="Role"
+        description="Create new Role">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/role.gif"
+          bundle="openome_model"/>
+      <largeIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/role.gif"
+          bundle="openome_model"/>
+    </tools>
+    <tools
+        xsi:type="gmftool:PaletteSeparator"/>
+    <tools
+        xsi:type="gmftool:CreationTool"
+        title="Hardgoal"
+        description="Create new Goal">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/hardgoal.gif"
+          bundle="openome_model"/>
+      <largeIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/hardgoal.gif"
+          bundle="openome_model"/>
+    </tools>
+    <tools
+        xsi:type="gmftool:CreationTool"
+        title="Softgoal"
+        description="Create new Softgoal">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/softgoal.gif"
+          bundle="openome_model"/>
+      <largeIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/softgoal.gif"
+          bundle="openome_model"/>
+    </tools>
+    <tools
+        xsi:type="gmftool:CreationTool"
+        title="Task"
+        description="Create new Task">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/task.gif"
+          bundle="openome_model"/>
+      <largeIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/task.gif"
+          bundle="openome_model"/>
+    </tools>
+    <tools
+        xsi:type="gmftool:CreationTool"
+        title="Resource"
+        description="Create new Resource">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/resource.gif"
+          bundle="openome_model"/>
+      <largeIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/resource.gif"
+          bundle="openome_model"/>
+    </tools>
+    <tools
+        xsi:type="gmftool:PaletteSeparator"/>
+    <tools
+        xsi:type="gmftool:CreationTool"
+        title="Dependency"
+        description="Create new Dependency">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/dependency.gif"
+          bundle="openome_model"/>
+      <largeIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/dependency.gif"
+          bundle="openome_model"/>
+    </tools>
+    <tools
+        xsi:type="gmftool:PaletteSeparator"/>
+    <tools
+        xsi:type="gmftool:CreationTool"
+        title="Decomposition"
+        description="Create Decomposition (AND)">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/anddecomposition.gif"
+          bundle="openome_model"/>
+      <largeIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/anddecomposition.gif"
+          bundle="openome_model"/>
+    </tools>
+    <tools
+        xsi:type="gmftool:CreationTool"
+        title="Means-ends"
+        description="Create a Means-Ends (OR) Decomposition">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/ordecomposition.gif"
+          bundle="openome_model"/>
+      <largeIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/ordecomposition.gif"
+          bundle="openome_model"/>
+    </tools>
+    <tools
+        xsi:type="gmftool:PaletteSeparator"/>
+    <tools
+        xsi:type="gmftool:ToolGroup"
+        title="Contributions"
+        description="Create a contribution"
+        collapsible="true"
+        active="//@palette/@tools.15/@tools.3">
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Make"
+          description="Create a make contribution.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Some+"
+          description="Create a Some+ contribution.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Help"
+          description="Create new help contribution.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/contribution.png"
+            bundle="openome_model"/>
+        <largeIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Unknown"
+          description="Create an unknown contribution.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+        <largeIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Hurt"
+          description="Create a hurt contribution.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Some-"
+          description="Create a Some- contribution.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Break"
+          description="Create a break contribution.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="AND"
+          description="Create an And Contribution">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="OR"
+          description="Create an Or Contribution">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+    </tools>
+    <tools
+        xsi:type="gmftool:ToolGroup"
+        title="Associations"
+        description="Create associations."
+        collapsible="true"
+        active="//@palette/@tools.16/@tools.0">
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="ISA"
+          description="Create an ISA association.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Covers"
+          description="Create a covers association.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Is part of"
+          description="Create an is part of association.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Occupies"
+          description="Create an occupies association.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Plays"
+          description="Create a plays association.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="INS"
+          description="Create an INS association.">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="icons/contribution.png"
+            bundle="openome_model"/>
+      </tools>
+    </tools>
+  </palette>
+</gmftool:ToolRegistry>

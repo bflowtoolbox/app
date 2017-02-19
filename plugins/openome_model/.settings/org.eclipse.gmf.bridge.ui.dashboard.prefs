@@ -1,0 +1,8 @@
+#Thu Sep 09 13:50:09 EDT 2010
+eclipse.preferences.version=1
+gmf_dashboard/domainGenerationModel=platform\:/resource/openome_model/model/openome_model.genmodel
+gmf_dashboard/domainModel=platform\:/resource/openome_model/model/openome_model.ecore
+gmf_dashboard/generationModel=platform\:/resource/openome_model/model/openome_model.gmfgen
+gmf_dashboard/graphicalDefinitionModel=platform\:/resource/openome_model/model/openome_model.gmfgraph
+gmf_dashboard/mappingModel=platform\:/resource/openome_model/model/openome_model.gmfmap
+gmf_dashboard/toolingDefinitionModel=platform\:/resource/openome_model/model/openome_model.gmftool

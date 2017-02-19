@@ -1,0 +1,99 @@
+module openome_model;
+create OUT : G  from IN : F;
+
+rule Model {
+	from s:  F!Model
+	to t:G!Model (name <-s.name,
+		intentions <- s.intentions, containers <-s.containers, 
+		decompositions <-s.decompositions, contributions<-s.contributions,dependencies <-s.dependencies)
+}
+
+rule Softgoal {
+	from
+		s : F!Softgoal
+	to
+		t : G!Softgoal (
+			name <- s.name)
+}
+
+rule Goal {
+	from
+		s : F!Goal
+	to
+		t : G!Goal (
+			name <- s.name)
+}
+
+rule Role {
+	from
+		s : F!Role
+	to
+		t : G!Role (
+			name <- s.name,
+			intentions <- s.intentions)
+}
+
+rule Agent {
+	from
+		s : F!Agent
+	to
+		t : G!Agent (
+			name <- s.name,
+			intentions <- s.intentions)
+}
+
+
+rule AndDecomposition {
+	from
+		s : F!AndDecomposition
+	to
+		t : G!AndDecomposition (
+			source <- s.source,
+			target <- s.target)
+}
+
+rule OrDecomposition {
+	from
+		s : F!OrDecomposition
+	to
+		t : G!OrDecomposition (
+			source <- s.source,
+			target <- s.target)
+}
+
+
+rule MakeContribution {
+	from
+		s : F!MakeContribution
+	to
+		t : G!MakeContribution (
+			source <- s.source,
+			target <- s.target)
+}
+
+rule Dependency {
+	from
+		s : F!Dependency (s.dependencyFrom.rule ->select(e | e.target.name = 'Security')->isEmpty())
+	to
+		t : G!Dependency  (
+			dependencyFrom <- s.dependencyFrom,
+			dependencyTo <- s.dependencyTo,
+			label<-s.label,
+			model<-s.model)
+}
+
+rule Security {
+	from s: F!Dependency (not s.dependencyFrom.rule 
+		    ->select(e | e.target.name = 'Security')->isEmpty())
+	to
+		t : G!Dependency  (
+			dependencyFrom <- s.dependencyFrom,
+			dependencyTo <- s.dependencyTo,
+			label<-s.label,
+			model<-s.model),
+  	    t1:G!BreakContribution (source <- s.dependencyTo, 
+  	    	                                   target <- t2, 
+											   model<- s.model),
+		t2:G!Goal (name <- s.dependencyFrom.name, 
+			container<-s.dependencyTo.container)
+ }

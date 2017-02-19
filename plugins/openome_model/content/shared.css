@@ -1,0 +1,96 @@
+*
+{
+	margin:0;
+	padding:0;
+	border:0;
+}
+
+html
+{
+	overflow:auto;
+	border:0px;
+	height:100%;
+}
+
+body
+{
+	font-family:sans-serif;
+	font-size:1em;
+	color:#000000;
+	background:#fff;
+}
+
+div#header
+{
+	background:#776fd7 url("./titlebanner.gif") bottom left repeat-x;
+	padding:1em;
+	padding-bottom:40px;
+}
+
+h1
+{
+	font-size:2em;
+	font-weight:bold;
+	color:#E5E5E5;
+}
+
+h2
+{
+	font-size:1.5em;
+	margin-bottom:1em;
+	font-weight:normal;
+}
+
+h3
+{
+	font-size:1.25em;
+	color:#787878;
+}
+
+a.menu
+{
+	display:block;
+	color:#000000;
+	font-weight:normal;
+	text-decoration:none;
+	padding-bottom:0.5em;
+}
+
+a
+{
+	color:#776fd7;
+}
+
+a:hover
+{
+	color:#000000;
+}
+
+div.info
+{
+	background:#e1dffa;
+	border:1px solid #d6d4f5;
+	padding:2em;
+	margin-top:1em;
+}
+
+p
+{
+	margin:1em 0;
+}
+
+img
+{
+	vertical-align:middle;
+}
+
+img.bullet
+{
+	padding-right:0.5em;
+}
+
+.page-style
+{
+	padding:2em;
+	padding-top:0;
+}
