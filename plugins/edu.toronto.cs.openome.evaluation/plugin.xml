@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   
+      <extension-point id="solver" name="Solvers Extension Point" schema="schema/solver.exsd"/>
+   <extension
+         point="edu.toronto.cs.openome.evaluation.solver">
+      <solver
+            file="zchaff.exe">
+      </solver>
+      <solver
+            file="zminimal.exe">
+      </solver>
+      <solver
+            file="script.sh">
+      </solver>
+      <solver
+            file="zchaffLinux">
+      </solver>
+      <solver
+            file="zminimalLinux">
+      </solver>
+      <solver
+            file="zchaffMac">
+      </solver>
+      <solver
+            file="zminimalMac">
+      </solver>
+   </extension>
+     <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.InteractiveQualReasonerHandler"
+            id="openome_IntQualReasoning_cmd"
+            name="openome_IntQualReasoning_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.InteractiveQualBackwardReasonerHandler"
+            id="openome_IntQualBackReasoning_cmd"
+            name="openome_IntQualBackReasoning_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.AutomaticQualReasonerHandler"
+            id="openome_AutoQualReasoning_cmd"
+            name="openome_AutoQualReasoning_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.ClearLabelsHandler"
+            id="openome_ClearLabels_cmd"
+            name="openome_ClearLabels_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.MarkLeavesHandler"
+            id="openome_MarkLeaves_cmd"
+            name="openome_MarkLeaves_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.MarkRootsHandler"
+            id="openome_MarkRoots_cmd"
+            name="openome_MarkRoots_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.UnhighlightAllHander"
+            id="openome_Unhighlight_cmd"
+            name="openome_Unhighlight_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.ApplyNoneHandler"
+            id="openome_ApplyNone_cmd"
+            name="openome_ApplyNone_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.ApplySatisfiedHandler"
+            id="openome_ApplySatisfied_cmd"
+            name="openome_ApplySatisfied_cmd">
+      </command>      
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.ApplyWeaklySatisfiedHandler"
+            id="openome_ApplyWeaklySatisfied_cmd"
+            name="openome_ApplyWeaklySatisfied_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.ApplyConflictHandler"
+            id="openome_ApplyConflict_cmd"
+            name="openome_ApplyConflict_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.ApplyWeaklyDeniedHandler"
+            id="openome_ApplyWeaklyDenied_cmd"
+            name="openome_ApplyWeaklyDenied_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.ApplyDeniedHandler"
+            id="openome_ApplyDenied_cmd"
+            name="openome_ApplyDenied_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.ApplyUnknownHandler"
+            id="openome_ApplyUnknown_cmd"
+            name="openome_ApplyUnknown_cmd">
+      </command>
+      <command
+            defaultHandler="edu.toronto.cs.openome.evaluation.handlers.ModelStatsHandler"
+            id="openome_Model_Statistics_cmd"
+            name="openome_Model_Statistics_cmd">
+      </command>                        
+      </extension>
+
+   <extension 
+		id="openome_reasoning_menus"
+		point="org.eclipse.ui.menus">
+	
+		<menuContribution 
+			locationURI="menu:openome_top_menu?after=additions">			
+   			<menu
+         		id="openome_reasoning_main_menu"
+         		label="Reasoning">
+         		<command 
+					commandId="openome_IntQualReasoning_cmd"
+					icon="icons/forward.gif"
+					id="openome_IntQualReasoning_menu"
+					label="Forward Interactive Qualitative Evaluation"
+					tooltip=""
+					mnemonic="Q">
+				</command>
+   			</menu>
+		</menuContribution>
+		<menuContribution
+            locationURI="menu:openome_top_menu?after=additions">
+         <menu
+               id="openome_reasoning_main_menu"
+               label="Reasoning">
+            <command
+                  commandId="openome_IntQualBackReasoning_cmd"
+                  icon="icons/backward.gif"
+                  id="openome_IntQualBackReasoning_menu"
+                  label="Backward Interactive Qualitative Evaluation"
+                  mnemonic="B">
+            </command>
+         </menu>
+      </menuContribution>
+  <menuContribution
+        locationURI="menu:openome_top_menu?after=additions">
+     <menu
+           id="openome_reasoning_main_menu"
+           label="Reasoning">
+        <command
+              commandId="openome_AutoQualReasoning_cmd"
+              icon="icons/sample.gif"
+              id="openome_AutoQualReasoning_menu"
+              label="Forward Automatic Qualitative Evaluation"
+              mnemonic="A">
+        </command>
+     </menu>
+  </menuContribution>
+      <menuContribution
+            locationURI="menu:openome_top_menu?after=additions">
+         <menu
+               id="openome_reasoning_main_menu"
+               label="Reasoning">
+            <command
+                  commandId="openome_ClearLabels_cmd"
+                  icon="icons/sample.gif"
+                  id="openome_ClearLabels_menu"
+                  label="Clear All Evaluation Labels"
+                  mnemonic="C">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:openome_top_menu?after=additions">
+         <menu
+               id="openome_reasoning_main_menu"
+               label="Reasoning">
+            <command
+                  commandId="openome_MarkLeaves_cmd"
+                  icon="icons/leaf.gif"
+                  id="openome_MarkLeaves_menu"
+                  label="Mark Model Leaves"
+                  mnemonic="B">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:openome_top_menu?after=additions">
+         <menu
+               id="openome_reasoning_main_menu"
+               label="Reasoning">
+            <command
+                  commandId="openome_MarkRoots_cmd"
+                  icon="icons/roots.jpg"
+                  id="openome_MarkRoots_menu"
+                  label="Mark Model Roots"
+                  mnemonic="B">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:openome_top_menu?after=additions">
+         <menu
+               id="openome_reasoning_main_menu"
+               label="Reasoning">
+            <command
+                  commandId="openome_Unhighlight_cmd"
+                  icon="icons/sample.gif"
+                  id="openome_Unhighlight_menu"
+                  label="Unhighlight All Intentions"
+                  mnemonic="B">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:openome_top_menu?after=additions">
+         <command
+               commandId="openome_Model_Statistics_cmd"
+               icon="icons/sample.gif"
+               id="openome_Model_Statistics"
+               label="Model Statistics"
+               mnemonic="B">
+         </command>
+      </menuContribution>
+
+<!-- Toolbar Buttons for Evaluation -->
+
+<!-- backward button -->
+      <menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+         		<command
+                 commandId="openome_IntQualReasoning_cmd"
+                 icon="icons/forward.gif"
+                 id="openome_IntQualReasoning_menu"
+                 label="Forward Eval"
+                 mnemonic="F"
+                 mode="FORCE_TEXT"
+                 tooltip="Forward Interactive Qualitative Evaluation">
+				</command>
+   			</toolbar>
+		</menuContribution>
+      	<menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                   commandId="openome_IntQualBackReasoning_cmd"
+                   icon="icons/backward.gif"
+                   id="openome_IntQualBackReasoning_menu"
+                   label="Backward Eval"
+                   mnemonic="B"
+                   mode="FORCE_TEXT"
+                   tooltip="Backward Interactive Qualitative Evaluation">
+            	</command>
+             <separator
+                   name="edu.toronto.cs.openome.evaluation.separator3"
+                   visible="true">
+             </separator>
+   			</toolbar>
+		</menuContribution>         
+<!-- mark leaves button -->
+        <menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                   commandId="openome_MarkLeaves_cmd"
+                   icon="icons/leaf.gif"
+                   id="openome_MarkLeaves_toolbarIcon"
+                   label="Leaves"
+                   mnemonic="L"
+                   mode="FORCE_TEXT"
+                   tooltip="Mark Model Leaves">
+            	</command>
+   			</toolbar>
+		</menuContribution>
+<!-- mark roots -->
+      	<menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                   commandId="openome_MarkRoots_cmd"
+                   icon="icons/roots.jpg"
+                   id="openome_MarkRoots_toolbarIcon"
+                   label="Roots"
+                   mnemonic="R"
+                   mode="FORCE_TEXT"
+                   tooltip="Mark Model Roots">
+            	</command>
+   			</toolbar>
+		</menuContribution>
+<!-- "unhighlight all" button -->
+      	<menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                   commandId="openome_Unhighlight_cmd"
+                   icon="icons/sample.gif"
+                   id="openome_Unhighlight_toolbarIcon"
+                   label="Clear"
+                   mnemonic="U"
+                   mode="FORCE_TEXT"
+                   tooltip="Unhighlight All Intentions">
+            	</command>
+             <separator
+                   name="edu.toronto.cs.openome.evaluation.separator4"
+                   visible="true">
+             </separator>
+   			</toolbar>
+		</menuContribution>
+<!-- "clear all eval labels" button -->
+        <menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                  commandId="openome_ClearLabels_cmd"
+                  icon="icons/clear.gif"
+                  id="openome_ClearLabels_toolbarIcon"
+                  tooltip="Clear All Evaluation Labels"
+                  mnemonic="C">
+            	</command>
+   			</toolbar>
+		</menuContribution>
+<!-- apply none label -->
+        <menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                  commandId="openome_ApplyNone_cmd"
+                  icon="icons/none.gif"
+                  id="openome_ApplyNone_toolbarIcon"
+                  tooltip="Apply None Label"
+                  mnemonic="W">
+            	</command>
+   			</toolbar>
+		</menuContribution>				
+<!-- apply satisfied label -->
+        <menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                  commandId="openome_ApplySatisfied_cmd"
+                  icon="icons/evalLabels/satisfiedEval.png"
+                  id="openome_ApplySatisfied_toolbarIcon"
+                  tooltip="Apply Satisfied Label"
+                  mnemonic="W">
+            	</command>
+   			</toolbar>
+		</menuContribution>		
+<!-- apply weakly satisfied label -->
+        <menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                  commandId="openome_ApplyWeaklySatisfied_cmd"
+                  icon="icons/evalLabels/weaklySatisfiedEval.png"
+                  id="openome_ApplyWeaklySatisfied_toolbarIcon"
+                  tooltip="Apply Partially Satisfied Label"
+                  mnemonic="W">
+            	</command>
+   			</toolbar>
+		</menuContribution>
+<!-- apply conflict label -->
+        <menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                  commandId="openome_ApplyConflict_cmd"
+                  icon="icons/evalLabels/conflictEval.png"
+                  id="openome_ApplyConflict_toolbarIcon"
+                  tooltip="Apply Conflict Label"
+                  mnemonic="W">
+            	</command>
+   			</toolbar>
+		</menuContribution>		
+<!-- apply weakly denied label -->
+        <menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                  commandId="openome_ApplyWeaklyDenied_cmd"
+                  icon="icons/evalLabels/weaklyDeniedEval.png"
+                  id="openome_ApplyWeaklyDenied_toolbarIcon"
+                  tooltip="Apply Partially Denied Label"
+                  mnemonic="W">
+            	</command>
+   			</toolbar>
+		</menuContribution>		
+<!-- apply denied label -->
+        <menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                  commandId="openome_ApplyDenied_cmd"
+                  icon="icons/evalLabels/deniedEval.png"
+                  id="openome_ApplyDenied_toolbarIcon"
+                  tooltip="Apply Denied Label"
+                  mnemonic="W">
+            	</command>
+   			</toolbar>
+		</menuContribution>
+<!-- apply unknown label -->
+        <menuContribution 
+			locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">			
+   			<toolbar
+         		id="openome_reasoning_toolbar"
+         		label="Reasoning">
+	            <command
+                  commandId="openome_ApplyUnknown_cmd"
+                  icon="icons/evalLabels/unknownEval.png"
+                  id="openome_ApplyUnknown_toolbarIcon"
+                  tooltip="Apply Unknown Label"
+                  mnemonic="W">
+            	</command>
+   			</toolbar>
+		</menuContribution>						
+<!-- forward button -->
+      
+	</extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="edu.toronto.cs.openome.evaluation.views.AlternativesView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="edu.toronto.cs.openome.evaluation"
+            name="Alternatives"
+            parentCategory="edu.toronto.cs.openome.evaluation">
+      </category>
+      <view
+            category="edu.toronto.cs.openome.evaluation"
+            class="edu.toronto.cs.openome.evaluation.views.AlternativesView"
+            icon="icons/sample.gif"
+            id="edu.toronto.cs.openome.evaluation.views.AlternativesView"
+            name="Alternatives"
+            restorable="true">
+      </view>
+      <view
+            category="edu.toronto.cs.openome.evaluation"
+            class="edu.toronto.cs.openome.evaluation.views.HumanJudgmentsView"
+            icon="icons/sample.gif"
+            id="edu.toronto.cs.openome.evaluation.views.HumanJudgmentsView"
+            name="Human Judgments"
+            restorable="true">
+      </view>
+      <view
+            category="edu.toronto.cs.openome.evaluation"
+            class="edu.toronto.cs.openome.evaluation.views.InconsistencyChecksView"
+            icon="icons/sample.gif"
+            id="edu.toronto.cs.openome.evaluation.views.InconsistencyChecksView"
+            name="Inconsistency Checks"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>
