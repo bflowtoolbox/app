@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bflow.toolbox.hive.addons.AddonsPlugin;
 import org.bflow.toolbox.hive.addons.core.model.IComponent;
 import org.bflow.toolbox.hive.addons.core.model.Protocol;
 import org.bflow.toolbox.hive.addons.protocols.Standardprotocol;
@@ -28,7 +29,8 @@ import org.dom4j.io.XMLWriter;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 17/04/10
- * @version 06/06/14
+ * @version 06.06.14
+ * 			22.02.17 AST: Switched to addons logger
  */
 public class ProtocolDescriptor {
 	public boolean storable;
@@ -167,8 +169,7 @@ public class ProtocolDescriptor {
 	 */
 	public String getDescriptionText(String abbreviation) {
 		String value = descriptionMap.get(abbreviation);
-		if(value == null)
-			return descriptionMap.get("default");
+		if (value == null) return descriptionMap.get("default");
 		return value;
 	}
 
@@ -191,6 +192,9 @@ public class ProtocolDescriptor {
 		this.classPath = classPath;
 	}
 	
+	/**
+	 * Loads the descriptor from its file.
+	 */
 	private void parseDescription() {
 		if (file != null) {
 			SAXReader reader = new SAXReader();
@@ -256,7 +260,7 @@ public class ProtocolDescriptor {
 				}
 				
 			} catch(Exception ex) {
-				ex.printStackTrace();
+				AddonsPlugin.getInstance().logError("Error on loading descriptor", ex);
 			}
 		}
 	}
@@ -316,7 +320,7 @@ public class ProtocolDescriptor {
 			writer.write(doc);
 			writer.close();
 		} catch(IOException ex) {
-			ex.printStackTrace();
+			AddonsPlugin.getInstance().logError("Error on writing descriptor", ex);
 		}
 		
 	}
