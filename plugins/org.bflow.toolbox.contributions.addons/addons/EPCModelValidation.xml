@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<protocol name="ExtendedModelValidation">
+<protocol name="EPC Extended Model Validation">
 	<display>
-		<default>Extended Model Validation</default>
-		<de>Erweiterte Modellprüfung</de>
+		<default>EPC Model Validation</default>
+		<de>EPK Modellprüfung</de>
 	</display>
 	<description>
 		<default>Transforms a diagram into a prolog program to do a deeper analysis.

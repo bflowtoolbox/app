@@ -5,7 +5,11 @@
          point="org.bflow.toolbox.addons.protocol">
       <Protocol
             File="addons/EPCModelValidation.xml"
-            ID="bflow.extendedmodelvalidation">
+            ID="bflow.epc_extendedmodelvalidation">
+      </Protocol>
+      <Protocol
+            File="addons/istartModelValidation.xml"
+            ID="bflow.istar_extendedmodelvalidation">
       </Protocol>
    </extension>
    <extension
@@ -13,7 +17,12 @@
       <Prolog_Addition
             File="prolog addition/epc2009.pl"
             ID="bflow.epc2009"
-            Name="Extended model validation">
+            Name="EPC Model Validation">
+      </Prolog_Addition>
+      <Prolog_Addition
+            File="prolog addition/istar2011.pl"
+            ID="bflow.istar2011"
+            Name="i* Model Validation">
       </Prolog_Addition>
    </extension>
    <extension
