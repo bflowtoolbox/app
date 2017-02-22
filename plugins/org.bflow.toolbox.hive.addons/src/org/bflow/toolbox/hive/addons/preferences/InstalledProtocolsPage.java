@@ -50,18 +50,29 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  * @since 13.04.10
  * @version 23.08.13
  * 			12.03.15 Added check of ToolStore.hasTool()
+ * 			22.02.17 Removed fixed button width
  */
 public class InstalledProtocolsPage extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
 
 	private TableViewer viewer;
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
+	 */
 	@Override
 	protected void createFieldEditors() {
+		// Nothing to do here
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 */
 	@Override
 	public void init(IWorkbench workbench) {
+		// Nothing to do here
 	}
 
 	@Override
@@ -77,7 +88,6 @@ public class InstalledProtocolsPage extends FieldEditorPreferencePage implements
 		panel.setLayout(new GridLayout(5, false));
 
 		GridData btnGridData = new GridData();
-		btnGridData.widthHint = 80;
 
 		Button btnAdd = new Button(panel, SWT.NONE);
 		btnAdd.setLayoutData(btnGridData);
