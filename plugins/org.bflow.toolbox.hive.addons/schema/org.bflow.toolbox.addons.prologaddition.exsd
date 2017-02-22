@@ -64,6 +64,9 @@
                <documentation>
                   Must be a unique identifier.
                </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="Name" type="string" use="required">
