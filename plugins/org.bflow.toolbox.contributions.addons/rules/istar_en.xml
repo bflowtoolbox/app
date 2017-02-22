@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<language value="eng">
+	<rule>
+		<id>name_missing</id>
+		<name>name_missing</name>
+		<message></message>
+		<class>Syntax (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports an element with no name</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>not_connected</id>
+		<name>not_connected</name>
+		<message></message>
+		<class>Syntax (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports a model that is not a coherent graph</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>missing_dependum</id>
+		<name>missing_dependum</name>
+		<message></message>
+		<class>Syntax (i*)</class>
+		<diagram>istar</diagram>
+		<description>A dependency link does not show the dependum</description>
+		<url>http://istar.rwth-aachen.de/tiki-index.php?page_ref_id=241</url>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>wrong_arc_to_goal</id>
+		<name>wrong_arc_to_goal</name>
+		<message></message>
+		<class>Syntax (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports a wrong type of connection (contribution or means-ends-link) to a goal</description>
+		<url>http://istar.rwth-aachen.de/tiki-index.php?page_ref_id=210</url>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>goal_decomposition</id>
+		<name>goal_decomposition</name>
+		<message></message>
+		<class>Syntax (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports a decomposition link to a goal</description>
+		<url>http://istar.rwth-aachen.de/tiki-index.php?page_ref_id=206</url>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>depencency_link_at_actor_boundary</id>
+		<name>depencency_link_at_actor_boundary</name>
+		<message></message>
+		<class>Syntax (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports dependency links in an SR model that are connected with an actor instead of an element within an actor</description>
+		<url>http://istar.rwth-aachen.de/tiki-index.php?page_ref_id=267</url>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>dependum_used_in_more_than_one_dependency</id>
+		<name>dependum_used_in_more_than_one_dependency</name>
+		<message></message>
+		<class>Syntax (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports a dependum that is used in more than one dependency</description>
+		<url>http://istar.rwth-aachen.de/tiki-index.php?page_ref_id=240</url>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>goal_or_softgoal_as_leaf</id>
+		<name>goal_or_softgoal_as_leaf</name>
+		<message></message>
+		<class>Syntax (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports a goal or softgoal that is not decomposed any further</description>
+		<url>http://istar.rwth-aachen.de/tiki-index.php?page_ref_id=248</url>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>specific_actor_links</id>
+		<name>specific_actor_links</name>
+		<message></message>
+		<class>Syntax (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports an actor/agent/role that should be modelled by a more specific actor symbol</description>
+		<url>http://istar.rwth-aachen.de/tiki-index.php?page_ref_id=232</url>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>link_direction_does_not_reflect_hierarchy</id>
+		<name>link_direction_does_not_reflect_hierarchy</name>
+		<message></message>
+		<class>Layout (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports a goal that is decomposed, but the elements used for the goal refinement are placed above the goal</description>
+		<url>http://istar.rwth-aachen.de/tiki-index.php?page_ref_id=268</url>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>overlapping_elements</id>
+		<name>overlapping_elements</name>
+		<message></message>
+		<class>Layout (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports overlapping elements</description>
+		<url>http://istar.rwth-aachen.de/tiki-index.php?page_ref_id=266</url>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+
+<!-- ************************************************** TODO
+
+
+	<rule>
+		<id>element_outside_actor_boundaries</id>
+		<name>element_outside_actor_boundaries</name>
+		<message></message>
+		<class>Layout</class>
+		<diagram>istar</diagram>
+		<description>Reports an element of an actor which is drawn outside the boundaries of the actor</description>
+		<url>http://istar.rwth-aachen.de/tiki-index.php?page_ref_id=269</url>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>dependum_inside_actor</id>
+		<name>dependum_inside_actor</name>
+		<message></message>
+		<class>Layout</class>
+		<diagram>istar</diagram>
+		<description>Reports a dependum that is inside the boundaries of an actor</description>
+		<url>http://istar.rwth-aachen.de/tiki-index.php?page_ref_id=202</url>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+
+
+************************************************** -->
+
+	<rule>
+		<id>looks_like_goal</id>
+		<name>looks_like_goal</name>
+		<message></message>
+		<class>Labels (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports labels of tasks or resources containing phrases that sound like being a goal or softgoal</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>looks_like_softgoal</id>
+		<name>looks_like_softgoal</name>
+		<message></message>
+		<class>Labels (i*)</class>
+		<diagram>istar</diagram>
+		<description>Reports labels of tasks or resources containing phrases that sound like being a softgoal</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+	<rule>
+		<id>metric_number_of_nodes</id>
+		<name>metric_number_of_nodes</name>
+		<message></message>
+		<class>Metrics (i*)</class>
+		<diagram>istar</diagram>
+		<description>Metrics: Number of nodes in the diagram</description>
+		<image></image>
+		<default>true</default>
+		<type>prolog</type>
+	</rule>
+</language>

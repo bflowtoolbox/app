@@ -43,6 +43,10 @@
             Abbr="en_US"
             File="rules/oepc_en.xml">
       </Rule>
+      <Rule
+            Abbr="en_US"
+            File="rules/istar_en.xml">
+      </Rule>
    </extension>
    <extension
          id="exportscripts/bpmn.exd"
