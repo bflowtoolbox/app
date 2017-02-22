@@ -85,6 +85,7 @@ import org.eclipse.ui.part.ViewPart;
  * @version 30.12.13
  * 			28.02.15 Added part listener to fix various (de)activate issues
  * 			01.03.15 Added support of copying elements and their attributes
+ * 			22.02.17 Removed fixed height of first row
  */
 @SuppressWarnings("restriction")
 public class AttributeViewPart extends ViewPart implements ISelectionListener, IAttributeFileRegistryListener {
@@ -165,7 +166,6 @@ public class AttributeViewPart extends ViewPart implements ISelectionListener, I
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.grabExcessHorizontalSpace = true;
-		gridData.heightHint = 35;
 
 		mainPane.setLayout(gridLayout);
 		mainPane.setLayoutData(gridData);
