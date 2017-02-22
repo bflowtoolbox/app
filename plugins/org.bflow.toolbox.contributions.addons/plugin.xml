@@ -4,7 +4,7 @@
    <extension
          point="org.bflow.toolbox.addons.protocol">
       <Protocol
-            File="addons/ExtendedModelValidation.xml"
+            File="addons/EPCModelValidation.xml"
             ID="bflow.extendedmodelvalidation">
       </Protocol>
    </extension>

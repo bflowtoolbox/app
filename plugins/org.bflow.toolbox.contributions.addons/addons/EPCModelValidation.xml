@@ -26,4 +26,4 @@
 			class="org.bflow.toolbox.hive.addons.components.ProblemsViewGeneratorComponent"
 			params="" />
 	</components>
-</protocol>
+	</protocol>
