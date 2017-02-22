@@ -151,7 +151,7 @@
             class="oepc.diagram.providers.OepcIconProvider">
       </provider>
       <provider
-            class="org.bflow.toolbox.vc.diagram.providers.VcIconProvider">
+            class="vcchart.diagram.providers.VcIconProvider">
       </provider>
    </extension>
    <extension
