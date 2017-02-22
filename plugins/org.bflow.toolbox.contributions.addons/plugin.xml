@@ -82,6 +82,10 @@
             File="exportscripts/yawl.exd.xml"
             Name="YAWL">
       </Exportscript>
+      <Exportscript
+            File="exportscripts/istar2Prolog.exd.xml"
+            Name="Prolog i*">
+      </Exportscript>
    </extension>
    <extension
          point="org.bflow.toolbox.interchange.importscript">

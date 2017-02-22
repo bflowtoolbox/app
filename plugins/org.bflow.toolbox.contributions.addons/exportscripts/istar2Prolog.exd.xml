@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exportdescription>
+	<config>
+		<name>Prolog Facts</name>
+		<fileextension>pl</fileextension>
+		<description>Exports an bflow i* diagram as Prolog Facts.</description>
+		<callstack>
+			<script>
+				<file>/exportscripts/files/istar2prolog.xslt</file>	
+			</script>
+		</callstack> 
+	</config>
+</exportdescription>
