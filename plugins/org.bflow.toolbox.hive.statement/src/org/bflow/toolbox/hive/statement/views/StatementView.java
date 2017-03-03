@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
@@ -36,6 +37,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.CompartmentEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
@@ -56,7 +58,8 @@ import org.eclipse.swt.SWT;
  * Implements the view part to support the add-ons Statement View.
  * 
  * @author Markus Schnädelbach
- * @version	03.03.2017 Removed printStackTrace() calls
+ * @version	03.03.2017 	Removed printStackTrace() calls
+ * 						Added support of CompartmentEditPart
  */
 public class StatementView extends ViewPart implements ISelectionListener, IAttributeFileRegistryListener{
 
@@ -647,14 +650,22 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 							
 							activeEditorPart.getDiagramGraphicalViewer().deselectAll();
 							
-							selectionService.addSelectionListener(selectionListener =	new ISelectionListener() {
+							selectionService.addSelectionListener(selectionListener = new ISelectionListener() {
 								@Override
 								public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-									
 										IStructuredSelection sel = (IStructuredSelection) selection;
-										if (sel.getFirstElement() instanceof ShapeNodeEditPart) {
-											ShapeNodeEditPart editPart = (ShapeNodeEditPart) sel.getFirstElement();
-											String classname = editPart.getClass().getSimpleName().replace("EditPart", ""); //$NON-NLS-1$ //$NON-NLS-2$
+										Object selectedElement = sel.getFirstElement();
+										
+										// If it's a CompartmentEditPart we have to unwrap its original edit part
+										if (selectedElement instanceof CompartmentEditPart) {
+											CompartmentEditPart compartmentEditPart = (CompartmentEditPart)selectedElement;
+											selectedElement = compartmentEditPart.getParent();
+										}
+										
+										// Handle edit part
+										if (selectedElement instanceof ShapeNodeEditPart) {
+											ShapeNodeEditPart editPart = (ShapeNodeEditPart) selectedElement;
+											String classname = editPart.getClass().getSimpleName().replace("EditPart", StringUtils.EMPTY); //$NON-NLS-1$ //$NON-NLS-2$
 				                			if (variablename.toLowerCase().equals(classname.toLowerCase())) {
 				                				NodeImpl nodeImpl = (NodeImpl) editPart.getModel();
 												EObject eObj = nodeImpl.getElement();
@@ -664,12 +675,13 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 												
 												//try to get the name attribute of that shape
 												String shapename = getNameAttributeFromEObject(eObj);
-				                				
-												String replacementString;
-												if (shapename != null) {
-													replacementString = shapename;
-												}else {
-													replacementString = id;
+												String replacementString = shapename != null ? shapename : id;
+						
+												// If the link has disposed, we are wrong here
+												// TODO Rework event canceling
+												if (link.isDisposed()) {
+													selectionService.removeSelectionListener(this);
+													return;
 												}
 												
 				                				link.setText(link.getText().replace(">....<", replacementString)); //$NON-NLS-1$
@@ -690,8 +702,6 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 					controlsToLinks.put(property, link);
 				}else if (isLastProperty(property) && combo == null) {
 					combo = new Combo((Composite) cell.getViewerRow().getControl(), SWT.DROP_DOWN);
-					
-					
 					
 					String[] templatesArray = new String[propertyTemplates.size()];
 					for (int i = 0; i < templatesArray.length; i++) {
