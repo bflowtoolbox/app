@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.Text;
  * @version 06.06.14
  * 			15.03.15 Validate each selected component
  * 			04.04.15 Handle issue that viewer has other object references that component list
+ * 			03.03.17 Updated style for higher resolutions
  * 
  */
 public class AddonEditDialog extends Dialog {
@@ -103,8 +104,7 @@ public class AddonEditDialog extends Dialog {
 		txtName = new Text(composite, SWT.BORDER);
 
 		GridData gridData = new GridData(SWT.LEAD, SWT.TOP, true, true);
-		gridData.heightHint = 16;
-		gridData.widthHint = 200;
+		gridData.widthHint = 650 / 2;
 		txtName.setLayoutData(gridData);
 
 		txtName.setText(((Standardprotocol) addonDescriptor.getProtocol()).getName());
@@ -113,10 +113,10 @@ public class AddonEditDialog extends Dialog {
 		Label lblDescription = new Label(composite, SWT.NONE);
 		lblDescription.setText(NLSupport.AddonEditDialog_LblDescription);
 
-		txtDescription = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.MULTI);
+		txtDescription = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.MULTI | SWT.V_SCROLL);
 
 		gridData = new GridData(SWT.FILL, SWT.TOP, true, false);
-		gridData.heightHint = 50;
+		gridData.heightHint = txtDescription.computeSize(SWT.DEFAULT, SWT.DEFAULT).y * 2;
 		gridData.widthHint = 650;
 		txtDescription.setLayoutData(gridData);
 
