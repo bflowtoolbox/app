@@ -20,7 +20,8 @@ Require-Bundle: org.eclipse.core.expressions,
  openome_model.figures,
  org.eclipse.gmf.runtime.diagram.ui.render,
  openome_model,
- org.eclipse.gmf.runtime.diagram.ui.providers;bundle-version="1.7.0"
+ org.eclipse.gmf.runtime.diagram.ui.providers;bundle-version="1.7.0",
+ org.eclipse.gmf.runtime.diagram.ui.providers.ide;bundle-version="1.7.0"
 Eclipse-LazyStart: true
 Import-Package: edu.toronto.cs.openome_model.diagram.edit.parts,
  org.eclipse.gmf.runtime.notation
