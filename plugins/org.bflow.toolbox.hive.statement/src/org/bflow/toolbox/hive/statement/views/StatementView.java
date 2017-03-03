@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.CompartmentEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.gmf.runtime.notation.impl.DiagramImpl;
@@ -122,7 +123,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
         viewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
         viewer.getTable().setHeaderVisible(true);
         viewer.getTable().setLinesVisible(true);
-        viewer.setContentProvider(new ArrayContentProvider());
+        viewer.setContentProvider(ArrayContentProvider.getInstance());
         ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE); 
         
         final TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(viewer,new FocusCellOwnerDrawHighlighter(viewer));
@@ -511,19 +512,48 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		HashMap<String, NodeName> shapeIdtoClassname = new HashMap<>();
 		@SuppressWarnings("unchecked")
 		List<Object> children = activeEditorPart.getDiagramEditPart().getChildren();
-		for (Object child : children) {
-			if (child instanceof ShapeNodeEditPart) {
-				ShapeNodeEditPart editPart = (ShapeNodeEditPart) child;
+		MapShapeIdToClassname(children, shapeIdtoClassname);
+		return shapeIdtoClassname;
+	}
+	
+	/**
+	 * Maps the name of each edit part of the given edit part set to its
+	 * corresponding edit part id. Each association is added to the given result
+	 * set. If an edit part has children itself, the child collection is
+	 * processed recursively.
+	 * 
+	 * @param editPartSet
+	 *            Set of edit parts to process
+	 * @param resultSet
+	 *            Result set
+	 */
+	private void MapShapeIdToClassname(List<Object> editPartSet, HashMap<String, NodeName> resultSet) {
+		for (Object child : editPartSet) {
+			GraphicalEditPart graphicalEditPart = (GraphicalEditPart) child;
+			@SuppressWarnings("unchecked")
+			List<Object> editPartChildren = graphicalEditPart.getChildren();
+			
+			// Process children
+			MapShapeIdToClassname(editPartChildren, resultSet);
+			
+			// If it's a CompartmentEditPart we have to unwrap its original edit part
+			if (graphicalEditPart instanceof CompartmentEditPart) {
+				CompartmentEditPart compartmentEditPart = (CompartmentEditPart)child;
+				graphicalEditPart = (GraphicalEditPart) compartmentEditPart.getParent();
+			}
+			
+			// Process edit part
+			if (graphicalEditPart instanceof ShapeNodeEditPart) {
+				ShapeNodeEditPart editPart = (ShapeNodeEditPart) graphicalEditPart;
 				NodeImpl nodeImpl = (NodeImpl) editPart.getModel();
 				EObject eObj = nodeImpl.getElement();
 				XMLResource resource = (XMLResource) eObj.eResource();
 				String id = resource.getID(eObj);
 				String classname = child.getClass().getSimpleName().replace("EditPart", "").toLowerCase(); //$NON-NLS-1$ //$NON-NLS-2$
 				String shapename = getNameAttributeFromEObject(eObj);
-				shapeIdtoClassname.put(id, new NodeName(classname, shapename));
+				resultSet.put(id, new NodeName(classname, shapename));
 			}
 		}
-		return shapeIdtoClassname;
 	}
 	
 	public HashSet<String> getAllRelatedNodeIds() {
@@ -538,9 +568,9 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	 * Disabled the StatementView
 	 */
 	private void disableView() {
-		this.diagramTitle = ""; //$NON-NLS-1$
+		this.diagramTitle = StringUtils.EMPTY;
 		tableColumPropertyTemplate.setText(diagramTitle);
-		this.diagramId = ""; //$NON-NLS-1$
+		this.diagramId = StringUtils.EMPTY; 
 		properties.clear();
 		for (Property prop : controlsToLinks.keySet()) {
 			controlsToLinks.get(prop).dispose();
@@ -614,7 +644,7 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 					link.setText(property.getTemplateStringWithLinks());
 					if (!property.isComplete()) {
 						link.setToolTipText(NLSupport.StatementView_ToolTipText_PropertyVariableNotAssigned);
-					}else {
+					} else {
 						link.setToolTipText(NLSupport.StatementView_ToolTipText_PropertyVariableAssigned);
 					}
 					
@@ -622,6 +652,11 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 
 						@Override
 						public void handleEvent(Event event) {
+							if (link.isDisposed()) {
+								link.removeListener(SWT.Selection, this);
+								return;
+							}
+							
 							final int varId = Integer.parseInt(event.text);
 							final String variablename = property.getVariable(varId).getClearName();
 							if (selectionInProgress && property.equals(selectionProperty) && selectionVarId == varId) {
