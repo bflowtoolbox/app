@@ -4,7 +4,7 @@ Bundle-Name: Statement
 Bundle-SymbolicName: org.bflow.toolbox.hive.statement;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Localization: plugin
-Bundle-Activator: org.bflow.toolbox.hive.statement.Activator
+Bundle-Activator: org.bflow.toolbox.hive.statement.StatementPlugin
 Require-Bundle: org.eclipse.gmf.runtime.diagram.ui,
  org.bflow.toolbox.hive.attributes,
  org.bflow.toolbox.hive.nls,

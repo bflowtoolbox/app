@@ -21,6 +21,7 @@ import org.bflow.toolbox.hive.attributes.AttributeFileRegistry;
 import org.bflow.toolbox.hive.attributes.AttributeFileRegistryEvent;
 import org.bflow.toolbox.hive.attributes.IAttributeFileRegistryListener;
 import org.bflow.toolbox.hive.nls.NLSupport;
+import org.bflow.toolbox.hive.statement.StatementPlugin;
 import org.bflow.toolbox.hive.statement.views.Property.Variable;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -55,6 +56,7 @@ import org.eclipse.swt.SWT;
  * Implements the view part to support the add-ons Statement View.
  * 
  * @author Markus Schnädelbach
+ * @version	03.03.2017 Removed printStackTrace() calls
  */
 public class StatementView extends ViewPart implements ISelectionListener, IAttributeFileRegistryListener{
 
@@ -99,7 +101,6 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	 * Creates a new instance.
 	 */
 	public StatementView() {
-		
 		IEditorPart currentEditorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		activeEditorPart = null;
 		if (currentEditorPart instanceof DiagramEditor) {
@@ -115,7 +116,6 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 	 * it.
 	 */
 	public void createPartControl(Composite parent) {
-		
         viewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
         viewer.getTable().setHeaderVisible(true);
         viewer.getTable().setLinesVisible(true);
@@ -201,25 +201,17 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 		rootPath = rootPath.append(".properties/templates.txt"); //$NON-NLS-1$
 		File templateFile = rootPath.toFile();
 		if (templateFile.isFile() && templateFile.canRead()) {
-			BufferedReader in = null;
-	        try {
-	            in = new BufferedReader(new FileReader(templateFile));
+			try (BufferedReader bufferedReader = new BufferedReader(new FileReader(templateFile))) {
 	            String temp = null;
-	            while ((temp = in.readLine()) != null) {
+	            while ((temp = bufferedReader.readLine()) != null) {
 	            	if (!temp.trim().isEmpty()) {
 	            		propertyTemplates.add(temp);
 					}
 	            }
 	        } catch (IOException e) {
-	            e.printStackTrace();
-	        } finally {
-	            if (in != null)
-					try {
-						in.close();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-	        } 
+	        	String msg = String.format("Error on reading templates file '%s'", templateFile.toURI().toString());
+	            StatementPlugin.getDefault().logError(msg, e);
+	        }
 		}
 		return propertyTemplates;
 	}
@@ -401,11 +393,11 @@ public class StatementView extends ViewPart implements ISelectionListener, IAttr
 				}
 		    }
 		} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-		    e.printStackTrace();
+		    StatementPlugin.getDefault().logError("Could not get name attribute from EObject", e);
 		}
 		if (shapename != null && !shapename.trim().isEmpty()) {
 			return shapename;
-		}else {
+		} else {
 			return null;
 		}
 	}
