@@ -1,4 +1,4 @@
-package org.bflow.toolbox.hive.eclipse.integration.internal;
+package org.bflow.toolbox.hive.eclipse.integration.graphiti.internal;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
