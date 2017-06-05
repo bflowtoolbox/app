@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Text;
  * @since 14.08.09
  * @version 28.12.13
  * 			27.02.15 Removed readonly flag from text control
+ * 			05.06.17 Enhanced UI styling
  * @see MIFExportWizard
  * 
  */
@@ -67,18 +68,24 @@ public class MIFExportWizardPage extends WizardPage {
 		this.selectedFiles = selectedFiles;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
+	 */
 	@Override
 	public void createControl(Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
 
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
-
+		
 		Label lblSelDiagram = new Label(composite, SWT.NONE);
 		lblSelDiagram.setText(NLSupport.MIFExportWizardPage_LabelSelectDiagramText);
+		lblSelDiagram.setLayoutData(new GridData(SWT.TRAIL, SWT.DEFAULT, false, false));
 
 		textFieldSourceFile = new Text(composite, SWT.BORDER);
-
+		textFieldSourceFile.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		
 		String selectionString = StringUtils.EMPTY;
 
 		for (Object f : selectedFiles.toArray())
@@ -87,42 +94,41 @@ public class MIFExportWizardPage extends WizardPage {
 		textFieldSourceFile.setText(selectionString);
 		textFieldSourceFile.setEditable(false);
 
-		GridData txtSelFileGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		txtSelFileGridData.widthHint = 150;
-		textFieldSourceFile.setLayoutData(txtSelFileGridData);
-
 		Label lblSelExportType = new Label(composite, SWT.NONE);
 		lblSelExportType.setText(NLSupport.MIFExportWizardPage_LabelSelectExportTypeText);
+		lblSelExportType.setLayoutData(new GridData(SWT.TRAIL, SWT.DEFAULT, false, false));
 
 		cbExportTypes = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
 		prepareComboBox();
 
 		Label lblDescription = new Label(composite, SWT.NONE);
 		lblDescription.setText(NLSupport.MIFExportWizardPage_LabelDescriptionText);
+		lblDescription.setLayoutData(new GridData(SWT.TRAIL, SWT.TOP, false, false));
 
-		txtDescription = new Text(composite, SWT.WRAP | SWT.READ_ONLY);
+		txtDescription = new Text(composite, SWT.WRAP | SWT.READ_ONLY | SWT.BORDER);
 		txtDescription.setText(StringUtils.EMPTY);
 
-		GridData txtDescriptionGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		txtDescriptionGridData.widthHint = 200;
-		txtDescriptionGridData.heightHint = 50;
+		GridData txtDescriptionGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		txtDescriptionGridData.minimumHeight = 120;
 
 		txtDescription.setLayoutData(txtDescriptionGridData);
 
 		Label lblTargetFile = new Label(composite, SWT.NONE);
 		lblTargetFile.setText(NLSupport.MIFExportWizardPage_LabelTargetFileText);
+		lblTargetFile.setLayoutData(new GridData(SWT.TRAIL, SWT.DEFAULT, false, false));
 
 		Composite fileSelection = new Composite(composite, SWT.NONE);
 
 		GridLayout fileSelectionLayout = new GridLayout(2, false);
-		fileSelectionLayout.marginLeft = 0;
-		fileSelectionLayout.horizontalSpacing = 0;
+		fileSelectionLayout.marginWidth = 0;
+		fileSelectionLayout.marginHeight = 0;
 
 		fileSelection.setLayout(fileSelectionLayout);
-		fileSelection.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
+		fileSelection.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 
 		textFieldTargetFile = new Text(fileSelection, SWT.BORDER);
 		textFieldTargetFile.setText(StringUtils.EMPTY);
+		textFieldTargetFile.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 		textFieldTargetFile.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -130,13 +136,15 @@ public class MIFExportWizardPage extends WizardPage {
 			}
 		});
 
-		GridData txtTargetFileGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-
-		txtTargetFileGridData.widthHint = 200;
-		textFieldTargetFile.setLayoutData(txtTargetFileGridData);
-
 		Button btnBrowse = new Button(fileSelection, SWT.NONE);
 		btnBrowse.setText(NLSupport.MIFExportWizardPage_ButtonBrowseText);
+		
+		GridData btnGrdDt = new GridData(SWT.DEFAULT, SWT.TOP, false, false);
+		btnGrdDt.widthHint = 160;
+		btnGrdDt.verticalIndent = -1;
+		
+		btnBrowse.setLayoutData(btnGrdDt);
+		
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
