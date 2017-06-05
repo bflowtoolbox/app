@@ -147,7 +147,7 @@ xmlns:edu.toronto.cs.openome_model="http:///edu/toronto/cs/openome_model.ecore">
 		<xsl:choose>
 			<xsl:when test="contains($points, $delimiter)">
 				<xsl:variable name="BendpointString">
-					<xsl:text>bendpoint(</xsl:text><xsl:value-of select="$edgeId"/><xsl:text>, </xsl:text><xsl:value-of select="substring-before($points, $delimiter)"/><xsl:text>)</xsl:text>
+					<xsl:text>bendpoint('</xsl:text><xsl:value-of select="$edgeId"/><xsl:text>', </xsl:text><xsl:value-of select="substring-before($points, $delimiter)"/><xsl:text>)</xsl:text>
 				</xsl:variable>
 				<xsl:call-template name="PrologOutput">
 					<xsl:with-param name="output" select="$BendpointString"/>
@@ -159,7 +159,7 @@ xmlns:edu.toronto.cs.openome_model="http:///edu/toronto/cs/openome_model.ecore">
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:variable name="BendpointString">
-					<xsl:text>bendpoint(</xsl:text><xsl:value-of select="$edgeId"/><xsl:text>, </xsl:text><xsl:value-of select="$points"/><xsl:text>)</xsl:text>
+					<xsl:text>bendpoint('</xsl:text><xsl:value-of select="$edgeId"/><xsl:text>', </xsl:text><xsl:value-of select="$points"/><xsl:text>)</xsl:text>
 				</xsl:variable>
 				<xsl:call-template name="PrologOutput">
 					<xsl:with-param name="output" select="$BendpointString"/>
