@@ -1,0 +1,11 @@
+bin
+obj
+packages
+_ReSharper.*/
+.vs
+.fake
+.binaries
+.idea
+*.testsettings
+*.user
+*.suo
