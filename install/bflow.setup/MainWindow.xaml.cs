@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Forms;
 using Ionic.Zip;
 
 namespace bflow.setup {
@@ -11,8 +12,11 @@ namespace bflow.setup {
             InitializeComponent();
         }
 
-        private void OnKlickMichClick(object sender, RoutedEventArgs e) {
-            Console.WriteLine("Ich wurde geklickt");
+        private void OnOpenFolderClick(object sender, RoutedEventArgs e) {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            DialogResult result = folderBrowserDialog.ShowDialog();
+            String path = folderBrowserDialog.SelectedPath;
+            textName.Text = path;
         }
 
         private void DoZip() {
