@@ -6,16 +6,49 @@
         xmlns:local="clr-namespace:bflow.setup"
         mc:Ignorable="d"
         Title="bflow* Toolbox 1.5.0" Height="450" Width="800">
-    <StackPanel Margin="10">
-        <Image Source="bflow-logo.png" Height="50" HorizontalAlignment="Left"/>
-        <TextBlock Margin="0,20,0,0" Width="400" TextWrapping="Wrap" HorizontalAlignment="Left">Installationsanleitung für <Bold>bflow* Toolbox 1.5.0</Bold><LineBreak />Klicken Sie auf <Italic>Weiter</Italic></TextBlock>
-        <Label Content="Installationspfad" Margin="0,20,0,0"/>
-        <TextBox Name="textName" Width="300" HorizontalAlignment="Left" Text="C:\\" />
-        <Button Click="OnOpenFolderClick" Margin="0, 10, 0, 0" HorizontalAlignment="Left" Content="Ordner wählen" />
-        <Label Content="Sprache" Margin="0,10,0,0" />
-        <ComboBox Width="200" HorizontalAlignment="Left">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <!--<ColumnDefinition Width="*" />-->
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Image Source="bflow-logo.png" Height="70" />
+        <TextBlock Grid.Column="1" Margin="20,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center">Installationsanleitung für <Bold>bflow* Toolbox 1.5.0</Bold><LineBreak />Klicken Sie auf <Italic>Weiter</Italic></TextBlock>
+        <Label Grid.Row="1" Content="Installationspfad:" HorizontalAlignment="Right" Margin="0,30,-5,0" />
+        <WrapPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,30,0,0">
+            <TextBox Name="path" Width="300" Height="Auto" Text="" Margin="20,0,0,0" Padding="5" BorderThickness="0.5,0.5,0,0.5" IsReadOnly="True" />
+            <Button Click="GetPathClick" Background="White" BorderThickness="0,0.5,0.5,0.5" Padding="5">
+                <Button.BorderBrush>
+                    <SolidColorBrush Color="#FFABADB3"/>
+                </Button.BorderBrush>
+                <Image Source="foldericon.png" Width="20px" />
+            </Button>
+        </WrapPanel>
+        <Label Grid.Row="2" Content="Sprache:" HorizontalAlignment="Right" Margin="0,10,-5,0" />
+        <ComboBox Grid.Row="2" Name="language" Grid.Column="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="Auto" Margin="20,10,0,0" Padding="5">
             <ComboBoxItem IsSelected="True">Deutsch</ComboBoxItem>
             <ComboBoxItem>Englisch</ComboBoxItem>
         </ComboBox>
-    </StackPanel>
+        <WrapPanel Grid.Row="3" Grid.Column="1" Margin="20,30,0,0">
+            <Button Click="DoZipClick" Content="Installieren" Height="Auto" Width="Auto" Padding="5" Margin="0,0,10,0">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=path}" Value="">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Click="CloseButtonClick" Content="Schließen" Width="Auto" Padding="5" />
+        </WrapPanel>
+    </Grid>
 </Window>
