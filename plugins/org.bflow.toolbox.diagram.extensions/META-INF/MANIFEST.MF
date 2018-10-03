@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide;bundle-version="3.7.0",
  org.bflow.toolbox.hive.libs;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .
 Import-Package: com.ibm.icu.text,
  org.bflow.toolbox.check
@@ -35,3 +35,4 @@ Export-Package: org.bflow.toolbox.extensions.actions,
  org.bflow.toolbox.extensions.view.factories,
  org.bflow.toolbox.extensions.wizards
 Bundle-Activator: org.bflow.toolbox.extensions.internal.PluginActivator
+Automatic-Module-Name: org.bflow.toolbox.diagram.extensions

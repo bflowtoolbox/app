@@ -334,12 +334,11 @@ public class ContainerSelectionGroup extends Composite {
 	 * 
 	 * @param container
 	 */
-	@SuppressWarnings("unchecked")
 	public void setSelectedContainer(IContainer container) {
 		selectedContainer = container;
 
 		// expand to and select the specified container
-		List itemsToExpand = new ArrayList();
+		List<IContainer> itemsToExpand = new ArrayList<>();
 		IContainer parent = container.getParent();
 		while (parent != null) {
 			itemsToExpand.add(0, parent);

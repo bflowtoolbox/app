@@ -106,7 +106,7 @@ public class EpcModelSelectionWizardPage extends WizardPage implements
 
 	private boolean setSelection() {
 		boolean hasSelection = false;
-		Iterator it = selection.iterator();
+		Iterator<?> it = selection.iterator();
 		if (it.hasNext()) {
 			Object object = it.next();
 			IResource selectedResource = null;
@@ -132,7 +132,7 @@ public class EpcModelSelectionWizardPage extends WizardPage implements
 	public void setSelectedContainer(IResource resource) {
 		// expand to and select the specified container
 
-		List itemsToExpand = new ArrayList();
+		List<IContainer> itemsToExpand = new ArrayList<>();
 		IContainer parent = resource.getParent();
 		while (parent != null) {
 			itemsToExpand.add(0, parent);

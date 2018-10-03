@@ -56,22 +56,15 @@ public class OecpExportWizard extends Wizard implements IExportWizard {
 		Map<String, Object> slotContents = new HashMap<String, Object>();
 
 		properties.put("oepcMetamodelPackage", "oepc.OepcPackage");
-		properties.put("bflowMetamodelPackage",
-				"org.bflow.toolbox.bflow.BflowPackage");
-		properties.put("notationMetamodelPackage",
-				"org.eclipse.gmf.runtime.notation.NotationPackage");
+		properties.put("bflowMetamodelPackage",	"org.bflow.toolbox.bflow.BflowPackage");
+		properties.put("notationMetamodelPackage", "org.eclipse.gmf.runtime.notation.NotationPackage");
 
-		properties.put("oepcModelFile", oepcModelSelectionWizardPage
-				.getOepcModelFile().getAbsolutePath().replace("\\", "/"));
-		properties
-				.put(
-						"visioEmfMetamodelFile",
-						"platform:/plugin/org.bflow.toolbox.export.visio.oepc/src/metamodel/visio_oepk_metamodel.ecore");
+		properties.put("oepcModelFile", oepcModelSelectionWizardPage.getOepcModelFile().getAbsolutePath().replace("\\", "/"));
+		properties.put("visioEmfMetamodelFile", "platform:/plugin/org.bflow.toolbox.export.visio.oepc/src/metamodel/visio_oepk_metamodel.ecore");
 		
 		String visioStencilPath = "";
 		try {
-			URL url = FileLocator.find(Activator.getDefault().getBundle(),
-					new Path("src/metamodel/oepk.vss"), null);
+			URL url = FileLocator.find(Activator.getDefault().getBundle(), new Path("src/metamodel/oepk.vss"), null);
 			URL metaModelURL;
 			metaModelURL = FileLocator.toFileURL(url);
 			File metamodel = new File(metaModelURL.getFile());

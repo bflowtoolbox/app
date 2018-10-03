@@ -12,7 +12,7 @@ Require-Bundle: org.bflow.toolbox.bflow.model;bundle-version="1.0.0",
  org.bflow.toolbox.hive.libs;bundle-version="1.0.0"
 Bundle-Vendor: Bflow Dev Team
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: check,
  org.bflow.toolbox.check
 Bundle-Activator: org.bflow.toolbox.check.CheckPlugin

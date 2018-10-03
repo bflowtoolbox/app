@@ -8,7 +8,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/jawin-stubs.jar,lib/jawin.jar,.
 Bundle-Name: Visio-EMF-Bridge Plug-in
 Bundle-NativeCode: /jawin/jawin.dll; processor=x86
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.emf.ecore.xmi;bundle-version="2.4.0",org.e
  clipse.core.runtime;bundle-version="3.4.0"
 Bundle-Vendor: InfAI
@@ -16,4 +16,5 @@ Bundle-Version: 1.2.0.201011261125
 Bundle-ManifestVersion: 2
 Bundle-Activator: org.infai.m3b.visio.emf.Activator
 Bundle-SymbolicName: org.infai.m3b.visio.emf
+Automatic-Module-Name: org.infai.m3b.visio.emf
 

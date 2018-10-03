@@ -20,4 +20,5 @@ Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: dependent
 Bundle-Vendor: Bflow Dev Team
 Bundle-Activator: org.bflow.toolbox.imports.visio.oepc.Activator
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.bflow.toolbox.import.visio.oepc

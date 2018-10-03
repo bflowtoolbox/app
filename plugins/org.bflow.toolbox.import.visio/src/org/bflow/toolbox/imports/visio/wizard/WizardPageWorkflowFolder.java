@@ -96,7 +96,7 @@ public class WizardPageWorkflowFolder extends WizardPage implements Listener {
 
 	private boolean setSelection() {
 		boolean hasSelection = false;
-		Iterator it = selection.iterator();
+		Iterator<?> it = selection.iterator();
 		if (it.hasNext()) {
 			Object object = it.next();
 			IResource selectedResource = null;

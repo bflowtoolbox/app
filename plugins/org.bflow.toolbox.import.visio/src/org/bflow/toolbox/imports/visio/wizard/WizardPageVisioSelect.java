@@ -115,7 +115,7 @@ public class WizardPageVisioSelect extends WizardPage {
 
 		
 		try {
-			URL url = FileLocator.find(activator.getDefault().getBundle(),
+			URL url = FileLocator.find(VisioActivator.getDefault().getBundle(),
 					new Path(stencilPath), null);
 			URL stencilURL = FileLocator.toFileURL(url);
 			visioStencilFile = new File(stencilURL.toURI());
@@ -144,35 +144,29 @@ public class WizardPageVisioSelect extends WizardPage {
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				DirectoryDialog dd = new DirectoryDialog(composite.getShell(),
-						SWT.OPEN);
+				DirectoryDialog dd = new DirectoryDialog(composite.getShell(), SWT.OPEN);
 				dd.setMessage("Select your destination folder:");
 				String stencilCopyPath = dd.open();
-				if (!stencilCopyPath.isEmpty()) {
-					try {
-						File copyOfVisioStencilFile = new File(stencilCopyPath
-								+ "/" + stencilFileName);
-						// copy file using filechannels
-						FileChannel inChannel = new FileInputStream(
-								visioStencilFile).getChannel();
-						FileChannel outChannel = new FileOutputStream(
-								copyOfVisioStencilFile).getChannel();
-						try {
-							inChannel.transferTo(0, inChannel.size(),
-									outChannel);
-						} catch (IOException e1) {
-							throw e1;
-						} finally {
-							if (inChannel != null)
-								inChannel.close();
-							if (outChannel != null)
-								outChannel.close();
+				if (stencilCopyPath.isEmpty()) return;
+				
+				try {
+					File copyOfVisioStencilFile = new File(stencilCopyPath + "/" + stencilFileName);
+					// copy file using filechannels
+					
+					try (FileInputStream fis = new FileInputStream(visioStencilFile)) {
+						try (FileChannel inChannel = fis.getChannel()) {
+							
+							try(FileOutputStream fos = new FileOutputStream(copyOfVisioStencilFile)) {
+								try (FileChannel outChannel = fos.getChannel()) {
+									inChannel.transferTo(0, inChannel.size(), outChannel);
+								}
+							}
+							
 						}
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+					}						
+				} catch (IOException e1) {
+					e1.printStackTrace();
 				}
-
 			}
 		});
 

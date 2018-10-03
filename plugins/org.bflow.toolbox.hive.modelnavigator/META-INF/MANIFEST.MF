@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.ui,
  org.bflow.toolbox.hive.libs;bundle-version="1.0.0",
  org.bflow.toolbox.hive.gmfbridge;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Eclipse-BuddyPolicy: dependent
 Export-Package: org.bflow.toolbox.hive.modelnavigator
 Bundle-Vendor: Bflow Dev Team
+Automatic-Module-Name: org.bflow.toolbox.hive.modelnavigator

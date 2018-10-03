@@ -60,7 +60,7 @@ public class DiagramEditorProxy extends EditorPart {
 	 * @see org.eclipse.ui.part.WorkbenchPart#getAdapter(java.lang.Class)
 	 */
 	@Override
-	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
+	public <T> T getAdapter(Class<T> adapter) {
 		return fOriginEditorPart.getAdapter(adapter);
 	}
 

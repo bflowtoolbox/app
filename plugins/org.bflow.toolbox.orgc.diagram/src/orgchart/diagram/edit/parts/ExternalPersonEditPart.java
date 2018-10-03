@@ -3,9 +3,7 @@
  */
 package orgchart.diagram.edit.parts;
 
-import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;

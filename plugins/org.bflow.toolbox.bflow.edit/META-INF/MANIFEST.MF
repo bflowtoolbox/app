@@ -7,10 +7,11 @@ Bundle-ClassPath: .
 Bundle-Activator: org.bflow.toolbox.bflow.provider.BflowEditPlugin$Implementation
 Bundle-Vendor: Bflow Dev Team
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.bflow.toolbox.bflow.provider
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.edit;visibility:=reexport,
  org.bflow.toolbox.bflow.model;bundle-version="1.0.0"
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: org.bflow.toolbox.bflow.edit

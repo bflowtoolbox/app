@@ -47,6 +47,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.bflow.toolbox.chk.syntax;bundle-version="1.0.0",
  org.bflow.toolbox.hive.attributes;bundle-version="1.0.4"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: check,
  org.bflow.toolbox.extensions.colorschemes
+Automatic-Module-Name: org.bflow.toolbox.oepc.diagram

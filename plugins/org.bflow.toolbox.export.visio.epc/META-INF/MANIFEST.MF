@@ -15,5 +15,6 @@ Require-Bundle: org.eclipse.ui,
  org.infai.m3b.visio.emf.oaw;bundle-version="1.2.0",
  org.eclipse.emf.mwe.core;bundle-version="1.2.1"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Bflow Dev Team
+Automatic-Module-Name: org.bflow.toolbox.export.visio.epc

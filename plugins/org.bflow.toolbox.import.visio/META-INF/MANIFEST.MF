@@ -15,9 +15,10 @@ Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.eclipse.core.resources;bundle-version="3.8.101",
  org.eclipse.gmf.runtime.notation.edit
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Bflow Dev Team
 Export-Package: org.bflow.toolbox.imports.visio,
  org.bflow.toolbox.imports.visio.runner,
  org.bflow.toolbox.imports.visio.wizard,
  template
+Automatic-Module-Name: org.bflow.toolbox.import.visio

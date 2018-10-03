@@ -3,9 +3,7 @@
  */
 package orgchart.diagram.edit.parts;
 
-import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
@@ -28,8 +26,6 @@ import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.swt.graphics.Color;
-
 import orgchart.diagram.edit.policies.InternalPersonItemSemanticEditPolicy;
 import orgchart.diagram.part.OrgcVisualIDRegistry;
 

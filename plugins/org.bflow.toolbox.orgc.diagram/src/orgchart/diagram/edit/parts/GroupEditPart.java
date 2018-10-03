@@ -262,12 +262,7 @@ public class GroupEditPart extends BflowNodeEditPart {
 			StackLayout layoutGroup = new StackLayout() {
 
 				public void layout(IFigure figure) {
-					// TODO Auto-generated method stub
-					Rectangle r = new Rectangle(figure.getBounds().x + 20,
-							figure.getBounds().y + 10,
-							figure.getBounds().width - 40,
-							figure.getBounds().height - 20);
-					List children = figure.getChildren();
+					List<?> children = figure.getChildren();
 					IFigure child;
 					for (int i = 0; i < children.size(); i++) {
 						child = (IFigure) children.get(i);
@@ -332,12 +327,11 @@ public class GroupEditPart extends BflowNodeEditPart {
 		private void layoutLabelContainer(Shape figure, final int xOffset, final int yOffset) {
 			StackLayout layoutEventPolygonFigure0 = new StackLayout() {
 				
-				@SuppressWarnings("unchecked")
 				public void layout(IFigure figure) {
 					Rectangle r = new Rectangle(figure.getBounds().x + xOffset,
 							figure.getBounds().y + yOffset,
 							figure.getBounds().width - 2 * xOffset, figure.getBounds().height	- 2 * yOffset);
-					List children = figure.getChildren();
+					List<?> children = figure.getChildren();
 					IFigure child;
 					for (int i = 0; i < children.size(); i++) {
 						child = (IFigure) children.get(i);

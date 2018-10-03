@@ -17,7 +17,7 @@ Require-Bundle: org.bflow.toolbox.hive.addons;bundle-version="1.0.0",
  org.bflow.toolbox.diagram.extensions;bundle-version="1.1.0",
  org.bflow.toolbox.hive.libs;bundle-version="1.0.0",
  org.bflow.toolbox.vc.diagram;bundle-version="1.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,
  libs/commons-beanutils-1.8.3.jar,
  libs/commons-beanutils-bean-collections-1.8.3.jar,
@@ -27,3 +27,4 @@ Bundle-ClassPath: .,
  libs/xom-1.2.10.jar,
  libs/commons-lang-2.6.jar
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: org.bflow.toolbox.contributions.addons

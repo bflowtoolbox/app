@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Activator: oepc.presentation.OepcEditorPlugin$Implementation
 Bundle-Vendor: Bflow Dev Team
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: oepc.presentation
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;visibility:=reexport,
@@ -17,3 +17,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.ide;visibility:=reexport,
  org.bflow.toolbox.bflow.edit;bundle-version="1.0.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: org.bflow.toolbox.oepc.editor

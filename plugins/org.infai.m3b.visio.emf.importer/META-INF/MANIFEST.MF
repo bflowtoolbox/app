@@ -11,5 +11,6 @@ Bundle-Name: Visio-EMF-Bridge (Transformation) Plug-in
 Bundle-Activator: org.infai.m3b.visio.emf.importer.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.infai.m3b.visio.emf.importer
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.infai.m3b.visio.emf.importer
 
