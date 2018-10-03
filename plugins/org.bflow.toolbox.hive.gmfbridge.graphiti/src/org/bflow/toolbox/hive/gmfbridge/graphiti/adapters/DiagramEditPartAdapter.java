@@ -20,6 +20,8 @@ import org.bflow.toolbox.hive.libs.aprogu.lang.HReflectionUtils;
 import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.RootElement;
+import org.eclipse.bpmn2.modeler.core.adapters.ExtendedPropertiesProvider;
+import org.eclipse.bpmn2.modeler.core.model.ModelDecorator;
 import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
 import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.ecore.EAttribute;
@@ -50,6 +52,7 @@ import org.eclipse.swt.widgets.Display;
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 	2015-03-27
  * @version 2015-12-23 Added injecting of diagram type provider adapter
+ * 			2018-10-03 Updated to latest API
  * 
  */
 @SuppressWarnings("restriction")
@@ -205,7 +208,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 * @return Process model element
 	 */
 	private BaseElement getProcessModel() {
-		EObject model = (EObject)fGraphitiDiagramEditPart.getModel();
+		EObject model = (EObject) fGraphitiDiagramEditPart.getModel();
 		Diagram diagram = (Diagram) model;
 		
 		// TODO Check references / dependencies
@@ -276,7 +279,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 *            HashMap can stores every found attribute
 	 */
 	private void lookupAndApplyAttributes(EObject modelObject, HashMap<String, HashMap<String, String>> attributes) {
-		List<EStructuralFeature> features = ModelUtil.getAnyAttributes(modelObject);
+		List<EStructuralFeature> features = ModelDecorator.getAnyAttributes(modelObject);
 		
 		for (EStructuralFeature structuralFeature : features) {
 			if (!(structuralFeature instanceof EAttribute)) continue;
@@ -332,7 +335,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 * @return Model object or NULL
 	 */
 	private EObject lookupModelObject(String modelElementId) {
-		EObject model = (EObject)fGraphitiDiagramEditPart.getModel();
+		EObject model = (EObject) fGraphitiDiagramEditPart.getModel();
 		Diagram diagram = (Diagram) model;
 		
 		// Lookup shapes
@@ -377,18 +380,20 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			
 			@Override
 			public void execute() {				
-				EStructuralFeature attribute = ModelUtil.getAnyAttribute(objectModel, attributeName);
+				EStructuralFeature attribute = ModelDecorator.getAnyAttribute(objectModel, attributeName);
 				if (attribute == null) {
 					if (attributeValue == null) return;
-					attribute = ModelUtil.addAnyAttribute(objectModel, DynamicAddonAttributePrefix, attributeName, attributeValue);
+					ModelDecorator modelDecorator = new ModelDecorator(objectModel.eClass().getEPackage());
+					attribute = modelDecorator.addAnyAttribute(objectModel, DynamicAddonAttributePrefix, attributeName, attributeValue);
 					return;
 				}
-				ModelUtil.setValue(getEditingDomain(), objectModel, attribute, attributeValue);				
+				
+				ExtendedPropertiesProvider.setValue(objectModel, attribute, attributeValue);
 			}
 		};
 
 		// Perform transaction async to avoid concurrent transactions
-		Display.getCurrent().asyncExec(new Runnable(){
+		Display.getCurrent().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				EMFCommandOperation commandOperation = new EMFCommandOperation(getEditingDomain(), command);
@@ -415,9 +420,9 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 * @return Attribute value or NULL
 	 */
 	private String getAttributeValue(final EObject modelObject, final String attributeName) {
-		EStructuralFeature attribute = ModelUtil.getAnyAttribute(modelObject, attributeName);
+		EStructuralFeature attribute = ModelDecorator.getAnyAttribute(modelObject, attributeName);
 		if (attribute == null) return null;
-		Object value = ModelUtil.getValue(modelObject, attribute);
+		Object value = ExtendedPropertiesProvider.getValue(modelObject, attribute);
 		if (value == null) return null;
 		String str = value.toString();
 		return str;

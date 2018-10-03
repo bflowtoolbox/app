@@ -6,7 +6,6 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.notification.INotificationService;
 import org.eclipse.graphiti.platform.IDiagramBehavior;
-import org.eclipse.graphiti.platform.IDiagramEditor;
 import org.eclipse.graphiti.platform.ga.IGraphicsAlgorithmRendererFactory;
 import org.eclipse.graphiti.tb.IToolBehaviorProvider;
 
@@ -14,13 +13,14 @@ import org.eclipse.graphiti.tb.IToolBehaviorProvider;
  * Provides an adapter of {@link IDiagramTypeProvider} that injects a custom
  * implementation of {@link IToolBehaviorProvider}.
  * 
- * @author Arian Storch
+ * @author Arian Storch<arian.storch@bflow.org>
  * @since 2015-12-23
+ * @version 2018-10-03 Updated to latest API
  * 
  */
 public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	
-	private IDiagramTypeProvider fOriginalDiagramTypeProvider;	
+	private IDiagramTypeProvider _originalDiagramTypeProvider;	
 
 	/**
 	 * Creates a new instance based on the given original provider.
@@ -30,7 +30,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	public DiagramTypeProviderAdapter(IDiagramTypeProvider originalDiagramTypeProvider) {
 		super();
-		fOriginalDiagramTypeProvider = originalDiagramTypeProvider;
+		_originalDiagramTypeProvider = originalDiagramTypeProvider;
 	}
 
 	/*
@@ -39,7 +39,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public String getProviderId() {
-		return fOriginalDiagramTypeProvider.getProviderId();
+		return _originalDiagramTypeProvider.getProviderId();
 	}
 
 	/*
@@ -48,7 +48,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public void setProviderId(String arg0) {
-		fOriginalDiagramTypeProvider.setProviderId(arg0);
+		_originalDiagramTypeProvider.setProviderId(arg0);
 	}
 
 	/*
@@ -57,7 +57,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public IFeatureProvider getFeatureProvider() {
-		return fOriginalDiagramTypeProvider.getFeatureProvider();
+		return _originalDiagramTypeProvider.getFeatureProvider();
 	}
 
 	/*
@@ -66,7 +66,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public void dispose() {
-		fOriginalDiagramTypeProvider.dispose();
+		_originalDiagramTypeProvider.dispose();
 	}
 
 	/*
@@ -75,7 +75,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public IToolBehaviorProvider[] getAvailableToolBehaviorProviders() {
-		IToolBehaviorProvider[] originalBehaviorProvider = fOriginalDiagramTypeProvider.getAvailableToolBehaviorProviders();
+		IToolBehaviorProvider[] originalBehaviorProvider = _originalDiagramTypeProvider.getAvailableToolBehaviorProviders();
 		return originalBehaviorProvider;
 	}
 
@@ -85,7 +85,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public String getContextId() {
-		return fOriginalDiagramTypeProvider.getContextId();
+		return _originalDiagramTypeProvider.getContextId();
 	}
 
 	/*
@@ -94,7 +94,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public int getCurrentToolBehaviorIndex() {
-		return fOriginalDiagramTypeProvider.getCurrentToolBehaviorIndex();
+		return _originalDiagramTypeProvider.getCurrentToolBehaviorIndex();
 	}
 
 	/*
@@ -103,7 +103,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public IToolBehaviorProvider getCurrentToolBehaviorProvider() {
-		IToolBehaviorProvider toolBehaviorProvider = fOriginalDiagramTypeProvider.getCurrentToolBehaviorProvider();
+		IToolBehaviorProvider toolBehaviorProvider = _originalDiagramTypeProvider.getCurrentToolBehaviorProvider();
 		return new ToolBehaviorProviderAdapter(toolBehaviorProvider); // TODO check if there is a memory leak
 	}
 
@@ -113,7 +113,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public Diagram getDiagram() {
-		return fOriginalDiagramTypeProvider.getDiagram();
+		return _originalDiagramTypeProvider.getDiagram();
 	}
 
 	/*
@@ -122,16 +122,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public IDiagramBehavior getDiagramBehavior() {
-		return fOriginalDiagramTypeProvider.getDiagramBehavior();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.graphiti.dt.IDiagramTypeProvider#getDiagramEditor()
-	 */
-	@Override
-	public IDiagramEditor getDiagramEditor() {
-		return fOriginalDiagramTypeProvider.getDiagramEditor();
+		return _originalDiagramTypeProvider.getDiagramBehavior();
 	}
 
 	/*
@@ -140,7 +131,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public String getDiagramTitle() {
-		return fOriginalDiagramTypeProvider.getDiagramTitle();
+		return _originalDiagramTypeProvider.getDiagramTitle();
 	}
 
 	/*
@@ -149,7 +140,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public IGraphicsAlgorithmRendererFactory getGraphicsAlgorithmRendererFactory() {
-		return fOriginalDiagramTypeProvider.getGraphicsAlgorithmRendererFactory();
+		return _originalDiagramTypeProvider.getGraphicsAlgorithmRendererFactory();
 	}
 
 	/*
@@ -158,7 +149,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public INotificationService getNotificationService() {
-		return fOriginalDiagramTypeProvider.getNotificationService();
+		return _originalDiagramTypeProvider.getNotificationService();
 	}
 
 	/*
@@ -167,16 +158,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public Object[] getRelatedBusinessObjects(Object[] arg0) {
-		return fOriginalDiagramTypeProvider.getRelatedBusinessObjects(arg0);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.graphiti.dt.IDiagramTypeProvider#init(org.eclipse.graphiti.mm.pictograms.Diagram, org.eclipse.graphiti.platform.IDiagramEditor)
-	 */
-	@Override
-	public void init(Diagram arg0, IDiagramEditor arg1) {
-		fOriginalDiagramTypeProvider.init(arg0, arg1);
+		return _originalDiagramTypeProvider.getRelatedBusinessObjects(arg0);
 	}
 
 	/*
@@ -185,7 +167,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public void init(Diagram arg0, IDiagramBehavior arg1) {
-		fOriginalDiagramTypeProvider.init(arg0, arg1);
+		_originalDiagramTypeProvider.init(arg0, arg1);
 	}
 
 	/*
@@ -194,7 +176,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public boolean isAutoUpdateAtReset() {
-		return fOriginalDiagramTypeProvider.isAutoUpdateAtReset();
+		return _originalDiagramTypeProvider.isAutoUpdateAtReset();
 	}
 
 	/*
@@ -203,7 +185,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public boolean isAutoUpdateAtRuntime() {
-		return fOriginalDiagramTypeProvider.isAutoUpdateAtRuntime();
+		return _originalDiagramTypeProvider.isAutoUpdateAtRuntime();
 	}
 
 	/*
@@ -212,7 +194,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public boolean isAutoUpdateAtRuntimeWhenEditorIsSaved() {
-		return fOriginalDiagramTypeProvider.isAutoUpdateAtRuntimeWhenEditorIsSaved();
+		return _originalDiagramTypeProvider.isAutoUpdateAtRuntimeWhenEditorIsSaved();
 	}
 
 	/*
@@ -221,7 +203,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public boolean isAutoUpdateAtStartup() {
-		return fOriginalDiagramTypeProvider.isAutoUpdateAtStartup();
+		return _originalDiagramTypeProvider.isAutoUpdateAtStartup();
 	}
 
 	/*
@@ -230,7 +212,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public void postInit() {
-		fOriginalDiagramTypeProvider.postInit();
+		_originalDiagramTypeProvider.postInit();
 	}
 
 	/*
@@ -239,7 +221,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public void resourceReloaded(Diagram arg0) {
-		fOriginalDiagramTypeProvider.resourceReloaded(arg0);
+		_originalDiagramTypeProvider.resourceReloaded(arg0);
 	}
 
 	/*
@@ -248,7 +230,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public void resourcesSaved(Diagram arg0, Resource[] arg1) {
-		fOriginalDiagramTypeProvider.resourcesSaved(arg0, arg1);
+		_originalDiagramTypeProvider.resourcesSaved(arg0, arg1);
 	}
 
 	/*
@@ -257,7 +239,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public void setContextId(String arg0) {
-		fOriginalDiagramTypeProvider.setContextId(arg0);
+		_originalDiagramTypeProvider.setContextId(arg0);
 	}
 
 	/*
@@ -266,7 +248,7 @@ public class DiagramTypeProviderAdapter implements IDiagramTypeProvider {
 	 */
 	@Override
 	public void setCurrentToolBehaviorIndex(int arg0) {
-		fOriginalDiagramTypeProvider.setCurrentToolBehaviorIndex(arg0);
+		_originalDiagramTypeProvider.setCurrentToolBehaviorIndex(arg0);
 	}
 
 }
