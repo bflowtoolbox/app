@@ -9,7 +9,6 @@ import org.bflow.toolbox.extensions.edit.parts.ColorChangeable;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.graphics.Color;
 
-
 /**
  * Each <code>BflowDiagramEditPart</code> provides an color schema.
  * Classes matches this schema must implement me to provide colors.

@@ -10,7 +10,7 @@ import org.eclipse.gmf.runtime.notation.View;
 /**
  * @generated NOT
  */
-public class OEPCEditPart extends LiveValidatedDiagramEditPart{
+public class OEPCEditPart extends LiveValidatedDiagramEditPart {
 
 	/**
 	 * @generated

@@ -84,7 +84,7 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 	public IGlobalColorSchema getSchema(String schemaId) {
 		IGlobalColorSchema schema = new OriginalColorSchema();
 		Iterator<IGlobalColorSchema> schemeIterator = installedSchemas.iterator();
-		while(schemeIterator.hasNext()) {
+		while (schemeIterator.hasNext()) {
 			IGlobalColorSchema s = schemeIterator.next();
 			if (s.toString().equals(schemaId))
 				return s;
