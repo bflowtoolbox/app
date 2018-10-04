@@ -101,10 +101,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="bflow-logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="foldericon.png" />
+    <Resource Include="img\foldericon.png" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
@@ -116,6 +113,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\bee.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\bflow-logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
