@@ -53,6 +53,7 @@ import org.eclipse.swt.widgets.Display;
  * @since 	2015-03-27
  * @version 2015-12-23 Added injecting of diagram type provider adapter
  * 			2018-10-03 Updated to latest API
+ * 			2018-10-04 Fixed index out of range exception when getting RootElement
  * 
  */
 @SuppressWarnings("restriction")
@@ -60,28 +61,28 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	
 	private static final String DynamicAddonAttributePrefix = "customAddonAttribute"; // "dynamicAddonAttribute";
 
-	private org.eclipse.graphiti.ui.internal.parts.DiagramEditPart fGraphitiDiagramEditPart;
+	private org.eclipse.graphiti.ui.internal.parts.DiagramEditPart _graphitiDiagramEditPart;
 	@SuppressWarnings("unused")
-	private GraphicalViewer fDiagramGraphicalViewer;
+	private GraphicalViewer _diagramGraphicalViewer;
 	
 	@SuppressWarnings("unused")
-	private EObject fDiagramModel;
+	private EObject _diagramModel;
 	
-	private EObject fProcessModel;
-	private View fNotationView = new ViewImpl() {};
+	private EObject _processModel;
+	private View _notationView = new ViewImpl() {};
 	
-	private IAttributeFileListener fAttributeFileListener = new _AttributeFileListener();
-	private IAttributeFileRegistryListener fAttributeFileRegistryListener = new _AttributeFileRegistryListener();
-	private AttributeFile fCurrentAttributeFile;
+	private IAttributeFileListener _attributeFileListener = new _AttributeFileListener();
+	private IAttributeFileRegistryListener _attributeFileRegistryListener = new _AttributeFileRegistryListener();
+	private AttributeFile _currentAttributeFile;
 	
-	private AnnotationDecorationSupport fAnnotationDecorationSupport;
+	private AnnotationDecorationSupport _annotationDecorationSupport;
 	
 	/**
 	 * Creates a new instance based on the given instances.
 	 * 
 	 * @param graphitiDiagramEditPart
 	 */
-	public DiagramEditPartAdapter(final org.eclipse.graphiti.ui.internal.parts.DiagramEditPart graphitiDiagramEditPart) {
+	public DiagramEditPartAdapter(org.eclipse.graphiti.ui.internal.parts.DiagramEditPart graphitiDiagramEditPart) {
 		super(null);
 		
 		final IContainerShapeEditPart pp = graphitiDiagramEditPart;
@@ -89,7 +90,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 		final ConfigurationProvider cfg = (ConfigurationProvider) cfgProv;
 		final IDiagramTypeProvider dtp = cfg.getDiagramTypeProvider(); // Alternative: Override field toolBehaviorProviders
 		
-		fAnnotationDecorationSupport = new AnnotationDecorationSupport(dtp.getProviderId());
+		_annotationDecorationSupport = new AnnotationDecorationSupport(dtp.getProviderId());
 		
 		/*
 		 * We must inject our own Diagram Type Provider to hook up the interfaces.
@@ -120,22 +121,22 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 				}});
 		}
 		
-		fGraphitiDiagramEditPart = graphitiDiagramEditPart;
-		fDiagramGraphicalViewer = (GraphicalViewer) fGraphitiDiagramEditPart.getViewer();
-		fDiagramModel = Graphiti.getLinkService().getBusinessObjectForLinkedPictogramElement(fGraphitiDiagramEditPart.getPictogramElement());
+		_graphitiDiagramEditPart = graphitiDiagramEditPart;
+		_diagramGraphicalViewer = (GraphicalViewer) _graphitiDiagramEditPart.getViewer();
+		_diagramModel = Graphiti.getLinkService().getBusinessObjectForLinkedPictogramElement(_graphitiDiagramEditPart.getPictogramElement());
 		
-		fProcessModel = getProcessModel();
-		fNotationView.setElement(fProcessModel);
+		_processModel = getProcessModel();
+		_notationView.setElement(_processModel);
 		
 		// Subscribe to attribute file
 		AttributeFile attributeFile = AttributeFileRegistry.getInstance().getActiveAttributeFile();
 		if (attributeFile != null) {
-			attributeFile.removeListener(fAttributeFileListener);
-			attributeFile.addListener(fAttributeFileListener);
-			fCurrentAttributeFile = attributeFile;
+			attributeFile.removeListener(_attributeFileListener);
+			attributeFile.addListener(_attributeFileListener);
+			_currentAttributeFile = attributeFile;
 		}
 		
-		AttributeFileRegistry.getInstance().addRegistryListener(fAttributeFileRegistryListener);
+		AttributeFileRegistry.getInstance().addRegistryListener(_attributeFileRegistryListener);
 	}
 	
 	/**
@@ -144,13 +145,13 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 */
 	@Override
 	public void dispose() {
-		if (fCurrentAttributeFile != null) {
-			fCurrentAttributeFile.removeListener(fAttributeFileListener);
-			fCurrentAttributeFile = null;
+		if (_currentAttributeFile != null) {
+			_currentAttributeFile.removeListener(_attributeFileListener);
+			_currentAttributeFile = null;
 		}
 		
-		fAnnotationDecorationSupport.dispose();
-		AttributeFileRegistry.getInstance().removeRegistryListener(fAttributeFileRegistryListener);
+		_annotationDecorationSupport.dispose();
+		AttributeFileRegistry.getInstance().removeRegistryListener(_attributeFileRegistryListener);
 	}
 	
 	/* (non-Javadoc)
@@ -158,7 +159,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 */
 	@Override
 	public List<?> getConnections() {
-		EObject model = (EObject)fGraphitiDiagramEditPart.getModel();
+		EObject model = (EObject)_graphitiDiagramEditPart.getModel();
 		Diagram diagram = (Diagram) model;
 		
 		List<Connection> connectionModels = diagram.getConnections();
@@ -175,7 +176,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 */
 	@Override
 	public List<?> getChildren() {
-		EObject model = (EObject)fGraphitiDiagramEditPart.getModel();
+		EObject model = (EObject)_graphitiDiagramEditPart.getModel();
 		Diagram diagram = (Diagram) model;
 		
 		List<Shape> shapeModels = diagram.getChildren();
@@ -192,7 +193,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 */
 	@Override
 	public EObject resolveSemanticElement() {		
-		return fProcessModel; // XXX fDiagramModel
+		return _processModel; // XXX fDiagramModel
 	}
 	
 	/* (non-Javadoc)
@@ -200,7 +201,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 */
 	@Override
 	public View getNotationView() {
-		return fNotationView;
+		return _notationView;
 	}
 	
 	/**
@@ -208,7 +209,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 * @return Process model element
 	 */
 	private BaseElement getProcessModel() {
-		EObject model = (EObject) fGraphitiDiagramEditPart.getModel();
+		EObject model = (EObject) _graphitiDiagramEditPart.getModel();
 		Diagram diagram = (Diagram) model;
 		
 		// TODO Check references / dependencies
@@ -220,8 +221,10 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 		EObject diagramModel = Graphiti.getLinkService().getBusinessObjectForLinkedPictogramElement(diagram);
 		EObject diagramContainer = diagramModel.eContainer();
 		Definitions definitions = (Definitions) diagramContainer;
-		RootElement baseElement = definitions.getRootElements().get(0);
+		List<RootElement> rootElements = definitions.getRootElements();
+		if (rootElements.isEmpty()) return null;
 		
+		RootElement baseElement = rootElements.get(0);
 		return baseElement;
 	}
 	
@@ -246,7 +249,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 */
 	@Override
 	public void load(HashMap<String, HashMap<String, String>> attributes) throws Exception {
-		EObject model = (EObject)fGraphitiDiagramEditPart.getModel();
+		EObject model = (EObject) _graphitiDiagramEditPart.getModel();
 		Diagram diagram = (Diagram) model;
 		
 		// Lookup shapes
@@ -266,7 +269,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 		}
 		
 		// Lookup plane / diagram model
-		lookupAndApplyAttributes(fProcessModel, attributes);
+		lookupAndApplyAttributes(_processModel, attributes);
 	}
 	
 	/**
@@ -335,7 +338,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	 * @return Model object or NULL
 	 */
 	private EObject lookupModelObject(String modelElementId) {
-		EObject model = (EObject) fGraphitiDiagramEditPart.getModel();
+		EObject model = (EObject) _graphitiDiagramEditPart.getModel();
 		Diagram diagram = (Diagram) model;
 		
 		// Lookup shapes
@@ -357,8 +360,8 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 		}
 		
 		// Lookup plane / diagram model
-		String diagramModelId = ModelUtil.getID(fProcessModel);
-		if (diagramModelId.equalsIgnoreCase(modelElementId)) return fProcessModel;
+		String diagramModelId = ModelUtil.getID(_processModel);
+		if (diagramModelId.equalsIgnoreCase(modelElementId)) return _processModel;
 		
 		return null;
 	}
@@ -449,7 +452,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			setAttributeValue(modelObject, attributeName, attributeValue);
 			
 			// Refresh UI due to annotation changes
-			fGraphitiDiagramEditPart.refresh();
+			_graphitiDiagramEditPart.refresh();
 		}
 
 		/* (non-Javadoc)
@@ -464,7 +467,7 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 			setAttributeValue(modelObject, attributeName, null);
 			
 			// Refresh UI due to annotation changes
-			fGraphitiDiagramEditPart.refresh();
+			_graphitiDiagramEditPart.refresh();
 		}
 		
 		/* (non-Javadoc)
@@ -498,15 +501,15 @@ public class DiagramEditPartAdapter extends DiagramEditPart implements IAttribut
 	class _AttributeFileRegistryListener implements IAttributeFileRegistryListener {
 		@Override
 		public void noticeAttributeFileChange(AttributeFileRegistryEvent event) {
-			if (fCurrentAttributeFile != null) {
-				fCurrentAttributeFile.removeListener(fAttributeFileListener);
-				fCurrentAttributeFile = null;
+			if (_currentAttributeFile != null) {
+				_currentAttributeFile.removeListener(_attributeFileListener);
+				_currentAttributeFile = null;
 			}
 			
-			fCurrentAttributeFile = event.attributeFile;
+			_currentAttributeFile = event.attributeFile;
 			
-			if (fCurrentAttributeFile != null) {
-				fCurrentAttributeFile.addListener(fAttributeFileListener);
+			if (_currentAttributeFile != null) {
+				_currentAttributeFile.addListener(_attributeFileListener);
 			}
 		}
 	}
