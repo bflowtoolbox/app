@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gmf.runtime.common.core.command.CommandResult;
+import org.eclipse.gmf.runtime.draw2d.ui.figures.FigureUtilities;
 import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.ShapeStyle;
@@ -22,12 +23,13 @@ import org.eclipse.swt.graphics.Color;
  * or single parts of it.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 01/11/13
+ * @since 2013-11-01
+ * @version 2018-10-04 Updated color to int calculation
  */
 public class ApplyColorCommand extends Command {
 	
 	/** The color schema that will be applied. */
-	private IGlobalColorSchema colorSchema;
+	private IGlobalColorSchema _colorSchema;
 	
 	/**
 	 * Stores all elements and the information about previous colors.
@@ -40,7 +42,7 @@ public class ApplyColorCommand extends Command {
 	 * @param colorSchema Color schema that is applied to the diagram
 	 */
 	public ApplyColorCommand(IGlobalColorSchema colorSchema) {
-		this.colorSchema = colorSchema;
+		_colorSchema = colorSchema;
 	}
 
 	/**
@@ -50,8 +52,8 @@ public class ApplyColorCommand extends Command {
 	 */
 	public void setElements(List<ColorChangeable> elements) {
 		notices.clear();
-		for(Iterator<ColorChangeable> it = elements.iterator(); it.hasNext();) {
-				ColorChangeable part = it.next();
+		for (Iterator<ColorChangeable> itr = elements.iterator(); itr.hasNext();) {
+				ColorChangeable part = itr.next();
 				notices.add(new ColorNotice(part, 
 						part.getPrimaryFigure().getForegroundColor(), 
 						part.getPrimaryFigure().getBackgroundColor()));
@@ -88,16 +90,17 @@ public class ApplyColorCommand extends Command {
 	@Override
 	public void execute() {
 		Iterator<ColorNotice> elements = notices.iterator();
-		while(elements.hasNext()) {
+		while (elements.hasNext()) {
 			ColorNotice notice = elements.next();
 			ColorChangeable editPart = notice.getEditPart();
+			Class<? extends ColorChangeable> editPartCls = editPart.getClass();
 			
-			IGlobalColorSchema schema = colorSchema;
+			IGlobalColorSchema schema = _colorSchema;
 			
-			Color foreground = schema.getForeground(editPart.getClass());
-			Color background = schema.getBackground(editPart.getClass());
+			Color foreground = schema.getForeground(editPartCls);
+			Color background = schema.getBackground(editPartCls);
 			
-			if(execute(notice.getEditPart(), foreground, background)) {
+			if (execute(editPart, foreground, background)) {
 				notice.getEditPart().applyColor(foreground, background);
 			}
 		}
@@ -110,24 +113,21 @@ public class ApplyColorCommand extends Command {
 	 * @param background
 	 * @return
 	 */
-	public boolean execute(final ColorChangeable editPart, 
-			final Color foreground, final Color background){
+	public boolean execute(final ColorChangeable editPart, final Color foreground, final Color background) {
 		boolean success = true;
 		
-		AbstractTransactionalCommand command = 
-			new AbstractTransactionalCommand(editPart.getEditingDomain(), 
-					null, null){
+		AbstractTransactionalCommand command = new AbstractTransactionalCommand(editPart.getEditingDomain(), 
+					null, null) {
 
-			protected CommandResult doExecuteWithResult(
-					IProgressMonitor monitor, IAdaptable info)
-					throws ExecutionException {
+			protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+				ShapeStyle style = (ShapeStyle) editPart.getPrimaryView().getStyle(NotationPackage.Literals.SHAPE_STYLE);
 				
-				ShapeStyle style = 
-					(ShapeStyle) editPart.getPrimaryView().getStyle(
-						NotationPackage.Literals.SHAPE_STYLE);
 				if (style != null) {
-					style.setLineColor(foreground.hashCode());
-					style.setFillColor(background.hashCode());
+					int fgClr = FigureUtilities.colorToInteger(foreground);
+					int bgClr = FigureUtilities.colorToInteger(background);
+					
+					style.setLineColor(fgClr);
+					style.setFillColor(bgClr);
 				}
 				
 				return CommandResult.newOKCommandResult();
@@ -148,6 +148,7 @@ public class ApplyColorCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
+	@Override
 	public void redo() {
 		execute();
 	}
@@ -155,13 +156,15 @@ public class ApplyColorCommand extends Command {
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
 		Iterator<ColorNotice> elements = notices.iterator();
-		while(elements.hasNext()) {
+		while (elements.hasNext()) {
 			ColorNotice notice = elements.next();
 			Color foreground = notice.getDefaultForeground();
 			Color background = notice.getDefaultBackground();
-			if(execute(notice.getEditPart(), foreground, background)) {
+			
+			if (execute(notice.getEditPart(), foreground, background)) {
 				notice.getEditPart().applyColor(foreground, background);
 			}
 		}
