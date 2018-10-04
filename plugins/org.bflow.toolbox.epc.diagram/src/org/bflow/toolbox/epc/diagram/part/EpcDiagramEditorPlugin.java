@@ -272,9 +272,8 @@ public class EpcDiagramEditorPlugin extends AbstractUIPlugin {
 		if (error == null && throwable != null) {
 			error = throwable.getMessage();
 		}
-		getLog().log(
-				new Status(IStatus.ERROR, EpcDiagramEditorPlugin.ID,
-						IStatus.OK, error, throwable));
+		
+		getLog().log(new Status(IStatus.ERROR, ID, IStatus.OK, error, throwable));
 		debug(error, throwable);
 	}
 
