@@ -1,6 +1,7 @@
 package org.bflow.toolbox.epc.extensions.actions;
 
 import org.bflow.toolbox.epc.diagram.part.EpcCreationWizard;
+import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -12,45 +13,57 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
  * Implements the IWorkbenchWindowActionDelegate to call the new epc diagram
  * wizard
  * 
- * @author Arian Storch
- * @since 21/11/09
- * @version 04/01/10 bug fixed
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2009-11-21
+ * @version 2010-01-04
  * 
  */
-public class NewEpcDiagramWizardAction implements
-		IWorkbenchWindowActionDelegate {
-	private IWorkbenchWindow workbenchWindow;
+public class NewEpcDiagramWizardAction implements IWorkbenchWindowActionDelegate {
+	private IWorkbenchWindow _workbenchWindow;
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#dispose()
+	 */
 	@Override
 	public void dispose() {
+		// Nothing to do here
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IWorkbenchWindowActionDelegate#init(org.eclipse.ui.IWorkbenchWindow)
+	 */
 	@Override
 	public void init(IWorkbenchWindow window) {
-		this.workbenchWindow = window;
+		_workbenchWindow = window;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
+	 */
 	@Override
 	public void run(IAction action) {
 		try {
 			EpcCreationWizard wizard = new EpcCreationWizard();
 				
-			ISelection iSel = workbenchWindow.getActivePage().getSelection();	
+			ISelection selection = _workbenchWindow.getActivePage().getSelection();	
+			StructuredSelection structSelection = new StructuredSelection(selection);
 			
-			StructuredSelection sSel = new StructuredSelection(iSel);
+			wizard.init(_workbenchWindow.getWorkbench(), structSelection);
 			
-			wizard.init(workbenchWindow.getWorkbench(), sSel);
-
-			WizardDialog wd = new WizardDialog(workbenchWindow.getShell(),
-					wizard);
-
-			wd.open();
+			WizardDialog wizardDialog = new WizardDialog(_workbenchWindow.getShell(), wizard);
+			wizardDialog.open();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			EpcDiagramEditorPlugin.getInstance().logError("Error on running EpcCreationWizard", ex);			
 		}
-
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
+	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 	}
