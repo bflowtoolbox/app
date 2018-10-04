@@ -11,6 +11,7 @@
                label="Bflow BPMN Diagram Toolbar">
             <command
                   commandId="org.bflow.toolbox.bpmn.diagram.command.createBpmnDiagram"
+                  icon="icons/bpmn2process2.png"
                   label="Neues BPMN-Diagramm erstellen"
                   style="push">
             </command>
@@ -21,7 +22,7 @@
          point="org.eclipse.ui.commands">
       <command
             id="org.bflow.toolbox.bpmn.diagram.command.createBpmnDiagram"
-            name="createNewBpmnDiagram">
+            name="Neues BPMN-Diagramm erstellen">
       </command>
    </extension>
    <extension
