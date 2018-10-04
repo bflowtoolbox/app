@@ -32,6 +32,7 @@ public class EventViewFactory extends AbstractShapeViewFactory {
 	/**
 	 * @generated NOT
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	protected List createStyles(View view) {
 		List styles = new ArrayList();
@@ -47,26 +48,23 @@ public class EventViewFactory extends AbstractShapeViewFactory {
 			IAdaptable semanticAdapter, String semanticHint, int index,
 			boolean persisted) {
 		if (semanticHint == null) {
-			semanticHint = OepcVisualIDRegistry
-					.getType(EventEditPart.VISUAL_ID);
+			semanticHint = OepcVisualIDRegistry.getType(EventEditPart.VISUAL_ID);
 			view.setType(semanticHint);
 		}
-		super.decorateView(containerView, view, semanticAdapter, semanticHint,
-				index, persisted);
-		if (!OEPCEditPart.MODEL_ID.equals(OepcVisualIDRegistry
-				.getModelID(containerView))) {
-			EAnnotation shortcutAnnotation = EcoreFactory.eINSTANCE
-					.createEAnnotation();
+		super.decorateView(containerView, view, semanticAdapter, semanticHint, index, persisted);
+		if (!OEPCEditPart.MODEL_ID.equals(OepcVisualIDRegistry.getModelID(containerView))) {
+			EAnnotation shortcutAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
 			shortcutAnnotation.setSource("Shortcut"); //$NON-NLS-1$
-			shortcutAnnotation.getDetails().put(
-					"modelID", OEPCEditPart.MODEL_ID); //$NON-NLS-1$
+			shortcutAnnotation.getDetails().put("modelID", OEPCEditPart.MODEL_ID); //$NON-NLS-1$
 			view.getEAnnotations().add(shortcutAnnotation);
 		}
+		
 		IAdaptable eObjectAdapter = null;
 		EObject eObject = (EObject) semanticAdapter.getAdapter(EObject.class);
 		if (eObject != null) {
 			eObjectAdapter = new EObjectAdapter(eObject);
 		}
+		
 		getViewService().createNode(eObjectAdapter, view,
 				OepcVisualIDRegistry.getType(EventNameEditPart.VISUAL_ID),
 				ViewUtil.APPEND, true, getPreferencesHint());
@@ -78,6 +76,7 @@ public class EventViewFactory extends AbstractShapeViewFactory {
 		if (style == null) {
 			style = (ShapeStyle) view.createStyle(shapeStyle);
 		}
+				
 		BflowDiagramEditPart.apply(EventEditPart.class, style);
 		
 		EClass textStyleEclass = NOTATION.getTextStyle();
