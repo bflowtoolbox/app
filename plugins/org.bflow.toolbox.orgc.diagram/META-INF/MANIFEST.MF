@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
+Bundle-Name: Bflow ORGC Diagram
 Bundle-SymbolicName: org.bflow.toolbox.orgc.diagram; singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: orgchart.diagram.part.OrgcDiagramEditorPlugin
-Bundle-Vendor: %providerName
+Bundle-Vendor: Bflow Dev Team
 Bundle-Localization: plugin
 Export-Package: orgchart.diagram.edit.parts,
  orgchart.diagram.part,
