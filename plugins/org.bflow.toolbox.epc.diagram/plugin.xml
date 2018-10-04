@@ -717,7 +717,7 @@
                icon="icons/obj16/EpcIcon.png"
                id="org.bflow.toolbox.epc.diagram.createNewEpcWizardAction"
                label="%newEpcDiagramToolBarItem"
-               style="push"
+               style="toggle"
                toolbarPath="Normal"
                tooltip="%newEpcDiagramToolBarItem">
          </action>

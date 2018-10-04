@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Bflow BPMN Diagram
+Bundle-SymbolicName: org.bflow.toolbox.bpmn.diagram;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Bflow Dev Team
+Automatic-Module-Name: org.bflow.toolbox.bpmn.diagram
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Export-Package: org.bflow.toolbox.bpmn.diagram,
+ org.bflow.toolbox.bpmn.diagram.handlers
+Bundle-Activator: org.bflow.toolbox.bpmn.diagram.BpmnDiagramPlugin
+Bundle-ActivationPolicy: lazy
