@@ -32,7 +32,7 @@
         </StackPanel>
         <Label Grid.Row="1" Content="Installationspfad" HorizontalAlignment="Right" Margin="0,30,-5,0" />
         <WrapPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,30,0,0">
-            <TextBox Name="path" Width="300" Height="Auto" Text="" Margin="10,0,0,0" Padding="5" BorderThickness="0.5,0.5,0,0.5" IsReadOnly="True" />
+            <TextBox Name="path" Width="300" Height="Auto" Margin="10,0,0,0" Padding="5" BorderThickness="0.5,0.5,0,0.5" IsReadOnly="True" />
             <Button Click="GetPathClick" Background="White" BorderThickness="0,0.5,0.5,0.5" Padding="5">
                 <Button.BorderBrush>
                     <SolidColorBrush Color="#FFABADB3"/>
@@ -45,9 +45,9 @@
             <ComboBoxItem IsSelected="True">Deutsch</ComboBoxItem>
             <ComboBoxItem>Englisch</ComboBoxItem>
         </ComboBox>
-        <StackPanel Grid.Row="3" Grid.Column="1" Margin="15,30,0,0" HorizontalAlignment="Left" Visibility="Hidden" Name="progress">
-            <ProgressBar Height="20" Width="325" Name="progBar" Minimum="0" Maximum="100" />
-            <TextBlock Margin="0,0,0,5" Name="progText">Kopiere 1/5 Dateien</TextBlock>
+        <StackPanel Grid.Row="3" Grid.Column="1" Margin="10,30,0,0" HorizontalAlignment="Left" Visibility="Hidden" Name="progress">
+            <ProgressBar Height="20" Width="325" Name="progBar" Minimum="0" Maximum="100" Foreground="#FF5FBFFF" />
+            <TextBlock Margin="0,0,0,5" Name="progText" />
         </StackPanel>
         <WrapPanel Grid.Row="4" Grid.Column="1" Margin="15,25,0,0" HorizontalAlignment="Right">
             <Button Click="DoZipClick" Content="Installieren" Height="Auto" Width="Auto" Padding="5" Margin="0,0,10,0">
