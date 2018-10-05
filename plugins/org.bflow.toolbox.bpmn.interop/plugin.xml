@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         name="qw"
+         point="org.eclipse.gmf.runtime.common.ui.services.action.contributionItemProviders">
+      <contributionItemProvider
+            checkPluginLoaded="true"
+            class="org.bflow.toolbox.bpmn.interop.AbstractContributionItemProvider1">
+         <Priority
+               name="Medium">
+         </Priority>
+         <partContribution
+               class="org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart"
+               id="oepc.diagram.part.OepcDiagramEditorID">
+            <partAction
+                  global="false"
+                  id="org.bflow.toolbox.bpmn.interop.partAction2"
+                  menubarPath="/diagramMenu/validationGroup">
+            </partAction>
+         </partContribution>
+      </contributionItemProvider>
+   </extension>
+
+</plugin>
