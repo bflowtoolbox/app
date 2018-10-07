@@ -6,9 +6,15 @@ import org.eclipse.gef.Request;
 import org.eclipse.gmf.runtime.common.ui.util.IWorkbenchPartDescriptor;
 import org.eclipse.gmf.runtime.diagram.ui.actions.DiagramAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
-
 import oepc.diagram.edit.parts.OEPCEditPart;
 
+/**
+ * Implements {@link IAction} to provide the BPMN model conversion action.
+ * 
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2018-10-07
+ *
+ */
 public class ConvertToBpmnDiagramAction extends DiagramAction {
 
 	/** Action id */
@@ -23,7 +29,8 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 		super(partDescriptor.getPartPage());
 		setId(Id);
 		setText("Zu BPMN umwandeln");
-		// setImageDescriptor(newImage);
+		setToolTipText("Wandelt das geöffnete Modell in ein BPMN-Modell um.");
+		setImageDescriptor(BpmnInteropPlugin.getDefault().imageDescriptorFromPlugin("icons/convert16.png"));
 	}
 
 	/*

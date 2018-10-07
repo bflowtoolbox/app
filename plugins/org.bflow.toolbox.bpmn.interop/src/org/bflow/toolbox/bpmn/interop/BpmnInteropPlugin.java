@@ -1,5 +1,6 @@
 package org.bflow.toolbox.bpmn.interop;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -44,4 +45,14 @@ public class BpmnInteropPlugin extends AbstractUIPlugin {
 		return plugin;
 	}
 
+	/**
+	 * This is a convenience method for BpmnInteropPlugin.imageDescriptorFromPlugin.
+	 * See there for commands.
+	 * 
+	 * @param imageFilePath See static method
+	 * @return See static method
+	 */
+	public ImageDescriptor imageDescriptorFromPlugin(String imageFilePath) {
+		return imageDescriptorFromPlugin(PLUGIN_ID, imageFilePath);
+	}
 }
