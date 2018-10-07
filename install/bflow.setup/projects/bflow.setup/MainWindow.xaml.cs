@@ -6,6 +6,7 @@ using Ionic.Zip;
 using IWshRuntimeLibrary;
 using System.Threading;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace bflow.setup
 {
@@ -112,6 +113,15 @@ namespace bflow.setup
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
             var worker = sender as BackgroundWorker;
+            string packageName = "bflow-1.5.0.zip";
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.zippacks." + packageName)) {
+                if (stream == null) throw new InvalidOperationException("Could not open stream to package");
+
+                using (ZipFile zipFile = ZipFile.Read(stream)) {
+                    // TODO @TSC Use this stream
+                }
+            }
+
             string src = "C:\\Users\\tschiessl\\Documents\\bflow\\bflow Toolbox.zip";
             string dest = "C:\\Users\\tschiessl\\Documents\\bflow\\bflow Toolbox";
             int filesMax = CountFiles(src);
