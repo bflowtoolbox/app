@@ -18,7 +18,7 @@ import oepc.diagram.edit.parts.OEPCEditPart;
 public class ConvertToBpmnDiagramAction extends DiagramAction {
 
 	/** Action id */
-	public static final String Id = "org.bflow.toolbox.bpmn.interop.actions.convertToBpmn";
+	public static final String Id = "org.bflow.toolbox.bpmn.interop.actions.convertToBpmn"; //$NON-NLS-1$
 	
 	/**
 	 * Initializes the new instance.
@@ -28,9 +28,9 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 	public ConvertToBpmnDiagramAction(IWorkbenchPartDescriptor partDescriptor) {
 		super(partDescriptor.getPartPage());
 		setId(Id);
-		setText("Zu BPMN umwandeln");
-		setToolTipText("Wandelt das geöffnete Modell in ein BPMN-Modell um.");
-		setImageDescriptor(BpmnInteropPlugin.getDefault().imageDescriptorFromPlugin("icons/convert16.png"));
+		setText(Messages.ConvertToBpmnDiagramAction_Text);
+		setToolTipText(Messages.ConvertToBpmnDiagramAction_ToolTipText);
+		setImageDescriptor(BpmnInteropPlugin.getDefault().imageDescriptorFromPlugin("icons/convert16.png")); //$NON-NLS-1$
 	}
 
 	/*
