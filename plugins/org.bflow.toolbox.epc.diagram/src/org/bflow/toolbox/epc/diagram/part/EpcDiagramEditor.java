@@ -11,6 +11,7 @@ import org.bflow.toolbox.epc.diagram.listener.EpcDiagramEditorMouseListener;
 import org.bflow.toolbox.epc.diagram.nls.NLSupport;
 import org.bflow.toolbox.epc.diagram.views.DragHelper;
 import org.bflow.toolbox.epc.extensions.idelete.IntelligentDeleter;
+import org.bflow.toolbox.extensions.BflowDiagramEditor;
 import org.bflow.toolbox.extensions.helpers.EFSUtil;
 import org.bflow.toolbox.hive.attributes.AttributeFile;
 import org.bflow.toolbox.hive.attributes.AttributeViewPart;
@@ -45,7 +46,6 @@ import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramDropTargetListener;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDiagramDocument;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDocument;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDocumentProvider;
-import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -77,9 +77,10 @@ import org.eclipse.ui.part.ShowInContext;
 
 /**
  * @generated
- * @version 31/07/13 edited by Arian Storch<arian.storch@bflow.org>
+ * @version 2013-07-31 Edited by Arian Storch<arian.storch@bflow.org>
+ * 			2018-10-07 Changed superclass to BflowDiagramEditor
  */
-public class EpcDiagramEditor extends DiagramDocumentEditor implements
+public class EpcDiagramEditor extends BflowDiagramEditor implements
 		IGotoMarker, IAttributableDocumentEditor {
 
 	/**
@@ -92,10 +93,8 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 	 */
 	public static final String CONTEXT_ID = "org.bflow.toolbox.epc.diagram.ui.diagramContext"; //$NON-NLS-1$
 
-	/**
-	 * mouse listener
-	 */
-	private EpcDiagramEditorMouseListener mouseListener;
+	/** mouse listener */
+	private EpcDiagramEditorMouseListener _mouseListener;
 
 	/**
 	 * @generated
@@ -127,6 +126,10 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 		super.init(site, input);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor#setInput(org.eclipse.ui.IEditorInput)
+	 */
 	@Override
 	public void setInput(IEditorInput input) {
 		// Code copied from super class
@@ -145,12 +148,20 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditorWithFlyOutPalette#setFocus()
+	 */
 	@Override
 	public void setFocus() {
 		super.setFocus();
 		IntelligentDeleter.setEpcDiagramEditor(this);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor#isDirty()
+	 */
 	@Override
 	public boolean isDirty() {
 		boolean dirtyAttributes = false;
@@ -265,12 +276,15 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 	 * @return mouse location registered by the last click.
 	 */
 	public Point getMouseLocation() {
-		return mouseListener.getMouseLocation();
+		return _mouseListener.getMouseLocation();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor#performSave(boolean, org.eclipse.core.runtime.IProgressMonitor)
+	 */
 	@Override
 	protected void performSave(boolean overwrite, IProgressMonitor progressMonitor) {
-
 		if (AttributeViewPart.getInstance() != null)
 			if (AttributeViewPart.getInstance().getAttributeFile() != null)
 				if (AttributeViewPart.getInstance().getAttributeFile().isDirty())
@@ -365,9 +379,7 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 		}
 	}
 
-	/**
-	 * Sets the editor dirty.
-	 */
+	/** Sets the editor dirty. */
 	public void firePropertyChanged() {
 		this.firePropertyChange(EpcDiagramEditor.PROP_DIRTY);
 	}
@@ -407,26 +419,23 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 	private IHandlerActivation iHandlerActivationZoomIn;
 	private IHandlerActivation iHandlerActivationZoomOut;
 	
-	/**
-	 * Registers custom zoom handlers for this editor.
-	 */
+	/** Registers custom zoom handlers for this editor. */
 	private void registerZoomHandler() {
-		if(iZoomInAction == null)
+		if (iZoomInAction == null)
 			iZoomInAction = new ZoomInAction(getZoomManager());
-		if(iZoomOutAction == null)
+		if (iZoomOutAction == null)
 			iZoomOutAction = new ZoomOutAction(getZoomManager());
 		
 		getActionRegistry().registerAction(iZoomInAction);
 		getActionRegistry().registerAction(iZoomOutAction);
 
 		IWorkbenchWindow window = getSite().getWorkbenchWindow();
-		IHandlerService handlerService = 
-				(IHandlerService) window.getService(IHandlerService.class);
+		IHandlerService handlerService = (IHandlerService) window.getService(IHandlerService.class);
 
-		if(iActionHandlerZoomIn == null)
+		if (iActionHandlerZoomIn == null)
 			iActionHandlerZoomIn = new ActionHandler(iZoomInAction);
 		
-		if(iActionHandlerZoomOut == null)
+		if (iActionHandlerZoomOut == null)
 			iActionHandlerZoomOut = new ActionHandler(iZoomOutAction);
 		
 		iHandlerActivationZoomIn = handlerService.activateHandler(
@@ -435,25 +444,26 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 				iZoomOutAction.getActionDefinitionId(), iActionHandlerZoomOut);
 	}
 	
-	/**
-	 * Un-registers the custom zoom handlers for this editor.
-	 */
+	/** Un-registers the custom zoom handlers for this editor. */
 	private void unregisterZoomHandler() {
 		IWorkbenchWindow window = getSite().getWorkbenchWindow();
-		IHandlerService handlerService = 
-				(IHandlerService) window.getService(IHandlerService.class);
+		IHandlerService handlerService = (IHandlerService) window.getService(IHandlerService.class);
 		
-		if(iZoomInAction != null) {
+		if (iZoomInAction != null) {
 			getActionRegistry().removeAction(iZoomInAction);
 			handlerService.deactivateHandler(iHandlerActivationZoomIn);
 		}
 		
-		if(iZoomOutAction != null) {
+		if (iZoomOutAction != null) {
 			getActionRegistry().removeAction(iZoomOutAction);
 			handlerService.deactivateHandler(iHandlerActivationZoomOut);
 		}
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor#dispose()
+	 */
 	@Override
 	public void dispose() {
 		// Remove key binding support for zooming
@@ -487,9 +497,9 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 
 				});
 
-		mouseListener = new EpcDiagramEditorMouseListener();
-		getGraphicalViewer().getControl().addMouseListener(mouseListener);
-		getGraphicalViewer().getControl().addMouseMoveListener(mouseListener);
+		_mouseListener = new EpcDiagramEditorMouseListener();
+		getGraphicalViewer().getControl().addMouseListener(_mouseListener);
+		getGraphicalViewer().getControl().addMouseMoveListener(_mouseListener);
 	}
 
 	/**
@@ -573,6 +583,10 @@ public class EpcDiagramEditor extends DiagramDocumentEditor implements
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor#getFileExtension()
+	 */
 	@Override
 	public String getFileExtension() {
 		return this.getEditorInput().getName().split("\\.")[1]; //$NON-NLS-1$

@@ -4,6 +4,7 @@ import oepc.diagram.navigator.OepcNavigatorItem;
 import oepc.diagram.nls.NLSSupport;
 
 import org.bflow.toolbox.check.CheckPlugin;
+import org.bflow.toolbox.extensions.BflowDiagramEditor;
 import org.bflow.toolbox.extensions.helpers.EFSUtil;
 import org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor;
 import org.eclipse.core.commands.IHandler;
@@ -30,8 +31,6 @@ import org.eclipse.gmf.runtime.diagram.ui.internal.properties.WorkspaceViewerPro
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDiagramDocument;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDocument;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDocumentProvider;
-import org.eclipse.gmf.runtime.diagram.ui.resources.editor.internal.l10n.EditorMessages;
-import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -63,9 +62,10 @@ import org.eclipse.ui.part.ShowInContext;
 
 /**
  * @generated
- * @version 22/07/13 edited by Arian Storch<arian.storch@bflow.org>
+ * @version 2013-07-22 Edited by Arian Storch<arian.storch@bflow.org>
+ * 			2018-10-07 Changed superclass to BflowDiagramEditor
  */
-public class OepcDiagramEditor extends DiagramDocumentEditor implements
+public class OepcDiagramEditor extends BflowDiagramEditor implements
 		IGotoMarker, IAttributableDocumentEditor {
 
 	/**
@@ -365,26 +365,23 @@ public class OepcDiagramEditor extends DiagramDocumentEditor implements
 	private IHandlerActivation iHandlerActivationZoomIn;
 	private IHandlerActivation iHandlerActivationZoomOut;
 	
-	/**
-	 * Registers custom zoom handlers for this editor.
-	 */
+	/** Registers custom zoom handlers for this editor. */
 	private void registerZoomHandler() {
-		if(iZoomInAction == null)
+		if (iZoomInAction == null)
 			iZoomInAction = new ZoomInAction(getZoomManager());
-		if(iZoomOutAction == null)
+		if (iZoomOutAction == null)
 			iZoomOutAction = new ZoomOutAction(getZoomManager());
 		
 		getActionRegistry().registerAction(iZoomInAction);
 		getActionRegistry().registerAction(iZoomOutAction);
 
 		IWorkbenchWindow window = getSite().getWorkbenchWindow();
-		IHandlerService handlerService = 
-				(IHandlerService) window.getService(IHandlerService.class);
+		IHandlerService handlerService = (IHandlerService) window.getService(IHandlerService.class);
 
-		if(iActionHandlerZoomIn == null)
+		if (iActionHandlerZoomIn == null)
 			iActionHandlerZoomIn = new ActionHandler(iZoomInAction);
 		
-		if(iActionHandlerZoomOut == null)
+		if (iActionHandlerZoomOut == null)
 			iActionHandlerZoomOut = new ActionHandler(iZoomOutAction);
 		
 		iHandlerActivationZoomIn = handlerService.activateHandler(
@@ -393,25 +390,27 @@ public class OepcDiagramEditor extends DiagramDocumentEditor implements
 				iZoomOutAction.getActionDefinitionId(), iActionHandlerZoomOut);
 	}
 	
-	/**
-	 * Un-registers the custom zoom handlers for this editor.
-	 */
+	/** Un-registers the custom zoom handlers for this editor. */
 	private void unregisterZoomHandler() {
 		IWorkbenchWindow window = getSite().getWorkbenchWindow();
 		IHandlerService handlerService = 
 				(IHandlerService) window.getService(IHandlerService.class);
 		
-		if(iZoomInAction != null) {
+		if (iZoomInAction != null) {
 			getActionRegistry().removeAction(iZoomInAction);
 			handlerService.deactivateHandler(iHandlerActivationZoomIn);
 		}
 		
-		if(iZoomOutAction != null) {
+		if (iZoomOutAction != null) {
 			getActionRegistry().removeAction(iZoomOutAction);
 			handlerService.deactivateHandler(iHandlerActivationZoomOut);
 		}
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor#dispose()
+	 */
 	@Override
 	public void dispose() {
 		// Remove key binding support for zooming
@@ -419,14 +418,21 @@ public class OepcDiagramEditor extends DiagramDocumentEditor implements
 		super.dispose();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor#firePropertyChanged()
+	 */
 	@Override
 	public void firePropertyChanged() {
 		this.firePropertyChange(OepcDiagramEditor.PROP_DIRTY);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor#getFileExtension()
+	 */
 	@Override
 	public String getFileExtension() {
 		return this.getEditorInput().getName().split("\\.")[1]; //$NON-NLS-1$
 	}
-
 }
