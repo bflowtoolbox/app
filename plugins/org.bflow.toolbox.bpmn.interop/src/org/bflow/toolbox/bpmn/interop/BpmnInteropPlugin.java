@@ -5,6 +5,9 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
+ * 
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2018-10-05
  */
 public class BpmnInteropPlugin extends AbstractUIPlugin {
 
@@ -13,12 +16,6 @@ public class BpmnInteropPlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static BpmnInteropPlugin plugin;
-	
-	/**
-	 * The constructor
-	 */
-	public BpmnInteropPlugin() {
-	}
 
 	/*
 	 * (non-Javadoc)
