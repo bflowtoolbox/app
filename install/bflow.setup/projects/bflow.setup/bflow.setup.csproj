@@ -101,7 +101,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="img\foldericon.png" />
+    <Resource Include="images\foldericon.png" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">
@@ -115,10 +115,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="img\bee.ico" />
+    <Resource Include="images\bee.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="img\bflow-logo.png" />
+    <Resource Include="images\bflow-logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
