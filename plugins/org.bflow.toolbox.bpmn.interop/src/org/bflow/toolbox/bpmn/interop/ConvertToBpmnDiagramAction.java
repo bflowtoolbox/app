@@ -89,20 +89,20 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 		// Check if the target file exists and ask the user how to proceed
 		if (targetFile.exists()) {
 			if (!MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					"Datei überschreiben?", 
-					"Es existiert bereits eine Datei mit dem gleichen Namen. Soll diese überschrieben werden?")) return;
+					Messages.ConvertToBpmnDiagramAction_MessageDialog_Title, 
+					Messages.ConvertToBpmnDiagramAction_MessageDialog_Hint)) return;
 		}
 		
 		// Perform the conversion
 		File targetFolder = targetFile.getParentFile();		
-		IInterchangeDescriptor descriptor = ExportDescriptorStore.getExportDescription("BPMN");
+		IInterchangeDescriptor descriptor = ExportDescriptorStore.getExportDescription("BPMN"); //$NON-NLS-1$
 		if (descriptor == null) return;
 		
 		try {
 			InterchangeProcessService.processExport(sourceFile, targetFolder, descriptor);
 		} catch (InterchangeProcessingException ex) {
 			throw new RuntimeException(
-					"Error on running model conversion. Check the details.", 
+					Messages.ConvertToBpmnDiagramAction_Error_ModelConversion, 
 					ex);
 		}
 		
@@ -119,7 +119,7 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
 		} catch (CoreException ex) {
 			throw new RuntimeException(
-					"Error in refreshing workspace. Check the details", 
+					Messages.ConvertToBpmnDiagramAction_Error_RefreshWorkspace, 
 					ex);
 		}
 	}
@@ -135,7 +135,7 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 		String sourceFilePath = sourceFile.getAbsolutePath();
 		String sourceFileName = FilenameUtils.getBaseName(sourceFilePath);
 		String sourceFileDirPath = FilenameUtils.getFullPath(sourceFilePath);
-		String targetFilePath = FilenameUtils.concat(sourceFileDirPath, sourceFileName + ".bpmn");
+		String targetFilePath = FilenameUtils.concat(sourceFileDirPath, sourceFileName + ".bpmn"); //$NON-NLS-1$
 		return new File(targetFilePath);
 	}
 	
