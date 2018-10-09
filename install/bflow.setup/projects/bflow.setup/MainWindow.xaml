@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:bflow.setup"
         mc:Ignorable="d"
-        Title="bflow* Toolbox 1.5.0 Installation" Height="380" Width="600" Icon="images/bee.ico" ResizeMode="NoResize">
+        Title="bflow* Toolbox 1.5.0 Installation" 
+        Height="380" 
+        Width="600" 
+        Icon="images/bee.ico" 
+        ResizeMode="NoResize">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
             <GradientStop Color="#FF5FBFFF"/>
@@ -32,7 +36,7 @@
         </StackPanel>
         <Label Grid.Row="1" Content="Installationspfad" HorizontalAlignment="Right" Margin="0,30,-5,0" />
         <WrapPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,30,0,0">
-            <TextBox Name="path" Width="300" Height="Auto" Margin="10,0,0,0" Padding="5" BorderThickness="0.5,0.5,0,0.5" IsReadOnly="True" />
+            <TextBox Name="_textboxPath" Width="300" Height="Auto" Margin="10,0,0,0" Padding="5" BorderThickness="0.5,0.5,0,0.5" IsReadOnly="True" />
             <Button Click="GetPathClick" Background="White" BorderThickness="0,0.5,0.5,0.5" Padding="5">
                 <Button.BorderBrush>
                     <SolidColorBrush Color="#FFABADB3"/>

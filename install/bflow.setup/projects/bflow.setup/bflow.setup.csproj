@@ -95,6 +95,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <EmbeddedResource Include="zippacks\Test.zip" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetZip">
@@ -120,6 +121,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\bflow-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="images\beeDesk.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

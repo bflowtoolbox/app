@@ -15,25 +15,28 @@ namespace bflow.setup
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string _targetPath;
+        private string _targetLang;
+
         public MainWindow()
         {
             InitializeComponent();
         }
-         
+
         private void GetPathClick(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             DialogResult Result = folderBrowserDialog.ShowDialog();
             string Path = folderBrowserDialog.SelectedPath;
-            path.Text = Path;
+            _textboxPath.Text = Path;
         }
 
         private string GetPath()
         {
-            string Path = "";
+            string Path = null;
             Dispatcher.Invoke(() =>
             {
-                Path = path.Text;
+                Path = _textboxPath.Text;
             });
             return Path;
         }
@@ -59,7 +62,7 @@ namespace bflow.setup
                 //What should the application do when there is an error while creating the Ini
                 text += "Fehler";
             }
-            System.IO.File.WriteAllText(@"C:\\Users\\tschiessl\\Documents\\bflow\\bflow.ini", text);
+            System.IO.File.WriteAllText(@"C:\\Users\\tschiessl\\Documents\\bflow\\bflow.ini", text); // Problem
         }
 
         private void CreateShortcut()
@@ -67,15 +70,16 @@ namespace bflow.setup
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "bflow Toolbox" + ".lnk");
             WshShellClass shell = new WshShellClass();
             WshShortcut shortcut = (WshShortcut)shell.CreateShortcut(path);
-            string targetPath = "C:\\Users\\tschiessl\\Documents\\bflow\\bflow Toolbox\\Technikspezialisierung.docx";
+            string targetPath = "C:\\Users\\tschiessl\\Documents\\bflow\\bflow Toolbox\\Technikspezialisierung.docx"; // Problem
             shortcut.TargetPath = targetPath;
             shortcut.WorkingDirectory = Path.GetDirectoryName(targetPath);
             shortcut.Description = "bflow Toolbox";
-            shortcut.IconLocation = "C:\\Users\\tschiessl\\Documents\\Quellcode\\bflow\\install\\bflow.setup\\img\\bee.ico";
+            shortcut.IconLocation = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.images.beeDesk.ico").ToString(); // Problem
+            //System.Windows.MessageBox.Show(shortcut.IconLocation);
             shortcut.Save();
         }
 
-        private int CountFiles(String src)
+        /*private int CountFiles(String src)
         {
             int files = 0;
             using (ZipFile zipFile = ZipFile.Read(src))
@@ -86,7 +90,7 @@ namespace bflow.setup
                 }
             }
             return files;
-        }
+        }*/
 
         private void CloseButtonClick(object sender, RoutedEventArgs e)
         {
@@ -95,15 +99,21 @@ namespace bflow.setup
 
         private void DoZipClick(object sender, RoutedEventArgs e)
         {
+            _targetPath = _textboxPath.Text;
+            _targetLang = language.Text;
             BackgroundWorker worker = new BackgroundWorker();
             worker.RunWorkerCompleted += worker_RunWorkerCompleted;
             worker.WorkerReportsProgress = true;
             worker.DoWork += worker_DoWork;
             worker.ProgressChanged += worker_ProgressChanged;
-            worker.RunWorkerAsync(10000);
-            string path = this.path.Text;
+            worker.RunWorkerAsync(1000);
+            string path = this._textboxPath.Text;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progBar.Value = e.ProgressPercentage;
@@ -113,65 +123,51 @@ namespace bflow.setup
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
             var worker = sender as BackgroundWorker;
-            string packageName = "bflow-1.5.0.zip";
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.zippacks." + packageName)) {
+            string packageName = "Test.zip";// bflow-1.5.0.zip";
+            ExtractExistingFileAction fileAction = ExtractExistingFileAction.Throw;
+            
+            if (Directory.Exists(_targetPath) && Directory.GetFiles(_targetPath).Length > 0)
+            {
+                MessageBoxResult result = System.Windows.MessageBox.Show("Es existiert bereits ein Verzeichnis! Soll das Verzeichnis überschrieben werden?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        fileAction = ExtractExistingFileAction.OverwriteSilently;
+                        break;
+                    case MessageBoxResult.No:
+                        System.Windows.MessageBox.Show("Die Installation wird abgebrochen.", "bflow* Toolbox 1.5.0", MessageBoxButton.OK);
+                        break;
+                }
+            }
+            fileAction = ExtractExistingFileAction.OverwriteSilently; // has to be corrected later on
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.zippacks." + packageName))
+            {
                 if (stream == null) throw new InvalidOperationException("Could not open stream to package");
 
-                using (ZipFile zipFile = ZipFile.Read(stream)) {
-                    // TODO @TSC Use this stream
-                }
-            }
+                Dispatcher.Invoke(() =>
+                {
+                    progress.Visibility = Visibility.Visible; // kein Dispatcher
+                });
 
-            string src = "C:\\Users\\tschiessl\\Documents\\bflow\\bflow Toolbox.zip";
-            string dest = "C:\\Users\\tschiessl\\Documents\\bflow\\bflow Toolbox";
-            int filesMax = CountFiles(src);
-            using (ZipFile zipFile = ZipFile.Read(src))
-            {
-                if (Directory.Exists(dest) && Directory.GetFiles(dest).Length > 0)
+                int filesMax = 5; //int filesMax = CountFiles(stream.ToString());
+                using (ZipFile zipFile = ZipFile.Read(stream))
                 {
-                    MessageBoxResult result = System.Windows.MessageBox.Show("Es existiert bereits ein Verzeichnis! Soll das Verzeichnis überschrieben werden?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
-                    switch (result)
+                    worker.ReportProgress(0, string.Format("Kopiere 0/{0} Dateien", filesMax));
+                    int fileCount = 0;
+                    while (fileCount < filesMax)
                     {
-                        case MessageBoxResult.Yes:
-                            Dispatcher.Invoke(() =>
-                            {
-                                progress.Visibility = Visibility.Visible;
-                            });
-                            foreach (ZipEntry i in zipFile)
-                            {
-                                i.Extract(GetPath(), ExtractExistingFileAction.OverwriteSilently);
-                            }
-                            CreateIni();
-                            CreateShortcut();
-                            break;
-                        case MessageBoxResult.No:
-                            System.Windows.MessageBox.Show("Die Installation wird abgebrochen.", "bflow* Toolbox 1.5.0", MessageBoxButton.OK);
-                            break;
+                        Thread.Sleep(500); //This line has to be removed in the end
+                        foreach (ZipEntry a in zipFile)
+                        {
+                            a.Extract(GetPath(), fileAction);
+                            worker.ReportProgress((fileCount + 1) * (100 / filesMax), string.Format("Kopiere {0}/{1} Dateien", fileCount + 1, filesMax));
+                            fileCount++;
+                        }
                     }
                 }
-                else
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        progress.Visibility = Visibility.Visible;
-                    });
-                    foreach (ZipEntry i in zipFile)
-                    {
-                        i.Extract(GetPath());
-                    }
-                    CreateIni();
-                    CreateShortcut();
-                }
             }
-            worker.ReportProgress(0, string.Format("Kopiere 0/{0} Dateien", filesMax));
-            for (int i = 0; i < filesMax; i++)
-            {
-                Thread.Sleep(500); //This line has to be removed in the end
-                worker.ReportProgress((i + 1) * (100/filesMax), string.Format("Kopiere {0}/{1} Dateien", i + 1, filesMax));
-            }
-            worker.ReportProgress(100, "Installation abgeschlossen."); 
         }
-
+        
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             System.Windows.MessageBox.Show("Die Installation war erfolgreich!", "bflow* Toolbox 1.5.0", MessageBoxButton.OK);
