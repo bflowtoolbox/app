@@ -157,7 +157,7 @@ namespace bflow.setup
             for (int i = 0; i < filesMax; i++)
             {
                 Thread.Sleep(500); //This line has to be removed in the end
-                worker.ReportProgress((i + 1) * (100/filesMax), sString.Format("Kopiere {0}/{1} Dateien", i + 1, filesMax));
+                worker.ReportProgress((i + 1) * (100/filesMax), string.Format("Kopiere {0}/{1} Dateien", i + 1, filesMax));
             }
             worker.ReportProgress(100, "Installation abgeschlossen."); 
         }
