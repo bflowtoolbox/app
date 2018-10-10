@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:bflow.setup"
         mc:Ignorable="d"
+        Closing="OnHandleExitButtonClick"
         Title="bflow* Toolbox 1.5.0 Installation" 
-        Height="380" 
-        Width="600" 
+        Height="400" 
+        Width="590" 
         Icon="images/bee.ico" 
         ResizeMode="NoResize">
     <Window.Background>
@@ -28,16 +29,17 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Image Source="images/bflow-logo.png" Height="65" Margin="10"/>
         <StackPanel Grid.Column="1" Margin="10,0,0,0">
-            <TextBlock TextWrapping="Wrap" FontSize="22" Margin="0,0,0,5">bflow* Toolbox 1.5.0 Installation</TextBlock>
-            <TextBlock TextWrapping="Wrap">Installationsanleitung für <Bold>bflow* Toolbox 1.5.0</Bold><LineBreak />Wählen Sie einen Pfad aus und klicken Sie auf <Italic>Installieren</Italic></TextBlock>
+            <TextBlock TextWrapping="Wrap" FontSize="24" FontWeight="DemiBold" Margin="0,0,0,5">bflow* Toolbox 1.5.0 Installation</TextBlock>
+            <TextBlock TextWrapping="Wrap">Wählen Sie den Installationspfad und die gewünschte Sprache aus und starten Sie die Installation mit einem Klick auf <Italic>Installieren</Italic>.</TextBlock>
         </StackPanel>
         <Label Grid.Row="1" Content="Installationspfad" HorizontalAlignment="Right" Margin="0,30,-5,0" />
         <WrapPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,30,0,0">
             <TextBox Name="_textboxPath" Width="300" Height="Auto" Margin="10,0,0,0" Padding="5" BorderThickness="0.5,0.5,0,0.5" IsReadOnly="True" />
-            <Button Click="GetPathClick" Background="White" BorderThickness="0,0.5,0.5,0.5" Padding="5">
+            <Button Click="OnHandleBrowseButtonClick" Background="White" BorderThickness="0,0.5,0.5,0.5" Padding="5" Name="BrowseButton">
                 <Button.BorderBrush>
                     <SolidColorBrush Color="#FFABADB3"/>
                 </Button.BorderBrush>
@@ -45,28 +47,18 @@
             </Button>
         </WrapPanel>
         <Label Grid.Row="2" Content="Sprache" HorizontalAlignment="Right" Margin="0,10,-5,0" />
-        <ComboBox Grid.Row="2" Name="language" Grid.Column="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="Auto" Margin="10,10,0,0" Padding="5">
+        <ComboBox Grid.Row="2" Name="_selectLanguage" Grid.Column="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="Auto" Margin="10,10,0,0" Padding="5">
             <ComboBoxItem IsSelected="True">Deutsch</ComboBoxItem>
             <ComboBoxItem>Englisch</ComboBoxItem>
         </ComboBox>
-        <StackPanel Grid.Row="3" Grid.Column="1" Margin="10,30,0,0" HorizontalAlignment="Left" Visibility="Hidden" Name="progress">
+        <StackPanel Grid.Row="3" Grid.Column="1" Margin="10,35,0,0" HorizontalAlignment="Left" Visibility="Hidden" Name="showProgress">
             <ProgressBar Height="20" Width="325" Name="progBar" Minimum="0" Maximum="100" Foreground="#FF5FBFFF" />
-            <TextBlock Margin="0,0,0,5" Name="progText" />
+            <TextBlock Margin="0,5,0,5" Name="progBarText" />
         </StackPanel>
-        <WrapPanel Grid.Row="4" Grid.Column="1" Margin="15,25,0,0" HorizontalAlignment="Right">
-            <Button Click="DoZipClick" Content="Installieren" Height="Auto" Width="Auto" Padding="5" Margin="0,0,10,0">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="IsEnabled" Value="True" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Text, ElementName=path}" Value="">
-                                <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Click="CloseButtonClick" Content="Schließen" Width="Auto" Padding="5" />
+        <Separator Grid.Row="4" Grid.ColumnSpan="2" Margin="0,20,0,0" Width="550" SnapsToDevicePixels="True" />
+        <WrapPanel Grid.Row="5" Grid.Column="1" Margin="15,15,0,0" HorizontalAlignment="Right">
+            <Button Click="OnHandleInstallButtonClick" Content="Installieren" Height="Auto" Width="70" Padding="5" Margin="0,0,10,0" IsEnabled="False" Name="InstallButton" />
+            <Button Click="OnHandleCloseButtonClick" Content="Schließen" Width="70" Padding="5" />
         </WrapPanel>
     </Grid>
 </Window>
