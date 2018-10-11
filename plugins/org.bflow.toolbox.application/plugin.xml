@@ -45,7 +45,7 @@
          </property>
          <property
                name="startupForegroundColor"
-               value="C8D5EA">
+               value="000000">
          </property>
          <property
                name="startupMessageRect"
