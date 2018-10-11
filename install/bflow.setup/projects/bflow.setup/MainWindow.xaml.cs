@@ -15,21 +15,32 @@ namespace bflow.setup {
     public partial class MainWindow : Window {
         private string _targetPath;
         private string _targetLang;
+        private bool _doOverwrite;
         private bool _hasInstallStarted = false;
         private bool _hasInstallFinished = false;
+        private bool _pauseBackgroundworker = false;
         private BackgroundWorker worker;
-
+        
         public MainWindow() {
             InitializeComponent();
         }
 
         private void OnHandleBrowseButtonClick(object sender, RoutedEventArgs e) {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            folderBrowserDialog.RootFolder = Environment.SpecialFolder.Desktop;
             DialogResult result = folderBrowserDialog.ShowDialog();
             string selectedPath = folderBrowserDialog.SelectedPath;
             _textboxPath.Text = selectedPath;
-            if (_textboxPath.Text != string.Empty) {
-                InstallButton.IsEnabled = true;
+            if (result == System.Windows.Forms.DialogResult.Cancel) {
+                _textboxPath.Text = "C:\\Users\\tschiessl\\Documents\\bflow\\bflow"; //später ändern
+            }
+        }
+
+        private void changeCloseButtonText() {
+            if (_hasInstallStarted) {
+                _closeButton.Content = "Abbrechen";
+            } else {
+                _closeButton.Content = "Schließen";
             }
         }
 
@@ -64,56 +75,82 @@ namespace bflow.setup {
             shortcut.TargetPath = targetPath;
             shortcut.WorkingDirectory = Path.GetDirectoryName(targetPath);
             shortcut.Description = "bflow Toolbox";
-            shortcut.IconLocation = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.images.beeDesk.ico").ToString(); // Problem
-            //System.Windows.MessageBox.Show(shortcut.IconLocation);
+            using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.images.beeDesk.ico")) {
+                using (var file = new FileStream("C:\\Users\\tschiessl\\Documents\\bflow\\bflow\\beeDesk.ico", FileMode.Create, FileAccess.Write)) {
+                    resource.CopyTo(file);
+                }
+            }
+            shortcut.IconLocation = "C:\\Users\\tschiessl\\Documents\\bflow\\bflow\\beeDesk.ico"; // Problem
             shortcut.Save();
         }
 
         private void OnHandleCloseButtonClick(object sender, RoutedEventArgs e) {
             if (_hasInstallStarted == false || _hasInstallFinished == true) {
-                MessageBoxResult result = System.Windows.MessageBox.Show("Möchten Sie das Programm schließen?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
-                switch (result) {
-                    case MessageBoxResult.Yes:
-                        Close();
-                        break;
-                    case MessageBoxResult.No:
-                        break;
-                }
+                Close();
             } else if (_hasInstallStarted == true && _hasInstallFinished == false) {
+                _pauseBackgroundworker = true;
                 MessageBoxResult result = System.Windows.MessageBox.Show("Möchten Sie die Installation abbrechen?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
+                _pauseBackgroundworker = false;
                 switch (result) {
                     case MessageBoxResult.Yes:
                         worker.CancelAsync();
                         Dispatcher.Invoke(() => {
                             showProgress.Visibility = Visibility.Hidden;
                         });
+                        _hasInstallStarted = false;
+                        changeCloseButtonText();
                         break;
                     case MessageBoxResult.No:
-                        break;
+                        return;
                 }
             }
         }
 
         private void OnHandleExitButtonClick(object sender, System.ComponentModel.CancelEventArgs e) {
-            /*MessageBoxResult result = System.Windows.MessageBox.Show("Möchten Sie die Installation abbrechen?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
-            switch (result) {
-                case MessageBoxResult.Yes:
-                    e.Cancel = false;
-                    break;
-                case MessageBoxResult.No:
-                    e.Cancel = true;
-                    break;
-            }*/
+            if (_hasInstallStarted == false || _hasInstallFinished == true) {
+                MessageBoxResult result = System.Windows.MessageBox.Show("Möchten Sie das Programm schließen?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
+                switch (result) {
+                    case MessageBoxResult.Yes:
+                        e.Cancel = false;
+                        break;
+                    case MessageBoxResult.No:
+                        e.Cancel = true;
+                        break;
+                }
+            } else if (_hasInstallStarted == true && _hasInstallFinished == false) {
+                e.Cancel = true;
+                _pauseBackgroundworker = true;
+                MessageBoxResult result = System.Windows.MessageBox.Show("Möchten Sie die Installation abbrechen?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
+                _pauseBackgroundworker = false;
+                switch (result) {
+                    case MessageBoxResult.Yes:
+                        worker.CancelAsync();
+                        Dispatcher.Invoke(() => {
+                            showProgress.Visibility = Visibility.Hidden;
+                        });
+                        _hasInstallStarted = false;
+                        changeCloseButtonText();
+                        break;
+                    case MessageBoxResult.No:
+                        return;
+                }
+            }
+        }
+
+        private void EnableUI(bool enable) {
+            _textboxPath.IsEnabled = enable;
+            _selectLanguage.IsEnabled = enable;
+            BrowseButton.IsEnabled = enable;
+            InstallButton.IsEnabled = enable;
         }
 
         private void OnHandleInstallButtonClick(object sender, RoutedEventArgs e) {
             _targetPath = _textboxPath.Text;
             _targetLang = _selectLanguage.Text;
             _hasInstallStarted = true;
-            _textboxPath.IsEnabled = false;
-            _selectLanguage.IsEnabled = false;
-            BrowseButton.IsEnabled = false;
-            InstallButton.IsEnabled = false;
+            EnableUI(false);
+            _doOverwrite = doOverwrite(_targetPath);
+            changeCloseButtonText();
             worker = new BackgroundWorker();
             worker.WorkerSupportsCancellation = true;
             worker.RunWorkerCompleted += worker_RunWorkerCompleted;
@@ -128,21 +165,29 @@ namespace bflow.setup {
             progBarText.Text = (string)e.UserState;
         }
 
+        private bool doOverwrite(string directory) {
+            if (Directory.Exists(directory) && Directory.GetFiles(directory, "*", SearchOption.AllDirectories).Length > 0) {
+                MessageBoxResult result = System.Windows.MessageBox.Show("Es existiert bereits ein Verzeichnis! Soll das Verzeichnis überschrieben werden?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.No) {
+                    System.Windows.MessageBox.Show("Die Installation wird abgebrochen.", "bflow* Toolbox 1.5.0", MessageBoxButton.OK);
+                    EnableUI(true);
+                    _hasInstallStarted = false;
+                    return false;
+                }
+            }
+            return true;
+        }
+
         private void worker_DoWork(object sender, DoWorkEventArgs e) {
             var worker = sender as BackgroundWorker;
             string packageName = "Test.zip";// bflow-1.5.0.zip";
             ExtractExistingFileAction fileAction = ExtractExistingFileAction.Throw;
-            if (Directory.Exists(_targetPath) && Directory.GetFiles(_targetPath, "*", SearchOption.AllDirectories).Length > 0) {
-                MessageBoxResult result = System.Windows.MessageBox.Show("Es existiert bereits ein Verzeichnis! Soll das Verzeichnis überschrieben werden?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
-                switch (result) {
-                    case MessageBoxResult.Yes:
-                        fileAction = ExtractExistingFileAction.OverwriteSilently;
-                        break;
-                    case MessageBoxResult.No:
-                        System.Windows.MessageBox.Show("Die Installation wird abgebrochen.", "bflow* Toolbox 1.5.0", MessageBoxButton.OK);
-                        return;
-                }
+            if (_doOverwrite) {
+                fileAction = ExtractExistingFileAction.OverwriteSilently;
+            } else {
+                return;
             }
+
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.zippacks." + packageName)) {
                 if (stream == null) throw new InvalidOperationException("Could not open stream to package");
 
@@ -158,32 +203,38 @@ namespace bflow.setup {
                     }
                     worker.ReportProgress(0, string.Format("Kopiere 0/{0} Dateien", filesMax));
                     while (fileCount < filesMax) {
-                        if (worker.CancellationPending == false) {
-                            foreach (ZipEntry j in zipFile) {
-                                Thread.Sleep(1000);
+                        foreach (ZipEntry j in zipFile) {
+                            while (_pauseBackgroundworker) {
+                                Thread.Sleep(500);
+                            }
+                            if (worker.CancellationPending == false) {
+                                Thread.Sleep(200); //has to be deleted later on
                                 j.Extract(GetPathFromTextbox(), fileAction);
                                 worker.ReportProgress((fileCount + 1) * (100 / filesMax), string.Format("Kopiere {0}/{1} Dateien", fileCount + 1, filesMax));
                                 fileCount++;
+                            } else {
+                                _hasInstallStarted = false;
+                                Dispatcher.Invoke(() => {
+                                    EnableUI(true);
+                                });
+                                return;
                             }
-                            CreateIni();
-                            CreateShortcut();
-                            _hasInstallFinished = true;
-                        } else {
-                            //worker.CancelAsync();
-                            return;
                         }
                     }
+                    CreateIni();
+                    CreateShortcut();
+                    _hasInstallFinished = true;
                 }
             }
         }
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            if (_hasInstallFinished == true && worker.CancellationPending == false) {
+            if (_hasInstallFinished) {
                 System.Windows.MessageBox.Show("Die Installation war erfolgreich!", "bflow* Toolbox 1.5.0", MessageBoxButton.OK);
+                _hasInstallStarted = false;
+                changeCloseButtonText();
             }
-            //progBar.Value = 0;
             progBarText.Text = "Installation abgeschlossen.";
-            //Close();
         }
 
     }
