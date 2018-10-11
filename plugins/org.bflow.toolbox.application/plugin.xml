@@ -19,7 +19,13 @@
             class="org.bflow.toolbox.application.FeaturedBflowPerspective"
             icon="icons/bee16a.png"
             id="org.bflow.toolbox.application.perspective.featured"
-            name="Bflow Perspective">
+            name="Bflow Perspective (Featured)">
+      </perspective>
+      <perspective
+            class="org.bflow.toolbox.application.DefaultBflowPerspective"
+            icon="icons/bee16a.png"
+            id="org.bflow.toolbox.application.perspective.default"
+            name="Bflow Perspective (Default)">
       </perspective>
    </extension>
    <extension

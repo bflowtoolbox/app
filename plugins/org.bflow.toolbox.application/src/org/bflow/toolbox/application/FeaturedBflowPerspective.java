@@ -12,7 +12,7 @@ import org.eclipse.ui.console.IConsoleConstants;
 
 /**
  * Implements {@link IPerspectiveFactory} to provide a default
- * configuration for operating with common bflow features.
+ * perspective configuration with all bflow features.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2012-02-27
@@ -24,12 +24,12 @@ import org.eclipse.ui.console.IConsoleConstants;
 public class FeaturedBflowPerspective implements IPerspectiveFactory {
 	
 	/** Unique perspective id */
-	public static final String PerspectiveId = "org.bflow.toolbox.application.perspective.featured";
+	public static final String Id = "org.bflow.toolbox.application.perspective.featured";
 	
-	private static final String LeftTopFolderId = "bflow.leftTopFolder";
-	private static final String LeftBottomFolderId = "bflow.leftBottomFolder";
-	private static final String RightTopFolderId = "bflow.rightTopFolder";
-	private static final String BottomFolderId = "bflow.bottomFolder";
+	private static final String LeftTopFolderId = "bflow.perspective.featured.leftTopFolder";
+	private static final String LeftBottomFolderId = "bflow.perspective.featured.leftBottomFolder";
+	private static final String RightTopFolderId = "bflow.perspective.featured.rightTopFolder";
+	private static final String BottomFolderId = "bflow.perspective.featured.bottomFolder";
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IPerspectiveFactory#createInitialLayout(org.eclipse.ui.IPageLayout)
