@@ -4,6 +4,7 @@ Bundle-Name: Bflow BPMN Diagram
 Bundle-SymbolicName: org.bflow.toolbox.bpmn.diagram;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Bflow Dev Team
+Bundle-Localization: plugin
 Automatic-Module-Name: org.bflow.toolbox.bpmn.diagram
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.ui,
