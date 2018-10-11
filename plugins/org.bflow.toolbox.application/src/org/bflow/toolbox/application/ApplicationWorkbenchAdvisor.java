@@ -11,6 +11,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
     }
 
 	public String getInitialWindowPerspectiveId() {
-		return BflowPerspective.PerspectiveId;
+		return FeaturedBflowPerspective.PerspectiveId;
 	}
 }

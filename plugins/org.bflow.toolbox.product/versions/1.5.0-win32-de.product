@@ -3,12 +3,11 @@
 
 <product name="%productName" uid="org.bflow.toolbox.application.product" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="1.5.0.qualifier" useFeatures="false" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
    <launcherArgs>
-      <programArgs>-perspective org.bflow.toolbox.application.perspective
+      <programArgs>-perspective org.bflow.toolbox.application.perspective.featured
 -nl de_DE
       </programArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
@@ -34,7 +33,6 @@
             winExtraLargeHigh="/org.bflow.toolbox.product/icons/bee256_32bit.bmp"/>
       </win>
    </launcher>
-
 
    <vm>
       <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>

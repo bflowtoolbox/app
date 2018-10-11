@@ -15,17 +15,16 @@ import org.eclipse.ui.console.IConsoleConstants;
  * configuration for operating with common bflow features.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 27.02.12
- * @version 30.12.13
- * 			25.08.15 Changed order of view parts at the bottom
+ * @since 2012-02-27
+ * @version 2013-12-30
+ * 			2015-08-25 Changed order of view parts at the bottom
+ * 			2018-10-11 Renamed from BflowPerspective to FeaturedBflowPerspective
  *
  */
-public class BflowPerspective implements IPerspectiveFactory {
+public class FeaturedBflowPerspective implements IPerspectiveFactory {
 	
-	/**
-	 * Unique perspective id
-	 */
-	public static final String PerspectiveId = "org.bflow.toolbox.application.perspective";
+	/** Unique perspective id */
+	public static final String PerspectiveId = "org.bflow.toolbox.application.perspective.featured";
 	
 	private static final String LeftTopFolderId = "bflow.leftTopFolder";
 	private static final String LeftBottomFolderId = "bflow.leftBottomFolder";
@@ -59,5 +58,4 @@ public class BflowPerspective implements IPerspectiveFactory {
 		bottomFolder.addView(AnnotationRuleViewPart.VIEW_ID);
 		bottomFolder.addView(AttributeFilterViewPart.VIEW_ID);
 	}
-
 }

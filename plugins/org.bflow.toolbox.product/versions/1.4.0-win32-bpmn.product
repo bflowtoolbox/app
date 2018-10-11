@@ -14,10 +14,13 @@
    </configIni>
 
    <launcherArgs>
-      <programArgs>-perspective org.bflow.toolbox.application.perspective 
--nl en_US</programArgs>
-      <vmArgs>-Xms40m -Xmx512m -Dosgi.requiredJavaVersion=1.7</vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+      <programArgs>-perspective org.bflow.toolbox.application.perspective.featured
+-nl en_US
+      </programArgs>
+      <vmArgs>-Xms40m -Xmx512m -Dosgi.requiredJavaVersion=1.7
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="/org.bflow.toolbox.product/icons/bee16a.png" i32="/org.bflow.toolbox.product/icons/bee32.png" i48="/org.bflow.toolbox.product/icons/bee48.png" i64="/org.bflow.toolbox.product/icons/bee64.png" i128="/org.bflow.toolbox.product/icons/bee128.png"/>
@@ -28,7 +31,6 @@
       startupMessageRect="7,220,441,20"
       startupForegroundColor="C8D5EA" />
    <launcher name="bflow">
-      <solaris/>
       <win useIco="false">
          <bmp
             winSmallHigh="/org.bflow.toolbox.product/icons/bee16_32bit.bmp"

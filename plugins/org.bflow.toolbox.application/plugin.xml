@@ -16,9 +16,9 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="org.bflow.toolbox.application.BflowPerspective"
+            class="org.bflow.toolbox.application.FeaturedBflowPerspective"
             icon="icons/bee16a.png"
-            id="org.bflow.toolbox.application.perspective"
+            id="org.bflow.toolbox.application.perspective.featured"
             name="Bflow Perspective">
       </perspective>
    </extension>

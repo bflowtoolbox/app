@@ -1,4 +1,4 @@
-package org.bflow.toolbox.application.internal;
+package org.bflow.toolbox.application;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -7,20 +7,14 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class PluginActivator extends AbstractUIPlugin {
+public class BflowApplicationPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.bflow.toolbox.application"; //$NON-NLS-1$
 
 	// The shared instance
-	private static PluginActivator plugin;
+	private static BflowApplicationPlugin plugin;
 	
-	/**
-	 * The constructor
-	 */
-	public PluginActivator() {
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
@@ -44,7 +38,7 @@ public class PluginActivator extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static PluginActivator getDefault() {
+	public static BflowApplicationPlugin getDefault() {
 		return plugin;
 	}
 
