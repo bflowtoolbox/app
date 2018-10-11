@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
+Bundle-Name: Bflow VC Diagram
 Bundle-SymbolicName: org.bflow.toolbox.vc.diagram; singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: vcchart.diagram.part.VcDiagramEditorPlugin
-Bundle-Vendor: %providerName
+Bundle-Vendor: Bflow Dev Team
 Bundle-Localization: plugin
 Export-Package: vcchart.diagram.edit.parts,
  vcchart.diagram.part,
