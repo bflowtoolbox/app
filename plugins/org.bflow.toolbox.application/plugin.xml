@@ -7,6 +7,7 @@
          point="org.eclipse.core.runtime.applications">
       <application
             cardinality="singleton-global"
+            icon="icons/bee16a.png"
             thread="main">
          <run
                class="org.bflow.toolbox.application.Application">
@@ -32,15 +33,31 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            application="org.bflow.toolbox.application.application"
-            name="Bflow* Toolbox">
+            application="org.eclipse.ui.ide.workbench"
+            name="bflow* Toolbox 1.5.0">
          <property
                name="windowImages"
-               value="icons/alt_window_16.gif,icons/alt_window_32.gif">
+               value="platform:/plugin/org.bflow.toolbox.product/icons/bee16a.png,platform:/plugin/org.bflow.toolbox.product/icons/bee32.png,platform:/plugin/org.bflow.toolbox.product/icons/bee48.png,platform:/plugin/org.bflow.toolbox.product/icons/bee64.png,platform:/plugin/org.bflow.toolbox.product/icons/bee128.png,platform:/plugin/org.bflow.toolbox.product/icons/bee256.png">
          </property>
          <property
                name="appName"
-               value="Bflow* Toolbox">
+               value="bflow* Toolbox 1.5.0">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="C8D5EA">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="7,252,445,20">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="5,275,445,15">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
          </property>
       </product>
    </extension>

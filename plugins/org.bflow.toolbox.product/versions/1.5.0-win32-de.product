@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="%productName" uid="org.bflow.toolbox.application.product" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="1.5.0.qualifier" useFeatures="false" includeLaunchers="true">
+<product name="bflow* Toolbox 1.5.0" uid="org.bflow.toolbox.application.product" id="org.bflow.toolbox.application.product" application="org.eclipse.ui.ide.workbench" version="1.5.0.qualifier" useFeatures="false" includeLaunchers="true">
 
    <configIni use="default">
    </configIni>
 
    <launcherArgs>
-      <programArgs>-perspective org.bflow.toolbox.application.perspective.featured
+      <programArgs>-perspective org.bflow.toolbox.application.perspective.default
 -nl de_DE
       </programArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
@@ -20,7 +20,7 @@
       location="org.bflow.toolbox.product"
       startupProgressRect="5,275,445,15"
       startupMessageRect="7,252,445,20"
-      startupForegroundColor="C8D5EA" />
+      startupForegroundColor="000000" />
    <launcher name="bflow">
       <win useIco="false">
          <bmp
