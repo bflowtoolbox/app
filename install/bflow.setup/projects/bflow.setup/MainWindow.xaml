@@ -39,8 +39,12 @@
         </StackPanel>
         <Label Grid.Row="1" Content="Installationspfad" HorizontalAlignment="Right" Margin="0,30,-5,0" />
         <WrapPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,30,0,0">
-            <TextBox Name="_textboxPath" Text="C:\Users\tschiessl\Documents\bflow\bflow" Width="300" Height="Auto" Margin="10,0,0,0" Padding="5" BorderThickness="0.5,0.5,0,0.5" IsReadOnly="True" />
-            <Button Click="OnHandleBrowseButtonClick" Background="White" BorderThickness="0,0.5,0.5,0.5" Padding="5" Name="BrowseButton">
+            <TextBox Name="_textboxPath" 
+                     Text="{Binding Path=TargetPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                     Width="300" Height="Auto" Margin="10,0,0,0" Padding="5" BorderThickness="0.5,0.5,0,0.5" IsReadOnly="True" 
+                     IsEnabled="{Binding Path=TextboxPathIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            <Button Click="OnHandleBrowseButtonClick" Background="White" BorderThickness="0,0.5,0.5,0.5" Padding="5" Name="BrowseButton"
+                    IsEnabled="{Binding Path=BrowseButtonIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                 <Button.BorderBrush>
                     <SolidColorBrush Color="#FFABADB3"/>
                 </Button.BorderBrush>
@@ -48,17 +52,23 @@
             </Button>
         </WrapPanel>
         <Label Grid.Row="2" Content="Sprache" HorizontalAlignment="Right" Margin="0,10,-5,0" />
-        <ComboBox Grid.Row="2" Name="_selectLanguage" Grid.Column="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="Auto" Margin="10,10,0,0" Padding="5">
+        <ComboBox Grid.Row="2" 
+                  Name="_selectLanguage" 
+                  Text="{Binding Path=TargetLang, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                  Grid.Column="1"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="Auto" Margin="10,10,0,0" Padding="5"
+                  IsEnabled="{Binding Path=SelectLanguageIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
             <ComboBoxItem IsSelected="True">Deutsch</ComboBoxItem>
             <ComboBoxItem>Englisch</ComboBoxItem>
         </ComboBox>
-        <StackPanel Grid.Row="3" Grid.Column="1" Margin="10,35,0,0" HorizontalAlignment="Left" Visibility="Hidden" Name="showProgress">
+        <StackPanel Grid.Row="3" Grid.Column="1" Margin="10,35,0,0" HorizontalAlignment="Left" Visibility="{Binding Path=ProgressVisibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Name="showProgress">
             <ProgressBar Height="20" Width="325" Name="progBar" Minimum="0" Maximum="100" Foreground="#FF5FBFFF" />
             <TextBlock Margin="0,5,0,5" Name="progBarText" />
         </StackPanel>
         <Separator Grid.Row="4" Grid.ColumnSpan="2" Margin="-15,20,-15,0" Width="545" SnapsToDevicePixels="True" />
         <WrapPanel Grid.Row="5" Grid.Column="1" Margin="15,5,0,0" HorizontalAlignment="Right">
-            <Button Click="OnHandleInstallButtonClick" Content="Installieren" Height="Auto" Width="70" Padding="5" Margin="0,0,10,0" IsEnabled="True" Name="InstallButton" />
+            <Button Click="OnHandleInstallButtonClick" Content="Installieren" Height="Auto" Width="70" Padding="5" Margin="0,0,10,0" 
+                    IsEnabled="{Binding Path=InstallButtonIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                    Name="InstallButton" />
             <Button Name="_closeButton" Click="OnHandleCloseButtonClick" Content="Schließen" Width="70" Padding="5" />
         </WrapPanel>
     </Grid>
