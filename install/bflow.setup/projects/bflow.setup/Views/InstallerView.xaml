@@ -1,11 +1,17 @@
-﻿<UserControl x:Class="bflow.setup.Views.InstallerView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:bflow.setup.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="363" d:DesignWidth="555">
+﻿<UserControl x:Class = "bflow.setup.Views.InstallerView" 
+   xmlns = "http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+   xmlns:x = "http://schemas.microsoft.com/winfx/2006/xaml" 
+   xmlns:mc = "http://schemas.openxmlformats.org/markup-compatibility/2006" 
+   xmlns:d = "http://schemas.microsoft.com/expression/blend/2008" 
+   xmlns:local = "clr-namespace:bflow.setup.Views" 
+   xmlns:viewModel = "clr-namespace:bflow.setup.ViewModel" 
+   xmlns:vml = "clr-namespace:bflow.setup.VML" 
+   vml:ViewModelLocator.AutoHookedUpViewModel = "True" 
+   mc:Ignorable = "d" d:DesignHeight = "300" d:DesignWidth = "300">
+
+    <!--<UserControl.DataContext>
+        <viewModel:InstallerViewModel/>
+    </UserControl.DataContext>-->
 
     <ItemsControl ItemsSource="{Binding Path= Installer}">
         <ItemsControl.ItemTemplate>
@@ -62,8 +68,9 @@
                     IsEnabled="{Binding Path=InstallButtonIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                     Name="InstallButton" />
                         <!--Click="OnHandleInstallButtonClick"-->
-                        <Button Name="_closeButton" Command ="{Binding CloseCommand}" Content="{Binding Path=CloseButtonText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="70" Padding="5" />
+                        <Button Name="_closeButton"  Command ="{Binding CloseCommand}" Content="{Binding Path=CloseButtonText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsEnabled="True" Width="70" Padding="5" />
                         <!--Click="OnHandleCloseButtonClick"-->
+                        <!--Command ="{Binding CloseCommand}"-->
                     </WrapPanel>
                 </Grid>
             </DataTemplate>

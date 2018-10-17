@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Input;
 using bflow.setup.Model;
 using static bflow.setup.Model.InstallerModel;
 
@@ -11,7 +12,7 @@ namespace bflow.setup.ViewModel {
 
         public InstallerViewModel() {
             LoadInstaller();
-            CloseCommand = new MyICommand(OnClose);
+            CloseCommand = new MyICommand(OnClose, CanClose);
         }
 
         public ObservableCollection<Installer> Installer {
@@ -36,8 +37,25 @@ namespace bflow.setup.ViewModel {
             Installer = installer;
         }
 
+        private Installer _selectedStudent;
+
+        public Installer SelectedStudent {
+            get {
+                return _selectedStudent;
+            }
+
+            set {
+                _selectedStudent = value;
+                CloseCommand.RaiseCanExecuteChanged();
+            }
+        }
+
         private void OnClose() {
-            MessageBox.Show("Hello");
+            System.Windows.MessageBox.Show("Hello");
+        }
+
+        private bool CanClose() {
+            return SelectedStudent != null;
         }
     }
 }

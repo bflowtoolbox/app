@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="VML\ViewModelLocator.cs" />
     <Page Include="Views\InstallerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

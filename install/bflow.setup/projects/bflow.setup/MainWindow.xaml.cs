@@ -5,7 +5,7 @@ namespace bflow.setup {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        
+
         public MainWindow() {
             InitializeComponent();
         }
@@ -15,7 +15,7 @@ namespace bflow.setup {
                new bflow.setup.ViewModel.InstallerViewModel();
             installerViewModelObject.LoadInstaller();
 
-            InstallerViewControl.DataContext = installerViewModelObject;
+            //InstallerViewControl.DataContext = installerViewModelObject;
         }
     }
 }
