@@ -15,7 +15,7 @@ namespace bflow.setup {
                new bflow.setup.ViewModel.InstallerViewModel();
             installerViewModelObject.LoadInstaller();
 
-            //InstallerViewControl.DataContext = installerViewModelObject;
+            InstallerViewControl.DataContext = installerViewModelObject;
         }
     }
 }

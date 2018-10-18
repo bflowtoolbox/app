@@ -8,11 +8,11 @@ using static bflow.setup.Model.InstallerModel;
 namespace bflow.setup.ViewModel {
     public class InstallerViewModel {
 
-        public MyICommand CloseCommand { get; set; }
+        public ICommand CloseCommand { get; set; } = new MyCommand();
 
         public InstallerViewModel() {
             LoadInstaller();
-            CloseCommand = new MyICommand(OnClose, CanClose);
+            //CloseCommand = new MyCommand();
         }
 
         public ObservableCollection<Installer> Installer {
@@ -35,27 +35,6 @@ namespace bflow.setup.ViewModel {
             });
 
             Installer = installer;
-        }
-
-        private Installer _selectedStudent;
-
-        public Installer SelectedStudent {
-            get {
-                return _selectedStudent;
-            }
-
-            set {
-                _selectedStudent = value;
-                CloseCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        private void OnClose() {
-            System.Windows.MessageBox.Show("Hello");
-        }
-
-        private bool CanClose() {
-            return SelectedStudent != null;
         }
     }
 }

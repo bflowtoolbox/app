@@ -72,7 +72,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MyICommand.cs" />
+    <Compile Include="MyCommand.cs" />
     <Compile Include="Views\InstallerView.xaml.cs">
       <DependentUpon>InstallerView.xaml</DependentUpon>
     </Compile>

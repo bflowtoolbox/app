@@ -68,7 +68,9 @@
                     IsEnabled="{Binding Path=InstallButtonIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                     Name="InstallButton" />
                         <!--Click="OnHandleInstallButtonClick"-->
-                        <Button Name="_closeButton"  Command ="{Binding CloseCommand}" Content="{Binding Path=CloseButtonText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsEnabled="True" Width="70" Padding="5" />
+                        <Button Name="_closeButton"  Command ="{Binding Path=CloseCommand}" Content="Schließen" IsEnabled="True" Width="70" Padding="5" />
+
+                        <!--<Button Name="_closeButton"  Command ="{Binding Path=CloseCommand}" Content="{Binding Path=CloseButtonText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsEnabled="True" Width="70" Padding="5" />-->
                         <!--Click="OnHandleCloseButtonClick"-->
                         <!--Command ="{Binding CloseCommand}"-->
                     </WrapPanel>

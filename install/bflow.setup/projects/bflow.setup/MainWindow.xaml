@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:bflow.setup"
         xmlns:views="clr-namespace:bflow.setup.Views"
+        xmlns:viewModel = "clr-namespace:bflow.setup.ViewModel" 
         mc:Ignorable="d"
         
         Title="bflow* Toolbox 1.5.0 Installation" 
