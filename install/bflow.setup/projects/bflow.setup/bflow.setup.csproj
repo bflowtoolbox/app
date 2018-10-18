@@ -59,11 +59,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="VML\ViewModelLocator.cs" />
-    <Page Include="Views\InstallerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,18 +67,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MyCommand.cs" />
-    <Compile Include="Views\InstallerView.xaml.cs">
-      <DependentUpon>InstallerView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="CloseCommand.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ViewModel\InstallerViewModel.cs" />
-    <Compile Include="Model\InstallerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
