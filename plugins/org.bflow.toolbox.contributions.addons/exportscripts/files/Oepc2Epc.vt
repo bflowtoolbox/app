@@ -169,6 +169,28 @@
   #end
 #end
 
+#macro( findInsAndOuts $shape $incomingLine $outgoingLine )
+  #foreach( $edge in $edges )
+    #if( $edge.Target == $shape )
+      #set( $incomingLine = $incomingLine + $edge.Id + " " )
+    #elseif( $edge.Source == $shape )
+      #set( $outgoingLine = $outgoingLine + $edge.Id + " " )
+    #end
+  #end
+  
+  #set( $lineLength = $incomingLine.length() - 2 )
+  #if( $lineLength < 0 )
+    #set( $lineLength = 0 )
+  #end
+  #set( $incomingLine = $incomingLine.substring(0, $lineLength) )
+  
+  #set( $lineLength = $outgoingLine.length() - 2 )
+  #if( $lineLength < 0 )
+    #set( $lineLength = 0)
+  #end
+  #set( $outgoingLine = $outgoingLine.substring(0, $lineLength) )
+#end
+
 ##-- body content --
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:epc="org.bflow.toolbox.epc" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation">
@@ -185,7 +207,10 @@
     #if( $shapeType == "BusinessObject" ) 		  ## Business Objects require special handling (see macro)
       #renderBusinessObject( $shape )
     #else
-      <elements xmi:type="epc:$shapeType" xmi:id="$shapeId" name="$shapeName" in="" out="" />
+      #set( $incomingLine = "" )
+      #set( $outgoingLine = "" )
+      #findInsAndOuts( $shape $incomingLine $outgoingLine )
+      <elements xmi:type="epc:$shapeType" xmi:id="$shapeId" name="$shapeName" in="$incomingLine" out="$outgoingLine" />
     #end
   #end
 
