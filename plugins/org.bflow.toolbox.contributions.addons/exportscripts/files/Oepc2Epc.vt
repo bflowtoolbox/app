@@ -1,9 +1,116 @@
+##-- Set up common properties --
 #set( $modelName = $model.Name + ".epc" )
 #set( $modelId = $model.Id )
+#set( $typeMap = {
+					"Event":"Event", 
+					"OrganisationUnit":"Participant", 
+					"Document":"Document",
+					"ANDConnector":"AND",
+					"ORConnector":"OR",
+					"XORConnector":"XOR", 
+					"ITSystem":"Application"  
+				} ) ## BusinessObject isn't mapped because it is decomposed
+
+##-- Defines macros --
+#macro( eventVisNo $shape )
+<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2006" element="$shape.Id">
+	<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5004"/>
+	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="16744447" lineColor="0"/>
+	<styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
+	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+</children>
+#end
+
+#macro( itsysVisNo $shape )
+<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2004" element="$shape.Id">
+	<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5002"/>
+	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="16777087" lineColor="0"/>
+	<styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
+	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+</children>
+#end
+
+#macro( orgunitVisNo $shape )
+<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2002" element="$shape.Id">
+	<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5001"/>
+	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="8388607" lineColor="0"/>
+	<styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
+	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+</children>
+#end
+
+#macro( docVisNo $shape )
+<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2018" element="$shape.Id">
+	<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5015"/>
+	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
+	<styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
+	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+</children>
+#end
+
+#macro( xorVisNo $shape )
+<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2008" element="$shape.Id">
+	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
+	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+</children>
+#end
+
+#macro( orVisNo $shape )
+<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2003" element="$shape.Id">
+	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
+	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+</children>
+#end
+
+#macro( andVisNo $shape )
+<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2003" element="$shape.Id">
+	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
+	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+</children>
+#end
+
+#macro( renderShapeVisualNotation $shape )
+#set( $shapeType = $shape.Type.split("\.")[1] )
+<!-- former $shapeType -->
+#if( $shapeType == "Event" )
+	#eventVisNo($shape)
+#elseif( $shapeType == "ITSystem" )
+	#itsysVisNo($shape)
+#elseif( $shapeType == "OrganisationUnit" )
+	#orgunitVisNo($shape)
+#elseif( $shapeType == "Document" )
+	#docVisNo($shape)
+#elseif( $shapeType == "XORConnector" )
+	#xorVisNo($shape)
+#elseif( $shapeType == "ORConnector" )
+	#orVisNo($shape)
+#elseif( $shapeType == "ANDConnector" )
+	#andVisNo($shape)
+#end
+#end
+
+##-- body content --
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:epc="org.bflow.toolbox.epc" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation">
 <epc:Epc xmi:id="$modelId"/>
-  <notation:Diagram xmi:id="_AlMQ0NUjEeipCZIQd3G80w" type="Epc" element="$modelId" name="$modelName" measurementUnit="Pixel">
-    <styles xmi:type="notation:DiagramStyle" xmi:id="_AlMQ0dUjEeipCZIQd3G80w" pageWidth="2091" pageHeight="5130" description="IGlobalColorSchema=p"/>
+
+##-- Elements of the model --
+#foreach( $shape in $shapes )
+	#set( $elementType = $shape.Type.split("\.")[1] ) ## Get the source element type
+	#if ( $typeMap.containsKey($elementType) )		  ## Map the type to its EPC surrogate if there is any
+		#set( $elementType = $typeMap[$elementType] ) 
+	#end
+	#set( $elementId = $shape.Id )
+	#set( $elementName = $shape.Name )
+	<elements xmi:type="epc:$elementType" xmi:id="$elementId" name="$elementName"/>
+#end
+
+##-- Visual properties --
+  <notation:Diagram xmi:id="$uuid.create()" type="Epc" element="$modelId" name="$modelName" measurementUnit="Pixel">
+    ##-- Add styles for each model element --
+    #foreach( $shape in $shapes )
+    	#renderShapeVisualNotation( $shape )
+    #end
+    <styles xmi:type="notation:DiagramStyle" xmi:id="$uuid.create()" pageWidth="2091" pageHeight="5130" description="IGlobalColorSchema=p"/>
   </notation:Diagram>
 </xmi:XMI>
