@@ -1,4 +1,5 @@
 @trim
+@prettyprint
 ##-- Set up common properties --
 #set( $modelName = $model.Name + ".epc" )
 #set( $modelId = $model.Id )
@@ -216,7 +217,7 @@
 
   #foreach( $edge in $edges )
     #set( $edgeType = $edge.Type.split("\.")[1] ) ## Get the edge element type
-    #set( $edgeType = $typeMap[$edgeType] )		## Map the type to its EPC surrogate
+    #set( $edgeType = $typeMap[$edgeType] )       ## Map the type to its EPC surrogate
     #set( $edgeId = $edge.Id )
     #set( $edgeSource = $edge.Source.Id )
     #set( $edgeTarget = $edge.Target.Id )
