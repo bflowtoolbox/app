@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -45,8 +46,11 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 	/** The preprocess template directive */
 	private static final String PreprocessDirective = "@preprocess";
 	
-	/** The trim template prefix */
+	/** The trim template directive */
 	private static final String TrimDirective = "@trim";
+	
+	/** The pretty print directive */
+	private static final String PrettyPrintDirective = "@prettyprint";
 	
 	/** The default output file encoding */
 	private static final String DefaultOutputFileEncoding = "UTF-8";
@@ -118,6 +122,12 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 			trimResult = true;
 			template = StringUtils.remove(template, TrimDirective);
 		}
+		
+		boolean prettyPrint = false;
+		if (template.contains(PrettyPrintDirective)) {
+			prettyPrint = true;
+			template = StringUtils.remove(template, PrettyPrintDirective);
+		}
 
 		// Configure Velocity
 		// Setting additional template path
@@ -161,6 +171,10 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 		
 		if (trimResult) {
 			result = StringUtils.trim(result);
+		}
+		
+		if (prettyPrint) {
+			result = printPrettyXml(result);
 		}
 
 		try {
@@ -283,5 +297,25 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 		Velocity.setProperty("resource.loader", "url"); // Or file
 		Velocity.setProperty("url.resource.loader.class", "org.apache.velocity.runtime.resource.loader.URLResourceLoader"); 
 		Velocity.setProperty("url.resource.loader.root", strUrl);
+	}
+	
+	/**
+	 * Returns the given {@code xml} string without tabs and excessive whitespaces.
+	 * 
+	 * @param xml XML string to process
+	 * @return Cleansed XML string
+	 */
+	private String printPrettyXml(String xml) {
+		StringBuilder stringBuilder = new StringBuilder();
+		String[] lines = xml.split("\\r\\n|\\n|\\r");
+		for (int i = -1; ++i != lines.length;) {
+			String line = lines[i];
+			if (StringUtils.isBlank(line)) continue;
+			String tabFreeLine = StringUtils.remove(line, '\t');
+			String trimmedLine = StringUtils.remove(tabFreeLine, "        ");
+			stringBuilder.append(trimmedLine).append(System.lineSeparator());
+		}
+		
+		return stringBuilder.toString();
 	}
 }
