@@ -1,1 +1,9 @@
-Here is some stuff
+#set( $modelName = $model.Name + ".epc" )
+#set( $modelId = $model.Id )
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:epc="org.bflow.toolbox.epc" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation">
+<epc:Epc xmi:id="$modelId"/>
+  <notation:Diagram xmi:id="_AlMQ0NUjEeipCZIQd3G80w" type="Epc" element="$modelId" name="$modelName" measurementUnit="Pixel">
+    <styles xmi:type="notation:DiagramStyle" xmi:id="_AlMQ0dUjEeipCZIQd3G80w" pageWidth="2091" pageHeight="5130" description="IGlobalColorSchema=p"/>
+  </notation:Diagram>
+</xmi:XMI>
