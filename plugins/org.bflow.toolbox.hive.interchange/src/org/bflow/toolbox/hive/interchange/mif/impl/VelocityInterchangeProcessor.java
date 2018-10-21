@@ -38,11 +38,15 @@ import org.osgi.framework.Bundle;
  * @since 2012-10-18
  * @version 2014-04-22
  * 			2018-10-21 Added VelocityUuidTool to context
+ * 			2018-10-21 Added trim prefix support
  */
 public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 	
-	/** The preprocess template prefix */
-	private static final String PreprocessPrefix = "@preprocess";
+	/** The preprocess template directive */
+	private static final String PreprocessDirective = "@preprocess";
+	
+	/** The trim template prefix */
+	private static final String TrimDirective = "@trim";
 	
 	/** The default output file encoding */
 	private static final String DefaultOutputFileEncoding = "UTF-8";
@@ -99,14 +103,20 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 		}
 		
 		// Check for preprocessing and do it
-		if (template.startsWith(PreprocessPrefix)) {
-			template = StringUtils.remove(template, PreprocessPrefix);
+		if (template.startsWith(PreprocessDirective)) {
+			template = StringUtils.remove(template, PreprocessDirective);
 			template = StringUtils.remove(template, CharUtils.CR);
 			template = StringUtils.remove(template, CharUtils.LF);
 			template = StringUtils.remove(template, '\t');
 			
 			template = StringUtils.replace(template, "~nl", System.lineSeparator());
 			template = StringUtils.replace(template, "~t", "\t");
+		}
+		
+		boolean trimResult = false;
+		if (template.contains(TrimDirective)) {
+			trimResult = true;
+			template = StringUtils.remove(template, TrimDirective);
 		}
 
 		// Configure Velocity
@@ -132,25 +142,25 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 //		ctx.put("params", null); TODO add support for parameters
 		addToolsToContext(ctx);
 
-		StringWriter sw = new StringWriter();
 		String result = null;
 		boolean isValid = false;
-
-		try {
-			isValid = Velocity.evaluate(ctx, sw, "TemplateInterchangeProcessing", template);
-		} catch (Exception ex) {
-			String message = String.format("Could not evaluate the given template: %s", path);
-			throw new InterchangeProcessingException(message, ex);
+		try (StringWriter sw = new StringWriter()) {
+			try {
+				isValid = Velocity.evaluate(ctx, sw, "TemplateInterchangeProcessing", template);
+			} catch (Exception ex) {
+				String message = String.format("Could not evaluate the given template: %s", path);
+				throw new InterchangeProcessingException(message, ex);
+			}
+			
+			if (isValid) {
+				result = sw.toString();
+			}
+		} catch (IOException ex) {
+			// Shouldn't be a problem in common
 		}
-
-		if (isValid) {
-			result = sw.toString();
-		}
-
-		try {
-			sw.close();
-		} catch (IOException e1) {
-			// should be no problem in common
+		
+		if (trimResult) {
+			result = StringUtils.trim(result);
 		}
 
 		try {
