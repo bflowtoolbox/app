@@ -56,7 +56,7 @@
       </Exportscript>
       <Exportscript
             File="exportscripts/jbpt.exd"
-            Name="jbpt (MIF) (Exportscript)">
+            Name="jbpt (MIF)">
       </Exportscript>
       <Exportscript
             File="exportscripts/OryxEpml.exd.xml"
@@ -81,6 +81,10 @@
       <Exportscript
             File="exportscripts/yawl.exd.xml"
             Name="YAWL">
+      </Exportscript>
+      <Exportscript
+            File="exportscripts/Oepc2Epc.exd"
+            Name="oEPC-EPC (MIF)">
       </Exportscript>
    </extension>
    <extension

@@ -1,0 +1,7 @@
+public interchange 'EPC' (epc) <> oepc {
+
+description: 'Exports an oEPC diagram to EPC.'
+
+@script: '/exportscripts/files/Oepc2Epc.vt'
+
+}
