@@ -15,16 +15,16 @@ import org.eclipse.swt.graphics.Image;
 /**
  * Implements {@link IShape}.
  * 
- * @author Arian Storch
- * @since 01/10/12
- * @version 02/09/14
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2012-10-01
+ * @version 2014-09-02
  */
 public class ShapeAdapter implements IShape {
 	
 	/** The graphical edit part. */
 	private IGraphicalEditPart graphicalEditPart;
 	
-	/** The e object. */
+	/** The eobject. */
 	private EObject eObject;
 	
 	/** The figure. */
@@ -132,7 +132,7 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public String getId() {
-		if(id == null) {
+		if (id == null) {
 			id = EMFCoreUtil.getProxyID(eObject);
 		}
 		
@@ -160,7 +160,7 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public Object get(String propertyName) {
-		if(propertyProvider == null) {
+		if (propertyProvider == null) {
 			return null;
 		}
 		
@@ -188,7 +188,7 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof ShapeAdapter)) {
+		if (!(obj instanceof ShapeAdapter)) {
 			return false;
 		}
 		ShapeAdapter other = (ShapeAdapter)obj;

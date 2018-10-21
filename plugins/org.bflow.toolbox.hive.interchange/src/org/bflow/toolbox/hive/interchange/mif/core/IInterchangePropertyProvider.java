@@ -8,8 +8,8 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
  * interchange framework with additional values that aren't available from the
  * standard model digger and its meta model.
  * 
- * @author Arian Storch
- * @since 02/05/13
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2013-05-02
  * 
  */
 public interface IInterchangePropertyProvider {
