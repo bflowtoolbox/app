@@ -1,10 +1,10 @@
 package org.bflow.toolbox.hive.interchange.mif.core;
 
 /**
- * Defines an edge.
+ * Describes an edge.
  * 
- * @author Arian Storch
- * @since 01/10/12
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2012-10-01
  */
 public interface IEdge extends IAttributeContainer, IIdentifiable, IVelocityValueProvider {
 	

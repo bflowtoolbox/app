@@ -2,22 +2,14 @@ package org.bflow.toolbox.hive.interchange.mif.core;
 
 import org.eclipse.swt.graphics.Image;
 
-
 /**
- * Defines a shape.
+ * Describes a shape.
  * 
  * @author Arian Storch
- * @since 08/10/12
+ * @since 2012-10-08
+ * @version 2018-10-21 Added INameable inheritance
  */
-public interface IShape extends IAttributeContainer, IIdentifiable, IVelocityValueProvider {
-	
-	/**
-	 * Returns the name.
-	 * 
-	 * @return the name
-	 */
-	public String getName();
-	
+public interface IShape extends IAttributeContainer, IIdentifiable, INameable, IVelocityValueProvider {	
 	/**
 	 * Returns the width.
 	 * 
