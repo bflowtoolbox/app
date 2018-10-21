@@ -1,7 +1,6 @@
 package org.bflow.toolbox.application;
 
 import org.bflow.toolbox.hive.attributes.AttributeViewPart;
-import org.bflow.toolbox.hive.modelnavigator.ModelNavigatorView;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
@@ -41,7 +40,7 @@ public class DefaultBflowPerspective implements IPerspectiveFactory {
 		// Filling the right top folder
 		
 		// Filling the left bottom folder
-		leftBottomFolder.addView(ModelNavigatorView.ViewId);
+		leftBottomFolder.addView(IPageLayout.ID_OUTLINE);
 		
 		// Filling the bottom folder
 		bottomFolder.addView(IPageLayout.ID_PROBLEM_VIEW);
