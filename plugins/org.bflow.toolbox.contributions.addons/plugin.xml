@@ -43,8 +43,8 @@
             Name="ArisAML">
       </Exportscript>
       <Exportscript
-            File="exportscripts/bpmn.exd"
-            Name="BPMN (MIF)">
+            File="exportscripts/Epc2Bpmn.exd"
+            Name="EPC-BPMN (MIF)">
       </Exportscript>
       <Exportscript
             File="exportscripts/RACI.exd"
