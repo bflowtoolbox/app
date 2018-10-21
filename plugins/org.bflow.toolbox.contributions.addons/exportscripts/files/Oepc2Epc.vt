@@ -11,6 +11,7 @@
 					"XORConnector":"XOR", 
 					"ITSystem":"Application"  
 				} ) ## BusinessObject isn't mapped because it is decomposed
+#set( $functionSet = [] )
 
 ##-- Defines macros --
 #macro( eventVisNo $shape )
@@ -70,24 +71,59 @@
 </children>
 #end
 
+#macro( functionVisNo $function )
+#set( $propSet = $function.split("\^") )
+#set( $funcName = $propSet[0] )
+#set( $funcId = $propSet[1] )
+#set( $funcX = $propSet[2] )
+#set( $funcY = $propSet[3] )
+<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2007" element="$funcId">
+	<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5005"/>
+	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="8388479" lineColor="0"/>
+	<styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
+	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$funcX" y="$funcY"/>
+</children>
+#end
+
 #macro( renderShapeVisualNotation $shape )
 #set( $shapeType = $shape.Type.split("\.")[1] )
 <!-- former $shapeType -->
 #if( $shapeType == "Event" )
-	#eventVisNo($shape)
+	#eventVisNo( $shape )
 #elseif( $shapeType == "ITSystem" )
-	#itsysVisNo($shape)
+	#itsysVisNo( $shape )
 #elseif( $shapeType == "OrganisationUnit" )
-	#orgunitVisNo($shape)
+	#orgunitVisNo( $shape )
 #elseif( $shapeType == "Document" )
-	#docVisNo($shape)
+	#docVisNo( $shape )
 #elseif( $shapeType == "XORConnector" )
-	#xorVisNo($shape)
+	#xorVisNo( $shape )
 #elseif( $shapeType == "ORConnector" )
-	#orVisNo($shape)
+	#orVisNo( $shape )
 #elseif( $shapeType == "ANDConnector" )
-	#andVisNo($shape)
+	#andVisNo( $shape )
 #end
+#end
+
+#macro( renderBusinessObject $shape )
+ #set( $locX = $shape.X )
+ #set( $locY = $shape.Y )
+ #set( $n = 0 )
+
+ #foreach( $method in $shape.BusinessMethods )
+  #set( $methodId = $uuid.create() )
+  #set( $methodName = $method.Name )
+  <elements xmi:type="epc:Function" xmi:id="$methodId" name="$methodName"/>
+
+  ## Put the newly created function into a set
+  #set( $function = $methodName + "^" + $methodId + "^" + $locX + "^" + $locY)
+  #set( $_ = $functionSet.add($function) )
+
+  ## Increment values for the next loop iteration
+  #set( $n = $n + 1 ) 
+  #set( $locY = $locY + $n * 40 )
+ #end
+
 #end
 
 ##-- body content --
@@ -103,7 +139,9 @@
 	#end
 	#set( $elementId = $shape.Id )
 	#set( $elementName = $shape.Name )
-	#if( $elementType != "BusinessObject" ) 		  ## Business Objects require special handling (see below)
+	#if( $elementType == "BusinessObject" ) 		  ## Business Objects require special handling (see below)
+		#renderBusinessObject( $shape )
+	#else
 		<elements xmi:type="epc:$elementType" xmi:id="$elementId" name="$elementName"/>
 	#end
 #end
@@ -114,6 +152,9 @@
     ##-- Add styles for each model element --
     #foreach( $shape in $shapes )
     	#renderShapeVisualNotation( $shape )
+    #end
+    #foreach( $function in $functionSet )
+    	#functionVisNo( $function )
     #end
     	<styles xmi:type="notation:DiagramStyle" xmi:id="$uuid.create()" pageWidth="2091" pageHeight="5130" description="IGlobalColorSchema=p"/>
 	</notation:Diagram>
