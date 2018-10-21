@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -36,8 +35,9 @@ import org.osgi.framework.Bundle;
  * processing.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 18/10/12
- * @version 22/04/14
+ * @since 2012-10-18
+ * @version 2014-04-22
+ * 			2018-10-21 Added VelocityUuidTool to context
  */
 public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 	
@@ -99,7 +99,7 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 		}
 		
 		// Check for preprocessing and do it
-		if(template.startsWith(PreprocessPrefix)) {
+		if (template.startsWith(PreprocessPrefix)) {
 			template = StringUtils.remove(template, PreprocessPrefix);
 			template = StringUtils.remove(template, CharUtils.CR);
 			template = StringUtils.remove(template, CharUtils.LF);
@@ -247,9 +247,12 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 		ctx.put("number", new NumberTool());
 		ctx.put("render", new RenderTool());
 		ctx.put("text", new ResourceTool());
-//		ctx.put("lists", new ListTool()); // Deprecated
+		// ctx.put("lists", new ListTool()); // Deprecated
 		ctx.put("sorter", new SortTool());
 		ctx.put("loop", new LoopTool());
+		
+		// Custom tools
+		ctx.put("uuid", new VelocityUuidTool());
 	}
 	
 	/**
