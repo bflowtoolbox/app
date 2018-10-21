@@ -8,154 +8,214 @@
 					"Document":"Document",
 					"ANDConnector":"AND",
 					"ORConnector":"OR",
-					"XORConnector":"XOR", 
-					"ITSystem":"Application"  
+					"XORConnector":"XOR",
+					"ITSystem":"Application",
+					"InformationEdge":"Relation",
+					"ControlFlowEdge":"Arc"
 				} ) ## BusinessObject isn't mapped because it is decomposed
 #set( $functionSet = [] )
+#set( $model2visualMap = {} )
 
 ##-- Defines macros --
 #macro( eventVisNo $shape )
-<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2006" element="$shape.Id">
-	<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5004"/>
-	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="16744447" lineColor="0"/>
-	<styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
-	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+  #set( $visualId = $uuid.create() )
+  #set( $modelId = $shape.Id )
+  #set( $_ = $model2visualMap.put($modelId, $visualId) )
+  <children xmi:type="notation:Node" xmi:id="$visualId" type="2006" element="$modelId">
+    <children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5004"/>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="16744447" lineColor="0"/>
+    <styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
 </children>
 #end
 
 #macro( itsysVisNo $shape )
-<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2004" element="$shape.Id">
-	<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5002"/>
-	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="16777087" lineColor="0"/>
-	<styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
-	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
-</children>
+  #set( $visualId = $uuid.create() )
+  #set( $modelId = $shape.Id )
+  #set( $_ = $model2visualMap.put($modelId, $visualId) )
+  <children xmi:type="notation:Node" xmi:id="$visualId" type="2004" element="$modelId">
+    <children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5002"/>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="16777087" lineColor="0"/>
+    <styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+  </children>
 #end
 
 #macro( orgunitVisNo $shape )
-<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2002" element="$shape.Id">
-	<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5001"/>
-	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="8388607" lineColor="0"/>
-	<styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
-	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
-</children>
+  #set( $visualId = $uuid.create() )
+  #set( $modelId = $shape.Id )
+  #set( $_ = $model2visualMap.put($modelId, $visualId) )
+  <children xmi:type="notation:Node" xmi:id="$visualId" type="2002" element="$modelId">
+    <children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5001"/>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="8388607" lineColor="0"/>
+    <styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+  </children>
 #end
 
 #macro( docVisNo $shape )
-<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2018" element="$shape.Id">
-	<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5015"/>
-	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
-	<styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
-	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
-</children>
+  #set( $visualId = $uuid.create() )
+  #set( $modelId = $shape.Id )
+  #set( $_ = $model2visualMap.put($modelId, $visualId) )
+  <children xmi:type="notation:Node" xmi:id="$visualId" type="2018" element="$modelId">
+    <children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5015"/>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
+    <styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+  </children>
 #end
 
 #macro( xorVisNo $shape )
-<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2008" element="$shape.Id">
-	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
-	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
-</children>
+  #set( $visualId = $uuid.create() )
+  #set( $modelId = $shape.Id )
+  #set( $_ = $model2visualMap.put($modelId, $visualId) )
+  <children xmi:type="notation:Node" xmi:id="$visualId" type="2008" element="$modelId">
+    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+  </children>
 #end
 
 #macro( orVisNo $shape )
-<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2003" element="$shape.Id">
-	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
-	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
-</children>
+  #set( $visualId = $uuid.create() )
+  #set( $modelId = $shape.Id )
+  #set( $_ = $model2visualMap.put($modelId, $visualId) )
+  <children xmi:type="notation:Node" xmi:id="$visualId" type="2003" element="$modelId">
+    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+  </children>
 #end
 
 #macro( andVisNo $shape )
-<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2003" element="$shape.Id">
-	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
-	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
-</children>
+  #set( $visualId = $uuid.create() )
+  #set( $modelId = $shape.Id )
+  #set( $_ = $model2visualMap.put($modelId, $visualId) )
+  <children xmi:type="notation:Node" xmi:id="$visualId" type="2003" element="$modelId">
+    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" lineColor="0"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+  </children>
 #end
 
 #macro( functionVisNo $function )
-#set( $propSet = $function.split("\^") )
-#set( $funcName = $propSet[0] )
-#set( $funcId = $propSet[1] )
-#set( $funcX = $propSet[2] )
-#set( $funcY = $propSet[3] )
-<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="2007" element="$funcId">
-	<children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5005"/>
-	<styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="8388479" lineColor="0"/>
-	<styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
-	<layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$funcX" y="$funcY"/>
-</children>
+  #set( $propSet = $function.split("\^") )
+  #set( $funcName = $propSet[0] )
+  #set( $funcId = $propSet[1] )
+  #set( $funcX = $propSet[2] )
+  #set( $funcY = $propSet[3] )
+  #set( $visualId = $uuid.create() )
+  #set( $modelId = $funcId )
+  #set( $_ = $model2visualMap.put($modelId, $visualId) )
+  <children xmi:type="notation:Node" xmi:id="$visualId" type="2007" element="$modelId">
+    <children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5005"/>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="8388479" lineColor="0"/>
+    <styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$funcX" y="$funcY"/>
+  </children>
 #end
 
 #macro( renderShapeVisualNotation $shape )
-#set( $shapeType = $shape.Type.split("\.")[1] )
-<!-- former $shapeType -->
-#if( $shapeType == "Event" )
-	#eventVisNo( $shape )
-#elseif( $shapeType == "ITSystem" )
-	#itsysVisNo( $shape )
-#elseif( $shapeType == "OrganisationUnit" )
-	#orgunitVisNo( $shape )
-#elseif( $shapeType == "Document" )
-	#docVisNo( $shape )
-#elseif( $shapeType == "XORConnector" )
-	#xorVisNo( $shape )
-#elseif( $shapeType == "ORConnector" )
-	#orVisNo( $shape )
-#elseif( $shapeType == "ANDConnector" )
-	#andVisNo( $shape )
+  #set( $shapeType = $shape.Type.split("\.")[1] )
+  #if( $shapeType == "Event" )
+    #eventVisNo( $shape )
+  #elseif( $shapeType == "ITSystem" )
+    #itsysVisNo( $shape )
+  #elseif( $shapeType == "OrganisationUnit" )
+    #orgunitVisNo( $shape )
+  #elseif( $shapeType == "Document" )
+    #docVisNo( $shape )
+  #elseif( $shapeType == "XORConnector" )
+    #xorVisNo( $shape )
+  #elseif( $shapeType == "ORConnector" )
+    #orVisNo( $shape )
+  #elseif( $shapeType == "ANDConnector" )
+    #andVisNo( $shape )
+  #end
 #end
+
+#macro( renderEdgeVisualNotation $edge )
+  #set( $edgeTypeNumber = "4001" ) ## ARC
+  #if( $edge.Type.split("\.")[1] == "InformationEdge" )
+    #set( $edgeTypeNumber = "4002" ) ## Relation
+  #end
+  #set( $edgeId = $edge.Id )
+  #set( $edgeSrcMdlId = $edge.Source.Id )
+  #set( $edgeTgtMdlId = $edge.Target.Id )
+  #set( $visualSourceId = $model2visualMap.get($edgeSrcMdlId) )
+  #set( $visualTargetId = $model2visualMap.get($edgeTgtMdlId) )
+  <edges xmi:type="notation:Edge" xmi:id="$uuid.create()" type="$edgeTypeNumber" element="$edgeId" source="$visualSourceId" target="$visualTargetId">
+    <styles xmi:type="notation:RoutingStyle" xmi:id="$uuid.create()" routing="Rectilinear"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="$uuid.create()" fontName="Segoe UI"/>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" lineColor="0"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="$uuid.create()" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
 #end
 
 #macro( renderBusinessObject $shape )
- #set( $locX = $shape.X )
- #set( $locY = $shape.Y )
- #set( $n = 0 )
+  #set( $locX = $shape.X )
+  #set( $locY = $shape.Y )
+  #set( $n = 0 )
 
- #foreach( $method in $shape.BusinessMethods )
-  #set( $methodId = $uuid.create() )
-  #set( $methodName = $method.Name )
-  <elements xmi:type="epc:Function" xmi:id="$methodId" name="$methodName"/>
+  #foreach( $method in $shape.BusinessMethods )
+    #set( $methodId = $uuid.create() )
+    #set( $methodName = $method.Name )
+    <elements xmi:type="epc:Function" xmi:id="$methodId" name="$methodName"/>
 
-  ## Put the newly created function into a set
-  #set( $function = $methodName + "^" + $methodId + "^" + $locX + "^" + $locY)
-  #set( $_ = $functionSet.add($function) )
+    ## Put the newly created function into a set
+    #set( $function = $methodName + "^" + $methodId + "^" + $locX + "^" + $locY)
+    #set( $_ = $functionSet.add($function) )
 
-  ## Increment values for the next loop iteration
-  #set( $n = $n + 1 ) 
-  #set( $locY = $locY + $n * 40 )
- #end
-
+    ## Increment values for the next loop iteration
+    #set( $n = $n + 1 ) 
+    #set( $locY = $locY + $n * 40 )
+  #end
 #end
 
 ##-- body content --
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:epc="org.bflow.toolbox.epc" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation">
-	<epc:Epc xmi:id="$modelId">
+  <epc:Epc xmi:id="$modelId">
 
-##-- Elements of the model --
-#foreach( $shape in $shapes )
-	#set( $elementType = $shape.Type.split("\.")[1] ) ## Get the source element type
-	#if ( $typeMap.containsKey($elementType) )		  ## Map the type to its EPC surrogate if there is any
-		#set( $elementType = $typeMap[$elementType] ) 
-	#end
-	#set( $elementId = $shape.Id )
-	#set( $elementName = $shape.Name )
-	#if( $elementType == "BusinessObject" ) 		  ## Business Objects require special handling (see below)
-		#renderBusinessObject( $shape )
-	#else
-		<elements xmi:type="epc:$elementType" xmi:id="$elementId" name="$elementName"/>
-	#end
-#end
-	</epc:Epc>
+  ##-- Elements of the model --
+  #foreach( $shape in $shapes )
+    #set( $shapeType = $shape.Type.split("\.")[1] ) ## Get the shape element type
+    #if ( $typeMap.containsKey($shapeType) )		  ## Map the type to its EPC surrogate if there is any
+      #set( $shapeType = $typeMap[$shapeType] ) 
+    #end
+    #set( $shapeId = $shape.Id )
+    #set( $shapeName = $shape.Name )
+    #if( $shapeType == "BusinessObject" ) 		  ## Business Objects require special handling (see macro)
+      #renderBusinessObject( $shape )
+    #else
+      <elements xmi:type="epc:$shapeType" xmi:id="$shapeId" name="$shapeName" in="" out="" />
+    #end
+  #end
 
-##-- Visual properties --
-	<notation:Diagram xmi:id="$uuid.create()" type="Epc" element="$modelId" name="$modelName" measurementUnit="Pixel">
-    ##-- Add styles for each model element --
-    #foreach( $shape in $shapes )
-    	#renderShapeVisualNotation( $shape )
-    #end
-    #foreach( $function in $functionSet )
-    	#functionVisNo( $function )
-    #end
-    	<styles xmi:type="notation:DiagramStyle" xmi:id="$uuid.create()" pageWidth="2091" pageHeight="5130" description="IGlobalColorSchema=p"/>
-	</notation:Diagram>
+  #foreach( $edge in $edges )
+    #set( $edgeType = $edge.Type.split("\.")[1] ) ## Get the edge element type
+    #set( $edgeType = $typeMap[$edgeType] )		## Map the type to its EPC surrogate
+    #set( $edgeId = $edge.Id )
+    #set( $edgeSource = $edge.Source.Id )
+    #set( $edgeTarget = $edge.Target.Id )
+    <connections xmi:type="epc:$edgeType" xmi:id="$edgeId" from="$edgeSource" to="$edgeTarget"/>
+  #end
+  
+  </epc:Epc>
+
+  ##-- Visual properties --
+  <notation:Diagram xmi:id="$uuid.create()" type="Epc" element="$modelId" name="$modelName" measurementUnit="Pixel">
+  
+  ##-- Add styles for each model element --
+  #foreach( $shape in $shapes )
+    #renderShapeVisualNotation( $shape )
+  #end
+  
+  #foreach( $function in $functionSet ) ## Render decomposed Business Objects as single functions
+    #functionVisNo( $function )
+  #end
+    <styles xmi:type="notation:DiagramStyle" xmi:id="$uuid.create()" pageWidth="2091" pageHeight="5130" description="IGlobalColorSchema=p"/>
+  
+  #foreach( $edge in $edges )
+    #renderEdgeVisualNotation( $edge )
+  #end
+  
+  </notation:Diagram>
 </xmi:XMI>
