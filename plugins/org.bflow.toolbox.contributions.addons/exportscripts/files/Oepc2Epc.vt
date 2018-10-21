@@ -1,3 +1,4 @@
+@trim
 ##-- Set up common properties --
 #set( $modelName = $model.Name + ".epc" )
 #set( $modelId = $model.Id )
@@ -102,7 +103,9 @@
 	#end
 	#set( $elementId = $shape.Id )
 	#set( $elementName = $shape.Name )
+	#if( $elementType != "BusinessObject" ) 		  ## Business Objects require special handling (see below)
 		<elements xmi:type="epc:$elementType" xmi:id="$elementId" name="$elementName"/>
+	#end
 #end
 	</epc:Epc>
 
