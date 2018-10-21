@@ -9,8 +9,8 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 /**
  * Implements {@link IInterchangePropertyProvider} to provide values for oEPC model elements.
  * 
- * @author Arian Storch
- * @since 03/05/13
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2013-05-03
  *
  */
 public class OEPCPropertyValueProvider implements IInterchangePropertyProvider {
@@ -24,12 +24,13 @@ public class OEPCPropertyValueProvider implements IInterchangePropertyProvider {
 	@Override
 	public Object getPropertyValue(String propertyName, EObject eObj, IGraphicalEditPart graphicalEditPart, String id) {
 		// Can only be part of BusinessObjects
-		if(propertyName.equalsIgnoreCase("BusinessAttributes") && (eObj instanceof BusinessObject)) {
+		if (propertyName.equalsIgnoreCase("BusinessAttributes") && (eObj instanceof BusinessObject)) {
 			BusinessObject businessObject = (BusinessObject)eObj;
 			return businessObject.getAttributes();
 		}
+		
 		// Can only be part of BusinessObjects
-		if(propertyName.equalsIgnoreCase("BusinessMethods") && (eObj instanceof BusinessObject)) {
+		if (propertyName.equalsIgnoreCase("BusinessMethods") && (eObj instanceof BusinessObject)) {
 			BusinessObject businessObject = (BusinessObject)eObj;
 			return businessObject.getMethods();
 		}
