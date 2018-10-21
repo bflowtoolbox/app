@@ -9,6 +9,7 @@
    <launcherArgs>
       <programArgs>-perspective org.bflow.toolbox.application.perspective.default
 -nl de_DE
+-data @user.home/bflow
       </programArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
