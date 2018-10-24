@@ -14,22 +14,174 @@
 					"InformationEdge":"Relation",
 					"ControlFlowEdge":"Arc"
 				} ) ## BusinessObject isn't mapped because it is decomposed
-#set( $functionSet = [] )
-#set( $model2visualMap = {} )
+#set( $model2visualMap = {} )   ## Maps a model element id to the corresponding visual element id
 
-##-- Defines macros --
-#macro( eventVisNo $shape )
-  #set( $visualId = $uuid.create() )
-  #set( $modelId = $shape.Id )
-  #set( $_ = $model2visualMap.put($modelId, $visualId) )
-  <children xmi:type="notation:Node" xmi:id="$visualId" type="2006" element="$modelId">
-    <children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5004"/>
-    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="16744447" lineColor="0"/>
-    <styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
-</children>
+#set( $customFunctionSet = [] ) ## Contains all functions that are created by business object decomposition
+#set( $customEdgeSet = [] )		## Contains all edges that are created between newly created functions by business object decomposition
+
+#set( $blacklistShape = [] ) 	## Shapes to ignore so that they are dropped
+#set( $blacklistEdge = [] )  	## Edges to ignore so that they are dropped
+
+## **
+## * Selects each edge that is connected with the shape and adds it to 
+## * corresponding collection.
+## ** 
+#macro( selectConnectedEdges $shape $incomingEdges $outgoingEdges )
+  #foreach( $edge in $edges )
+    #if( $edge.Source == $shape )
+      #set( $_ = $outgoingEdges.add($edge) )
+    #elseif( $edge.Target == $shape )
+      #set( $_ = $incomingEdges.add($edge) )
+    #end
+  #end
 #end
 
+## **
+## * Selects each edge that is either incoming from or outgoing to the shape 
+## * and builds a string line with the ids. 
+## * Note, blacklisted elements are ignored.
+## * Note also, custom edges are not ignored.
+## **
+#macro( findInsAndOuts $shape $incomingLine $outgoingLine )
+  ## * First, check normal edges (but not dropped ones) *
+  #foreach( $edge in $edges )
+    #if( $blacklistEdge.contains($edge) != true)  ## ignore dropped edges
+      #if( $edge.Target == $shape )
+        #set( $incomingLine = $incomingLine + $edge.Id + " " )
+      #elseif( $edge.Source == $shape )
+        #set( $outgoingLine = $outgoingLine + $edge.Id + " " )
+      #end
+    #end
+  #end
+  
+  ## * Second, check custom edges *
+  #foreach( $edgeDef in $customEdgeSet )
+    #if( $edgeDef["tgt"] == $shape.Id )
+      #set( $incomingLine = $incomingLine + $edgeDef["id"] + " " )
+    #elseif( $edgeDef["src"] == $shape.Id )
+      #set( $outgoingLine = $outgoingLine + $edgeDef["id"] + " " )
+    #end
+  #end
+  
+  ## * Remove trailing whitespace *
+  #set( $lineLength = $incomingLine.length() - 1 )
+  #if( $lineLength < 0 )
+    #set( $lineLength = 0 )
+  #end
+  #set( $incomingLine = $incomingLine.substring(0, $lineLength) )
+  
+  #set( $lineLength = $outgoingLine.length() - 1 )
+  #if( $lineLength < 0 )
+    #set( $lineLength = 0)
+  #end
+  #set( $outgoingLine = $outgoingLine.substring(0, $lineLength) )
+#end
+
+## **
+## * Joins each element of the set into one result string where 
+## * each entry is separator with the given separator.
+## **
+#macro( join $set $separator $result )
+  #set( $line = "" )
+  #foreach( $item in $set )
+    #set( $line = $line + $item + $separator)
+  #end
+  #set( $length = $line.length() - 1 )
+  #if( $length < 0 )
+    #set( $length = 0 )
+  #end
+  #set( $_ = $result.add($line.substring(0, $length)) )
+#end
+
+##-- Preprocess the business object shapes --
+#foreach( $shape in $shapes )
+  #set( $shapeType = $shape.Type.split("\.")[1] )
+  #if( $shapeType == "BusinessObject" )
+    #set( $_ = $blacklistShape.add($shape) )
+    #set( $incomingEdges = [] )
+    #set( $outgoingEdges = [] )
+    #selectConnectedEdges( $shape $incomingEdges $outgoingEdges )
+    
+    #set( $locX = $shape.X )
+    #set( $locY = $shape.Y )
+    
+    #set( $n = 0 )
+    #set( $max = $shape.BusinessMethods.size() - 1 )
+    #set( $fstFunc = "NULL" )
+    #set( $lstFunc = "NULL" )
+    #set( $precFunc = "NULL" )
+    #foreach( $method in $shape.BusinessMethods )
+      #set( $bndX = $locX )
+      #set( $bndY = $locY + $n * 40 )
+      #set( $name = $method.Name )
+      #set( $id = $uuid.create() )
+      
+      #set( $in = [] )
+      #set( $out = [] )
+      #set( $methodDef = {
+      						"id":$id,
+      						"name":$name,
+      						"x":$bndX,
+      						"y":$bndY,
+      						"in":$in,
+      						"out":$out
+      						} )
+      #set( $_ = $customFunctionSet.add($methodDef) )
+      
+      #if( $n == 0 )
+        #set( $fstFunc = $methodDef )
+      #else
+        #set( $edgeId = $uuid.create() )
+        #set( $edgeDef = {
+      					"id":$edgeId,
+        				"src":$precFunc["id"],
+        				"tgt":$methodDef["id"]
+        				} )
+        #set( $_ = $customEdgeSet.add($edgeDef) )
+        
+        #set( $_ = $methodDef["in"].add($edgeId) )
+        #set( $_ = $precFunc["out"].add($edgeId) )
+      #end 
+            
+      #if( $n == $max )
+        #set( $lstFunc = $methodDef )        
+      #end
+      
+      #set( $precFunc = $methodDef )
+      #set( $n = $n + 1 )
+    #end
+    
+    ## ** Drop each incoming edge to the business object and create a new edge to the first function **
+    #foreach( $edge in $incomingEdges )
+      #set( $_ = $blacklistEdge.add($edge) )
+      
+      #set( $edgeId = $uuid.create() )
+      #set( $edgeDef = {
+      					"id":$edgeId,
+        				"src":$edge.Source.Id,
+        				"tgt":$fstFunc["id"]
+        				} )
+      #set( $_ = $customEdgeSet.add($edgeDef) )
+      #set( $_ = $fstFunc["in"].add($edgeId) )
+    #end
+    
+    ## ** Drop each outgoing edge from the business object and create a new edge from the last function **
+    #foreach( $edge in $outgoingEdges )
+      #set( $_ = $blacklistEdge.add($edge) )
+      #set( $edgeId = $uuid.create() )
+      #set( $edgeDef = {
+      					"id":$edgeId,
+        				"src":$lstFunc["id"],
+        				"tgt":$edge.Target.Id
+        				} )
+      #set( $_ = $customEdgeSet.add($edgeDef) )
+      #set( $_ = $lstFunc["out"].add($edgeId) )
+    #end
+    
+  #end
+#end
+
+##-- Visual notation rendering macros --
 #macro( itsysVisNo $shape )
   #set( $visualId = $uuid.create() )
   #set( $modelId = $shape.Id )
@@ -96,21 +248,16 @@
   </children>
 #end
 
-#macro( functionVisNo $function )
-  #set( $propSet = $function.split("\^") )
-  #set( $funcName = $propSet[0] )
-  #set( $funcId = $propSet[1] )
-  #set( $funcX = $propSet[2] )
-  #set( $funcY = $propSet[3] )
+#macro( eventVisNo $shape )
   #set( $visualId = $uuid.create() )
-  #set( $modelId = $funcId )
+  #set( $modelId = $shape.Id )
   #set( $_ = $model2visualMap.put($modelId, $visualId) )
-  <children xmi:type="notation:Node" xmi:id="$visualId" type="2007" element="$modelId">
-    <children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5005"/>
-    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="8388479" lineColor="0"/>
+  <children xmi:type="notation:Node" xmi:id="$visualId" type="2006" element="$modelId">
+    <children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5004"/>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="16744447" lineColor="0"/>
     <styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$funcX" y="$funcY"/>
-  </children>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$shape.X" y="$shape.Y"/>
+</children>
 #end
 
 #macro( renderShapeVisualNotation $shape )
@@ -132,17 +279,22 @@
   #end
 #end
 
-#macro( renderEdgeVisualNotation $edge )
-  #set( $edgeTypeNumber = "4001" ) ## ARC
-  #if( $edge.Type.split("\.")[1] == "InformationEdge" )
-    #set( $edgeTypeNumber = "4002" ) ## Relation
-  #end
-  #set( $edgeId = $edge.Id )
-  #set( $edgeSrcMdlId = $edge.Source.Id )
-  #set( $edgeTgtMdlId = $edge.Target.Id )
-  #set( $visualSourceId = $model2visualMap.get($edgeSrcMdlId) )
-  #set( $visualTargetId = $model2visualMap.get($edgeTgtMdlId) )
-  <edges xmi:type="notation:Edge" xmi:id="$uuid.create()" type="$edgeTypeNumber" element="$edgeId" source="$visualSourceId" target="$visualTargetId">
+#macro( renderFunctionVisualNotation $funcId $funcName $funcX $funcY )
+  #set( $modelId = $funcId )
+  #set( $visualId = $uuid.create() )
+  #set( $_ = $model2visualMap.put($modelId, $visualId) )
+  <children xmi:type="notation:Node" xmi:id="$visualId" type="2007" element="$modelId">
+    <children xmi:type="notation:Node" xmi:id="$uuid.create()" type="5005"/>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" fontName="Segoe UI" fillColor="8388479" lineColor="0"/>
+    <styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()" textAlignment="Center"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="$uuid.create()" x="$funcX" y="$funcY"/>
+  </children>
+#end
+
+#macro( renderEdgeVisualNotation $m_edgeId $m_edgeSrcId $m_edgeTgtId $m_edgeTypeNumber )
+  #set( $visualSourceId = $model2visualMap.get($m_edgeSrcId) )
+  #set( $visualTargetId = $model2visualMap.get($m_edgeTgtId) )
+  <edges xmi:type="notation:Edge" xmi:id="$uuid.create()" type="$m_edgeTypeNumber" element="$m_edgeId" source="$visualSourceId" target="$visualTargetId">
     <styles xmi:type="notation:RoutingStyle" xmi:id="$uuid.create()" routing="Rectilinear"/>
     <styles xmi:type="notation:FontStyle" xmi:id="$uuid.create()" fontName="Segoe UI"/>
     <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" lineColor="0"/>
@@ -150,64 +302,41 @@
   </edges>
 #end
 
-#macro( renderBusinessObject $shape )
-  #set( $locX = $shape.X )
-  #set( $locY = $shape.Y )
-  #set( $n = 0 )
-
-  #foreach( $method in $shape.BusinessMethods )
-    #set( $methodId = $uuid.create() )
-    #set( $methodName = $method.Name )
-    <elements xmi:type="epc:Function" xmi:id="$methodId" name="$methodName"/>
-
-    ## Put the newly created function into a set
-    #set( $function = $methodName + "^" + $methodId + "^" + $locX + "^" + $locY)
-    #set( $_ = $functionSet.add($function) )
-
-    ## Increment values for the next loop iteration
-    #set( $n = $n + 1 ) 
-    #set( $locY = $locY + $n * 40 )
-  #end
-#end
-
-#macro( findInsAndOuts $shape $incomingLine $outgoingLine )
-  #foreach( $edge in $edges )
-    #if( $edge.Target == $shape )
-      #set( $incomingLine = $incomingLine + $edge.Id + " " )
-    #elseif( $edge.Source == $shape )
-      #set( $outgoingLine = $outgoingLine + $edge.Id + " " )
-    #end
-  #end
-  
-  #set( $lineLength = $incomingLine.length() - 2 )
-  #if( $lineLength < 0 )
-    #set( $lineLength = 0 )
-  #end
-  #set( $incomingLine = $incomingLine.substring(0, $lineLength) )
-  
-  #set( $lineLength = $outgoingLine.length() - 2 )
-  #if( $lineLength < 0 )
-    #set( $lineLength = 0)
-  #end
-  #set( $outgoingLine = $outgoingLine.substring(0, $lineLength) )
-#end
-
-##-- body content --
+##-- Body content --
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:epc="org.bflow.toolbox.epc" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation">
+  ##-- Model elements --
   <epc:Epc xmi:id="$modelId">
 
-  ##-- Elements of the model --
+  ## ** First, render the custom functions **
+  #foreach( $customFunction in $customFunctionSet )
+    #set( $functionId = $customFunction["id"] )
+    #set( $functionName = $customFunction["name"] )
+    #set( $sep = " ")
+    #set( $incomingLine = [] )
+    #join( $customFunction["in"] $sep $incomingLine )
+    #set( $outgoingLine = [] )
+    #join( $customFunction["out"] $sep $outgoingLine )
+    <elements xmi:type="epc:Function" xmi:id="$functionId" name="$functionName" in="$incomingLine[0]" out="$outgoingLine[0]" />
+  #end
+  
+  ## ** Render the custom edges afterwards to check the correctness **
+  #foreach( $customEdge in $customEdgeSet )
+    #set( $edgeId = $customEdge["id"] )
+    #set( $edgeSource = $customEdge["src"] )
+    #set( $edgeTarget = $customEdge["tgt"] )
+    <connections xmi:type="epc:Arc" xmi:id="$edgeId" from="$edgeSource" to="$edgeTarget" />
+  #end 
+
+  ## ** Then, render the remaining shapes but no business objects **
   #foreach( $shape in $shapes )
     #set( $shapeType = $shape.Type.split("\.")[1] ) ## Get the shape element type
-    #if ( $typeMap.containsKey($shapeType) )		  ## Map the type to its EPC surrogate if there is any
+    #if ( $typeMap.containsKey($shapeType) )		## Map the type to its EPC surrogate if there is any
       #set( $shapeType = $typeMap[$shapeType] ) 
     #end
     #set( $shapeId = $shape.Id )
     #set( $shapeName = $shape.Name )
-    #if( $shapeType == "BusinessObject" ) 		  ## Business Objects require special handling (see macro)
-      #renderBusinessObject( $shape )
-    #else
+    #if( $shapeType != "BusinessObject" )
       #set( $incomingLine = "" )
       #set( $outgoingLine = "" )
       #findInsAndOuts( $shape $incomingLine $outgoingLine )
@@ -215,13 +344,16 @@
     #end
   #end
 
+  ## ** Finally, render the remaining edges but not the blacklisted **
   #foreach( $edge in $edges )
-    #set( $edgeType = $edge.Type.split("\.")[1] ) ## Get the edge element type
-    #set( $edgeType = $typeMap[$edgeType] )       ## Map the type to its EPC surrogate
-    #set( $edgeId = $edge.Id )
-    #set( $edgeSource = $edge.Source.Id )
-    #set( $edgeTarget = $edge.Target.Id )
-    <connections xmi:type="epc:$edgeType" xmi:id="$edgeId" from="$edgeSource" to="$edgeTarget"/>
+    #if( $blacklistEdge.contains($edge) != true )
+      #set( $edgeType = $edge.Type.split("\.")[1] ) ## Get the edge element type
+      #set( $edgeType = $typeMap[$edgeType] )       ## Map the type to its EPC surrogate
+      #set( $edgeId = $edge.Id )
+      #set( $edgeSource = $edge.Source.Id )
+      #set( $edgeTarget = $edge.Target.Id )
+      <connections xmi:type="epc:$edgeType" xmi:id="$edgeId" from="$edgeSource" to="$edgeTarget"/>
+    #end
   #end
   
   </epc:Epc>
@@ -229,18 +361,32 @@
   ##-- Visual properties --
   <notation:Diagram xmi:id="$uuid.create()" type="Epc" element="$modelId" name="$modelName" measurementUnit="Pixel">
   
-  ##-- Add styles for each model element --
-  #foreach( $shape in $shapes )
-    #renderShapeVisualNotation( $shape )
+  ## ** First, add styles for custom functions **
+  #foreach( $customFunction in $customFunctionSet )
+    #renderFunctionVisualNotation( $customFunction["id"] $customFunction["name"] $customFunction["x"] $customFunction["y"] )
   #end
   
-  #foreach( $function in $functionSet ) ## Render decomposed Business Objects as single functions
-    #functionVisNo( $function )
+  ## ** Next, we have to render the remaining shapes (except business objects) to map the visual ids 
+  #foreach( $shape in $shapes )
+    #renderShapeVisualNotation( $shape ) ## Note, the business objects are dropped in the macro
   #end
+  
     <styles xmi:type="notation:DiagramStyle" xmi:id="$uuid.create()" pageWidth="2091" pageHeight="5130" description="IGlobalColorSchema=p"/>
   
+  ## ** First, render styles for custom edges **
+  #foreach( $customEdge in $customEdgeSet )
+    #renderEdgeVisualNotation( $customEdge["id"] $customEdge["src"] $customEdge["tgt"] "4001" )
+  #end
+  
+  ## ** Finally, render styles for remaining edges that are not dropped **
   #foreach( $edge in $edges )
-    #renderEdgeVisualNotation( $edge )
+    #if( $blacklistEdge.contains($edge) != true )
+      #set( $edgeTypeNumber = "4001" ) ## ARC
+      #if( $edge.Type.split("\.")[1] == "InformationEdge" )
+        #set( $edgeTypeNumber = "4002" ) ## Relation
+      #end
+      #renderEdgeVisualNotation( $edge.Id $edge.Source.Id $edge.Target.Id, $edgeTypeNumber )
+    #end
   #end
   
   </notation:Diagram>
