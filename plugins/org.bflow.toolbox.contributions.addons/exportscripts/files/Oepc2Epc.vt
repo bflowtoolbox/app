@@ -112,7 +112,7 @@
     #set( $precFunc = "NULL" )
     #foreach( $method in $shape.BusinessMethods )
       #set( $bndX = $locX )
-      #set( $bndY = $locY + $n * 40 )
+      #set( $bndY = $locY + $n * 80 )
       #set( $name = $method.Name )
       #set( $id = $uuid.create() )
       
