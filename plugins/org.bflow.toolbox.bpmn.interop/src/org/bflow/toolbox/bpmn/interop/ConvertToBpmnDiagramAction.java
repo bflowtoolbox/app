@@ -84,22 +84,32 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 		if (pathEditorInput == null) return;
 		
 		File sourceFile = pathEditorInput.getPath().toFile();
-		File targetFile = getTargetFile(sourceFile);
+		File epcTargetFile = getTargetFile(sourceFile, ".epc"); // TODO to temp file
+		File bpmnTargetFile = getTargetFile(sourceFile, ".bpmn");
 		
 		// Check if the target file exists and ask the user how to proceed
-		if (targetFile.exists()) {
+		if (bpmnTargetFile.exists()) {
 			if (!MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 					Messages.ConvertToBpmnDiagramAction_MessageDialog_Title, 
 					Messages.ConvertToBpmnDiagramAction_MessageDialog_Hint)) return;
 		}
 		
 		// Perform the conversion
-		File targetFolder = targetFile.getParentFile();		
-		IInterchangeDescriptor descriptor = ExportDescriptorStore.getExportDescription("BPMN"); //$NON-NLS-1$
-		if (descriptor == null) return;
+		File targetFolder = bpmnTargetFile.getParentFile();
+		
+		// Collect required descriptors
+		IInterchangeDescriptor epcDescriptor = ExportDescriptorStore.getExportDescription("EPC");
+		if (epcDescriptor == null) return;
+
+		IInterchangeDescriptor bpmnDescriptor = ExportDescriptorStore.getExportDescription("BPMN"); //$NON-NLS-1$
+		if (bpmnDescriptor == null) return;
 		
 		try {
-			InterchangeProcessService.processExport(sourceFile, targetFolder, descriptor);
+			// First, we have to transform from oEPC to EPC
+			InterchangeProcessService.processExport(sourceFile, targetFolder, epcDescriptor);
+			
+			// Then, we have to transform from EPC to BPMN
+			InterchangeProcessService.processExport(epcTargetFile, targetFolder, bpmnDescriptor);			
 		} catch (InterchangeProcessingException ex) {
 			throw new RuntimeException(
 					Messages.ConvertToBpmnDiagramAction_Error_ModelConversion, 
@@ -122,6 +132,8 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 					Messages.ConvertToBpmnDiagramAction_Error_RefreshWorkspace, 
 					ex);
 		}
+		
+		// TODO Ask to open the new BPMN model
 	}
 	
 	/**
@@ -129,13 +141,14 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 	 * {@code sourceFile}.
 	 * 
 	 * @param sourceFile Source file
+	 * @param fileExtensions File extension
 	 * @return File pointer to the derived target file
 	 */
-	private File getTargetFile(File sourceFile) {
+	private File getTargetFile(File sourceFile, String fileExtensions) {
 		String sourceFilePath = sourceFile.getAbsolutePath();
 		String sourceFileName = FilenameUtils.getBaseName(sourceFilePath);
 		String sourceFileDirPath = FilenameUtils.getFullPath(sourceFilePath);
-		String targetFilePath = FilenameUtils.concat(sourceFileDirPath, sourceFileName + ".bpmn"); //$NON-NLS-1$
+		String targetFilePath = FilenameUtils.concat(sourceFileDirPath, sourceFileName + fileExtensions); //$NON-NLS-1$
 		return new File(targetFilePath);
 	}
 	
