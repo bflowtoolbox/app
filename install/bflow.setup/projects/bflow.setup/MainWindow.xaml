@@ -7,7 +7,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:cmd="clr-namespace:bflow.setup"
         Title="bflow* Toolbox 1.5.0 Installation" 
-        Height="363" 
+        Height="428" 
         Width="555" 
         Icon="images/bee.ico" 
         ResizeMode="NoResize"
@@ -36,14 +36,15 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Image Source="images/bflow-logo.png" Height="65" Margin="10"/>
         <StackPanel Grid.Column="1" Margin="10,0,0,0">
             <TextBlock TextWrapping="Wrap" FontSize="24" FontWeight="DemiBold" Margin="0,0,0,5">bflow* Toolbox 1.5.0 Installation</TextBlock>
             <TextBlock TextWrapping="Wrap">Wählen Sie den Installationspfad und die gewünschte Sprache aus und starten Sie die Installation mit einem Klick auf <Italic>Installieren</Italic>.</TextBlock>
         </StackPanel>
-        <Label Grid.Row="1" Content="Installationspfad" HorizontalAlignment="Right" Margin="0,30,-5,0" />
-        <WrapPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,30,0,0">
+        <Label Grid.Row="1" Content="Installationspfad" HorizontalAlignment="Right" Margin="0,20,-5,0" />
+        <WrapPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,20,0,0">
             <TextBox Name="_textboxPath" 
                      Text="{Binding Path=TargetPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                      Width="300" 
@@ -80,9 +81,42 @@
             <ComboBoxItem IsSelected="True">Deutsch</ComboBoxItem>
             <ComboBoxItem>Englisch</ComboBoxItem>
         </ComboBox>
-        <StackPanel Grid.Row="3" 
+        <GroupBox Grid.Row="3" Grid.Column="1" Height="70" Width="350"  VerticalAlignment="Center" Margin="-28,20,0,0">
+            <GroupBox.Header>
+                <CheckBox Name="_checkboxGroupPath"
+                  IsEnabled="{Binding Path=CheckboxGroupPathIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                  Command="{Binding CheckGroupCommand}"
+                  IsChecked="{Binding Path=CheckboxGroupPathIsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                  Grid.Row="3" 
+                  HorizontalAlignment="Right" 
+                  VerticalAlignment="Top" 
+                  >Gruppenordner</CheckBox>
+            </GroupBox.Header>
+            <WrapPanel Margin="5,10,0,0">
+                <TextBox Name="_textboxGroupPath" 
+                     Text="{Binding Path=GroupTargetPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                     Width="300" 
+                     Height="Auto"
+                     Padding="5" 
+                     BorderThickness="0.5,0.5,0,0.5" 
+                     IsReadOnly="True" 
+                     IsEnabled="{Binding Path=TextboxGroupPathIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <Button Background="White" 
+                    Command="{Binding BrowseGroupCommand}" 
+                    BorderThickness="0,0.5,0.5,0.5" 
+                    Padding="5" 
+                    Name="GroupBrowseButton"
+                    IsEnabled="{Binding Path=BrowseGroupButtonIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                    <Button.BorderBrush>
+                        <SolidColorBrush Color="#FFABADB3"/>
+                    </Button.BorderBrush>
+                    <Image Source="images/foldericon.png" Width="15" />
+                </Button>
+            </WrapPanel>
+        </GroupBox>
+        <StackPanel Grid.Row="4" 
                     Grid.Column="1" 
-                    Margin="10,35,0,0" 
+                    Margin="13,20,0,0" 
                     HorizontalAlignment="Left" 
                     Visibility="{Binding Path=ProgressVisibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                     Name="showProgress">
@@ -97,8 +131,8 @@
                        Name="progBarText" 
                        Text="{Binding Path=ProgressBarText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         </StackPanel>
-        <Separator Grid.Row="4" Grid.ColumnSpan="2" Margin="-15,20,-15,0" Width="545" SnapsToDevicePixels="True" />
-        <WrapPanel Grid.Row="5" Grid.Column="1" Margin="15,5,0,0" HorizontalAlignment="Right">
+        <Separator Grid.Row="5" Grid.ColumnSpan="2" Margin="-15,20,-15,0" Width="545" SnapsToDevicePixels="True" />
+        <WrapPanel Grid.Row="6" Grid.Column="1" Margin="15,5,0,0" HorizontalAlignment="Right">
             <Button Content="Installieren" 
                     Height="Auto" 
                     Width="70" 
