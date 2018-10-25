@@ -84,13 +84,22 @@
         <GroupBox Grid.Row="3" Grid.Column="1" Height="70" Width="350"  VerticalAlignment="Center" Margin="-28,20,0,0">
             <GroupBox.Header>
                 <CheckBox Name="_checkboxGroupPath"
+                          Content="Gruppenordner"
                   IsEnabled="{Binding Path=CheckboxGroupPathIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                   Command="{Binding CheckGroupCommand}"
                   IsChecked="{Binding Path=CheckboxGroupPathIsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                   Grid.Row="3" 
                   HorizontalAlignment="Right" 
-                  VerticalAlignment="Top" 
-                  >Gruppenordner</CheckBox>
+                  VerticalAlignment="Top">
+                    <!--<CheckBox.ToolTip>
+                        <ToolTip>
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Submit Request</TextBlock>
+                                <TextBlock>Submits the request to the server.</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </CheckBox.ToolTip>-->
+                </CheckBox>
             </GroupBox.Header>
             <WrapPanel Margin="5,10,0,0">
                 <TextBox Name="_textboxGroupPath" 

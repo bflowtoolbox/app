@@ -14,7 +14,8 @@ using File = System.IO.File;
 
 namespace bflow.setup {
     public class MainWindowViewModel : INotifyPropertyChanged {
-        private string _targetPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        private string _targetPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\bflow";
+        private string _tempPath = Path.GetTempPath(); // Temppath
         private string _groupTargetPath = string.Empty;
         private string _language = "Deutsch";
         private string _closeButtonText = "Schließen";
@@ -31,8 +32,8 @@ namespace bflow.setup {
         private bool _checkboxGroupPathIsChecked = false;
         public Action CloseAction { get; set; }
 
-        private const string unixCarriageReturn = "\n";
-        private const string windowsCarriageReturn = "\r\n";
+        private const string UnixCarriageReturn = "\n";
+        private const string WindowsCarriageReturn = "\r\n";
         private const string BflowPackageName = "bflow-1.5.0.zip";
 
         private bool _doOverwrite;
@@ -334,16 +335,16 @@ namespace bflow.setup {
         }
 
         /// <summary>
-        /// Creates a new Ini file in the installation folder with the content of the field _iiniText
+        /// Creates a new Ini file in the installation folder with the content of the field _iniText
         /// </summary>
         private void CreateIni() {
             Dictionary<string, string> iniValueMap = new Dictionary<string, string>();
             string line = string.Empty;
-            string iniPath = TargetPath + _installRoot + "\\bflow.ini";
+            string iniPath = TargetPath + "\\bflow.ini";
             string oldIniText = File.ReadAllText(iniPath);
-            string carriageReturn = oldIniText.Contains(windowsCarriageReturn)
-                ? windowsCarriageReturn
-                : unixCarriageReturn;
+            string carriageReturn = oldIniText.Contains(WindowsCarriageReturn)
+                ? WindowsCarriageReturn
+                : UnixCarriageReturn;
 
             string[] oldIniLines = oldIniText.Split(new[] { carriageReturn }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i <= oldIniLines.Length / 2; i += 2) {
@@ -374,7 +375,7 @@ namespace bflow.setup {
             shortcut.TargetPath = targetPath;
             shortcut.WorkingDirectory = Path.GetDirectoryName(targetPath);
             shortcut.Description = "bflow Toolbox";
-            var iconLocation = TargetPath + _installRoot + "\\beeDesk.ico"; // global??
+            var iconLocation = TargetPath + "\\beeDesk.ico"; // global??
             using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.images.beeDesk.ico")) {
                 using (var file = new FileStream(iconLocation, FileMode.Create, FileAccess.Write)) {
                     resource.CopyTo(file);
@@ -421,7 +422,7 @@ namespace bflow.setup {
         private void OnExecuteInstall(object obj) {
             _hasInstallStarted = true;
             EnableUI(false);
-            _doOverwrite = doOverwrite(TargetPath + _installRoot);
+            _doOverwrite = doOverwrite(TargetPath);
             changeCloseButtonText();
             worker = new BackgroundWorker();
             worker.WorkerSupportsCancellation = true;
@@ -522,23 +523,31 @@ namespace bflow.setup {
                                 // Give some time to interact
                                 Thread.Sleep(200);
 #endif
-                                zipEntry.Extract(TargetPath, fileAction);
+                                //zipEntry.Extract(TargetPath, fileAction);
+                                zipEntry.Extract(_tempPath, fileAction);
                                 int progressSteps = Convert.ToInt32(Math.Ceiling(100.00 / filesMax));
                                 worker.ReportProgress((fileCount + 1) * progressSteps, string.Format("Kopiere {0}/{1} Dateien", fileCount + 1, filesMax));
                                 fileCount++;
                             } else {
                                 _hasInstallStarted = false;
+                                Directory.Delete(_tempPath + _installRoot, true); //Temp folder löschen??
                                 EnableUI(true);
                                 return;
                             }
                         }
                     }
+                    if (Directory.Exists(TargetPath)) {
+                        Directory.Delete(TargetPath, true);
+                    }
+
+                    Thread.Sleep(100); // The app has to wait so that the directory is deleted when the moving action is started
+                    Directory.Move(_tempPath + _installRoot, TargetPath);
                     try {
                         CreateIni();
+                        CreateShortcut();
                     } catch (Exception ex) {
                         System.Windows.MessageBox.Show(ex.Message);
                     }
-                    CreateShortcut();
                     _hasInstallFinished = true;
                 }
             }
