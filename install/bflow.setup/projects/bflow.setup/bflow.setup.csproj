@@ -100,8 +100,8 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <EmbeddedResource Include="zippacks\Test.zip" />
     <EmbeddedResource Include="zippacks\bflow-1.5.0.zip" />
+    <EmbeddedResource Include="zippacks\bflow.zip" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetZip">

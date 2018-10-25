@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using File = System.IO.File;
 
 namespace bflow.setup {
     public class MainWindowViewModel : INotifyPropertyChanged {
@@ -28,15 +30,17 @@ namespace bflow.setup {
         private bool _checkboxGroupPathIsEnabled = true;
         private bool _checkboxGroupPathIsChecked = false;
         public Action CloseAction { get; set; }
-        Dictionary<string, string> _iniTextA = new Dictionary<string, string>();
 
+        private const string unixCarriageReturn = "\n";
+        private const string windowsCarriageReturn = "\r\n";
         private const string BflowPackageName = "bflow-1.5.0.zip";
+
         private bool _doOverwrite;
         private bool _hasInstallStarted = false;
         private bool _hasInstallFinished = false;
         private bool _pauseBackgroundworker = false;
-        private string _installRoot = "\\bflow Toolbox";
-        private string _iniText = "-nl ";
+        private string _installRoot = "\\bflow";
+        private string _iniLanguage = string.Empty;
         private BackgroundWorker worker;
 
         public ICommand CloseCommand { get; set; } = new RelayCommand(OnExecuteClose, OnCanExecuteClose);
@@ -254,13 +258,13 @@ namespace bflow.setup {
             DialogResult result = folderBrowserDialog.ShowDialog();
             string selectedPath = folderBrowserDialog.SelectedPath;
             GroupTargetPath = selectedPath;
-            if (GroupTargetPath != String.Empty) {
+            if (GroupTargetPath != string.Empty) {
                 InstallButtonIsEnabled = true;
             } else {
                 InstallButtonIsEnabled = false;
             }
             if (result == DialogResult.Cancel) {
-                GroupTargetPath = String.Empty;
+                GroupTargetPath = string.Empty;
             }
         }
 
@@ -273,7 +277,7 @@ namespace bflow.setup {
         }
 
         private static void OnExecuteClose(object obj) {
-            App.Current.MainWindow.Close();
+            System.Windows.Application.Current.MainWindow.Close();
         }
 
         private bool OnCanExecuteExit(object arg) {
@@ -324,8 +328,6 @@ namespace bflow.setup {
         private void changeCloseButtonText() {
             if (_hasInstallStarted && !_hasInstallFinished) {
                 CloseButtonText = "Abbrechen";
-            } else if (_hasInstallFinished) {
-                CloseButtonText = "Schließen";
             } else {
                 CloseButtonText = "Schließen";
             }
@@ -335,39 +337,30 @@ namespace bflow.setup {
         /// Creates a new Ini file in the installation folder with the content of the field _iiniText
         /// </summary>
         private void CreateIni() {
+            Dictionary<string, string> iniValueMap = new Dictionary<string, string>();
             string line = string.Empty;
-            int lineCount = 0;
-            try {
-                StreamReader streamCounter = new StreamReader(TargetPath + _installRoot + "\\bflow.ini");
-                while (streamCounter.ReadLine() != null) {
-                    lineCount++;
-                }
-                streamCounter.Close();
-                StreamReader streamReader = new StreamReader(TargetPath + _installRoot + "\\bflow.ini");
-                int arrLength = lineCount / 2;
-                string[] iniKey = new string[arrLength];
-                string[] iniValue = new string[arrLength];
-                while (line != null) {
-                    //Console.WriteLine(text);
-                    for (int i = 0; i < arrLength; i++) {
-                        line = streamReader.ReadLine();
-                        if (line.Substring(0, 1) == "-") {
-                            iniKey[i] = line;
-                        } else if (line.Substring(0, 1) != "-") {
-                            iniValue[i] = line;
-                        } else {
-                            //Exception
-                        }
-                        //_iniTextA.Add(iniKey, iniValue);
-                    }
-                }
-                streamReader.Close();
-                //System.IO.File.WriteAllText(TargetPath + _installRoot + "\\bflow.ini", _iniText);
-            } catch (Exception e) {
-                //Console.WriteLine("Exception: " + e.Message);
-            } finally {
-                //Console.WriteLine("Executing finally block.");
+            string iniPath = TargetPath + _installRoot + "\\bflow.ini";
+            string oldIniText = File.ReadAllText(iniPath);
+            string carriageReturn = oldIniText.Contains(windowsCarriageReturn)
+                ? windowsCarriageReturn
+                : unixCarriageReturn;
+
+            string[] oldIniLines = oldIniText.Split(new[] { carriageReturn }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i <= oldIniLines.Length / 2; i += 2) {
+                string key = oldIniLines[i];
+                string value = oldIniLines[i + 1];
+                iniValueMap.Add(key, value);
             }
+            // There are two cases: Either the language key does already exist, than the value can simply be overwritten.
+            // Or the language key doesn't exist (shouldn't be happening!), than the key-value-pair is added.
+            iniValueMap["-nl"] = _iniLanguage;
+            if (GroupTargetPath != string.Empty) {
+                // As seen above
+                iniValueMap["--sharedfolder"] = GroupTargetPath;
+            }
+            IEnumerable<string> entryList = iniValueMap.Select(pair => pair.Key + carriageReturn + pair.Value);
+            string newIniText = string.Join(carriageReturn, entryList);
+            File.WriteAllText(iniPath, newIniText);
         }
 
         /// <summary>
@@ -414,10 +407,10 @@ namespace bflow.setup {
 
         private bool OnCanExecuteInstall(object arg) {
             if (Language == "Deutsch") {
-                _iniText += "de_DE";
+                _iniLanguage = "de_DE";
                 return true;
             } else if (Language == "Englisch") {
-                _iniText += "en_US";
+                _iniLanguage = "en_US";
                 return true;
             } else {
                 System.Windows.MessageBox.Show("Bitte geben Sie eine gültige Sprache ein!");
@@ -443,7 +436,7 @@ namespace bflow.setup {
             if (CheckboxGroupPathIsChecked) {
                 TextboxGroupPathIsEnabled = true;
                 BrowseGroupButtonIsEnabled = true;
-                if (GroupTargetPath == String.Empty) {
+                if (GroupTargetPath == string.Empty) {
                     InstallButtonIsEnabled = false;
                 }
             } else {
@@ -495,7 +488,7 @@ namespace bflow.setup {
             string packageName = BflowPackageName; // überprüfen
 
 #if  DEBUG
-            packageName = "Test.zip";
+            packageName = "bflow.zip";
 #endif
 
             ExtractExistingFileAction fileAction = ExtractExistingFileAction.Throw;
@@ -530,7 +523,8 @@ namespace bflow.setup {
                                 Thread.Sleep(200);
 #endif
                                 zipEntry.Extract(TargetPath, fileAction);
-                                worker.ReportProgress((fileCount + 1) * (100 / filesMax), string.Format("Kopiere {0}/{1} Dateien", fileCount + 1, filesMax));
+                                int progressSteps = Convert.ToInt32(Math.Ceiling(100.00 / filesMax));
+                                worker.ReportProgress((fileCount + 1) * progressSteps, string.Format("Kopiere {0}/{1} Dateien", fileCount + 1, filesMax));
                                 fileCount++;
                             } else {
                                 _hasInstallStarted = false;
@@ -539,7 +533,11 @@ namespace bflow.setup {
                             }
                         }
                     }
-                    CreateIni();
+                    try {
+                        CreateIni();
+                    } catch (Exception ex) {
+                        System.Windows.MessageBox.Show(ex.Message);
+                    }
                     CreateShortcut();
                     _hasInstallFinished = true;
                 }
