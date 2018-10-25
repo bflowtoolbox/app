@@ -82,6 +82,25 @@
 #end
 
 ## **
+## * Adds only(!) an edge to any IT-System if there is exactly one method.
+## **
+#macro( addEdgeToITSystem $itsysShapes $methodDef $max )
+  #if( $max == 0 ) ## Due to index shift
+    #foreach( $itsys in $itsysShapes )
+      #set( $iseId = $uuid.create() )
+      #set( $iseEdge = {
+    						"id":$iseId,
+        					"src":$itsys.Id,
+        					"tgt":$methodDef["id"],
+        					"knd":"Relation"
+      					} )
+    #set( $_ = $customEdgeSet.add($iseEdge) )
+    #set( $_ = $methodDef["in"].add($iseId) ) 
+    #end
+  #end
+#end
+
+## **
 ## * Selects each edge that is either incoming from or outgoing to the shape 
 ## * and builds a string line with the ids. 
 ## * Note, blacklisted elements are ignored.
@@ -182,6 +201,7 @@
       #set( $_ = $customFunctionSet.add($methodDef) )
       
       #addEdgeToEachOrgUnit( $orgShapes $methodDef )
+      #addEdgeToITSystem( $itsysShapes $methodDef $max )
       
       #if( $n == 0 )
         #set( $fstFunc = $methodDef )
@@ -211,15 +231,18 @@
     #foreach( $edge in $incomingEdges )
       #set( $_ = $blacklistEdge.add($edge) )
       
-      #set( $edgeId = $uuid.create() )
-      #set( $edgeDef = {
-      					"id":$edgeId,
-        				"src":$edge.Source.Id,
-        				"tgt":$fstFunc["id"],
-        				"knd":"Arc"
-        				} )
-      #set( $_ = $customEdgeSet.add($edgeDef) )
-      #set( $_ = $fstFunc["in"].add($edgeId) )
+      ##* Don't creates edges to IT-Systems; it's already done *
+      #if( $itsysShapes.contains($edge.Source) != true ) 
+        #set( $edgeId = $uuid.create() )
+        #set( $edgeDef = {
+      	  					"id":$edgeId,
+        					"src":$edge.Source.Id,
+        					"tgt":$fstFunc["id"],
+        					"knd":"Arc"
+        					} )
+        #set( $_ = $customEdgeSet.add($edgeDef) )
+        #set( $_ = $fstFunc["in"].add($edgeId) )
+      #end
     #end
     
     ## ** Drop each outgoing edge from the business object and create a new edge from the last function **
