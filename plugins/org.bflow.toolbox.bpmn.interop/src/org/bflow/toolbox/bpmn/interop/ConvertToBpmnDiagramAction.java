@@ -109,7 +109,10 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 			InterchangeProcessService.processExport(sourceFile, targetFolder, epcDescriptor);
 			
 			// Then, we have to transform from EPC to BPMN
-			InterchangeProcessService.processExport(epcTargetFile, targetFolder, bpmnDescriptor);			
+			InterchangeProcessService.processExport(epcTargetFile, targetFolder, bpmnDescriptor);
+			
+			// Remove the temporarily EPC file
+			epcTargetFile.delete();
 		} catch (InterchangeProcessingException ex) {
 			throw new RuntimeException(
 					Messages.ConvertToBpmnDiagramAction_Error_ModelConversion, 
