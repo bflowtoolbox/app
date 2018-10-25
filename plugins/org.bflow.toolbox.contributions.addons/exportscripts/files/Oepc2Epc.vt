@@ -73,7 +73,8 @@
     #set( $orgUnitEdge = {
     						"id":$oueId,
         					"src":$orgunit.Id,
-        					"tgt":$methodDef["id"]
+        					"tgt":$methodDef["id"],
+        					"knd":"Relation"
       					} )
     #set( $_ = $customEdgeSet.add($orgUnitEdge) )
     #set( $_ = $methodDef["in"].add($oueId) )
@@ -189,7 +190,8 @@
         #set( $edgeDef = {
       					"id":$edgeId,
         				"src":$precFunc["id"],
-        				"tgt":$methodDef["id"]
+        				"tgt":$methodDef["id"],
+        				"knd":"Arc"
         				} )
         #set( $_ = $customEdgeSet.add($edgeDef) )
         
@@ -213,7 +215,8 @@
       #set( $edgeDef = {
       					"id":$edgeId,
         				"src":$edge.Source.Id,
-        				"tgt":$fstFunc["id"]
+        				"tgt":$fstFunc["id"],
+        				"knd":"Arc"
         				} )
       #set( $_ = $customEdgeSet.add($edgeDef) )
       #set( $_ = $fstFunc["in"].add($edgeId) )
@@ -229,7 +232,8 @@
         #set( $edgeDef = {
       	  					"id":$edgeId,
         					"src":$lstFunc["id"],
-        					"tgt":$edge.Target.Id
+        					"tgt":$edge.Target.Id,
+        					"knd":"Arc"
         					} )
         #set( $_ = $customEdgeSet.add($edgeDef) )
         #set( $_ = $lstFunc["out"].add($edgeId) )
@@ -383,7 +387,8 @@
     #set( $edgeId = $customEdge["id"] )
     #set( $edgeSource = $customEdge["src"] )
     #set( $edgeTarget = $customEdge["tgt"] )
-    <connections xmi:type="epc:Arc" xmi:id="$edgeId" from="$edgeSource" to="$edgeTarget" />
+    #set( $edgeKind = $customEdge["knd"] )
+    <connections xmi:type="epc:$edgeKind" xmi:id="$edgeId" from="$edgeSource" to="$edgeTarget" />
   #end 
 
   ## ** Then, render the remaining shapes but no business objects **
@@ -433,7 +438,11 @@
   
   ## ** First, render styles for custom edges **
   #foreach( $customEdge in $customEdgeSet )
-    #renderEdgeVisualNotation( $customEdge["id"] $customEdge["src"] $customEdge["tgt"] "4001" )
+    #set( $etn = "4001" ) ## ARC
+    #if ( $customEdge["knd"] == "Relation" )
+      #set( $etn = "4002" ) ## Relation
+    #end
+    #renderEdgeVisualNotation( $customEdge["id"] $customEdge["src"] $customEdge["tgt"] $etn )
   #end
   
   ## ** Finally, render styles for remaining edges that are not dropped **
