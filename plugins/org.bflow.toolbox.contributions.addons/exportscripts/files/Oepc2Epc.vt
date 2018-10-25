@@ -37,6 +37,50 @@
 #end
 
 ## **
+## * Adds all target shapes of the edges from the edgeSet which target 
+## * kind (tgtKndName) is the same as specified to the given result set (rsltSet).
+## **
+#macro( selectRelatedTargetShapes $edgeSet $tgtKndName $rsltSet )
+  #foreach( $edge in $edgeSet )
+    #if( $edge.Target.Type.toString().endsWith($tgtKndName) )
+      #set( $_ = $rsltSet.add($edge.Target) )
+    #end
+  #end
+#end
+
+## **
+## * Adds all source shapes of the edges from the edgeSet which source 
+## * kind (srcKndName) is the same as specified to the given result set (rsltSet).
+## **
+#macro( selectRelatedSourceShapes $edgeSet $srcKndName $rsltSet )
+  #foreach( $edge in $edgeSet )
+    #if( $edge.Source.Type.toString().endsWith($srcKndName) )
+      #set( $_ = $rsltSet.add($edge.Source) )
+    #end
+  #end
+#end
+
+## **
+## * Adds an edge to each shape of the given orgShapes set where 
+## * the given methodDef is the target of the edge.
+## **
+#macro( addEdgeToEachOrgUnit $orgShapes $methodDef ) 
+  ##* Each function has to be connected with an org unit*
+  ##* Note, the first is by default *
+  #foreach( $orgunit in $orgShapes )
+  ##* Edge from the org unit to the function *
+    #set( $oueId = $uuid.create() )
+    #set( $orgUnitEdge = {
+    						"id":$oueId,
+        					"src":$orgunit.Id,
+        					"tgt":$methodDef["id"]
+      					} )
+    #set( $_ = $customEdgeSet.add($orgUnitEdge) )
+    #set( $_ = $methodDef["in"].add($oueId) )
+  #end
+#end
+
+## **
 ## * Selects each edge that is either incoming from or outgoing to the shape 
 ## * and builds a string line with the ids. 
 ## * Note, blacklisted elements are ignored.
@@ -102,6 +146,14 @@
     #set( $outgoingEdges = [] )
     #selectConnectedEdges( $shape $incomingEdges $outgoingEdges )
     
+    #set( $orgShapes = [] )   ## Related organisation units
+    #selectRelatedTargetShapes( $outgoingEdges "OrganisationUnit" $orgShapes )
+    #selectRelatedSourceShapes( $incomingEdges "OrganisationUnit" $orgShapes )
+    
+    #set( $itsysShapes = [] ) ## Related IT system
+    #selectRelatedTargetShapes( $outgoingEdges "ITSystem" $itsysShapes )
+    #selectRelatedSourceShapes( $incomingEdges "ITSystem" $itsysShapes )
+    
     #set( $locX = $shape.X )
     #set( $locY = $shape.Y )
     
@@ -128,6 +180,8 @@
       						} )
       #set( $_ = $customFunctionSet.add($methodDef) )
       
+      #addEdgeToEachOrgUnit( $orgShapes $methodDef )
+      
       #if( $n == 0 )
         #set( $fstFunc = $methodDef )
       #else
@@ -140,7 +194,7 @@
         #set( $_ = $customEdgeSet.add($edgeDef) )
         
         #set( $_ = $methodDef["in"].add($edgeId) )
-        #set( $_ = $precFunc["out"].add($edgeId) )
+        #set( $_ = $precFunc["out"].add($edgeId) )  
       #end 
             
       #if( $n == $max )
@@ -168,14 +222,18 @@
     ## ** Drop each outgoing edge from the business object and create a new edge from the last function **
     #foreach( $edge in $outgoingEdges )
       #set( $_ = $blacklistEdge.add($edge) )
-      #set( $edgeId = $uuid.create() )
-      #set( $edgeDef = {
-      					"id":$edgeId,
-        				"src":$lstFunc["id"],
-        				"tgt":$edge.Target.Id
-        				} )
-      #set( $_ = $customEdgeSet.add($edgeDef) )
-      #set( $_ = $lstFunc["out"].add($edgeId) )
+      
+      ##* Don't creates edges to orgunits; it's already done *
+      #if ( $orgShapes.contains($edge.Target) != true )
+        #set( $edgeId = $uuid.create() )
+        #set( $edgeDef = {
+      	  					"id":$edgeId,
+        					"src":$lstFunc["id"],
+        					"tgt":$edge.Target.Id
+        					} )
+        #set( $_ = $customEdgeSet.add($edgeDef) )
+        #set( $_ = $lstFunc["out"].add($edgeId) )
+      #end
     #end
     
   #end
