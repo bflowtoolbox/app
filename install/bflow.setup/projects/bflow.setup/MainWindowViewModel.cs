@@ -3,6 +3,7 @@ using IWshRuntimeLibrary;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -21,6 +22,8 @@ namespace bflow.setup {
         private string _closeButtonText = "Schließen";
         private string _progressBarText = string.Empty;
         private int _progressBarValue;
+        private double _closeButtonOpacity = 1.0;
+        private bool _progressBarIndeterminate = false;
         private bool _textboxPathIsEnabled = true;
         private bool _textboxGroupPathIsEnabled = false;
         private Visibility _progressVisibility { get; set; } = Visibility.Hidden;
@@ -28,6 +31,7 @@ namespace bflow.setup {
         private bool _browseButtonIsEnabled = true;
         private bool _browseGroupButtonIsEnabled = false;
         private bool _installButtonIsEnabled = true;
+        private bool _closeButtonIsEnabled = true;
         private bool _checkboxGroupPathIsEnabled = true;
         private bool _checkboxGroupPathIsChecked = false;
         public Action CloseAction { get; set; }
@@ -39,6 +43,7 @@ namespace bflow.setup {
         private bool _doOverwrite;
         private bool _hasInstallStarted = false;
         private bool _hasInstallFinished = false;
+        private bool _isInstallSuccess = false;
         private bool _pauseBackgroundworker = false;
         private string _installRoot = "\\bflow";
         private string _iniLanguage = string.Empty;
@@ -129,6 +134,17 @@ namespace bflow.setup {
             }
         }
 
+        public double CloseButtonOpacity {
+            get { return _closeButtonOpacity; }
+
+            set {
+                if (_closeButtonOpacity != value) {
+                    _closeButtonOpacity = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(CloseButtonOpacity)));
+                }
+            }
+        }
+
         public Visibility ProgressVisibility {
             get { return _progressVisibility; }
 
@@ -147,6 +163,17 @@ namespace bflow.setup {
                 if (_textboxPathIsEnabled != value) {
                     _textboxPathIsEnabled = value;
                     PropertyChanged(this, new PropertyChangedEventArgs(nameof(TextboxPathIsEnabled)));
+                }
+            }
+        }
+
+        public bool ProgressBarIndeterminate {
+            get { return _progressBarIndeterminate; }
+
+            set {
+                if (_progressBarIndeterminate != value) {
+                    _progressBarIndeterminate = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(ProgressBarIndeterminate)));
                 }
             }
         }
@@ -292,33 +319,37 @@ namespace bflow.setup {
         /// </summary>
         private void OnExecuteExit(object obj) {
             CancelEventArgs eventArgs = (CancelEventArgs)obj;
-            if (_hasInstallStarted == false && _hasInstallFinished == false) {
-                MessageBoxResult result = System.Windows.MessageBox.Show("Möchten Sie das Programm schließen?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
-                switch (result) {
-                    case MessageBoxResult.Yes:
-                        eventArgs.Cancel = false;
-                        break;
-                    case MessageBoxResult.No:
-                        eventArgs.Cancel = true;
-                        break;
+            if (_closeButtonIsEnabled) {
+                if (!_hasInstallStarted && !_hasInstallFinished && !_isInstallSuccess) {
+                    MessageBoxResult result = System.Windows.MessageBox.Show("Möchten Sie das Programm schließen?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
+                    switch (result) {
+                        case MessageBoxResult.Yes:
+                            eventArgs.Cancel = false;
+                            break;
+                        case MessageBoxResult.No:
+                            eventArgs.Cancel = true;
+                            break;
+                    }
+                } else if (_hasInstallStarted && _hasInstallFinished) {
+                    eventArgs.Cancel = false;
+                } else {
+                    eventArgs.Cancel = true;
+                    _pauseBackgroundworker = true;
+                    MessageBoxResult result = System.Windows.MessageBox.Show("Möchten Sie die Installation abbrechen?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
+                    _pauseBackgroundworker = false;
+                    switch (result) {
+                        case MessageBoxResult.Yes:
+                            worker.CancelAsync();
+                            ProgressVisibility = Visibility.Hidden;
+                            _hasInstallStarted = false;
+                            ChangeCloseButtonText();
+                            break;
+                        case MessageBoxResult.No:
+                            return;
+                    }
                 }
-            } else if (_hasInstallStarted && _hasInstallFinished) {
-                eventArgs.Cancel = false;
-            } else if (_hasInstallStarted && _hasInstallFinished == false) {
+            } else {
                 eventArgs.Cancel = true;
-                _pauseBackgroundworker = true;
-                MessageBoxResult result = System.Windows.MessageBox.Show("Möchten Sie die Installation abbrechen?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
-                _pauseBackgroundworker = false;
-                switch (result) {
-                    case MessageBoxResult.Yes:
-                        worker.CancelAsync();
-                        ProgressVisibility = Visibility.Hidden;
-                        _hasInstallStarted = false;
-                        changeCloseButtonText();
-                        break;
-                    case MessageBoxResult.No:
-                        return;
-                }
             }
         }
 
@@ -326,8 +357,8 @@ namespace bflow.setup {
         /// While the installation is running, the text on the Close Button shows "Abbrechen",
         /// otherwise it shows "Schließen"
         /// </summary>
-        private void changeCloseButtonText() {
-            if (_hasInstallStarted && !_hasInstallFinished) {
+        private void ChangeCloseButtonText() {
+            if (_hasInstallStarted && !_hasInstallFinished && !_isInstallSuccess) {
                 CloseButtonText = "Abbrechen";
             } else {
                 CloseButtonText = "Schließen";
@@ -422,8 +453,8 @@ namespace bflow.setup {
         private void OnExecuteInstall(object obj) {
             _hasInstallStarted = true;
             EnableUI(false);
-            _doOverwrite = doOverwrite(TargetPath);
-            changeCloseButtonText();
+            _doOverwrite = DoOverwrite(TargetPath);
+            ChangeCloseButtonText();
             worker = new BackgroundWorker();
             worker.WorkerSupportsCancellation = true;
             worker.RunWorkerCompleted += worker_RunWorkerCompleted;
@@ -466,7 +497,7 @@ namespace bflow.setup {
         /// </summary>
         /// <param name="directory"></param>
         /// <returns></returns>
-        private bool doOverwrite(string directory) {
+        private bool DoOverwrite(string directory) {
             if (Directory.Exists(directory) && Directory.GetFiles(directory, "*", SearchOption.AllDirectories).Length > 0) {
                 MessageBoxResult result = System.Windows.MessageBox.Show("Es existiert bereits ein Verzeichnis! Soll das Verzeichnis überschrieben werden?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.No) {
@@ -477,6 +508,25 @@ namespace bflow.setup {
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        /// After extracting the installation files to the temp folder, the files are moved to the target folder
+        /// Already existing folders are deleted
+        /// </summary>
+        private void MoveTempToTarget() {
+            if (Directory.Exists(TargetPath)) {
+                Directory.Delete(TargetPath, true);
+            }
+            // The app has to wait so that the directory is deleted when the moving action is started
+            // but not longer than 2 minutes
+            int elapsedTime = 0;
+            const int sleepTime = 1000;
+            while (Directory.Exists(TargetPath) && elapsedTime <= 120 * sleepTime) {
+                Thread.Sleep(sleepTime);
+                elapsedTime += sleepTime;
+            }
+            Directory.Move(_tempPath + _installRoot, TargetPath);
         }
 
         /// <summary>
@@ -523,32 +573,41 @@ namespace bflow.setup {
                                 // Give some time to interact
                                 Thread.Sleep(200);
 #endif
-                                //zipEntry.Extract(TargetPath, fileAction);
                                 zipEntry.Extract(_tempPath, fileAction);
                                 int progressSteps = Convert.ToInt32(Math.Ceiling(100.00 / filesMax));
                                 worker.ReportProgress((fileCount + 1) * progressSteps, string.Format("Kopiere {0}/{1} Dateien", fileCount + 1, filesMax));
                                 fileCount++;
                             } else {
                                 _hasInstallStarted = false;
-                                Directory.Delete(_tempPath + _installRoot, true); //Temp folder löschen??
                                 EnableUI(true);
                                 return;
                             }
                         }
                     }
-                    if (Directory.Exists(TargetPath)) {
-                        Directory.Delete(TargetPath, true);
-                    }
-
-                    Thread.Sleep(100); // The app has to wait so that the directory is deleted when the moving action is started
-                    Directory.Move(_tempPath + _installRoot, TargetPath);
+                    ProgressBarIndeterminate = true;
+                    ProgressBarText = "Installation abschließen";
+                    _closeButtonIsEnabled = false;
+                    CloseButtonText = "Warten...";
+                    CloseButtonOpacity = 0.5;
+                    EnableUI(false);
                     try {
+                        MoveTempToTarget();
                         CreateIni();
                         CreateShortcut();
+                        _hasInstallFinished = true;
+                        _isInstallSuccess = true;
                     } catch (Exception ex) {
                         System.Windows.MessageBox.Show(ex.Message);
+                        // The Installation has started and finished but was not successfull
+                        _hasInstallFinished = true;
+                        _isInstallSuccess = false;
+                        ChangeCloseButtonText();
+                        ProgressBarText = "Installation fehlgeschlagen.";
+                        ProgressBarValue = 0;
                     }
-                    _hasInstallFinished = true;
+                    _closeButtonIsEnabled = true;
+                    CloseButtonOpacity = 1.0;
+                    ProgressBarIndeterminate = false;
                 }
             }
         }
@@ -559,11 +618,16 @@ namespace bflow.setup {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            if (_hasInstallFinished) {
+            if (_hasInstallFinished && _isInstallSuccess) {
                 System.Windows.MessageBox.Show("Die Installation war erfolgreich!", "bflow* Toolbox 1.5.0", MessageBoxButton.OK);
-                changeCloseButtonText();
+                ChangeCloseButtonText();
+                ProgressBarText = "Installation abgeschlossen.";
             }
-            ProgressBarText = "Installation abgeschlossen.";
+            //Cleaning up the temp folder
+            if (Directory.Exists(_tempPath + _installRoot)) {
+                Directory.Delete(_tempPath + _installRoot, true);
+            }
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

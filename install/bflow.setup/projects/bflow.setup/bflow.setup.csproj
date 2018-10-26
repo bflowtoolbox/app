@@ -131,6 +131,8 @@
   <ItemGroup>
     <EmbeddedResource Include="images\beeDesk.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="images\infoicon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
