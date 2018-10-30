@@ -44,8 +44,8 @@
             <TextBlock TextWrapping="Wrap" FontSize="24" FontWeight="DemiBold" Margin="0,0,0,5">bflow* Toolbox 1.5.0 Installation</TextBlock>
             <TextBlock TextWrapping="Wrap">Wählen Sie den Installationspfad und die gewünschte Sprache aus und starten Sie die Installation mit einem Klick auf <Italic>Installieren</Italic>.</TextBlock>
         </StackPanel>
-        <Label Content="Installationspfad" HorizontalAlignment="Right" Grid.Row="1" />
-        <WrapPanel Grid.Column="1" Grid.Row="1" Margin="0">
+        <Label Content="Installationspfad" HorizontalAlignment="Right" Grid.Row="1"/>
+        <WrapPanel Grid.Column="1" Grid.Row="1">
             <TextBox Name="_textboxPath" 
                      Text="{Binding Path=TargetPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                      Width="325" 
@@ -64,7 +64,10 @@
                 <Button.BorderBrush>
                     <SolidColorBrush Color="#FFABADB3"/>
                 </Button.BorderBrush>
-                <Image Source="images/foldericon.png" Width="15" />
+                <TextBlock Style="{StaticResource LigatureSymbols}" 
+                               FontSize="20" 
+                               Text="&#xE04c;"
+                               Margin="5,-2,5,-2" Foreground="lightblue" />
             </Button>
         </WrapPanel>
         <Label Grid.Row="2" Content="Sprache" HorizontalAlignment="Right" Margin="0,5,0,0"/>
@@ -78,32 +81,35 @@
                   Height="Auto" 
                   Margin="10,5,0,0" 
                   Padding="5"
-                  IsEnabled="{Binding Path=SelectLanguageIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.RowSpan="2">
+                  IsEnabled="{Binding Path=SelectLanguageIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
             <ComboBoxItem IsSelected="True">Deutsch</ComboBoxItem>
             <ComboBoxItem>Englisch</ComboBoxItem>
         </ComboBox>
-        <GroupBox Grid.Row="3" BorderBrush="White" Padding="5" BorderThickness="0.325,0.325,0.45,0.45" Grid.Column="1" Height="70" Width="348"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,10,0,0">
+        <GroupBox Grid.Row="3" BorderBrush="White" Padding="5" BorderThickness="0.325,0.325,0.45,0.45" Grid.Column="1" Height="70" Width="358"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,10,0,0">
             <GroupBox.Header>
                 <WrapPanel>
                     <CheckBox Name="_checkboxGroupPath"
-                          Content="Gruppenordner"
-                  IsEnabled="{Binding Path=CheckboxGroupPathIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                  Command="{Binding CheckGroupCommand}"
-                  IsChecked="{Binding Path=CheckboxGroupPathIsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                  Grid.Row="3" 
-                  HorizontalAlignment="Right" 
-                  VerticalAlignment="Top">
+                              Content="Gruppenordner"
+                              IsEnabled="{Binding Path=CheckboxGroupPathIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              Command="{Binding CheckGroupCommand}"
+                              IsChecked="{Binding Path=CheckboxGroupPathIsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              Grid.Row="3"
+                              HorizontalAlignment="Right" 
+                              VerticalAlignment="Top">
                     </CheckBox>
-                    <Image Source="images/infoicon.png" Height="13" Margin="5,0,0,0" VerticalAlignment="Top">
-                        <Image.ToolTip>
+                    <TextBlock Style="{StaticResource LigatureSymbols}" 
+                               FontSize="20" 
+                               Text="&#xE075;"
+                               Margin="5,-2,5,-2" Foreground="#FFF1F9FF">
+                        <TextBlock.ToolTip>
                             <ToolTip MaxWidth="250">
                                 <StackPanel>
                                     <TextBlock FontWeight="Bold">Gruppenordner</TextBlock>
                                     <TextBlock TextWrapping="Wrap">Hinterlegen Sie hier den Pfad für den Gruppenordner auf dem Netzlaufwerk.</TextBlock>
                                 </StackPanel>
                             </ToolTip>
-                        </Image.ToolTip>
-                    </Image>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
                 </WrapPanel>
             </GroupBox.Header>
             <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -124,7 +130,10 @@
                     <Button.BorderBrush>
                         <SolidColorBrush Color="#FFABADB3"/>
                     </Button.BorderBrush>
-                    <Image Source="images/foldericon.png" Width="15" />
+                    <TextBlock Style="{StaticResource LigatureSymbols}" 
+                               FontSize="20" 
+                               Text="&#xE04c;"
+                               Margin="5,-2,5,-2" Foreground="lightblue" />
                 </Button>
             </WrapPanel>
         </GroupBox>
@@ -147,7 +156,7 @@
                        Text="{Binding Path=ProgressBarText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
         </StackPanel>
         <Separator Grid.Row="5" Grid.ColumnSpan="2" Margin="-2,40,-2,5" Width="545" SnapsToDevicePixels="True" />
-        <WrapPanel Grid.Row="6" Grid.Column="1" Margin="0,0,0,25" HorizontalAlignment="Right">
+        <WrapPanel Grid.Row="56" Grid.Column="1" Margin="0,0,0,25" HorizontalAlignment="Right">
             <Button Content="Installieren" 
                     Height="Auto" 
                     Width="70" 
@@ -161,7 +170,7 @@
                     Command="{Binding CloseCommand}"
                     Width="70" 
                     Padding="5" 
-                    Opacity="{Binding Path=CloseButtonOpacity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    IsEnabled="{Binding Path=CloseButtonIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         </WrapPanel>
     </Grid>
 </Window>

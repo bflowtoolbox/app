@@ -7,7 +7,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Principal;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -22,7 +24,6 @@ namespace bflow.setup {
         private string _closeButtonText = "Schließen";
         private string _progressBarText = string.Empty;
         private int _progressBarValue;
-        private double _closeButtonOpacity = 1.0;
         private bool _progressBarIndeterminate = false;
         private bool _textboxPathIsEnabled = true;
         private bool _textboxGroupPathIsEnabled = false;
@@ -40,6 +41,7 @@ namespace bflow.setup {
         private const string WindowsCarriageReturn = "\r\n";
         private const string BflowPackageName = "bflow-1.5.0.zip";
 
+        private bool _isAdmin;
         private bool _doOverwrite;
         private bool _hasInstallStarted = false;
         private bool _hasInstallFinished = false;
@@ -49,7 +51,7 @@ namespace bflow.setup {
         private string _iniLanguage = string.Empty;
         private BackgroundWorker worker;
 
-        public ICommand CloseCommand { get; set; } = new RelayCommand(OnExecuteClose, OnCanExecuteClose);
+        public ICommand CloseCommand { get; set; }
         public ICommand ExitCommand { get; set; }
         public ICommand BrowseCommand { get; set; }
         public ICommand BrowseGroupCommand { get; set; }
@@ -57,6 +59,7 @@ namespace bflow.setup {
         public ICommand CheckGroupCommand { get; set; }
 
         public MainWindowViewModel() {
+            CloseCommand = new RelayCommand(OnExecuteClose, OnCanExecuteClose);
             BrowseCommand = new RelayCommand(OnExecuteBrowse, OnCanExecuteBrowse);
             BrowseGroupCommand = new RelayCommand(OnExecuteBrowseGroup, OnCanExecuteBrowseGroup);
             ExitCommand = new RelayCommand(OnExecuteExit, OnCanExecuteExit);
@@ -130,17 +133,6 @@ namespace bflow.setup {
                 if (_progressBarValue != value) {
                     _progressBarValue = value;
                     PropertyChanged(this, new PropertyChangedEventArgs(nameof(ProgressBarValue)));
-                }
-            }
-        }
-
-        public double CloseButtonOpacity {
-            get { return _closeButtonOpacity; }
-
-            set {
-                if (_closeButtonOpacity != value) {
-                    _closeButtonOpacity = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(CloseButtonOpacity)));
                 }
             }
         }
@@ -233,6 +225,17 @@ namespace bflow.setup {
             }
         }
 
+        public bool CloseButtonIsEnabled {
+            get { return _closeButtonIsEnabled; }
+
+            set {
+                if (_closeButtonIsEnabled != value) {
+                    _closeButtonIsEnabled = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(CloseButtonIsEnabled)));
+                }
+            }
+        }
+
         public bool CheckboxGroupPathIsEnabled {
             get { return _checkboxGroupPathIsEnabled; }
 
@@ -285,15 +288,12 @@ namespace bflow.setup {
             folderBrowserDialog.RootFolder = Environment.SpecialFolder.Desktop;
             DialogResult result = folderBrowserDialog.ShowDialog();
             string selectedPath = folderBrowserDialog.SelectedPath;
-            GroupTargetPath = selectedPath;
-            if (GroupTargetPath != string.Empty) {
-                InstallButtonIsEnabled = true;
-            } else {
-                InstallButtonIsEnabled = false;
-            }
-            if (result == DialogResult.Cancel) {
-                GroupTargetPath = string.Empty;
-            }
+            GroupTargetPath = result == DialogResult.Cancel
+                ? string.Empty
+                : selectedPath;
+            InstallButtonIsEnabled = string.IsNullOrEmpty(selectedPath)
+                ? false
+                : true;
         }
 
         private bool OnCanExecuteBrowseGroup(object arg) {
@@ -304,7 +304,9 @@ namespace bflow.setup {
             return true;
         }
 
-        private static void OnExecuteClose(object obj) {
+        private void OnExecuteClose(object obj) {
+            if (!CloseButtonIsEnabled) return;
+
             System.Windows.Application.Current.MainWindow.Close();
         }
 
@@ -319,7 +321,7 @@ namespace bflow.setup {
         /// </summary>
         private void OnExecuteExit(object obj) {
             CancelEventArgs eventArgs = (CancelEventArgs)obj;
-            if (_closeButtonIsEnabled) {
+            if (CloseButtonIsEnabled) {
                 if (!_hasInstallStarted && !_hasInstallFinished && !_isInstallSuccess) {
                     MessageBoxResult result = System.Windows.MessageBox.Show("Möchten Sie das Programm schließen?", "bflow* Toolbox 1.5.0", MessageBoxButton.YesNo);
                     switch (result) {
@@ -457,10 +459,10 @@ namespace bflow.setup {
             ChangeCloseButtonText();
             worker = new BackgroundWorker();
             worker.WorkerSupportsCancellation = true;
-            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+            worker.RunWorkerCompleted += OnRunWorkerCompleted;
             worker.WorkerReportsProgress = true;
-            worker.DoWork += worker_DoWork;
-            worker.ProgressChanged += worker_ProgressChanged;
+            worker.DoWork += OnExtractData;
+            worker.ProgressChanged += OnProgressChanged;
             worker.RunWorkerAsync(1000);
         }
 
@@ -487,7 +489,7 @@ namespace bflow.setup {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+        private void OnProgressChanged(object sender, ProgressChangedEventArgs e) {
             ProgressBarValue = e.ProgressPercentage;
             ProgressBarText = (string)e.UserState;
         }
@@ -535,7 +537,7 @@ namespace bflow.setup {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void worker_DoWork(object sender, DoWorkEventArgs e) {
+        private void OnExtractData(object sender, DoWorkEventArgs e) {
             string packageName = BflowPackageName; // überprüfen
 
 #if  DEBUG
@@ -543,11 +545,9 @@ namespace bflow.setup {
 #endif
 
             ExtractExistingFileAction fileAction = ExtractExistingFileAction.Throw;
-            if (_doOverwrite) {
-                fileAction = ExtractExistingFileAction.OverwriteSilently;
-            } else {
-                return;
-            }
+            if (!_doOverwrite) return;
+
+            fileAction = ExtractExistingFileAction.OverwriteSilently;
 
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.zippacks." + packageName)) {
                 if (stream == null) throw new InvalidOperationException("Could not open stream to package");
@@ -584,11 +584,17 @@ namespace bflow.setup {
                             }
                         }
                     }
-                    ProgressBarIndeterminate = true;
-                    ProgressBarText = "Installation abschließen";
-                    _closeButtonIsEnabled = false;
-                    CloseButtonText = "Warten...";
-                    CloseButtonOpacity = 0.5;
+                    Task.Run(() => {
+                        Thread.Sleep(2000);
+                        if (!CloseButtonIsEnabled) {
+                            App.Current.Dispatcher.BeginInvoke(new Action(() => {
+                                ProgressBarIndeterminate = true;
+                                ProgressBarText = "Installation abschließen";
+                                CloseButtonText = "Warten...";
+                            }));
+                        }
+                    });
+                    CloseButtonIsEnabled = false;
                     EnableUI(false);
                     try {
                         MoveTempToTarget();
@@ -605,8 +611,7 @@ namespace bflow.setup {
                         ProgressBarText = "Installation fehlgeschlagen.";
                         ProgressBarValue = 0;
                     }
-                    _closeButtonIsEnabled = true;
-                    CloseButtonOpacity = 1.0;
+                    CloseButtonIsEnabled = true;
                     ProgressBarIndeterminate = false;
                 }
             }
@@ -617,7 +622,7 @@ namespace bflow.setup {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+        private void OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             if (_hasInstallFinished && _isInstallSuccess) {
                 System.Windows.MessageBox.Show("Die Installation war erfolgreich!", "bflow* Toolbox 1.5.0", MessageBoxButton.OK);
                 ChangeCloseButtonText();

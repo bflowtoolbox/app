@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:bflow.setup"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="LigatureSymbols">
+            <Setter Property="TextElement.FontFamily" Value="fonts/#LigatureSymbols" />
+        </Style>
     </Application.Resources>
 </Application>
