@@ -367,9 +367,8 @@
   #end
 #end
 
-#macro( noteEdgeVisNo $edge )
-  ##* First, render the related note shape *
-  #set( $noteShape = $edge.Source )
+#macro( noteVisNo $shape )
+  #set( $noteShape = $shape )
   #set( $noteShapeId = $uuid.create() )
   #set( $noteShapeName = $noteShape.Name )
   #set( $noteShapeX = $noteShape.X )
@@ -388,6 +387,12 @@
     <element xsi:nil="true"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MFaQo90DEeimF82Hd11Baw" x="$noteShapeX" y="$noteShapeY" width="$noteShapeW" height="$noteShapeH"/>
   </children>
+#end
+
+#macro( noteEdgeVisNo $edge )
+  ##* First, render the related note shape *
+  #noteVisNo( $edge.Source )
+  
   ##* Then, render the edge to the note shape *
   #set( $noteTargetShape = $edge.Target )
   #set( $noteTargetModelId = $noteTargetShape.Id )
@@ -521,6 +526,14 @@
   #foreach( $edge in $edges )
     #if( $blacklistEdge.contains($edge) != true )
       #renderEdgeVisualNotation( $edge )
+    #end
+  #end
+  
+  ## ** There might be some notes without edges **
+  #foreach( $shape in $shapes )
+    #set( $shapeType = $shape.Type.split("\.")[1] )
+    #if( $typeMap[$shapeType] == $nil )
+      #noteVisNo( $shape )
     #end
   #end
   
