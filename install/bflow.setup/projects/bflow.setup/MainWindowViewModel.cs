@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Application = System.Windows.Application;
 using File = System.IO.File;
 
 namespace bflow.setup {
@@ -19,7 +20,8 @@ namespace bflow.setup {
         private const string WindowsCarriageReturn = "\r\n";
         private const string BflowPackageName = "bflow-1.5.0.zip";
 
-        private readonly string _tempPath = Path.GetTempPath(); // Temppath
+        private static readonly string _tempPath = Path.GetTempPath(); // Temppath
+        private static readonly string _tempInstallPath = _tempPath + "\\bflow";
 
         private string _targetPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\bflow";
         private string _groupTargetPath = string.Empty;
@@ -38,14 +40,12 @@ namespace bflow.setup {
         private bool _closeButtonIsEnabled = true;
         private bool _checkboxGroupPathIsEnabled = true;
         private bool _checkboxGroupPathIsChecked = false;
-        public Action CloseAction { get; set; }
-
+        
         private bool _doOverwrite;
         private bool _hasInstallStarted = false;
         private bool _hasInstallFinished = false;
         private bool _isInstallSuccess = false;
         private bool _pauseBackgroundworker = false;
-        private string _installRoot = "\\bflow";
         private string _iniLanguage = string.Empty;
         private BackgroundWorker _worker;
 
@@ -71,192 +71,171 @@ namespace bflow.setup {
         public ICommand CheckGroupCommand { get; }
 
         public string TargetPath {
-            get {
-                return _targetPath;
-            }
-
+            get { return _targetPath; }
             set {
                 if (_targetPath != value) {
                     _targetPath = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(TargetPath)));
+                    RaisePropertyChanged(nameof(TargetPath));
                 }
             }
         }
 
         public string GroupTargetPath {
-            get {
-                return _groupTargetPath;
-            }
-
+            get { return _groupTargetPath; }
             set {
                 if (_groupTargetPath != value) {
                     _groupTargetPath = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(GroupTargetPath)));
+                    RaisePropertyChanged(nameof(GroupTargetPath));
                 }
             }
         }
 
         public string Language {
             get { return _language; }
-
             set {
                 if (_language != value) {
                     _language = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Language)));
+                    RaisePropertyChanged(nameof(Language));
                 }
             }
         }
 
         public string CloseButtonText {
             get { return _closeButtonText; }
-
             set {
                 if (_closeButtonText != value) {
                     _closeButtonText = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(CloseButtonText)));
+                    RaisePropertyChanged(nameof(CloseButtonText));
                 }
             }
         }
 
         public string ProgressBarText {
             get { return _progressBarText; }
-
             set {
                 if (_progressBarText != value) {
                     _progressBarText = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(ProgressBarText)));
+                    RaisePropertyChanged(nameof(ProgressBarText));
                 }
             }
         }
 
         public int ProgressBarValue {
             get { return _progressBarValue; }
-
             set {
                 if (_progressBarValue != value) {
                     _progressBarValue = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(ProgressBarValue)));
+                    RaisePropertyChanged(nameof(ProgressBarValue));
                 }
             }
         }
 
         public Visibility ProgressVisibility {
             get { return _progressVisibility; }
-
             set {
                 if (_progressVisibility != value) {
                     _progressVisibility = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(ProgressVisibility)));
+                    RaisePropertyChanged(nameof(ProgressVisibility));
                 }
             }
         }
 
         public bool TextboxPathIsEnabled {
             get { return _textboxPathIsEnabled; }
-
             set {
                 if (_textboxPathIsEnabled != value) {
                     _textboxPathIsEnabled = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(TextboxPathIsEnabled)));
+                    RaisePropertyChanged(nameof(TextboxPathIsEnabled));
                 }
             }
         }
 
         public bool ProgressBarIndeterminate {
             get { return _progressBarIndeterminate; }
-
             set {
                 if (_progressBarIndeterminate != value) {
                     _progressBarIndeterminate = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(ProgressBarIndeterminate)));
+                    RaisePropertyChanged(nameof(ProgressBarIndeterminate));
                 }
             }
         }
 
         public bool TextboxGroupPathIsEnabled {
             get { return _textboxGroupPathIsEnabled; }
-
             set {
                 if (_textboxGroupPathIsEnabled != value) {
                     _textboxGroupPathIsEnabled = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(TextboxGroupPathIsEnabled)));
+                    RaisePropertyChanged(nameof(TextboxGroupPathIsEnabled));
                 }
             }
         }
 
         public bool SelectLanguageIsEnabled {
             get { return _selectLanguageIsEnabled; }
-
             set {
                 if (_selectLanguageIsEnabled != value) {
                     _selectLanguageIsEnabled = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectLanguageIsEnabled)));
+                    RaisePropertyChanged(nameof(SelectLanguageIsEnabled));
                 }
             }
         }
 
         public bool BrowseButtonIsEnabled {
             get { return _browseButtonIsEnabled; }
-
             set {
                 if (_browseButtonIsEnabled != value) {
                     _browseButtonIsEnabled = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(BrowseButtonIsEnabled)));
+                    RaisePropertyChanged(nameof(BrowseButtonIsEnabled));
                 }
             }
         }
 
         public bool BrowseGroupButtonIsEnabled {
             get { return _browseGroupButtonIsEnabled; }
-
             set {
                 if (_browseGroupButtonIsEnabled != value) {
                     _browseGroupButtonIsEnabled = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(BrowseGroupButtonIsEnabled)));
+                    RaisePropertyChanged(nameof(BrowseGroupButtonIsEnabled));
                 }
             }
         }
 
         public bool InstallButtonIsEnabled {
             get { return _installButtonIsEnabled; }
-
             set {
                 if (_installButtonIsEnabled != value) {
                     _installButtonIsEnabled = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(InstallButtonIsEnabled)));
+                    RaisePropertyChanged(nameof(InstallButtonIsEnabled));
                 }
             }
         }
 
         public bool CloseButtonIsEnabled {
             get { return _closeButtonIsEnabled; }
-
             set {
                 if (_closeButtonIsEnabled != value) {
                     _closeButtonIsEnabled = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(CloseButtonIsEnabled)));
+                    RaisePropertyChanged(nameof(CloseButtonIsEnabled));
                 }
             }
         }
 
         public bool CheckboxGroupPathIsEnabled {
             get { return _checkboxGroupPathIsEnabled; }
-
             set {
                 if (_checkboxGroupPathIsEnabled != value) {
                     _checkboxGroupPathIsEnabled = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(CheckboxGroupPathIsEnabled)));
+                    RaisePropertyChanged(nameof(CheckboxGroupPathIsEnabled));
                 }
             }
         }
 
         public bool CheckboxGroupPathIsChecked {
             get { return _checkboxGroupPathIsChecked; }
-
             set {
                 if (_checkboxGroupPathIsChecked != value) {
                     _checkboxGroupPathIsChecked = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(CheckboxGroupPathIsChecked)));
+                    RaisePropertyChanged(nameof(CheckboxGroupPathIsChecked));
                 }
             }
         }
@@ -309,8 +288,7 @@ namespace bflow.setup {
 
         private void OnExecuteClose(object obj) {
             if (!CloseButtonIsEnabled) return;
-
-            System.Windows.Application.Current.MainWindow.Close();
+            Application.Current?.MainWindow?.Close();
         }
 
         private bool OnCanExecuteExit(object arg) {
@@ -375,7 +353,7 @@ namespace bflow.setup {
         /// </summary>
         private void CreateIni() {
             Dictionary<string, string> iniValueMap = new Dictionary<string, string>();
-            string line = string.Empty;
+            
             string iniPath = TargetPath + "\\bflow.ini";
             string oldIniText = File.ReadAllText(iniPath);
             string carriageReturn = oldIniText.Contains(WindowsCarriageReturn)
@@ -400,20 +378,25 @@ namespace bflow.setup {
             File.WriteAllText(iniPath, newIniText);
         }
 
-        /// <summary>
-        ///  Creates a shortcut on the desktop with an icon and text
-        /// </summary>
+        /// <summary>  Creates a shortcut on the desktop with an icon and text. </summary>
         private void CreateShortcut() {
             string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "bflow Toolbox" + ".lnk");
             WshShellClass shell = new WshShellClass();
             WshShortcut shortcut = (WshShortcut)shell.CreateShortcut(shortcutPath);
-            string targetPath = TargetPath + _installRoot + "\\Technikspezialisierung.docx";// bflow.exe";
+
+            string exeName = "bflow.exe";
+
+#if DEBUG
+            exeName = "Technikspezialisierung.docx";
+#endif
+
+            string targetPath = TargetPath + "\\" + exeName;
             shortcut.TargetPath = targetPath;
             shortcut.WorkingDirectory = Path.GetDirectoryName(targetPath);
             shortcut.Description = "bflow Toolbox";
-            var iconLocation = TargetPath + "\\beeDesk.ico"; // global??
-            using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.images.beeDesk.ico")) {
-                using (var file = new FileStream(iconLocation, FileMode.Create, FileAccess.Write)) {
+            string iconLocation = TargetPath + "\\beeDesk.ico"; // global??
+            using (Stream resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.images.beeDesk.ico")) {
+                using (FileStream file = new FileStream(iconLocation, FileMode.Create, FileAccess.Write)) {
                     resource.CopyTo(file);
                 }
             }
@@ -531,7 +514,7 @@ namespace bflow.setup {
                 Thread.Sleep(sleepTime);
                 elapsedTime += sleepTime;
             }
-            Directory.Move(_tempPath + _installRoot, TargetPath);
+            Directory.Move(_tempInstallPath, TargetPath);
         }
 
         /// <summary>
@@ -558,10 +541,7 @@ namespace bflow.setup {
 
                 using (ZipFile zipFile = ZipFile.Read(stream)) {
                     int fileCount = 0;
-                    int filesMax = 0;
-                    foreach (ZipEntry i in zipFile) {
-                        filesMax++;
-                    }
+                    int filesMax = zipFile.Count;
                     _worker.ReportProgress(0, string.Format("Kopiere 0/{0} Dateien", filesMax));
                     while (fileCount < filesMax) {
                         foreach (ZipEntry zipEntry in zipFile) {
@@ -590,7 +570,7 @@ namespace bflow.setup {
                     Task.Run(() => {
                         Thread.Sleep(2000);
                         if (!CloseButtonIsEnabled) {
-                            App.Current.Dispatcher.BeginInvoke(new Action(() => {
+                            Application.Current.Dispatcher.BeginInvoke(new Action(() => {
                                 ProgressBarIndeterminate = true;
                                 ProgressBarText = "Installation abschließen";
                                 CloseButtonText = "Warten...";
@@ -631,11 +611,11 @@ namespace bflow.setup {
                 ChangeCloseButtonText();
                 ProgressBarText = "Installation abgeschlossen.";
             }
-            //Cleaning up the temp folder
-            if (Directory.Exists(_tempPath + _installRoot)) {
-                Directory.Delete(_tempPath + _installRoot, true);
-            }
 
+            //Cleaning up the temp folder
+            if (Directory.Exists(_tempInstallPath)) {
+                Directory.Delete(_tempInstallPath, true);
+            }
         }
 
         /// <inheritdoc />
