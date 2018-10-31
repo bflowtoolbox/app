@@ -252,8 +252,8 @@
     #foreach( $edge in $outgoingEdges )
       #set( $_ = $blacklistEdge.add($edge) )
       
-      ##* Don't creates edges to OrgUnits; it's already done *
-      #if ( $orgShapes.contains($edge.Target) != true )
+      ##* Don't creates edges to OrgUnits and IT-Systems; it's already done *
+      #if ( $orgShapes.contains($edge.Target) != true && $itsysShapes.contains($edge.Target) != true)
         #set( $edgeId = $uuid.create() )
         #set( $edgeDef = {
       	  					"id":$edgeId,
