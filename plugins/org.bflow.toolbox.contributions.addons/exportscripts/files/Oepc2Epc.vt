@@ -367,6 +367,39 @@
   #end
 #end
 
+#macro( noteEdgeVisNo $edge )
+  ##* First, render the related note shape *
+  #set( $noteShape = $edge.Source )
+  #set( $noteShapeId = $uuid.create() )
+  #set( $noteShapeName = $noteShape.Name )
+  #set( $noteShapeX = $noteShape.X )
+  #set( $noteShapeY = $noteShape.Y )
+  #set( $noteShapeW = $noteShape.Width )
+  #set( $noteShapeH = $noteShape.Height )
+  <children xmi:type="notation:Shape" xmi:id="$noteShapeId" type="Note" fontName="Segoe UI" description="$noteShapeName" fillColor="13369343" transparency="0" lineColor="6737151" lineWidth="1">
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="$uuid.create()" type="DiagramName">
+      <element xsi:nil="true"/>
+    </children>
+    <children xmi:type="notation:BasicDecorationNode" xmi:id="$uuid.create()" type="Description">
+      <element xsi:nil="true"/>
+    </children>
+    <styles xmi:type="notation:TextStyle" xmi:id="$uuid.create()"/>
+    <styles xmi:type="notation:LineTypeStyle" xmi:id="$uuid.create()"/>
+    <element xsi:nil="true"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MFaQo90DEeimF82Hd11Baw" x="$noteShapeX" y="$noteShapeY" width="$noteShapeW" height="$noteShapeH"/>
+  </children>
+  ##* Then, render the edge to the note shape *
+  #set( $noteTargetShape = $edge.Target )
+  #set( $noteTargetModelId = $noteTargetShape.Id )
+  #set( $noteTargetVisualId = $model2visualMap[$noteTargetModelId] )
+  <edges xmi:type="notation:Connector" xmi:id="$uuid.create()" type="NoteAttachment" source="$noteShapeId" target="$noteTargetVisualId" lineWidth="1">
+    <styles xmi:type="notation:ArrowStyle" xmi:id="$uuid.create()"/>
+    <styles xmi:type="notation:LineTypeStyle" xmi:id="$uuid.create()"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="$uuid.create()" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+#end
+
 #macro( renderFunctionVisualNotation $funcId $funcName $funcX $funcY )
   #set( $modelId = $funcId )
   #set( $visualId = $uuid.create() )
@@ -395,8 +428,9 @@
   #if( $edgeType == "InformationEdge" )
     #renderEdgeVisualStandardNotation( $edge.Id $edge.Source.Id $edge.Target.Id, "4002" )
   #elseif( $edgeType == "ControlFlowEdge")
-    ##renderEdgeVisualStandardNotation( $edge.Id $edge.Source.Id $edge.Target.Id, "4001" )
-  ##elseif( $edgeType == "eclipse" )
+    #renderEdgeVisualStandardNotation( $edge.Id $edge.Source.Id $edge.Target.Id, "4001" )
+  #elseif( $edgeType == "eclipse" )
+    #noteEdgeVisNo( $edge )
   #end
 #end
 
