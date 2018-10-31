@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace bflow.setup {
@@ -15,14 +11,20 @@ namespace bflow.setup {
             _canExecuteHandler = canExecuteHandler;
         }
 
+        /// <inheritdoc />
         public event EventHandler CanExecuteChanged;
 
+        /// <inheritdoc />
         public bool CanExecute(object parameter) {
             return _canExecuteHandler(parameter);
         }
 
         public void Execute(object parameter) {
             _executeHandler(parameter);
+        }
+
+        protected virtual void RaiseCanExecuteChanged() {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
