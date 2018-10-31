@@ -3,11 +3,9 @@ using IWshRuntimeLibrary;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,8 +15,13 @@ using File = System.IO.File;
 
 namespace bflow.setup {
     public class MainWindowViewModel : INotifyPropertyChanged {
+        private const string UnixCarriageReturn = "\n";
+        private const string WindowsCarriageReturn = "\r\n";
+        private const string BflowPackageName = "bflow-1.5.0.zip";
+
+        private readonly string _tempPath = Path.GetTempPath(); // Temppath
+
         private string _targetPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\bflow";
-        private string _tempPath = Path.GetTempPath(); // Temppath
         private string _groupTargetPath = string.Empty;
         private string _language = "Deutsch";
         private string _closeButtonText = "Schließen";
@@ -27,7 +30,7 @@ namespace bflow.setup {
         private bool _progressBarIndeterminate = false;
         private bool _textboxPathIsEnabled = true;
         private bool _textboxGroupPathIsEnabled = false;
-        private Visibility _progressVisibility { get; set; } = Visibility.Hidden;
+        private Visibility _progressVisibility = Visibility.Hidden;
         private bool _selectLanguageIsEnabled = true;
         private bool _browseButtonIsEnabled = true;
         private bool _browseGroupButtonIsEnabled = false;
@@ -37,11 +40,6 @@ namespace bflow.setup {
         private bool _checkboxGroupPathIsChecked = false;
         public Action CloseAction { get; set; }
 
-        private const string UnixCarriageReturn = "\n";
-        private const string WindowsCarriageReturn = "\r\n";
-        private const string BflowPackageName = "bflow-1.5.0.zip";
-
-        private bool _isAdmin;
         private bool _doOverwrite;
         private bool _hasInstallStarted = false;
         private bool _hasInstallFinished = false;
@@ -49,14 +47,7 @@ namespace bflow.setup {
         private bool _pauseBackgroundworker = false;
         private string _installRoot = "\\bflow";
         private string _iniLanguage = string.Empty;
-        private BackgroundWorker worker;
-
-        public ICommand CloseCommand { get; set; }
-        public ICommand ExitCommand { get; set; }
-        public ICommand BrowseCommand { get; set; }
-        public ICommand BrowseGroupCommand { get; set; }
-        public ICommand InstallCommand { get; set; }
-        public ICommand CheckGroupCommand { get; set; }
+        private BackgroundWorker _worker;
 
         public MainWindowViewModel() {
             CloseCommand = new RelayCommand(OnExecuteClose, OnCanExecuteClose);
@@ -66,6 +57,18 @@ namespace bflow.setup {
             InstallCommand = new RelayCommand(OnExecuteInstall, OnCanExecuteInstall);
             CheckGroupCommand = new RelayCommand(OnExecuteCheckGroup, OnCanExecuteCheckGroup);
         }
+
+        public ICommand CloseCommand { get; }
+
+        public ICommand ExitCommand { get; }
+
+        public ICommand BrowseCommand { get; }
+
+        public ICommand BrowseGroupCommand { get; }
+
+        public ICommand InstallCommand { get; }
+
+        public ICommand CheckGroupCommand { get; }
 
         public string TargetPath {
             get {
@@ -341,7 +344,7 @@ namespace bflow.setup {
                     _pauseBackgroundworker = false;
                     switch (result) {
                         case MessageBoxResult.Yes:
-                            worker.CancelAsync();
+                            _worker.CancelAsync();
                             ProgressVisibility = Visibility.Hidden;
                             _hasInstallStarted = false;
                             ChangeCloseButtonText();
@@ -457,13 +460,13 @@ namespace bflow.setup {
             EnableUI(false);
             _doOverwrite = DoOverwrite(TargetPath);
             ChangeCloseButtonText();
-            worker = new BackgroundWorker();
-            worker.WorkerSupportsCancellation = true;
-            worker.RunWorkerCompleted += OnRunWorkerCompleted;
-            worker.WorkerReportsProgress = true;
-            worker.DoWork += OnExtractData;
-            worker.ProgressChanged += OnProgressChanged;
-            worker.RunWorkerAsync(1000);
+            _worker = new BackgroundWorker();
+            _worker.WorkerSupportsCancellation = true;
+            _worker.RunWorkerCompleted += OnRunWorkerCompleted;
+            _worker.WorkerReportsProgress = true;
+            _worker.DoWork += OnExtractData;
+            _worker.ProgressChanged += OnProgressChanged;
+            _worker.RunWorkerAsync(1000);
         }
 
         private void OnExecuteCheckGroup(object obj) {
@@ -559,7 +562,7 @@ namespace bflow.setup {
                     foreach (ZipEntry i in zipFile) {
                         filesMax++;
                     }
-                    worker.ReportProgress(0, string.Format("Kopiere 0/{0} Dateien", filesMax));
+                    _worker.ReportProgress(0, string.Format("Kopiere 0/{0} Dateien", filesMax));
                     while (fileCount < filesMax) {
                         foreach (ZipEntry zipEntry in zipFile) {
 
@@ -568,14 +571,14 @@ namespace bflow.setup {
                                 Thread.Sleep(500);
                             }
 
-                            if (worker.CancellationPending == false) {
+                            if (_worker.CancellationPending == false) {
 #if DEBUG
                                 // Give some time to interact
                                 Thread.Sleep(200);
 #endif
                                 zipEntry.Extract(_tempPath, fileAction);
                                 int progressSteps = Convert.ToInt32(Math.Ceiling(100.00 / filesMax));
-                                worker.ReportProgress((fileCount + 1) * progressSteps, string.Format("Kopiere {0}/{1} Dateien", fileCount + 1, filesMax));
+                                _worker.ReportProgress((fileCount + 1) * progressSteps, string.Format("Kopiere {0}/{1} Dateien", fileCount + 1, filesMax));
                                 fileCount++;
                             } else {
                                 _hasInstallStarted = false;
@@ -635,6 +638,7 @@ namespace bflow.setup {
 
         }
 
+        /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged(string property) {
