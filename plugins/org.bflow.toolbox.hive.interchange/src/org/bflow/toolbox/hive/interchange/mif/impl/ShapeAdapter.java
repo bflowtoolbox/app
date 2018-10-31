@@ -1,15 +1,19 @@
 package org.bflow.toolbox.hive.interchange.mif.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bflow.toolbox.hive.interchange.mif.core.IInterchangePropertyProvider;
 import org.bflow.toolbox.hive.interchange.mif.core.IShape;
+import org.bflow.toolbox.hive.libs.aprogu.lang.Cast;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
+import org.eclipse.gmf.runtime.notation.Node;
 import org.eclipse.gmf.runtime.notation.Shape;
+import org.eclipse.gmf.runtime.notation.ShapeStyle;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -98,6 +102,20 @@ public class ShapeAdapter implements IShape {
 		if (_semanticElement instanceof Shape) {
 			Shape shape = (Shape) _semanticElement;
 			name = shape.getDescription();
+		}
+		
+		// Absolute(?) fallback, try to get the name from the internal shape style
+		if (_semanticElement instanceof Node) {
+			Node node = (Node) _semanticElement;
+			List<?> styles = node.getStyles();
+			for (int i = -1; ++i != styles.size();) {
+				Object style = styles.get(i);
+				ShapeStyle shapeStyle = Cast.as(ShapeStyle.class, style);
+				if (shapeStyle != null) {
+					name = shapeStyle.getDescription();
+					break;
+				}
+			}
 		}
 		
 		return name;
