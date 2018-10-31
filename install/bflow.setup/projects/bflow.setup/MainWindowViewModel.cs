@@ -383,7 +383,7 @@ namespace bflow.setup {
                 : UnixCarriageReturn;
 
             string[] oldIniLines = oldIniText.Split(new[] { carriageReturn }, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i <= oldIniLines.Length / 2; i += 2) {
+            for (int i = 0; i < oldIniLines.Length; i += 2) {
                 string key = oldIniLines[i];
                 string value = oldIniLines[i + 1];
                 iniValueMap.Add(key, value);
@@ -542,7 +542,7 @@ namespace bflow.setup {
         /// <param name="e"></param>
         private void OnExtractData(object sender, DoWorkEventArgs e) {
             string packageName = BflowPackageName; // überprüfen
-
+            
 #if  DEBUG
             packageName = "bflow.zip";
 #endif
