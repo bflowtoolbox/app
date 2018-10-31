@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-
 namespace bflow.setup {
     /// <summary>
     /// Implementiert eine Trigger-Action, die innerhalb von XAML-Code dazu verwendet wird,
