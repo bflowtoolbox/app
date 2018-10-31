@@ -40,6 +40,9 @@
   <PropertyGroup>
     <ApplicationManifest>bflow.setup.exe.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>images\bee.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
