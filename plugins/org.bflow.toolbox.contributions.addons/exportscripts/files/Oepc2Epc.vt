@@ -1,6 +1,7 @@
 @trim
 @prettyprint
 ##-- Set up common properties --
+#set( $nil = "" )
 #set( $modelName = $model.Name + ".epc" )
 #set( $modelId = $model.Id )
 #set( $typeMap = {
@@ -12,7 +13,8 @@
 					"XORConnector":"XOR",
 					"ITSystem":"Application",
 					"InformationEdge":"Relation",
-					"ControlFlowEdge":"Arc"
+					"ControlFlowEdge":"Arc",
+					"eclipse":$nil
 				} ) ## BusinessObject isn't mapped because it is decomposed
 #set( $model2visualMap = {} )   ## Maps a model element id to the corresponding visual element id
 
@@ -109,7 +111,8 @@
 #macro( findInsAndOuts $shape $incomingLine $outgoingLine )
   ## * First, check normal edges (but not dropped ones) *
   #foreach( $edge in $edges )
-    #if( $blacklistEdge.contains($edge) != true)  ## ignore dropped edges
+    #set( $edgeType = $edge.Type.split("\.")[1] )
+    #if( $blacklistEdge.contains($edge) != true && $typeMap[$edgeType] != $nil )  ## ignore dropped edges
       #if( $edge.Target == $shape )
         #set( $incomingLine = $incomingLine + $edge.Id + " " )
       #elseif( $edge.Source == $shape )
@@ -376,7 +379,7 @@
   </children>
 #end
 
-#macro( renderEdgeVisualNotation $m_edgeId $m_edgeSrcId $m_edgeTgtId $m_edgeTypeNumber )
+#macro( renderEdgeVisualStandardNotation $m_edgeId $m_edgeSrcId $m_edgeTgtId $m_edgeTypeNumber )
   #set( $visualSourceId = $model2visualMap.get($m_edgeSrcId) )
   #set( $visualTargetId = $model2visualMap.get($m_edgeTgtId) )
   <edges xmi:type="notation:Edge" xmi:id="$uuid.create()" type="$m_edgeTypeNumber" element="$m_edgeId" source="$visualSourceId" target="$visualTargetId">
@@ -385,6 +388,16 @@
     <styles xmi:type="notation:ShapeStyle" xmi:id="$uuid.create()" lineColor="0"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="$uuid.create()" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
   </edges>
+#end
+
+#macro( renderEdgeVisualNotation $edge )
+  #set( $edgeType = $edge.Type.split("\.")[1] )
+  #if( $edgeType == "InformationEdge" )
+    #renderEdgeVisualStandardNotation( $edge.Id $edge.Source.Id $edge.Target.Id, "4002" )
+  #elseif( $edgeType == "ControlFlowEdge")
+    ##renderEdgeVisualStandardNotation( $edge.Id $edge.Source.Id $edge.Target.Id, "4001" )
+  ##elseif( $edgeType == "eclipse" )
+  #end
 #end
 
 ##-- Body content --
@@ -422,7 +435,7 @@
     #end
     #set( $shapeId = $shape.Id )
     #set( $shapeName = $shape.Name )
-    #if( $shapeType != "BusinessObject" )
+    #if( $shapeType != $nil && $shapeType != "BusinessObject" )
       #set( $incomingLine = "" )
       #set( $outgoingLine = "" )
       #findInsAndOuts( $shape $incomingLine $outgoingLine )
@@ -435,10 +448,12 @@
     #if( $blacklistEdge.contains($edge) != true )
       #set( $edgeType = $edge.Type.split("\.")[1] ) ## Get the edge element type
       #set( $edgeType = $typeMap[$edgeType] )       ## Map the type to its EPC surrogate
-      #set( $edgeId = $edge.Id )
-      #set( $edgeSource = $edge.Source.Id )
-      #set( $edgeTarget = $edge.Target.Id )
-      <connections xmi:type="epc:$edgeType" xmi:id="$edgeId" from="$edgeSource" to="$edgeTarget"/>
+      #if( $edgeType != $nil )
+        #set( $edgeId = $edge.Id )
+        #set( $edgeSource = $edge.Source.Id )
+        #set( $edgeTarget = $edge.Target.Id )      
+        <connections xmi:type="epc:$edgeType" xmi:id="$edgeId" from="$edgeSource" to="$edgeTarget"/>
+      #end      
     #end
   #end
   
@@ -465,17 +480,13 @@
     #if ( $customEdge["knd"] == "Relation" )
       #set( $etn = "4002" ) ## Relation
     #end
-    #renderEdgeVisualNotation( $customEdge["id"] $customEdge["src"] $customEdge["tgt"] $etn )
+    #renderEdgeVisualStandardNotation( $customEdge["id"] $customEdge["src"] $customEdge["tgt"] $etn )
   #end
   
   ## ** Finally, render styles for remaining edges that are not dropped **
   #foreach( $edge in $edges )
     #if( $blacklistEdge.contains($edge) != true )
-      #set( $edgeTypeNumber = "4001" ) ## ARC
-      #if( $edge.Type.split("\.")[1] == "InformationEdge" )
-        #set( $edgeTypeNumber = "4002" ) ## Relation
-      #end
-      #renderEdgeVisualNotation( $edge.Id $edge.Source.Id $edge.Target.Id, $edgeTypeNumber )
+      #renderEdgeVisualNotation( $edge )
     #end
   #end
   
