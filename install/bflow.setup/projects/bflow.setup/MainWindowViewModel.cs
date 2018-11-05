@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,7 +19,7 @@ namespace bflow.setup {
     public class MainWindowViewModel : INotifyPropertyChanged {
         private const string UnixCarriageReturn = "\n";
         private const string WindowsCarriageReturn = "\r\n";
-        private const string BflowPackageName = "bflow-1.5.0.zip";
+        private const string BflowPackageName = "bflow.zip";
 
         private static readonly string _tempPath = Path.GetTempPath(); // Temppath
         private static readonly string _tempInstallPath = _tempPath + "\\bflow";
@@ -29,23 +30,23 @@ namespace bflow.setup {
         private string _closeButtonText = "Schließen";
         private string _progressBarText = string.Empty;
         private int _progressBarValue;
-        private bool _progressBarIndeterminate = false;
+        private bool _progressBarIndeterminate;
         private bool _textboxPathIsEnabled = true;
-        private bool _textboxGroupPathIsEnabled = false;
+        private bool _textboxGroupPathIsEnabled;
         private Visibility _progressVisibility = Visibility.Hidden;
         private bool _selectLanguageIsEnabled = true;
         private bool _browseButtonIsEnabled = true;
-        private bool _browseGroupButtonIsEnabled = false;
+        private bool _browseGroupButtonIsEnabled;
         private bool _installButtonIsEnabled = true;
         private bool _closeButtonIsEnabled = true;
         private bool _checkboxGroupPathIsEnabled = true;
-        private bool _checkboxGroupPathIsChecked = false;
+        private bool _checkboxGroupPathIsChecked;
         
         private bool _doOverwrite;
-        private bool _hasInstallStarted = false;
-        private bool _hasInstallFinished = false;
-        private bool _isInstallSuccess = false;
-        private bool _pauseBackgroundworker = false;
+        private bool _hasInstallStarted;
+        private bool _hasInstallFinished;
+        private bool _isInstallSuccess;
+        private bool _pauseBackgroundworker;
         private string _iniLanguage = string.Empty;
         private BackgroundWorker _worker;
 
@@ -75,7 +76,7 @@ namespace bflow.setup {
             set {
                 if (_targetPath != value) {
                     _targetPath = value;
-                    RaisePropertyChanged(nameof(TargetPath));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -85,7 +86,7 @@ namespace bflow.setup {
             set {
                 if (_groupTargetPath != value) {
                     _groupTargetPath = value;
-                    RaisePropertyChanged(nameof(GroupTargetPath));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace bflow.setup {
             set {
                 if (_language != value) {
                     _language = value;
-                    RaisePropertyChanged(nameof(Language));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -105,7 +106,7 @@ namespace bflow.setup {
             set {
                 if (_closeButtonText != value) {
                     _closeButtonText = value;
-                    RaisePropertyChanged(nameof(CloseButtonText));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -115,7 +116,7 @@ namespace bflow.setup {
             set {
                 if (_progressBarText != value) {
                     _progressBarText = value;
-                    RaisePropertyChanged(nameof(ProgressBarText));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -125,7 +126,7 @@ namespace bflow.setup {
             set {
                 if (_progressBarValue != value) {
                     _progressBarValue = value;
-                    RaisePropertyChanged(nameof(ProgressBarValue));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -135,7 +136,7 @@ namespace bflow.setup {
             set {
                 if (_progressVisibility != value) {
                     _progressVisibility = value;
-                    RaisePropertyChanged(nameof(ProgressVisibility));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -145,7 +146,7 @@ namespace bflow.setup {
             set {
                 if (_textboxPathIsEnabled != value) {
                     _textboxPathIsEnabled = value;
-                    RaisePropertyChanged(nameof(TextboxPathIsEnabled));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -155,7 +156,7 @@ namespace bflow.setup {
             set {
                 if (_progressBarIndeterminate != value) {
                     _progressBarIndeterminate = value;
-                    RaisePropertyChanged(nameof(ProgressBarIndeterminate));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -165,7 +166,7 @@ namespace bflow.setup {
             set {
                 if (_textboxGroupPathIsEnabled != value) {
                     _textboxGroupPathIsEnabled = value;
-                    RaisePropertyChanged(nameof(TextboxGroupPathIsEnabled));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -175,7 +176,7 @@ namespace bflow.setup {
             set {
                 if (_selectLanguageIsEnabled != value) {
                     _selectLanguageIsEnabled = value;
-                    RaisePropertyChanged(nameof(SelectLanguageIsEnabled));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -185,7 +186,7 @@ namespace bflow.setup {
             set {
                 if (_browseButtonIsEnabled != value) {
                     _browseButtonIsEnabled = value;
-                    RaisePropertyChanged(nameof(BrowseButtonIsEnabled));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -195,7 +196,7 @@ namespace bflow.setup {
             set {
                 if (_browseGroupButtonIsEnabled != value) {
                     _browseGroupButtonIsEnabled = value;
-                    RaisePropertyChanged(nameof(BrowseGroupButtonIsEnabled));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -205,7 +206,7 @@ namespace bflow.setup {
             set {
                 if (_installButtonIsEnabled != value) {
                     _installButtonIsEnabled = value;
-                    RaisePropertyChanged(nameof(InstallButtonIsEnabled));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -215,7 +216,7 @@ namespace bflow.setup {
             set {
                 if (_closeButtonIsEnabled != value) {
                     _closeButtonIsEnabled = value;
-                    RaisePropertyChanged(nameof(CloseButtonIsEnabled));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -225,7 +226,7 @@ namespace bflow.setup {
             set {
                 if (_checkboxGroupPathIsEnabled != value) {
                     _checkboxGroupPathIsEnabled = value;
-                    RaisePropertyChanged(nameof(CheckboxGroupPathIsEnabled));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -235,7 +236,7 @@ namespace bflow.setup {
             set {
                 if (_checkboxGroupPathIsChecked != value) {
                     _checkboxGroupPathIsChecked = value;
-                    RaisePropertyChanged(nameof(CheckboxGroupPathIsChecked));
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -273,9 +274,7 @@ namespace bflow.setup {
             GroupTargetPath = result == DialogResult.Cancel
                 ? string.Empty
                 : selectedPath;
-            InstallButtonIsEnabled = string.IsNullOrEmpty(selectedPath)
-                ? false
-                : true;
+            InstallButtonIsEnabled = !string.IsNullOrEmpty(selectedPath);
         }
 
         private bool OnCanExecuteBrowseGroup(object arg) {
@@ -396,6 +395,7 @@ namespace bflow.setup {
             shortcut.Description = "bflow Toolbox";
             string iconLocation = TargetPath + "\\beeDesk.ico"; // global??
             using (Stream resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("bflow.setup.images.beeDesk.ico")) {
+                if (resource == null) throw new InvalidOperationException("Could not resolve icon from manifest");
                 using (FileStream file = new FileStream(iconLocation, FileMode.Create, FileAccess.Write)) {
                     resource.CopyTo(file);
                 }
@@ -404,20 +404,17 @@ namespace bflow.setup {
             shortcut.Save();
         }
 
-        /// <summary>
-        /// Enables or disabled the UI for user input
-        /// </summary>
-        /// <param name="enable"></param>
-        private void EnableUI(bool enable) {
-            TextboxPathIsEnabled = enable;
-            SelectLanguageIsEnabled = enable;
-            BrowseButtonIsEnabled = enable;
-            BrowseButtonIsEnabled = enable;
-            InstallButtonIsEnabled = enable;
-            CheckboxGroupPathIsEnabled = enable;
+        /// <summary> Enables or disabled the UI for user input </summary>
+        private void EnableUI(bool value) {
+            TextboxPathIsEnabled = value;
+            SelectLanguageIsEnabled = value;
+            BrowseButtonIsEnabled = value;
+            BrowseButtonIsEnabled = value;
+            InstallButtonIsEnabled = value;
+            CheckboxGroupPathIsEnabled = value;
             if (CheckboxGroupPathIsChecked) {
-                TextboxGroupPathIsEnabled = enable;
-                BrowseGroupButtonIsEnabled = enable;
+                TextboxGroupPathIsEnabled = value;
+                BrowseGroupButtonIsEnabled = value;
             } else {
                 TextboxGroupPathIsEnabled = false;
                 BrowseGroupButtonIsEnabled = false;
@@ -429,13 +426,15 @@ namespace bflow.setup {
             if (Language == "Deutsch") {
                 _iniLanguage = "de_DE";
                 return true;
-            } else if (Language == "Englisch") {
+            }
+
+            if (Language == "Englisch") {
                 _iniLanguage = "en_US";
                 return true;
-            } else {
-                System.Windows.MessageBox.Show("Bitte geben Sie eine gültige Sprache ein!");
-                return false;
             }
+
+            System.Windows.MessageBox.Show("Bitte geben Sie eine gültige Sprache ein!");
+            return false;
         }
 
         private void OnExecuteInstall(object obj) {
@@ -473,8 +472,6 @@ namespace bflow.setup {
         /// <summary>
         /// The ProgressChanged event is responsible for the progressbar and the progresstext
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnProgressChanged(object sender, ProgressChangedEventArgs e) {
             ProgressBarValue = e.ProgressPercentage;
             ProgressBarText = (string)e.UserState;
@@ -506,6 +503,7 @@ namespace bflow.setup {
             if (Directory.Exists(TargetPath)) {
                 Directory.Delete(TargetPath, true);
             }
+
             // The app has to wait so that the directory is deleted when the moving action is started
             // but not longer than 2 minutes
             int elapsedTime = 0;
@@ -524,11 +522,7 @@ namespace bflow.setup {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnExtractData(object sender, DoWorkEventArgs e) {
-            string packageName = BflowPackageName; // überprüfen
-            
-#if  DEBUG
-            packageName = "bflow.zip";
-#endif
+            string packageName = BflowPackageName;
 
             ExtractExistingFileAction fileAction = ExtractExistingFileAction.Throw;
             if (!_doOverwrite) return;
@@ -603,8 +597,6 @@ namespace bflow.setup {
         /// <summary>
         /// This event is fired when the backgroundworker has actually completed its tasks
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             if (_hasInstallFinished && _isInstallSuccess) {
                 System.Windows.MessageBox.Show("Die Installation war erfolgreich!", "bflow* Toolbox 1.5.0", MessageBoxButton.OK);
@@ -612,7 +604,7 @@ namespace bflow.setup {
                 ProgressBarText = "Installation abgeschlossen.";
             }
 
-            //Cleaning up the temp folder
+            // Cleaning up the temp folder
             if (Directory.Exists(_tempInstallPath)) {
                 Directory.Delete(_tempInstallPath, true);
             }
@@ -621,8 +613,9 @@ namespace bflow.setup {
         /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void RaisePropertyChanged(string property) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        /// <summary> Raises the <see cref="PropertyChanged"/> event for the <paramref name="propertyName"/>. </summary>
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = null) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
