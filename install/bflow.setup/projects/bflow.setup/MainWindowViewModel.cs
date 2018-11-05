@@ -22,7 +22,7 @@ namespace bflow.setup {
         private const string BflowPackageName = "bflow.zip";
 
         private static readonly string _tempPath = Path.GetTempPath(); // Temppath
-        private static readonly string _tempInstallPath = _tempPath + "\\bflow";
+        private static readonly string _tempInstallPath = Path.Combine(_tempPath, "bflow");
 
         private string _targetPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + "\\bflow";
         private string _groupTargetPath = string.Empty;
@@ -512,7 +512,23 @@ namespace bflow.setup {
                 Thread.Sleep(sleepTime);
                 elapsedTime += sleepTime;
             }
-            Directory.Move(_tempInstallPath, TargetPath);
+            
+            Exception cpyEx = null;
+            try {
+                Win32.CopyDirectory(_tempInstallPath, TargetPath, true);
+            } catch (Exception ex) {
+                cpyEx = ex;
+            }
+
+            // Always clean up
+            try {
+                Directory.Delete(_tempInstallPath, true);
+            } catch {
+                // Ok, not fine but we cannot change it
+            }
+
+            if (cpyEx != null)
+                throw cpyEx;
         }
 
         /// <summary>
