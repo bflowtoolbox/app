@@ -7,17 +7,23 @@ let ilMergePath = "../tools/ilmerge.exe"
 
 // Filesets
 let projectFile = "../bflow.setup/projects/bflow.setup/bflow.setup.csproj"
+let tgtPackFile = "../bflow.setup/projects/bflow.setup/zippacks/bflow.zip"
+let srcPackFile = "../packs/bflow-1.5.0.zip"
 
 // Target directories
 let targetDir = "../.binaries/"
 
 // Targets
-Target "CleanTargetDir" (fun _ -> 
+Target "Clean Target Dir" (fun _ -> 
     CleanDir targetDir
 )
 
-Target "PackageRestore" (fun _ ->
+Target "Restore Packages" (fun _ ->
     ()
+)
+
+Target "Copy Packs" (fun _ -> 
+    CopyFile tgtPackFile srcPackFile
 )
 
 Target "Build client" (fun _ -> 
@@ -36,8 +42,9 @@ Target "Default" (fun _ ->
 )
 
 // Dependencies
-"CleanTargetDir"
-    ==> "PackageRestore"
+"Clean Target Dir"
+    ==> "Restore Packages"
+    ==> "Copy Packs"
     ==> "Build client"
     ==> "Zip files"
     ==> "Default"
