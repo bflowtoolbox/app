@@ -223,7 +223,7 @@ public class DiagramExportComponent implements IDiagramExportComponent {
 	 */
 	@Override
 	public String getDisplayName() {
-		return "Diagram export";
+		return "Diagram Export";
 	}
 
 	/* (non-Javadoc)

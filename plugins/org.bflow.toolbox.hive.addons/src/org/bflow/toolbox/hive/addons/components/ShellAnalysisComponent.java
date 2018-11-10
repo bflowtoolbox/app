@@ -139,7 +139,7 @@ public class ShellAnalysisComponent implements IShellAnalysisComponent {
 
 	@Override
 	public String getDisplayName() {
-		return "Shell analysis";
+		return "Shell Analysis";
 	}
 
 	@Override

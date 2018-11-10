@@ -341,7 +341,7 @@ public class ToolRunComponent implements IToolRunComponent {
 	 */
 	@Override
 	public String getDisplayName() {
-		return "Tool run";
+		return "Tool Run";
 	}
 
 	/* (non-Javadoc)

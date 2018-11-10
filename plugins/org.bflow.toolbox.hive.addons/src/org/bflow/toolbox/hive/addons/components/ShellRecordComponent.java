@@ -54,7 +54,7 @@ public class ShellRecordComponent implements IShellRecordComponent {
 
 	@Override
 	public String getDisplayName() {
-		return "Shell record";
+		return "Shell Record";
 	}
 
 	@Override

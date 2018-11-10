@@ -162,7 +162,7 @@ public class EPCMetricsEvaluationComponent implements
 
 	@Override
 	public String getDisplayName() {
-		return "EPC metric info analysis";
+		return "EPC Metric Info Analysis";
 	}
 
 	@Override

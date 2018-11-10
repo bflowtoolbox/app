@@ -88,7 +88,7 @@ public class ConsoleDisplayComponent implements IConsoleViewGeneratorComponent {
 	 */
 	@Override
 	public String getDisplayName() {
-		return "Console display";
+		return "Console Display";
 	}
 
 	/*
