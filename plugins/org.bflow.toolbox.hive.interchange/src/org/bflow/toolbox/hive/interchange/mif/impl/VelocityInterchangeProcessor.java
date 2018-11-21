@@ -97,15 +97,12 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 		String path = exportDescriptor.getScripts()[0].getPath();
 
 		String template;
-
-		try {
-			InputStream is = resolveScriptInputStream(path);
+		try (InputStream is = resolveScriptInputStream(path)) {
 			template = IOUtils.toString(is); // TODO Check the encoding of the template input
-			is.close();
 		} catch (IOException ex) {
 			throw new InterchangeProcessingException("Could not read template from File " + path, ex);
-		}
-		
+		}		
+
 		// Check for preprocessing and do it
 		if (template.startsWith(PreprocessDirective)) {
 			template = StringUtils.remove(template, PreprocessDirective);
