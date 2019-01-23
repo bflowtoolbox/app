@@ -24,12 +24,12 @@ import vcchart.diagram.edit.parts.Activity2EditPart;
  * @author Markus Schnädelbach
  *
  */
-public class RemoveSubdiagramAction implements IObjectActionDelegate {
+public class VcRemoveSubdiagramAction implements IObjectActionDelegate {
 	private Activity1 a1;
 	private Activity2 a2;
 	
 	/** The log instance for this class */
-	private static final Log logger = LogFactory.getLog(RemoveSubdiagramAction.class);
+	private static final Log logger = LogFactory.getLog(VcRemoveSubdiagramAction.class);
 
 	@Override
 	public void run(IAction action) {

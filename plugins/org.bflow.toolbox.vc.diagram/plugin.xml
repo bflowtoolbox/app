@@ -640,14 +640,14 @@
             <separator name="group1"/>
         </menu>
         <action
-              class="vcchart.diagram.actions.RemoveSubdiagramAction"
+              class="vcchart.diagram.actions.VcRemoveSubdiagramAction"
               icon="icons/del16.png"
               id="org.bflow.toolbox.epc.diagram.RemoveSubdiagramAction"
               label="%removeLinkedDiagramActionTitle"
               menubarPath="SubDiagramInsert/group1">
         </action>
         <action
-              class="vcchart.diagram.actions.InsertSubdiagramAction"
+              class="vcchart.diagram.actions.VcInsertSubdiagramAction"
               enablesFor="1"
               icon="icons/add16.png"
               id="org.bflow.toolbox.diagram.InsertSubDiagramAction1"
@@ -655,7 +655,7 @@
               menubarPath="SubDiagramInsert/group1">
        </action>
         <action
-              class="vcchart.diagram.actions.OpenSubdiagramAction"
+              class="vcchart.diagram.actions.VcOpenSubdiagramAction"
               icon="icons/play16.png"
               id="org.bflow.toolbox.epc.diagram.OpenSubdiagramAction"
               label="%openLinkedDiagramActionTitle"

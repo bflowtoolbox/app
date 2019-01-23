@@ -21,7 +21,7 @@ import vcchart.diagram.edit.parts.Activity2EditPart;
  * @author Markus Schnädelbach
  *
  */
-public class OpenSubdiagramAction implements IObjectActionDelegate   {
+public class VcOpenSubdiagramAction implements IObjectActionDelegate   {
 	
 	private String subdiagram;
 

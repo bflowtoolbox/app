@@ -29,7 +29,7 @@ import vcchart.diagram.edit.parts.Activity2EditPart;
  * @author Markus Schnädelbach
  *
  */
-public class InsertSubdiagramAction implements IObjectActionDelegate {
+public class VcInsertSubdiagramAction implements IObjectActionDelegate {
 	
 	private Activity1 a1;
 	private Activity2 a2;
@@ -37,7 +37,7 @@ public class InsertSubdiagramAction implements IObjectActionDelegate {
 	private ShapeNodeEditPart  selectedActivity;
 	
 	/** The log instance for this class */
-	private static final Log logger = LogFactory.getLog(InsertSubdiagramAction.class);
+	private static final Log logger = LogFactory.getLog(VcInsertSubdiagramAction.class);
 
 	@Override
 	public void run(IAction action) {
