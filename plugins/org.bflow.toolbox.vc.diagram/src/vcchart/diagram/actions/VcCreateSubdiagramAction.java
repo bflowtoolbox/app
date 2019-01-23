@@ -32,13 +32,12 @@ import vcchart.diagram.edit.parts.Activity2EditPart;
  *
  */
 public class VcCreateSubdiagramAction implements IObjectActionDelegate {	
+	private Log _log = LogFactory.getLog(VcCreateSubdiagramAction.class);
+	
 	private Shell _shell;
 	private IWorkbench _workbench;
 	private Activity1 _activity1;
-	private Activity2 _activity2;
-	
-	/** The log instance for this class */
-	private static final Log logger = LogFactory.getLog(VcCreateSubdiagramAction.class);
+	private Activity2 _activity2;	
 	
 	/*
 	 * (non-Javadoc)
@@ -87,9 +86,9 @@ public class VcCreateSubdiagramAction implements IObjectActionDelegate {
 			applyer.apply(object, path);
 			tx.commit();
 		} catch (RollbackException e) {
-			logger.error("Subdiagram could not linked with Activity.", e);
+			_log.error("Subdiagram could not linked with Activity.", e);
 		} catch (InterruptedException e) {
-			logger.error("The current thread is interuppted, therefore no transaction can be started.", e);
+			_log.error("The current thread is interuppted, therefore no transaction can be started.", e);
 		}
 	}
 	

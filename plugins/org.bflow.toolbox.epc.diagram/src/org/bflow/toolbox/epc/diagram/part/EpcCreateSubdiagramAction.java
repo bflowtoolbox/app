@@ -1,7 +1,10 @@
 package org.bflow.toolbox.epc.diagram.part;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.epc.Function;
 import org.bflow.toolbox.epc.ProcessInterface;
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
@@ -11,7 +14,9 @@ import org.bflow.toolbox.epc.diagram.edit.parts.ProcessInterfaceEditPart;
 import org.bflow.toolbox.extensions.edit.parts.ColoredNodeEditPart;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.RecordingCommand;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.emf.transaction.RollbackException;
+import org.eclipse.emf.transaction.impl.TransactionImpl;
+import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.emf.clipboard.core.ClipboardUtil;
 import org.eclipse.jface.action.IAction;
@@ -25,7 +30,6 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPart;
 
-
 /**
  * @generated NOT
  * @author ?, Arian Storch<arian.storch@bflow.org>
@@ -33,6 +37,7 @@ import org.eclipse.ui.IWorkbenchPart;
  * 			2019-01-23 AST Fixed NPE when the dialog has been cancelled
  */
 public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
+	private Log _log = LogFactory.getLog(EpcCreateSubdiagramAction.class);
 	private ShapeNodeEditPart _selectedElement;	
 	private Function _func;
 	private ProcessInterface _proc;
@@ -68,64 +73,82 @@ public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
 		WizardDialog wizardDialog = new WizardDialog(_shell, wizard);
 		if (wizardDialog.open() == WizardDialog.CANCEL) return;
 		
-		final String pathName = wizard.getDiagram().getURI().toPlatformString(true);		
-		
-		try {			
-			if (_functionType) {				
-				_selectedElement.getViewer().getEditDomain().getCommandStack().execute(
-						new Command() {
-							@Override
-							public void execute() {
-								super.execute();
-								_func.getSubdiagram().add(pathName);
-							}
-						}
-				);
+		String pathName = wizard.getDiagram().getURI().toPlatformString(true);
 				
-				// are there events before and after?
-				ColoredNodeEditPart prev = getEventBefore();
-				ColoredNodeEditPart next = getEventAfter();
-				ArrayList<EObject> list = new ArrayList<EObject>();
+		if (_functionType) {		
+			commitTransaction(_func, pathName, (f,p) -> {((Function)f).getSubdiagram().add(p);});
+						
+			// Are there events before and after?
+			ColoredNodeEditPart prev = getEventBefore();
+			ColoredNodeEditPart next = getEventAfter();
+			ArrayList<EObject> list = new ArrayList<EObject>();
+			
+			if (prev != null)
+				list.add(prev.resolveSemanticElement());				
+			
+			if (next != null) 
+				list.add(next.resolveSemanticElement());
+			
+			// Do copy
+			if (list.size() > 0) {
+				final String s = ClipboardUtil.copyElementsToString(list, null, null);
 				
-				if (prev != null)
-					list.add(prev.resolveSemanticElement());				
-				
-				if (next != null) 
-					list.add(next.resolveSemanticElement());
-				
-				// Do copy
-				if (list.size() > 0) {
-					final String s = ClipboardUtil.copyElementsToString(list, null, null);
-					
-					EpcDiagramEditor newEditor = (EpcDiagramEditor) _workbench
-												.getActiveWorkbenchWindow()
-												.getActivePage()
-												.getActiveEditor();
+				EpcDiagramEditor newEditor = (EpcDiagramEditor) _workbench
+											.getActiveWorkbenchWindow()
+											.getActivePage()
+											.getActiveEditor();
 
-					final EpcEditPart newEditPart = (EpcEditPart) newEditor.getDiagramEditPart();
-					
-					newEditPart.getEditingDomain().getCommandStack().execute(
-							new RecordingCommand(newEditPart.getEditingDomain()) {
-								@Override
-								protected void doExecute() {
-									try {
-										ClipboardUtil.pasteElementsFromString(s,
-												newEditPart.resolveSemanticElement(),
-												null, null);
-									} catch (Exception ex) {
-										ex.printStackTrace();
-									}
-								}
-							});
-				}
+				final EpcEditPart newEditPart = (EpcEditPart) newEditor.getDiagramEditPart();
 				
-				_selectedElement.refresh();
-			} else {
-				_proc.setSubdiagram(wizard.getDiagram().getURI().toPlatformString(true));
+				newEditPart.getEditingDomain().getCommandStack().execute(
+						new RecordingCommand(newEditPart.getEditingDomain()) {
+							@Override
+							protected void doExecute() {
+								try {
+									ClipboardUtil.pasteElementsFromString(s,
+											newEditPart.resolveSemanticElement(),
+											null, null);
+								} catch (Exception ex) {
+									_log.error("Error on pasting elements from string", ex);
+								}
+							}
+						});
 			}
-		} catch(Exception ex) {
-			ex.printStackTrace();
+			
+			_selectedElement.refresh();
+		} else {
+			commitTransaction(_proc, pathName, (pi, p) -> {((ProcessInterface)pi).setSubdiagram(p);});				
 		}
+	}
+	
+	/**
+	 * Invokes {@code applyer} within a transaction with the specified arguments.
+	 * 
+	 * @param object  Object to modify within the transaction
+	 * @param path    Value
+	 * @param applyer Applyer delegate
+	 */
+	private void commitTransaction(EObject object, String path, IApplyer<EObject> applyer) {
+		if (object == null) return;
+		
+		TransactionImpl tx = new TransactionImpl(
+				TransactionUtil.getEditingDomain(object.eContainer()), 
+				false,
+				Collections.EMPTY_MAP
+				);
+		try {			
+			tx.start();
+			applyer.apply(object, path);
+			tx.commit();
+		} catch (RollbackException e) {
+			_log.error("Subdiagram could not linked with element.", e);
+		} catch (InterruptedException e) {
+			_log.error("The current thread is interuppted, therefore no transaction can be started.", e);
+		}
+	}
+	
+	interface IApplyer<TObject> {
+		void apply(TObject obj, String value);
 	}
 
 	/*
