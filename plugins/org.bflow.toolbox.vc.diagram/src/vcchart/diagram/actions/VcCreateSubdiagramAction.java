@@ -28,17 +28,17 @@ import vcchart.diagram.edit.parts.Activity2EditPart;
  * Action for creating and linking a new EPC to a VC-Activity.
  * 
  * @author Markus Schnädelbach, Arian Storch<arian.storch@bflow.org>
- * @version 2019-01-23 AST Fixed NPE when the dialog has been cancelled.
+ * @version 2019-01-23 AST Fixed NPE when the dialog has been cancelled
  *
  */
-public class CreateSubdiagramAction implements IObjectActionDelegate {	
+public class VcCreateSubdiagramAction implements IObjectActionDelegate {	
 	private Shell _shell;
 	private IWorkbench _workbench;
 	private Activity1 _activity1;
 	private Activity2 _activity2;
 	
 	/** The log instance for this class */
-	private static final Log logger = LogFactory.getLog(CreateSubdiagramAction.class);
+	private static final Log logger = LogFactory.getLog(VcCreateSubdiagramAction.class);
 	
 	/*
 	 * (non-Javadoc)
@@ -108,13 +108,11 @@ public class CreateSubdiagramAction implements IObjectActionDelegate {
 			if (structuredSelection.size() == 1)
 				if (structuredSelection.getFirstElement() instanceof Activity1EditPart) {
 					Activity1EditPart a1EP = (Activity1EditPart) structuredSelection.getFirstElement();
-					this._activity1 = (Activity1) a1EP.getPrimaryView().getElement();
+					_activity1 = (Activity1) a1EP.getPrimaryView().getElement();
 				} else if (structuredSelection.getFirstElement() instanceof Activity2EditPart) {
 					Activity2EditPart a2EP = (Activity2EditPart) structuredSelection.getFirstElement();
-					this._activity2 = (Activity2) a2EP.getPrimaryView().getElement();
+					_activity2 = (Activity2) a2EP.getPrimaryView().getElement();
 				}	
 		}
-	}
-
-	
+	}	
 }

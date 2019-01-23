@@ -37,7 +37,7 @@ public class InsertSubdiagramAction implements IObjectActionDelegate {
 	private ShapeNodeEditPart  selectedActivity;
 	
 	/** The log instance for this class */
-	private static final Log logger = LogFactory.getLog(CreateSubdiagramAction.class);
+	private static final Log logger = LogFactory.getLog(InsertSubdiagramAction.class);
 
 	@Override
 	public void run(IAction action) {

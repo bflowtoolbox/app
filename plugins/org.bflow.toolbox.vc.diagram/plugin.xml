@@ -662,7 +662,7 @@
               menubarPath="SubDiagramInsert/group1">
         </action>
     	<action
-           class="vcchart.diagram.actions.CreateSubdiagramAction"
+           class="vcchart.diagram.actions.VcCreateSubdiagramAction"
            enablesFor="1"
            icon="icons/app16.png"
            id="org.bflow.toolbox.diagram.CreateSubDiagramAction1"
