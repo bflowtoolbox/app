@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bflow.toolbox.epc.Function;
+import org.bflow.toolbox.epc.diagram.Messages;
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart;
-import org.bflow.toolbox.epc.diagram.nls.NLSupport;
 import org.bflow.toolbox.epc.diagram.part.EpcCreationWizard;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditor;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;
@@ -43,8 +43,8 @@ import org.eclipse.ui.IWorkbenchPart;
  * Implements the {@link IObjectActionDelegate} to handle the request.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 23/03/10
- * @version 14/12/13
+ * @since 2010-03-23
+ * @version 2013-12-14
  */
 public class SwapOutDiagrampartToNewAction implements IObjectActionDelegate {
 	private DiagramEditor editor;
@@ -80,16 +80,16 @@ public class SwapOutDiagrampartToNewAction implements IObjectActionDelegate {
 
 		if (selection.size() == 1) {
 			MessageDialog.openInformation(myShell, 
-					NLSupport.SwapOutDiagrampartToNewAction_DialogTitle,
-					NLSupport.SwapOutDiagrampartToNewAction_1);
+					Messages.SwapOutDiagrampartToNewAction_DialogTitle,
+					Messages.SwapOutDiagrampartToNewAction_1);
 			return;
 
 		}
 
 		if (!isSESE(selStart, selEnd)) {
 			MessageDialog.openError(myShell, 
-					NLSupport.SwapOutDiagrampartToNewAction_2,
-					NLSupport.SwapOutDiagrampartToNewAction_3);
+					Messages.SwapOutDiagrampartToNewAction_DialogTitle,
+					Messages.SwapOutDiagrampartToNewAction_3);
 			return;
 		}
 
@@ -193,8 +193,8 @@ public class SwapOutDiagrampartToNewAction implements IObjectActionDelegate {
 				keepSelEnd = true;
 			}
 			if (MessageDialog.openQuestion(myShell, 
-					NLSupport.SwapOutDiagrampartToNewAction_4,
-					NLSupport.SwapOutDiagrampartToNewAction_5)) {
+					Messages.SwapOutDiagrampartToNewAction_4,
+					Messages.SwapOutDiagrampartToNewAction_5)) {
 				editPart.getEditingDomain().getCommandStack().execute(
 						new DeleteCommand(editPart.getEditingDomain(), list) {
 						});
@@ -205,12 +205,12 @@ public class SwapOutDiagrampartToNewAction implements IObjectActionDelegate {
 			 * do chain
 			 */
 			if (MessageDialog.openQuestion(myShell, 
-					NLSupport.SwapOutDiagrampartToNewAction_6,
-					NLSupport.SwapOutDiagrampartToNewAction_7)) {
+					Messages.SwapOutDiagrampartToNewAction_6,
+					Messages.SwapOutDiagrampartToNewAction_7)) {
 				InputDialog dlg = new InputDialog(
 						myShell,
-						NLSupport.SwapOutDiagrampartToNewAction_8,
-						NLSupport.SwapOutDiagrampartToNewAction_9 + 
+						Messages.SwapOutDiagrampartToNewAction_8,
+						Messages.SwapOutDiagrampartToNewAction_8 + 
 						": ", "", null); //$NON-NLS-1$ //$NON-NLS-2$
 
 				if (dlg.open() == InputDialog.CANCEL)

@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.epc.Function;
 import org.bflow.toolbox.epc.ProcessInterface;
+import org.bflow.toolbox.epc.diagram.Messages;
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart;
@@ -20,11 +21,11 @@ import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.emf.clipboard.core.ClipboardUtil;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbench;
@@ -61,11 +62,12 @@ public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void run(IAction arg0) {
-		if (! _func.getSubdiagram().isEmpty()) {
-			MessageBox messageBox = new MessageBox(this._shell);
-			messageBox.setText("Warning: List of Subdiagrams not null!");
-			messageBox.setMessage("Warning: There are already existing subdiagrams. Creating a new one will overwrite these references.");
-			messageBox.open();
+		if (!_func.getSubdiagram().isEmpty()) {
+			MessageDialog.openWarning(
+					_shell, 
+					Messages.EpcCreateSubdiagramAction_WarningDialogTitle, 
+					Messages.EpcCreateSubdiagramAction_WarningDialogText1
+					+ Messages.EpcCreateSubdiagramAction_WarningDialogText2);
 		}
 		
 		EpcCreationWizard wizard = new EpcCreationWizard();
@@ -109,7 +111,7 @@ public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
 											newEditPart.resolveSemanticElement(),
 											null, null);
 								} catch (Exception ex) {
-									_log.error("Error on pasting elements from string", ex);
+									_log.error("Error on pasting elements from string", ex); //$NON-NLS-1$
 								}
 							}
 						});
@@ -141,9 +143,9 @@ public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
 			applyer.apply(object, path);
 			tx.commit();
 		} catch (RollbackException e) {
-			_log.error("Subdiagram could not linked with element.", e);
+			_log.error("Subdiagram could not linked with element.", e); //$NON-NLS-1$
 		} catch (InterruptedException e) {
-			_log.error("The current thread is interuppted, therefore no transaction can be started.", e);
+			_log.error("The current thread is interuppted, therefore no transaction can be started.", e); //$NON-NLS-1$
 		}
 	}
 	

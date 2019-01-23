@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.bflow.toolbox.check.CheckPlugin;
 import org.bflow.toolbox.epc.diagram.listener.EpcDiagramEditorMouseListener;
-import org.bflow.toolbox.epc.diagram.nls.NLSupport;
 import org.bflow.toolbox.epc.diagram.views.DragHelper;
 import org.bflow.toolbox.epc.extensions.idelete.IntelligentDeleter;
 import org.bflow.toolbox.extensions.BflowDiagramEditor;
@@ -141,8 +140,8 @@ public class EpcDiagramEditor extends BflowDiagramEditor implements
 			if (input != null)
 				fileName = input.getName();
 			
-			String title = NLSupport.EpcDiagramEditor_ErrorOnOpening;// EditorMessages.Editor_error_setinput_title;
-			String msg = String.format(NLSupport.EpcDiagramEditor_FileDoesNotExistAnymore, fileName);  // EditorMessages.Editor_error_setinput_message;
+			String title = org.bflow.toolbox.epc.diagram.Messages.EpcDiagramEditor_ErrorOnOpening;// EditorMessages.Editor_error_setinput_title;
+			String msg = String.format(org.bflow.toolbox.epc.diagram.Messages.EpcDiagramEditor_FileDoesNotExistAnymore, fileName);  // EditorMessages.Editor_error_setinput_message;
 			Shell shell= getSite().getShell();
 			ErrorDialog.openError(shell, title, null, new Status(IStatus.ERROR, "org.bflow.toolbox.epc.diagram", msg, x)); //$NON-NLS-1$
 		}
@@ -528,17 +527,14 @@ public class EpcDiagramEditor extends BflowDiagramEditor implements
 						.findObjectAt(this.getDropLocation())
 						.getClass()
 						.toString()
-						.equals(
-								"class org.bflow.toolbox.epc.diagram.edit.parts.FunctionNameEditPart") //$NON-NLS-1$
+						.equals("class org.bflow.toolbox.epc.diagram.edit.parts.FunctionNameEditPart") //$NON-NLS-1$
 						|| view
 								.findObjectAt(this.getDropLocation())
 								.getClass()
 								.toString()
-								.equals(
-										"class org.bflow.toolbox.epc.diagram.edit.parts.ProcessInterfaceNameEditPart")) { //$NON-NLS-1$
+								.equals("class org.bflow.toolbox.epc.diagram.edit.parts.ProcessInterfaceNameEditPart")) { //$NON-NLS-1$
 				} else
-					DragHelper.dropTarget = view.findObjectAt(this
-							.getDropLocation());
+					DragHelper.dropTarget = view.findObjectAt(this.getDropLocation());
 			}
 
 			TransferData data = getCurrentEvent().currentDataType;

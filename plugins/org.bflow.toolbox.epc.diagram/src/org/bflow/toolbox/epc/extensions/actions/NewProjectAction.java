@@ -1,6 +1,6 @@
 package org.bflow.toolbox.epc.extensions.actions;
 
-import org.bflow.toolbox.epc.diagram.nls.NLSupport;
+import org.bflow.toolbox.epc.diagram.Messages;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
@@ -16,8 +16,8 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
  * wizard.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 04/01/10
- * @version 14/12/13
+ * @since 2019-04-01
+ * @version 2013-12-14
  * 
  */
 public class NewProjectAction implements IWorkbenchWindowActionDelegate {
@@ -39,11 +39,11 @@ public class NewProjectAction implements IWorkbenchWindowActionDelegate {
 	public void run(IAction action) {
 		
 		DummyWizard dumWiz = new DummyWizard();
-		dumWiz.setWindowTitle(NLSupport.NewProjectAction_WindowTitle);
+		dumWiz.setWindowTitle(Messages.NewProjectAction_WindowTitle);
 				
 		page = new WizardNewProjectCreationPage("new wizard creation page"); //$NON-NLS-1$
-		page.setTitle(NLSupport.NewProjectAction_PageTitle);
-		page.setDescription(NLSupport.NewProjectAction_PageDescription);
+		page.setTitle(Messages.NewProjectAction_PageTitle);
+		page.setDescription(Messages.NewProjectAction_PageDescription);
 		dumWiz.addPage(page);
 		
 		WizardDialog wd = new WizardDialog(workbenchWnd.getShell(), dumWiz);
