@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bflow.toolbox.bflow.provider.BflowItemProviderAdapterFactory;
+import org.bflow.toolbox.epc.diagram.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.diagram.expressions.EpcOCLFactory;
 import org.bflow.toolbox.epc.diagram.providers.EpcMarkerNavigationProvider;
-import org.bflow.toolbox.epc.extensions.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.provider.EpcItemProviderAdapterFactory;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.eclipse.core.resources.IResource;

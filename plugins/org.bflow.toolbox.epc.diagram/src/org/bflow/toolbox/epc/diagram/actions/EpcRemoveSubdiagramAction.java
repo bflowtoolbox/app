@@ -1,31 +1,27 @@
-package org.bflow.toolbox.epc.extensions.actions;
+package org.bflow.toolbox.epc.diagram.actions;
 
 import org.bflow.toolbox.epc.Function;
 import org.bflow.toolbox.epc.ProcessInterface;
 import org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.ProcessInterfaceEditPart;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.gmf.runtime.emf.core.resources.GMFResource;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
 
 /**
- * Implements the IObjectActionDelegate to handle request for opening a
- * partitioned diagram.
+ * Implements the IObjectActionDelegate to handle the remove subdiagram request.
  * 
  * @author Arian Storch
- * @since 15/03/10
+ * @since 16/03/10
  * @version 05/07/11
  * 
  */
-public class OpenSubdiagramAction implements IObjectActionDelegate {
-	private String subdiagram;
+public class EpcRemoveSubdiagramAction implements IObjectActionDelegate {
+	private Function function;
+	private ProcessInterface pInterface;
 
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
@@ -34,50 +30,40 @@ public class OpenSubdiagramAction implements IObjectActionDelegate {
 
 	@Override
 	public void run(IAction action) {
+		if (function != null) {
+			function.getSubdiagram().clear();
+		}
 
-		String sub = subdiagram;
-
-		if (sub != null && !sub.isEmpty()) {
-			URI fileURI = URI.createPlatformResourceURI(sub, true);
-
-			Resource res = new GMFResource(fileURI);
-
-			try {
-				org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorUtil
-						.openDiagram(res);
-			} catch (PartInitException e) {
-				e.printStackTrace();
-			}
+		if (pInterface != null) {
+			pInterface.setSubdiagram(null);
 		}
 	}
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		action.setEnabled(false);
-		subdiagram = null;
+		function = null;
+		pInterface = null;
 		
 		IStructuredSelection strSel = (IStructuredSelection) selection;
 
 		BflowNodeEditPart part = (BflowNodeEditPart) strSel.getFirstElement();
 
 		if (part instanceof FunctionEditPart) {
-			Function f = (Function) ((FunctionEditPart) part)
+			function = (Function) ((FunctionEditPart) part)
 					.resolveSemanticElement();
 			
-			if(!f.getSubdiagram().isEmpty()) {
-				subdiagram = f.getSubdiagram().get(0);
+			if(!function.getSubdiagram().isEmpty())
 				action.setEnabled(true);
-			}
 
 			return;
 		}
 
 		if (part instanceof ProcessInterfaceEditPart) {
-			ProcessInterface p = (ProcessInterface) ((ProcessInterfaceEditPart) part)
+			pInterface = (ProcessInterface) ((ProcessInterfaceEditPart) part)
 					.resolveSemanticElement();
-			subdiagram = p.getSubdiagram();
 			
-			if(subdiagram != null)
+			if(pInterface.getSubdiagram() != null)
 				action.setEnabled(true);
 
 			return;

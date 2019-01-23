@@ -1,4 +1,4 @@
-package org.bflow.toolbox.epc.diagram.part;
+package org.bflow.toolbox.epc.diagram.actions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +12,8 @@ import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.ProcessInterfaceEditPart;
+import org.bflow.toolbox.epc.diagram.part.EpcCreationWizard;
+import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditor;
 import org.bflow.toolbox.extensions.edit.parts.ColoredNodeEditPart;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.RecordingCommand;

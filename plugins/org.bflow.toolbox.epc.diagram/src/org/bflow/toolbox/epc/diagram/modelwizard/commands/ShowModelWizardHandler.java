@@ -1,7 +1,7 @@
 package org.bflow.toolbox.epc.diagram.modelwizard.commands;
 
+import org.bflow.toolbox.epc.diagram.actions.ElementGeneratorAction;
 import org.bflow.toolbox.epc.diagram.wizards.ModelWizard;
-import org.bflow.toolbox.epc.extensions.actions.ElementGeneratorAction;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

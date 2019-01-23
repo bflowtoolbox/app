@@ -1,4 +1,4 @@
-package org.bflow.toolbox.epc.extensions.actions;
+package org.bflow.toolbox.epc.diagram.actions;
 
 import org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.IDiagramWorkbenchPart;

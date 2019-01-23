@@ -1,9 +1,11 @@
-package org.bflow.toolbox.epc.diagram.part;
+package org.bflow.toolbox.epc.diagram.actions;
 
 import org.bflow.toolbox.epc.Function;
 import org.bflow.toolbox.epc.ProcessInterface;
 import org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.ProcessInterfaceEditPart;
+import org.bflow.toolbox.epc.diagram.part.EpcElementChooserDialog;
+import org.bflow.toolbox.epc.diagram.part.Messages;
 import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;

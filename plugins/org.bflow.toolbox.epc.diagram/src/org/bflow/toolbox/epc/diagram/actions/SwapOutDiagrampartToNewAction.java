@@ -1,4 +1,4 @@
-package org.bflow.toolbox.epc.extensions.actions;
+package org.bflow.toolbox.epc.diagram.actions;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -81,14 +81,14 @@
             <separator name="group1"/>
         </menu>
         <action
-              class="org.bflow.toolbox.epc.extensions.actions.RemoveSubdiagramAction"
+              class="org.bflow.toolbox.epc.diagram.actions.EpcRemoveSubdiagramAction"
               icon="icons/Remove-16.png"
               id="org.bflow.toolbox.epc.diagram.RemoveSubdiagramAction"
               label="%removeLinkedDiagramActionTitle"
               menubarPath="SubDiagramInsert/group1">
         </action>
         <action
-              class="org.bflow.toolbox.epc.diagram.part.EpcInsertSubdiagramAction"
+              class="org.bflow.toolbox.epc.diagram.actions.EpcInsertSubdiagramAction"
               enablesFor="1"
               icon="icons/Add-16.png"
               id="org.bflow.toolbox.diagram.InsertSubDiagramAction1"
@@ -96,14 +96,14 @@
               menubarPath="SubDiagramInsert/group1">
        </action>
         <action
-              class="org.bflow.toolbox.epc.extensions.actions.OpenSubdiagramAction"
+              class="org.bflow.toolbox.epc.diagram.actions.EpcOpenSubdiagramAction"
               icon="icons/Play-16.png"
               id="org.bflow.toolbox.epc.diagram.OpenSubdiagramAction"
               label="%openLinkedDiagramActionTitle"
               menubarPath="SubDiagramInsert/group1">
         </action>
     	<action
-           class="org.bflow.toolbox.epc.diagram.part.EpcCreateSubdiagramAction"
+           class="org.bflow.toolbox.epc.diagram.actions.EpcCreateSubdiagramAction"
            enablesFor="1"
            icon="icons/Applications-16.png"
            id="org.bflow.toolbox.diagram.CreateSubDiagramAction1"
@@ -137,7 +137,7 @@
                path="additions">
          </menu>
          <action
-               class="org.bflow.toolbox.epc.extensions.actions.ElementGeneratorAction"
+               class="org.bflow.toolbox.epc.diagram.actions.ElementGeneratorAction"
                definitionId="org.bflow.toolbox.epc.diagram.showModelWizard"
                icon="icons/wizard_16.png"
                id="org.bflow.toolbox.diagram.extensions.ModelWizardAction"
@@ -150,7 +150,7 @@
             id="org.bflow.toolbox.diagram.extensions.FunctionModelWizard"
             objectClass="org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart">
          <action
-               class="org.bflow.toolbox.epc.extensions.actions.ElementGeneratorAction"
+               class="org.bflow.toolbox.epc.diagram.actions.ElementGeneratorAction"
                definitionId="org.bflow.toolbox.epc.diagram.showModelWizard"
                icon="icons/wizard_16.png"
                id="org.bflow.toolbox.diagram.extensions.FunctionModelWizardAction"
@@ -173,7 +173,7 @@
                path="additions">
          </menu>
          <action
-               class="org.bflow.toolbox.epc.extensions.actions.ElementGeneratorAction"
+               class="org.bflow.toolbox.epc.diagram.actions.ElementGeneratorAction"
                definitionId="org.bflow.toolbox.epc.diagram.showModelWizard"
                icon="icons/wizard_16.png"
                id="org.bflow.toolbox.diagram.extensions.EventModelWizardAction"
@@ -186,7 +186,7 @@
             id="org.bflow.toolbox.diagram.extensions.showAttributeView"
             objectClass="org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart">
          <action
-               class="org.bflow.toolbox.epc.extensions.actions.ShowAttributeViewAction"
+               class="org.bflow.toolbox.epc.diagram.actions.ShowAttributeViewAction"
                icon="platform:/plugin/org.eclipse.ui.views/icons/full/eview16/prop_ps.gif "
                id="org.bflow.toolbox.diagram.extensions.showAttributeView"
                label="Show Attribute View"
@@ -713,7 +713,7 @@
             visible="true"
             id="org.bflow.toolbox.epc.diagram.ActionSet">
          <action
-               class="org.bflow.toolbox.epc.extensions.actions.NewEpcDiagramWizardAction"
+               class="org.bflow.toolbox.epc.diagram.actions.NewEpcDiagramWizardAction"
                icon="icons/obj16/EpcIcon.png"
                id="org.bflow.toolbox.epc.diagram.createNewEpcWizardAction"
                label="%newEpcDiagramToolBarItem"
@@ -722,7 +722,7 @@
                tooltip="%newEpcDiagramToolBarItem">
          </action>
          <action
-               class="org.bflow.toolbox.epc.extensions.actions.NewProjectAction"
+               class="org.bflow.toolbox.epc.diagram.actions.NewProjectAction"
                icon="icons/folderAlpha.png"
                id="org.bflow.toolbox.epc.diagram.createProjectAction"
                label="%newProjectFolderToolBarItem"
@@ -905,7 +905,7 @@
 		<objectContribution adaptable="true" id="live.validation"
 			objectClass="org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart">
 			<action
-         class="org.bflow.toolbox.epc.extensions.actions.LiveValidationAction"
+         class="org.bflow.toolbox.epc.diagram.actions.LiveValidationAction"
          definitionId="org.bflow.toolbox.epc.diagram.enableLiveValidation"
          enablesFor="1"
          id="live.validation.action"
@@ -971,7 +971,7 @@
            id="org.bflow.toolbox.epc.diagram.ObjectPartOutSwapping"
            objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.INodeEditPart">
         <action
-              class="org.bflow.toolbox.epc.extensions.actions.SwapOutDiagrampartToNewAction"
+              class="org.bflow.toolbox.epc.diagram.actions.SwapOutDiagrampartToNewAction"
               id="org.bflow.toolbox.epc.diagram.action1"
               label="&amp;New Diagram"
               menubarPath="PartOutSwapping/group1">

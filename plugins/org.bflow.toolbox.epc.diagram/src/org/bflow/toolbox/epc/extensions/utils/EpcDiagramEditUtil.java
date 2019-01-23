@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Vector;
 
 import org.bflow.toolbox.bflow.BflowPackage;
+import org.bflow.toolbox.epc.diagram.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditor;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorUtil;
 import org.bflow.toolbox.epc.diagram.providers.EpcElementTypes;
 import org.bflow.toolbox.epc.extensions.idelete.IntelligentDeleter;
-import org.bflow.toolbox.epc.extensions.actions.DiagramLiveValidator;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.bflow.toolbox.extensions.edit.parts.ColoredNodeEditPart;
 import org.eclipse.core.commands.ExecutionException;

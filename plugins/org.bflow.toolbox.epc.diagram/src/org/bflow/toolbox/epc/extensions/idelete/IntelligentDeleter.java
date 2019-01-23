@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.Vector;
 
 import org.bflow.toolbox.epc.Arc;
+import org.bflow.toolbox.epc.diagram.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.diagram.edit.parts.ANDEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.OREditPart;
@@ -13,7 +14,6 @@ import org.bflow.toolbox.epc.diagram.edit.policies.ArcItemSemanticEditPolicy;
 import org.bflow.toolbox.epc.diagram.edit.policies.EpcBaseItemSemanticEditPolicy;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditor;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;
-import org.bflow.toolbox.epc.extensions.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.extensions.utils.EpcDiagramEditUtil;
 import org.bflow.toolbox.extensions.configurator.BflowConfigurator;
 import org.bflow.toolbox.extensions.edit.parts.ColoredConnectionEditPart;

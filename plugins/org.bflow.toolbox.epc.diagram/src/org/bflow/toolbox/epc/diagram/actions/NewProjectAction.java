@@ -1,4 +1,4 @@
-package org.bflow.toolbox.epc.extensions.actions;
+package org.bflow.toolbox.epc.diagram.actions;
 
 import org.bflow.toolbox.epc.diagram.Messages;
 import org.eclipse.core.resources.IProject;

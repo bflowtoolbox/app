@@ -1,6 +1,6 @@
 package org.bflow.toolbox.epc.diagram.providers;
 
-import org.bflow.toolbox.epc.extensions.actions.SelectAllShapesWithTextAction;
+import org.bflow.toolbox.epc.diagram.actions.SelectAllShapesWithTextAction;
 import org.eclipse.gmf.runtime.common.ui.services.action.contributionitem.AbstractContributionItemProvider;
 import org.eclipse.gmf.runtime.common.ui.util.IWorkbenchPartDescriptor;
 import org.eclipse.gmf.runtime.diagram.ui.printing.actions.PrintPreviewAction;
