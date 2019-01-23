@@ -28,61 +28,58 @@ import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * @generated NOT
- * @author 
- * @version 09/08/10 modified by Arian Storch
+ * @author ?, Arian Storch<arian.storch@bflow.org>
+ * @version 2010-09-08 AST ?
+ * 			2019-01-23 AST Fixed NPE when the dialog has been cancelled
  */
 public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
-
-	private ShapeNodeEditPart mySelectedElement;
+	private ShapeNodeEditPart _selectedElement;	
+	private Function _func;
+	private ProcessInterface _proc;
+	private Shell _shell;	
+	private IWorkbench _workbench;	
+	private boolean _functionType;
 	
-	private Function func;
-	private ProcessInterface proc;
-
-	private Shell myShell;
-	
-	private IWorkbench workbench;
-	
-	private boolean functionType;
-	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction, org.eclipse.ui.IWorkbenchPart)
+	 */
+	@Override
 	public void setActivePart(IAction arg0, IWorkbenchPart arg1) {
-		myShell = arg1.getSite().getShell();
-		workbench = arg1.getSite().getWorkbenchWindow().getWorkbench();
+		_shell = arg1.getSite().getShell();
+		_workbench = arg1.getSite().getWorkbenchWindow().getWorkbench();
 	}
 
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
+	 */
+	@Override
 	public void run(IAction arg0) {
-		if (! func.getSubdiagram().isEmpty()) {
-			MessageBox messageBox = new MessageBox(this.myShell);
+		if (! _func.getSubdiagram().isEmpty()) {
+			MessageBox messageBox = new MessageBox(this._shell);
 			messageBox.setText("Warning: List of Subdiagrams not null!");
 			messageBox.setMessage("Warning: There are already existing subdiagrams. Creating a new one will overwrite these references.");
 			messageBox.open();
 		}
+		
 		EpcCreationWizard wizard = new EpcCreationWizard();
-		wizard.init(workbench, StructuredSelection.EMPTY);
-		WizardDialog wizardDialog = new WizardDialog(myShell, wizard);
-		wizardDialog.open();
+		wizard.init(_workbench, StructuredSelection.EMPTY);
+		WizardDialog wizardDialog = new WizardDialog(_shell, wizard);
+		if (wizardDialog.open() == WizardDialog.CANCEL) return;
 		
-		final String pathName = wizard.getDiagram().getURI().toPlatformString(true);
+		final String pathName = wizard.getDiagram().getURI().toPlatformString(true);		
 		
-		//if (pathName.startsWith(Workspace.workspaceDirectory)) {
-		
-		try
-		{
-			
-			if (functionType) 
-			{				
-				mySelectedElement.getViewer().getEditDomain().getCommandStack().execute(
-				new Command(){
-					
-					@Override
-					public void execute() {
-						super.execute();
-						func.getSubdiagram().add(pathName);
-					}
-					
-				}		
-				
+		try {			
+			if (_functionType) {				
+				_selectedElement.getViewer().getEditDomain().getCommandStack().execute(
+						new Command() {
+							@Override
+							public void execute() {
+								super.execute();
+								_func.getSubdiagram().add(pathName);
+							}
+						}
 				);
 				
 				// are there events before and after?
@@ -90,29 +87,25 @@ public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
 				ColoredNodeEditPart next = getEventAfter();
 				ArrayList<EObject> list = new ArrayList<EObject>();
 				
-				if(prev != null)
+				if (prev != null)
 					list.add(prev.resolveSemanticElement());				
 				
-				if(next != null) 
+				if (next != null) 
 					list.add(next.resolveSemanticElement());
 				
-				/*
-				 * do copy
-				 */
-				if(list.size() > 0) {
-					final String s = ClipboardUtil.copyElementsToString(list, null,
-							null);
+				// Do copy
+				if (list.size() > 0) {
+					final String s = ClipboardUtil.copyElementsToString(list, null, null);
 					
-					EpcDiagramEditor newEditor = (EpcDiagramEditor) workbench
-												.getActiveWorkbenchWindow().getActivePage()
-																.getActiveEditor();
+					EpcDiagramEditor newEditor = (EpcDiagramEditor) _workbench
+												.getActiveWorkbenchWindow()
+												.getActivePage()
+												.getActiveEditor();
 
-					final EpcEditPart newEditPart = (EpcEditPart) newEditor
-															.getDiagramEditPart();
+					final EpcEditPart newEditPart = (EpcEditPart) newEditor.getDiagramEditPart();
 					
 					newEditPart.getEditingDomain().getCommandStack().execute(
 							new RecordingCommand(newEditPart.getEditingDomain()) {
-
 								@Override
 								protected void doExecute() {
 									try {
@@ -122,43 +115,37 @@ public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
 									} catch (Exception ex) {
 										ex.printStackTrace();
 									}
-
 								}
 							});
 				}
 				
-				mySelectedElement.refresh();
+				_selectedElement.refresh();
+			} else {
+				_proc.setSubdiagram(wizard.getDiagram().getURI().toPlatformString(true));
 			}
-			else proc.setSubdiagram(wizard.getDiagram().getURI().toPlatformString(true));
-		}
-		catch(Exception ex)
-		{
+		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
-				
-		/*} else {	
-			MessageBox messageBox = new MessageBox(this.myShell);
-			messageBox.setMessage("Error: File not in Workspace!");
-			messageBox.setText("Error: File not in Workspace!");
-			messageBox.open();
-		}	*/
 	}
 
-	
-	public void selectionChanged(IAction action, ISelection selection) {
-	
-		mySelectedElement = null;
-		functionType = false;
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
+	 */
+	@Override
+	public void selectionChanged(IAction action, ISelection selection) {	
+		_selectedElement = null;
+		_functionType = false;
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			if (structuredSelection.size() == 1)
 				if (structuredSelection.getFirstElement() instanceof FunctionEditPart) {
-					mySelectedElement = (FunctionEditPart) structuredSelection.getFirstElement();
-					func = (Function)mySelectedElement.getPrimaryView().getElement();
-					functionType = true;
+					_selectedElement = (FunctionEditPart) structuredSelection.getFirstElement();
+					_func = (Function)_selectedElement.getPrimaryView().getElement();
+					_functionType = true;
 				} else if (structuredSelection.getFirstElement() instanceof ProcessInterfaceEditPart) {
-					mySelectedElement = (ProcessInterfaceEditPart) structuredSelection.getFirstElement();		
-					proc = (ProcessInterface)mySelectedElement.getPrimaryView().getElement();
+					_selectedElement = (ProcessInterfaceEditPart) structuredSelection.getFirstElement();		
+					_proc = (ProcessInterface)_selectedElement.getPrimaryView().getElement();
 				}	
 		}
 
@@ -166,13 +153,13 @@ public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
 	}
 	
 	private boolean isEnabled() {
-		return mySelectedElement != null;
+		return _selectedElement != null;
 	}
 	
 	private ColoredNodeEditPart getEventBefore() {
-		FunctionEditPart editPart = (FunctionEditPart)mySelectedElement;
+		FunctionEditPart editPart = (FunctionEditPart)_selectedElement;
 		
-		if(editPart.getTargetConnections().size() == 0)
+		if (editPart.getTargetConnections().size() == 0)
 			return null;
 		
 		ColoredNodeEditPart prev = (ColoredNodeEditPart) ((ArcEditPart)editPart.getTargetConnections().get(0)).getSource();
@@ -181,9 +168,9 @@ public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
 	}
 	
 	private ColoredNodeEditPart getEventAfter() {
-		FunctionEditPart editPart = (FunctionEditPart)mySelectedElement;
+		FunctionEditPart editPart = (FunctionEditPart)_selectedElement;
 		
-		if(editPart.getSourceConnections().size() == 0)
+		if (editPart.getSourceConnections().size() == 0)
 			return null;
 		
 		ColoredNodeEditPart next = (ColoredNodeEditPart) ((ArcEditPart)editPart.getSourceConnections().get(0)).getTarget();
