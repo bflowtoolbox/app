@@ -76,7 +76,7 @@
         <menu
               icon="icons/Document-Move-16.png"
               id="SubDiagramInsert"
-              label="Diagram partitioning..."
+              label="%linkDiagramMenuTitle"
               path="additions"> 
             <separator name="group1"/>
         </menu>
@@ -84,7 +84,7 @@
               class="org.bflow.toolbox.epc.extensions.actions.RemoveSubdiagramAction"
               icon="icons/Remove-16.png"
               id="org.bflow.toolbox.epc.diagram.RemoveSubdiagramAction"
-              label="Remove partitioned diagram..."
+              label="%removeLinkedDiagramActionTitle"
               menubarPath="SubDiagramInsert/group1">
         </action>
         <action
@@ -92,14 +92,14 @@
               enablesFor="1"
               icon="icons/Add-16.png"
               id="org.bflow.toolbox.diagram.InsertSubDiagramAction1"
-              label="Insert / Add existing partitioned diagram..."
+              label="%insertOrAddLinkedDiagramActionTitle"
               menubarPath="SubDiagramInsert/group1">
        </action>
         <action
               class="org.bflow.toolbox.epc.extensions.actions.OpenSubdiagramAction"
               icon="icons/Play-16.png"
               id="org.bflow.toolbox.epc.diagram.OpenSubdiagramAction"
-              label="&amp;Open partitioned Diagram..."
+              label="%openLinkedDiagramActionTitle"
               menubarPath="SubDiagramInsert/group1">
         </action>
     	<action
@@ -107,7 +107,7 @@
            enablesFor="1"
            icon="icons/Applications-16.png"
            id="org.bflow.toolbox.diagram.CreateSubDiagramAction1"
-           label="Create new partitioned diagram..."
+           label="%createNewLinkedDiagramActionTitle"
            menubarPath="SubDiagramInsert/group1">
         </action>
      <visibility>
