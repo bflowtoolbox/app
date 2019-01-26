@@ -6,6 +6,9 @@ import java.util.Stack;
 import java.util.UUID;
 import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.bflow.toolbox.epc.diagram.Messages;
 import org.bflow.toolbox.epc.diagram.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.diagram.edit.parts.ANDEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
@@ -59,78 +62,53 @@ import org.eclipse.swt.graphics.Point;
  * Defines a wizard to generate and add numerous elements to the diagram.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 24/11/09
- * @version 22/08/13
+ * @since 2019-11-24
+ * @version 2013-08-22
+ * 			2019-01-26 AST Localized dialog
  * 
  */
 public class ModelWizard extends Wizard {
-	/**
-	 * wizard page
-	 */
+	/**	wizard page */
 	private ElementGeneratorWizardPage egwp;
 
-	/**
-	 * editor instance
-	 */
+	/** editor instance	 */
 	private EpcDiagramEditor editor;
 
-	/**
-	 * mouse location before the editor was called
-	 */
+	/** mouse location before the editor was called	 */
 	private Point location;
 
-	/**
-	 * selection within the editor
-	 */
+	/** selection within the editor */
 	private IStructuredSelection selection;
 
-	/**
-	 * anchor for element generation
-	 */
+	/** anchor for element generation */
 	private BflowNodeEditPart anchor = null;
 
 	private ColoredNodeEditPart connectorTop = null;
 	@SuppressWarnings("unused")
 	private ColoredNodeEditPart connectorBottom = null;
 
-	/**
-	 * last drawn connector
-	 */
+	/**	last drawn connector */
 	private Connector lastDrawnConnector = null;
 
-	/**
-	 * last drawn ColoredNodeEditParts
-	 */
+	/** last drawn ColoredNodeEditParts */
 	private Stack<ColoredNodeEditPart> lastDrawnCNEditParts = new Stack<ColoredNodeEditPart>();
 
-	/**
-	 * last drawn BflowNodeEditParts
-	 */
+	/** last drawn BflowNodeEditParts */
 	private Stack<ColoredNodeEditPart> lastDrawnEditParts = new Stack<ColoredNodeEditPart>();
 	
-	/**
-	 * additional BflowNodeEditParts like File, OU, Document ...
-	 */
+	/** additional BflowNodeEditParts like File, OU, Document ... */
 	private ArrayList<ColoredNodeEditPart> additionalEditParts = new ArrayList<ColoredNodeEditPart>();
 
-	/**
-	 * array of edit parts for layouting
-	 */
+	/** array of edit parts for layouting */
 	private Object editParts[] = new Object[10];
 
-	/**
-	 * holds the connections to create
-	 */
+	/** holds the connections to create */
 	private Vector<Connection> connectionStack = new Vector<Connection>();
 
-	/**
-	 * flag that indicates if the live validation is enabled
-	 */
+	/** flag that indicates if the live validation is enabled */
 	private boolean validationEnabled;
 	
-	/**
-	 * the unique id of that insert operation (for redo/undo)
-	 */
+	/** the unique id of that insert operation (for redo/undo) */
 	private String id;
 
 	/**
@@ -140,11 +118,10 @@ public class ModelWizard extends Wizard {
 	 *            editor instance
 	 */
 	public ModelWizard(EpcDiagramEditor editor) {
-		this.setWindowTitle("Model processing: model wizard");
+		this.setWindowTitle(Messages.ModelWizard_Title);
 		this.editor = editor;
 		this.location = editor.getMouseLocation();
-		this.selection = (IStructuredSelection) editor.getSite()
-				.getSelectionProvider().getSelection();
+		this.selection = (IStructuredSelection) editor.getSite().getSelectionProvider().getSelection();
 
 		if (selection.getFirstElement().getClass() != EpcEditPart.class)
 			anchor = (BflowNodeEditPart) selection.getFirstElement();
@@ -154,14 +131,17 @@ public class ModelWizard extends Wizard {
 		this.addPage(egwp);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
+	 */
 	@Override
 	public boolean performFinish() {
 
 		/*
 		 * Deactivate validation
 		 */
-		DiagramLiveValidator validator = EpcDiagramEditorPlugin.getInstance()
-				.getDiagramLiveValidator();
+		DiagramLiveValidator validator = EpcDiagramEditorPlugin.getInstance().getDiagramLiveValidator();
 		validationEnabled = validator.isEnabled();
 		validator.setEnabled(false);
 
@@ -180,18 +160,16 @@ public class ModelWizard extends Wizard {
 			history.setLimit(new ResourceUndoContext(editingDomain, res), 2000);
 			history.setLimit(IOperationHistory.GLOBAL_UNDO_CONTEXT, 2000);
 			
-			
 			/*
 			 * generating elements
 			 */
 			createElements();
 			createConnections();
-			
-			
-					
+						
 			AbstractOperation aoend = EpcDiagramEditUtil.getCollectedUndoRedoCommand(id, "Model Wizard");
 			aoend.addContext(IOperationHistory.GLOBAL_UNDO_CONTEXT);
 			history.add(aoend);
+			
 			/*
 			 * do update
 			 */
@@ -205,8 +183,7 @@ public class ModelWizard extends Wizard {
 			/*
 			 * layout update
 			 */
-			BflowDiagramEditPart bfEditPart = (BflowDiagramEditPart) editor
-					.getDiagramEditPart();
+			BflowDiagramEditPart bfEditPart = (BflowDiagramEditPart) editor.getDiagramEditPart();
 			bfEditPart.getDiagramFormLayer().getFormHelper().pack();
 
 			/*
@@ -220,6 +197,7 @@ public class ModelWizard extends Wizard {
 			insertedNodes.addAll(lastDrawnCNEditParts);
 			insertedNodes.addAll(lastDrawnEditParts);
 			insertedNodes.addAll(additionalEditParts);
+			
 			// add all new connections
 			ArrayList<EditPart> insertedEdges = new ArrayList<EditPart>();
 			for (ColoredNodeEditPart editPart : insertedNodes) {
@@ -235,9 +213,9 @@ public class ModelWizard extends Wizard {
 			editor.getSite().getSelectionProvider().setSelection(newSelection);
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Log log = LogFactory.getLog(ModelWizard.class);
+			log.error("Error on performing finish", ex); //$NON-NLS-1$
 			return false;
-
 		} finally {
 			/*
 			 * activate (if it was before) and run validation
@@ -357,10 +335,10 @@ public class ModelWizard extends Wizard {
 					
 					//Extrahiere eventuell vorhande Bedingungen für dieses Shape
 					AdditionalFunctionConditions additionalFunctionConditions = null;
-					if(el.getKind() == Element.Kind.Function && shapeName.matches(".*[//].*[=].*")){
+					if(el.getKind() == Element.Kind.Function && shapeName.matches(".*[//].*[=].*")){ //$NON-NLS-1$
 						//nur für Funktionen
-						additionalFunctionConditions = new AdditionalFunctionConditions(shapeName.substring(shapeName.indexOf("//")));
-						shapeName = shapeName.substring(0,shapeName.indexOf("//"));	 
+						additionalFunctionConditions = new AdditionalFunctionConditions(shapeName.substring(shapeName.indexOf("//"))); //$NON-NLS-1$
+						shapeName = shapeName.substring(0,shapeName.indexOf("//"));	  //$NON-NLS-1$
 					}
 					
 					if (!el.getKind().isSingleConnector()) {
@@ -495,7 +473,7 @@ public class ModelWizard extends Wizard {
 			 */
 			if (countArcConnections(anchor.getSourceConnections()) > 0) {
 
-				List cons = anchor.getSourceConnections();
+				List<?> cons = anchor.getSourceConnections();
 				for (Object con : cons) {
 					if (con instanceof ArcEditPart) {
 						ArcEditPart arc = (ArcEditPart) con;
@@ -528,7 +506,7 @@ public class ModelWizard extends Wizard {
 	 * @param list with connections for a GraphicalEditPart
 	 * @return number of arc editparts
 	 */
-	private int countArcConnections(List list){
+	private int countArcConnections(List<?> list){
 		int count = 0;
 		for (Object con : list) {
 			if (con instanceof ArcEditPart) {
@@ -559,8 +537,8 @@ public class ModelWizard extends Wizard {
 		CreateElementRequestAdapter adapter = (CreateElementRequestAdapter) desc.getElementAdapter();
 		EObject element = adapter.resolve();
 		
-		IModelBuilderAttendant att = ModelBuilderAttendantRegistry.getModelBuilderFor("epc");
-		EStructuralFeature structuralFeature = att.getEStructuralFeatureFor(null, "name");
+		IModelBuilderAttendant att = ModelBuilderAttendantRegistry.getModelBuilderFor("epc"); //$NON-NLS-1$
+		EStructuralFeature structuralFeature = att.getEStructuralFeatureFor(null, "name"); //$NON-NLS-1$
 		
 		SetRequest setRequest = new SetRequest(element, structuralFeature, shapeName);
 		SetValueCommand svc = new SetValueCommand(setRequest);
