@@ -21,19 +21,11 @@ tbd
 
 ### Add German localization
 
-1.  Go to the Eclipse Babel project web site and navigate to the download site with the latest packages (currently "http://download.eclipse.org/technology/babel/babel_language_packs/R0.16.0/photon/photon.php")
-2.  Download the package "BabelLanguagePack-eclipse-de_4.8.0.v20180815020001.zip (85.17%)"
-3.  Navigate to the archive site (http://archive.eclipse.org/technology/babel/index.php)
-4.  Locate the Eclipse version where GMF localization packs are provided. 
-    Currently, the last provided version is "Helios" (see http://archive.eclipse.org/technology/babel/babel_language_packs/R0.10.1/helios/helios.php).
-5.  Download the following packages:
-    * BabelLanguagePack-modeling.gmp.gmf-runtime-de_3.6.0.v20121120125106.zip
-6.  Extract the packages anywhere on your drive. Ensure to merge each "eclipse" folder of each package.
-    Finally, there is one "eclipse" folder that contains one "plug-ins" and one "features" folder, 
-    where each contains all jar files.
-7.  Set up a new Plug-in Development Target Platform based on the current target (see Eclipse Preferences).   
-8.  Name the new platform "Bflow German Platform". 
-9.  Add a new location, choose "Directory" as source. Enter the path to the directory 
-    where the babel language packs have been extracted. If everything is correct, the preview 
-    dialog shows a lot of found plug-ins.
-10. Close the dialog and switch to the new target platform. Finally, apply the new settings.
+1. 	Extract the "eclipse-nl.zip" package that is located in the repository path "babel-packs" 
+	anywhere on your drive, for instance "c:\bflow\eclipse-nl".
+2.  Set up a new Plug-in Development Target Platform based on the current target (see Eclipse Preferences).   
+3.  Name the new platform "Bflow German Platform". 
+4.  Add a new location, choose "Directory" as source. Enter the path to the directory 
+    where the babel language packs have been extracted (for instance, "c:\bflow\eclipse-nl"). 
+	If everything is correct, the preview dialog shows a lot of found plug-ins.
+5. 	Close the dialog and switch to the new target platform. Finally, apply the new settings.
