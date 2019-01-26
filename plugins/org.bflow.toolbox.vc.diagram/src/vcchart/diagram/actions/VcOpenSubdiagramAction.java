@@ -1,5 +1,7 @@
 package vcchart.diagram.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -18,16 +20,22 @@ import vcchart.diagram.edit.parts.Activity2EditPart;
 
 /**
  * Action for opening a linked EPC file.
- * @author Markus Schnädelbach
+ * 
+ * @author Markus Schnädelbach, Arian Storch<arian.storch@bflow.org>
+ * @version 2019-01-26 AST Added logger
  *
  */
 public class VcOpenSubdiagramAction implements IObjectActionDelegate   {
-	
-	private String subdiagram;
+	private Log _log = LogFactory.getLog(VcOpenSubdiagramAction.class);
+	private String _subdiagram;
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
+	 */
 	@Override
 	public void run(IAction action) {
-		String sub = subdiagram;
+		String sub = _subdiagram;
 
 		if (sub != null && !sub.isEmpty()) {
 			URI fileURI = URI.createPlatformResourceURI(sub, true);
@@ -36,16 +44,20 @@ public class VcOpenSubdiagramAction implements IObjectActionDelegate   {
 
 			try {
 				org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorUtil.openDiagram(res);
-			} catch (PartInitException e) {
-				e.printStackTrace();
+			} catch (PartInitException ex) {
+				_log.error("Error on opening diagram", ex);
 			}
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
+	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		action.setEnabled(false);
-		subdiagram = null;
+		_subdiagram = null;
 		
 		IStructuredSelection strSel = (IStructuredSelection) selection;
 
@@ -55,7 +67,7 @@ public class VcOpenSubdiagramAction implements IObjectActionDelegate   {
 			Activity1 a1 = (Activity1) ((Activity1EditPart) part).resolveSemanticElement();
 			
 			if(a1.getSubdiagram() != null) {
-				subdiagram = a1.getSubdiagram();
+				_subdiagram = a1.getSubdiagram();
 				action.setEnabled(true);
 			}
 
@@ -66,7 +78,7 @@ public class VcOpenSubdiagramAction implements IObjectActionDelegate   {
 			Activity2 a2 = (Activity2) ((Activity2EditPart) part).resolveSemanticElement();
 			
 			if(a2.getSubdiagram() != null) {
-				subdiagram = a2.getSubdiagram();
+				_subdiagram = a2.getSubdiagram();
 				action.setEnabled(true);
 			}
 
@@ -74,8 +86,12 @@ public class VcOpenSubdiagramAction implements IObjectActionDelegate   {
 		}		
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction, org.eclipse.ui.IWorkbenchPart)
+	 */
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-
+		// Nothing to do
 	}
 }

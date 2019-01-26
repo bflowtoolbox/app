@@ -1,14 +1,9 @@
 package vcchart.diagram.actions;
 
-import java.util.Collections;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.epc.diagram.part.EpcCreationWizard;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.transaction.RollbackException;
-import org.eclipse.emf.transaction.impl.TransactionImpl;
-import org.eclipse.emf.transaction.util.TransactionUtil;
+import org.bflow.toolbox.extensions.BflowDiagramElementEditUtil;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -62,38 +57,13 @@ public class VcCreateSubdiagramAction implements IObjectActionDelegate {
 		if (wizardDialog.open() == WizardDialog.CANCEL) return;
 			
 		String pathName = wizard.getDiagram().getURI().toPlatformString(true);
-		commitTransaction(_activity1, pathName, (activity, path) -> {((Activity1) activity).setSubdiagram(path);});
-		commitTransaction(_activity2, pathName, (activity, path) -> {((Activity2) activity).setSubdiagram(path);});
-	}
-	
-	/**
-	 * Invokes {@code applyer} within a transaction with the specified arguments.
-	 * 
-	 * @param object  Object to modify within the transaction
-	 * @param path    Value
-	 * @param applyer Applyer delegate
-	 */
-	private void commitTransaction(EObject object, String path, IApplyer<EObject> applyer) {
-		if (object == null) return;
 		
-		TransactionImpl tx = new TransactionImpl(
-				TransactionUtil.getEditingDomain(object.eContainer()), 
-				false,
-				Collections.EMPTY_MAP
-				);
-		try {			
-			tx.start();
-			applyer.apply(object, path);
-			tx.commit();
-		} catch (RollbackException e) {
-			_log.error("Subdiagram could not linked with Activity.", e);
-		} catch (InterruptedException e) {
-			_log.error("The current thread is interuppted, therefore no transaction can be started.", e);
-		}
-	}
-	
-	interface IApplyer<TObject> {
-		void apply(TObject obj, String value);
+		try {
+			BflowDiagramElementEditUtil.modifyWithTransaction(_activity1, pathName, (e, v) -> e.setSubdiagram(v));
+			BflowDiagramElementEditUtil.modifyWithTransaction(_activity2, pathName, (e, v) -> e.setSubdiagram(v));
+		} catch (Exception ex) {
+			_log.error("Error on modifying element", ex);
+		}		
 	}
 
 	/*

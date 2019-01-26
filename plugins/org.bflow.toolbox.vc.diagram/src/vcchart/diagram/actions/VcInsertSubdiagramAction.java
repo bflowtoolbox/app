@@ -1,14 +1,10 @@
 package vcchart.diagram.actions;
 
-import java.util.Collections;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.epc.diagram.part.EpcElementChooserDialog;
+import org.bflow.toolbox.extensions.BflowDiagramElementEditUtil;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.transaction.RollbackException;
-import org.eclipse.emf.transaction.impl.TransactionImpl;
-import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.jface.action.IAction;
@@ -26,75 +22,67 @@ import vcchart.diagram.edit.parts.Activity2EditPart;
 
 /**
  * Action for linking an existing EPC to a VC-Activity.
- * @author Markus Schnädelbach
+ * 
+ * @author Markus Schnädelbach, Arian Storch<arian.storch@bflow.org>
+ * @version 2019-01-26 AST Modify element within transaction
  *
  */
 public class VcInsertSubdiagramAction implements IObjectActionDelegate {
+	private Log _log = LogFactory.getLog(VcInsertSubdiagramAction.class);
+	private Activity1 _activity1;
+	private Activity2 _activity2;
+	private Shell _shell;
+	private ShapeNodeEditPart _selectedActivity;
 	
-	private Activity1 a1;
-	private Activity2 a2;
-	private Shell shell;
-	private ShapeNodeEditPart  selectedActivity;
-	
-	/** The log instance for this class */
-	private static final Log logger = LogFactory.getLog(VcInsertSubdiagramAction.class);
-
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
+	 */
 	@Override
 	public void run(IAction action) {
-		final View view = (View) selectedActivity.getModel();
-		EpcElementChooserDialog elementChooser = new EpcElementChooserDialog(shell, view);
+		final View view = (View) _selectedActivity.getModel();
+		EpcElementChooserDialog elementChooser = new EpcElementChooserDialog(_shell, view);
 		int result = elementChooser.open();
-		if (result != Window.OK) {
-			return;
-		}
+		if (result != Window.OK) return;
+			
 		URI selectedModelElementURI = elementChooser.getSelectedModelElementURI();
-		String choosenEpcPath = selectedModelElementURI.toPlatformString(true);
+		String path = selectedModelElementURI.toPlatformString(true);
 
-		if (a1 != null) {
-			TransactionImpl t = new TransactionImpl(TransactionUtil.getEditingDomain(a1.eContainer()), false, Collections.EMPTY_MAP);
-			try {
-				t.start();
-				a1.setSubdiagram(choosenEpcPath);
-				t.commit();
-			} catch (RollbackException e) {
-				logger.error("Subdiagram could not linked with Activity1.", e);
-			} catch (InterruptedException e) {
-				logger.error("The current thread is interuppted, therefore no transaction can be started.", e);
-			}
-
-		} else if (a2 != null) {
-			TransactionImpl t = new TransactionImpl(TransactionUtil.getEditingDomain(a2.eContainer()), false, Collections.EMPTY_MAP);
-			try {
-				t.start();
-				a2.setSubdiagram(choosenEpcPath);
-				t.commit();
-			} catch (RollbackException e) {
-				logger.error("Subdiagram could not linked with Activity2.", e);
-			} catch (InterruptedException e) {
-				logger.error("The current thread is interuppted, therefore no transaction can be started.", e);
-			}
+		try {
+			BflowDiagramElementEditUtil.modifyWithTransaction(_activity1, path, (e, v) -> e.setSubdiagram(v));
+			BflowDiagramElementEditUtil.modifyWithTransaction(_activity2, path, (e, v) -> e.setSubdiagram(v));
+		} catch (Exception ex) {
+			_log.error("Error on modifying element", ex);
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
+	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		selectedActivity = null;
+		_selectedActivity = null;
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			if (structuredSelection.size() == 1)
 				if (structuredSelection.getFirstElement() instanceof Activity1EditPart) {
-					selectedActivity = (Activity1EditPart) structuredSelection.getFirstElement();
-					a1 = (Activity1)selectedActivity.getPrimaryView().getElement();
+					_selectedActivity = (Activity1EditPart) structuredSelection.getFirstElement();
+					_activity1 = (Activity1)_selectedActivity.getPrimaryView().getElement();
 				} else if (structuredSelection.getFirstElement() instanceof Activity2EditPart) {
-					selectedActivity = (Activity2EditPart) structuredSelection.getFirstElement();		
-					a2 = (Activity2)selectedActivity.getPrimaryView().getElement();
+					_selectedActivity = (Activity2EditPart) structuredSelection.getFirstElement();		
+					_activity2 = (Activity2)_selectedActivity.getPrimaryView().getElement();
 				}	
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction, org.eclipse.ui.IWorkbenchPart)
+	 */
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		shell = targetPart.getSite().getShell();
+		_shell = targetPart.getSite().getShell();
 	}
 
 }
