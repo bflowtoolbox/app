@@ -129,56 +129,27 @@
       </objectContribution>
       <objectContribution
             adaptable="false"
-            id="org.bflow.toolbox.diagram.extensions.ModelWizard"
-            objectClass="org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart">
-         <menu
-               id="model.processing.epc.menu"
-               label="Model processing..."
-               path="additions">
-         </menu>
+            id="org.bflow.toolbox.diagram.extensions.modelWizard"
+            objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart">
          <action
                class="org.bflow.toolbox.epc.diagram.actions.ElementGeneratorAction"
                definitionId="org.bflow.toolbox.epc.diagram.showModelWizard"
                icon="icons/wizard_16.png"
-               id="org.bflow.toolbox.diagram.extensions.ModelWizardAction"
-               label="Model Wizard..."
-               menubarPath="model.processing.epc.menu">
-         </action>
-      </objectContribution>
-      <objectContribution
-            adaptable="false"
-            id="org.bflow.toolbox.diagram.extensions.FunctionModelWizard"
-            objectClass="org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart">
-         <action
-               class="org.bflow.toolbox.epc.diagram.actions.ElementGeneratorAction"
-               definitionId="org.bflow.toolbox.epc.diagram.showModelWizard"
-               icon="icons/wizard_16.png"
-               id="org.bflow.toolbox.diagram.extensions.FunctionModelWizardAction"
-               label="Model wizard..."
-               menubarPath="model.processing.function.menu">
-         </action>
-         <menu
-               id="model.processing.function.menu"
-               label="Model processing"
-               path="additions">
-         </menu>
-      </objectContribution>
-      <objectContribution
-            adaptable="false"
-            id="org.bflow.toolbox.diagram.extensions.EventModelWizard"
-            objectClass="org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart">
-         <menu
-               id="model.processing.event.menu"
-               label="Model processing"
-               path="additions">
-         </menu>
-         <action
-               class="org.bflow.toolbox.epc.diagram.actions.ElementGeneratorAction"
-               definitionId="org.bflow.toolbox.epc.diagram.showModelWizard"
-               icon="icons/wizard_16.png"
-               id="org.bflow.toolbox.diagram.extensions.EventModelWizardAction"
-               label="Model wizard..."
-               menubarPath="model.processing.event.menu">
+               id="org.bflow.toolbox.diagram.extensions.actions.modelWizard"
+               label="%modelWizardActionTitle">
+            <enablement>
+               <or>
+                  <objectClass
+                        name="org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart">
+                  </objectClass>
+                  <objectClass
+                        name="org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart">
+                  </objectClass>
+                  <objectClass
+                        name="org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart">
+                  </objectClass>
+               </or>
+            </enablement>
          </action>
       </objectContribution>
       <objectContribution
