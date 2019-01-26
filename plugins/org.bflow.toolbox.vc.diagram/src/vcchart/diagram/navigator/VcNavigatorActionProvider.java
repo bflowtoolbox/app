@@ -25,8 +25,8 @@ import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 import org.eclipse.ui.part.FileEditorInput;
 
+import vcchart.diagram.Messages;
 import vcchart.diagram.edit.parts.ModelEditPart;
-import vcchart.diagram.part.Messages;
 import vcchart.diagram.part.VcDiagramEditor;
 import vcchart.diagram.part.VcDiagramEditorPlugin;
 import vcchart.diagram.part.VcVisualIDRegistry;

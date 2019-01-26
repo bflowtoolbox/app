@@ -11,6 +11,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 
+import vcchart.diagram.Messages;
+
 /**
  * @generated
  */

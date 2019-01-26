@@ -18,6 +18,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
+import vcchart.diagram.Messages;
+
 /**
  * @generated
  */

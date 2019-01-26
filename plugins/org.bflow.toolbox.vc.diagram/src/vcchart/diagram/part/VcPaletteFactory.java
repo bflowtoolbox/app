@@ -12,6 +12,7 @@ import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.gmf.tooling.runtime.part.DefaultLinkToolEntry;
 import org.eclipse.gmf.tooling.runtime.part.DefaultNodeToolEntry;
 
+import vcchart.diagram.Messages;
 import vcchart.diagram.providers.VcElementTypes;
 
 /**

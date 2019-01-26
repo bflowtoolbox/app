@@ -62,6 +62,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.IShowInTargetList;
 import org.eclipse.ui.part.ShowInContext;
 
+import vcchart.diagram.Messages;
 import vcchart.diagram.navigator.VcNavigatorItem;
 
 /**

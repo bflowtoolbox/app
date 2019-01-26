@@ -5,6 +5,8 @@ package vcchart.diagram.part;
 
 import org.eclipse.gmf.tooling.runtime.part.DefaultModelElementSelectionPage;
 
+import vcchart.diagram.Messages;
+
 /**
  * Wizard page that allows to select element from model.
  * @generated

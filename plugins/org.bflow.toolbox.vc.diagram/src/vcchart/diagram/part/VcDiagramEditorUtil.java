@@ -55,6 +55,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import vcchart.Model;
 import vcchart.VcchartFactory;
+import vcchart.diagram.Messages;
 import vcchart.diagram.edit.parts.ModelEditPart;
 
 /**

@@ -1,7 +1,7 @@
 /*
  * 
  */
-package vcchart.diagram.part;
+package vcchart.diagram;
 
 import org.eclipse.osgi.util.NLS;
 
@@ -10,11 +10,13 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 
+	private static final String BUNDLE_NAME = "vcchart.diagram.messages"; //$NON-NLS-1$
+	
 	/**
 	 * @generated
 	 */
 	static {
-		NLS.initializeMessages("messages", Messages.class); //$NON-NLS-1$
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class); //$NON-NLS-1$
 	}
 
 	/**

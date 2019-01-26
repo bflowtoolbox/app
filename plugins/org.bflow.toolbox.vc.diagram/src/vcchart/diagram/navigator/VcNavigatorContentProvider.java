@@ -28,6 +28,7 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonContentProvider;
 
+import vcchart.diagram.Messages;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
 import vcchart.diagram.edit.parts.ApplicationEditPart;
@@ -41,7 +42,6 @@ import vcchart.diagram.edit.parts.Relation1EditPart;
 import vcchart.diagram.edit.parts.Relation2EditPart;
 import vcchart.diagram.edit.parts.Relation3EditPart;
 import vcchart.diagram.edit.parts.TechnicalTermEditPart;
-import vcchart.diagram.part.Messages;
 import vcchart.diagram.part.VcVisualIDRegistry;
 
 /**

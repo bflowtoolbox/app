@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
-import vcchart.diagram.part.Messages;
+import vcchart.diagram.Messages;
 import vcchart.diagram.part.VcDiagramEditorPlugin;
 
 /**
