@@ -1,18 +1,13 @@
 package org.bflow.toolbox.epc.diagram.actions;
 
-import java.util.Collections;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.epc.Function;
 import org.bflow.toolbox.epc.ProcessInterface;
 import org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.ProcessInterfaceEditPart;
+import org.bflow.toolbox.extensions.BflowDiagramElementEditUtil;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.transaction.RollbackException;
-import org.eclipse.emf.transaction.impl.TransactionImpl;
-import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -39,7 +34,7 @@ public class EpcRemoveSubdiagramAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-
+		// Nothing to do here			
 	}
 
 	/*
@@ -48,40 +43,14 @@ public class EpcRemoveSubdiagramAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void run(IAction action) {
-		commitTransaction(_function, null, (f, p) -> f.getSubdiagram().clear());
-		commitTransaction(_interface, null, (i, p) -> i.setSubdiagram(null));
-	}
-	
-	/**
-	 * Invokes {@code applyer} within a transaction with the specified arguments.
-	 * 
-	 * @param object  Object to modify within the transaction
-	 * @param path    Value
-	 * @param applyer Applyer delegate
-	 */
-	private <TObject extends EObject> void commitTransaction(TObject object, String path, IApplyer<TObject> applyer) {
-		if (object == null) return;
-		
-		TransactionImpl tx = new TransactionImpl(
-				TransactionUtil.getEditingDomain(object.eContainer()), 
-				false,
-				Collections.EMPTY_MAP
-				);
-		try {			
-			tx.start();
-			applyer.apply(object, path);
-			tx.commit();
-		} catch (RollbackException e) {
-			_log.error("Subdiagram could not linked with element.", e); //$NON-NLS-1$
-		} catch (InterruptedException e) {
-			_log.error("The current thread is interuppted, therefore no transaction can be started.", e); //$NON-NLS-1$
+		try {
+			BflowDiagramElementEditUtil.modifyWithTransaction(_function, null, (e, v) -> e.getSubdiagram().clear());
+			BflowDiagramElementEditUtil.modifyWithTransaction(_interface, null, (e, v) -> e.setSubdiagram(null)); 
+		} catch (Exception ex) {
+			_log.error("Error on modifying element", ex);
 		}
 	}
 	
-	interface IApplyer<TObject> {
-		void apply(TObject obj, String value);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)

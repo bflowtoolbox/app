@@ -1,11 +1,14 @@
 package org.bflow.toolbox.epc.diagram.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.epc.Function;
 import org.bflow.toolbox.epc.ProcessInterface;
 import org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.ProcessInterfaceEditPart;
 import org.bflow.toolbox.epc.diagram.part.EpcElementChooserDialog;
 import org.bflow.toolbox.epc.diagram.part.Messages;
+import org.bflow.toolbox.extensions.BflowDiagramElementEditUtil;
 import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
@@ -27,55 +30,60 @@ import org.eclipse.ui.PartInitException;
 
 
 /**
+ * @author ?, Arian Storch<arian.storch@bflow.org>
  * @generated NOT
- * @version 05/07/11 modified by Arian Storch
+ * @version 2011-07-05 modified by Arian Storch
+ * @version 2019-01-26 AST Fixed exception when modifying element without
+ *          transaction
  */
 public class EpcInsertSubdiagramAction implements IObjectActionDelegate {
-
-	private ShapeNodeEditPart mySelectedElement;
+	private Log _log = LogFactory.getLog(EpcInsertSubdiagramAction.class);
+	private ShapeNodeEditPart _selectedElement;
 	
-	private Function func;
-	private ProcessInterface proc;
-
-	private Shell myShell;
+	private Function _func;
+	private ProcessInterface _proc;
+	private Shell _shell;	
+	private boolean _functionType;
 	
-	//private IWorkbench workbench;
-	
-	private boolean functionType;
-	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction, org.eclipse.ui.IWorkbenchPart)
+	 */
+	@Override
 	public void setActivePart(IAction arg0, IWorkbenchPart arg1) {		
-		myShell = arg1.getSite().getShell();
-		//workbench = arg1.getSite().getWorkbenchWindow().getWorkbench();
+		_shell = arg1.getSite().getShell();
 	}
 
-	
-	public void run(IAction arg0) {
-		
-		if (mySelectedElement instanceof FunctionEditPart) {
-			func = (Function)mySelectedElement.getPrimaryView().getElement();
-			functionType = true;
-		} else if (mySelectedElement instanceof ProcessInterfaceEditPart) {	
-			proc = (ProcessInterface)mySelectedElement.getPrimaryView().getElement();
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
+	 */
+	@Override
+	public void run(IAction arg0) {		
+		if (_selectedElement instanceof FunctionEditPart) {
+			_func = (Function)_selectedElement.getPrimaryView().getElement();
+			_functionType = true;
+		} else if (_selectedElement instanceof ProcessInterfaceEditPart) {	
+			_proc = (ProcessInterface)_selectedElement.getPrimaryView().getElement();
 		}	
 		
-		final View view = (View) mySelectedElement.getModel();
-		EpcElementChooserDialog elementChooser = new EpcElementChooserDialog(
-				myShell, view);
+		final View view = (View) _selectedElement.getModel();
+		EpcElementChooserDialog elementChooser = new EpcElementChooserDialog(_shell, view);
 		int result = elementChooser.open();
-		if (result != Window.OK) {
-			return;
-		}
-		URI selectedModelElementURI = elementChooser
-				.getSelectedModelElementURI();
+		if (result != Window.OK) return;
 		
-		if (functionType)
-			//modified by Christian
-			
-			func.getSubdiagram().add(selectedModelElementURI.toPlatformString(true));
-		else 
-			proc.setSubdiagram(selectedModelElementURI.toPlatformString(true));	
+		URI selectedModelElementURI = elementChooser.getSelectedModelElementURI();
+		String path = selectedModelElementURI.toPlatformString(true);
 		
+		try {
+			if (_functionType) {
+				BflowDiagramElementEditUtil.modifyWithTransaction(_func, path, (e, v) -> e.getSubdiagram().add(v));
+			} else {
+				BflowDiagramElementEditUtil.modifyWithTransaction(_proc, path, (e, v) -> e.setSubdiagram(v)); 
+			}
+		} catch (Exception ex) {
+			_log.error("Error on modifying element", ex);
+		}		
 	}
 
 	
@@ -83,47 +91,47 @@ public class EpcInsertSubdiagramAction implements IObjectActionDelegate {
 	private static boolean openEditor(IWorkbench workbench, URI fileURI) {
 		IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
 		IWorkbenchPage page = workbenchWindow.getActivePage();
-		IEditorDescriptor editorDescriptor = workbench.getEditorRegistry()
-				.getDefaultEditor(fileURI.toFileString());
+		IEditorDescriptor editorDescriptor = workbench.getEditorRegistry().getDefaultEditor(fileURI.toFileString());
 		if (editorDescriptor == null) {
-			MessageDialog
-					.openError(
+			MessageDialog.openError(
 							workbenchWindow.getShell(),
 							Messages.EpcCreationWizardOpenEditorError,
-							NLS
-									.bind(
-											Messages.EpcCreationWizardOpenEditorError,
-											fileURI.toFileString()));
+							NLS.bind(Messages.EpcCreationWizardOpenEditorError,	fileURI.toFileString())
+							);
 			return false;
 		} else {
 			try {
-				page.openEditor(new URIEditorInput(fileURI), editorDescriptor
-						.getId());
+				page.openEditor(new URIEditorInput(fileURI), editorDescriptor.getId());
 			} catch (PartInitException exception) {
-				MessageDialog
-						.openError(
+				MessageDialog.openError(
 								workbenchWindow.getShell(),
 								Messages.EpcCreationWizardOpenEditorError,
-								exception.getMessage());
+								exception.getMessage()
+								);
 				return false;
 			}
 		}
 		return true;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
+	 */
+	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		mySelectedElement = null;
-		functionType = false;
+		_selectedElement = null;
+		_functionType = false;
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			if (structuredSelection.size() == 1)
 				if (structuredSelection.getFirstElement() instanceof FunctionEditPart) {
-					mySelectedElement = (FunctionEditPart) structuredSelection.getFirstElement();
-					func = (Function)mySelectedElement.getPrimaryView().getElement();
-					functionType = true;
+					_selectedElement = (FunctionEditPart) structuredSelection.getFirstElement();
+					_func = (Function)_selectedElement.getPrimaryView().getElement();
+					_functionType = true;
 				} else if (structuredSelection.getFirstElement() instanceof ProcessInterfaceEditPart) {
-					mySelectedElement = (ProcessInterfaceEditPart) structuredSelection.getFirstElement();		
-					proc = (ProcessInterface)mySelectedElement.getPrimaryView().getElement();
+					_selectedElement = (ProcessInterfaceEditPart) structuredSelection.getFirstElement();		
+					_proc = (ProcessInterface)_selectedElement.getPrimaryView().getElement();
 				}	
 		}
 
@@ -131,6 +139,6 @@ public class EpcInsertSubdiagramAction implements IObjectActionDelegate {
 	}
 	
 	private boolean isEnabled() {	
-		return mySelectedElement != null;
+		return _selectedElement != null;
 	}
 }

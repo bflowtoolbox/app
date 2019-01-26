@@ -1,7 +1,6 @@
 package org.bflow.toolbox.epc.diagram.actions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,12 +13,10 @@ import org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart;
 import org.bflow.toolbox.epc.diagram.edit.parts.ProcessInterfaceEditPart;
 import org.bflow.toolbox.epc.diagram.part.EpcCreationWizard;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditor;
+import org.bflow.toolbox.extensions.BflowDiagramElementEditUtil;
 import org.bflow.toolbox.extensions.edit.parts.ColoredNodeEditPart;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.RecordingCommand;
-import org.eclipse.emf.transaction.RollbackException;
-import org.eclipse.emf.transaction.impl.TransactionImpl;
-import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.emf.clipboard.core.ClipboardUtil;
 import org.eclipse.jface.action.IAction;
@@ -80,8 +77,17 @@ public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
 		String pathName = wizard.getDiagram().getURI().toPlatformString(true);
 				
 		if (_functionType) {		
-			commitTransaction(_func, pathName, (f,p) -> {((Function)f).getSubdiagram().add(p);});
-						
+			try {
+				BflowDiagramElementEditUtil.modifyWithTransaction(
+						_func, 
+						pathName, 
+						(f,p) -> ((Function)f).getSubdiagram().add(p)
+						);
+			} catch (Exception ex) {
+				_log.error("Error on modifying element", ex);
+				return;
+			}			
+			
 			// Are there events before and after?
 			ColoredNodeEditPart prev = getEventBefore();
 			ColoredNodeEditPart next = getEventAfter();
@@ -121,40 +127,19 @@ public class EpcCreateSubdiagramAction implements IObjectActionDelegate {
 			
 			_selectedElement.refresh();
 		} else {
-			commitTransaction(_proc, pathName, (pi, p) -> {((ProcessInterface)pi).setSubdiagram(p);});				
+			try {
+				BflowDiagramElementEditUtil.modifyWithTransaction(
+						_proc, 
+						pathName, 
+						(pi, p) -> {((ProcessInterface)pi).setSubdiagram(p);}
+						);
+			} catch (Exception ex) {
+				_log.error("Error on modifying element", ex);
+				return;
+			}
 		}
 	}
 	
-	/**
-	 * Invokes {@code applyer} within a transaction with the specified arguments.
-	 * 
-	 * @param object  Object to modify within the transaction
-	 * @param path    Value
-	 * @param applyer Applyer delegate
-	 */
-	private void commitTransaction(EObject object, String path, IApplyer<EObject> applyer) {
-		if (object == null) return;
-		
-		TransactionImpl tx = new TransactionImpl(
-				TransactionUtil.getEditingDomain(object.eContainer()), 
-				false,
-				Collections.EMPTY_MAP
-				);
-		try {			
-			tx.start();
-			applyer.apply(object, path);
-			tx.commit();
-		} catch (RollbackException e) {
-			_log.error("Subdiagram could not linked with element.", e); //$NON-NLS-1$
-		} catch (InterruptedException e) {
-			_log.error("The current thread is interuppted, therefore no transaction can be started.", e); //$NON-NLS-1$
-		}
-	}
-	
-	interface IApplyer<TObject> {
-		void apply(TObject obj, String value);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
