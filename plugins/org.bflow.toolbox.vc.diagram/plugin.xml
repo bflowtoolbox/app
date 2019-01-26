@@ -603,9 +603,6 @@
          defaultHandler="vcchart.diagram.part.LoadResourceAction"/>
    </extension>
 
-   <extension point="org.eclipse.ui.handlers" id="menu-handlers">
-      <?gmfgen generated="true"?>
-   </extension>
    <extension point="org.eclipse.ui.actionSets">
       <?gmfgen generated="false"?>
       <actionSet 

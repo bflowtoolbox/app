@@ -4,6 +4,12 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.bflow.toolbox.epc.diagram.messages"; //$NON-NLS-1$
+	
+	static {
+		// initialize resource bundle
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+	}
+	
 	public static String EpcCreateSubdiagramAction_WarningDialogText1;
 	public static String EpcCreateSubdiagramAction_WarningDialogText2;
 	public static String EpcCreateSubdiagramAction_WarningDialogTitle;
@@ -19,13 +25,9 @@ public class Messages extends NLS {
 	public static String SwapOutDiagrampartToNewAction_6;
 	public static String SwapOutDiagrampartToNewAction_7;
 	public static String SwapOutDiagrampartToNewAction_8;
-	public static String SwapOutDiagrampartToNewAction_8x;
 	public static String SwapOutDiagrampartToNewAction_DialogTitle;
-	public static String SwapOutDiagrampartToNewAction_dt;
-	static {
-		// initialize resource bundle
-		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
-	}
+	
+	
 
 	private Messages() {
 	}

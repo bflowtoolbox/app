@@ -972,13 +972,14 @@
            objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.INodeEditPart">
         <action
               class="org.bflow.toolbox.epc.diagram.actions.SwapOutDiagrampartToNewAction"
-              id="org.bflow.toolbox.epc.diagram.action1"
-              label="&amp;New Diagram"
+              id="org.bflow.toolbox.epc.diagram.actions.partoutswapping"
+              label="%outsourceSelectionActionTitle"
               menubarPath="PartOutSwapping/group1">
         </action>
         <menu
+              icon="icons/extract_16.png"
               id="PartOutSwapping"
-              label="&amp;Swap out to..."
+              label="%outsourceSelectionMenuTitle"
               path="additions">
         </menu>
      </objectContribution>
