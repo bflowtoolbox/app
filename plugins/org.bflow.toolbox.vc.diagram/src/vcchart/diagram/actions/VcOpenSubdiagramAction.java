@@ -2,12 +2,8 @@ package vcchart.diagram.actions;
 
 import org.bflow.toolbox.extensions.actions.AbstractOpenDiagramLinkAction;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.gmf.runtime.emf.core.resources.GMFResource;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.PartInitException;
 
 import vcchart.Activity1;
 import vcchart.Activity2;
@@ -21,7 +17,7 @@ import vcchart.diagram.edit.parts.Activity2EditPart;
  * @since 2019-01-27
  *
  */
-public class VcOpenSubdiagramAction extends AbstractOpenDiagramLinkAction<String> {	
+public class VcOpenSubdiagramAction extends AbstractOpenDiagramLinkAction {	
 	/*
 	 * (non-Javadoc)
 	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#getSelectionData(org.eclipse.jface.viewers.ISelection)
@@ -51,30 +47,5 @@ public class VcOpenSubdiagramAction extends AbstractOpenDiagramLinkAction<String
 	@Override
 	protected boolean isEnabled(String selectionData) {
 		return selectionData != null;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#getModificationValue(java.lang.Object)
-	 */
-	@Override
-	protected Void getModificationValue(String selectionData) {
-		return null;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#performModification(java.lang.Object, java.lang.Object)
-	 */
-	@Override
-	protected void performModification(String selectionData, Void modificationValue) throws Exception {
-		URI fileURI = URI.createPlatformResourceURI(selectionData, true);
-		Resource res = new GMFResource(fileURI);
-
-		try {
-			org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorUtil.openDiagram(res);
-		} catch (PartInitException ex) {
-			Log().error("Error on opening diagram", ex);
-		}		
 	}
 }
