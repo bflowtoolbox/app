@@ -4,6 +4,8 @@ import org.eclipse.osgi.util.NLS;
 
 public class NLSupport extends NLS {
 	private static final String BUNDLE_NAME = "org.bflow.toolbox.extensions.messages"; //$NON-NLS-1$
+	public static String AbstractCreateDiagramLinkAction_SelectionDialogText;
+	public static String AbstractCreateDiagramLinkAction_SelectionDialogTitle;
 	public static String AbstractInsertDiagramLinkAction_DialogTitle;
 	public static String AbstractSelectAllShapesWithTextAction_Text;
 	public static String AbstractSelectAllShapesWithTextAction_Tooltip;
