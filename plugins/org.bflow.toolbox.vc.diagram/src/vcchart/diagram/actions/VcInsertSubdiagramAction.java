@@ -1,88 +1,94 @@
 package vcchart.diagram.actions;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.bflow.toolbox.epc.diagram.part.EpcElementChooserDialog;
 import org.bflow.toolbox.extensions.BflowDiagramElementEditUtil;
-import org.eclipse.emf.common.util.URI;
+import org.bflow.toolbox.extensions.actions.AbstractInsertDiagramLinkAction;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IObjectActionDelegate;
-import org.eclipse.ui.IWorkbenchPart;
 
 import vcchart.Activity1;
 import vcchart.Activity2;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
+import vcchart.diagram.part.VcDiagramEditorPlugin;
 
 /**
- * Action for linking an existing EPC to a VC-Activity.
+ * Action for linking existing diagrams to a VC activity.
  * 
- * @author Markus Schnädelbach, Arian Storch<arian.storch@bflow.org>
- * @version 2019-01-26 AST Modify element within transaction
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2019-01-27
  *
  */
-public class VcInsertSubdiagramAction implements IObjectActionDelegate {
-	private Log _log = LogFactory.getLog(VcInsertSubdiagramAction.class);
-	private Activity1 _activity1;
-	private Activity2 _activity2;
-	private Shell _shell;
-	private ShapeNodeEditPart _selectedActivity;
+public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<VcInsertSubdiagramAction.SelectionData> {
+	
+	static class SelectionData {
+		public Activity1 _activity1;
+		public Activity2 _activity2;
+		public ShapeNodeEditPart _selectedActivity;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.actions.InsertDiagramLinkAction#getAdapterFactory()
+	 */
+	@Override
+	protected AdapterFactory getAdapterFactory() {
+		return VcDiagramEditorPlugin.getInstance().getItemProvidersAdapterFactory();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.actions.InsertDiagramLinkAction#getFileExtensions()
+	 */
+	@Override
+	protected String[] getFileExtensions() {
+		return new String[] {"epc", "oepc", "bpmn", "vc"};
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.actions.InsertDiagramLinkAction#getSelectionData(org.eclipse.jface.viewers.ISelection)
+	 */
+	@Override
+	protected SelectionData getSelectionData(ISelection selection) {
+		SelectionData sd = new SelectionData();
+		
+		if (selection instanceof IStructuredSelection) {
+			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+			if (structuredSelection.size() == 1) {
+				if (structuredSelection.getFirstElement() instanceof Activity1EditPart) {
+					sd._selectedActivity = (Activity1EditPart) structuredSelection.getFirstElement();
+					sd._activity1 = (Activity1) sd._selectedActivity.getPrimaryView().getElement();
+				} else if (structuredSelection.getFirstElement() instanceof Activity2EditPart) {
+					sd._selectedActivity = (Activity2EditPart) structuredSelection.getFirstElement();
+					sd._activity2 = (Activity2) sd._selectedActivity.getPrimaryView().getElement();
+				}	
+			}				
+		}
+		
+		return sd;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.actions.InsertDiagramLinkAction#getViewForSelection(java.lang.Object)
+	 */
+	@Override
+	protected View getViewForSelection(SelectionData selectionData) {
+		ShapeNodeEditPart editPart = selectionData._selectedActivity;
+		if (editPart == null) return null;
+		return (View) editPart.getModel();
+	}
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
+	 * @see org.bflow.toolbox.extensions.actions.InsertDiagramLinkAction#performInsert(java.lang.Object, java.lang.String)
 	 */
 	@Override
-	public void run(IAction action) {
-		final View view = (View) _selectedActivity.getModel();
-		EpcElementChooserDialog elementChooser = new EpcElementChooserDialog(_shell, view);
-		int result = elementChooser.open();
-		if (result != Window.OK) return;
-			
-		URI selectedModelElementURI = elementChooser.getSelectedModelElementURI();
-		String path = selectedModelElementURI.toPlatformString(true);
-
-		try {
-			BflowDiagramElementEditUtil.modifyWithTransaction(_activity1, path, (e, v) -> e.setSubdiagram(v));
-			BflowDiagramElementEditUtil.modifyWithTransaction(_activity2, path, (e, v) -> e.setSubdiagram(v));
-		} catch (Exception ex) {
-			_log.error("Error on modifying element", ex);
-		}
+	protected void performInsert(SelectionData sd, String path) throws Exception {
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1, path, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, path, (e, v) -> e.setSubdiagram(v));		
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
-	 */
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		_selectedActivity = null;
-		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			if (structuredSelection.size() == 1)
-				if (structuredSelection.getFirstElement() instanceof Activity1EditPart) {
-					_selectedActivity = (Activity1EditPart) structuredSelection.getFirstElement();
-					_activity1 = (Activity1)_selectedActivity.getPrimaryView().getElement();
-				} else if (structuredSelection.getFirstElement() instanceof Activity2EditPart) {
-					_selectedActivity = (Activity2EditPart) structuredSelection.getFirstElement();		
-					_activity2 = (Activity2)_selectedActivity.getPrimaryView().getElement();
-				}	
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction, org.eclipse.ui.IWorkbenchPart)
-	 */
-	@Override
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		_shell = targetPart.getSite().getShell();
-	}
-
 }
