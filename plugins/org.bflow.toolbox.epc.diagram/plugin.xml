@@ -81,6 +81,22 @@
             <separator name="group1"/>
         </menu>
         <action
+              class="org.bflow.toolbox.epc.diagram.actions.EpcInsertSubdiagramAction"
+              enablesFor="1"
+              icon="icons/Add-16.png"
+              id="org.bflow.toolbox.diagram.InsertSubDiagramAction1"
+              label="%insertOrAddLinkedDiagramActionTitle"
+              menubarPath="SubDiagramInsert/group1">
+       </action>       
+       <action
+           class="org.bflow.toolbox.epc.diagram.actions.EpcCreateSubdiagramAction"
+           enablesFor="1"
+           icon="icons/Applications-16.png"
+           id="org.bflow.toolbox.diagram.CreateSubDiagramAction1"
+           label="%createNewLinkedDiagramActionTitle"
+           menubarPath="SubDiagramInsert/group1">
+        </action>
+        <action
               class="org.bflow.toolbox.epc.diagram.actions.EpcRemoveSubdiagramAction"
               icon="icons/Remove-16.png"
               id="org.bflow.toolbox.epc.diagram.RemoveSubdiagramAction"
@@ -88,27 +104,11 @@
               menubarPath="SubDiagramInsert/group1">
         </action>
         <action
-              class="org.bflow.toolbox.epc.diagram.actions.EpcInsertSubdiagramAction"
-              enablesFor="1"
-              icon="icons/Add-16.png"
-              id="org.bflow.toolbox.diagram.InsertSubDiagramAction1"
-              label="%insertOrAddLinkedDiagramActionTitle"
-              menubarPath="SubDiagramInsert/group1">
-       </action>
-        <action
               class="org.bflow.toolbox.epc.diagram.actions.EpcOpenSubdiagramAction"
               icon="icons/Play-16.png"
               id="org.bflow.toolbox.epc.diagram.OpenSubdiagramAction"
               label="%openLinkedDiagramActionTitle"
               menubarPath="SubDiagramInsert/group1">
-        </action>
-    	<action
-           class="org.bflow.toolbox.epc.diagram.actions.EpcCreateSubdiagramAction"
-           enablesFor="1"
-           icon="icons/Applications-16.png"
-           id="org.bflow.toolbox.diagram.CreateSubDiagramAction1"
-           label="%createNewLinkedDiagramActionTitle"
-           menubarPath="SubDiagramInsert/group1">
         </action>
      <visibility>
         <or>
