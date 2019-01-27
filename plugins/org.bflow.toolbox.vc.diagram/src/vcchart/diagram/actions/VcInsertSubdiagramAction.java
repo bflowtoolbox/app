@@ -70,6 +70,15 @@ public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<Vc
 		
 		return sd;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractInsertDiagramLinkAction#isEnabled(java.lang.Object)
+	 */
+	@Override
+	protected boolean isEnabled(SelectionData selectionData) {
+		return true;
+	}
 
 	/*
 	 * (non-Javadoc)

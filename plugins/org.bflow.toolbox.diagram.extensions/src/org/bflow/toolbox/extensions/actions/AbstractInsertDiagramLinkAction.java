@@ -67,7 +67,8 @@ public abstract class AbstractInsertDiagramLinkAction<TSelectionData> implements
 	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		_selectionData = getSelectionData(selection);		
+		_selectionData = getSelectionData(selection);
+		action.setEnabled(isEnabled(_selectionData));
 	}
 	
 	/*
@@ -108,6 +109,9 @@ public abstract class AbstractInsertDiagramLinkAction<TSelectionData> implements
 			
 	/** Return the selection data that is used for the insert operation. */
 	protected abstract TSelectionData getSelectionData(ISelection selection);
+	
+	/** Returns TRUE if the current action is enabled and therefore executable. */
+	protected abstract boolean isEnabled(TSelectionData selectionData);
 	
 	/** Return a {@link View} for the specified {@code selectionData}. */
 	protected abstract View getViewForSelection(TSelectionData selectionData);
