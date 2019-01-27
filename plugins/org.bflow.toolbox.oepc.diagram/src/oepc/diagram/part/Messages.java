@@ -460,5 +460,7 @@ public class Messages extends NLS {
 	 */
 	public static String OepcModelingAssistantProviderMessage;
 
-	//TODO: put accessor fields manually	
+	//TODO: put accessor fields manually
+	public static String OepcDiagramEditor_ErrorOnOpening;
+	public static String OepcDiagramEditor_FileDoesNotExistAnymore;
 }

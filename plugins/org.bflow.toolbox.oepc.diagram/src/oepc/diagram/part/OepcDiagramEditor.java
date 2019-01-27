@@ -1,7 +1,6 @@
 package oepc.diagram.part;
 
 import oepc.diagram.navigator.OepcNavigatorItem;
-import oepc.diagram.nls.NLSSupport;
 
 import org.bflow.toolbox.check.CheckPlugin;
 import org.bflow.toolbox.extensions.BflowDiagramEditor;
@@ -119,8 +118,8 @@ public class OepcDiagramEditor extends BflowDiagramEditor implements
 			if(input != null)
 				fileName = input.getName();
 			
-			String title = NLSSupport.OepcDiagramEditor_ErrorOnOpening; // EditorMessages.Editor_error_setinput_title;
-			String msg = String.format(NLSSupport.OepcDiagramEditor_FileDoesNotExistAnymore, fileName); // EditorMessages.Editor_error_setinput_message;
+			String title = Messages.OepcDiagramEditor_ErrorOnOpening; // EditorMessages.Editor_error_setinput_title;
+			String msg = String.format(Messages.OepcDiagramEditor_FileDoesNotExistAnymore, fileName); // EditorMessages.Editor_error_setinput_message;
 			Shell shell= getSite().getShell();
 			ErrorDialog.openError(
 					shell, title, null, new Status(IStatus.ERROR, "org.bflow.toolbox.oepc.diagram", msg, x)); //$NON-NLS-1$
