@@ -7,6 +7,7 @@ import org.bflow.toolbox.epc.diagram.wizards.ModelWizard;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -28,7 +29,10 @@ public class ElementGeneratorAction implements IObjectActionDelegate {
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		_activePart = targetPart;
-		_editor = (EpcDiagramEditor) _activePart.getSite().getWorkbenchWindow().getActivePage().getActiveEditor();
+		IEditorPart editorPart = _activePart.getSite().getWorkbenchWindow().getActivePage().getActiveEditor();
+		
+		if (editorPart instanceof EpcDiagramEditor)
+			_editor = (EpcDiagramEditor) editorPart;
 	}
 
 	/*
