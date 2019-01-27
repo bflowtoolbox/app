@@ -32,5 +32,15 @@
             commandId="org.bflow.toolbox.bpmn.diagram.command.createBpmnDiagram">
       </handler>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.eclipse.ui.Bflow"
+            class="org.bflow.toolbox.bpmn.diagram.wizards.BpmnCreationWizard"
+            icon="icons/bpmn2process2.png"
+            id="org.bflow.toolbox.bpmn.diagram.wizards.Bpmn2CreationWizardID"
+            name="%createBpmnDiagramWizardName">
+      </wizard>
+   </extension>
 
 </plugin>
