@@ -1,4 +1,4 @@
-package oepc.diagram.part;
+package oepc.diagram;
 
 import org.eclipse.osgi.util.NLS;
 
@@ -7,11 +7,13 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 
+	private static final String BUNDLE_NAME = "oepc.diagram.messages";
+	
 	/**
 	 * @generated
 	 */
 	static {
-		NLS.initializeMessages("messages", Messages.class); //$NON-NLS-1$
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}
 
 	/**

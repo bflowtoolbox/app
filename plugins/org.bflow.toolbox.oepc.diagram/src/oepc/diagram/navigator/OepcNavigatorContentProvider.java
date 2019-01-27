@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import oepc.diagram.Messages;
 import oepc.diagram.edit.parts.ANDConnectorEditPart;
 import oepc.diagram.edit.parts.BusinessAttributeEditPart;
 import oepc.diagram.edit.parts.BusinessMethodEditPart;
@@ -21,7 +22,6 @@ import oepc.diagram.edit.parts.OEPCEditPart;
 import oepc.diagram.edit.parts.ORConnectorEditPart;
 import oepc.diagram.edit.parts.OrganisationUnitEditPart;
 import oepc.diagram.edit.parts.XORConnectorEditPart;
-import oepc.diagram.part.Messages;
 import oepc.diagram.part.OepcVisualIDRegistry;
 
 import org.eclipse.core.resources.IFile;

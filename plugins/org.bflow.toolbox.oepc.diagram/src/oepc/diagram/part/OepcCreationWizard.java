@@ -16,6 +16,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
+import oepc.diagram.Messages;
+
 /**
  * @generated
  * @version 2013-07-22 AST

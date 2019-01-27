@@ -3,9 +3,9 @@ package oepc.diagram.edit.parts;
 import java.util.Iterator;
 import java.util.List;
 
+import oepc.diagram.Messages;
 import oepc.diagram.edit.policies.BusinessObjectBusinessObjectAttributeCompartmentCanonicalEditPolicy;
 import oepc.diagram.edit.policies.BusinessObjectBusinessObjectAttributeCompartmentItemSemanticEditPolicy;
-import oepc.diagram.part.Messages;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;

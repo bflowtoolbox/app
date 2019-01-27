@@ -16,6 +16,8 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
+import oepc.diagram.Messages;
+
 /**
  * @generated
  * @version 22/07/13 modified by Arian Storch<arian.storch@bflow.org>

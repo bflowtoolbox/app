@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import oepc.OepcFactory;
+import oepc.diagram.Messages;
 import oepc.diagram.edit.parts.OEPCEditPart;
 
 import org.eclipse.core.commands.ExecutionException;

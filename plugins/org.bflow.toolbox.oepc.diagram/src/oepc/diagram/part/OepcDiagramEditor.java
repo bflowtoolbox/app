@@ -1,5 +1,6 @@
 package oepc.diagram.part;
 
+import oepc.diagram.Messages;
 import oepc.diagram.navigator.OepcNavigatorItem;
 
 import org.bflow.toolbox.check.CheckPlugin;

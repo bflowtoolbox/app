@@ -10,9 +10,9 @@ import java.util.List;
 import oepc.Document;
 import oepc.ITSystem;
 import oepc.OrganisationUnit;
+import oepc.diagram.Messages;
 import oepc.diagram.edit.parts.BusinessObjectEditPart;
 import oepc.diagram.edit.parts.OEPCEditPart;
-import oepc.diagram.part.Messages;
 import oepc.diagram.part.OepcDiagramEditorPlugin;
 
 import org.eclipse.core.runtime.IAdaptable;

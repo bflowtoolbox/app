@@ -1,5 +1,6 @@
 package oepc.diagram.part;
 
+import oepc.diagram.Messages;
 import oepc.diagram.edit.parts.OEPCEditPart;
 
 import org.eclipse.core.resources.IFile;

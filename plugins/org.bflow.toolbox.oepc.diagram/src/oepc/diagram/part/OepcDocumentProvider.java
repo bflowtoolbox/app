@@ -57,6 +57,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
+import oepc.diagram.Messages;
+
 /**
  * @generated
  */
