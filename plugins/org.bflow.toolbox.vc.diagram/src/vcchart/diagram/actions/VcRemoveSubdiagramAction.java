@@ -37,9 +37,8 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		BflowNodeEditPart part = (BflowNodeEditPart) strSel.getFirstElement();
 
 		if (part instanceof Activity1EditPart) {
-			sd._activity1 = (Activity1) ((Activity1EditPart) part).resolveSemanticElement();
-			
-		} else if(part instanceof Activity2EditPart) {
+			sd._activity1 = (Activity1) ((Activity1EditPart) part).resolveSemanticElement();			
+		} else if (part instanceof Activity2EditPart) {
 			sd._activity2 = (Activity2) ((Activity2EditPart) part).resolveSemanticElement();			
 		}
 		
@@ -52,7 +51,14 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 	 */
 	@Override
 	protected boolean isEnabled(SelectionData sd) {
-		return sd._activity1 != null || sd._activity2 != null;
+		boolean isEnabled = true;
+		if (sd._activity1 != null)
+			isEnabled &= sd._activity1.getSubdiagram() != null;
+		
+		if (sd._activity2 != null)
+			isEnabled &= sd._activity2.getSubdiagram() != null;
+		
+		return isEnabled;
 	}
 	
 	/*
