@@ -4,6 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class NLSupport extends NLS {
 	private static final String BUNDLE_NAME = "org.bflow.toolbox.extensions.i18n.messages"; //$NON-NLS-1$
+	public static String AbstractInsertDiagramLinkAction_DialogTitle;
 	public static String AbstractSelectAllShapesWithTextAction_Text;
 	public static String AbstractSelectAllShapesWithTextAction_Tooltip;
 	public static String BflowMainPreferencesPage_ButtonIntelligentDeleterText;
