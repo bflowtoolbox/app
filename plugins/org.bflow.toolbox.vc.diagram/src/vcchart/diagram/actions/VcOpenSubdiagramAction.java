@@ -1,16 +1,12 @@
 package vcchart.diagram.actions;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.bflow.toolbox.extensions.actions.AbstractOpenDiagramLinkAction;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.gmf.runtime.emf.core.resources.GMFResource;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IObjectActionDelegate;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 
 import vcchart.Activity1;
@@ -19,79 +15,66 @@ import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
 
 /**
- * Action for opening a linked EPC file.
+ * Action for opening a linked diagram file.
  * 
- * @author Markus Schnädelbach, Arian Storch<arian.storch@bflow.org>
- * @version 2019-01-26 AST Added logger
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2019-01-27
  *
  */
-public class VcOpenSubdiagramAction implements IObjectActionDelegate   {
-	private Log _log = LogFactory.getLog(VcOpenSubdiagramAction.class);
-	private String _subdiagram;
-
+public class VcOpenSubdiagramAction extends AbstractOpenDiagramLinkAction<String> {	
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#getSelectionData(org.eclipse.jface.viewers.ISelection)
 	 */
 	@Override
-	public void run(IAction action) {
-		String sub = _subdiagram;
-
-		if (sub != null && !sub.isEmpty()) {
-			URI fileURI = URI.createPlatformResourceURI(sub, true);
-
-			Resource res = new GMFResource(fileURI);
-
-			try {
-				org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorUtil.openDiagram(res);
-			} catch (PartInitException ex) {
-				_log.error("Error on opening diagram", ex);
-			}
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
-	 */
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		action.setEnabled(false);
-		_subdiagram = null;
-		
+	protected String getSelectionData(ISelection selection) {
 		IStructuredSelection strSel = (IStructuredSelection) selection;
-
 		BflowNodeEditPart part = (BflowNodeEditPart) strSel.getFirstElement();
-
+		
 		if (part instanceof Activity1EditPart) {
 			Activity1 a1 = (Activity1) ((Activity1EditPart) part).resolveSemanticElement();
-			
-			if(a1.getSubdiagram() != null) {
-				_subdiagram = a1.getSubdiagram();
-				action.setEnabled(true);
-			}
-
-			return;
+			return a1.getSubdiagram();
 		}
 		
 		if (part instanceof Activity2EditPart) {
 			Activity2 a2 = (Activity2) ((Activity2EditPart) part).resolveSemanticElement();
-			
-			if(a2.getSubdiagram() != null) {
-				_subdiagram = a2.getSubdiagram();
-				action.setEnabled(true);
-			}
-
-			return;
-		}		
+			return a2.getSubdiagram();
+		}	
+		
+		return null;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction, org.eclipse.ui.IWorkbenchPart)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#isEnabled(java.lang.Object)
 	 */
 	@Override
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// Nothing to do
+	protected boolean isEnabled(String selectionData) {
+		return selectionData != null;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#getModificationValue(java.lang.Object)
+	 */
+	@Override
+	protected Void getModificationValue(String selectionData) {
+		return null;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#performModification(java.lang.Object, java.lang.Object)
+	 */
+	@Override
+	protected void performModification(String selectionData, Void modificationValue) throws Exception {
+		URI fileURI = URI.createPlatformResourceURI(selectionData, true);
+		Resource res = new GMFResource(fileURI);
+
+		try {
+			org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorUtil.openDiagram(res);
+		} catch (PartInitException ex) {
+			Log().error("Error on opening diagram", ex);
+		}		
 	}
 }
