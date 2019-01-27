@@ -2,8 +2,8 @@ package org.bflow.toolbox.extensions.diagram.preferences;
 
 import org.bflow.toolbox.check.CheckPlugin;
 import org.bflow.toolbox.check.LauncherConfigurator;
+import org.bflow.toolbox.extensions.NLSupport;
 import org.bflow.toolbox.extensions.configurator.BflowConfigurator;
-import org.bflow.toolbox.extensions.i18n.NLSupport;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;

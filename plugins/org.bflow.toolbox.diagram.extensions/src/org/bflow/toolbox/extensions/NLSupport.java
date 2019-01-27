@@ -1,9 +1,9 @@
-package org.bflow.toolbox.extensions.i18n;
+package org.bflow.toolbox.extensions;
 
 import org.eclipse.osgi.util.NLS;
 
 public class NLSupport extends NLS {
-	private static final String BUNDLE_NAME = "org.bflow.toolbox.extensions.i18n.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.bflow.toolbox.extensions.messages"; //$NON-NLS-1$
 	public static String AbstractInsertDiagramLinkAction_DialogTitle;
 	public static String AbstractSelectAllShapesWithTextAction_Text;
 	public static String AbstractSelectAllShapesWithTextAction_Tooltip;
