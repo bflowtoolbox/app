@@ -76,8 +76,8 @@ public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<Vc
 	 * @see org.bflow.toolbox.extensions.actions.AbstractInsertDiagramLinkAction#isEnabled(java.lang.Object)
 	 */
 	@Override
-	protected boolean isEnabled(SelectionData selectionData) {
-		return true;
+	protected boolean isEnabled(SelectionData sd) {
+		return sd._activity1 != null || sd._activity2 != null;
 	}
 
 	/*
