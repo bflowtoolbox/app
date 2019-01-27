@@ -93,10 +93,10 @@ public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<Vc
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.bflow.toolbox.extensions.actions.InsertDiagramLinkAction#performInsert(java.lang.Object, java.lang.String)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#performModification(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	protected void performInsert(SelectionData sd, String path) throws Exception {
+	protected void performModification(SelectionData sd, String path) throws Exception {
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1, path, (e, v) -> e.setSubdiagram(v));
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, path, (e, v) -> e.setSubdiagram(v));		
 	}
