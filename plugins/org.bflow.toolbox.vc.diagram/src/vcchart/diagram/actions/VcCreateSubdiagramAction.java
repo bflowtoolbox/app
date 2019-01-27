@@ -64,7 +64,8 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 	protected String[] getWizardIds() {
 		return new String[] {
 				"org.bflow.toolbox.epc.diagram.part.EpcCreationWizardID",
-				"oepc.diagram.part.OepcCreationWizardID"
+				"oepc.diagram.part.OepcCreationWizardID",
+				"vcchart.diagram.part.VcCreationWizardID"
 				};
 	}
 	
