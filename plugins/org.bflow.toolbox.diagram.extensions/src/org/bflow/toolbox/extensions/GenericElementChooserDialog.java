@@ -325,6 +325,8 @@ public class GenericElementChooserDialog extends Dialog {
 				EObject selectedModelElement = (EObject) selectedElement;
 				if (ViewService.getInstance().provides(Node.class, new EObjectAdapter(selectedModelElement), _view, null, ViewUtil.APPEND, true, myPreferenceHint)) {
 					result = EcoreUtil.getURI(selectedModelElement);
+				} else {
+					result = EcoreUtil.getURI(selectedModelElement); // Graphiti / BPMN2 
 				}
 			}
 			
@@ -333,8 +335,10 @@ public class GenericElementChooserDialog extends Dialog {
 				Object[] children = ((ITreeContentProvider)_treeViewer.getContentProvider()).getChildren(selectedElement);
 				for (int i = -1; ++i != children.length;) {
 					Object child = children[i];
-					if (child instanceof Diagram) {
-						result =  getElementURI(child);
+					if (child instanceof Diagram) { // GMF
+						result = getElementURI(child);
+					} else if (child instanceof EObject) { // Graphiti / BPMN2
+						result = getElementURI(child);
 					}
 				}
 			}
