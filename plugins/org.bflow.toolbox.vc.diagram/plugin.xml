@@ -637,34 +637,34 @@
             <separator name="group1"/>
         </menu>
         <action
-              class="vcchart.diagram.actions.VcRemoveSubdiagramAction"
-              icon="icons/del16.png"
-              id="org.bflow.toolbox.epc.diagram.RemoveSubdiagramAction"
-              label="%removeLinkedDiagramActionTitle"
-              menubarPath="SubDiagramInsert/group1">
-        </action>
-        <action
               class="vcchart.diagram.actions.VcInsertSubdiagramAction"
               enablesFor="1"
               icon="icons/add16.png"
-              id="org.bflow.toolbox.diagram.InsertSubDiagramAction1"
+              id="org.bflow.toolbox.diagram.vc.insertSubDiagramAction"
               label="%insertOrAddLinkedDiagramActionTitle"
               menubarPath="SubDiagramInsert/group1">
-       </action>
-        <action
-              class="vcchart.diagram.actions.VcOpenSubdiagramAction"
-              icon="icons/play16.png"
-              id="org.bflow.toolbox.epc.diagram.OpenSubdiagramAction"
-              label="%openLinkedDiagramActionTitle"
-              menubarPath="SubDiagramInsert/group1">
-        </action>
+       </action>        
     	<action
            class="vcchart.diagram.actions.VcCreateSubdiagramAction"
            enablesFor="1"
            icon="icons/app16.png"
-           id="org.bflow.toolbox.diagram.CreateSubDiagramAction1"
+           id="org.bflow.toolbox.diagram.vc.createSubDiagramAction"
            label="%createNewLinkedDiagramActionTitle"
            menubarPath="SubDiagramInsert/group1">
+        </action>
+        <action
+              class="vcchart.diagram.actions.VcRemoveSubdiagramAction"
+              icon="icons/del16.png"
+              id="org.bflow.toolbox.diagram.vc.removeSubdiagramAction"
+              label="%removeLinkedDiagramActionTitle"
+              menubarPath="SubDiagramInsert/group1">
+        </action>
+        <action
+              class="vcchart.diagram.actions.VcOpenSubdiagramAction"
+              icon="icons/play16.png"
+              id="org.bflow.toolbox.diagram.vc.openSubdiagramAction"
+              label="%openLinkedDiagramActionTitle"
+              menubarPath="SubDiagramInsert/group1">
         </action>
      <visibility>
         <or>
