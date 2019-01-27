@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Color;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2013-11-01
+ * @version 2019-01-27 AST Brightened color about 15%
  */
 public class PresentationColorSchema extends OriginalColorSchema {
 	
@@ -74,11 +75,11 @@ public class PresentationColorSchema extends OriginalColorSchema {
 		return super.getBackground(type);
 	}
 
-	private static final Color ClrEvent = new Color(null, 255, 127, 255);
-	private static final Color ClrFunction = new Color(null, 127, 255, 127);
-	private static final Color ClrApplication = new Color(null, 127, 255, 255);
-	private static final Color ClrParticipant = new Color(null, 255, 255, 127);
-	private static final Color ClrCluster = new Color(null, 255, 124, 124);
-	private static final Color ClrProduct = new Color(null, 106, 255, 192);
+	private static final Color ClrEvent       = new Color(null, 255, 146, 255);
+	private static final Color ClrFunction    = new Color(null, 146, 255, 146);
+	private static final Color ClrApplication = new Color(null, 146, 255, 255);
+	private static final Color ClrParticipant = new Color(null, 255, 255, 146);
+	private static final Color ClrCluster     = new Color(null, 255, 142, 142);
+	private static final Color ClrProduct     = new Color(null, 121, 255, 220);
 
 }
