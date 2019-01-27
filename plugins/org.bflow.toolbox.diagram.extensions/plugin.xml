@@ -6,22 +6,22 @@
 	<extension point="org.eclipse.ui.popupMenus">
 		<objectContribution adaptable="false" id="textAlignment"
 			objectClass="org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart">
-			<menu id="textAlignment.menu" label="Text Alignment" path="viewGroup">
+			<menu id="textAlignment.menu" label="%textAlignmentMenu" path="viewGroup">
 				<separator name="group1" />
 			</menu>
 			<action class="org.bflow.toolbox.extensions.actions.TextAlignmentAction"
 				enablesFor="*" icon="icons/alignleft.gif" id="textAlignment.left"
-				label="Left" menubarPath="textAlignment.menu/group1" state="false"
+				label="%textAlignmentLeft" menubarPath="textAlignment.menu/group1" state="false"
 				style="push">
 			</action>
 			<action class="org.bflow.toolbox.extensions.actions.TextAlignmentAction"
 				enablesFor="*" icon="icons/aligncenter.gif" id="textAlignment.center"
-				label="Center" menubarPath="textAlignment.menu/group1" state="false"
+				label="%textAlignmentCenter" menubarPath="textAlignment.menu/group1" state="false"
 				style="push">
 			</action>
 			<action class="org.bflow.toolbox.extensions.actions.TextAlignmentAction"
 				enablesFor="*" icon="icons/alignright.gif" id="textAlignment.right"
-				label="Right" menubarPath="textAlignment.menu/group1" state="false"
+				label="%textAlignmentRight" menubarPath="textAlignment.menu/group1" state="false"
 				style="push">
 			</action>
 		</objectContribution>
@@ -34,22 +34,22 @@
 	<extension point="org.eclipse.ui.popupMenus">
 		<objectContribution adaptable="false" id="editpart.style"
 			objectClass="org.bflow.toolbox.extensions.edit.parts.ColorChangeable">
-			<menu id="editpart.style.menu" label="Style" path="formatMenu">
+			<menu id="editpart.style.menu" label="%styleMenu" path="formatMenu">
 				<separator name="group1" />
 			</menu>
 			<action class="org.bflow.toolbox.extensions.colorschemes.actions.StyleBlackWhiteAction"
-				enablesFor="*" id="editpart.style.blackwhite" label="Black-White"
+				enablesFor="*" id="editpart.style.blackwhite" label="%styleBlackWhite"
 				menubarPath="editpart.style.menu/group1" state="false" style="push">
 			</action>
 			<action
 				class="org.bflow.toolbox.extensions.colorschemes.actions.StyleOriginalColorAction"
-				enablesFor="*" id="editpart.style.original" label="Original Color"
+				enablesFor="*" id="editpart.style.original" label="%styleOriginalColor"
 				menubarPath="editpart.style.menu/group1" state="false" style="push">
 			</action>
    <action
          class="org.bflow.toolbox.extensions.colorschemes.actions.StylePresentationColorAction"
          id="editpart.style.presentation"
-         label="Presentation Color"
+         label="%stylePresentationColor"
          menubarPath="editpart.style.menu/group1"
          state="false"
          style="push">
@@ -62,22 +62,22 @@
 	<extension point="org.eclipse.ui.popupMenus">
 		<objectContribution adaptable="false" id="editor.style"
 			objectClass="org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart">
-			<menu id="bflow.style.menu" label="Style" path="viewGroup">
+			<menu id="bflow.style.menu" label="%styleMenu" path="viewGroup">
 				<separator name="group1" />
 			</menu>
 			<action class="org.bflow.toolbox.extensions.colorschemes.actions.StyleDiagramAction"
-				enablesFor="1" id="IGlobalColorSchema=bw" label="Black-White"
+				enablesFor="1" id="IGlobalColorSchema=bw" label="%styleBlackWhite"
 				menubarPath="bflow.style.menu/group1">
 			</action>
 			<action class="org.bflow.toolbox.extensions.colorschemes.actions.StyleDiagramAction"
-				enablesFor="1" id="IGlobalColorSchema=o" label="Original Color"
+				enablesFor="1" id="IGlobalColorSchema=o" label="%styleOriginalColor"
 				menubarPath="bflow.style.menu/group1">
 			</action>
    <action
          class="org.bflow.toolbox.extensions.colorschemes.actions.StyleDiagramAction"
          enablesFor="1"
          id="IGlobalColorSchema=p"
-         label="Presentation Color"
+         label="%stylePresentationColor"
          menubarPath="bflow.style.menu/group1">
    </action>
 		</objectContribution>
