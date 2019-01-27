@@ -1,10 +1,5 @@
-/*
- * 
- */
 package vcchart.diagram.edit.parts;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
 import org.eclipse.draw2d.Graphics;
@@ -18,9 +13,7 @@ import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -32,15 +25,17 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
-import org.eclipse.gmf.runtime.emf.core.resources.GMFResource;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 import vcchart.Activity2;
+import vcchart.diagram.actions.VcOpenSubdiagramAction;
 import vcchart.diagram.edit.policies.Activity2ItemSemanticEditPolicy;
 import vcchart.diagram.part.VcVisualIDRegistry;
 
@@ -63,10 +58,6 @@ public class Activity2EditPart extends BflowNodeEditPart {
 	 * @generated
 	 */
 	protected IFigure primaryShape;
-	
-	/** The log instance for this class */
-	private static final Log logger = LogFactory.getLog(Activity2.class);
-
 
 	/**
 	 * @generated
@@ -380,19 +371,10 @@ public class Activity2EditPart extends BflowNodeEditPart {
 	 * Opens the subdiagram if this edit part is connected with one.
 	 */
 	private void openSubdiagram() {
-		Activity2 a2 = (Activity2) Activity2EditPart.this.getPrimaryView().getElement();
-
-		if (a2.getSubdiagram() != null && !a2.getSubdiagram().isEmpty()) {
-			URI fileURI = URI.createPlatformResourceURI(a2.getSubdiagram(), true);
-			Resource res = new GMFResource(fileURI);
-
-			try {
-				org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorUtil.openDiagram(res);
-			} catch (PartInitException e) {
-				logger.error("Could not open linked subdiagram", e);
-			}
-
-		}
+		Action action = new Action() {};
+		VcOpenSubdiagramAction openDiagram = new VcOpenSubdiagramAction();
+		openDiagram.setActivePart(action, PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart());
+		openDiagram.selectionChanged(action, new StructuredSelection(this));
+		openDiagram.run(action);
 	}
-
 }
