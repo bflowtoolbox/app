@@ -1,14 +1,10 @@
 package vcchart.diagram.actions;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.extensions.BflowDiagramElementEditUtil;
+import org.bflow.toolbox.extensions.actions.AbstractRemoveDiagramLinkAction;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IObjectActionDelegate;
-import org.eclipse.ui.IWorkbenchPart;
 
 import vcchart.Activity1;
 import vcchart.Activity2;
@@ -16,66 +12,66 @@ import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
 
 /**
- * Action for removing a linked EPC.
+ * Action for removing a linked diagram from a VC activity.
  * 
- * @author Markus Schnädelbach, Arian Storch<arian.storch@bflow.org>
- * @version 2019-01-26 AST Modify element with transaction
- *
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2019-01-27
+ * 
  */
-public class VcRemoveSubdiagramAction implements IObjectActionDelegate {
-	private Log _log = LogFactory.getLog(VcRemoveSubdiagramAction.class);
-	private Activity1 _activity1;
-	private Activity2 _activity2;
+public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<VcRemoveSubdiagramAction.SelectionData> {
+	
+	class SelectionData {
+		public Activity1 _activity1;
+		public Activity2 _activity2;
+	}
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#getSelectionData(org.eclipse.jface.viewers.ISelection)
 	 */
 	@Override
-	public void run(IAction action) {		
-		try {
-			BflowDiagramElementEditUtil.modifyWithTransaction(_activity1, null, (e, v) -> e.setSubdiagram(null));
-			BflowDiagramElementEditUtil.modifyWithTransaction(_activity2, null, (e, v) -> e.setSubdiagram(null)); 
-		} catch (Exception ex) {
-			_log.error("Error on modifying element", ex);
-		}		
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
-	 */
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		action.setEnabled(false);
-		_activity1 = null;
-		_activity2 = null;
+	protected SelectionData getSelectionData(ISelection selection) {
+		SelectionData sd = new SelectionData();
 		
 		IStructuredSelection strSel = (IStructuredSelection) selection;
-
 		BflowNodeEditPart part = (BflowNodeEditPart) strSel.getFirstElement();
 
 		if (part instanceof Activity1EditPart) {
-			_activity1 = (Activity1) ((Activity1EditPart) part).resolveSemanticElement();
-			if (_activity1.getSubdiagram() != null) {
-				action.setEnabled(true);
-			}
+			sd._activity1 = (Activity1) ((Activity1EditPart) part).resolveSemanticElement();
 			
 		} else if(part instanceof Activity2EditPart) {
-			_activity2 = (Activity2) ((Activity2EditPart) part).resolveSemanticElement();
-			if (_activity2.getSubdiagram() != null) {
-				action.setEnabled(true);
-			}
-			
+			sd._activity2 = (Activity2) ((Activity2EditPart) part).resolveSemanticElement();			
 		}
+		
+		return sd;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction, org.eclipse.ui.IWorkbenchPart)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#isEnabled(java.lang.Object)
 	 */
 	@Override
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// Nothing to do here		
-	}	
+	protected boolean isEnabled(SelectionData sd) {
+		return sd._activity1 != null || sd._activity2 != null;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#getModificationValue(java.lang.Object)
+	 */
+	@Override
+	protected Void getModificationValue(SelectionData selectionData) {
+		// We don't need additional values
+		return null;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#performModification(java.lang.Object, java.lang.Object)
+	 */
+	@Override
+	protected void performModification(SelectionData sd, Void modificationValue) throws Exception {
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1, null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, null, (e, v) -> e.setSubdiagram(null)); 		
+	}
 }
