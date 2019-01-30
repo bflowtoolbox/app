@@ -3,25 +3,16 @@ package oepc.diagram.edit.parts;
 import java.util.Collections;
 import java.util.List;
 
-import oepc.diagram.edit.policies.BusinessMethodItemSemanticEditPolicy;
-import oepc.diagram.edit.policies.OepcTextNonResizableEditPolicy;
-import oepc.diagram.edit.policies.OepcTextSelectionEditPolicy;
-import oepc.diagram.providers.OepcElementTypes;
-import oepc.diagram.providers.OepcParserProvider;
-
 import org.bflow.toolbox.extensions.trackers.BusinessElementDragEditPartsTracker;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.RunnableWithResult;
 import org.eclipse.gef.AccessibleEditPart;
 import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.requests.DirectEditRequest;
@@ -35,13 +26,11 @@ import org.eclipse.gmf.runtime.common.ui.services.parser.ParserService;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.CompartmentEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DragDropEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.LabelDirectEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.ListItemComponentEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.l10n.DiagramColorRegistry;
 import org.eclipse.gmf.runtime.diagram.ui.requests.RequestConstants;
-import org.eclipse.gmf.runtime.diagram.ui.tools.DragEditPartsTrackerEx;
 import org.eclipse.gmf.runtime.diagram.ui.tools.TextDirectEditManager;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
@@ -56,6 +45,12 @@ import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
+
+import oepc.diagram.edit.policies.BusinessMethodItemSemanticEditPolicy;
+import oepc.diagram.edit.policies.OepcTextNonResizableEditPolicy;
+import oepc.diagram.edit.policies.OepcTextSelectionEditPolicy;
+import oepc.diagram.providers.OepcElementTypes;
+import oepc.diagram.providers.OepcParserProvider;
 
 /**
  * @generated
