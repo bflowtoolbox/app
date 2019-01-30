@@ -126,5 +126,19 @@ public class ProductImpl extends NamedElementImpl implements Product {
 		
 		return super.eIsSet(featureID);
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (Subdiagram: ");
+		result.append(_subdiagram);
+		result.append(')');
+		return result.toString();
+	}
 
 } //ProductImpl
