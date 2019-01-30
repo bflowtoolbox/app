@@ -18,7 +18,7 @@ public interface Activity2 extends NamedElement, All_Rel_1, All_Rel_3 {
 	/**
 	 * @generated NOT
 	 */
-	void setSubdiagram(String pathName);
+	void setSubdiagram(String value);
 	
 	/**
 	 * @generated NOT
