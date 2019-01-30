@@ -473,13 +473,18 @@ public interface VcchartPackage extends EPackage {
 	int PRODUCT__NAME = NAMED_ELEMENT__NAME;
 	
 	/**
+	 * @generated NOT
+	 */
+	int PRODUCT__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Product</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRODUCT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int PRODUCT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Product</em>' class.
@@ -1103,6 +1108,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getProduct();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getProduct_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Objective <em>Objective</em>}'.
@@ -1496,6 +1506,11 @@ public interface VcchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PRODUCT = eINSTANCE.getProduct();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute PRODUCT__SUBDIAGRAM = eINSTANCE.getProduct_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link vcchart.impl.ObjectiveImpl <em>Objective</em>}' class.

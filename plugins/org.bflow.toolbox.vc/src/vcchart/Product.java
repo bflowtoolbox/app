@@ -14,4 +14,14 @@ package vcchart;
  * @generated
  */
 public interface Product extends NamedElement, All_Rel_1_EndPoint, All_Rel_3 {
+	/**
+	 * @generated NOT
+	 */
+	void setSubdiagram(String value);
+	
+	/**
+	 * @generated NOT
+	 */
+	String getSubdiagram();
+	
 } // Product
