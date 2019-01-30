@@ -4,11 +4,11 @@
 package vcchart.diagram.edit.parts;
 
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.ScalablePolygonShape;
-import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -22,15 +22,15 @@ import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 
+import vcchart.Product;
 import vcchart.diagram.edit.policies.ProductItemSemanticEditPolicy;
 import vcchart.diagram.part.VcVisualIDRegistry;
 
@@ -80,8 +80,7 @@ public class ProductEditPart extends BflowNodeEditPart {
 		org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy lep = new org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy() {
 
 			protected EditPolicy createChildEditPolicy(EditPart child) {
-				EditPolicy result = child
-						.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
+				EditPolicy result = child.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
 				if (result == null) {
 					result = new NonResizableEditPolicy();
 				}
@@ -216,8 +215,7 @@ public class ProductEditPart extends BflowNodeEditPart {
 	 * @generated
 	 */
 	public EditPart getPrimaryChildEditPart() {
-		return getChildBySemanticHint(VcVisualIDRegistry
-				.getType(ProductNameEditPart.VISUAL_ID));
+		return getChildBySemanticHint(VcVisualIDRegistry.getType(ProductNameEditPart.VISUAL_ID));
 	}
 
 	/**
@@ -242,48 +240,64 @@ public class ProductEditPart extends BflowNodeEditPart {
 		 * @generated
 		 */
 		private WrappingLabel fFigureProductLabelFigure;
+		
+		/**
+		 * @generated NOT
+		 */
+		private Image _playImage;
 
 		/**
 		 * @generated
 		 */
 		public ProductFigure() {
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(10)));
-			this.addPoint(new Point(getMapMode().DPtoLP(50), getMapMode()
-					.DPtoLP(0)));
-			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode()
-					.DPtoLP(10)));
-			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode()
-					.DPtoLP(50)));
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(50)));
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(42)));
-			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode()
-					.DPtoLP(42)));
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(42)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(10)));
+			this.addPoint(new Point(getMapMode().DPtoLP(50), getMapMode().DPtoLP(0)));
+			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode().DPtoLP(10)));
+			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode().DPtoLP(50)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(50)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(42)));
+			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode().DPtoLP(42)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(42)));
 			this.setFill(true);
-			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100),
-					getMapMode().DPtoLP(50)));
+			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100), getMapMode().DPtoLP(50)));
 			this.setBorder(new MarginBorder(getMapMode().DPtoLP(5),
 					getMapMode().DPtoLP(5), getMapMode().DPtoLP(5),
 					getMapMode().DPtoLP(5)));
 			createContents();
 		}
+		
+		
 
 		/**
 		 * @generated
 		 */
-		private void createContents() {
-
+		private void createContents() {			
 			fFigureProductLabelFigure = new WrappingLabel();
 			fFigureProductLabelFigure.setText("");
 			fFigureProductLabelFigure.setTextWrap(true);
 			fFigureProductLabelFigure.setAlignment(PositionConstants.CENTER);
-			fFigureProductLabelFigure.setTextJustification(PositionConstants.CENTER);
+			fFigureProductLabelFigure.setTextJustification(PositionConstants.CENTER);			
 			this.add(fFigureProductLabelFigure);
+		}
+		
+		@Override
+		protected void paintClientArea(Graphics graphics) {
+			super.paintClientArea(graphics);
+			
+			Product product = (Product) ProductEditPart.this.getPrimaryView().getElement();
 
+			if (product.getSubdiagram() != null && !product.getSubdiagram().isEmpty()) {
+				_playImage = new Image(null, this.getClass().getResourceAsStream("/icons/play10.png"));
+				Point loc = fFigureProductLabelFigure.getLocation();
+				Dimension dim = fFigureProductLabelFigure.getSize();						
+				Point imgLoc = new Point(loc.x + dim.width - 10, loc.y + dim.height/2-12);
+				graphics.drawImage(_playImage, imgLoc);
+			} else {
+				if (_playImage != null) {
+					_playImage.dispose();
+					_playImage = null;
+				}			
+			}
 		}
 
 		/**
@@ -303,6 +317,5 @@ public class ProductEditPart extends BflowNodeEditPart {
 	@Override
 	public IFigure getPrimaryFigure() {
 		return getPrimaryShape();
-	}
-
+	}	
 }
