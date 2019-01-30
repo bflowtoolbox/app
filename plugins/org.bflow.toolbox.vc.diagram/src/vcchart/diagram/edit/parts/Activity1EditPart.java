@@ -85,8 +85,7 @@ public class Activity1EditPart extends BflowNodeEditPart {
 		org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy lep = new org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy() {
 
 			protected EditPolicy createChildEditPolicy(EditPart child) {
-				EditPolicy result = child
-						.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
+				EditPolicy result = child.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
 				if (result == null) {
 					result = new NonResizableEditPolicy();
 				}
@@ -221,8 +220,7 @@ public class Activity1EditPart extends BflowNodeEditPart {
 	 * @generated
 	 */
 	public EditPart getPrimaryChildEditPart() {
-		return getChildBySemanticHint(VcVisualIDRegistry
-				.getType(Activity1NameEditPart.VISUAL_ID));
+		return getChildBySemanticHint(VcVisualIDRegistry.getType(Activity1NameEditPart.VISUAL_ID));
 	}
 
 	/**
@@ -253,21 +251,14 @@ public class Activity1EditPart extends BflowNodeEditPart {
 		 * @generated NOT
 		 */
 		public Activity1Figure() {
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(0)));
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(50)));
-			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode()
-					.DPtoLP(50)));
-			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode()
-					.DPtoLP(25)));
-			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode()
-					.DPtoLP(0)));
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(0)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(0)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(50)));
+			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode().DPtoLP(50)));
+			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode().DPtoLP(25)));
+			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode().DPtoLP(0)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(0)));
 			this.setFill(true);
-			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100),
-					getMapMode().DPtoLP(50)));
+			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100),getMapMode().DPtoLP(50)));
 			this.setBorder(new MarginBorder(getMapMode().DPtoLP(1),
 					getMapMode().DPtoLP(5), getMapMode().DPtoLP(5),
 					getMapMode().DPtoLP(5)));	
@@ -276,13 +267,13 @@ public class Activity1EditPart extends BflowNodeEditPart {
 		}
 
 		/**
-		 * @generated
+		 * @generated NOT
 		 */
 		private void createContents() {
 			subdiagram_icon = new ScalablePolygonShape(){
 				@Override
 				protected void fillShape(Graphics graphics) {
-					//Somit is dieses Shape nicht sichtbar
+					// So this shape isn't visible
 					graphics.setForegroundColor(getCurentColorShemaBackgroundColor());
 					super.fillShape(graphics);
 				}
@@ -339,7 +330,7 @@ public class Activity1EditPart extends BflowNodeEditPart {
 				Image img = new Image(null, this.getClass().getResourceAsStream("/icons/play10.png"));
 				Point nPoint = new Point(p.x + d.width - 16, p.y + d.height/2-16);
 				graphics.drawImage(img, nPoint);
-			}else {
+			} else {
 				subdiagram_icon.setEnabled(false);
 				subdiagram_icon.setVisible(false);
 			}
@@ -355,14 +346,12 @@ public class Activity1EditPart extends BflowNodeEditPart {
 	public IFigure getPrimaryFigure() {
 		return getPrimaryShape();
 	}
-	
-
-	
+		
 	public Color getCurentColorShemaBackgroundColor() {
 		BflowDiagramEditPart diagramEditPart = BflowDiagramEditPart.getCurrentViewer();
-		if(diagramEditPart != null){
+		if (diagramEditPart != null){
 			return diagramEditPart.getColorSchema().getBackground(Activity1EditPart.class);
-		}else {
+		} else {
 			return new Color(null, 0, 248, 0);
 		}
 	}
