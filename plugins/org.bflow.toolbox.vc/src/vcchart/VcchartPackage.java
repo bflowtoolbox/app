@@ -389,13 +389,18 @@ public interface VcchartPackage extends EPackage {
 	int ACTIVITY1__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int ACTIVITY1__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Activity1</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY1_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ACTIVITY1_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Activity1</em>' class.
@@ -406,11 +411,6 @@ public interface VcchartPackage extends EPackage {
 	 */
 	int ACTIVITY1_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
 	
-	/**
-	 * @generated NOT
-	 */
-	int ACTIVITY1__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
-
 	/**
 	 * The meta object id for the '{@link vcchart.impl.Activity2Impl <em>Activity2</em>}' class.
 	 * <!-- begin-user-doc -->
@@ -431,13 +431,18 @@ public interface VcchartPackage extends EPackage {
 	int ACTIVITY2__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int ACTIVITY2__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Activity2</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY2_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ACTIVITY2_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Activity2</em>' class.
@@ -446,12 +451,7 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY2_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
-	
-	/**
-	 * @generated NOT
-	 */
-	int ACTIVITY2__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ACTIVITY2_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;	
 
 	/**
 	 * The meta object id for the '{@link vcchart.impl.ProductImpl <em>Product</em>}' class.
@@ -471,7 +471,7 @@ public interface VcchartPackage extends EPackage {
 	 * @ordered
 	 */
 	int PRODUCT__NAME = NAMED_ELEMENT__NAME;
-
+	
 	/**
 	 * The number of structural features of the '<em>Product</em>' class.
 	 * <!-- begin-user-doc -->
