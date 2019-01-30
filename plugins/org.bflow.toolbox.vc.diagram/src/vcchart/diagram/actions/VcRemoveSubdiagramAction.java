@@ -71,16 +71,6 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#getModificationValue(java.lang.Object)
-	 */
-	@Override
-	protected Void getModificationValue(SelectionData selectionData) {
-		// We don't need additional values
-		return null;
-	}
-	
-	/*
-	 * (non-Javadoc)
 	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#performModification(java.lang.Object, java.lang.Object)
 	 */
 	@Override
