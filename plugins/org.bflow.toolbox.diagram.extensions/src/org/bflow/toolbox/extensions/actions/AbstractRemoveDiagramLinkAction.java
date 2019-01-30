@@ -9,5 +9,13 @@ package org.bflow.toolbox.extensions.actions;
  * @param <TSelectionData> Selection data class
  */
 public abstract class AbstractRemoveDiagramLinkAction<TSelectionData> extends AbstractDiagramLinkAction<TSelectionData, Void> {
-
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#getModificationValue(java.lang.Object)
+	 */
+	@Override
+	protected Void getModificationValue(TSelectionData selectionData) {
+		// We don't need additional values
+		return null;
+	}
 }
