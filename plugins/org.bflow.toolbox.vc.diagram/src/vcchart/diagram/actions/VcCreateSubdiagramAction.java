@@ -7,8 +7,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 import vcchart.Activity1;
 import vcchart.Activity2;
+import vcchart.Product;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
+import vcchart.diagram.edit.parts.ProductEditPart;
 
 /**
  * Action for creating and linking a new diagram to a VC activity.
@@ -21,7 +23,8 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 	
 	class SelectionData {
 		public Activity1 _activity1;
-		public Activity2 _activity2;	
+		public Activity2 _activity2;
+		public Product _product;
 	}
 
 	/*
@@ -32,17 +35,26 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 	protected SelectionData getSelectionData(ISelection selection) {
 		SelectionData sd = new SelectionData();
 		
+		Activity1 activity1 = null;
+		Activity2 activity2 = null;
+		Product product = null;
+		
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			if (structuredSelection.size() == 1)
-				if (structuredSelection.getFirstElement() instanceof Activity1EditPart) {
-					Activity1EditPart a1EP = (Activity1EditPart) structuredSelection.getFirstElement();
-					sd._activity1 = (Activity1) a1EP.getPrimaryView().getElement();
-				} else if (structuredSelection.getFirstElement() instanceof Activity2EditPart) {
-					Activity2EditPart a2EP = (Activity2EditPart) structuredSelection.getFirstElement();
-					sd._activity2 = (Activity2) a2EP.getPrimaryView().getElement();
-				}	
+			Object selObj = structuredSelection.getFirstElement();
+			
+			if (selObj instanceof Activity1EditPart) {
+				activity1 = (Activity1) ((Activity1EditPart) selObj).getPrimaryView().getElement();
+			} else if (selObj instanceof Activity2EditPart) {
+				activity2 = (Activity2) ((Activity2EditPart) selObj).getPrimaryView().getElement();
+			} else if (selObj instanceof ProductEditPart) {
+				product = (Product) ((ProductEditPart) selObj).getPrimaryView().getElement();
+			}				
 		}
+		
+		sd._activity1 = activity1;
+		sd._activity2 = activity2;
+		sd._product = product;
 		
 		return sd;
 	}
@@ -53,7 +65,7 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 	 */
 	@Override
 	protected boolean isEnabled(SelectionData sd) {
-		return sd._activity1 != null || sd._activity2 != null;
+		return sd._activity1 != null || sd._activity2 != null || sd._product != null;
 	}
 	
 	/*
@@ -75,8 +87,9 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 	 * @see org.bflow.toolbox.extensions.actions.AbstractDiagramLinkAction#performModification(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	protected void performModification(SelectionData sd, String pathName) throws Exception {
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1, pathName, (e, v) -> e.setSubdiagram(v));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, pathName, (e, v) -> e.setSubdiagram(v));		
+	protected void performModification(SelectionData sd, String value) throws Exception {
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1, value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, value, (e, v) -> e.setSubdiagram(v));	
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,   value, (e, v) -> e.setSubdiagram(v));
 	}
 }

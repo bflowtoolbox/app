@@ -8,8 +8,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 import vcchart.Activity1;
 import vcchart.Activity2;
+import vcchart.Product;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
+import vcchart.diagram.edit.parts.ProductEditPart;
 
 /**
  * Action for removing a linked diagram from a VC activity.
@@ -23,6 +25,7 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 	class SelectionData {
 		public Activity1 _activity1;
 		public Activity2 _activity2;
+		public Product _product;
 	}
 	
 	/*
@@ -40,6 +43,8 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 			sd._activity1 = (Activity1) ((Activity1EditPart) part).resolveSemanticElement();			
 		} else if (part instanceof Activity2EditPart) {
 			sd._activity2 = (Activity2) ((Activity2EditPart) part).resolveSemanticElement();			
+		} else if( part instanceof ProductEditPart) {
+			sd._product = (Product) ((ProductEditPart) part).resolveSemanticElement();
 		}
 		
 		return sd;
@@ -57,6 +62,9 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		
 		if (sd._activity2 != null)
 			isEnabled &= sd._activity2.getSubdiagram() != null;
+		
+		if (sd._product != null)
+			isEnabled &= sd._product.getSubdiagram() != null;
 		
 		return isEnabled;
 	}
@@ -78,6 +86,7 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 	@Override
 	protected void performModification(SelectionData sd, Void modificationValue) throws Exception {
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1, null, (e, v) -> e.setSubdiagram(null));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, null, (e, v) -> e.setSubdiagram(null)); 		
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,   null, (e, v) -> e.setSubdiagram(null));
 	}
 }

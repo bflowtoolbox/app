@@ -7,8 +7,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 import vcchart.Activity1;
 import vcchart.Activity2;
+import vcchart.Product;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
+import vcchart.diagram.edit.parts.ProductEditPart;
 
 /**
  * Action for opening a linked diagram file.
@@ -36,6 +38,11 @@ public class VcOpenSubdiagramAction extends AbstractOpenDiagramLinkAction {
 			Activity2 a2 = (Activity2) ((Activity2EditPart) part).resolveSemanticElement();
 			return a2.getSubdiagram();
 		}	
+		
+		if (part instanceof ProductEditPart) {
+			Product p = (Product) ((ProductEditPart) part).resolveSemanticElement();
+			return p.getSubdiagram();
+		}
 		
 		return null;
 	}
