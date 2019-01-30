@@ -615,7 +615,7 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated Not
+	 * @generated NOT
 	 */
 	public void createPackageContents() {
 		if (isCreated) return;
