@@ -768,13 +768,18 @@ public interface OepcPackage extends EPackage {
 	int BUSINESS_METHOD__NAME = BUSINESS_OBJECT_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int BUSINESS_METHOD__SUBDIAGRAM = BUSINESS_OBJECT_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Business Method</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUSINESS_METHOD_FEATURE_COUNT = BUSINESS_OBJECT_ELEMENT_FEATURE_COUNT + 0;
+	int BUSINESS_METHOD_FEATURE_COUNT = BUSINESS_OBJECT_ELEMENT_FEATURE_COUNT + 1;
 
 
 	/**
@@ -1026,6 +1031,11 @@ public interface OepcPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getBusinessMethod();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getBusinessMethod_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link oepc.Document <em>Document</em>}'.
@@ -1228,6 +1238,11 @@ public interface OepcPackage extends EPackage {
 		 * @generated
 		 */
 		EClass BUSINESS_METHOD = eINSTANCE.getBusinessMethod();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute BUSINESS_METHOD__SUBDIAGRAM = eINSTANCE.getBusinessMethod_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link oepc.impl.DocumentImpl <em>Document</em>}' class.
