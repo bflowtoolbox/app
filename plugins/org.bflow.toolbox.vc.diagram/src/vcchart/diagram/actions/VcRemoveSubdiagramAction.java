@@ -8,9 +8,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 import vcchart.Activity1;
 import vcchart.Activity2;
+import vcchart.Objective;
 import vcchart.Product;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
+import vcchart.diagram.edit.parts.ObjectiveEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
 
 /**
@@ -26,6 +28,7 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		public Activity1 _activity1;
 		public Activity2 _activity2;
 		public Product _product;
+		public Objective _objective;
 	}
 	
 	/*
@@ -43,8 +46,10 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 			sd._activity1 = (Activity1) ((Activity1EditPart) part).resolveSemanticElement();			
 		} else if (part instanceof Activity2EditPart) {
 			sd._activity2 = (Activity2) ((Activity2EditPart) part).resolveSemanticElement();			
-		} else if( part instanceof ProductEditPart) {
+		} else if ( part instanceof ProductEditPart) {
 			sd._product = (Product) ((ProductEditPart) part).resolveSemanticElement();
+		} else if (part instanceof ObjectiveEditPart) {
+			sd._objective = (Objective) ((ObjectiveEditPart) part).resolveSemanticElement();
 		}
 		
 		return sd;
@@ -66,6 +71,9 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		if (sd._product != null)
 			isEnabled &= sd._product.getSubdiagram() != null;
 		
+		if (sd._objective != null)
+			isEnabled &= sd._objective.getSubdiagram() != null;
+		
 		return isEnabled;
 	}
 	
@@ -78,5 +86,6 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1, null, (e, v) -> e.setSubdiagram(null));
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, null, (e, v) -> e.setSubdiagram(null));
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,   null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective, null, (e, v) -> e.setSubdiagram(null));
 	}
 }

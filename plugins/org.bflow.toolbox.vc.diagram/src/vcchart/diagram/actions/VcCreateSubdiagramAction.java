@@ -7,9 +7,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 import vcchart.Activity1;
 import vcchart.Activity2;
+import vcchart.Objective;
 import vcchart.Product;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
+import vcchart.diagram.edit.parts.ObjectiveEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
 
 /**
@@ -25,6 +27,7 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 		public Activity1 _activity1;
 		public Activity2 _activity2;
 		public Product _product;
+		public Objective _objective;
 	}
 
 	/*
@@ -38,6 +41,7 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 		Activity1 activity1 = null;
 		Activity2 activity2 = null;
 		Product product = null;
+		Objective objective = null;
 		
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
@@ -49,12 +53,15 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 				activity2 = (Activity2) ((Activity2EditPart) selObj).getPrimaryView().getElement();
 			} else if (selObj instanceof ProductEditPart) {
 				product = (Product) ((ProductEditPart) selObj).getPrimaryView().getElement();
-			}				
+			} else if (selObj instanceof ObjectiveEditPart) {
+				objective = (Objective) ((ObjectiveEditPart) selObj).getPrimaryView().getElement();
+			}
 		}
 		
 		sd._activity1 = activity1;
 		sd._activity2 = activity2;
 		sd._product = product;
+		sd._objective = objective;
 		
 		return sd;
 	}
@@ -65,7 +72,9 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 	 */
 	@Override
 	protected boolean isEnabled(SelectionData sd) {
-		return sd._activity1 != null || sd._activity2 != null || sd._product != null;
+		return sd._activity1 != null || sd._activity2 != null 
+				|| sd._product != null || sd._objective != null
+				;
 	}
 	
 	/*
@@ -91,5 +100,6 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1, value, (e, v) -> e.setSubdiagram(v));
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, value, (e, v) -> e.setSubdiagram(v));	
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,   value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective, value, (e, v) -> e.setSubdiagram(v));
 	}
 }
