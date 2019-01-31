@@ -467,6 +467,13 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	public EClass getObjective() {
 		return objectiveEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	public EAttribute getObjective_Subdiagram() {
+		return (EAttribute) objectiveEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -659,6 +666,7 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		createEAttribute(productEClass, PRODUCT__SUBDIAGRAM);
 
 		objectiveEClass = createEClass(OBJECTIVE);
+		createEAttribute(objectiveEClass, OBJECTIVE__SUBDIAGRAM);
 
 		clusterEClass = createEClass(CLUSTER);
 
@@ -757,7 +765,10 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		initEAttribute(getProduct_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Product.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		
 		initEReference(getModel_TechnicalTerms(), this.getTechnicalTerm(), null, "TechnicalTerms", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_Objectives(), this.getObjective(), null, "Objectives", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObjective_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_Participants(), this.getParticipant(), null, "Participants", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModel_Applications(), this.getApplication(), null, "Applications", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModel_Documents(), this.getDocument(), null, "Documents", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

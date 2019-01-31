@@ -515,13 +515,18 @@ public interface VcchartPackage extends EPackage {
 	int OBJECTIVE__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int OBJECTIVE__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Objective</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECTIVE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int OBJECTIVE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Objective</em>' class.
@@ -1123,6 +1128,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getObjective();
+	
+	/** 
+	 * @generated NOT
+	 */
+	EAttribute getObjective_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Cluster <em>Cluster</em>}'.
@@ -1521,6 +1531,11 @@ public interface VcchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass OBJECTIVE = eINSTANCE.getObjective();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute OBJECTIVE__SUBDIAGRAM = eINSTANCE.getObjective_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link vcchart.impl.ClusterImpl <em>Cluster</em>}' class.
