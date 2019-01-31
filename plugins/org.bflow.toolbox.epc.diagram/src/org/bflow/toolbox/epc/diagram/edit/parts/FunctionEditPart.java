@@ -4,6 +4,7 @@ import org.bflow.toolbox.epc.Function;
 import org.bflow.toolbox.epc.diagram.edit.policies.EpcTextSelectionEditPolicy;
 import org.bflow.toolbox.epc.diagram.edit.policies.FunctionItemSemanticEditPolicy;
 import org.bflow.toolbox.epc.diagram.edit.policies.OpenEditorEditPolicy;
+import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;
 import org.bflow.toolbox.epc.diagram.part.EpcVisualIDRegistry;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
@@ -19,7 +20,6 @@ import org.eclipse.draw2d.ScalablePolygonShape;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -44,8 +44,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PartInitException;
 
 /**
- * @generated
- * @version 17/03/10 modified by Arian Storch
+ * @generated NOT
+ * @version 2010-03-17 modified by Arian Storch
+ * 			2019-01-31 AST Changed link icon
  */
 public class FunctionEditPart extends BflowNodeEditPart {
 
@@ -263,7 +264,16 @@ public class FunctionEditPart extends BflowNodeEditPart {
 		 * @generated
 		 */
 		private WrappingLabel fFigureFunctionNameFigure;
+		
+		/**
+		 * @generated NOT
+		 */
 		private ScalablePolygonShape fSubdiagramFigure;
+		
+		/**
+		 * @generated NOT
+		 */
+		private Image _playImage;
 
 		/**
 		 * @generated NOT
@@ -274,14 +284,12 @@ public class FunctionEditPart extends BflowNodeEditPart {
 
 			this.setLayoutManager(layoutThis);
 
-			this.setCornerDimensions(new Dimension(getMapMode().DPtoLP(12),
-					getMapMode().DPtoLP(12)));
+			this.setCornerDimensions(new Dimension(getMapMode().DPtoLP(12),	getMapMode().DPtoLP(12)));
 			
 			this.setBackgroundColor(getCurrentColorSchemaBackgroundColor());
 			this.setForegroundColor(getCurentColorShemaForegroundColor());
 			
-			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100),
-					getMapMode().DPtoLP(50)));
+			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100), getMapMode().DPtoLP(50)));
 			this.setBorder(new MarginBorder(getMapMode().DPtoLP(5),
 					getMapMode().DPtoLP(5), getMapMode().DPtoLP(5),
 					getMapMode().DPtoLP(5)));	
@@ -337,34 +345,30 @@ public class FunctionEditPart extends BflowNodeEditPart {
 		}
 		
 		@Override
-		protected void paintClientArea(Graphics graphics) {
-		
+		protected void paintClientArea(Graphics graphics) {		
 			super.paintClientArea(graphics);
 			
-			try
-			{
-				Function f = (Function)instance.getPrimaryView().getElement();
-				
-				if(f.getSubdiagram().size() > 0)
-				{
-					fSubdiagramFigure.setEnabled(true);
-					fSubdiagramFigure.setVisible(true);
-					Point p = fFigureFunctionNameFigure.getLocation();
-					Dimension d = fFigureFunctionNameFigure.getSize();
-								
-					Image img = new Image(null, this.getClass().getResourceAsStream("/icons/Play-10i.png"));
-								
-					Point nPoint = new Point(p.x+d.width-16, p.y+3);
-					
-					graphics.drawImage(img, nPoint);					
-				}else {
-					fSubdiagramFigure.setEnabled(false);
-					fSubdiagramFigure.setVisible(false);
+			Function f = (Function) instance.getPrimaryView().getElement();
+			
+			if (f.getSubdiagram().size() > 0) {
+				fSubdiagramFigure.setEnabled(true);
+				fSubdiagramFigure.setVisible(true);
+
+				Point p = fFigureFunctionNameFigure.getLocation();
+				Dimension d = fFigureFunctionNameFigure.getSize();
+
+				_playImage = new Image(null, this.getClass().getResourceAsStream("/icons/link-16.png"));
+
+				Point nPoint = new Point(p.x + d.width - 16, p.y);
+				graphics.drawImage(_playImage, nPoint);
+			} else {
+				fSubdiagramFigure.setEnabled(false);
+				fSubdiagramFigure.setVisible(false);
+
+				if (_playImage != null) {
+					_playImage.dispose();
+					_playImage = null;
 				}
-			}
-			catch(Exception ex)
-			{
-				ex.printStackTrace();
 			}
 			
 		}
@@ -414,18 +418,18 @@ public class FunctionEditPart extends BflowNodeEditPart {
 	
 	public Color getCurrentColorSchemaBackgroundColor() {
 		BflowDiagramEditPart diagramEditPart = BflowDiagramEditPart.getCurrentViewer();
-		if(diagramEditPart != null){
+		if (diagramEditPart != null) {
 			return diagramEditPart.getColorSchema().getBackground(FunctionEditPart.class);
-		}else {
+		} else {
 			return ColorConstants.white;
-		}		
+		}
 	}
 	
 	public Color getCurentColorShemaForegroundColor() {
 		BflowDiagramEditPart diagramEditPart = BflowDiagramEditPart.getCurrentViewer();
-		if(diagramEditPart != null){
+		if (diagramEditPart != null) {
 			return diagramEditPart.getColorSchema().getForeground(FunctionEditPart.class);
-		}else {
+		} else {
 			return ColorConstants.black;
 		}
 	}
@@ -433,25 +437,19 @@ public class FunctionEditPart extends BflowNodeEditPart {
 	/**
 	 * Opens the subdiagram if this edit part is connected with one.
 	 */
-	private void openSubdiagram()
-	{		
-		Function f = (Function)instance.getPrimaryView().getElement();
-		
-		if(f.getSubdiagram().size() > 0)
-		{
+	private void openSubdiagram() {
+		Function f = (Function) instance.getPrimaryView().getElement();
+
+		if (f.getSubdiagram().size() > 0) {
 			URI fileURI = URI.createPlatformResourceURI(f.getSubdiagram().get(0), true);
-			
+
 			Resource res = new GMFResource(fileURI);
-			
-			try 
-			{
+
+			try {
 				org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorUtil.openDiagram(res);
-			} 
-			catch (PartInitException e) 
-			{
-				e.printStackTrace();
+			} catch (PartInitException e) {
+				EpcDiagramEditorPlugin.getInstance().logError("Error on opening EPC diagram", e);
 			}
-		}			
-	}
-	
+		}
+	}	
 }

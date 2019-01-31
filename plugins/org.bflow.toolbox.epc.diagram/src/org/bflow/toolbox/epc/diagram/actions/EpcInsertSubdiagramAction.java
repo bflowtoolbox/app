@@ -67,7 +67,7 @@ public class EpcInsertSubdiagramAction implements IObjectActionDelegate {
 			_proc = (ProcessInterface)_selectedElement.getPrimaryView().getElement();
 		}	
 		
-		final View view = (View) _selectedElement.getModel();
+		View view = (View) _selectedElement.getModel();
 		EpcElementChooserDialog elementChooser = new EpcElementChooserDialog(_shell, view);
 		int result = elementChooser.open();
 		if (result != Window.OK) return;
