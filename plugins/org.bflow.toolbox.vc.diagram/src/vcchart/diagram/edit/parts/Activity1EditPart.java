@@ -245,7 +245,15 @@ public class Activity1EditPart extends BflowNodeEditPart {
 		 * @generated
 		 */
 		private WrappingLabel fFigureActivity1LabelFigure;
+		
+		/**
+		 * @generated NOT
+		 */
 		private ScalablePolygonShape subdiagram_icon;
+		
+		/**
+		 * @generated NOT
+		 */
 		private Image _playImage;
 
 		/**
