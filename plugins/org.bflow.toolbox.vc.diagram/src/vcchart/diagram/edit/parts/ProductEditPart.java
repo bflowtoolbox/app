@@ -287,10 +287,10 @@ public class ProductEditPart extends BflowNodeEditPart {
 			Product product = (Product) ProductEditPart.this.getPrimaryView().getElement();
 
 			if (product.getSubdiagram() != null && !product.getSubdiagram().isEmpty()) {
-				_playImage = new Image(null, this.getClass().getResourceAsStream("/icons/play10.png"));
+				_playImage = new Image(null, this.getClass().getResourceAsStream("/icons/link-16.png"));
 				Point loc = fFigureProductLabelFigure.getLocation();
 				Dimension dim = fFigureProductLabelFigure.getSize();						
-				Point imgLoc = new Point(loc.x + dim.width - 10, loc.y + dim.height/2-12);
+				Point imgLoc = new Point(loc.x + dim.width - 16, loc.y + dim.height/2-12);
 				graphics.drawImage(_playImage, imgLoc);
 			} else {
 				if (_playImage != null) {

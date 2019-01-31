@@ -248,28 +248,21 @@ public class Activity2EditPart extends BflowNodeEditPart {
 		 */
 		private WrappingLabel fFigureActivity2LabelFigure;
 		private ScalablePolygonShape subdiagram_icon;
+		private Image _playImage;
 
 		/**
 		 * @generated
 		 */
 		public Activity2Figure() {
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(0)));
-			this.addPoint(new Point(getMapMode().DPtoLP(15), getMapMode()
-					.DPtoLP(25)));
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(50)));
-			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode()
-					.DPtoLP(50)));
-			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode()
-					.DPtoLP(25)));
-			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode()
-					.DPtoLP(0)));
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(0)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(0)));
+			this.addPoint(new Point(getMapMode().DPtoLP(15), getMapMode().DPtoLP(25)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(50)));
+			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode().DPtoLP(50)));
+			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode().DPtoLP(25)));
+			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode().DPtoLP(0)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(0)));
 			this.setFill(true);
-			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100),
-					getMapMode().DPtoLP(50)));
+			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100), getMapMode().DPtoLP(50)));
 			this.setBorder(new MarginBorder(getMapMode().DPtoLP(1),
 					getMapMode().DPtoLP(5), getMapMode().DPtoLP(5),
 					getMapMode().DPtoLP(5)));
@@ -284,7 +277,7 @@ public class Activity2EditPart extends BflowNodeEditPart {
 			subdiagram_icon = new ScalablePolygonShape(){
 				@Override
 				protected void fillShape(Graphics graphics) {
-					//Somit is dieses Shape nicht sichtbar
+					// So this shape isn't visible
 					graphics.setForegroundColor(getCurentColorShemaBackgroundColor());
 					super.fillShape(graphics);
 				}
@@ -336,14 +329,20 @@ public class Activity2EditPart extends BflowNodeEditPart {
 			if (a2.getSubdiagram() != null && !a2.getSubdiagram().isEmpty()) {
 				subdiagram_icon.setEnabled(true);
 				subdiagram_icon.setVisible(true);
-				Point p = fFigureActivity2LabelFigure.getLocation();
-				Dimension d = fFigureActivity2LabelFigure.getSize();
-				Image img = new Image(null, this.getClass().getResourceAsStream("/icons/play10.png"));
-				Point nPoint = new Point(p.x + d.width - 16, p.y + d.height/2-16);
-				graphics.drawImage(img, nPoint);
+				
+				_playImage = new Image(null, this.getClass().getResourceAsStream("/icons/link-16.png"));
+				Point loc = fFigureActivity2LabelFigure.getLocation();
+				Dimension dim = fFigureActivity2LabelFigure.getSize();						
+				Point imgLoc = new Point(loc.x + dim.width - 28, loc.y + dim.height/2-18);
+				graphics.drawImage(_playImage, imgLoc);
 			}else {
 				subdiagram_icon.setEnabled(false);
 				subdiagram_icon.setVisible(false);
+				
+				if (_playImage != null) {
+					_playImage.dispose();
+					_playImage = null;
+				}	
 			}
 		}
 	}

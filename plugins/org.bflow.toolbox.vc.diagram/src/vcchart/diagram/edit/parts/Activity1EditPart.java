@@ -246,6 +246,7 @@ public class Activity1EditPart extends BflowNodeEditPart {
 		 */
 		private WrappingLabel fFigureActivity1LabelFigure;
 		private ScalablePolygonShape subdiagram_icon;
+		private Image _playImage;
 
 		/**
 		 * @generated NOT
@@ -325,14 +326,20 @@ public class Activity1EditPart extends BflowNodeEditPart {
 			if (a1.getSubdiagram() != null && !a1.getSubdiagram().isEmpty()) {
 				subdiagram_icon.setEnabled(true);
 				subdiagram_icon.setVisible(true);
-				Point p = fFigureActivity1LabelFigure.getLocation();
-				Dimension d = fFigureActivity1LabelFigure.getSize();
-				Image img = new Image(null, this.getClass().getResourceAsStream("/icons/play10.png"));
-				Point nPoint = new Point(p.x + d.width - 16, p.y + d.height/2-16);
-				graphics.drawImage(img, nPoint);
+				
+				_playImage = new Image(null, this.getClass().getResourceAsStream("/icons/link-16.png"));
+				Point loc = fFigureActivity1LabelFigure.getLocation();
+				Dimension dim = fFigureActivity1LabelFigure.getSize();						
+				Point imgLoc = new Point(loc.x + dim.width - 28, loc.y + dim.height/2-18);
+				graphics.drawImage(_playImage, imgLoc);
 			} else {
 				subdiagram_icon.setEnabled(false);
 				subdiagram_icon.setVisible(false);
+				
+				if (_playImage != null) {
+					_playImage.dispose();
+					_playImage = null;
+				}	
 			}
 		}
 	}
