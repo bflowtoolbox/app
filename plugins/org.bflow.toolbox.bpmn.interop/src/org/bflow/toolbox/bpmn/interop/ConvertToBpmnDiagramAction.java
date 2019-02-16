@@ -22,6 +22,7 @@ import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.gmf.runtime.diagram.ui.parts.IDiagramWorkbenchPart;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPathEditorInput;
@@ -51,7 +52,11 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 		setId(Id);
 		setText(Messages.ConvertToBpmnDiagramAction_Text);
 		setToolTipText(Messages.ConvertToBpmnDiagramAction_ToolTipText);
-		setImageDescriptor(BpmnInteropPlugin.getDefault().imageDescriptorFromPlugin("icons/convert16.png")); //$NON-NLS-1$
+		
+		ImageDescriptor imgDesc = BpmnInteropPlugin.imageDescriptorFromPlugin(
+				"org.bflow.toolbox.bpmn.diagram", "/icons/bpmn2process2.png"); //$NON-NLS-1$ //$NON-NLS-2$
+		
+		setImageDescriptor(imgDesc);
 	}
 
 	/*
