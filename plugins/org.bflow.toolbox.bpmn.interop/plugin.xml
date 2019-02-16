@@ -30,6 +30,11 @@
                   id="org.bflow.toolbox.bpmn.interop.actions.convertToBpmn"
                   menubarPath="/diagramMenu/conversionMenu/exportGroup">
             </partAction>
+            <partAction
+                  global="false"
+                  id="org.bflow.toolbox.bpmn.interop.actions.convertToEpc"
+                  menubarPath="/diagramMenu/conversionMenu/exportGroup">
+            </partAction>
          </partContribution>
       </contributionItemProvider>
    </extension>

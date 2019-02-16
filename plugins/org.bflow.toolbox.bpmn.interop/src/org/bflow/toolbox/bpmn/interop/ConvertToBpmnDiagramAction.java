@@ -35,6 +35,7 @@ import oepc.diagram.edit.parts.OEPCEditPart;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2018-10-07
+ * @version 2019-02-16 AST Changed action icon
  *
  */
 public class ConvertToBpmnDiagramAction extends DiagramAction {

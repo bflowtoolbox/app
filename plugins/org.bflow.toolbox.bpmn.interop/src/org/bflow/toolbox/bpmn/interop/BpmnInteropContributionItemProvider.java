@@ -13,6 +13,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
  *  
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2018-10-07
+ * @version 2019-02-16 AST Added convert to EPC action
  *
  */
 public class BpmnInteropContributionItemProvider extends AbstractContributionItemProvider {
@@ -24,6 +25,10 @@ public class BpmnInteropContributionItemProvider extends AbstractContributionIte
 	protected IAction createAction(String actionId, IWorkbenchPartDescriptor partDescriptor) {
 		if (actionId.equals(ConvertToBpmnDiagramAction.Id))
 			return new ConvertToBpmnDiagramAction(partDescriptor);
+		
+		if (actionId.equals(ConvertToEpcDiagramAction.Id)) {
+			return new ConvertToEpcDiagramAction(partDescriptor);
+		}
 		
 		return super.createAction(actionId, partDescriptor);
 	}

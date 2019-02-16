@@ -11,6 +11,8 @@ public class Messages extends NLS {
 	public static String ConvertToBpmnDiagramAction_MessageDialog_Title;
 	public static String ConvertToBpmnDiagramAction_Text;
 	public static String ConvertToBpmnDiagramAction_ToolTipText;
+	public static String ConvertToEpcDiagramAction_Text;
+	public static String ConvertToEpcDiagramAction_ToolTipText;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
