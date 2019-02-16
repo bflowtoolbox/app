@@ -117,6 +117,8 @@ public abstract class AbstractConvertDiagramAction extends DiagramAction {
 		File targetFile = getTargetFile(sourceFile);
 		File targetFolder = targetFile.getParentFile();
 		Shell workbenchShell = getWorkbenchPage().getWorkbenchWindow().getShell();
+		
+		@SuppressWarnings("unused")
 		boolean targetWasOpen = false;
 		
 		// Check if the target file exists and ask the user how to proceed
@@ -130,12 +132,9 @@ public abstract class AbstractConvertDiagramAction extends DiagramAction {
 			targetWasOpen = closeEditorIfRequired(targetFile);
 		}
 				
-		try {
-			onConvert(sourceFile, targetFile, targetFolder);
-		} catch(Exception ex) {
-			_log.error("Error on performing model conversion", ex); //$NON-NLS-1$
-			return;
-		}
+		// Critical method, but we do not catch exceptions here, 
+		// because we want them to be published by the workbench.
+		onConvert(sourceFile, targetFile, targetFolder);
 		
 		// Refresh the workspace		
 		IFile editorInputFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(pathEditorInput.getPath());
@@ -161,7 +160,7 @@ public abstract class AbstractConvertDiagramAction extends DiagramAction {
 			.getActivePage()
 			.openEditor(new FileEditorInput(file), desc.getId());
 		} catch (PartInitException ex) {
-			throw new RuntimeException("Error on opening diagram editor", ex); //$NON-NLS-1$
+			throw new RuntimeException(Messages.AbstractConvertDiagramAction_EditorOpening_Error_Message, ex); 
 		}	
 	}
 	
@@ -229,15 +228,32 @@ public abstract class AbstractConvertDiagramAction extends DiagramAction {
 	 * Returns the file pointer to the target file that is derived from the given
 	 * {@code sourceFile}.
 	 * 
-	 * @param sourceFile Source file
-	 * @param fileExtensions File extension
+	 * @param sourceFile  Source file
+	 * @param fnExtension Filename extension
 	 * @return File pointer to the derived target file
 	 */
-	protected File getTargetFile(File sourceFile, String fileExtensions) {
+	protected File getTargetFile(File sourceFile, String fnExtension) {
+		return getTargetFile(sourceFile, null, fnExtension);
+	}
+	
+	/**
+	 * Returns the file pointer to the target file that is derived from the given
+	 * {@code sourceFile}.
+	 * 
+	 * @param sourceFile  Source file
+	 * @param fnPrefix    Filename prefix
+	 * @param fnExtension Filename extension
+	 * @return File pointer to the derived target file
+	 */
+	protected File getTargetFile(File sourceFile, String fnPrefix, String fnExtension) {
 		String sourceFilePath = sourceFile.getAbsolutePath();
 		String sourceFileName = FilenameUtils.getBaseName(sourceFilePath);
+		
+		if (fnPrefix != null)
+			sourceFileName = fnPrefix + sourceFileName;
+		
 		String sourceFileDirPath = FilenameUtils.getFullPath(sourceFilePath);
-		String targetFilePath = FilenameUtils.concat(sourceFileDirPath, sourceFileName + fileExtensions); //$NON-NLS-1$
+		String targetFilePath = FilenameUtils.concat(sourceFileDirPath, sourceFileName + fnExtension); //$NON-NLS-1$
 		return new File(targetFilePath);
 	}
 	
