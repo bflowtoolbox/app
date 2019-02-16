@@ -3,7 +3,7 @@
 	<config>
 		<name>Aris</name>
 		<fileextension>xml</fileextension>
-		<description>Exports a bflow* EPC diagram to Aris AML.</description>
+		<description>%arisScript_description</description>
 		<diagram>epc</diagram>
 		<callstack>
 			<script>
