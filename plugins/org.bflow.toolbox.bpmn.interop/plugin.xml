@@ -10,7 +10,7 @@
                name="Medium">
          </Priority>
          <partContribution
-               class="org.bflow.toolbox.extensions.BflowDiagramEditor">
+               class="oepc.diagram.part.OepcDiagramEditor">
             <partAction
                   global="false"
                   id="org.bflow.toolbox.bpmn.interop.actions.convertToBpmn"
