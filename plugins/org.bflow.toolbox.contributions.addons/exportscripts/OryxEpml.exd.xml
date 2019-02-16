@@ -3,7 +3,7 @@
 	<config>
 		<name>Oryx EPML</name>
 		<fileextension>epml</fileextension>
-		<description>Exports a bflow* EPC diagram to Oryx EPML.</description>
+		<description>%oryxEpmlScript_description</description>
 		<diagram>epc</diagram>
 		<callstack>
 			<script>

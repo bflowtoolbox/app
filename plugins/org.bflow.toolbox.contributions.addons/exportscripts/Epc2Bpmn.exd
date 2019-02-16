@@ -1,6 +1,6 @@
 public interchange 'BPMN' (bpmn) <> epc {
 
-description: 'Exports a bflow* EPC diagram to BPMN (can be opened for example by Camunda BPMN 2.0 Modeler)'
+description: '%epc2BpmnScript_description'
 
 @script: '/exportscripts/files/Epc2Bpmn.vt', insertAttributes=true
 

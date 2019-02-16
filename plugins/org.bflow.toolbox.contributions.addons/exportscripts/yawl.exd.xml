@@ -3,7 +3,7 @@
 	<config>
 		<name>YAWL</name>
 		<fileextension>xml</fileextension>
-		<description>Exports a bflow* EPC diagram to YAWL.</description>
+		<description>%yawlScript_description</description>
 		<diagram>epc</diagram>
 		<callstack>
 			<script>

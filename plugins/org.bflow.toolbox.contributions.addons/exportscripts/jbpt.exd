@@ -1,6 +1,6 @@
-public interchange 'Java program for jbpt' (java) <> epc {
+public interchange 'Java Program for jbpt' (java) <> epc {
 
-description: 'Transforms the EPC into a Java program using the jbpt library (https://code.google.com/p/jbpt/)'
+description: '%javaProgram4jbptScript_description'
 
 @script: '/exportscripts/files/jbpt.vt', insertAttributes=true
 
