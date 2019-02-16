@@ -96,8 +96,8 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 		// Check if the target file exists and ask the user how to proceed
 		if (bpmnTargetFile.exists()) {
 			if (!MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
-					Messages.ConvertToBpmnDiagramAction_MessageDialog_Title, 
-					Messages.ConvertToBpmnDiagramAction_MessageDialog_Hint)) return;
+					Messages.AbstractConvertDiagramAction_DialogTitle, 
+					Messages.AbstractConvertDiagramAction_ExistingModelDialog_Text)) return;
 		}
 		
 		// Perform the conversion
@@ -121,7 +121,7 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 			epcTargetFile.delete();
 		} catch (InterchangeProcessingException ex) {
 			throw new RuntimeException(
-					Messages.ConvertToBpmnDiagramAction_Error_ModelConversion, 
+					Messages.AbstractConvertDiagramAction_Error_ModelConversion, 
 					ex);
 		}
 		
@@ -138,7 +138,7 @@ public class ConvertToBpmnDiagramAction extends DiagramAction {
 			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
 		} catch (CoreException ex) {
 			throw new RuntimeException(
-					Messages.ConvertToBpmnDiagramAction_Error_RefreshWorkspace, 
+					Messages.AbstractConvertDiagramAction_Error_RefreshWorkspace, 
 					ex);
 		}
 		

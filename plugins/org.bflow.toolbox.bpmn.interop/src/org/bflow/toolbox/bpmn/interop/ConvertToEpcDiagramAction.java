@@ -1,13 +1,11 @@
 package org.bflow.toolbox.bpmn.interop;
 
+import java.io.File;
+
 import org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.gef.Request;
 import org.eclipse.gmf.runtime.common.ui.util.IWorkbenchPartDescriptor;
-import org.eclipse.gmf.runtime.diagram.ui.actions.DiagramAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.IStructuredSelection;
 
 import oepc.diagram.edit.parts.OEPCEditPart;
 
@@ -18,7 +16,7 @@ import oepc.diagram.edit.parts.OEPCEditPart;
  * @since 2019-02-16
  *
  */
-public class ConvertToEpcDiagramAction extends DiagramAction {
+public class ConvertToEpcDiagramAction extends AbstractConvertDiagramAction {
 
 	/** Action id */
 	public static final String Id = "org.bflow.toolbox.bpmn.interop.actions.convertToEpc"; //$NON-NLS-1$
@@ -29,8 +27,8 @@ public class ConvertToEpcDiagramAction extends DiagramAction {
 	 * @param partDescriptor Part descriptor
 	 */
 	public ConvertToEpcDiagramAction(IWorkbenchPartDescriptor partDescriptor) {
-		super(partDescriptor.getPartPage());
-		setId(Id);
+		super(partDescriptor, Id);
+		
 		setText(Messages.ConvertToEpcDiagramAction_Text);
 		setToolTipText(Messages.ConvertToEpcDiagramAction_ToolTipText);
 		
@@ -42,40 +40,28 @@ public class ConvertToEpcDiagramAction extends DiagramAction {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.gmf.runtime.diagram.ui.actions.DiagramAction#createTargetRequest()
+	 * @see org.bflow.toolbox.bpmn.interop.AbstractConvertDiagramAction#onCalculateEnabled(java.lang.Object)
 	 */
 	@Override
-	protected Request createTargetRequest() {
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.gmf.runtime.diagram.ui.actions.DiagramAction#isSelectionListener()
-	 */
-	@Override
-	protected boolean isSelectionListener() {
-		return true;
-	}	
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.gmf.runtime.diagram.ui.actions.DiagramAction#calculateEnabled()
-	 */
-	@Override
-	protected boolean calculateEnabled() {
-		IStructuredSelection selection = getStructuredSelection();
-		Object firstElement = selection.getFirstElement();
-		return (firstElement instanceof EpcEditPart || firstElement instanceof OEPCEditPart);
+	protected boolean onCalculateEnabled(Object selectedObject) {
+		return (selectedObject instanceof EpcEditPart || selectedObject instanceof OEPCEditPart);
 	}
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.gmf.runtime.diagram.ui.actions.DiagramAction#doRun(org.eclipse.core.runtime.IProgressMonitor)
+	 * @see org.bflow.toolbox.bpmn.interop.AbstractConvertDiagramAction#getTargetFile(java.io.File)
 	 */
 	@Override
-	protected void doRun(IProgressMonitor progressMonitor) {
-		// TODO Auto-generated method stub
-		super.doRun(progressMonitor);
+	protected File getTargetFile(File sourceFile) {
+		return getTargetFile(sourceFile, ".epc");
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.bpmn.interop.AbstractConvertDiagramAction#getExportDescriptionName()
+	 */
+	@Override
+	protected String getExportDescriptionName() {
+		return "EPC"; // Name of the export description
 	}
 }
