@@ -62,8 +62,6 @@ public class InterchangeDescriptorFactory {
 			applDiagramEditorTypes = new ArrayList<String>();
 		}
 		
-		
-		
 		return factory.new InterchangeDescriptorImpl(
 				applDiagramEditorTypes.toArray(new String[0]), description, 
 				fileExtensions.toArray(new String[0]), name, 
