@@ -35,17 +35,23 @@ import java.io.File;
 
 import javax.swing.ImageIcon;
 
+import org.apache.commons.logging.LogFactory;
+import org.bflow.toolbox.hive.nls.NLSupport;
+
 public class ImageFileChooserUtils {
-    public final static String jpeg = "jpeg";
-    public final static String jpg = "jpg";
-    public final static String gif = "gif";
-    public final static String tiff = "tiff";
-    public final static String tif = "tif";
-    public final static String png = "png";
+    public final static String jpeg = "jpeg"; //$NON-NLS-1$
+    public final static String jpg = "jpg"; //$NON-NLS-1$
+    public final static String gif = "gif"; //$NON-NLS-1$
+    public final static String tiff = "tiff"; //$NON-NLS-1$
+    public final static String tif = "tif"; //$NON-NLS-1$
+    public final static String png = "png"; //$NON-NLS-1$
     
     private static final String[] FileExtensions = {jpeg, jpg, tiff, tif, png, gif};
     
     public static final String[] WildcardFileExtensions = getApplicableFileExtensions();
+    
+    public static final String[] FilterExtensions = {"*.png;*.gif;*.jpg;*.jpeg;*.tif;*.tiff"}; //$NON-NLS-1$
+    public static final String[] FilterNames = {NLSupport.ImageFileChooserUtils_FilterNames}; 
     
 	/**
 	 * Returns all define file extensions with wildcard prefix (for instance,
@@ -56,14 +62,12 @@ public class ImageFileChooserUtils {
     private static String[] getApplicableFileExtensions() {
     	String[] fileExtensions = new String[FileExtensions.length];
     	for (int i = -1; ++i != fileExtensions.length;) {
-    		fileExtensions[i] = String.format("*.%s", FileExtensions[i]);
+    		fileExtensions[i] = String.format("*.%s", FileExtensions[i]); //$NON-NLS-1$
     	}
     	return fileExtensions;			
     }
 
-    /*
-     * Get the extension of a file.
-     */
+    /** Get the extension of a file. */
     public static String getExtension(File f) {
         String ext = null;
         String s = f.getName();
@@ -81,7 +85,8 @@ public class ImageFileChooserUtils {
         if (imgURL != null) {
             return new ImageIcon(imgURL);
         } else {
-            System.err.println("Couldn't find file: " + path);
+        	LogFactory.getLog(ImageFileChooserUtils.class)
+        			  .warn("Couldn't find file: " + path); //$NON-NLS-1$
             return null;
         }
     }

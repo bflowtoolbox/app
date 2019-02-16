@@ -91,6 +91,7 @@ public class NLSupport extends NLS {
 	public static String ImageExportWizardPage_LblLine2;
 	public static String ImageExportWizardPage_LblLine3;
 	public static String ImageExportWizardPage_Title;
+	public static String ImageFileChooserUtils_FilterNames;
 	public static String InstalledProtocolsPage_BtnAdd;
 	public static String InstalledProtocolsPage_BtnDialogConfirmDescription;
 	public static String InstalledProtocolsPage_BtnDialogConfirmTitle;
