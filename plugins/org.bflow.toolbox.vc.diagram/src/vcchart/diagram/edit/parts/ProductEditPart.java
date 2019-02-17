@@ -115,8 +115,7 @@ public class ProductEditPart extends BflowNodeEditPart {
 	 */
 	protected boolean addFixedChild(EditPart childEditPart) {
 		if (childEditPart instanceof ProductNameEditPart) {
-			((ProductNameEditPart) childEditPart).setLabel(getPrimaryShape()
-					.getFigureProductLabelFigure());
+			((ProductNameEditPart) childEditPart).setLabel(getPrimaryShape().getFigureProductLabelFigure());
 			return true;
 		}
 		return false;
@@ -239,7 +238,7 @@ public class ProductEditPart extends BflowNodeEditPart {
 		private WrappingLabel fFigureProductLabelFigure;
 
 		/**
-		 * @generated
+		 * @generated NOT
 		 */
 		public ProductFigure() {
 			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(10)));
@@ -262,7 +261,7 @@ public class ProductEditPart extends BflowNodeEditPart {
 		}		
 
 		/**
-		 * @generated
+		 * @generated NOT
 		 */
 		private void createContents() {			
 			fFigureProductLabelFigure = new WrappingLabel();
