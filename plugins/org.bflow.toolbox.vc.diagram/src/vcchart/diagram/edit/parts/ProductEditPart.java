@@ -1,10 +1,9 @@
-/*
- * 
- */
 package vcchart.diagram.edit.parts;
 
+import org.bflow.toolbox.extensions.LinkContext;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
-import org.eclipse.draw2d.Graphics;
+import org.bflow.toolbox.extensions.figures.LinkImageFigure;
+import org.bflow.toolbox.extensions.layouts.CentralizingLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
@@ -66,8 +65,7 @@ public class ProductEditPart extends BflowNodeEditPart {
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
-		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
-				new ProductItemSemanticEditPolicy());
+		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE, new ProductItemSemanticEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
 		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
@@ -223,8 +221,7 @@ public class ProductEditPart extends BflowNodeEditPart {
 	 */
 	protected void handleNotificationEvent(Notification event) {
 		if (event.getNotifier() == getModel()
-				&& EcorePackage.eINSTANCE.getEModelElement_EAnnotations()
-						.equals(event.getFeature())) {
+		&& EcorePackage.eINSTANCE.getEModelElement_EAnnotations().equals(event.getFeature())) {
 			handleMajorSemanticChange();
 		} else {
 			super.handleNotificationEvent(event);
@@ -240,11 +237,6 @@ public class ProductEditPart extends BflowNodeEditPart {
 		 * @generated
 		 */
 		private WrappingLabel fFigureProductLabelFigure;
-		
-		/**
-		 * @generated NOT
-		 */
-		private Image _playImage;
 
 		/**
 		 * @generated
@@ -264,9 +256,10 @@ public class ProductEditPart extends BflowNodeEditPart {
 					getMapMode().DPtoLP(5), getMapMode().DPtoLP(5),
 					getMapMode().DPtoLP(5)));
 			createContents();
-		}
-		
-		
+			
+			// 2019-02-17 AST Required by the link image figure
+			setLayoutManager(new CentralizingLayout());
+		}		
 
 		/**
 		 * @generated
@@ -278,26 +271,11 @@ public class ProductEditPart extends BflowNodeEditPart {
 			fFigureProductLabelFigure.setAlignment(PositionConstants.CENTER);
 			fFigureProductLabelFigure.setTextJustification(PositionConstants.CENTER);			
 			this.add(fFigureProductLabelFigure);
-		}
-		
-		@Override
-		protected void paintClientArea(Graphics graphics) {
-			super.paintClientArea(graphics);
-			
-			Product product = (Product) ProductEditPart.this.getPrimaryView().getElement();
-
-			if (product.getSubdiagram() != null && !product.getSubdiagram().isEmpty()) {
-				_playImage = new Image(null, this.getClass().getResourceAsStream("/icons/link-16.png"));
-				Point loc = fFigureProductLabelFigure.getLocation();
-				Dimension dim = fFigureProductLabelFigure.getSize();						
-				Point imgLoc = new Point(loc.x + dim.width - 16, loc.y + dim.height/2-12);
-				graphics.drawImage(_playImage, imgLoc);
-			} else {
-				if (_playImage != null) {
-					_playImage.dispose();
-					_playImage = null;
-				}			
-			}
+					
+			Image playImage = new Image(null, this.getClass().getResourceAsStream("/icons/link-16.png"));
+			LinkContext linkContext = new LinkContext(() -> ((Product) ProductEditPart.this.getPrimaryView().getElement()).getSubdiagram());
+			LinkImageFigure linkImage = new LinkImageFigure(playImage, linkContext);			
+			this.add(linkImage);					
 		}
 
 		/**
