@@ -31,46 +31,43 @@ public class ExportDescriptorStore {
 	private static Map<IInterchangeDescriptor, String> locationMap = new HashMap<>();
 	
 	/**
-	 * Registers the export description to the store that is provided by an
-	 * bundle.
+	 * Registers the export description to the store that is provided by an bundle.
 	 * 
-	 * @param exp
-	 *            export description
-	 * @param bundle
-	 *            the bundle which holds the export descriptor and its files
+	 * @param desc   Export description
+	 * @param bundle The bundle which holds the export descriptor and its files
 	 */
-	public static void register(IInterchangeDescriptor exp, Bundle bundle) {
+	public static void register(IInterchangeDescriptor desc, Bundle bundle) {
 		if (bundle == null) throw new NullPointerException("Bundle cannot be null!");
 		
 		// 2019-02-16 AST Add localization support
-		String expDesc = exp.getDescription();
+		String expDesc = desc.getDescription();
 		if (expDesc != null && expDesc.startsWith("%")) {
 			PropertyResourceBundle prb = getPropertyResourceBundle(bundle);
 			if (prb != null) {
 				String key = expDesc.substring(1);
 				String localizedText = prb.getString(key);
-				applyLocalizedText(exp, localizedText);
+				applyLocalizedText(desc, localizedText);
 			}
 		}
 		
-		depository.add(exp);
-		bundleMap.put(exp, bundle);
+		depository.add(desc);
+		bundleMap.put(desc, bundle);
 	}
 
 	/**
 	 * Registers the export description to the store that is provided by a local
 	 * file.
 	 * 
-	 * @param exp  Export description
+	 * @param desc Export description
 	 * @param path Absolute path to the export description file
 	 */
-	public static void register(IInterchangeDescriptor exp, String path) {
+	public static void register(IInterchangeDescriptor desc, String path) {
 		if (path == null || path.isEmpty()) {
 			throw new NullPointerException("Absolute path cannot be null or empty!");
 		}
 
-		depository.add(exp);
-		locationMap.put(exp, path);
+		depository.add(desc);
+		locationMap.put(desc, path);
 	}
 
 	/**
