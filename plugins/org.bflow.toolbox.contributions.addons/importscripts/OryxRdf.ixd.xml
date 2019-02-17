@@ -3,7 +3,7 @@
 	<config>
 		<name>Oryx RDF</name>
 		<fileextension>xml</fileextension>
-		<description>Imports an EPC model that has been created with Oryx (UNSTABLE!).</description>
+		<description>%oryxRdfImportScript_description</description>
 		<callstack>
 			<script>
 				<file>/importscripts/files/rdf2epml.xslt</file>	

@@ -1,6 +1,6 @@
 public interchange 'EPCTools EPML' (epml) <> epc {
 
-description: 'Imports an EPC model that has been created with EPCTools.'
+description: '%epcToolsImportScript_description'
 
 @script: '/importscripts/files/epml.ads'
 

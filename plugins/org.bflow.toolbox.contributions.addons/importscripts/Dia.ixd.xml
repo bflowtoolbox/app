@@ -3,7 +3,7 @@
 	<config>
 		<name>dia XML</name>
 		<fileextension>xml;dia</fileextension>
-		<description>Imports an EPC model that has been created with dia (using edpc shapes from http://dia-installer.de/shapes/edpc/index.html.de)</description>
+		<description>%diaScript_description</description>
 		<callstack>
 			<script>
 				<file>/importscripts/files/dia2epml.xslt</file>

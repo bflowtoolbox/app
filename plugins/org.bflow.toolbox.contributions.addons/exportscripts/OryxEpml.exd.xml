@@ -3,7 +3,7 @@
 	<config>
 		<name>Oryx EPML</name>
 		<fileextension>epml</fileextension>
-		<description>%oryxEpmlScript_description</description>
+		<description>%oryxEpmlExportScript_description</description>
 		<diagram>epc</diagram>
 		<callstack>
 			<script>

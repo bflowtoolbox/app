@@ -1,6 +1,6 @@
 public interchange 'ARIS AML [version 6.1 - 7.0]' (xml) <> epc {
 
-description: 'Imports an EPC model that has been created with ARIS. This script supports versions 6.1 - 7.0'
+description: '%arisAmlx7Script_description'
 
 @script: '/importscripts/files/aris_aml.ads'
 

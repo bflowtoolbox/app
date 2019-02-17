@@ -3,7 +3,7 @@
 	<config>
 		<name>EPCTools EPML</name>
 		<fileextension>epml</fileextension>
-		<description>%epcToolsScript_description</description>
+		<description>%epcToolsExportScript_description</description>
 		<diagram>epc</diagram>
 		<callstack>
 			<script>

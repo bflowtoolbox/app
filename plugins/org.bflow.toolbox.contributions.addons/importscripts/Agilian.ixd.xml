@@ -3,7 +3,7 @@
 	<config>
 		<name>Agilian XML</name>
 		<fileextension>xml</fileextension>
-		<description>Imports an EPC model that has been created with Agilian (Traditional XML Structure)</description>
+		<description>%agilianScript_description</description>
 		<callstack>
 			<script>
 				<file>/importscripts/files/agilian.xslt</file>	

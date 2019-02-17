@@ -3,7 +3,7 @@
 	<config>
 		<name>Semtalk EPML</name>
 		<fileextension>epml</fileextension>
-		<description>%semtalkScript_description</description>
+		<description>%semtalkEpmlExportScript_description</description>
 		<diagram>epc</diagram>
 		<callstack>
 			<script>
