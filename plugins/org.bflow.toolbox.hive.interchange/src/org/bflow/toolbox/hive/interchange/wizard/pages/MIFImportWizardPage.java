@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bflow.toolbox.hive.interchange.mif.core.IInterchangeDescriptor;
 import org.bflow.toolbox.hive.interchange.wizard.EImportOption;
 import org.bflow.toolbox.hive.nls.NLSupport;
+import org.bflow.toolbox.kits.swt.LayoutFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -83,41 +84,38 @@ public class MIFImportWizardPage extends WizardPage {
 	public void createControl(Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
 		
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 		
 		Label lblFormat = new Label(composite, SWT.NONE);
+		lblFormat.setLayoutData(new GridData(SWT.TRAIL, SWT.CENTER, false, false));
 		lblFormat.setText(NLSupport.MIFImportWizardPage_LblFormat); 
 		
 		_cbImportDescriptions = new Combo(composite, SWT.READ_ONLY);
+		_cbImportDescriptions.setLayoutData(LayoutFactory.createGridData().withColumnSpan(2).build());
 		prepareComboBox();
 		
 		Label lblDescription = new Label(composite, SWT.NONE);
+		lblDescription.setLayoutData(new GridData(SWT.TRAIL, SWT.TOP, false, false));
 		lblDescription.setText(NLSupport.MIFImportWizardPage_LblDescription); 
 		
-		_textFieldDescription = new Text(composite, SWT.READ_ONLY);
-		
-		GridData txtDescriptionGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		txtDescriptionGridData.widthHint = 200;
-		txtDescriptionGridData.heightHint = 50;
-
-		_textFieldDescription.setLayoutData(txtDescriptionGridData);
+		_textFieldDescription = new Text(composite, SWT.READ_ONLY | SWT.WRAP);			
+		_textFieldDescription.setLayoutData(
+				LayoutFactory.createGridData(SWT.FILL, SWT.FILL, true, false)
+							 .withColumnSpan(2)
+							 .withHeight(50)
+							 .build()
+		);
 		
 		Label lblSelectFile = new Label(composite, SWT.NONE);
+		lblSelectFile.setLayoutData(new GridData(SWT.TRAIL, SWT.CENTER, false, false));
 		lblSelectFile.setText(NLSupport.MIFImportWizardPage_LblSelectSrcFile); 
 		
-		_textFieldFile = new Text(composite, SWT.BORDER);
-		
-		GridData textFieldFileGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, false);
-		textFieldFileGridData.widthHint = 400;
-		
-		_textFieldFile.setLayoutData(textFieldFileGridData);
-		
-		Label nullLbl = new Label(composite, SWT.NONE);
-		nullLbl.setText(StringUtils.EMPTY); //$NON-NLS-1$
+		_textFieldFile = new Text(composite, SWT.BORDER);		
+		_textFieldFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		
 		Button btnBrowse = new Button(composite, SWT.NONE);
-		
-		btnBrowse.setText(NLSupport.MIFImportWizardPage_BtnSelectSrcFile);  //$NON-NLS-2$
+		btnBrowse.setText(NLSupport.MIFImportWizardPage_BtnSelectSrcFile);
+		btnBrowse.setLayoutData(LayoutFactory.createGridData().withLRMargin(btnBrowse, 10).build());		
 		
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -171,20 +169,15 @@ public class MIFImportWizardPage extends WizardPage {
 			}});
 		
 		Label lblTargetDir = new Label(composite, SWT.NONE);
+		lblTargetDir.setLayoutData(new GridData(SWT.TRAIL, SWT.CENTER, false, false));
 		lblTargetDir.setText(NLSupport.MIFImportWizardPage_LblTgtDir); 
 		
-		_textFieldTarget = new Text(composite, SWT.BORDER);
-		
-		GridData textFieldTargetGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, false);
-		textFieldTargetGridData.widthHint = 400;
-		
-		_textFieldTarget.setLayoutData(textFieldTargetGridData);
-		
-		Label lblNull = new Label(composite, SWT.NONE);
-		lblNull.setText(StringUtils.EMPTY); //$NON-NLS-1$ 
-		
+		_textFieldTarget = new Text(composite, SWT.BORDER);		
+		_textFieldTarget.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
 		Button btnBrowseTarget = new Button(composite, SWT.NONE);
-		btnBrowseTarget.setText(NLSupport.MIFImportWizardPage_BtnTgtDir);  //$NON-NLS-2$
+		btnBrowseTarget.setText(NLSupport.MIFImportWizardPage_BtnTgtDir);
+		btnBrowseTarget.setLayoutData(LayoutFactory.createGridData().withLRMargin(btnBrowseTarget, 10).build());
 		
 		btnBrowseTarget.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -208,10 +201,11 @@ public class MIFImportWizardPage extends WizardPage {
 		Group optionsGroup = new Group(composite, SWT.NONE);
 		optionsGroup.setLayout(new GridLayout());
 		optionsGroup.setText(NLSupport.MIFImportWizardPage_Options);
-		
-		GridData optionsCompositeGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		optionsCompositeGridData.horizontalSpan = 2;
-		optionsGroup.setLayoutData(optionsCompositeGridData);
+		optionsGroup.setLayoutData(
+				LayoutFactory.createGridData(SWT.FILL, SWT.FILL, true, true)
+							 .withColumnSpan(3)
+							 .build()
+		);
 		
 		_chkArrangeAll = new Button(optionsGroup, SWT.CHECK);
 		_chkArrangeAll.setText(NLSupport.MIFImportWizardPage_ArrangeAll);
