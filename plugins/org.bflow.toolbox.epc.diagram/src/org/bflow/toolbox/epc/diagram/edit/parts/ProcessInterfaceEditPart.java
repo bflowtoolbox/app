@@ -66,8 +66,7 @@ public class ProcessInterfaceEditPart extends BflowNodeEditPart {
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
-		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
-				new ProcessInterfaceItemSemanticEditPolicy());
+		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE, new ProcessInterfaceItemSemanticEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
 		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
@@ -80,8 +79,7 @@ public class ProcessInterfaceEditPart extends BflowNodeEditPart {
 		LayoutEditPolicy lep = new LayoutEditPolicy() {
 
 			protected EditPolicy createChildEditPolicy(EditPart child) {
-				EditPolicy result = child
-						.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
+				EditPolicy result = child.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
 				if (result == null) {
 					result = new NonResizableEditPolicy();
 				}
@@ -120,8 +118,7 @@ public class ProcessInterfaceEditPart extends BflowNodeEditPart {
 	protected boolean addFixedChild(EditPart childEditPart) {
 		if (childEditPart instanceof ProcessInterfaceNameEditPart) {
 			((ProcessInterfaceNameEditPart) childEditPart)
-					.setLabel(getPrimaryShape()
-							.getFigureProcessInterfaceNameFigure());
+					.setLabel(getPrimaryShape().getFigureProcessInterfaceNameFigure());
 			return true;
 		}
 		return false;
@@ -167,8 +164,7 @@ public class ProcessInterfaceEditPart extends BflowNodeEditPart {
 	 * @generated
 	 */
 	protected NodeFigure createNodePlate() {
-		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(getMapMode()
-				.DPtoLP(111), getMapMode().DPtoLP(61));
+		DefaultSizeNodeFigure result = new DefaultSizeNodeFigure(getMapMode().DPtoLP(111), getMapMode().DPtoLP(61));
 		return result;
 	}
 
@@ -218,8 +214,7 @@ public class ProcessInterfaceEditPart extends BflowNodeEditPart {
 	 * @generated
 	 */
 	public EditPart getPrimaryChildEditPart() {
-		return getChildBySemanticHint(EpcVisualIDRegistry
-				.getType(ProcessInterfaceNameEditPart.VISUAL_ID));
+		return getChildBySemanticHint(EpcVisualIDRegistry.getType(ProcessInterfaceNameEditPart.VISUAL_ID));
 	}
 
 	/**
@@ -227,8 +222,7 @@ public class ProcessInterfaceEditPart extends BflowNodeEditPart {
 	 */
 	protected void handleNotificationEvent(Notification event) {
 		if (event.getNotifier() == getModel()
-				&& EcorePackage.eINSTANCE.getEModelElement_EAnnotations()
-						.equals(event.getFeature())) {
+		&& EcorePackage.eINSTANCE.getEModelElement_EAnnotations().equals(event.getFeature())) {
 			handleMajorSemanticChange();
 		} else {
 			super.handleNotificationEvent(event);
@@ -251,43 +245,34 @@ public class ProcessInterfaceEditPart extends BflowNodeEditPart {
 		 * @generated NOT
 		 */
 		public ProcessInterfaceFigure() {
-			this.setLayoutManager(new StackLayout());
 			this.setFill(false);
 			this.setOutline(false);
 			
-			BflowDiagramEditPart diagramEditPart = 
-				BflowDiagramEditPart.getCurrentViewer();
-			if(diagramEditPart != null){
-				this.setBackgroundColor(
-						diagramEditPart.getColorSchema().getBackground(
-								ProcessInterfaceEditPart.class));
-				this.setForegroundColor(
-						diagramEditPart.getColorSchema().getForeground(
-								ProcessInterfaceEditPart.class));
-			}
-			else{
+			BflowDiagramEditPart diagramEditPart = BflowDiagramEditPart.getCurrentViewer();
+			if (diagramEditPart != null) {
+				this.setBackgroundColor(diagramEditPart.getColorSchema().getBackground(ProcessInterfaceEditPart.class));
+				this.setForegroundColor(diagramEditPart.getColorSchema().getForeground(ProcessInterfaceEditPart.class));
+			} else {
 				this.setBackgroundColor(ColorConstants.white);
-				this.setForegroundColor(
-						ColorConstants.black);
+				this.setForegroundColor(ColorConstants.black);
 			}
 			
-			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(111),
-					getMapMode().DPtoLP(61)));
+			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(111), getMapMode().DPtoLP(61)));
 			this.setBorder(new CompoundBorder(createBorder0(),
 					new MarginBorder(getMapMode().DPtoLP(0), getMapMode()
 							.DPtoLP(0), getMapMode().DPtoLP(10), getMapMode()
 							.DPtoLP(10))));
 			createContents();
+			
+			this.setLayoutManager(new StackLayout());
 		}
 
 		/**
 		 * @generated NOT
 		 */
 		private void createContents() {
-
 			RoundedRectangle rrect0 = new RoundedRectangle();
-			rrect0.setCornerDimensions(new Dimension(getMapMode().DPtoLP(8),
-					getMapMode().DPtoLP(8)));
+			rrect0.setCornerDimensions(new Dimension(getMapMode().DPtoLP(8), getMapMode().DPtoLP(8)));
 
 			this.add(rrect0);
 			processInterfaceFigure = rrect0;
@@ -299,14 +284,11 @@ public class ProcessInterfaceEditPart extends BflowNodeEditPart {
 					getMapMode().DPtoLP(4), getMapMode().DPtoLP(4),
 					getMapMode().DPtoLP(4), getMapMode().DPtoLP(4)));
 
-			fFigureProcessInterfaceNameFigure
-					.setAlignment(PositionConstants.CENTER);
-			fFigureProcessInterfaceNameFigure
-					.setTextJustification(PositionConstants.CENTER);
+			fFigureProcessInterfaceNameFigure.setAlignment(PositionConstants.CENTER);
+			fFigureProcessInterfaceNameFigure.setTextJustification(PositionConstants.CENTER);
 			fFigureProcessInterfaceNameFigure.setTextWrap(true);
 
 			rrect0.add(fFigureProcessInterfaceNameFigure);
-
 		}
 
 		/**
@@ -355,8 +337,7 @@ public class ProcessInterfaceEditPart extends BflowNodeEditPart {
 	}
 
 	public WrappingLabel[] getLabels() {
-		return new WrappingLabel[] { ((ProcessInterfaceFigure) primaryShape)
-				.getFigureProcessInterfaceNameFigure() };
+		return new WrappingLabel[] { ((ProcessInterfaceFigure) primaryShape).getFigureProcessInterfaceNameFigure() };
 	}
 	
 	public View getPrimaryView2(){
@@ -367,7 +348,6 @@ public class ProcessInterfaceEditPart extends BflowNodeEditPart {
 		getPrimaryShape().setBackgroundColor(background);
 		super.setBackgroundColor(background);
 	}
-	
 	
 	public void setForegroundColor(Color foreground){
 		getPrimaryShape().setForegroundColor(foreground);
