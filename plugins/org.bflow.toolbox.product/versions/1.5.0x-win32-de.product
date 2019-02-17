@@ -42,11 +42,9 @@
       </win>
    </launcher>
 
-
    <vm>
       <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
    </vm>
-
 
    <plugins>
       <plugin id="com.google.inject"/>
@@ -121,6 +119,7 @@
       <plugin id="org.bflow.toolbox.import.visio"/>
       <plugin id="org.bflow.toolbox.import.visio.epc"/>
       <plugin id="org.bflow.toolbox.import.visio.oepc"/>
+      <plugin id="org.bflow.toolbox.kits.swt"/>
       <plugin id="org.bflow.toolbox.oepc"/>
       <plugin id="org.bflow.toolbox.oepc.diagram"/>
       <plugin id="org.bflow.toolbox.oepc.edit"/>
