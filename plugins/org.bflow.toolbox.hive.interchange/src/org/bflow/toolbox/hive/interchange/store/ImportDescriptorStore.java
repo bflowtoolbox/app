@@ -15,10 +15,10 @@ import org.osgi.framework.Bundle;
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2011-07-13
  * @version 2014-06-17
+ * 			2019-02-17 AST Added localization support via plugin.properties
  * 
  */
 public class ImportDescriptorStore {
-
 	private static List<IInterchangeDescriptor> depository = new LinkedList<IInterchangeDescriptor>();
 	private static Map<IInterchangeDescriptor, Bundle> bundleMap = new HashMap<IInterchangeDescriptor, Bundle>();
 	private static Map<IInterchangeDescriptor, String> locationMap = new HashMap<IInterchangeDescriptor, String>();
@@ -32,6 +32,9 @@ public class ImportDescriptorStore {
 	public static void register(IInterchangeDescriptor desc, Bundle bundle) {
 		if (bundle == null) throw new NullPointerException("Bundle cannot be null!");
 
+		// 2019-02-16 AST Add localization support
+		LocalizationKit.localizeDescription(desc, bundle);
+		
 		depository.add(desc);
 		bundleMap.put(desc, bundle);
 	}
