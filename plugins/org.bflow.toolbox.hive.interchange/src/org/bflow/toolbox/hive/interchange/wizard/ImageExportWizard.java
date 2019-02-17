@@ -1,6 +1,8 @@
 package org.bflow.toolbox.hive.interchange.wizard;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.hive.interchange.wizard.pages.ImageExportWizardPage;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.gmf.runtime.diagram.ui.render.actions.CopyToImageAction;
@@ -19,19 +21,14 @@ import org.eclipse.ui.part.FileEditorInput;
  * as images.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 19/07/13
+ * @since 2013-07-19
  */
 public class ImageExportWizard extends Wizard implements IExportWizard {
-
-	/** The workbench page. */
-	private IWorkbenchPage iWorkbenchPage;
+	private Log _log = LogFactory.getLog(ImageExportWizard.class);
+	private IWorkbenchPage _workbenchPage;
+	private IStructuredSelection _selection;
 	
-	/** The selection. */
-	private IStructuredSelection iSelection;
-	
-	/**
-	 * Instantiates a new image export wizard.
-	 */
+	/** Initializes the new instance. */
 	public ImageExportWizard() {
 		setWindowTitle("Toolbox Image Export");
 	}
@@ -42,7 +39,7 @@ public class ImageExportWizard extends Wizard implements IExportWizard {
 	@Override
 	public boolean canFinish() {
 		boolean canFinish = super.canFinish();
-		boolean someSelection = !iSelection.isEmpty();
+		boolean someSelection = !_selection.isEmpty();
 		return someSelection && canFinish;
 	}
 	
@@ -51,8 +48,8 @@ public class ImageExportWizard extends Wizard implements IExportWizard {
 	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		iWorkbenchPage = workbench.getActiveWorkbenchWindow().getActivePage();
-		iSelection = selection;
+		_workbenchPage = workbench.getActiveWorkbenchWindow().getActivePage();
+		_selection = selection;
 		addPage(new ImageExportWizardPage());
 	}
 
@@ -61,29 +58,30 @@ public class ImageExportWizard extends Wizard implements IExportWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		Object[] selectedElements = iSelection.toArray();
+		Object[] selectedElements = _selection.toArray();
 		
 		for(int i = 0; i < selectedElements.length; i++) {
 			Object selectedElement = selectedElements[i];
 			
 			// Should be impossible
-			if(selectedElement instanceof IEditorPart) {
+			if (selectedElement instanceof IEditorPart) {
 				throw new NotImplementedException();
 			}
 			
-			if(selectedElement instanceof IFile) {
+			if (selectedElement instanceof IFile) {
 				IFile file = (IFile)selectedElement;
 				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
 				try {
-					iWorkbenchPage.openEditor(new FileEditorInput(file), desc.getId());
-					CopyToImageAction copyToImageAction = new CopyToImageAction(iWorkbenchPage);
+					_workbenchPage.openEditor(new FileEditorInput(file), desc.getId());
+					CopyToImageAction copyToImageAction = new CopyToImageAction(_workbenchPage);
 					copyToImageAction.init();
 					copyToImageAction.run();
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (Exception ex) {
+					_log.error("Error on executing image export", ex);
 				}
 			}
 		}
+		
 		return true;
 	}
 }

@@ -4,14 +4,10 @@ package org.bflow.toolbox.hive.interchange.wizard;
  * Defines import options.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 11/08/13
+ * @since 2013-08-11
  */
-public enum EImportOption {
-	
-	ArrangeAll,
-	
-	PackPage,
-	
+public enum EImportOption {	
+	ArrangeAll,	
+	PackPage,	
 	AutoSize;
-
 }
