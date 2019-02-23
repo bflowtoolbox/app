@@ -26,7 +26,7 @@ public class PluginActivator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 		PluginActivator.context = bundleContext;
 		
-		new LicenceChecker().run();
+		new LicenceManager().check();
 	}
 
 	/*

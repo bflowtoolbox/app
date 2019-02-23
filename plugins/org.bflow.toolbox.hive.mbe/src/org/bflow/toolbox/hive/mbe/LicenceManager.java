@@ -29,15 +29,15 @@ import org.eclipse.ui.PlatformUI;
  * @since 2019-02-23
  *
  */
-public class LicenceChecker {
-	private final Log _log = LogFactory.getLog(LicenceChecker.class);
+public class LicenceManager {
+	private final Log _log = LogFactory.getLog(LicenceManager.class);
 	
 	/**
 	 * Runs the licence validation. If the current licence is not valid, the
 	 * workbench is shut down asynchronously. If this is the first start of
 	 * workbench, a demo licence which expires after 30 days is installed.
 	 */
-	public void run() {
+	public void check() {
 		String workspacePath = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString();
 		Path path = Paths.get(workspacePath, "/.config/.lock");
 		
