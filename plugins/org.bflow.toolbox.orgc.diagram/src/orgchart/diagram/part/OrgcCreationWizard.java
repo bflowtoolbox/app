@@ -1,10 +1,8 @@
-/*
- * 
- */
 package orgchart.diagram.part;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.bflow.toolbox.extensions.IDiagramCreationWizard;
 import org.bflow.toolbox.extensions.wizards.DiagramPageSetupWizardPage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -20,8 +18,9 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 /**
  * @generated
+ * @version 2019-02-23 AST Added IDiagramCreationWizard implementation
  */
-public class OrgcCreationWizard extends Wizard implements INewWizard {
+public class OrgcCreationWizard extends Wizard implements INewWizard, IDiagramCreationWizard {
 
 	/**
 	 * @generated
@@ -85,8 +84,7 @@ public class OrgcCreationWizard extends Wizard implements INewWizard {
 	/**
 	 * @generated
 	 */
-	public void setOpenNewlyCreatedDiagramEditor(
-			boolean openNewlyCreatedDiagramEditor) {
+	public void setOpenNewlyCreatedDiagramEditor(boolean openNewlyCreatedDiagramEditor) {
 		this.openNewlyCreatedDiagramEditor = openNewlyCreatedDiagramEditor;
 	}
 
@@ -102,6 +100,15 @@ public class OrgcCreationWizard extends Wizard implements INewWizard {
 		setNeedsProgressMonitor(true);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.IDiagramCreationWizard#getShortHint()
+	 */
+	@Override
+	public String getShortHint() {
+		return Messages.OrgcCreationWizardTitle;
+	}
+	
 	/**
 	 * @generated NOT
 	 */

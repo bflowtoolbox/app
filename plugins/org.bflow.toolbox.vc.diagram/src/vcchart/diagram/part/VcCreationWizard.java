@@ -1,6 +1,3 @@
-/*
- * 
- */
 package vcchart.diagram.part;
 
 import java.lang.reflect.InvocationTargetException;

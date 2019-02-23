@@ -23,6 +23,21 @@ import vcchart.diagram.edit.parts.ProductEditPart;
  */
 public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<VcCreateSubdiagramAction.SelectionData> {	
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.actions.AbstractCreateDiagramLinkAction#getWizardIds()
+	 */
+	@Override
+	protected String[] getWizardIds() {
+		return new String[] {
+				"org.bflow.toolbox.epc.diagram.part.EpcCreationWizardID",
+				"oepc.diagram.part.OepcCreationWizardID",
+				"vcchart.diagram.part.VcCreationWizardID",
+				"org.bflow.toolbox.bpmn.diagram.wizards.Bpmn2CreationWizardID",
+				"orgchart.diagram.part.OrgcCreationWizardID"
+				};
+	}
+	
 	class SelectionData {
 		public Activity1 _activity1;
 		public Activity2 _activity2;
@@ -75,20 +90,6 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 		return sd._activity1 != null || sd._activity2 != null 
 				|| sd._product != null || sd._objective != null
 				;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.bflow.toolbox.extensions.actions.AbstractCreateDiagramLinkAction#getWizardIds()
-	 */
-	@Override
-	protected String[] getWizardIds() {
-		return new String[] {
-				"org.bflow.toolbox.epc.diagram.part.EpcCreationWizardID",
-				"oepc.diagram.part.OepcCreationWizardID",
-				"vcchart.diagram.part.VcCreationWizardID",
-				"org.bflow.toolbox.bpmn.diagram.wizards.Bpmn2CreationWizardID"
-				};
 	}
 	
 	/*

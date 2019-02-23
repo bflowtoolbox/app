@@ -25,7 +25,9 @@ public class OepcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<
 		return new String[] {
 				"org.bflow.toolbox.epc.diagram.part.EpcCreationWizardID",
 				"oepc.diagram.part.OepcCreationWizardID",
-				"org.bflow.toolbox.bpmn.diagram.wizards.Bpmn2CreationWizardID"
+				"vcchart.diagram.part.VcCreationWizardID",
+				"org.bflow.toolbox.bpmn.diagram.wizards.Bpmn2CreationWizardID",
+				"orgchart.diagram.part.OrgcCreationWizardID"
 				};
 	}
 
