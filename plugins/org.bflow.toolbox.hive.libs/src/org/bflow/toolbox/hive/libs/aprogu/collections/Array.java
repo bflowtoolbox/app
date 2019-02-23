@@ -26,4 +26,21 @@ public class Array {
 		
 		return cpy;
 	}
+	
+	/**
+	 * Returns a new array with the specified length. All items of the given array
+	 * are copied into the new one.
+	 * 
+	 * @param set  Array to copy elements from
+	 * @param size New array size
+	 * @return New array with desired size and copied elements
+	 */
+	public static byte[] resize(byte[] set, int size) {
+		byte[] cpy = new byte[size];
+		for (int i = -1; ++i != size;) {
+			cpy[i] = i < set.length ? set[i] : null;
+		}
+		
+		return cpy;
+	}
 }
