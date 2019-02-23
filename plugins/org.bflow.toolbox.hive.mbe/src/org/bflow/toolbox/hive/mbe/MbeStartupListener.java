@@ -54,7 +54,7 @@ public class MbeStartupListener implements IStartup {
 		workbench.getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				Bundle bundle = Activator.getContext().getBundle();
+				Bundle bundle = PluginActivator.getContext().getBundle();
 				String pluginId = bundle.getSymbolicName();
 				String flagName = "firstRun";
 				

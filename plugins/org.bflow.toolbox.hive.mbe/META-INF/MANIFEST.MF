@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Modeling behaviour extensions
 Bundle-SymbolicName: org.bflow.toolbox.hive.mbe;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.bflow.toolbox.hive.mbe.Activator
+Bundle-Activator: org.bflow.toolbox.hive.mbe.PluginActivator
 Bundle-Vendor: bflow* toolbox dev team
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
