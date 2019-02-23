@@ -16,6 +16,7 @@ import oepc.diagram.part.OepcDiagramEditorPlugin;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2019-01-30
+ * @version 2019-02-23 AST Added orgc as linkable diagram
  *
  */
 public class OepcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<BusinessMethodEditPart> {
@@ -67,7 +68,7 @@ public class OepcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<
 	 */
 	@Override
 	protected String[] getFileExtensions() {
-		return new String[] { "epc", "oepc", "bpmn" };
+		return new String[] { "epc", "oepc", "bpmn", "vc", "orgc" };
 	}	
 
 	/*

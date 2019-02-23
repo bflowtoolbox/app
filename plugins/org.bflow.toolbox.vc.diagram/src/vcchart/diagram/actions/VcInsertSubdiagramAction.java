@@ -23,6 +23,7 @@ import vcchart.diagram.part.VcDiagramEditorPlugin;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2019-01-27
+ * @version 2019-02-23 AST Added orgc as linkable diagram
  *
  */
 public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<VcInsertSubdiagramAction.SelectionData> {
@@ -50,7 +51,7 @@ public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<Vc
 	 */
 	@Override
 	protected String[] getFileExtensions() {
-		return new String[] {"epc", "oepc", "bpmn", "vc"};
+		return new String[] { "epc", "oepc", "bpmn", "vc", "orgc" };
 	}
 
 	/*
