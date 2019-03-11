@@ -10,11 +10,13 @@ import vcchart.Activity1;
 import vcchart.Activity2;
 import vcchart.Application;
 import vcchart.Objective;
+import vcchart.Participant;
 import vcchart.Product;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
 import vcchart.diagram.edit.parts.ApplicationEditPart;
 import vcchart.diagram.edit.parts.ObjectiveEditPart;
+import vcchart.diagram.edit.parts.ParticipantEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
 
 /**
@@ -32,6 +34,7 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		public Product _product;
 		public Objective _objective;
 		public Application _application;
+		public Participant _participant;
 	}
 	
 	/*
@@ -55,6 +58,8 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 			sd._objective = (Objective) ((ObjectiveEditPart) part).resolveSemanticElement();
 		} else if (part instanceof ApplicationEditPart) {
 			sd._application = (Application) ((ApplicationEditPart) part).resolveSemanticElement();
+		} else if (part instanceof ParticipantEditPart) {
+			sd._participant = (Participant) ((ParticipantEditPart) part).resolveSemanticElement();
 		}
 		
 		return sd;
@@ -82,6 +87,9 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		if (sd._application != null)
 			isEnabled &= sd._application.getSubdiagram() != null;
 		
+		if (sd._participant != null)
+			isEnabled &= sd._participant.getSubdiagram() != null;
+		
 		return isEnabled;
 	}
 	
@@ -96,5 +104,6 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,     null, (e, v) -> e.setSubdiagram(null));
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective,   null, (e, v) -> e.setSubdiagram(null));
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._application, null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._participant, null, (e, v) -> e.setSubdiagram(null));
 	}
 }

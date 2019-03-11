@@ -9,11 +9,13 @@ import vcchart.Activity1;
 import vcchart.Activity2;
 import vcchart.Application;
 import vcchart.Objective;
+import vcchart.Participant;
 import vcchart.Product;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
 import vcchart.diagram.edit.parts.ApplicationEditPart;
 import vcchart.diagram.edit.parts.ObjectiveEditPart;
+import vcchart.diagram.edit.parts.ParticipantEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
 
 /**
@@ -56,6 +58,11 @@ public class VcOpenSubdiagramAction extends AbstractOpenDiagramLinkAction {
 		if (part instanceof ApplicationEditPart) {
 			Application a = (Application) ((ApplicationEditPart) part).resolveSemanticElement();
 			return a.getSubdiagram();
+		}
+		
+		if (part instanceof ParticipantEditPart) {
+			Participant p = (Participant) ((ParticipantEditPart) part).resolveSemanticElement();
+			return p.getSubdiagram();
 		}
 		
 		return null;
