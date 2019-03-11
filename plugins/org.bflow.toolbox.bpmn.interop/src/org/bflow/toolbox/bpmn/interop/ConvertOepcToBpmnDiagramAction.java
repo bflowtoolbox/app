@@ -23,7 +23,7 @@ import oepc.diagram.edit.parts.OEPCEditPart;
  * @version 2019-02-16 AST Changed action icon
  *
  */
-public class ConvertToBpmnDiagramAction extends AbstractConvertDiagramAction {
+public class ConvertOepcToBpmnDiagramAction extends AbstractConvertDiagramAction {
 
 	/** Action id */
 	public static final String Id = "org.bflow.toolbox.bpmn.interop.actions.convertToBpmn"; //$NON-NLS-1$
@@ -33,7 +33,7 @@ public class ConvertToBpmnDiagramAction extends AbstractConvertDiagramAction {
 	 * 
 	 * @param partDescriptor Part descriptor
 	 */
-	public ConvertToBpmnDiagramAction(IWorkbenchPartDescriptor partDescriptor) {
+	public ConvertOepcToBpmnDiagramAction(IWorkbenchPartDescriptor partDescriptor) {
 		super(partDescriptor, Id);
 		setText(Messages.ConvertToBpmnDiagramAction_Text);
 		setToolTipText(Messages.ConvertToBpmnDiagramAction_ToolTipText);

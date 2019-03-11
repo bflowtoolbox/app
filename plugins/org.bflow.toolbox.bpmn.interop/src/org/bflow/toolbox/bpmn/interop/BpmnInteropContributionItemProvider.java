@@ -23,11 +23,11 @@ public class BpmnInteropContributionItemProvider extends AbstractContributionIte
 	 */
 	@Override
 	protected IAction createAction(String actionId, IWorkbenchPartDescriptor partDescriptor) {
-		if (actionId.equals(ConvertToBpmnDiagramAction.Id))
-			return new ConvertToBpmnDiagramAction(partDescriptor);
+		if (actionId.equals(ConvertOepcToBpmnDiagramAction.Id))
+			return new ConvertOepcToBpmnDiagramAction(partDescriptor);
 		
-		if (actionId.equals(ConvertToEpcDiagramAction.Id)) {
-			return new ConvertToEpcDiagramAction(partDescriptor);
+		if (actionId.equals(ConvertOepcToEepcDiagramAction.Id)) {
+			return new ConvertOepcToEepcDiagramAction(partDescriptor);
 		}
 		
 		return super.createAction(actionId, partDescriptor);

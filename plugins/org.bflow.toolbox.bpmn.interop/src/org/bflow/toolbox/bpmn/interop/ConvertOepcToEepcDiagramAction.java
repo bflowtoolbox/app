@@ -16,7 +16,7 @@ import oepc.diagram.edit.parts.OEPCEditPart;
  * @since 2019-02-16
  *
  */
-public class ConvertToEpcDiagramAction extends AbstractConvertDiagramAction {
+public class ConvertOepcToEepcDiagramAction extends AbstractConvertDiagramAction {
 
 	/** Action id */
 	public static final String Id = "org.bflow.toolbox.bpmn.interop.actions.convertToEpc"; //$NON-NLS-1$
@@ -26,7 +26,7 @@ public class ConvertToEpcDiagramAction extends AbstractConvertDiagramAction {
 	 * 
 	 * @param partDescriptor Part descriptor
 	 */
-	public ConvertToEpcDiagramAction(IWorkbenchPartDescriptor partDescriptor) {
+	public ConvertOepcToEepcDiagramAction(IWorkbenchPartDescriptor partDescriptor) {
 		super(partDescriptor, Id);
 		
 		setText(Messages.ConvertToEpcDiagramAction_Text);
