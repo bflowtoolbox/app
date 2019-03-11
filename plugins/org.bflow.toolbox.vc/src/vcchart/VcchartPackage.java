@@ -631,13 +631,18 @@ public interface VcchartPackage extends EPackage {
 	int PARTICIPANT__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int PARTICIPANT__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Participant</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int PARTICIPANT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Participant</em>' class.
@@ -1168,6 +1173,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getParticipant();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getParticipant_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Application <em>Application</em>}'.
@@ -1576,6 +1586,11 @@ public interface VcchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PARTICIPANT = eINSTANCE.getParticipant();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute PARTICIPANT__SUBDIAGRAM = eINSTANCE.getParticipant_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link vcchart.impl.ApplicationImpl <em>Application</em>}' class.

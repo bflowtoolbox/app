@@ -501,6 +501,14 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	public EClass getParticipant() {
 		return participantEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getParticipant_Subdiagram() {
+		return (EAttribute) participantEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -681,6 +689,7 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		technicalTermEClass = createEClass(TECHNICAL_TERM);
 
 		participantEClass = createEClass(PARTICIPANT);
+		createEAttribute(participantEClass, PARTICIPANT__SUBDIAGRAM);
 
 		applicationEClass = createEClass(APPLICATION);
 		createEAttribute(applicationEClass, APPLICATION__SUBDIAGRAM);
@@ -779,6 +788,7 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		initEAttribute(getObjective_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		
 		initEReference(getModel_Participants(), this.getParticipant(), null, "Participants", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getParticipant_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		
 		initEReference(getModel_Applications(), this.getApplication(), null, "Applications", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getApplication_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Application.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
