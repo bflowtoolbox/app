@@ -668,13 +668,18 @@ public interface VcchartPackage extends EPackage {
 	int APPLICATION__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int APPLICATION__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Application</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int APPLICATION_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int APPLICATION_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Application</em>' class.
@@ -1173,6 +1178,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getApplication();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getApplication_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Document <em>Document</em>}'.
@@ -1576,6 +1586,11 @@ public interface VcchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass APPLICATION = eINSTANCE.getApplication();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute APPLICATION__SUBDIAGRAM = eINSTANCE.getApplication_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link vcchart.impl.DocumentImpl <em>Document</em>}' class.

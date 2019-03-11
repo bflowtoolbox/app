@@ -510,6 +510,14 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	public EClass getApplication() {
 		return applicationEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getApplication_Subdiagram() {
+		return (EAttribute) applicationEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -675,6 +683,7 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		participantEClass = createEClass(PARTICIPANT);
 
 		applicationEClass = createEClass(APPLICATION);
+		createEAttribute(applicationEClass, APPLICATION__SUBDIAGRAM);
 
 		documentEClass = createEClass(DOCUMENT);
 
@@ -770,7 +779,10 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		initEAttribute(getObjective_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		
 		initEReference(getModel_Participants(), this.getParticipant(), null, "Participants", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_Applications(), this.getApplication(), null, "Applications", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getApplication_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Application.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_Documents(), this.getDocument(), null, "Documents", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModel_Relations1(), this.getRelation1(), null, "Relations1", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModel_Relations2(), this.getRelation2(), null, "Relations2", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
