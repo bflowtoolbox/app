@@ -680,6 +680,9 @@
            <objectClass
                  name="vcchart.diagram.edit.parts.ObjectiveEditPart">
            </objectClass>
+           <objectClass
+                 name="vcchart.diagram.edit.parts.ApplicationEditPart">
+           </objectClass>
         </or>
      </visibility>
      </objectContribution>

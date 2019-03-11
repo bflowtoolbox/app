@@ -8,10 +8,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 import vcchart.Activity1;
 import vcchart.Activity2;
+import vcchart.Application;
 import vcchart.Objective;
 import vcchart.Product;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
+import vcchart.diagram.edit.parts.ApplicationEditPart;
 import vcchart.diagram.edit.parts.ObjectiveEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
 
@@ -29,6 +31,7 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		public Activity2 _activity2;
 		public Product _product;
 		public Objective _objective;
+		public Application _application;
 	}
 	
 	/*
@@ -50,6 +53,8 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 			sd._product = (Product) ((ProductEditPart) part).resolveSemanticElement();
 		} else if (part instanceof ObjectiveEditPart) {
 			sd._objective = (Objective) ((ObjectiveEditPart) part).resolveSemanticElement();
+		} else if (part instanceof ApplicationEditPart) {
+			sd._application = (Application) ((ApplicationEditPart) part).resolveSemanticElement();
 		}
 		
 		return sd;
@@ -74,6 +79,9 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		if (sd._objective != null)
 			isEnabled &= sd._objective.getSubdiagram() != null;
 		
+		if (sd._application != null)
+			isEnabled &= sd._application.getSubdiagram() != null;
+		
 		return isEnabled;
 	}
 	
@@ -83,9 +91,10 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 	 */
 	@Override
 	protected void performModification(SelectionData sd, Void modificationValue) throws Exception {
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1, null, (e, v) -> e.setSubdiagram(null));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, null, (e, v) -> e.setSubdiagram(null));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,   null, (e, v) -> e.setSubdiagram(null));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective, null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1,   null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2,   null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,     null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective,   null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._application, null, (e, v) -> e.setSubdiagram(null));
 	}
 }

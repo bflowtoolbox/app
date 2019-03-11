@@ -10,10 +10,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 import vcchart.Activity1;
 import vcchart.Activity2;
+import vcchart.Application;
 import vcchart.Objective;
 import vcchart.Product;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
+import vcchart.diagram.edit.parts.ApplicationEditPart;
 import vcchart.diagram.edit.parts.ObjectiveEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
 import vcchart.diagram.part.VcDiagramEditorPlugin;
@@ -34,6 +36,7 @@ public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<Vc
 		public Product _product;
 		public Objective _objective;
 		public ShapeNodeEditPart _selectedActivity;
+		public Application _application;
 	}
 
 	/*
@@ -67,6 +70,7 @@ public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<Vc
 		Activity2 activity2 = null;
 		Product product = null;
 		Objective objective = null;
+		Application application = null;
 		
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
@@ -84,6 +88,9 @@ public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<Vc
 			} else if (selObj instanceof ObjectiveEditPart) {
 				selectedEditPart = (ShapeNodeEditPart) selObj;
 				objective = (Objective) selectedEditPart.getPrimaryView().getElement();
+			} else if (selObj instanceof ApplicationEditPart) {
+				selectedEditPart = (ApplicationEditPart) selObj;
+				application = (Application) selectedEditPart.getPrimaryView().getElement();
 			}
 		}
 		
@@ -92,6 +99,7 @@ public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<Vc
 		sd._activity2 = activity2;
 		sd._product = product;
 		sd._objective = objective;
+		sd._application = application;
 		
 		return sd;
 	}
@@ -103,7 +111,8 @@ public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<Vc
 	@Override
 	protected boolean isEnabled(SelectionData sd) {
 		return sd._activity1 != null || sd._activity2 != null 
-				|| sd._product != null || sd._objective != null
+		      || sd._product != null || sd._objective != null
+		      || sd._application != null
 				;
 	}
 
@@ -124,9 +133,10 @@ public class VcInsertSubdiagramAction extends AbstractInsertDiagramLinkAction<Vc
 	 */
 	@Override
 	protected void performModification(SelectionData sd, String path) throws Exception {
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1, path, (e, v) -> e.setSubdiagram(v));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, path, (e, v) -> e.setSubdiagram(v));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product  , path, (e, v) -> e.setSubdiagram(v));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective, path, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1,   path, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2,   path, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product  ,   path, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective,   path, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._application, path, (e, v) -> e.setSubdiagram(v));
 	}
 }

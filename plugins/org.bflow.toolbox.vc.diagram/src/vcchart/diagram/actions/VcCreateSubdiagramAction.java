@@ -7,10 +7,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 import vcchart.Activity1;
 import vcchart.Activity2;
+import vcchart.Application;
 import vcchart.Objective;
 import vcchart.Product;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
+import vcchart.diagram.edit.parts.ApplicationEditPart;
 import vcchart.diagram.edit.parts.ObjectiveEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
 
@@ -43,6 +45,7 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 		public Activity2 _activity2;
 		public Product _product;
 		public Objective _objective;
+		public Application _application;
 	}
 
 	/*
@@ -57,6 +60,7 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 		Activity2 activity2 = null;
 		Product product = null;
 		Objective objective = null;
+		Application application = null;
 		
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
@@ -70,6 +74,8 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 				product = (Product) ((ProductEditPart) selObj).getPrimaryView().getElement();
 			} else if (selObj instanceof ObjectiveEditPart) {
 				objective = (Objective) ((ObjectiveEditPart) selObj).getPrimaryView().getElement();
+			} else if (selObj instanceof ApplicationEditPart) {
+				application = (Application) ((ApplicationEditPart) selObj).getPrimaryView().getElement();
 			}
 		}
 		
@@ -77,6 +83,7 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 		sd._activity2 = activity2;
 		sd._product = product;
 		sd._objective = objective;
+		sd._application = application;
 		
 		return sd;
 	}
@@ -88,7 +95,8 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 	@Override
 	protected boolean isEnabled(SelectionData sd) {
 		return sd._activity1 != null || sd._activity2 != null 
-				|| sd._product != null || sd._objective != null
+		      || sd._product != null || sd._objective != null
+		      || sd._application != null
 				;
 	}
 	
@@ -98,9 +106,10 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 	 */
 	@Override
 	protected void performModification(SelectionData sd, String value) throws Exception {
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1, value, (e, v) -> e.setSubdiagram(v));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2, value, (e, v) -> e.setSubdiagram(v));	
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,   value, (e, v) -> e.setSubdiagram(v));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective, value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1,   value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2,   value, (e, v) -> e.setSubdiagram(v));	
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,     value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective,   value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._application, value, (e, v) -> e.setSubdiagram(value));
 	}
 }
