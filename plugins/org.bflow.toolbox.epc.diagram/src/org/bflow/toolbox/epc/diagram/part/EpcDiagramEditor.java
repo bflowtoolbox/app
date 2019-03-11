@@ -378,7 +378,10 @@ public class EpcDiagramEditor extends BflowDiagramEditor implements
 		}
 	}
 
-	/** Sets the editor dirty. */
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor#firePropertyChanged()
+	 */
 	public void firePropertyChanged() {
 		this.firePropertyChange(EpcDiagramEditor.PROP_DIRTY);
 	}
