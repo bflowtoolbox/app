@@ -16,7 +16,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import oepc.diagram.edit.parts.OEPCEditPart;
 
 /**
- * Implements {@link IAction} to provide the BPMN model conversion action.
+ * Implements {@link IAction} to provide the oEPC-BPMN model conversion action.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2018-10-07
@@ -26,7 +26,7 @@ import oepc.diagram.edit.parts.OEPCEditPart;
 public class ConvertOepcToBpmnDiagramAction extends AbstractConvertDiagramAction {
 
 	/** Action id */
-	public static final String Id = "org.bflow.toolbox.bpmn.interop.actions.convertToBpmn"; //$NON-NLS-1$
+	public static final String Id = "org.bflow.toolbox.bpmn.interop.actions.convertOepcToBpmn"; //$NON-NLS-1$
 	
 	/**
 	 * Initializes the new instance.

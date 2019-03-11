@@ -19,7 +19,7 @@ import oepc.diagram.edit.parts.OEPCEditPart;
 public class ConvertOepcToEepcDiagramAction extends AbstractConvertDiagramAction {
 
 	/** Action id */
-	public static final String Id = "org.bflow.toolbox.bpmn.interop.actions.convertToEpc"; //$NON-NLS-1$
+	public static final String Id = "org.bflow.toolbox.bpmn.interop.actions.convertOepcToEpc"; //$NON-NLS-1$
 	
 	/**
 	 * Initializes the new instance.

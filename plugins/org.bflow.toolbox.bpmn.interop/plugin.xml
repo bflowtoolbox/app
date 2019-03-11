@@ -27,12 +27,12 @@
             </partMenuGroup>
             <partAction
                   global="false"
-                  id="org.bflow.toolbox.bpmn.interop.actions.convertToBpmn"
+                  id="org.bflow.toolbox.bpmn.interop.actions.convertOepcToBpmn"
                   menubarPath="/diagramMenu/conversionMenu/exportGroup">
             </partAction>
             <partAction
                   global="false"
-                  id="org.bflow.toolbox.bpmn.interop.actions.convertToEpc"
+                  id="org.bflow.toolbox.bpmn.interop.actions.convertOepcToEpc"
                   menubarPath="/diagramMenu/conversionMenu/exportGroup">
             </partAction>
          </partContribution>
