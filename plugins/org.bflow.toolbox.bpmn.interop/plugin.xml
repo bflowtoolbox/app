@@ -36,6 +36,28 @@
                   menubarPath="/diagramMenu/conversionMenu/exportGroup">
             </partAction>
          </partContribution>
+         <partContribution
+               class="org.bflow.toolbox.epc.diagram.part.EpcDiagramEditor">
+            <partMenuGroup
+                  id="conversionGroup"
+                  menubarPath="/diagramMenu/"
+                  separator="true">
+            </partMenuGroup>
+            <partMenu
+                  id="conversionMenu"
+                  menubarPath="/diagramMenu/conversionGroup">
+            </partMenu>
+            <partMenuGroup
+                  id="exportGroup"
+                  menubarPath="/diagramMenu/conversionMenu/"
+                  separator="true">
+            </partMenuGroup>
+            <partAction
+                  global="false"
+                  id="org.bflow.toolbox.bpmn.interop.actions.convertEepcToBpmn"
+                  menubarPath="/diagramMenu/conversionMenu/exportGroup">
+            </partAction>
+         </partContribution>
       </contributionItemProvider>
    </extension>
 

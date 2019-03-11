@@ -7,33 +7,31 @@ import org.eclipse.gmf.runtime.common.ui.util.IWorkbenchPartDescriptor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import oepc.diagram.edit.parts.OEPCEditPart;
-
 /**
- * Implements {@link IAction} to provide the oEPC-eEPC model conversion action.
+ * Implements {@link IAction} to provide the eEPC-BPMN model conversion action.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 2019-02-16
+ * @since 2019-03-11
  *
  */
-public class ConvertOepcToEepcDiagramAction extends AbstractConvertDiagramAction {
-
+public class ConvertEepcToBpmnDiagramAction extends AbstractConvertDiagramAction {
+	
 	/** Action id */
-	public static final String Id = "org.bflow.toolbox.bpmn.interop.actions.convertOepcToEpc"; //$NON-NLS-1$
+	public static final String Id = "org.bflow.toolbox.bpmn.interop.actions.convertEepcToBpmn"; //$NON-NLS-1$
 	
 	/**
 	 * Initializes the new instance.
 	 * 
 	 * @param partDescriptor Part descriptor
 	 */
-	public ConvertOepcToEepcDiagramAction(IWorkbenchPartDescriptor partDescriptor) {
+	public ConvertEepcToBpmnDiagramAction(IWorkbenchPartDescriptor partDescriptor) {
 		super(partDescriptor, Id);
 		
-		setText(Messages.ConvertToEpcDiagramAction_Text);
-		setToolTipText(Messages.ConvertToEpcDiagramAction_ToolTipText);
+		setText(Messages.ConvertToBpmnDiagramAction_Text);
+		setToolTipText(Messages.ConvertToBpmnDiagramAction_ToolTipText);
 		
 		ImageDescriptor imgDesc = BpmnInteropPlugin.imageDescriptorFromPlugin(
-				"org.bflow.toolbox.diagram.extensions", "/icons/EpcIcon.png"); //$NON-NLS-1$ //$NON-NLS-2$
+				"org.bflow.toolbox.bpmn.diagram", "/icons/bpmn2process2.png"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		setImageDescriptor(imgDesc);
 	}
@@ -44,24 +42,24 @@ public class ConvertOepcToEepcDiagramAction extends AbstractConvertDiagramAction
 	 */
 	@Override
 	protected boolean onCalculateEnabled(Object selectedObject) {
-		return (selectedObject instanceof EpcEditPart || selectedObject instanceof OEPCEditPart);
+		return selectedObject instanceof EpcEditPart;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.bflow.toolbox.bpmn.interop.AbstractConvertDiagramAction#getTargetFile(java.io.File)
 	 */
 	@Override
 	protected File getTargetFile(File sourceFile) {
-		return getTargetFile(sourceFile, ".epc");
+		return getTargetFile(sourceFile, ".bpmn");
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.bflow.toolbox.bpmn.interop.AbstractConvertDiagramAction#getExportDescriptionName()
 	 */
 	@Override
 	protected String getExportDescriptionName() {
-		return "EPC"; // Name of the export description
+		return "BPMN";
 	}
 }

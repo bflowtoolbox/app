@@ -26,9 +26,11 @@ public class BpmnInteropContributionItemProvider extends AbstractContributionIte
 		if (actionId.equals(ConvertOepcToBpmnDiagramAction.Id))
 			return new ConvertOepcToBpmnDiagramAction(partDescriptor);
 		
-		if (actionId.equals(ConvertOepcToEepcDiagramAction.Id)) {
+		if (actionId.equals(ConvertOepcToEepcDiagramAction.Id))
 			return new ConvertOepcToEepcDiagramAction(partDescriptor);
-		}
+		
+		if (actionId.equals(ConvertEepcToBpmnDiagramAction.Id))
+			return new ConvertEepcToBpmnDiagramAction(partDescriptor);
 		
 		return super.createAction(actionId, partDescriptor);
 	}
