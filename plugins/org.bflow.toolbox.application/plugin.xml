@@ -34,18 +34,18 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.ui.ide.workbench"
-            name="bflow* Toolbox 1.5.0">
+            name="bflow* Toolbox 1.5.4">
          <property
                name="windowImages"
                value="platform:/plugin/org.bflow.toolbox.product/icons/professional/bee16.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee32.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee48.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee64.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee128.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee256.png">
          </property>
          <property
                name="appName"
-               value="bflow* Toolbox 1.5.0">
+               value="bflow* Toolbox 1.5.4">
          </property>
          <property
                name="startupForegroundColor"
-               value="c1bc1f">
+               value="000000">
          </property>
          <property
                name="startupMessageRect"

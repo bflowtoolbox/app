@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="bflow* Toolbox 1.5.0" uid="org.bflow.toolbox.application.product" id="org.bflow.toolbox.application.product" application="org.eclipse.ui.ide.workbench" version="1.5.0.qualifier" useFeatures="false" includeLaunchers="true">
+<product name="bflow* Toolbox 1.5.4" uid="org.bflow.toolbox.application.product" id="org.bflow.toolbox.application.product" application="org.eclipse.ui.ide.workbench" version="1.5.4.qualifier" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.bflow.toolbox.product/icons/professional/bee128.png"/>
       <text>
-         Bflow* Toolbox 1.5.0
+         Bflow* Toolbox 1.5.4
       </text>
    </aboutInfo>
 
@@ -28,7 +28,7 @@
       location="org.bflow.toolbox.product"
       startupProgressRect="2,290,450,10"
       startupMessageRect="7,265,320,20"
-      startupForegroundColor="c1bc1f" />
+      startupForegroundColor="000000" />
    <launcher name="bflow">
       <win useIco="false">
          <bmp
