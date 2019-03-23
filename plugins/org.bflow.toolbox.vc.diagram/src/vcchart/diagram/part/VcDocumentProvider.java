@@ -661,20 +661,44 @@ public class VcDocumentProvider extends AbstractDocumentProvider implements
 								0,
 								"Incorrect document used: " + document + " instead of org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDiagramDocument", null)); //$NON-NLS-1$ //$NON-NLS-2$
 			}
-			IDiagramDocument diagramDocument = (IDiagramDocument) document;
-			final Resource newResource = diagramDocument.getEditingDomain()
-					.getResourceSet().createResource(newResoruceURI);
-			final Diagram diagramCopy = (Diagram) EcoreUtil
-					.copy(diagramDocument.getDiagram());
+			final IDiagramDocument diagramDocument = (IDiagramDocument) document;
+			final Resource newResource = diagramDocument
+											.getEditingDomain()
+											.getResourceSet()
+											.createResource(newResoruceURI);
+			
+			// 2019-03-23 AST
+			// The method EcoreUtil.copy() copies the elements of the diagram as references 
+			// and not as full stand-alone clones. This leads to the behavior that if a referenced 
+			// element is modified, the copied element is also changed even when it's not part 
+			// of the original model file.
+			// To solve this, we don't use the copy method and add the original eobjects as clones
+			// ourselves to the new diagram file.
+			//
+			// Important note:
+			// This change goes back to the SVN commit 378 from Jörn Hartmann (see sourceforge.net)
+			
+			// Original code
+			// final Diagram diagramCopy = (Diagram) EcoreUtil.copy(diagramDocument.getDiagram());
+			
+			// New code
+			final Diagram originalDiagram = diagramDocument.getDiagram();
+									
 			try {
 				new AbstractTransactionalCommand(
-						diagramDocument.getEditingDomain(), NLS.bind(
+						diagramDocument.getEditingDomain(), 
+						NLS.bind(
 								Messages.VcDocumentProvider_SaveAsOperation,
-								diagramCopy.getName()), affectedFiles) {
-					protected CommandResult doExecuteWithResult(
-							IProgressMonitor monitor, IAdaptable info)
+								diagramDocument.getDiagram().getName()
+								), affectedFiles) {
+					protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info)
 							throws ExecutionException {
-						newResource.getContents().add(diagramCopy);
+						// Original code (see comments above)
+						// newResource.getContents().add(diagramCopy);
+						
+						// New code
+						newResource.getContents().add(originalDiagram.getElement());
+						newResource.getContents().add(originalDiagram);
 						return CommandResult.newOKCommandResult();
 					}
 				}.execute(monitor, null);
