@@ -4,7 +4,7 @@
 <product name="bflow* Toolbox 1.5.0" uid="org.bflow.toolbox.application.product" id="org.bflow.toolbox.application.product" application="org.eclipse.ui.ide.workbench" version="1.5.0.qualifier" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/org.bflow.toolbox.product/icons/bee128.png"/>
+      <image path="/org.bflow.toolbox.product/icons/professional/bee128.png"/>
       <text>
          Bflow* Toolbox 1.5.0
       </text>
@@ -22,7 +22,7 @@
       </vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.bflow.toolbox.product/icons/bee16a.png" i32="/org.bflow.toolbox.product/icons/bee32.png" i48="/org.bflow.toolbox.product/icons/bee48.png" i64="/org.bflow.toolbox.product/icons/bee64.png" i128="/org.bflow.toolbox.product/icons/bee128.png" i256="/org.bflow.toolbox.product/icons/bee256.png"/>
+   <windowImages i16="/org.bflow.toolbox.product/icons/professional/bee16.png" i32="/org.bflow.toolbox.product/icons/professional/bee32.png" i48="/org.bflow.toolbox.product/icons/professional/bee48.png" i64="/org.bflow.toolbox.product/icons/professional/bee64.png" i128="/org.bflow.toolbox.product/icons/professional/bee128.png" i256="/org.bflow.toolbox.product/icons/professional/bee256.png"/>
 
    <splash
       location="org.bflow.toolbox.product"
@@ -32,13 +32,13 @@
    <launcher name="bflow">
       <win useIco="false">
          <bmp
-            winSmallHigh="/org.bflow.toolbox.product/icons/bee16_32bit.bmp"
-            winSmallLow="/org.bflow.toolbox.product/icons/bee16_8bit.bmp"
-            winMediumHigh="/org.bflow.toolbox.product/icons/bee32_32bit.bmp"
-            winMediumLow="/org.bflow.toolbox.product/icons/bee32_8bit.bmp"
-            winLargeHigh="/org.bflow.toolbox.product/icons/bee48_32bit.bmp"
-            winLargeLow="/org.bflow.toolbox.product/icons/bee48_8bit.bmp"
-            winExtraLargeHigh="/org.bflow.toolbox.product/icons/bee256_32bit.bmp"/>
+            winSmallHigh="/org.bflow.toolbox.product/icons/professional/bee16-32.bmp"
+            winSmallLow="/org.bflow.toolbox.product/icons/professional/bee16-8.bmp"
+            winMediumHigh="/org.bflow.toolbox.product/icons/professional/bee32-32.bmp"
+            winMediumLow="/org.bflow.toolbox.product/icons/professional/bee32-8.bmp"
+            winLargeHigh="/org.bflow.toolbox.product/icons/professional/bee48-32.bmp"
+            winLargeLow="/org.bflow.toolbox.product/icons/professional/bee48-8.bmp"
+            winExtraLargeHigh="/org.bflow.toolbox.product/icons/professional/bee256-32.bmp"/>
       </win>
    </launcher>
 
@@ -46,6 +46,7 @@
    <vm>
       <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
    </vm>
+
 
    <plugins>
       <plugin id="com.google.inject"/>
