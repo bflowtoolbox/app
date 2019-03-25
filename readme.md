@@ -6,7 +6,7 @@ tbd
 ## Development
 ### Minimum required
 
-1. Download the "Eclipse IDE for Eclipse Committers" (x86 preferred) from eclipse.org
+1. Download the "Eclipse IDE for Eclipse Committers" (x86/32 bit required) from eclipse.org. Eclipse 2018-09 (4.9) is the latest version that supports 32 bit. Latest active download link [here](https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2018-09/R/eclipse-committers-2018-09-win32.zip)
 2. Download and install the Java JDK 1.8 (x86 preferred) if not already done.
 3. Install "Graphical Modeling Framework (GMF) Runtime SDK	1.12.0.201806010809" (section Modelling) as Eclipse plug-in.
 4. Install "Xpand SDK	2.2.0.v201605260315" (section Modelling) as Eclipse plug-in.
