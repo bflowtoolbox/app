@@ -811,6 +811,16 @@
         </menu>
      </objectContribution>
   </extension>
+  <extension
+        point="org.eclipse.ui.views">
+     <view
+           allowMultiple="false"
+           class="oepc.diagram.views.OepcAssetsViewPart"
+           id="org.bflow.toolbox.oepc.diagram.views.assets"
+           name="Assets"
+           restorable="true">
+     </view>
+  </extension>
 	
 	
 
