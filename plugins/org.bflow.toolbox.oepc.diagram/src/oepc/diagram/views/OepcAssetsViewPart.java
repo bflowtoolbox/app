@@ -1,10 +1,24 @@
 package oepc.diagram.views;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Vector;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
+import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
+import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -28,7 +42,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
@@ -46,12 +62,18 @@ import org.eclipse.ui.part.ViewPart;
  *
  */
 public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
-
 	public static final String VIEW_ID = "org.bflow.toolbox.oepc.diagram.views.assets"; //$NON-NLS-1$
 	
+	private static final String ELEMENT_LABEL_PREFIX = "Ausgewähltes Element: ";
+	private static final String ELEMENT_LABEL_NO_SELECTION = "<Kein Element selektiert>";
+	
+	private IEditorPart diagramEditor;
 	private IGraphicalEditPart selectedDiagramElement;
+	
+	private Map<IFile, File> directoryMap;
+	private Map<IGraphicalEditPart, List<Association>> associationMap;
 
-	private Label currentElement;
+	private Label selectedDiagramElementName;
 	private Table attributeTable;
 	private TableViewer viewer;
 	private Button btnAdd;
@@ -61,6 +83,13 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	@Override
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
+		
+		diagramEditor = site.getPage().getActiveEditor();
+		directoryMap = new HashMap<>();
+		associationMap = new HashMap<>();
+		
+		aquireFolderForDiagram();
+		
 		site.getPage().addSelectionListener(this);
 	}	
 	
@@ -95,6 +124,13 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				showSuccessOnButtonClick(btnAdd);
+				
+				File diagramFolder = aquireFolderForDiagram();
+				File associatedFile = createFileWithRandomContent(diagramFolder);
+				Association association = new Association(selectedDiagramElement, associatedFile);
+				
+				addToAssociationMap(association);
+				viewer.add(association);
 			}
 		});
 
@@ -121,8 +157,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			}
 		});
 		
-		currentElement = new Label(controlPane, SWT.NONE);
-		currentElement.setText("Ausgewähltes Element:");
+		selectedDiagramElementName = new Label(controlPane, SWT.NONE);
+		updateSelectedDiagramElementName(selectedDiagramElement);
 
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 
@@ -136,11 +172,15 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				StructuredSelection selection = (StructuredSelection) e.getSelection();
 				Association association = (Association) selection.getFirstElement();
 				
-				String elementId = getElementId(selectedDiagramElement);
-				if(elementId == null) elementId = association.diagramElementId;
-				
 				MessageDialog.openInformation(attributeTable.getShell(), "Opening File", 
-						"Opening file " + association.filePath + " of element " + association.diagramElementId);				
+						"Opening file " + association.associatedFile.getName() + " of element " + association.getElementName());
+				
+				try {
+					Desktop.getDesktop().open(association.associatedFile);
+				} catch (IOException ioe) {
+					// TODO Auto-generated catch block
+					ioe.printStackTrace();
+				}
 			}
 		});
 
@@ -174,9 +214,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		attributeTable.setLayoutData(gridData);
 		attributeTable.addKeyListener(new TableViewerKeyListener());
 		
-		for(int i = 0; i < 10; i++)
-			viewer.add(new Association("Element " + i, "C:\\pfad\\zu\\datei\\nummer\\" + i + "\\"));
-		
 		parent.layout();
 		parent.pack();
 		org.eclipse.swt.graphics.Point parentSize = parent.getSize();
@@ -187,10 +224,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		sc.setExpandVertical(true);
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
-	 */
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub		
@@ -228,6 +261,15 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		Object firstElement = structuredSelection.getFirstElement();
 		if(!(firstElement instanceof IGraphicalEditPart)) return;
 		selectedDiagramElement = (IGraphicalEditPart) firstElement;
+		
+		updateSelectedDiagramElementName(selectedDiagramElement);
+	}
+	
+	private void updateSelectedDiagramElementName(IGraphicalEditPart selectedDiagramElement) {
+		String name = getElementName(selectedDiagramElement);
+		String text = ELEMENT_LABEL_PREFIX + (!name.equals("") ? name : ELEMENT_LABEL_NO_SELECTION);		
+		selectedDiagramElementName.setText(text);
+		selectedDiagramElementName.requestLayout();
 	}
 	
 	private void disableView() {
@@ -239,30 +281,118 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		attributeTable.setEnabled(value);
 		btnAdd.setEnabled(value);
 		btnDel.setEnabled(value);
-		btnDelAll.setEnabled(false);
+		btnDelAll.setEnabled(value);
 	}
+	
+	private void addToAssociationMap(Association association) {
+		IGraphicalEditPart part = association.diagramElement;
+		
+		List<Association> associations = associationMap.get(part);
+		if(associations == null) associations = new Vector<>();
+
+		associations.add(association);
+		
+		associationMap.put(selectedDiagramElement, associations);
+	}
+	
+	
+	private File aquireFolderForDiagram() {
+		IFile currentlyOpenedFile = getCurrentlyOpenedFile(diagramEditor);
+		
+		if(directoryMap.containsKey(currentlyOpenedFile))
+			return directoryMap.get(currentlyOpenedFile);
+		
+		IPath path = currentlyOpenedFile.getRawLocation();
+		
+		String folderName = "." + path.removeFileExtension().lastSegment();
+		String pathString = path.removeLastSegments(1).append(folderName).toOSString();
+		
+		File folder = getOrCreateFolder(pathString);
+		directoryMap.put(currentlyOpenedFile, folder);
+		
+		return folder;
+	}
+	
+	
+	private IFile getCurrentlyOpenedFile(IWorkbenchPart part) {
+		if (!(part instanceof DiagramDocumentEditor)) return null;
+		IEditorInput input = ((DiagramDocumentEditor) part).getEditorInput();
+			
+		if (!(input instanceof IFileEditorInput)) return null;
+		IFile file = ((IFileEditorInput) input).getFile();
+
+		return file;
+	}
+	
+	
+	private File getOrCreateFolder(String path) {
+		File folder = new File(path);
+		if(!folder.exists() && !folder.isDirectory()) folder.mkdirs();
+		
+		return folder;
+	}
+	
+	
+	private static void showSuccessOnButtonClick(Button button) {
+		MessageDialog.openInformation(button.getShell(), "Button works!", button.getToolTipText() + " button works!");
+	}
+
 	
 	/**
 	 * Returns the unique id of the model element that is wrapped by 
 	 * the given {@code editPart}. If {@code editPart} is NULL, 
 	 * NULL is returned.
 	 */
-	private String getElementId(IGraphicalEditPart editPart) {
+	private static String getElementId(IGraphicalEditPart editPart) {
 		if (editPart == null) return null;
 		EObject eobj = editPart.resolveSemanticElement();
-		return EcoreUtil.getID(eobj);
+		return EMFCoreUtil.getProxyID(eobj);
 	}
 	
-	private static void showSuccessOnButtonClick(Button button) {
-		MessageDialog.openInformation(button.getShell(), "Button works!", button.getToolTipText() + " button works!");
+	
+	private static String getElementName(IGraphicalEditPart editPart) {
+		if (editPart == null) return "";
+		EObject eobj = editPart.resolveSemanticElement();
+		return EMFCoreUtil.getName(eobj);
 	}
-
+	
+	
+	private static File createFileWithRandomContent(File folder) {
+		Random r = new Random();
+		
+		byte[] nameBytes = new byte[32];
+		r.nextBytes(nameBytes);
+		String name = Base64.getEncoder().encodeToString(nameBytes) + ".txt";
+		
+		byte[] contentBytes = new byte[1024];
+		r.nextBytes(contentBytes);
+		String content = Base64.getEncoder().encodeToString(contentBytes);
+		
+		//StringBuilder sb = new StringBuilder(content)
+		
+		File file = new File(folder, name);
+		
+		try {
+			file.createNewFile();
+			
+			FileWriter fw = new FileWriter(file);
+			fw.write(content);
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return file;
+	}
+	
+	
 	private class AssociationViewerComparator extends ViewerComparator {
 		@Override
 		public int compare(Viewer viewer, Object o1, Object o2) {
 			return 0;
 		}
 	}
+	
 	
 	private class TableViewerKeyListener extends KeyAdapter {
 		@Override
@@ -278,6 +408,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		}
 	}
 	
+	
 	private class AssociationLabelProvider extends ColumnLabelProvider {
 		public static final int COLUMN_ONE = 0;
 		public static final int COLUMN_TWO = 1;		
@@ -291,18 +422,22 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		@Override
 		public String getText(Object object) {
 			Association association = (Association) object;
-			return column == COLUMN_ONE ? association.diagramElementId : association.filePath;
+			return column == COLUMN_ONE ? association.getElementName() : association.associatedFile.getAbsolutePath();
 		}		
 	}
 	
+	
 	private class Association {
-		public final String diagramElementId;
-		public final String filePath;
+		public final IGraphicalEditPart diagramElement;
+		public final File associatedFile;
 				
-		public Association(String diagramElementId, String filePath) {
-			this.diagramElementId = diagramElementId;
-			this.filePath = filePath;
+		public Association(IGraphicalEditPart diagramElement, File associatedFile) {
+			this.diagramElement = diagramElement;
+			this.associatedFile = associatedFile;
+		}
+		
+		public String getElementName() {
+			return OepcAssetsViewPart.getElementName(diagramElement);
 		}
 	}
-
 }
