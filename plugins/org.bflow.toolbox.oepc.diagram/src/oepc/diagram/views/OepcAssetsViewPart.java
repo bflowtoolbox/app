@@ -4,6 +4,9 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +34,12 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.DropTargetListener;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.URLTransfer;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -42,6 +51,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -64,14 +74,14 @@ import org.eclipse.ui.part.ViewPart;
 public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	public static final String VIEW_ID = "org.bflow.toolbox.oepc.diagram.views.assets"; //$NON-NLS-1$
 	
-	private static final String ELEMENT_LABEL_PREFIX = "Ausgewähltes Element: ";
+	private static final String ELEMENT_LABEL_PREFIX = "Ausgewähltes Diagrammelement: ";
 	private static final String ELEMENT_LABEL_NO_SELECTION = "<Kein Element selektiert>";
 	
 	private IEditorPart diagramEditor;
 	private IGraphicalEditPart selectedDiagramElement;
 	
 	private Map<IFile, File> directoryMap;
-	private Map<IGraphicalEditPart, List<Association>> associationMap;
+	private Map<String, List<Association>> associationMap;
 
 	private Label selectedDiagramElementName;
 	private Table attributeTable;
@@ -89,6 +99,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		associationMap = new HashMap<>();
 		
 		aquireFolderForDiagram();
+		updateSelectedElement(site.getPage().getSelection());
 		
 		site.getPage().addSelectionListener(this);
 	}	
@@ -97,7 +108,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	public void createPartControl(Composite container) {
 		ScrolledComposite sc = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
 		
-		final Composite parent = new Composite(sc, SWT.BORDER);
+		Composite parent = new Composite(sc, SWT.BORDER);
 		GridLayout parLayout = new GridLayout(1, false);
 		parent.setLayout(parLayout);
 
@@ -123,8 +134,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				showSuccessOnButtonClick(btnAdd);
-				
 				File diagramFolder = aquireFolderForDiagram();
 				File associatedFile = createFileWithRandomContent(diagramFolder);
 				Association association = new Association(selectedDiagramElement, associatedFile);
@@ -141,7 +150,20 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		btnDel.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				showSuccessOnButtonClick(btnDel);
+				ISelection selection = viewer.getSelection();
+				if(selection.isEmpty() || !(selection instanceof StructuredSelection)) return;
+				StructuredSelection structuredSelection = (StructuredSelection) selection;
+				
+				for (Object o : structuredSelection.toArray()) {
+					if(!(o instanceof Association)) continue;
+					Association association = (Association) o;
+					
+					boolean success = deleteFileAndCatchException(association.associatedFile);
+					if(!success) continue;
+					
+					removeFromAssociationMap(association);
+					viewer.remove(association);
+				}
 			}
 		});
 
@@ -153,7 +175,18 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		btnDelAll.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				showSuccessOnButtonClick(btnDelAll);
+				TableItem[] items = viewer.getTable().getItems();
+				
+				for (TableItem item : items) {
+					if(!(item.getData() instanceof Association)) continue;
+					Association association = (Association) item.getData();
+					
+					boolean success = deleteFileAndCatchException(association.associatedFile);
+					if(!success) continue;
+					
+					removeFromAssociationMap(association);
+					viewer.remove(association);
+				}
 			}
 		});
 		
@@ -172,15 +205,73 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				StructuredSelection selection = (StructuredSelection) e.getSelection();
 				Association association = (Association) selection.getFirstElement();
 				
-				MessageDialog.openInformation(attributeTable.getShell(), "Opening File", 
-						"Opening file " + association.associatedFile.getName() + " of element " + association.getElementName());
-				
 				try {
 					Desktop.getDesktop().open(association.associatedFile);
 				} catch (IOException ioe) {
-					// TODO Auto-generated catch block
 					ioe.printStackTrace();
 				}
+			}
+		});
+		
+		viewer.addDropSupport(DND.DROP_COPY | DND.DROP_LINK, 
+				new Transfer[] { FileTransfer.getInstance(), URLTransfer.getInstance() }, 
+				new DropTargetListener() {
+			private final URLTransfer urlTransfer = URLTransfer.getInstance();
+			private final FileTransfer fileTransfer = FileTransfer.getInstance();			
+			
+			@Override
+			public void dropAccept(DropTargetEvent event) {
+				System.out.println("Drop accepting: " + event.toString());
+			}
+			
+			@Override
+			public void drop(DropTargetEvent event) {
+				if(!fileTransfer.isSupportedType(event.currentDataType)) return;
+				
+				Object o = fileTransfer.nativeToJava(event.currentDataType);
+				String[] paths = (String[]) o;
+				
+				if(paths == null) return;
+				
+				File[] files = Arrays.stream(paths).map(path -> new File(path)).toArray(File[]::new);
+				File folder = aquireFolderForDiagram();
+
+				Arrays.stream(files).forEach(file -> {
+					try {
+						File newFile = copyFileToFolder(folder, file);
+						Association association = new Association(selectedDiagramElement, newFile);
+						addToAssociationMap(association);
+						viewer.add(association);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				});
+			}
+			
+			@Override
+			public void dragOver(DropTargetEvent event) {
+				System.out.println("Drag over " + event.toString());
+				
+				event.feedback = DND.FEEDBACK_SCROLL;
+				if(event.item != null) event.feedback |= DND.FEEDBACK_INSERT_AFTER;
+				else 				   event.feedback |= DND.FEEDBACK_SELECT;
+			}
+			
+			@Override
+			public void dragOperationChanged(DropTargetEvent event) {
+				System.out.println("Drag operation changed " + event.toString());
+			}
+			
+			@Override
+			public void dragLeave(DropTargetEvent event) {
+			}
+			
+			@Override
+			public void dragEnter(DropTargetEvent event) {
+				if(urlTransfer.isSupportedType(event.currentDataType))
+					event.detail = DND.DROP_LINK;
+				if(fileTransfer.isSupportedType(event.currentDataType))
+					event.detail = DND.DROP_COPY;
 			}
 		});
 
@@ -254,15 +345,18 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		if (!(part instanceof DiagramEditor)) {
 			return;
 		}
-		
-		if(selection.isEmpty() || !(selection instanceof StructuredSelection)) return;
+
+		updateSelectedElement(selection);
+		updateSelectedDiagramElementName(selectedDiagramElement);
+	}
+	
+	private void updateSelectedElement(ISelection selection) {
+		if(selection == null || selection.isEmpty() || !(selection instanceof StructuredSelection)) return;
 		StructuredSelection structuredSelection = (StructuredSelection) selection;
 		
 		Object firstElement = structuredSelection.getFirstElement();
 		if(!(firstElement instanceof IGraphicalEditPart)) return;
 		selectedDiagramElement = (IGraphicalEditPart) firstElement;
-		
-		updateSelectedDiagramElementName(selectedDiagramElement);
 	}
 	
 	private void updateSelectedDiagramElementName(IGraphicalEditPart selectedDiagramElement) {
@@ -286,15 +380,24 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	
 	private void addToAssociationMap(Association association) {
 		IGraphicalEditPart part = association.diagramElement;
+		String elementId = getElementId(part);
 		
-		List<Association> associations = associationMap.get(part);
+		List<Association> associations = associationMap.get(elementId);
 		if(associations == null) associations = new Vector<>();
-
 		associations.add(association);
 		
-		associationMap.put(selectedDiagramElement, associations);
+		associationMap.put(elementId, associations);
 	}
 	
+	private boolean removeFromAssociationMap(Association association) {
+		IGraphicalEditPart part = association.diagramElement;
+		String elementId = getElementId(part);
+		
+		List<Association> associations = associationMap.get(elementId);
+		boolean success = associations.remove(association);
+		
+		return success;
+	}
 	
 	private File aquireFolderForDiagram() {
 		IFile currentlyOpenedFile = getCurrentlyOpenedFile(diagramEditor);
@@ -313,7 +416,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return folder;
 	}
 	
-	
 	private IFile getCurrentlyOpenedFile(IWorkbenchPart part) {
 		if (!(part instanceof DiagramDocumentEditor)) return null;
 		IEditorInput input = ((DiagramDocumentEditor) part).getEditorInput();
@@ -324,19 +426,12 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return file;
 	}
 	
-	
 	private File getOrCreateFolder(String path) {
 		File folder = new File(path);
 		if(!folder.exists() && !folder.isDirectory()) folder.mkdirs();
 		
 		return folder;
 	}
-	
-	
-	private static void showSuccessOnButtonClick(Button button) {
-		MessageDialog.openInformation(button.getShell(), "Button works!", button.getToolTipText() + " button works!");
-	}
-
 	
 	/**
 	 * Returns the unique id of the model element that is wrapped by 
@@ -349,32 +444,22 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return EMFCoreUtil.getProxyID(eobj);
 	}
 	
-	
 	private static String getElementName(IGraphicalEditPart editPart) {
 		if (editPart == null) return "";
 		EObject eobj = editPart.resolveSemanticElement();
 		return EMFCoreUtil.getName(eobj);
 	}
 	
-	
 	private static File createFileWithRandomContent(File folder) {
 		Random r = new Random();
-		
-		byte[] nameBytes = new byte[32];
-		r.nextBytes(nameBytes);
-		String name = Base64.getEncoder().encodeToString(nameBytes) + ".txt";
 		
 		byte[] contentBytes = new byte[1024];
 		r.nextBytes(contentBytes);
 		String content = Base64.getEncoder().encodeToString(contentBytes);
 		
-		//StringBuilder sb = new StringBuilder(content)
-		
-		File file = new File(folder, name);
-		
+		File file = null;
 		try {
-			file.createNewFile();
-			
+			file = File.createTempFile("rnd-", ".txt", folder);
 			FileWriter fw = new FileWriter(file);
 			fw.write(content);
 			fw.close();
@@ -385,14 +470,37 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return file;
 	}
 	
+	private static File copyFileToFolder(File folder, File file) throws IOException {
+		if(!folder.isDirectory()) throw new IllegalArgumentException("The first argument has to be a folder!");
+		if(!file.isFile()) throw new IllegalArgumentException("The second argument has to be a file!");
+		
+		String fileName = file.getName();
+		File targetFile = new File(folder, fileName);
+
+		Files.copy(file.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		
+		return targetFile;
+	}
 	
-	private class AssociationViewerComparator extends ViewerComparator {
+	private static boolean deleteFileAndCatchException(File file) {
+		boolean success = false;
+		
+		try {
+			success = file.delete();
+		} catch (SecurityException e) {
+			String message = e.getLocalizedMessage();
+			MessageDialog.openError(null, "Datei kann nicht gelöscht werden", message);
+		}
+		
+		return success;
+	}
+	
+ 	private class AssociationViewerComparator extends ViewerComparator {
 		@Override
 		public int compare(Viewer viewer, Object o1, Object o2) {
 			return 0;
 		}
 	}
-	
 	
 	private class TableViewerKeyListener extends KeyAdapter {
 		@Override
@@ -407,7 +515,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				attributeTable.setSelection(selectionIndex);
 		}
 	}
-	
 	
 	private class AssociationLabelProvider extends ColumnLabelProvider {
 		public static final int COLUMN_ONE = 0;
@@ -425,7 +532,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			return column == COLUMN_ONE ? association.getElementName() : association.associatedFile.getAbsolutePath();
 		}		
 	}
-	
 	
 	private class Association {
 		public final IGraphicalEditPart diagramElement;
