@@ -14,9 +14,7 @@ import java.util.Vector;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -60,6 +58,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.ViewPart;
 
+import oepc.diagram.part.OepcDiagramEditor;
+
 /**
  * Implements the view part to show/modify assets of an OEPC diagram.
  * 
@@ -74,6 +74,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	
 	private static final String ELEMENT_LABEL_PREFIX = "Ausgewähltes Diagrammelement: ";
 	private static final String ELEMENT_LABEL_NO_SELECTION = "<Kein Element selektiert>";
+	
+	private boolean isEnabled = true;
 	
 	private IEditorPart diagramEditor;
 	private IGraphicalEditPart selectedDiagramElement;
@@ -92,16 +94,19 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
 		
+		isEnabled = isEditorOepcDiagramEditor(site.getPage().getActiveEditor());
+		
 		diagramEditor = site.getPage().getActiveEditor();
 		directoryMap = new HashMap<>();
 		associationMap = new HashMap<>();
 		
+		site.getPage().addSelectionListener(this);
+		
 		aquireFolderForDiagram();
 		updateSelectedElement(site.getPage().getSelection());
-		
-		site.getPage().addSelectionListener(this);
-	}	
+	}
 	
+
 	@Override
 	public void createPartControl(Composite container) {
 		ScrolledComposite sc = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
@@ -319,6 +324,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		sc.setMinSize(parentSize);
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
+		
+		if (!isEnabled) disableView();
 	}
 	
 	@Override
@@ -327,31 +334,21 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	}
 	
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {// Check if the active editor is a diagram editor. If not deactivate the view
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		IEditorPart activeEditorPart = part.getSite().getPage().getActiveEditor();
+		boolean isOepc = isEditorOepcDiagramEditor(activeEditorPart);
 		
-		// Handling MultiPageEditorPart
-		if (activeEditorPart instanceof MultiPageEditorPart) {
-			MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart)activeEditorPart;
-			activeEditorPart = (IEditorPart) multiPageEditorPart.getSelectedPage();
-		}	
-		
-		// Ensure that is a graphical editor
-		if (!(activeEditorPart instanceof GraphicalEditor)) {
+		if (!isOepc && !isEnabled)
+			return;
+		else if (!isOepc)
 			disableView();
-			return;
-		} 
-		
-		// Handling MultiPageEditorPart
-		if (part instanceof MultiPageEditorPart) {
-			MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart)part;
-			part = (IEditorPart) multiPageEditorPart.getSelectedPage();
-		}
-		
-		if (!(part instanceof DiagramEditor)) {
-			return;
-		}
+		else if (!isEnabled)
+			enableView();
 
+		if (!isEnabled)
+			return;
+		
+		aquireFolderForDiagram();
 		updateSelectedElement(selection);
 		updateSelectedDiagramElementName(selectedDiagramElement);
 	}
@@ -372,9 +369,17 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		selectedDiagramElementName.requestLayout();
 	}
 	
+	private void enableView() {
+		isEnabled = true;
+		
+		setUpControls(isEnabled);
+	}
+	
 	private void disableView() {
+		isEnabled = false;
+		
 		viewer.setItemCount(0);
-		setUpControls(false);
+		setUpControls(isEnabled);
 	}
 	
 	private void setUpControls(boolean value) {
@@ -431,6 +436,15 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		directoryMap.put(currentlyOpenedFile, folder);
 		
 		return folder;
+	}
+	
+	private static boolean isEditorOepcDiagramEditor(IEditorPart editorPart) {
+		if (editorPart instanceof MultiPageEditorPart) {
+			MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart) editorPart;
+			editorPart = (IEditorPart) multiPageEditorPart.getSelectedPage();
+		}
+		
+		return editorPart instanceof OepcDiagramEditor; 
 	}
 	
 	private static boolean deleteFileAndCatchException(File file) {
