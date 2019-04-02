@@ -2,16 +2,13 @@ package oepc.diagram.views;
 
 import java.awt.Desktop;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Vector;
 
 import org.eclipse.core.resources.IFile;
@@ -49,6 +46,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -133,13 +131,21 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		btnAdd.setToolTipText("Datei-Assoziation hinzufügen");
 
 		btnAdd.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent event) {
 				File diagramFolder = aquireFolderForDiagram();
-				File associatedFile = createFileWithRandomContent(diagramFolder);
-				Association association = new Association(selectedDiagramElement, associatedFile);
+				File chosenFile = getFileFromFileDialog();
 				
-				addToAssociationMap(association);
-				viewer.add(association);
+				if (chosenFile == null) return;
+				
+				try {
+					File associatedFile = copyFileToFolder(diagramFolder, chosenFile);
+					Association association = new Association(selectedDiagramElement, associatedFile);
+					
+					addToAssociationMap(association);
+					viewer.add(association);
+				} catch (IOException e) {
+					MessageDialog.openError(null, "Fehler beim assozieren der Datei", e.getMessage());
+				}
 			}
 		});
 
@@ -399,8 +405,19 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return success;
 	}
 	
+	private File getFileFromFileDialog() {
+		FileDialog fd = new FileDialog(this.getViewSite().getShell(), SWT.OPEN);
+		fd.setText("Datei assoziieren");
+		
+		String path = fd.open();
+		if (path == null) return null;
+		
+		File file = new File(path);
+		return file.exists() ? file : null;
+	}
+	
 	private File aquireFolderForDiagram() {
-		IFile currentlyOpenedFile = getCurrentlyOpenedFile(diagramEditor);
+		IFile currentlyOpenedFile = getCurrentlyOpenedDiagram(diagramEditor);
 		
 		if(directoryMap.containsKey(currentlyOpenedFile))
 			return directoryMap.get(currentlyOpenedFile);
@@ -416,21 +433,17 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return folder;
 	}
 	
-	private IFile getCurrentlyOpenedFile(IWorkbenchPart part) {
-		if (!(part instanceof DiagramDocumentEditor)) return null;
-		IEditorInput input = ((DiagramDocumentEditor) part).getEditorInput();
-			
-		if (!(input instanceof IFileEditorInput)) return null;
-		IFile file = ((IFileEditorInput) input).getFile();
-
-		return file;
-	}
-	
-	private File getOrCreateFolder(String path) {
-		File folder = new File(path);
-		if(!folder.exists() && !folder.isDirectory()) folder.mkdirs();
+	private static boolean deleteFileAndCatchException(File file) {
+		boolean success = false;
 		
-		return folder;
+		try {
+			success = file.delete();
+		} catch (SecurityException e) {
+			String message = e.getLocalizedMessage();
+			MessageDialog.openError(null, "Datei kann nicht gelöscht werden", message);
+		}
+		
+		return success;
 	}
 	
 	/**
@@ -450,24 +463,21 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return EMFCoreUtil.getName(eobj);
 	}
 	
-	private static File createFileWithRandomContent(File folder) {
-		Random r = new Random();
-		
-		byte[] contentBytes = new byte[1024];
-		r.nextBytes(contentBytes);
-		String content = Base64.getEncoder().encodeToString(contentBytes);
-		
-		File file = null;
-		try {
-			file = File.createTempFile("rnd-", ".txt", folder);
-			FileWriter fw = new FileWriter(file);
-			fw.write(content);
-			fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+	private static IFile getCurrentlyOpenedDiagram(IWorkbenchPart part) {
+		if (!(part instanceof DiagramDocumentEditor)) return null;
+		IEditorInput input = ((DiagramDocumentEditor) part).getEditorInput();
+			
+		if (!(input instanceof IFileEditorInput)) return null;
+		IFile file = ((IFileEditorInput) input).getFile();
+
 		return file;
+	}
+	
+	private static File getOrCreateFolder(String path) {
+		File folder = new File(path);
+		if(!folder.exists() && !folder.isDirectory()) folder.mkdirs();
+		
+		return folder;
 	}
 	
 	private static File copyFileToFolder(File folder, File file) throws IOException {
@@ -480,19 +490,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		Files.copy(file.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		
 		return targetFile;
-	}
-	
-	private static boolean deleteFileAndCatchException(File file) {
-		boolean success = false;
-		
-		try {
-			success = file.delete();
-		} catch (SecurityException e) {
-			String message = e.getLocalizedMessage();
-			MessageDialog.openError(null, "Datei kann nicht gelöscht werden", message);
-		}
-		
-		return success;
 	}
 	
  	private class AssociationViewerComparator extends ViewerComparator {
