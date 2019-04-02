@@ -130,7 +130,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 
 		gridData = new GridData();
 		gridData.widthHint = 120;
-
+		
 		btnAdd = new Button(controlPane, SWT.NONE);
 		btnAdd.setImage(new Image(controlPane.getDisplay(), this.getClass().getResourceAsStream("/icons/Add-16.png")));
 		btnAdd.setToolTipText("Datei-Assoziation hinzufügen");
@@ -162,15 +162,15 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ISelection selection = viewer.getSelection();
-				if(selection.isEmpty() || !(selection instanceof StructuredSelection)) return;
+				if (selection.isEmpty() || !(selection instanceof StructuredSelection)) return;
 				StructuredSelection structuredSelection = (StructuredSelection) selection;
 				
 				for (Object o : structuredSelection.toArray()) {
-					if(!(o instanceof Association)) continue;
+					if (!(o instanceof Association)) continue;
 					Association association = (Association) o;
 					
 					boolean success = deleteFileAndCatchException(association.associatedFile);
-					if(!success) continue;
+					if (!success) continue;
 					
 					removeFromAssociationMap(association);
 					viewer.remove(association);
@@ -189,11 +189,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				TableItem[] items = viewer.getTable().getItems();
 				
 				for (TableItem item : items) {
-					if(!(item.getData() instanceof Association)) continue;
+					if (!(item.getData() instanceof Association)) continue;
 					Association association = (Association) item.getData();
 					
 					boolean success = deleteFileAndCatchException(association.associatedFile);
-					if(!success) continue;
+					if (!success) continue;
 					
 					removeFromAssociationMap(association);
 					viewer.remove(association);
@@ -211,7 +211,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
 			public void doubleClick(DoubleClickEvent e) {
-				if(e.getSelection().isEmpty() || !(e.getSelection() instanceof StructuredSelection)) return;
+				if (e.getSelection().isEmpty() || !(e.getSelection() instanceof StructuredSelection)) return;
 				
 				StructuredSelection selection = (StructuredSelection) e.getSelection();
 				Association association = (Association) selection.getFirstElement();
@@ -237,12 +237,12 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			
 			@Override
 			public void drop(DropTargetEvent event) {
-				if(!fileTransfer.isSupportedType(event.currentDataType)) return;
+				if (!fileTransfer.isSupportedType(event.currentDataType)) return;
 				
 				Object o = fileTransfer.nativeToJava(event.currentDataType);
 				String[] paths = (String[]) o;
 				
-				if(paths == null) return;
+				if (paths == null) return;
 				
 				File[] files = Arrays.stream(paths).map(path -> new File(path)).toArray(File[]::new);
 				File folder = aquireFolderForDiagram();
@@ -264,7 +264,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				System.out.println("Drag over " + event.toString());
 				
 				event.feedback = DND.FEEDBACK_SCROLL;
-				if(event.item != null) event.feedback |= DND.FEEDBACK_INSERT_AFTER;
+				if (event.item != null) event.feedback |= DND.FEEDBACK_INSERT_AFTER;
 				else 				   event.feedback |= DND.FEEDBACK_SELECT;
 			}
 			
@@ -279,9 +279,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			
 			@Override
 			public void dragEnter(DropTargetEvent event) {
-				if(urlTransfer.isSupportedType(event.currentDataType))
+				if (urlTransfer.isSupportedType(event.currentDataType))
 					event.detail = DND.DROP_LINK;
-				if(fileTransfer.isSupportedType(event.currentDataType))
+				if (fileTransfer.isSupportedType(event.currentDataType))
 					event.detail = DND.DROP_COPY;
 			}
 		});
@@ -354,11 +354,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	}
 	
 	private void updateSelectedElement(ISelection selection) {
-		if(selection == null || selection.isEmpty() || !(selection instanceof StructuredSelection)) return;
+		if (selection == null || selection.isEmpty() || !(selection instanceof StructuredSelection)) return;
 		StructuredSelection structuredSelection = (StructuredSelection) selection;
 		
 		Object firstElement = structuredSelection.getFirstElement();
-		if(!(firstElement instanceof IGraphicalEditPart)) return;
+		if (!(firstElement instanceof IGraphicalEditPart)) return;
 		selectedDiagramElement = (IGraphicalEditPart) firstElement;
 	}
 	
@@ -394,7 +394,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		String elementId = getElementId(part);
 		
 		List<Association> associations = associationMap.get(elementId);
-		if(associations == null) associations = new Vector<>();
+		if (associations == null) associations = new Vector<>();
 		associations.add(association);
 		
 		associationMap.put(elementId, associations);
@@ -423,8 +423,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	
 	private File aquireFolderForDiagram() {
 		IFile currentlyOpenedFile = getCurrentlyOpenedDiagram(diagramEditor);
+		if (currentlyOpenedFile == null) return null;
 		
-		if(directoryMap.containsKey(currentlyOpenedFile))
+		if (directoryMap.containsKey(currentlyOpenedFile))
 			return directoryMap.get(currentlyOpenedFile);
 		
 		IPath path = currentlyOpenedFile.getRawLocation();
@@ -489,14 +490,14 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	
 	private static File getOrCreateFolder(String path) {
 		File folder = new File(path);
-		if(!folder.exists() && !folder.isDirectory()) folder.mkdirs();
+		if (!folder.exists() && !folder.isDirectory()) folder.mkdirs();
 		
 		return folder;
 	}
 	
 	private static File copyFileToFolder(File folder, File file) throws IOException {
-		if(!folder.isDirectory()) throw new IllegalArgumentException("The first argument has to be a folder!");
-		if(!file.isFile()) throw new IllegalArgumentException("The second argument has to be a file!");
+		if (!folder.isDirectory()) throw new IllegalArgumentException("The first argument has to be a folder!");
+		if (!file.isFile()) throw new IllegalArgumentException("The second argument has to be a file!");
 		
 		String fileName = file.getName();
 		File targetFile = new File(folder, fileName);
@@ -522,7 +523,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			
 			btnDel.notifyListeners(SWT.Selection, null);
 			
-			if(attributeTable.getItemCount() > selectionIndex)
+			if (attributeTable.getItemCount() > selectionIndex)
 				attributeTable.setSelection(selectionIndex);
 		}
 	}
