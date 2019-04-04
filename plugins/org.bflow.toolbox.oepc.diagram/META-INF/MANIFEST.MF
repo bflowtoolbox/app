@@ -3,7 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Bflow OEPC Diagram
 Bundle-SymbolicName: org.bflow.toolbox.oepc.diagram; singleton:=true
 Bundle-Version: 1.3.0.qualifier
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ lib/toml4j-0.7.2.jar,
+ lib/gson-2.8.1.jar
 Bundle-Activator: oepc.diagram.part.OepcDiagramEditorPlugin
 Bundle-Vendor: Bflow Dev Team
 Bundle-Localization: plugin

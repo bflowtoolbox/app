@@ -7,9 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
@@ -63,6 +61,9 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.ViewPart;
 
+import com.moandjiezana.toml.Toml;
+import com.moandjiezana.toml.TomlWriter;
+
 import oepc.diagram.part.OepcDiagramEditor;
 
 /**
@@ -85,9 +86,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private IEditorPart diagramEditor;
 	private IGraphicalEditPart selectedDiagramElement;
 	
+	private File currentFolder;
+	private File currentAssociationsFile;
+	private Associations associations;
 	private Map<IFile, File> directoryMap;
-	private Map<String, List<Association>> associationMap;
-
+	
 	private Label selectedDiagramElementName;
 
 	private Table attributeTable;
@@ -106,15 +109,20 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		diagramEditor = site.getPage().getActiveEditor();
 		directoryMap = new HashMap<>();
-		associationMap = new HashMap<>();
 		
 		site.getPage().addSelectionListener(this);
 		
 		aquireFolderForDiagram();
+		aquireAssociationsForFolder();
 		updateSelectedElement(site.getPage().getSelection());
 	}
-	
 
+	@Override
+	public void dispose() {
+		super.dispose();
+		persistAssociations();
+	}
+	
 	@Override
 	public void createPartControl(Composite container) {
 		ScrolledComposite sc = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
@@ -152,9 +160,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				
 				try {
 					File associatedFile = copyFileToFolder(diagramFolder, chosenFile);
-					Association association = new Association(selectedDiagramElement, associatedFile);
+					Association association = new Association(getElementId(selectedDiagramElement), associatedFile);
 					
-					addToAssociationMap(association);
+					associations.add(association);
 					viewer.add(association);
 				} catch (IOException e) {
 					MessageDialog.openError(null, "Fehler beim assozieren der Datei", e.getMessage());
@@ -181,7 +189,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
             menu.setLocation(controlPane.getDisplay().map(btnAddModify.getParent(), null, menuPos));
             menu.setVisible(true);
 		}));
-		
 
 		btnDel = new Button(controlPane, SWT.NONE);
 		btnDel.setImage(new Image(controlPane.getDisplay(), this.getClass().getResourceAsStream("/icons/Remove-16.png")));
@@ -198,10 +205,10 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					if (!(o instanceof Association)) continue;
 					Association association = (Association) o;
 					
-					boolean success = deleteFileAndCatchException(association.associatedFile);
+					boolean success = deleteFileAndCatchException(new File(association.filePath));
+					success &= associations.remove(association);
 					if (!success) continue;
 					
-					removeFromAssociationMap(association);
 					viewer.remove(association);
 				}
 			}
@@ -221,10 +228,10 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					if (!(item.getData() instanceof Association)) continue;
 					Association association = (Association) item.getData();
 					
-					boolean success = deleteFileAndCatchException(association.associatedFile);
+					boolean success = deleteFileAndCatchException(new File(association.filePath));
+					success &= associations.remove(association);
 					if (!success) continue;
 					
-					removeFromAssociationMap(association);
 					viewer.remove(association);
 				}
 			}
@@ -246,7 +253,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				Association association = (Association) selection.getFirstElement();
 				
 				try {
-					Desktop.getDesktop().open(association.associatedFile);
+					Desktop.getDesktop().open((new File(association.filePath)));
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
@@ -279,8 +286,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				Arrays.stream(files).forEach(file -> {
 					try {
 						File newFile = copyFileToFolder(folder, file);
-						Association association = new Association(selectedDiagramElement, newFile);
-						addToAssociationMap(association);
+						Association association = new Association(getElementId(selectedDiagramElement), newFile);
+						associations.add(association);
 						viewer.add(association);
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -355,6 +362,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		sc.setExpandVertical(true);
 		
 		if (!isEnabled) disableView();
+		if (associations != null) viewer.add(associations.toArray());
 	}
 	
 	@Override
@@ -371,15 +379,21 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			return;
 		else if (!isOepc)
 			disableView();
-		else if (!isEnabled)
+		else if (!isEnabled) {
 			enableView();
+			diagramEditor = activeEditorPart;
+		}
 
 		if (!isEnabled)
 			return;
 		
 		aquireFolderForDiagram();
+		aquireAssociationsForFolder();
 		updateSelectedElement(selection);
 		updateSelectedDiagramElementName(selectedDiagramElement);
+		
+		if (associations != null)
+			viewer.add(associations.toArray());
 	}
 	
 	private void updateSelectedElement(ISelection selection) {
@@ -418,27 +432,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		btnDelAll.setEnabled(value);
 	}
 	
-	private void addToAssociationMap(Association association) {
-		IGraphicalEditPart part = association.diagramElement;
-		String elementId = getElementId(part);
-		
-		List<Association> associations = associationMap.get(elementId);
-		if (associations == null) associations = new Vector<>();
-		associations.add(association);
-		
-		associationMap.put(elementId, associations);
-	}
-	
-	private boolean removeFromAssociationMap(Association association) {
-		IGraphicalEditPart part = association.diagramElement;
-		String elementId = getElementId(part);
-		
-		List<Association> associations = associationMap.get(elementId);
-		boolean success = associations.remove(association);
-		
-		return success;
-	}
-	
 	private File getFileFromFileDialog() {
 		FileDialog fd = new FileDialog(this.getViewSite().getShell(), SWT.OPEN);
 		fd.setText("Datei assoziieren");
@@ -462,10 +455,37 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		String folderName = "." + path.removeFileExtension().lastSegment();
 		String pathString = path.removeLastSegments(1).append(folderName).toOSString();
 		
-		File folder = getOrCreateFolder(pathString);
-		directoryMap.put(currentlyOpenedFile, folder);
+		currentFolder = getOrCreateFolder(pathString);
+		directoryMap.put(currentlyOpenedFile, currentFolder);
 		
-		return folder;
+		return currentFolder;
+	}
+	
+	private Associations aquireAssociationsForFolder() {
+		if (currentFolder == null) return null;
+		
+		File associationFile = new File(currentFolder, ".associations");
+		if (associationFile.equals(currentAssociationsFile)) return associations;
+		
+		try {
+			if (!associationFile.exists()) associationFile.createNewFile();
+			
+			associations = new Toml().read(associationFile).to(Associations.class);
+			currentAssociationsFile = associationFile;
+			
+			return associations;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	private void persistAssociations() {
+		TomlWriter tomlWriter = new TomlWriter();
+		try {
+			tomlWriter.write(associations, currentAssociationsFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static boolean isEditorOepcDiagramEditor(IEditorPart editorPart) {
@@ -570,21 +590,10 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		@Override
 		public String getText(Object object) {
 			Association association = (Association) object;
-			return column == COLUMN_ONE ? association.getElementName() : association.associatedFile.getAbsolutePath();
+			
+			return column == COLUMN_ONE ? 
+					association.elementId : 
+					association.filePath;
 		}		
-	}
-	
-	private class Association {
-		public final IGraphicalEditPart diagramElement;
-		public final File associatedFile;
-				
-		public Association(IGraphicalEditPart diagramElement, File associatedFile) {
-			this.diagramElement = diagramElement;
-			this.associatedFile = associatedFile;
-		}
-		
-		public String getElementName() {
-			return OepcAssetsViewPart.getElementName(diagramElement);
-		}
 	}
 }
