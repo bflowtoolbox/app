@@ -10,9 +10,4 @@ public class Association {
 		this.elementId = elementId;
 		this.filePath = file.getAbsolutePath().replaceAll("\\\\", "/");
 	}
-	
-//	public Association(String elementId, String filePath) {
-//		this.elementId = elementId;
-//		this.filePath = filePath;
-//	}
 }
