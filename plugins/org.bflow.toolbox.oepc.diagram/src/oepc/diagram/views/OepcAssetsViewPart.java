@@ -28,10 +28,11 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.dnd.URLTransfer;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -146,7 +147,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 
 		gridData = new GridData();
 		gridData.widthHint = 120;
-		
+
 		btnAdd = new Button(controlPane, SWT.NONE);
 		btnAdd.setImage(new Image(controlPane.getDisplay(), this.getClass().getResourceAsStream("/icons/Add-16.png")));
 		btnAdd.setToolTipText("Datei-Assoziation hinzufügen");
@@ -205,7 +206,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					if (!(o instanceof Association)) continue;
 					Association association = (Association) o;
 					
-					boolean success = deleteFileAndCatchException(new File(association.filePath));
+					boolean success = deleteFileAndCatchException(new File(association.associatedURL));
 					success &= associations.remove(association);
 					if (!success) continue;
 					
@@ -228,7 +229,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					if (!(item.getData() instanceof Association)) continue;
 					Association association = (Association) item.getData();
 					
-					boolean success = deleteFileAndCatchException(new File(association.filePath));
+					boolean success = deleteFileAndCatchException(new File(association.associatedURL));
 					success &= associations.remove(association);
 					if (!success) continue;
 					
@@ -253,7 +254,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				Association association = (Association) selection.getFirstElement();
 				
 				try {
-					Desktop.getDesktop().open((new File(association.filePath)));
+					Desktop.getDesktop().open((new File(association.associatedURL)));
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
@@ -262,20 +263,20 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		viewer.addDropSupport(DND.DROP_COPY | DND.DROP_LINK, 
 				new Transfer[] { FileTransfer.getInstance(), URLTransfer.getInstance() }, 
-				new DropTargetListener() {
+				new DropTargetAdapter() {
 			private final URLTransfer urlTransfer = URLTransfer.getInstance();
 			private final FileTransfer fileTransfer = FileTransfer.getInstance();			
-			
-			@Override
-			public void dropAccept(DropTargetEvent event) {
-				System.out.println("Drop accepting: " + event.toString());
-			}
-			
+						
 			@Override
 			public void drop(DropTargetEvent event) {
-				if (!fileTransfer.isSupportedType(event.currentDataType)) return;
-				
-				Object o = fileTransfer.nativeToJava(event.currentDataType);
+				if (urlTransfer.isSupportedType(event.currentDataType))
+					associateURL(event.currentDataType);
+				if (fileTransfer.isSupportedType(event.currentDataType)) 
+					associateFile(event.currentDataType);
+			}
+			
+			private void associateFile(TransferData data) {
+				Object o = fileTransfer.nativeToJava(data);
 				String[] paths = (String[]) o;
 				
 				if (paths == null) return;
@@ -295,22 +296,20 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				});
 			}
 			
+			private void associateURL(TransferData data) {
+				Object o = urlTransfer.nativeToJava(data);
+				String url = (String) o;
+				
+				Association association = new Association(getElementId(selectedDiagramElement), url);
+				associations.add(association);
+				viewer.add(association);
+			}
+			
 			@Override
 			public void dragOver(DropTargetEvent event) {
-				System.out.println("Drag over " + event.toString());
-				
 				event.feedback = DND.FEEDBACK_SCROLL;
 				if (event.item != null) event.feedback |= DND.FEEDBACK_INSERT_AFTER;
 				else 				   event.feedback |= DND.FEEDBACK_SELECT;
-			}
-			
-			@Override
-			public void dragOperationChanged(DropTargetEvent event) {
-				System.out.println("Drag operation changed " + event.toString());
-			}
-			
-			@Override
-			public void dragLeave(DropTargetEvent event) {
 			}
 			
 			@Override
@@ -362,7 +361,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		sc.setExpandVertical(true);
 		
 		if (!isEnabled) disableView();
-		if (associations != null) viewer.add(associations.toArray());
 	}
 	
 	@Override
@@ -593,7 +591,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			
 			return column == COLUMN_ONE ? 
 					association.elementId : 
-					association.filePath;
+					association.associatedURL;
 		}		
 	}
 }
