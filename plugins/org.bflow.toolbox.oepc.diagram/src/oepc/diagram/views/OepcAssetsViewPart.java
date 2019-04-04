@@ -407,8 +407,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	
 	private void updateSelectedDiagramElementName(IGraphicalEditPart selectedDiagramElement) {
 		String name = getElementName(selectedDiagramElement);
-		String text = ELEMENT_LABEL_PREFIX + (!name.equals("") ? name : ELEMENT_LABEL_NO_SELECTION);		
-		selectedDiagramElementName.setText(text);
+		String text = ELEMENT_LABEL_PREFIX + (!name.equals("") ? name : ELEMENT_LABEL_NO_SELECTION);
+		selectedDiagramElementName.setText(text.replaceAll("[\r]\n", " "));
 		selectedDiagramElementName.requestLayout();
 	}
 	
