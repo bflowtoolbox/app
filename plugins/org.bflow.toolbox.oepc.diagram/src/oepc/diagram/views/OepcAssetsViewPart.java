@@ -57,6 +57,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -84,6 +85,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	
 	private boolean isEnabled = true;
 	
+	private IWorkbenchPage page;
 	private IEditorPart diagramEditor;
 	private IGraphicalEditPart selectedDiagramElement;
 	
@@ -106,21 +108,23 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
 		
-		isEnabled = isEditorOepcDiagramEditor(site.getPage().getActiveEditor());
-		
-		diagramEditor = site.getPage().getActiveEditor();
 		directoryMap = new HashMap<>();
+
+		page = site.getPage();
+		diagramEditor = page.getActiveEditor();
+		isEnabled = isEditorOepcDiagramEditor(diagramEditor);
 		
-		site.getPage().addSelectionListener(this);
+		page.addSelectionListener(this);
 		
 		aquireFolderForDiagram();
 		aquireAssociationsForFolder();
-		updateSelectedElement(site.getPage().getSelection());
+		updateSelectedElement(page.getSelection());
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
+		page.removeSelectionListener(this);
 		persistAssociations();
 	}
 	
