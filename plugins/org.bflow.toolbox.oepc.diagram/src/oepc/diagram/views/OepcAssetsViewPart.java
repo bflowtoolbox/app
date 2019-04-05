@@ -377,6 +377,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		viewer.getControl().forceFocus();
 	}
 	
+	
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		IEditorPart activeEditorPart = part.getSite().getPage().getActiveEditor();
@@ -427,6 +428,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		setUpControls(isEnabled);
 	}
 	
+	
 	private void disableView() {
 		isEnabled = false;
 		
@@ -434,12 +436,14 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		setUpControls(isEnabled);
 	}
 	
+	
 	private void setUpControls(boolean value) {
 		associationTable.setEnabled(value);
 		btnAdd.setEnabled(value);
 		btnDel.setEnabled(value);
 		btnDelAll.setEnabled(value);
 	}
+	
 	
 	private void setViewerElements(Association[] associations) {
 		viewer.setItemCount(0);
@@ -473,6 +477,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return currentFolder;
 	}
 	
+	
 	private Associations aquireAssociationsForFolder() {
 		if (currentFolder == null) return null;
 		
@@ -491,6 +496,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		}
 	}
 	
+	
 	private void persistAssociations() {
 		TomlWriter tomlWriter = new TomlWriter();
 		try {
@@ -500,6 +506,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		}
 	}
 	
+	
 	private static boolean isEditorOepcDiagramEditor(IEditorPart editorPart) {
 		if (editorPart instanceof MultiPageEditorPart) {
 			MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart) editorPart;
@@ -508,6 +515,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		return editorPart instanceof OepcDiagramEditor; 
 	}
+	
 	
 	private static boolean deleteFileAndCatchException(File file) {
 		boolean success = !file.exists();
@@ -534,12 +542,14 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return file;
 	}
 	
+	
 	private static File getOrCreateFolder(String path) {
 		File folder = new File(path);
 		if (!folder.exists()) folder.mkdirs();
 		
 		return folder;
 	}
+	
 	
 	private static File copyFileToFolder(File folder, File file) throws IOException {
 		if (!folder.isDirectory()) throw new IllegalArgumentException("The first argument has to be a folder!");
@@ -553,12 +563,14 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return targetFile;
 	}
 	
- 	private class AssociationViewerComparator extends ViewerComparator {
+ 	
+	private class AssociationViewerComparator extends ViewerComparator {
 		@Override
 		public int compare(Viewer viewer, Object o1, Object o2) {
 			return 0;
 		}
 	}
+	
 	
 	private class TableViewerKeyListener extends KeyAdapter {
 		@Override
@@ -573,6 +585,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				associationTable.setSelection(selectionIndex);
 		}
 	}
+	
 	
 	private class AssociationLabelProvider extends ColumnLabelProvider {
 		public static final int COLUMN_ONE = 0;
