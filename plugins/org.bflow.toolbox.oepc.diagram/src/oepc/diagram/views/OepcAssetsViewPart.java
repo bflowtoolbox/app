@@ -385,17 +385,15 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		if (!isOepc && !isEnabled)
 			return;
-		else if (!isOepc)
+		else if (!isOepc) {
 			disableView();
-		else if (!isEnabled) {
-			enableView();
-			diagramEditor = activeEditorPart;
-		}
-
-		if (!isEnabled)
 			return;
+		} else if (!isEnabled) {
+			enableView();
+			diagramEditor = (DiagramEditor) activeEditorPart;
+		}
 		
-		diagramEditor = activeEditorPart;
+		diagramEditor = (DiagramEditor) activeEditorPart;
 		aquireFolderForDiagram();
 		aquireAssociationsForFolder();
 		updateSelectedElement(selection);
