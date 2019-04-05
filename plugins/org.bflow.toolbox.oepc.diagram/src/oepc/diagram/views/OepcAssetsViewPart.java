@@ -3,6 +3,8 @@ package oepc.diagram.views;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
@@ -259,9 +261,15 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				Association association = (Association) selection.getFirstElement();
 				
 				try {
-					Desktop.getDesktop().open((new File(association.associatedURL)));
+					switch (association.type) {
+					case URL: Desktop.getDesktop().browse(new URI(association.associatedURL)); break;
+					case SYMLINK:
+					case FILE: Desktop.getDesktop().open((new File(association.associatedURL)));
+					}
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
+				} catch (URISyntaxException urie) {
+					urie.printStackTrace();
 				}
 			}
 		});
@@ -615,8 +623,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			
 			switch (association.type) {
 			case URL: extension = IconProvider.getExtension(IconProvider.BROWSER_EXTENSION); break;
-			case FILE: extension = IconProvider.getExtension(association.associatedURL);
 			case SYMLINK:
+			case FILE: extension = IconProvider.getExtension(association.associatedURL);
 			}
 			
 			return IconProvider.getIcon(extension);
