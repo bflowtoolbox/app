@@ -7,8 +7,8 @@ public class Association {
 	public final String elementId;
 	public final String associatedURL;
 	
-	public Association(String elementId, String url) {
-		this.type = Type.FILE;
+	public Association(String elementId, String url, Type type) {
+		this.type = type;
 		this.elementId = elementId;
 		this.associatedURL = url;
 	}

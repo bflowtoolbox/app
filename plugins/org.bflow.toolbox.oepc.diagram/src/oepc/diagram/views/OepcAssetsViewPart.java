@@ -307,7 +307,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				Object o = urlTransfer.nativeToJava(data);
 				String url = (String) o;
 				
-				Association association = new Association(GraphicalEditPartUtil.getElementId(selectedDiagramElement), url);
+				String elementId = GraphicalEditPartUtil.getElementId(selectedDiagramElement);
+				Association association = new Association(elementId, url, Association.Type.URL);
 				associations.add(association);
 				
 				setViewerElements(associations.toArray());
@@ -330,11 +331,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			}
 		});
 
-		TableViewerColumn viewColAttr = new TableViewerColumn(viewer, SWT.NONE);
-		viewColAttr.getColumn().setText("Diagrammelement");
-		viewColAttr.getColumn().setWidth(120);
-		viewColAttr.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_ONE));
-		viewColAttr.getColumn().addSelectionListener(new SelectionAdapter() {
+		TableViewerColumn viewColElement = new TableViewerColumn(viewer, SWT.NONE);
+		viewColElement.getColumn().setText("Diagrammelement");
+		viewColElement.getColumn().setWidth(120);
+		viewColElement.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_ONE));
+		viewColElement.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MessageDialog.openInformation(associationTable.getShell(), "Selection event on column ONE triggered", 
@@ -342,11 +343,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			}
 		});
 
-		TableViewerColumn viewColVal = new TableViewerColumn(viewer, SWT.NONE);
-		viewColVal.getColumn().setText("Assoziierte Datei");
-		viewColVal.getColumn().setWidth(180);
-		viewColVal.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_TWO));
-		viewColVal.getColumn().addSelectionListener(new SelectionAdapter() {
+		TableViewerColumn viewColUrl = new TableViewerColumn(viewer, SWT.NONE);
+		viewColUrl.getColumn().setText("Assoziierte Datei");
+		viewColUrl.getColumn().setWidth(180);
+		viewColUrl.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_TWO));
+		viewColUrl.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MessageDialog.openInformation(associationTable.getShell(), "Selection event on column TWO triggered", 
@@ -604,5 +605,23 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					GraphicalEditPartUtil.getElementName(element) : 
 					association.associatedURL;
 		}		
+		
+		@Override
+		public Image getImage(Object object) {
+			if (column != COLUMN_TWO) return null;
+			
+			Association association = (Association) object;
+			String extension = null;
+			
+			switch (association.type) {
+			case URL: extension = IconProvider.getExtension(IconProvider.BROWSER_EXTENSION); break;
+			case FILE: extension = IconProvider.getExtension(association.associatedURL);
+			case SYMLINK:
+			}
+			
+			return IconProvider.getIcon(extension);
+		}
+		
+		
 	}
 }
