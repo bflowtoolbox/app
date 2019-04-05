@@ -73,6 +73,8 @@ public class Associations {
 		List<Association> associations = associationsMap.get(elementId);
 		boolean success = associations.remove(association);
 		
+		if (associations.isEmpty()) associationsMap.remove(elementId);
+		
 		return success;
 	}
 }

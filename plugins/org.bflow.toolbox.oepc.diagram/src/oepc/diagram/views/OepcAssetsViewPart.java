@@ -211,9 +211,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					Association association = (Association) o;
 					
 					boolean success = deleteFileAndCatchException(new File(association.associatedURL));
-					success &= associations.remove(association);
 					if (!success) continue;
 					
+					associations.remove(association);
 					viewer.remove(association);
 				}
 			}
@@ -234,9 +234,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					Association association = (Association) item.getData();
 					
 					boolean success = deleteFileAndCatchException(new File(association.associatedURL));
-					success &= associations.remove(association);
 					if (!success) continue;
 					
+					associations.remove(association);
 					viewer.remove(association);
 				}
 			}
@@ -500,7 +500,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	}
 	
 	private static boolean deleteFileAndCatchException(File file) {
-		boolean success = false;
+		boolean success = !file.exists();
+		if (success) return success;
 		
 		try {
 			success = file.delete();
