@@ -3,15 +3,18 @@ package oepc.diagram.views;
 import java.io.File;
 
 public class Association {
+	public final Type type;
 	public final String elementId;
 	public final String associatedURL;
 	
 	public Association(String elementId, String url) {
+		this.type = Type.FILE;
 		this.elementId = elementId;
 		this.associatedURL = url;
 	}
 	
 	public Association(String elementId, File file) {
+		this.type = Type.FILE;
 		this.elementId = elementId;
 		this.associatedURL = file.getAbsolutePath().replaceAll("\\\\", "/");
 	}
@@ -25,5 +28,9 @@ public class Association {
 		if (this.elementId.equals(other.elementId) && this.associatedURL.equals(other.associatedURL)) return true;
 		
 		return false;
+	}
+	
+	public static enum Type {
+		URL, FILE, SYMLINK
 	}
 }
