@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
@@ -51,6 +49,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -92,11 +91,10 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private File currentFolder;
 	private File currentAssociationsFile;
 	private Associations associations;
-	private Map<IFile, File> directoryMap;
 	
 	private Label selectedDiagramElementName;
 
-	private Table attributeTable;
+	private Table associationTable;
 	private TableViewer viewer;
 	
 	private Button btnAdd;
@@ -107,8 +105,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	@Override
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
-		
-		directoryMap = new HashMap<>();
 
 		page = site.getPage();
 		diagramEditor = page.getActiveEditor();
@@ -125,7 +121,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	public void dispose() {
 		super.dispose();
 		page.removeSelectionListener(this);
-		persistAssociations();
 	}
 	
 	@Override
@@ -166,9 +161,10 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				try {
 					File associatedFile = copyFileToFolder(diagramFolder, chosenFile);
 					Association association = new Association(getElementId(selectedDiagramElement), associatedFile);
-					
 					associations.add(association);
-					viewer.add(association);
+					persistAssociations();
+					
+					setViewerElements(associations.toArray());
 				} catch (IOException e) {
 					MessageDialog.openError(null, "Fehler beim assozieren der Datei", e.getMessage());
 				}
@@ -181,9 +177,10 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		btnAddModify.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> {
 			Menu menu = new Menu(this.getViewSite().getShell(), SWT.POP_UP);
 
-            MenuItem item1 = new MenuItem(menu, SWT.PUSH);
+            MenuItem item1 = new MenuItem(menu, SWT.PUSH | SWT.CHECK);
             item1.setText("Kopie");
-            MenuItem item2 = new MenuItem(menu, SWT.PUSH);
+            item1.setSelection(true);
+            MenuItem item2 = new MenuItem(menu, SWT.PUSH | SWT.CHECK);
             item2.setText("Verknüpfung");
 
             Point pos = btnAddModify.getLocation();
@@ -215,6 +212,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					
 					associations.remove(association);
 					viewer.remove(association);
+					
+					persistAssociations();
 				}
 			}
 		});
@@ -238,6 +237,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					
 					associations.remove(association);
 					viewer.remove(association);
+					
+					persistAssociations();
 				}
 			}
 		});
@@ -293,7 +294,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 						File newFile = copyFileToFolder(folder, file);
 						Association association = new Association(getElementId(selectedDiagramElement), newFile);
 						associations.add(association);
-						viewer.add(association);
+						
+						setViewerElements(associations.toArray());
+						persistAssociations();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -306,7 +309,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				
 				Association association = new Association(getElementId(selectedDiagramElement), url);
 				associations.add(association);
-				viewer.add(association);
+				
+				setViewerElements(associations.toArray());
+				persistAssociations();
 			}
 			
 			@Override
@@ -332,7 +337,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		viewColAttr.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MessageDialog.openInformation(attributeTable.getShell(), "Selection event on column ONE triggered", 
+				MessageDialog.openInformation(associationTable.getShell(), "Selection event on column ONE triggered", 
 						e.toString());
 			}
 		});
@@ -344,27 +349,27 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		viewColVal.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MessageDialog.openInformation(attributeTable.getShell(), "Selection event on column TWO triggered", 
+				MessageDialog.openInformation(associationTable.getShell(), "Selection event on column TWO triggered", 
 						e.toString());
 			}
 		});
 
-		attributeTable = viewer.getTable();
-		attributeTable.setLinesVisible(true);
-		attributeTable.setHeaderVisible(true);
-		attributeTable.setLayoutData(gridData);
-		attributeTable.addKeyListener(new TableViewerKeyListener());
+		associationTable = viewer.getTable();
+		associationTable.setLinesVisible(true);
+		associationTable.setHeaderVisible(true);
+		associationTable.setLayoutData(gridData);
+		associationTable.addKeyListener(new TableViewerKeyListener());
 		
 		parent.layout();
 		parent.pack();
-		org.eclipse.swt.graphics.Point parentSize = parent.getSize();
 		
 		sc.setContent(parent);
-		sc.setMinSize(parentSize);
+		sc.setMinSize(parent.getSize());
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
 		
 		if (!isEnabled) disableView();
+		if (associations != null) setViewerElements(associations.toArray());
 	}
 	
 	@Override
@@ -389,13 +394,14 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		if (!isEnabled)
 			return;
 		
+		diagramEditor = activeEditorPart;
 		aquireFolderForDiagram();
 		aquireAssociationsForFolder();
 		updateSelectedElement(selection);
 		updateSelectedDiagramElementName(selectedDiagramElement);
 		
 		if (associations != null)
-			viewer.add(associations.toArray());
+			setViewerElements(associations.toArray());
 	}
 	
 	private void updateSelectedElement(ISelection selection) {
@@ -428,10 +434,18 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	}
 	
 	private void setUpControls(boolean value) {
-		attributeTable.setEnabled(value);
+		associationTable.setEnabled(value);
 		btnAdd.setEnabled(value);
 		btnDel.setEnabled(value);
 		btnDelAll.setEnabled(value);
+	}
+	
+	private void setViewerElements(Association[] associations) {
+		viewer.setItemCount(0);
+		viewer.add(associations);
+
+		for (TableColumn col : associationTable.getColumns())
+			col.pack();
 	}
 	
 	private File getFileFromFileDialog() {
@@ -449,17 +463,12 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		IFile currentlyOpenedFile = getCurrentlyOpenedDiagram(diagramEditor);
 		if (currentlyOpenedFile == null) return null;
 		
-		if (directoryMap.containsKey(currentlyOpenedFile))
-			return directoryMap.get(currentlyOpenedFile);
-		
 		IPath path = currentlyOpenedFile.getRawLocation();
 		
 		String folderName = "." + path.removeFileExtension().lastSegment();
 		String pathString = path.removeLastSegments(1).append(folderName).toOSString();
 		
 		currentFolder = getOrCreateFolder(pathString);
-		directoryMap.put(currentlyOpenedFile, currentFolder);
-		
 		return currentFolder;
 	}
 	
@@ -542,7 +551,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	
 	private static File getOrCreateFolder(String path) {
 		File folder = new File(path);
-		if (!folder.exists() && !folder.isDirectory()) folder.mkdirs();
+		if (!folder.exists()) folder.mkdirs();
 		
 		return folder;
 	}
@@ -571,12 +580,12 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		public void keyPressed(KeyEvent e) {
 			if (e.keyCode != SWT.DEL) return;
 			
-			int selectionIndex = attributeTable.getSelectionIndex();
+			int selectionIndex = associationTable.getSelectionIndex();
 			
 			btnDel.notifyListeners(SWT.Selection, null);
 			
-			if (attributeTable.getItemCount() > selectionIndex)
-				attributeTable.setSelection(selectionIndex);
+			if (associationTable.getItemCount() > selectionIndex)
+				associationTable.setSelection(selectionIndex);
 		}
 	}
 	
