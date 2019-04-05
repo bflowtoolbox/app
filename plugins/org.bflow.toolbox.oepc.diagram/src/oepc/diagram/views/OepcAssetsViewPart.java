@@ -9,10 +9,9 @@ import java.util.Arrays;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
-import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -85,7 +84,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private boolean isEnabled = true;
 	
 	private IWorkbenchPage page;
-	private IEditorPart diagramEditor;
+	private DiagramEditor diagramEditor;
 	private IGraphicalEditPart selectedDiagramElement;
 	
 	private File currentFolder;
@@ -105,9 +104,10 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	@Override
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
-
+		
 		page = site.getPage();
-		diagramEditor = page.getActiveEditor();
+		IEditorPart activeEditor = page.getActiveEditor();
+		diagramEditor = activeEditor instanceof DiagramEditor ? (DiagramEditor) activeEditor : null;
 		isEnabled = isEditorOepcDiagramEditor(diagramEditor);
 		
 		page.addSelectionListener(this);
@@ -160,7 +160,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				
 				try {
 					File associatedFile = copyFileToFolder(diagramFolder, chosenFile);
-					Association association = new Association(getElementId(selectedDiagramElement), associatedFile);
+					Association association = new Association(GraphicalEditPartUtil.getElementId(selectedDiagramElement), associatedFile);
 					associations.add(association);
 					persistAssociations();
 					
@@ -292,7 +292,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				Arrays.stream(files).forEach(file -> {
 					try {
 						File newFile = copyFileToFolder(folder, file);
-						Association association = new Association(getElementId(selectedDiagramElement), newFile);
+						Association association = new Association(GraphicalEditPartUtil.getElementId(selectedDiagramElement), newFile);
 						associations.add(association);
 						
 						setViewerElements(associations.toArray());
@@ -307,7 +307,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				Object o = urlTransfer.nativeToJava(data);
 				String url = (String) o;
 				
-				Association association = new Association(getElementId(selectedDiagramElement), url);
+				Association association = new Association(GraphicalEditPartUtil.getElementId(selectedDiagramElement), url);
 				associations.add(association);
 				
 				setViewerElements(associations.toArray());
@@ -413,8 +413,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		selectedDiagramElement = (IGraphicalEditPart) firstElement;
 	}
 	
+	
 	private void updateSelectedDiagramElementName(IGraphicalEditPart selectedDiagramElement) {
-		String name = getElementName(selectedDiagramElement);
+		String name = GraphicalEditPartUtil.getElementName(selectedDiagramElement);
 		String text = ELEMENT_LABEL_PREFIX + (!name.equals("") ? name : ELEMENT_LABEL_NO_SELECTION);
 		selectedDiagramElementName.setText(text.replaceAll("[\r]\n", " "));
 		selectedDiagramElementName.requestLayout();
@@ -522,22 +523,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return success;
 	}
 	
-	/**
-	 * Returns the unique id of the model element that is wrapped by 
-	 * the given {@code editPart}. If {@code editPart} is NULL, 
-	 * NULL is returned.
-	 */
-	private static String getElementId(IGraphicalEditPart editPart) {
-		if (editPart == null) return null;
-		EObject eobj = editPart.resolveSemanticElement();
-		return EMFCoreUtil.getProxyID(eobj);
-	}
-	
-	private static String getElementName(IGraphicalEditPart editPart) {
-		if (editPart == null) return "";
-		EObject eobj = editPart.resolveSemanticElement();
-		return EMFCoreUtil.getName(eobj);
-	}
 	
 	private static IFile getCurrentlyOpenedDiagram(IWorkbenchPart part) {
 		if (!(part instanceof DiagramDocumentEditor)) return null;
@@ -602,9 +587,10 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		@Override
 		public String getText(Object object) {
 			Association association = (Association) object;
+			IGraphicalEditPart element = GraphicalEditPartUtil.getViewPart(diagramEditor, association.elementId);
 			
 			return column == COLUMN_ONE ? 
-					association.elementId : 
+					GraphicalEditPartUtil.getElementName(element) : 
 					association.associatedURL;
 		}		
 	}
