@@ -84,6 +84,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private static final String ELEMENT_LABEL_NO_SELECTION = "<Kein Element selektiert>";
 	
 	private boolean isEnabled = true;
+	private boolean sortByElement = true;
+	private boolean sortAsc = true;
 	
 	private IWorkbenchPage page;
 	private DiagramEditor diagramEditor;
@@ -346,8 +348,12 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		viewColElement.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MessageDialog.openInformation(associationTable.getShell(), "Selection event on column ONE triggered", 
-						e.toString());
+				boolean columnChanged = !sortByElement;
+				
+				sortAsc = columnChanged ? true : !sortAsc;
+				sortByElement = true;
+				
+				updateViewer();
 			}
 		});
 
@@ -358,8 +364,12 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		viewColUrl.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MessageDialog.openInformation(associationTable.getShell(), "Selection event on column TWO triggered", 
-						e.toString());
+				boolean columnChanged = sortByElement;
+				
+				sortAsc = columnChanged ? true : !sortAsc;
+				sortByElement = false;
+				
+				updateViewer();
 			}
 		});
 
@@ -427,6 +437,13 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		String text = ELEMENT_LABEL_PREFIX + (!name.equals("") ? name : ELEMENT_LABEL_NO_SELECTION);
 		selectedDiagramElementName.setText(text.replaceAll("[\r]\n", " "));
 		selectedDiagramElementName.requestLayout();
+	}
+	
+	private void updateViewer() {
+		associationTable.setRedraw(false);
+		viewer.setItemCount(0);
+		setViewerElements(associations.toArray());
+		associationTable.setRedraw(true);
 	}
 	
 	private void enableView() {
@@ -557,7 +574,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return folder;
 	}
 	
-	
 	private static File copyFileToFolder(File folder, File file) throws IOException {
 		if (!folder.isDirectory()) throw new IllegalArgumentException("The first argument has to be a folder!");
 		if (!file.isFile()) throw new IllegalArgumentException("The second argument has to be a file!");
@@ -569,15 +585,34 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		return targetFile;
 	}
-	
  	
 	private class AssociationViewerComparator extends ViewerComparator {
 		@Override
 		public int compare(Viewer viewer, Object o1, Object o2) {
-			return 0;
+			Association a1 = (Association) o1;
+			Association a2 = (Association) o2;
+			
+			if (sortByElement) {
+				IGraphicalEditPart element1 = GraphicalEditPartUtil.getViewPart(diagramEditor, a1.elementId);
+				IGraphicalEditPart element2 = GraphicalEditPartUtil.getViewPart(diagramEditor, a2.elementId);
+				String name1 = GraphicalEditPartUtil.getElementName(element1);
+				String name2 = GraphicalEditPartUtil.getElementName(element2);
+				
+				if (!sortAsc)
+					return name1.compareToIgnoreCase(name2);
+				else
+					return name2.compareToIgnoreCase(name1);
+			} else {
+				String url1 = a1.associatedURL;
+				String url2 = a2.associatedURL;
+				
+				if (!sortAsc)
+					return url1.compareToIgnoreCase(url2);
+				else
+					return url2.compareToIgnoreCase(url1);
+			}
 		}
 	}
-	
 	
 	private class TableViewerKeyListener extends KeyAdapter {
 		@Override
@@ -592,7 +627,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				associationTable.setSelection(selectionIndex);
 		}
 	}
-	
 	
 	private class AssociationLabelProvider extends ColumnLabelProvider {
 		public static final int COLUMN_ONE = 0;
