@@ -116,9 +116,10 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		page.addSelectionListener(this);
 		
-		aquireFolderForDiagram();
-		aquireAssociationsForFolder();
-		updateSelectedElement(page.getSelection());
+		currentFolder = aquireFolderForDiagram(diagramEditor);
+		currentAssociationsFile = aquireAssociationsFileForFolder(currentFolder);
+		associations = parseAssociationsFromFile(currentAssociationsFile);
+		selectedDiagramElement = aquireSelectedElement(page.getSelection());
 	}
 
 	@Override
@@ -157,9 +158,10 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				File diagramFolder = aquireFolderForDiagram();
-				File chosenFile = getFileFromFileDialog();
+				File diagramFolder = aquireFolderForDiagram(diagramEditor);
+				if (diagramFolder == null) return;
 				
+				File chosenFile = getFileFromFileDialog();
 				if (chosenFile == null) return;
 				
 				try {
@@ -299,7 +301,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				if (paths == null) return;
 				
 				File[] files = Arrays.stream(paths).map(path -> new File(path)).toArray(File[]::new);
-				File folder = aquireFolderForDiagram();
+				File folder = aquireFolderForDiagram(diagramEditor);
 
 				Arrays.stream(files).forEach(file -> {
 					try {
@@ -413,22 +415,14 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		}
 		
 		diagramEditor = (DiagramEditor) activeEditorPart;
-		aquireFolderForDiagram();
-		aquireAssociationsForFolder();
-		updateSelectedElement(selection);
+		currentFolder = aquireFolderForDiagram(diagramEditor);
+		currentAssociationsFile = aquireAssociationsFileForFolder(currentFolder);
+		associations = parseAssociationsFromFile(currentAssociationsFile);
+		selectedDiagramElement = aquireSelectedElement(selection);
 		updateSelectedDiagramElementName(selectedDiagramElement);
 		
 		if (associations != null)
 			setViewerElements(associations.toArray());
-	}
-	
-	private void updateSelectedElement(ISelection selection) {
-		if (selection == null || selection.isEmpty() || !(selection instanceof StructuredSelection)) return;
-		StructuredSelection structuredSelection = (StructuredSelection) selection;
-		
-		Object firstElement = structuredSelection.getFirstElement();
-		if (!(firstElement instanceof IGraphicalEditPart)) return;
-		selectedDiagramElement = (IGraphicalEditPart) firstElement;
 	}
 	
 	
@@ -486,40 +480,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		File file = new File(path);
 		return file.exists() ? file : null;
-	}
-	
-	private File aquireFolderForDiagram() {
-		IFile currentlyOpenedFile = getCurrentlyOpenedDiagram(diagramEditor);
-		if (currentlyOpenedFile == null) return null;
-		
-		IPath path = currentlyOpenedFile.getRawLocation();
-		
-		String folderName = "." + path.removeFileExtension().lastSegment();
-		String pathString = path.removeLastSegments(1).append(folderName).toOSString();
-		
-		currentFolder = getOrCreateFolder(pathString);
-		return currentFolder;
-	}
-	
-	
-	private Associations aquireAssociationsForFolder() {
-		if (currentFolder == null) return null;
-		
-		File associationFile = new File(currentFolder, ".associations");
-		if (associationFile.equals(currentAssociationsFile)) return associations;
-		
-		try {
-			if (!associationFile.exists()) associationFile.createNewFile();
-			
-			associations = new Toml().read(associationFile).to(Associations.class);
-			currentAssociationsFile = associationFile;
-			
-			return associations;
-		} catch (Exception e) {
-			return null;
-		}
-	}
-	
+	}	
 	
 	private void persistAssociations() {
 		TomlWriter tomlWriter = new TomlWriter();
@@ -530,7 +491,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		}
 	}
 	
-	
 	private static boolean isEditorOepcDiagramEditor(IEditorPart editorPart) {
 		if (editorPart instanceof MultiPageEditorPart) {
 			MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart) editorPart;
@@ -539,7 +499,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		return editorPart instanceof OepcDiagramEditor; 
 	}
-	
 	
 	private static boolean deleteFileAndCatchException(File file) {
 		boolean success = !file.exists();
@@ -555,6 +514,44 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return success;
 	}
 	
+	private static File aquireFolderForDiagram(DiagramEditor editor) {
+		IFile currentlyOpenedFile = getCurrentlyOpenedDiagram(editor);
+		if (currentlyOpenedFile == null) return null;
+		
+		IPath path = currentlyOpenedFile.getRawLocation();
+		
+		String folderName = "." + path.removeFileExtension().lastSegment();
+		String pathString = path.removeLastSegments(1).append(folderName).toOSString();
+		
+		return getOrCreateFolder(pathString);
+	}
+	
+	private static File aquireAssociationsFileForFolder(File folder) {
+		if (folder == null) return null;
+		
+		File associationFile = new File(folder, ".associations");
+		
+		try {
+			if (!associationFile.exists()) associationFile.createNewFile();
+			return associationFile;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	private static Associations parseAssociationsFromFile(File file) {
+		if (file == null) return null;
+		return new Toml().read(file).to(Associations.class);
+	}
+	
+	private static IGraphicalEditPart aquireSelectedElement(ISelection selection) {
+		if (selection == null || selection.isEmpty() || !(selection instanceof StructuredSelection)) return null;
+		StructuredSelection structuredSelection = (StructuredSelection) selection;
+		
+		Object firstElement = structuredSelection.getFirstElement();
+		if (!(firstElement instanceof IGraphicalEditPart)) return null;
+		return (IGraphicalEditPart) firstElement;
+	}
 	
 	private static IFile getCurrentlyOpenedDiagram(IWorkbenchPart part) {
 		if (!(part instanceof DiagramDocumentEditor)) return null;
@@ -565,7 +562,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 
 		return file;
 	}
-	
 	
 	private static File getOrCreateFolder(String path) {
 		File folder = new File(path);
