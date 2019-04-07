@@ -119,7 +119,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		currentFolder = aquireFolderForDiagram(diagramEditor);
 		currentAssociationsFile = aquireAssociationsFileForFolder(currentFolder);
 		associations = parseAssociationsFromFile(currentAssociationsFile);
-		selectedDiagramElement = aquireSelectedElement(page.getSelection());
+		selectedDiagramElement = getSelectedElement(page.getSelection());
 	}
 
 	@Override
@@ -417,7 +417,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		currentFolder = aquireFolderForDiagram(diagramEditor);
 		currentAssociationsFile = aquireAssociationsFileForFolder(currentFolder);
 		associations = parseAssociationsFromFile(currentAssociationsFile);
-		selectedDiagramElement = aquireSelectedElement(selection);
+		selectedDiagramElement = getSelectedElement(selection);
 		updateSelectedDiagramElementName(selectedDiagramElement);
 		
 		if (associations != null)
@@ -541,7 +541,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return new Toml().read(file).to(Associations.class);
 	}
 	
-	private static IGraphicalEditPart aquireSelectedElement(ISelection selection) {
+	private static IGraphicalEditPart getSelectedElement(ISelection selection) {
 		if (selection == null || selection.isEmpty() || !(selection instanceof StructuredSelection)) return null;
 		StructuredSelection structuredSelection = (StructuredSelection) selection;
 		
