@@ -398,7 +398,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		viewer.getControl().forceFocus();
 	}
 	
-	
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		IEditorPart activeEditorPart = part.getSite().getPage().getActiveEditor();
@@ -446,14 +445,12 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		setUpControls(isEnabled);
 	}
 	
-	
 	private void disableView() {
 		isEnabled = false;
 		
 		viewer.setItemCount(0);
 		setUpControls(isEnabled);
 	}
-	
 	
 	private void setUpControls(boolean value) {
 		associationTable.setEnabled(value);
@@ -462,13 +459,21 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		btnDelAll.setEnabled(value);
 	}
 	
-	
 	private void setViewerElements(Association[] associations) {
 		viewer.setItemCount(0);
 		viewer.add(associations);
 
 		for (TableColumn col : associationTable.getColumns())
 			col.pack();
+	}
+
+	private void persistAssociations() {
+		TomlWriter tomlWriter = new TomlWriter();
+		try {
+			tomlWriter.write(associations, currentAssociationsFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private File getFileFromFileDialog() {
@@ -482,14 +487,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return file.exists() ? file : null;
 	}	
 	
-	private void persistAssociations() {
-		TomlWriter tomlWriter = new TomlWriter();
-		try {
-			tomlWriter.write(associations, currentAssociationsFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	private static boolean isEditorOepcDiagramEditor(IEditorPart editorPart) {
 		if (editorPart instanceof MultiPageEditorPart) {
@@ -582,6 +579,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		return targetFile;
 	}
  	
+	
 	private class AssociationViewerComparator extends ViewerComparator {
 		@Override
 		public int compare(Viewer viewer, Object o1, Object o2) {
