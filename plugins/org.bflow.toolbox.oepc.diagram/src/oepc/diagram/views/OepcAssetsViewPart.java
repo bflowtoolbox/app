@@ -284,11 +284,13 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			public void drop(DropTargetEvent event) {
 				if (urlTransfer.isSupportedType(event.currentDataType))
 					associateURL(event.currentDataType);
-				if (fileTransfer.isSupportedType(event.currentDataType)) 
-					associateFile(event.currentDataType);
+				else if (fileTransfer.isSupportedType(event.currentDataType)) 
+					associateFiles(event.currentDataType);
+				
+				persistAssociations();
 			}
 			
-			private void associateFile(TransferData data) {
+			private void associateFiles(TransferData data) {
 				Object o = fileTransfer.nativeToJava(data);
 				String[] paths = (String[]) o;
 				
@@ -304,7 +306,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 						associations.add(association);
 						
 						setViewerElements(associations.toArray());
-						persistAssociations();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -320,21 +321,20 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				associations.add(association);
 				
 				setViewerElements(associations.toArray());
-				persistAssociations();
 			}
 			
 			@Override
 			public void dragOver(DropTargetEvent event) {
 				event.feedback = DND.FEEDBACK_SCROLL;
-				if (event.item != null) event.feedback |= DND.FEEDBACK_INSERT_AFTER;
-				else 				   event.feedback |= DND.FEEDBACK_SELECT;
+				if (event.item != null)  event.feedback |= DND.FEEDBACK_INSERT_BEFORE;
+				else event.feedback |= DND.FEEDBACK_SELECT;
 			}
 			
 			@Override
 			public void dragEnter(DropTargetEvent event) {
 				if (urlTransfer.isSupportedType(event.currentDataType))
 					event.detail = DND.DROP_LINK;
-				if (fileTransfer.isSupportedType(event.currentDataType))
+				else if (fileTransfer.isSupportedType(event.currentDataType))
 					event.detail = DND.DROP_COPY;
 			}
 		});
