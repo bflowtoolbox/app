@@ -407,6 +407,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			
 			@Override
 			public void run() {
+				copyFiles = isChecked();
 			}
 			
 			@Override
