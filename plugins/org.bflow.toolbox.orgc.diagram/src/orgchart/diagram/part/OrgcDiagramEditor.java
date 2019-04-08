@@ -1,6 +1,3 @@
-/*
- * 
- */
 package orgchart.diagram.part;
 
 import java.util.ArrayList;
@@ -8,6 +5,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bflow.toolbox.extensions.BflowDiagramEditor;
+import org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -34,7 +33,6 @@ import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramDropTargetListener;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDiagramDocument;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDocument;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDocumentProvider;
-import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.gmf.tooling.runtime.part.LastClickPositionProvider;
@@ -61,13 +59,13 @@ import org.eclipse.ui.navigator.resources.ProjectExplorer;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.IShowInTargetList;
 import org.eclipse.ui.part.ShowInContext;
+
 import orgchart.diagram.navigator.OrgcNavigatorItem;
 
 /**
- * @generated
+ * @generated NOT
  */
-public class OrgcDiagramEditor extends DiagramDocumentEditor implements
-		IGotoMarker {
+public class OrgcDiagramEditor extends BflowDiagramEditor implements IGotoMarker, IAttributableDocumentEditor {
 
 	/**
 	 * @generated
@@ -140,8 +138,7 @@ public class OrgcDiagramEditor extends DiagramDocumentEditor implements
 	 * @generated
 	 */
 	protected IDocumentProvider getDocumentProvider(IEditorInput input) {
-		if (input instanceof IFileEditorInput
-				|| input instanceof URIEditorInput) {
+		if (input instanceof IFileEditorInput || input instanceof URIEditorInput) {
 			return OrgcDiagramEditorPlugin.getInstance().getDocumentProvider();
 		}
 		return super.getDocumentProvider(input);
@@ -163,10 +160,8 @@ public class OrgcDiagramEditor extends DiagramDocumentEditor implements
 	 * @generated
 	 */
 	protected void setDocumentProvider(IEditorInput input) {
-		if (input instanceof IFileEditorInput
-				|| input instanceof URIEditorInput) {
-			setDocumentProvider(OrgcDiagramEditorPlugin.getInstance()
-					.getDocumentProvider());
+		if (input instanceof IFileEditorInput || input instanceof URIEditorInput) {
+			setDocumentProvider(OrgcDiagramEditorPlugin.getInstance().getDocumentProvider());
 		} else {
 			super.setDocumentProvider(input);
 		}
@@ -272,6 +267,15 @@ public class OrgcDiagramEditor extends DiagramDocumentEditor implements
 		if (progressMonitor != null) {
 			progressMonitor.setCanceled(!success);
 		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor#firePropertyChanged()
+	 */
+	@Override
+	public void firePropertyChanged() {
+		this.firePropertyChange(OrgcDiagramEditor.PROP_DIRTY);		
 	}
 
 	/**
@@ -385,7 +389,7 @@ public class OrgcDiagramEditor extends DiagramDocumentEditor implements
 		/**
 		 * @generated
 		 */
-		protected List getObjectsBeingDropped() {
+		protected List<?> getObjectsBeingDropped() {
 			TransferData data = getCurrentEvent().currentDataType;
 			HashSet<URI> uris = new HashSet<URI>();
 
@@ -426,5 +430,13 @@ public class OrgcDiagramEditor extends DiagramDocumentEditor implements
 		protected abstract Object getJavaObject(TransferData data);
 
 	}
-
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.attributes.IAttributableDocumentEditor#getFileExtension()
+	 */
+	@Override
+	public String getFileExtension() {
+		return this.getEditorInput().getName().split("\\.")[1]; //$NON-NLS-1$
+	}
 }

@@ -42,7 +42,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.validation;visibility:=reexport,
  org.eclipse.gef;visibility:=reexport,
  org.bflow.toolbox.diagram.extensions,
- org.bflow.toolbox.epc.diagram
+ org.bflow.toolbox.epc.diagram,
+ org.bflow.toolbox.hive.attributes
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: org.bflow.toolbox.orgc.diagram
