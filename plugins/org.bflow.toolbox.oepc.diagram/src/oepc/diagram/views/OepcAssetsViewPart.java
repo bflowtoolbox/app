@@ -67,6 +67,7 @@ import com.moandjiezana.toml.Toml;
 import com.moandjiezana.toml.TomlWriter;
 
 import oepc.diagram.part.OepcDiagramEditor;
+import oepc.diagram.views.Association.Type;
 
 /**
  * Implements the view part to show/modify assets of an OEPC diagram.
@@ -86,6 +87,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private boolean isEnabled = true;
 	private boolean sortByElement = true;
 	private boolean sortAsc = true;
+	private boolean copyFiles = true;
 	
 	private IWorkbenchPage page;
 	private DiagramEditor diagramEditor;
@@ -165,8 +167,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				if (chosenFile == null) return;
 				
 				try {
-					File associatedFile = copyFileToFolder(diagramFolder, chosenFile);
-					Association association = new Association(GraphicalEditPartUtil.getElementId(selectedDiagramElement), associatedFile);
+					String elementId = GraphicalEditPartUtil.getElementId(selectedDiagramElement);
+					File associatedFile = copyFiles ? copyFileToFolder(diagramFolder, chosenFile) : chosenFile;
+					Type type = copyFiles ? Type.FILE : Type.SYMLINK;
+					
+					Association association = new Association(elementId, associatedFile, type);
 					associations.add(association);
 					persistAssociations();
 					
@@ -186,8 +191,15 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
             MenuItem item1 = new MenuItem(menu, SWT.PUSH | SWT.CHECK);
             item1.setText("Kopie");
             item1.setSelection(true);
+            item1.addSelectionListener(SelectionListener.widgetSelectedAdapter(item1Event -> {
+            	copyFiles = true;
+            }));
+            
             MenuItem item2 = new MenuItem(menu, SWT.PUSH | SWT.CHECK);
             item2.setText("Verknüpfung");
+            item2.addSelectionListener(SelectionListener.widgetSelectedAdapter(item2Event -> {
+            	copyFiles = false;
+            }));
 
             Point pos = btnAddModify.getLocation();
             Rectangle rect = btnAddModify.getBounds();
@@ -212,8 +224,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				for (Object o : structuredSelection.toArray()) {
 					if (!(o instanceof Association)) continue;
 					Association association = (Association) o;
-					
-					boolean success = deleteFileAndCatchException(new File(association.associatedURL));
+										
+					boolean success = association.type != Type.FILE || deleteFileAndCatchException(new File(association.associatedURL));
 					if (!success) continue;
 					
 					associations.remove(association);
@@ -238,7 +250,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					if (!(item.getData() instanceof Association)) continue;
 					Association association = (Association) item.getData();
 					
-					boolean success = deleteFileAndCatchException(new File(association.associatedURL));
+					boolean success = association.type != Type.FILE || deleteFileAndCatchException(new File(association.associatedURL));
 					if (!success) continue;
 					
 					associations.remove(association);
@@ -305,8 +317,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 
 				Arrays.stream(files).forEach(file -> {
 					try {
-						File newFile = copyFileToFolder(folder, file);
-						Association association = new Association(GraphicalEditPartUtil.getElementId(selectedDiagramElement), newFile);
+						String elementId = GraphicalEditPartUtil.getElementId(selectedDiagramElement);
+						File newFile = copyFiles ? copyFileToFolder(folder, file) : file;
+						Type type = copyFiles ? Type.FILE : Type.SYMLINK;
+						
+						Association association = new Association(elementId, newFile, type);
 						associations.add(association);
 						
 						setViewerElements(associations.toArray());

@@ -13,8 +13,8 @@ public class Association {
 		this.associatedURL = url;
 	}
 	
-	public Association(String elementId, File file) {
-		this.type = Type.FILE;
+	public Association(String elementId, File file, Type type) {
+		this.type = type;
 		this.elementId = elementId;
 		this.associatedURL = file.getAbsolutePath().replaceAll("\\\\", "/");
 	}
