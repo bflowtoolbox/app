@@ -3,6 +3,7 @@ package oepc.diagram.views;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -14,7 +15,10 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -45,6 +49,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -52,6 +57,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -97,6 +103,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private File currentAssociationsFile;
 	private Associations associations;
 	
+	private Action actionSetAssociationCopy;
+	private Action actionSetViewExtended;
 	
 	private Label selectedElementName;
 
@@ -129,6 +137,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	
 	@Override
 	public void createPartControl(Composite container) {
+		createViewActions();
+		
 		ScrolledComposite sc = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
 		
 		Composite parent = new Composite(sc, SWT.BORDER);
@@ -412,6 +422,67 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		setViewerElements(associations.toArray());
 	}
 	
+	
+	private void createViewActions() {
+		actionSetAssociationCopy = new Action() {
+			@Override
+			public ImageDescriptor getImageDescriptor() {
+				InputStream is = OepcAssetsViewPart.class.getResourceAsStream("/icons/Document-Move-16.png");
+				if (is == null) return null;
+				
+				Image img = new Image(Display.getCurrent(), is);
+				return ImageDescriptor.createFromImage(img);
+			}
+			
+			@Override
+			public int getStyle() {
+				return Action.AS_CHECK_BOX;
+			}
+			
+			@Override
+			public void run() {
+			}
+			
+			@Override
+			public String getToolTipText() {
+				return "Dateien kopieren anstatt zu verlinken";
+			}
+			
+		};
+		actionSetViewExtended = new Action() {
+			@Override
+			public ImageDescriptor getImageDescriptor() {
+				InputStream is = OepcAssetsViewPart.class.getResourceAsStream("/icons/Remove-16.png");
+				if (is == null) return null;
+				
+				Image img = new Image(Display.getCurrent(), is);
+				return ImageDescriptor.createFromImage(img);
+			}
+			
+			@Override
+			public int getStyle() {
+				return Action.AS_CHECK_BOX;
+			}
+			
+			@Override
+			public void run() {
+			}
+			
+			@Override
+			public String getToolTipText() {
+				return "Spalte mit Diagrammelementnamen anzeigen";
+			}
+		};
+
+		actionSetAssociationCopy.setChecked(true);
+		actionSetViewExtended.setChecked(true);
+		
+		IActionBars actionBars = getViewSite().getActionBars();
+		IToolBarManager toolBar = actionBars.getToolBarManager();
+		
+		toolBar.add(actionSetAssociationCopy);
+		toolBar.add(actionSetViewExtended);
+	}
 	
 	/**
 	 * Takes a {@code IGraphicalEditPart} as argument and sets the selectedElementName's
