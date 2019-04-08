@@ -14,4 +14,15 @@ package orgchart;
  * @generated
  */
 public interface Participant extends NamedElement, All_Rel_1 {
+	
+	/**
+	 * @generated NOT
+	 */
+	public String getSubdiagram();
+	
+	/**
+	 * @generated NOT
+	 */
+	public void setSubdiagram(String value);
+	
 } // Participant

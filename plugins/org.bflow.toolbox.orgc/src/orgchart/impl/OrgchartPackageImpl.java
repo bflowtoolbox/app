@@ -352,6 +352,14 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 	public EClass getParticipant() {
 		return participantEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getParticipant_Subdiagram() {
+		return (EAttribute) participantEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -512,6 +520,7 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 		personEClass = createEClass(PERSON);
 
 		participantEClass = createEClass(PARTICIPANT);
+		createEAttribute(participantEClass, PARTICIPANT__SUBDIAGRAM);
 
 		locationEClass = createEClass(LOCATION);
 
@@ -606,6 +615,7 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 		initEClass(personEClass, Person.class, "Person", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(participantEClass, Participant.class, "Participant", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getParticipant_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(locationEClass, Location.class, "Location", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
