@@ -160,19 +160,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				File diagramFolder = aquireFolderForDiagram(diagramEditor);
-				if (diagramFolder == null) return;
-				
 				File chosenFile = getFileFromFileDialog();
 				if (chosenFile == null) return;
 				
 				try {
-					String elementId = GraphicalEditPartUtil.getElementId(selectedDiagramElement);
-					File associatedFile = copyFiles ? copyFileToFolder(diagramFolder, chosenFile) : chosenFile;
-					Type type = copyFiles ? Type.FILE : Type.SYMLINK;
-					
-					Association association = new Association(elementId, associatedFile, type);
-					associations.add(association);
+					createForFileAndAddToAssociations(chosenFile);
 					persistAssociations();
 					
 					setViewerElements(associations.toArray());
@@ -230,9 +222,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					
 					associations.remove(association);
 					viewer.remove(association);
-					
-					persistAssociations();
 				}
+
+				persistAssociations();
 			}
 		});
 
@@ -255,9 +247,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					
 					associations.remove(association);
 					viewer.remove(association);
-					
-					persistAssociations();
 				}
+				
+				persistAssociations();
 			}
 		});
 		
@@ -313,17 +305,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				if (paths == null) return;
 				
 				File[] files = Arrays.stream(paths).map(path -> new File(path)).toArray(File[]::new);
-				File folder = aquireFolderForDiagram(diagramEditor);
-
 				Arrays.stream(files).forEach(file -> {
 					try {
-						String elementId = GraphicalEditPartUtil.getElementId(selectedDiagramElement);
-						File newFile = copyFiles ? copyFileToFolder(folder, file) : file;
-						Type type = copyFiles ? Type.FILE : Type.SYMLINK;
-						
-						Association association = new Association(elementId, newFile, type);
-						associations.add(association);
-						
+						createForFileAndAddToAssociations(file);
 						setViewerElements(associations.toArray());
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -482,6 +466,16 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			col.pack();
 	}
 
+	private void createForFileAndAddToAssociations(File file) throws IOException {
+		String elementId = GraphicalEditPartUtil.getElementId(selectedDiagramElement);
+		File diagramFolder = aquireFolderForDiagram(diagramEditor);
+		File associatedFile = copyFiles ? copyFileToFolder(diagramFolder, file) : file;
+		Type type = copyFiles ? Type.FILE : Type.SYMLINK;
+		
+		Association association = new Association(elementId, associatedFile, type);
+		associations.add(association);
+	}
+	
 	private void persistAssociations() {
 		TomlWriter tomlWriter = new TomlWriter();
 		try {
