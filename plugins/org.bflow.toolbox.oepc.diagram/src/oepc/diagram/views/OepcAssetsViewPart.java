@@ -41,10 +41,7 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -52,8 +49,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -112,7 +107,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private TableViewer viewer;
 	
 	private Button btnAdd;
-	private Button btnAddModify;
 	private Button btnDel;
 	private Button btnDelAll;
 	
@@ -148,7 +142,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		Composite controlPane = new Composite(parent, SWT.BORDER);
 
 		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 5;
+		gridLayout.numColumns = 4;
 
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = SWT.FILL;
@@ -181,34 +175,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			}
 		});
 		
-		btnAddModify = new Button(controlPane, SWT.ARROW | SWT.DOWN | SWT.FLAT);
-		btnAddModify.setToolTipText("Assoziations-Verhalten festlegen");
-		
-		btnAddModify.addSelectionListener(SelectionListener.widgetSelectedAdapter(event -> {
-			Menu menu = new Menu(this.getViewSite().getShell(), SWT.POP_UP);
-
-            MenuItem item1 = new MenuItem(menu, SWT.PUSH | SWT.CHECK);
-            item1.setText("Kopie");
-            item1.setSelection(true);
-            item1.addSelectionListener(SelectionListener.widgetSelectedAdapter(item1Event -> {
-            	copyFiles = true;
-            }));
-            
-            MenuItem item2 = new MenuItem(menu, SWT.PUSH | SWT.CHECK);
-            item2.setText("Verknüpfung");
-            item2.addSelectionListener(SelectionListener.widgetSelectedAdapter(item2Event -> {
-            	copyFiles = false;
-            }));
-
-            Point pos = btnAddModify.getLocation();
-            Rectangle rect = btnAddModify.getBounds();
-
-            Point menuPos = new Point(pos.x - 1, pos.y + rect.height);
-
-            menu.setLocation(controlPane.getDisplay().map(btnAddModify.getParent(), null, menuPos));
-            menu.setVisible(true);
-		}));
-
 		btnDel = new Button(controlPane, SWT.NONE);
 		btnDel.setImage(new Image(controlPane.getDisplay(), this.getClass().getResourceAsStream("/icons/Remove-16.png")));
 		btnDel.setToolTipText("Datei-Assoziation entfernen");
