@@ -53,6 +53,8 @@ public class Associations {
 	 */
 	public Association[] getAssociationsForElementId(String elementId) {
 		List<Association> associations = associationsMap.get(elementId);
+		if (associations == null) return new Association[0];
+		
 		Association[] array = new Association[associations.size()];
 		return associations.toArray(array);
 	}
