@@ -105,6 +105,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 
 	private Table associationTable;
 	private TableViewer viewer;
+	private TableViewerColumn elementColumn;
+	private TableViewerColumn urlColumn;
 	
 	private Button btnAdd;
 	private Button btnDel;
@@ -315,27 +317,13 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			}
 		});
 
-		TableViewerColumn viewColElement = new TableViewerColumn(viewer, SWT.NONE);
-		viewColElement.getColumn().setText("Diagrammelement");
-		viewColElement.getColumn().setWidth(120);
-		viewColElement.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_ONE));
-		viewColElement.getColumn().addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				boolean columnChanged = !sortByElement;
-				
-				sortAsc = columnChanged ? true : !sortAsc;
-				sortByElement = true;
-				
-				updateViewer();
-			}
-		});
+		
 
-		TableViewerColumn viewColUrl = new TableViewerColumn(viewer, SWT.NONE);
-		viewColUrl.getColumn().setText("Assoziierte Datei");
-		viewColUrl.getColumn().setWidth(180);
-		viewColUrl.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_TWO));
-		viewColUrl.getColumn().addSelectionListener(new SelectionAdapter() {
+		urlColumn = new TableViewerColumn(viewer, SWT.NONE);
+		urlColumn.getColumn().setText("Assoziierte Datei");
+		urlColumn.getColumn().setWidth(180);
+		urlColumn.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_TWO));
+		urlColumn.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				boolean columnChanged = sortByElement;
@@ -347,6 +335,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			}
 		});
 
+		addElementColumn();
+		
 		associationTable = viewer.getTable();
 		associationTable.setLinesVisible(true);
 		associationTable.setHeaderVisible(true);
@@ -433,6 +423,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			
 			@Override
 			public void run() {
+				if (isChecked()) {
+					addElementColumn();
+					associationTable.setColumnOrder(new int[] { 1, 0 });
+					if (isEnabled) updateViewer();
+				} else removeElementColumn();
 			}
 			
 			@Override
@@ -440,7 +435,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				return "Spalte mit Diagrammelementnamen anzeigen";
 			}
 		};
-
 		actionSetAssociationCopy.setChecked(true);
 		actionSetViewExtended.setChecked(true);
 		
@@ -449,6 +443,27 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		toolBar.add(actionSetAssociationCopy);
 		toolBar.add(actionSetViewExtended);
+
+	private void addElementColumn() {
+		elementColumn = new TableViewerColumn(viewer, SWT.NONE);
+		elementColumn.getColumn().setText("Diagrammelement");
+		elementColumn.getColumn().setWidth(120);
+		elementColumn.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_ONE));
+		elementColumn.getColumn().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				boolean columnChanged = !sortByElement;
+				
+				sortAsc = columnChanged ? true : !sortAsc;
+				sortByElement = true;
+				
+				updateViewer();
+			}
+		});
+	}
+	
+	private void removeElementColumn() {
+		elementColumn.getColumn().dispose();
 	}
 	
 	/**
@@ -744,7 +759,5 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			
 			return IconProvider.getIcon(extension);
 		}
-		
-		
 	}
 }
