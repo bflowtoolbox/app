@@ -89,6 +89,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private boolean sortByElement = true;
 	private boolean sortAsc = true;
 	private boolean copyFiles = true;
+	private boolean showAll = true;
 	
 	private IWorkbenchPage page;
 	private DiagramEditor diagramEditor;
@@ -100,6 +101,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	
 	private Action actionSetAssociationCopy;
 	private Action actionSetViewExtended;
+	private Action actionSetShowAllAssociations;
 	
 	private Label selectedElementName;
 
@@ -170,7 +172,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					createForFileAndAddToAssociations(chosenFile);
 					persistAssociations();
 					
-					setViewerElements(associations.toArray());
+					setViewerElements(associations, showAll);
 				} catch (IOException e) {
 					MessageDialog.openError(null, "Fehler beim assozieren der Datei", e.getMessage());
 				}
@@ -283,7 +285,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				Arrays.stream(files).forEach(file -> {
 					try {
 						createForFileAndAddToAssociations(file);
-						setViewerElements(associations.toArray());
+						setViewerElements(associations, showAll);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -298,7 +300,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				Association association = new Association(elementId, url, Association.Type.URL);
 				associations.add(association);
 				
-				setViewerElements(associations.toArray());
+				setViewerElements(associations, showAll);
 			}
 			
 			@Override
@@ -352,7 +354,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		sc.setExpandVertical(true);
 		
 		if (!isEnabled) disableView();
-		if (associations != null) setViewerElements(associations.toArray());
+		setViewerElements(associations, showAll);
 	}
 	
 	@Override
@@ -375,7 +377,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		updateState((DiagramEditor) activeEditor);
 		updateSelectedDiagramElementName(selectedDiagramElement);
-		setViewerElements(associations.toArray());
+		setViewerElements(associations, showAll);
 	}
 	
 	
@@ -435,14 +437,44 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				return "Spalte mit Diagrammelementnamen anzeigen";
 			}
 		};
+		actionSetShowAllAssociations = new Action() {
+			public ImageDescriptor getImageDescriptor() {
+				InputStream is = OepcAssetsViewPart.class.getResourceAsStream("/icons/Remove-16.png");
+				if (is == null) return null;
+				
+				Image img = new Image(Display.getCurrent(), is);
+				return ImageDescriptor.createFromImage(img);
+			}
+			
+			@Override
+			public int getStyle() {
+				return Action.AS_CHECK_BOX;
+			}
+			
+			@Override
+			public void run() {
+				showAll = isChecked();
+				updateViewer();
+			}
+			
+			@Override
+			public String getToolTipText() {
+				return "Alle Assoziationen anzeigen";
+			}
+		
+		};
+		
 		actionSetAssociationCopy.setChecked(true);
 		actionSetViewExtended.setChecked(true);
+		actionSetShowAllAssociations.setChecked(true);
 		
 		IActionBars actionBars = getViewSite().getActionBars();
 		IToolBarManager toolBar = actionBars.getToolBarManager();
 		
 		toolBar.add(actionSetAssociationCopy);
 		toolBar.add(actionSetViewExtended);
+		toolBar.add(actionSetShowAllAssociations);
+	}
 
 	private void addElementColumn() {
 		elementColumn = new TableViewerColumn(viewer, SWT.NONE);
@@ -493,7 +525,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private void updateViewer() {
 		associationTable.setRedraw(false);
 		viewer.setItemCount(0);
-		setViewerElements(associations.toArray());
+		setViewerElements(associations, showAll);
 		associationTable.setRedraw(true);
 	}
 	
@@ -518,14 +550,22 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	}
 	
 	/**
-	 * Displays all associations on the table viewer.
+	 * Displays all associations if {@code showAll} is {@code true} on the table viewer
+	 * and packs all columns.
+	 * Otherwise only the associations for the currently selected element are shown.
 	 * @param associations
 	 */
-	private void setViewerElements(Association[] associations) {
+	private void setViewerElements(Associations associations, boolean showAll) {
 		viewer.setItemCount(0);
 		if (associations == null) return;
 		
-		viewer.add(associations);
+		if (showAll) viewer.add(associations.toArray());
+		else {
+			String elementId = GraphicalEditPartUtil.getElementId(selectedDiagramElement);
+			Association[] filteredAssociations = associations.getAssociationsForElementId(elementId);
+			viewer.add(filteredAssociations);
+		}
+		
 		for (TableColumn col : associationTable.getColumns())
 			col.pack();
 	}
