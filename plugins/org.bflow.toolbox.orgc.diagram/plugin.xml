@@ -588,6 +588,9 @@
                <objectClass
                      name="orgchart.diagram.edit.parts.ParticipantEditPart">
                </objectClass>
+               <objectClass
+                     name="orgchart.diagram.edit.parts.GroupEditPart">
+               </objectClass>
             </or>
          </visibility>
          <menu
