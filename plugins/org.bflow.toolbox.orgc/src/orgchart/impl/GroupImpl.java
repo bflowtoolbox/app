@@ -16,7 +16,7 @@ import orgchart.OrgchartPackage;
  *
  * @generated
  */
-public class GroupImpl extends NamedElementImpl implements Group {
+public class GroupImpl extends LinkableElementImpl implements Group {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -34,6 +34,15 @@ public class GroupImpl extends NamedElementImpl implements Group {
 	@Override
 	protected EClass eStaticClass() {
 		return OrgchartPackage.Literals.GROUP;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see orgchart.impl.LinkableElementImpl#getSubdiagramFeatureId()
+	 */
+	@Override
+	protected int getSubdiagramFeatureId() {
+		return OrgchartPackage.GROUP__SUBDIAGRAM;
 	}
 
 } //GroupImpl

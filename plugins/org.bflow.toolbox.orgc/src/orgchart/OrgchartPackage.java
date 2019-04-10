@@ -411,6 +411,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @ordered
 	 */
 	int GROUP__NAME = NAMED_ELEMENT__NAME;
+	
+	/** 
+	 * @generated NOT 
+	 */
+	int GROUP__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Group</em>' class.
@@ -419,7 +424,7 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GROUP_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int GROUP_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Group</em>' class.
@@ -875,6 +880,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getGroup();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getGroup_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link orgchart.Position <em>Position</em>}'.
@@ -1177,6 +1187,11 @@ public interface OrgchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass GROUP = eINSTANCE.getGroup();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute GROUP__SUBDIAGRAM = eINSTANCE.getGroup_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link orgchart.impl.PositionImpl <em>Position</em>}' class.
