@@ -591,6 +591,9 @@
                <objectClass
                      name="orgchart.diagram.edit.parts.GroupEditPart">
                </objectClass>
+               <objectClass
+                     name="orgchart.diagram.edit.parts.LocationEditPart">
+               </objectClass>
             </or>
          </visibility>
          <menu
