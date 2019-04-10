@@ -14,18 +14,9 @@ import orgchart.Participant;
  * <p>
  * </p>
  *
- * @generated
+ * @generated NOT
  */
 public class ParticipantImpl extends LinkableElementImpl implements Participant {	
-	/*
-	 * (non-Javadoc)
-	 * @see orgchart.impl.LinkableElementImpl#getSubdiagramFeatureId()
-	 */
-	@Override
-	protected int getSubdiagramFeatureId() {
-		return OrgchartPackage.PARTICIPANT__SUBDIAGRAM;
-	}
-	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -43,6 +34,15 @@ public class ParticipantImpl extends LinkableElementImpl implements Participant 
 	@Override
 	protected EClass eStaticClass() {
 		return OrgchartPackage.Literals.PARTICIPANT;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see orgchart.impl.LinkableElementImpl#getSubdiagramFeatureId()
+	 */
+	@Override
+	protected int getSubdiagramFeatureId() {
+		return OrgchartPackage.PARTICIPANT__SUBDIAGRAM;
 	}
 	
 } //ParticipantImpl
