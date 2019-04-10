@@ -19,7 +19,7 @@ import vcchart.diagram.edit.parts.ParticipantEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
 
 /**
- * Action for creating and linking a new diagram to a VC activity.
+ * Action for creating and linking a new diagram to a VC element.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2019-01-27

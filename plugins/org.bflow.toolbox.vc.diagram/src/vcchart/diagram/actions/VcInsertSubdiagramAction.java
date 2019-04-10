@@ -23,7 +23,7 @@ import vcchart.diagram.edit.parts.ProductEditPart;
 import vcchart.diagram.part.VcDiagramEditorPlugin;
 
 /**
- * Action for linking existing diagrams to a VC activity.
+ * Action for linking existing diagrams to a VC element.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2019-01-27

@@ -20,7 +20,7 @@ import vcchart.diagram.edit.parts.ParticipantEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
 
 /**
- * Action for removing a linked diagram from a VC activity.
+ * Action for removing a linked diagram from a VC element.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2019-01-27
