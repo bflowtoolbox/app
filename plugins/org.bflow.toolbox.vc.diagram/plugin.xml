@@ -627,7 +627,7 @@
       <?gmfgen generated="false"?>
       <objectContribution
             adaptable="false"
-            id="org.bflow.toolbox.diagram.ActivitySubDiagram"
+            id="org.bflow.toolbox.diagram.vcSubDiagram"
             objectClass="org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart">
         <menu
               icon="icons/move16.png"
