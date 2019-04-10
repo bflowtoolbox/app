@@ -403,6 +403,14 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 	public EClass getPosition() {
 		return positionEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getPosition_Subdiagram() {
+		return (EAttribute) positionEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -545,6 +553,7 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 		createEAttribute(groupEClass, GROUP__SUBDIAGRAM);
 
 		positionEClass = createEClass(POSITION);
+		createEAttribute(positionEClass, POSITION__SUBDIAGRAM);
 
 		internalPersonEClass = createEClass(INTERNAL_PERSON);
 
@@ -642,7 +651,8 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 		initEAttribute(getGroup_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		
 		initEClass(positionEClass, Position.class, "Position", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
+		initEAttribute(getPosition_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Position.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEClass(internalPersonEClass, InternalPerson.class, "InternalPerson", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(externalPersonEClass, ExternalPerson.class, "ExternalPerson", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

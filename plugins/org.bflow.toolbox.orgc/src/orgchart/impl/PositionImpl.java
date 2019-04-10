@@ -16,7 +16,7 @@ import orgchart.Position;
  *
  * @generated
  */
-public class PositionImpl extends NamedElementImpl implements Position {
+public class PositionImpl extends LinkableElementImpl implements Position {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -34,6 +34,15 @@ public class PositionImpl extends NamedElementImpl implements Position {
 	@Override
 	protected EClass eStaticClass() {
 		return OrgchartPackage.Literals.POSITION;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see orgchart.impl.LinkableElementImpl#getSubdiagramFeatureId()
+	 */
+	@Override
+	protected int getSubdiagramFeatureId() {
+		return OrgchartPackage.POSITION__SUBDIAGRAM;
 	}
 
 } //PositionImpl
