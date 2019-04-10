@@ -594,6 +594,9 @@
                <objectClass
                      name="orgchart.diagram.edit.parts.LocationEditPart">
                </objectClass>
+               <objectClass
+                     name="orgchart.diagram.edit.parts.PositionEditPart">
+               </objectClass>
             </or>
          </visibility>
          <menu
