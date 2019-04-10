@@ -6,7 +6,10 @@ package orgchart.diagram.edit.parts;
 import java.util.List;
 
 import org.bflow.toolbox.epc.extensions.edit.parts.OrganisationUnitBorder;
+import org.bflow.toolbox.extensions.LinkContext;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
+import org.bflow.toolbox.extensions.figures.LinkImageFigure;
+import org.bflow.toolbox.extensions.layouts.CentralizingLayout;
 import org.eclipse.draw2d.Ellipse;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
@@ -32,6 +35,9 @@ import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.swt.graphics.Image;
+
+import orgchart.Participant;
 import orgchart.diagram.edit.policies.ParticipantItemSemanticEditPolicy;
 import orgchart.diagram.part.OrgcVisualIDRegistry;
 
@@ -67,8 +73,7 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
-		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
-				new ParticipantItemSemanticEditPolicy());
+		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE, new ParticipantItemSemanticEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
 		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
@@ -81,8 +86,7 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 		org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy lep = new org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy() {
 
 			protected EditPolicy createChildEditPolicy(EditPart child) {
-				EditPolicy result = child
-						.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
+				EditPolicy result = child.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
 				if (result == null) {
 					result = new NonResizableEditPolicy();
 				}
@@ -120,8 +124,7 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 	protected boolean addFixedChild(EditPart childEditPart) {
 		if (childEditPart instanceof ParticipantNameEditPart) {
 			((ParticipantNameEditPart) childEditPart)
-					.setLabel(getPrimaryShape()
-							.getFigureParticipantLabelFigure());
+					.setLabel(getPrimaryShape().getFigureParticipantLabelFigure());
 			return true;
 		}
 		return false;
@@ -219,8 +222,7 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 	 * @generated
 	 */
 	public EditPart getPrimaryChildEditPart() {
-		return getChildBySemanticHint(OrgcVisualIDRegistry
-				.getType(ParticipantNameEditPart.VISUAL_ID));
+		return getChildBySemanticHint(OrgcVisualIDRegistry.getType(ParticipantNameEditPart.VISUAL_ID));
 	}
 
 	/**
@@ -228,8 +230,7 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 	 */
 	protected void handleNotificationEvent(Notification event) {
 		if (event.getNotifier() == getModel()
-				&& EcorePackage.eINSTANCE.getEModelElement_EAnnotations()
-						.equals(event.getFeature())) {
+				&& EcorePackage.eINSTANCE.getEModelElement_EAnnotations().equals(event.getFeature())) {
 			handleMajorSemanticChange();
 		} else {
 			super.handleNotificationEvent(event);
@@ -266,6 +267,9 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 			this.tWidth = this.getPreferredSize().width;
 			this.tHeight = this.getPreferredSize().height;
 			createContents();
+			
+			// 2019-02-17 AST Required by the link image figure
+			setLayoutManager(new CentralizingLayout());
 		}
 
 		/**
@@ -288,6 +292,11 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 
 			nameContainer = nameContainer0;
 			nameContainer0.add(fFigureParticipantLabelFigure);
+			
+			Image playImage = new Image(null, this.getClass().getResourceAsStream("/icons/link-16.png"));
+			LinkContext linkContext = new LinkContext(() -> ((Participant) ParticipantEditPart.this.getPrimaryView().getElement()).getSubdiagram());
+			LinkImageFigure linkImage = new LinkImageFigure(playImage, linkContext);			
+			this.add(linkImage);	
 		}
 
 		/**
