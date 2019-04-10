@@ -376,13 +376,18 @@ public interface OrgchartPackage extends EPackage {
 	int LOCATION__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int LOCATION__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Location</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOCATION_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int LOCATION_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Location</em>' class.
@@ -870,6 +875,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getLocation();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getLocation_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link orgchart.Group <em>Group</em>}'.
@@ -1177,6 +1187,11 @@ public interface OrgchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass LOCATION = eINSTANCE.getLocation();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute LOCATION__SUBDIAGRAM = eINSTANCE.getLocation_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link orgchart.impl.GroupImpl <em>Group</em>}' class.

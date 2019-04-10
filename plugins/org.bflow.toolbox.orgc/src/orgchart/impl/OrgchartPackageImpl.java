@@ -369,6 +369,14 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 	public EClass getLocation() {
 		return locationEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getLocation_Subdiagram() {
+		return (EAttribute) locationEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -531,6 +539,7 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 		createEAttribute(participantEClass, PARTICIPANT__SUBDIAGRAM);
 
 		locationEClass = createEClass(LOCATION);
+		createEAttribute(locationEClass, LOCATION__SUBDIAGRAM);
 
 		groupEClass = createEClass(GROUP);
 		createEAttribute(groupEClass, GROUP__SUBDIAGRAM);
@@ -627,7 +636,8 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 		initEAttribute(getParticipant_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(locationEClass, Location.class, "Location", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
+		initEAttribute(getLocation_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEClass(groupEClass, Group.class, "Group", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGroup_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		
