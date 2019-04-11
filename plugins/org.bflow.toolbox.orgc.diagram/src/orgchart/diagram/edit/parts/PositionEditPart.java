@@ -34,7 +34,6 @@ import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.graphics.Image;
 
-import orgchart.Group;
 import orgchart.Position;
 import orgchart.diagram.edit.policies.PositionItemSemanticEditPolicy;
 import orgchart.diagram.part.OrgcVisualIDRegistry;
