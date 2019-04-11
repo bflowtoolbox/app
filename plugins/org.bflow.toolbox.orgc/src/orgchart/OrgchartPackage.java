@@ -502,13 +502,18 @@ public interface OrgchartPackage extends EPackage {
 	int INTERNAL_PERSON__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int INTERNAL_PERSON__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Internal Person</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INTERNAL_PERSON_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int INTERNAL_PERSON_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Internal Person</em>' class.
@@ -925,6 +930,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getInternalPerson();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getInternalPerson_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link orgchart.ExternalPerson <em>External Person</em>}'.
@@ -1242,6 +1252,11 @@ public interface OrgchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass INTERNAL_PERSON = eINSTANCE.getInternalPerson();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute INTERNAL_PERSON__SUBDIAGRAM = eINSTANCE.getInternalPerson_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link orgchart.impl.ExternalPersonImpl <em>External Person</em>}' class.
