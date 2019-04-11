@@ -584,6 +584,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @ordered
 	 */
 	int PERSON_TYPE__NAME = NAMED_ELEMENT__NAME;
+	
+	/**
+	 * @generated NOT
+	 */
+	int PERSON_TYPE__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Person Type</em>' class.
@@ -592,7 +597,7 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PERSON_TYPE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int PERSON_TYPE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Person Type</em>' class.
@@ -965,6 +970,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPersonType();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getPersonType_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link orgchart.Relation1 <em>Relation1</em>}'.
@@ -1292,6 +1302,11 @@ public interface OrgchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PERSON_TYPE = eINSTANCE.getPersonType();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute PERSON_TYPE__SUBDIAGRAM = eINSTANCE.getPersonType_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link orgchart.impl.Relation1Impl <em>Relation1</em>}' class.

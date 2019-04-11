@@ -454,6 +454,14 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 	public EClass getPersonType() {
 		return personTypeEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getPersonType_Subdiagram() {
+		return (EAttribute) personTypeEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -578,6 +586,7 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 		createEAttribute(externalPersonEClass, EXTERNAL_PERSON__SUBDIAGRAM);
 		
 		personTypeEClass = createEClass(PERSON_TYPE);
+		createEAttribute(personTypeEClass, PERSON_TYPE__SUBDIAGRAM);
 
 		relation1EClass = createEClass(RELATION1);
 		createEReference(relation1EClass, RELATION1__SOURCE);
@@ -678,7 +687,8 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 		initEAttribute(getExternalPerson_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, ExternalPerson.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		
 		initEClass(personTypeEClass, PersonType.class, "PersonType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
+		initEAttribute(getPersonType_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, PersonType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEClass(relation1EClass, Relation1.class, "Relation1", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRelation1_Source(), this.getAll_Rel_1(), null, "source", null, 0, 1, Relation1.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRelation1_Target(), this.getAll_Rel_1(), null, "target", null, 0, 1, Relation1.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
