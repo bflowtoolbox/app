@@ -603,6 +603,9 @@
                <objectClass
                      name="orgchart.diagram.edit.parts.ExternalPersonEditPart">
                </objectClass>
+               <objectClass
+                     name="orgchart.diagram.edit.parts.PersonTypeEditPart">
+               </objectClass>
             </or>
          </visibility>
          <menu
