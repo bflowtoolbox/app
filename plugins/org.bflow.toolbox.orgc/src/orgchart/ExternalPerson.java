@@ -11,7 +11,7 @@ package orgchart;
  *
  * @see orgchart.OrgchartPackage#getExternalPerson()
  * @model annotation="gmf.node label='name' label.icon='false' figure='rectangle' size='100,50' border.color='0,0,0'"
- * @generated
+ * @generated NOT
  */
-public interface ExternalPerson extends NamedElement, Person {
+public interface ExternalPerson extends NamedElement, LinkableElement, Person {
 } // ExternalPerson

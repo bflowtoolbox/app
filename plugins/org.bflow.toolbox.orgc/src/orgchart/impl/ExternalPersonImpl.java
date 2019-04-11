@@ -16,7 +16,7 @@ import orgchart.OrgchartPackage;
  *
  * @generated
  */
-public class ExternalPersonImpl extends NamedElementImpl implements ExternalPerson {
+public class ExternalPersonImpl extends LinkableElementImpl implements ExternalPerson {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -34,6 +34,15 @@ public class ExternalPersonImpl extends NamedElementImpl implements ExternalPers
 	@Override
 	protected EClass eStaticClass() {
 		return OrgchartPackage.Literals.EXTERNAL_PERSON;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see orgchart.impl.LinkableElementImpl#getSubdiagramFeatureId()
+	 */
+	@Override
+	protected int getSubdiagramFeatureId() {
+		return OrgchartPackage.EXTERNAL_PERSON__SUBDIAGRAM;
 	}
 
 } //ExternalPersonImpl
