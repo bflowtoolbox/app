@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
@@ -64,9 +66,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.ViewPart;
 
-import com.moandjiezana.toml.Toml;
-import com.moandjiezana.toml.TomlWriter;
-
 import oepc.diagram.part.OepcDiagramEditor;
 import oepc.diagram.views.Association.Type;
 
@@ -85,6 +84,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private static final String ELEMENT_LABEL_PREFIX = "Ausgewähltes Diagrammelement: ";
 	private static final String ELEMENT_LABEL_NO_SELECTION = "<Kein Element selektiert>";
 	
+	private static Log log;
+
 	private boolean isEnabled = true;
 	private boolean sortByElement = true;
 	private boolean sortAsc = true;
@@ -113,6 +114,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private Button btnAdd;
 	private Button btnDel;
 	private Button btnDelAll;
+	
+	static {
+		log = LogFactory.getLog(OepcAssetsViewPart.class);
+	}
+	
 	
 	@Override
 	public void init(IViewSite site) throws PartInitException {
@@ -170,7 +176,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				
 				try {
 					createForFileAndAddToAssociations(chosenFile);
-					persistAssociations();
+					AssociationPersistence.writeAssociationsToFile(associations, currentAssociationsFile);
 					
 					setViewerElements(associations, showAll);
 				} catch (IOException e) {
@@ -201,7 +207,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					viewer.remove(association);
 				}
 
-				persistAssociations();
+				AssociationPersistence.writeAssociationsToFile(associations, currentAssociationsFile);
 			}
 		});
 
@@ -225,8 +231,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					associations.remove(association);
 					viewer.remove(association);
 				}
-				
-				persistAssociations();
+
+				AssociationPersistence.writeAssociationsToFile(associations, currentAssociationsFile);
 			}
 		});
 		
@@ -252,9 +258,9 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					case FILE: Desktop.getDesktop().open((new File(association.associatedURL)));
 					}
 				} catch (IOException ioe) {
-					ioe.printStackTrace();
+					log.error(ioe.getMessage(), ioe);
 				} catch (URISyntaxException urie) {
-					urie.printStackTrace();
+					log.error(urie.getMessage(), urie);
 				}
 			}
 		});
@@ -271,15 +277,13 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					associateURL(event.currentDataType);
 				else if (fileTransfer.isSupportedType(event.currentDataType)) 
 					associateFiles(event.currentDataType);
-				
-				persistAssociations();
+
+				AssociationPersistence.writeAssociationsToFile(associations, currentAssociationsFile);
 			}
 			
 			private void associateFiles(TransferData data) {
 				Object o = fileTransfer.nativeToJava(data);
 				String[] paths = (String[]) o;
-				
-				if (paths == null) return;
 				
 				File[] files = Arrays.stream(paths).map(path -> new File(path)).toArray(File[]::new);
 				Arrays.stream(files).forEach(file -> {
@@ -287,7 +291,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 						createForFileAndAddToAssociations(file);
 						setViewerElements(associations, showAll);
 					} catch (IOException e) {
-						e.printStackTrace();
+						log.error(e.getMessage(), e);
 					}
 				});
 			}
@@ -524,8 +528,8 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	private void updateState(DiagramEditor editor) {
 		diagramEditor = editor;
 		currentFolder = aquireFolderForDiagram(diagramEditor);
-		currentAssociationsFile = aquireAssociationsFileForFolder(currentFolder);
-		associations = parseAssociationsFromFile(currentAssociationsFile);
+		currentAssociationsFile = AssociationPersistence.aquireAssociationsFile(currentFolder);
+		associations = AssociationPersistence.readAssociationsFromFile(currentAssociationsFile);
 		selectedDiagramElement = getSelectedElement(page.getSelection());
 	}
 	
@@ -591,19 +595,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		Association association = new Association(elementId, associatedFile, type);
 		associations.add(association);
-	}
-	
-	/**
-	 * Writes the current {@code Associations} object to disk. The destination for
-	 * the file is stored in the {@code currentAssociationsFile} instance variable.
-	 */
-	private void persistAssociations() {
-		TomlWriter tomlWriter = new TomlWriter();
-		try {
-			tomlWriter.write(associations, currentAssociationsFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private File getFileFromFileDialog() {
@@ -672,29 +663,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		if (!folder.exists()) folder.mkdirs();
 		
 		return folder;
-	}
-	
-	/**
-	 * Gets or creates the file in which all associations for the current diagram are persisted.
-	 * @param folder
-	 * @return The associations file, or {@code null} if it couldn't be found.
-	 */
-	private static File aquireAssociationsFileForFolder(File folder) {
-		if (folder == null) return null;
-		
-		File associationFile = new File(folder, ".associations");
-		
-		try {
-			if (!associationFile.exists()) associationFile.createNewFile();
-			return associationFile;
-		} catch (Exception e) {
-			return null;
-		}
-	}
-	
-	private static Associations parseAssociationsFromFile(File file) {
-		if (file == null) return null;
-		return new Toml().read(file).to(Associations.class);
 	}
 	
 	private static IGraphicalEditPart getSelectedElement(ISelection selection) {
