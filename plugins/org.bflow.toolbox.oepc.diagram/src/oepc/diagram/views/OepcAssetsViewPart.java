@@ -312,10 +312,20 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			
 			@Override
 			public void dragEnter(DropTargetEvent event) {
-				if (urlTransfer.isSupportedType(event.currentDataType))
+				TransferData data = event.currentDataType;
+				
+				if (urlTransfer.isSupportedType(data))
 					event.detail = DND.DROP_LINK;
-				else if (fileTransfer.isSupportedType(event.currentDataType))
+				else if (fileTransfer.isSupportedType(data) && hasNoFolder(data))
 					event.detail = DND.DROP_COPY;
+			}
+			
+			private boolean hasNoFolder(TransferData data) {
+				Object o = fileTransfer.nativeToJava(data);
+				String[] paths = (String[]) o;
+				
+				File[] files = Arrays.stream(paths).map(path -> new File(path)).toArray(File[]::new);
+				return Arrays.stream(files).allMatch(file -> !file.isDirectory());
 			}
 		});
 
