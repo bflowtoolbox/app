@@ -319,8 +319,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			}
 		});
 
-		
-
 		urlColumn = new TableViewerColumn(viewer, SWT.NONE);
 		urlColumn.getColumn().setText("Assoziierte Datei");
 		urlColumn.getColumn().setWidth(180);
@@ -427,7 +425,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			public void run() {
 				if (isChecked()) {
 					addElementColumn();
-					associationTable.setColumnOrder(new int[] { 1, 0 });
 					if (isEnabled) updateViewer();
 				} else removeElementColumn();
 			}
