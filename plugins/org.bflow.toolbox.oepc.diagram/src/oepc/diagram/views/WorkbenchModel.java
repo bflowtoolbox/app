@@ -35,11 +35,11 @@ public class WorkbenchModel implements ISelectionListener {
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (viewModel == null) return;
-		
-		viewModel.setSelectedElementId(GraphicalEditPartUtil.getElementId(getSelectedElement(selection)));
 
 		IEditorPart activeEditor = part.getSite().getPage().getActiveEditor();
 		if(isEditorOepcDiagramEditor(activeEditor)) viewModel.setDiagramEditor((DiagramEditor) activeEditor);
+		
+		viewModel.setSelectedElementId(GraphicalEditPartUtil.getElementId(getSelectedElement(selection)));
 		
 		IFile diagram = getOpenedDiagramForWorkbenchPart(part);
 		File folder = aquireFolderForDiagram(diagram);

@@ -34,23 +34,31 @@ public class OepcAssestsViewModel extends ViewModel {
 	}
 	
 	public void setSelectedElementId(String selectedElementId) {
-		setEnabled(selectedElementId != null);
+		if (isSafeToIgnore(selectedElementId)) return;
+		
 		firePropertyChanged("selectedElementId", this.selectedElementId, this.selectedElementId = selectedElementId);
 	}
 
 	public void setDiagramEditor(DiagramEditor diagramEditor) {
+		setEnabled(diagramEditor != null);
 		firePropertyChanged("diagramEditor", this.diagramEditor, this.diagramEditor = diagramEditor);
 	}
 	
 	public void setFolder(File folder) {
+		if (isSafeToIgnore(folder)) return;
+		
 		firePropertyChanged("folder", this.folder, this.folder = folder);
 	}
 	
 	public void setAssociations(Associations associations) {
+		if (isSafeToIgnore(associations)) return;
+		
 		firePropertyChanged("associations", this.associations, this.associations = associations);
 	}
 	
 	public void setAssociationsFile(File associationsFile) {
+		if (isSafeToIgnore(associationsFile)) return;
+		
 		firePropertyChanged("associationsFile", this.associations, this.associationsFile = associationsFile);
 	}
 	
@@ -85,5 +93,9 @@ public class OepcAssestsViewModel extends ViewModel {
 	
 	public Associations getAssociations() {
 		return associations;
+	}
+	
+	private boolean isSafeToIgnore(Object newValue) {
+		return newValue == null && diagramEditor != null;
 	}
 }

@@ -399,8 +399,6 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 			updateSelectedDiagramElementName(element);
 			
 			if (!showAll) updateViewer();
-		} else if ("diagramEditor".equals(propName) && isEnabled) {
-			System.out.println("foo");
 		} else if ("associations".equals(propName) && isEnabled) {
 			updateViewer();
 		}
