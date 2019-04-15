@@ -1,6 +1,8 @@
 package oepc.diagram.views;
 
 import java.awt.Desktop;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,10 +15,8 @@ import java.util.Arrays;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
-import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -55,18 +55,11 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.ViewPart;
 
-import oepc.diagram.part.OepcDiagramEditor;
 import oepc.diagram.views.Association.Type;
 
 /**
@@ -78,7 +71,7 @@ import oepc.diagram.views.Association.Type;
  * @since 2019-03-27
  *
  */
-public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
+public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListener {
 	public static final String VIEW_ID = "org.bflow.toolbox.oepc.diagram.views.assets"; //$NON-NLS-1$
 	
 	private static final String ELEMENT_LABEL_PREFIX = "Ausgewähltes Diagrammelement: ";
@@ -86,19 +79,12 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	
 	private static Log log;
 
-	private boolean isEnabled = true;
 	private boolean sortByElement = true;
 	private boolean sortAsc = true;
-	private boolean copyFiles = true;
 	private boolean showAll = true;
 	
-	private IWorkbenchPage page;
-	private DiagramEditor diagramEditor;
-	private IGraphicalEditPart selectedDiagramElement;
-	
-	private File currentFolder;
-	private File currentAssociationsFile;
-	private Associations associations;
+	private WorkbenchModel workbenchModel;
+	private OepcAssestsViewModel viewModel;
 	
 	private Action actionSetAssociationCopy;
 	private Action actionSetViewExtended;
@@ -124,19 +110,31 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
 		
-		page = site.getPage();
-		page.addSelectionListener(this);
+		this.workbenchModel = new WorkbenchModel();
+		this.viewModel = new OepcAssestsViewModel(workbenchModel);
 		
-		IEditorPart activeEditor = page.getActiveEditor();
-		isEnabled = isEditorOepcDiagramEditor(activeEditor);
+		IGraphicalEditPart element = WorkbenchModel.getSelectedElement(site.getPage().getSelection());
+		viewModel.setSelectedElementId(GraphicalEditPartUtil.getElementId(element));
 
-		if (isEnabled) updateState((DiagramEditor) activeEditor);
+		IEditorPart activeEditor = site.getPage().getActiveEditor();
+		if(WorkbenchModel.isEditorOepcDiagramEditor(activeEditor)) viewModel.setDiagramEditor((DiagramEditor) activeEditor);
+		
+		IFile diagram = WorkbenchModel.getOpenedDiagramForWorkbenchPart(activeEditor);
+		File folder = WorkbenchModel.aquireFolderForDiagram(diagram);
+		viewModel.setFolder(folder);
+		
+		File associationsFile = AssociationPersistence.aquireAssociationsFile(folder);
+		viewModel.setAssociationsFile(associationsFile);
+		viewModel.setAssociations(AssociationPersistence.readAssociationsFromFile(associationsFile));
+		
+		site.getPage().addSelectionListener(workbenchModel);
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		page.removeSelectionListener(this);
+		getSite().getPage().removeSelectionListener(workbenchModel);
+		viewModel.removePropertyChangeListener(this);
 	}
 	
 	@Override
@@ -175,8 +173,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				if (chosenFile == null) return;
 				
 				try {
-					createForFileAndAddToAssociations(chosenFile);
-					AssociationPersistence.writeAssociationsToFile(associations, currentAssociationsFile);
+					Associations associations = viewModel.getAssociations();
+					Association newAssociation = createAssociationForFile(chosenFile);
+					
+					associations.add(newAssociation);
+					AssociationPersistence.writeAssociationsToFile(associations, viewModel.getAssociationsFile());
 					
 					setViewerElements(associations, showAll);
 				} catch (IOException e) {
@@ -196,6 +197,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				if (selection.isEmpty() || !(selection instanceof StructuredSelection)) return;
 				StructuredSelection structuredSelection = (StructuredSelection) selection;
 				
+				Associations associations = viewModel.getAssociations();
 				for (Object o : structuredSelection.toArray()) {
 					if (!(o instanceof Association)) continue;
 					Association association = (Association) o;
@@ -207,7 +209,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					viewer.remove(association);
 				}
 
-				AssociationPersistence.writeAssociationsToFile(associations, currentAssociationsFile);
+				AssociationPersistence.writeAssociationsToFile(associations, viewModel.getAssociationsFile());
 			}
 		});
 
@@ -220,6 +222,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem[] items = viewer.getTable().getItems();
+				Associations associations = viewModel.getAssociations();
 				
 				for (TableItem item : items) {
 					if (!(item.getData() instanceof Association)) continue;
@@ -232,12 +235,12 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 					viewer.remove(association);
 				}
 
-				AssociationPersistence.writeAssociationsToFile(associations, currentAssociationsFile);
+				AssociationPersistence.writeAssociationsToFile(associations, viewModel.getAssociationsFile());
 			}
 		});
 		
 		selectedElementName = new Label(controlPane, SWT.NONE);
-		updateSelectedDiagramElementName(selectedDiagramElement);
+		updateSelectedDiagramElementName(GraphicalEditPartUtil.getViewPart(viewModel.getDiagramEditor(), viewModel.getSelectedElementId()));
 
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 
@@ -278,7 +281,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				else if (fileTransfer.isSupportedType(event.currentDataType)) 
 					associateFiles(event.currentDataType);
 
-				AssociationPersistence.writeAssociationsToFile(associations, currentAssociationsFile);
+				AssociationPersistence.writeAssociationsToFile(viewModel.getAssociations(), viewModel.getAssociationsFile());
 			}
 			
 			private void associateFiles(TransferData data) {
@@ -288,7 +291,11 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 				File[] files = Arrays.stream(paths).map(path -> new File(path)).toArray(File[]::new);
 				Arrays.stream(files).forEach(file -> {
 					try {
-						createForFileAndAddToAssociations(file);
+						Associations associations = viewModel.getAssociations();
+						Association newAssociation = createAssociationForFile(file);
+						
+						associations.add(newAssociation);
+						
 						setViewerElements(associations, showAll);
 					} catch (IOException e) {
 						log.error(e.getMessage(), e);
@@ -299,9 +306,10 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			private void associateURL(TransferData data) {
 				Object o = urlTransfer.nativeToJava(data);
 				String url = (String) o;
+
+				Associations associations = viewModel.getAssociations();
+				Association association = new Association(viewModel.getSelectedElementId(), url, Association.Type.URL);
 				
-				String elementId = GraphicalEditPartUtil.getElementId(selectedDiagramElement);
-				Association association = new Association(elementId, url, Association.Type.URL);
 				associations.add(association);
 				
 				setViewerElements(associations, showAll);
@@ -365,31 +373,37 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
 		
-		if (!isEnabled) disableView();
-		setViewerElements(associations, showAll);
+		setUpControls(viewModel.isEnabled());
+		setViewerElements(viewModel.getAssociations(), showAll);
+		viewModel.addPropertyChangeListener(this);
 	}
 	
 	@Override
 	public void setFocus() {
 		viewer.getControl().forceFocus();
 	}
-	
+
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		IEditorPart activeEditor = part.getSite().getPage().getActiveEditor();
-		boolean isOepc = isEditorOepcDiagramEditor(activeEditor);
+	public void propertyChange(PropertyChangeEvent evt) {
+		String propName = evt.getPropertyName();
+		boolean isEnabled = viewModel.isEnabled();
 		
-		if (!isOepc && !isEnabled)
-			return;
-		else if (!isOepc) {
-			disableView();
-			return;
-		} else if (!isEnabled)
-			enableView();
-		
-		updateState((DiagramEditor) activeEditor);
-		updateSelectedDiagramElementName(selectedDiagramElement);
-		setViewerElements(associations, showAll);
+		if ("isEnabled".equals(propName)) {
+			isEnabled = (Boolean) evt.getNewValue();
+			setUpControls(isEnabled);
+		} else if ("selectedElementId".equals(propName) && isEnabled) {
+			DiagramEditor editor = viewModel.getDiagramEditor();
+			String id = (String) evt.getNewValue();
+			
+			IGraphicalEditPart element = GraphicalEditPartUtil.getViewPart(editor, id);
+			updateSelectedDiagramElementName(element);
+			
+			if (!showAll) updateViewer();
+		} else if ("diagramEditor".equals(propName) && isEnabled) {
+			System.out.println("foo");
+		} else if ("associations".equals(propName) && isEnabled) {
+			updateViewer();
+		}
 	}
 	
 	
@@ -411,7 +425,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			
 			@Override
 			public void run() {
-				copyFiles = isChecked();
+				viewModel.setCopy(isChecked());
 			}
 			
 			@Override
@@ -439,7 +453,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			public void run() {
 				if (isChecked()) {
 					addElementColumn();
-					if (isEnabled) updateViewer();
+					if (viewModel.isEnabled()) updateViewer();
 				} else removeElementColumn();
 			}
 			
@@ -516,48 +530,31 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	 * @param selectedElement
 	 */
 	private void updateSelectedDiagramElementName(IGraphicalEditPart selectedElement) {
+		if (selectedElementName == null) return;
+		
 		String name = GraphicalEditPartUtil.getElementName(selectedElement);
 		String text = ELEMENT_LABEL_PREFIX + (!name.equals("") ? name : ELEMENT_LABEL_NO_SELECTION);
 		selectedElementName.setText(text.replaceAll("[\r]\n", " "));
 		selectedElementName.requestLayout();
 	}
 	
-	/**
-	 * Updates all instance variables that are relevant to represent to current state.
-	 */
-	private void updateState(DiagramEditor editor) {
-		diagramEditor = editor;
-		currentFolder = aquireFolderForDiagram(diagramEditor);
-		currentAssociationsFile = AssociationPersistence.aquireAssociationsFile(currentFolder);
-		associations = AssociationPersistence.readAssociationsFromFile(currentAssociationsFile);
-		selectedDiagramElement = getSelectedElement(page.getSelection());
-	}
-	
 	private void updateViewer() {
 		associationTable.setRedraw(false);
-		viewer.setItemCount(0);
-		setViewerElements(associations, showAll);
+		setViewerElements(viewModel.getAssociations(), showAll);
 		associationTable.setRedraw(true);
 	}
 	
-	private void enableView() {
-		isEnabled = true;
+	/**
+	 * Sets up all controls within this ViewPart.
+	 * @param isEnabled
+	 */
+	private void setUpControls(boolean isEnabled) {
+		associationTable.setEnabled(isEnabled);
+		btnAdd.setEnabled(isEnabled);
+		btnDel.setEnabled(isEnabled);
+		btnDelAll.setEnabled(isEnabled);
 		
-		setUpControls(isEnabled);
-	}
-	
-	private void disableView() {
-		isEnabled = false;
-		
-		viewer.setItemCount(0);
-		setUpControls(isEnabled);
-	}
-	
-	private void setUpControls(boolean value) {
-		associationTable.setEnabled(value);
-		btnAdd.setEnabled(value);
-		btnDel.setEnabled(value);
-		btnDelAll.setEnabled(value);
+		if (!isEnabled) viewer.setItemCount(0);
 	}
 	
 	/**
@@ -572,7 +569,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		
 		if (showAll) viewer.add(associations.toArray());
 		else {
-			String elementId = GraphicalEditPartUtil.getElementId(selectedDiagramElement);
+			String elementId = viewModel.getSelectedElementId();
 			Association[] filteredAssociations = associations.getAssociationsForElementId(elementId);
 			viewer.add(filteredAssociations);
 		}
@@ -582,19 +579,18 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 	}
 
 	/**
-	 * Creates an association for a given file and adds it to the the {@code associations}
-	 * instance variable. Based on the {@code copyFiles} instance variable, the association
-	 * is created based on the original file or on a copy. 
+	 * Creates an association for a given file. Based on the {@code copyFiles} instance variable,
+	 * the association is created based on the original file or on a copy. If the file is to be
+	 * copied, this method also performs its copying.
 	 * @param file 			The file that is to be associated
 	 * @throws IOException  If the copy of the file could for some reason not be created
 	 */
-	private void createForFileAndAddToAssociations(File file) throws IOException {
-		String elementId = GraphicalEditPartUtil.getElementId(selectedDiagramElement);
-		File associatedFile = copyFiles ? copyFileToFolder(currentFolder, file) : file;
-		Type type = copyFiles ? Type.FILE : Type.SYMLINK;
+	private Association createAssociationForFile(File file) throws IOException {
+		String elementId = viewModel.getSelectedElementId();
+		File associatedFile = viewModel.isCopy() ? copyFileToFolder(viewModel.getFolder(), file) : file;
+		Type type = viewModel.isCopy() ? Type.FILE : Type.SYMLINK;
 		
-		Association association = new Association(elementId, associatedFile, type);
-		associations.add(association);
+		return new Association(elementId, associatedFile, type);
 	}
 	
 	private File getFileFromFileDialog() {
@@ -607,22 +603,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		File file = new File(path);
 		return file.exists() ? file : null;
 	}	
-	
-	/**
-	 * Checks whether the supplied {@code IEditorPart} contains a {@code OepcDiagramEditor}
-	 * as its currently active page.
-	 * @param editorPart
-	 * @return {@code true} if active page is an instance of {@code OepcDiagramEditor},
-	 * {@code false} otherwise.
-	 */
-	private static boolean isEditorOepcDiagramEditor(IEditorPart editorPart) {
-		if (editorPart instanceof MultiPageEditorPart) {
-			MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart) editorPart;
-			editorPart = (IEditorPart) multiPageEditorPart.getSelectedPage();
-		}
-		
-		return editorPart instanceof OepcDiagramEditor; 
-	}
+
 	
 	/**
 	 * Tries to delete the supplied file and returns {@code true} if successful.
@@ -642,46 +623,6 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		}
 		
 		return success;
-	}
-	
-	/**
-	 * Gets or creates the folder in which all associations, associated and copied files
-	 * will be stored to, based on the name of the currently opened diagram.
-	 * @param editor
-	 * @return The folder corresponding to the diagram, or {@code null} if no diagram is open.
-	 */
-	private static File aquireFolderForDiagram(DiagramEditor editor) {
-		IFile currentlyOpenedFile = getCurrentlyOpenedDiagram(editor);
-		if (currentlyOpenedFile == null) return null;
-		
-		IPath path = currentlyOpenedFile.getRawLocation();
-		
-		String folderName = "." + path.removeFileExtension().lastSegment();
-		String pathString = path.removeLastSegments(1).append(folderName).toOSString();
-		
-		File folder = new File(pathString);
-		if (!folder.exists()) folder.mkdirs();
-		
-		return folder;
-	}
-	
-	private static IGraphicalEditPart getSelectedElement(ISelection selection) {
-		if (selection == null || selection.isEmpty() || !(selection instanceof StructuredSelection)) return null;
-		StructuredSelection structuredSelection = (StructuredSelection) selection;
-		
-		Object firstElement = structuredSelection.getFirstElement();
-		if (!(firstElement instanceof IGraphicalEditPart)) return null;
-		return (IGraphicalEditPart) firstElement;
-	}
-	
-	private static IFile getCurrentlyOpenedDiagram(IWorkbenchPart part) {
-		if (!(part instanceof DiagramDocumentEditor)) return null;
-		IEditorInput input = ((DiagramDocumentEditor) part).getEditorInput();
-			
-		if (!(input instanceof IFileEditorInput)) return null;
-		IFile file = ((IFileEditorInput) input).getFile();
-
-		return file;
 	}
 	
 	private static File copyFileToFolder(File folder, File file) throws IOException {
@@ -704,6 +645,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 			Association a2 = (Association) o2;
 			
 			if (sortByElement) {
+				DiagramEditor diagramEditor = viewModel.getDiagramEditor();
 				IGraphicalEditPart element1 = GraphicalEditPartUtil.getViewPart(diagramEditor, a1.elementId);
 				IGraphicalEditPart element2 = GraphicalEditPartUtil.getViewPart(diagramEditor, a2.elementId);
 				String name1 = GraphicalEditPartUtil.getElementName(element1);
@@ -752,6 +694,7 @@ public class OepcAssetsViewPart extends ViewPart implements ISelectionListener {
 		@Override
 		public String getText(Object object) {
 			Association association = (Association) object;
+			DiagramEditor diagramEditor = viewModel.getDiagramEditor();
 			IGraphicalEditPart element = GraphicalEditPartUtil.getViewPart(diagramEditor, association.elementId);
 			
 			return column == COLUMN_ONE ? 

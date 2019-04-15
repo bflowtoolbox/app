@@ -17,6 +17,8 @@ public class GraphicalEditPartUtil {
 	 * @param elementId The unique id of the element
 	 */
 	public static IGraphicalEditPart getViewPart(DiagramEditor editor, String elementId) {
+		if (editor == null || elementId == null) return null;
+		
 		DiagramEditPart diagram = editor.getDiagramEditPart();
 		List<?> children = diagram.getChildren();
 

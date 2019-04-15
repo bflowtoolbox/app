@@ -53,9 +53,12 @@ public class AssociationPersistence {
 	/**
 	 * Tries to read all associations stored in the give {@code file}.
 	 * Returns a new {@code Associations} object if the file is not present or empty.
+	 * Returns NULL if {@code file} is NULL.
 	 * @param file The source file
 	 */
 	public static Associations readAssociationsFromFile(File file) {
+		if (file == null) return null;
+
 		XMLDecoder decoder = null;
 		
 		try {
