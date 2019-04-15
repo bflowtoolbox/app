@@ -75,9 +75,8 @@ public class WorkbenchModel implements ISelectionListener {
 	}
 	
 	/**
-	 * TODO
-	 * @param part
-	 * @return
+	 * Returns the file associated with the currently opened diagram.
+	 * @param part The currently opened diagram
 	 */
 	static IFile getOpenedDiagramForWorkbenchPart(IWorkbenchPart part) {
 		if (!(part instanceof DiagramDocumentEditor)) return null;
@@ -90,9 +89,9 @@ public class WorkbenchModel implements ISelectionListener {
 	}
 	
 	/**
-	 * TODO
+	 * Extracts and returns the an {@code IGraphicalEditPart} out of the
+	 * given {@code selection}.
 	 * @param selection
-	 * @return
 	 */
 	static IGraphicalEditPart getSelectedElement(ISelection selection) {
 		if (selection == null || selection.isEmpty() || !(selection instanceof StructuredSelection)) return null;
