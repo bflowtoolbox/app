@@ -14,7 +14,7 @@ public class IconProvider {
 	private static ImageRegistry imageRegistry;
 	
 	static {
-		defaultImage = null; // TODO: Replace with real default image
+		defaultImage = new Image(Display.getCurrent(), IconProvider.class.getResourceAsStream("/icons/File-16.png"));
 		imageRegistry = new ImageRegistry();
 	}
 	

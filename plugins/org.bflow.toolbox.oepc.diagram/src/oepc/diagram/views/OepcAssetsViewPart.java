@@ -435,7 +435,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 		actionSetViewExtended = new Action() {
 			@Override
 			public ImageDescriptor getImageDescriptor() {
-				InputStream is = OepcAssetsViewPart.class.getResourceAsStream("/icons/Remove-16.png");
+				InputStream is = OepcAssetsViewPart.class.getResourceAsStream("/icons/DeleteColumn-16.png");
 				if (is == null) return null;
 				
 				Image img = new Image(Display.getCurrent(), is);
@@ -462,7 +462,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 		};
 		actionSetShowAllAssociations = new Action() {
 			public ImageDescriptor getImageDescriptor() {
-				InputStream is = OepcAssetsViewPart.class.getResourceAsStream("/icons/Remove-16.png");
+				InputStream is = OepcAssetsViewPart.class.getResourceAsStream("/icons/LinkEditor-16.png");
 				if (is == null) return null;
 				
 				Image img = new Image(Display.getCurrent(), is);
