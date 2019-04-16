@@ -81,14 +81,14 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 
 	private boolean sortByElement = true;
 	private boolean sortAsc = true;
-	private boolean showAll = true;
+	private boolean showSelected = false;
 	
 	private WorkbenchModel workbenchModel;
 	private OepcAssestsViewModel viewModel;
 	
 	private Action actionSetAssociationCopy;
 	private Action actionSetViewExtended;
-	private Action actionSetShowAllAssociations;
+	private Action actionSetShowSelectedAssociations;
 	
 	private Label selectedElementName;
 
@@ -179,7 +179,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 					associations.add(newAssociation);
 					AssociationPersistence.writeAssociationsToFile(associations, viewModel.getAssociationsFile());
 					
-					setViewerElements(associations, showAll);
+					setViewerElements(associations, showSelected);
 				} catch (IOException e) {
 					MessageDialog.openError(null, "Fehler beim assozieren der Datei", e.getMessage());
 				}
@@ -296,7 +296,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 						
 						associations.add(newAssociation);
 						
-						setViewerElements(associations, showAll);
+						setViewerElements(associations, showSelected);
 					} catch (IOException e) {
 						log.error(e.getMessage(), e);
 					}
@@ -312,7 +312,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 				
 				associations.add(association);
 				
-				setViewerElements(associations, showAll);
+				setViewerElements(associations, showSelected);
 			}
 			
 			@Override
@@ -374,7 +374,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 		sc.setExpandVertical(true);
 		
 		setUpControls(viewModel.isEnabled());
-		setViewerElements(viewModel.getAssociations(), showAll);
+		setViewerElements(viewModel.getAssociations(), showSelected);
 		viewModel.addPropertyChangeListener(this);
 	}
 	
@@ -398,7 +398,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 			IGraphicalEditPart element = GraphicalEditPartUtil.getViewPart(editor, id);
 			updateSelectedDiagramElementName(element);
 			
-			if (!showAll) updateViewer();
+			if (showSelected) updateViewer();
 		} else if ("associations".equals(propName) && isEnabled) {
 			updateViewer();
 		}
@@ -460,7 +460,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 				return "Spalte mit Diagrammelementnamen anzeigen";
 			}
 		};
-		actionSetShowAllAssociations = new Action() {
+		actionSetShowSelectedAssociations = new Action() {
 			public ImageDescriptor getImageDescriptor() {
 				InputStream is = OepcAssetsViewPart.class.getResourceAsStream("/icons/LinkEditor-16.png");
 				if (is == null) return null;
@@ -476,27 +476,27 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 			
 			@Override
 			public void run() {
-				showAll = isChecked();
+				showSelected = isChecked();
 				updateViewer();
 			}
 			
 			@Override
 			public String getToolTipText() {
-				return "Alle Assoziationen anzeigen";
+				return "Nur Assoziationen für gewähltes Element anzeigen";
 			}
 		
 		};
 		
 		actionSetAssociationCopy.setChecked(true);
 		actionSetViewExtended.setChecked(true);
-		actionSetShowAllAssociations.setChecked(true);
+		actionSetShowSelectedAssociations.setChecked(false);
 		
 		IActionBars actionBars = getViewSite().getActionBars();
 		IToolBarManager toolBar = actionBars.getToolBarManager();
 		
 		toolBar.add(actionSetAssociationCopy);
 		toolBar.add(actionSetViewExtended);
-		toolBar.add(actionSetShowAllAssociations);
+		toolBar.add(actionSetShowSelectedAssociations);
 	}
 
 	private void addElementColumn() {
@@ -538,7 +538,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 	
 	private void updateViewer() {
 		associationTable.setRedraw(false);
-		setViewerElements(viewModel.getAssociations(), showAll);
+		setViewerElements(viewModel.getAssociations(), showSelected);
 		associationTable.setRedraw(true);
 	}
 	
@@ -561,11 +561,11 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 	 * Otherwise only the associations for the currently selected element are shown.
 	 * @param associations
 	 */
-	private void setViewerElements(Associations associations, boolean showAll) {
+	private void setViewerElements(Associations associations, boolean showSelected) {
 		viewer.setItemCount(0);
 		if (associations == null) return;
 		
-		if (showAll) viewer.add(associations.toArray());
+		if (!showSelected) viewer.add(associations.toArray());
 		else {
 			String elementId = viewModel.getSelectedElementId();
 			Association[] filteredAssociations = associations.getAssociationsForElementId(elementId);
