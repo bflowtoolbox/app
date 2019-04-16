@@ -360,8 +360,6 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 				updateViewer();
 			}
 		});
-
-		addElementColumn();
 		
 		associationTable = viewer.getTable();
 		associationTable.setLinesVisible(true);
@@ -427,7 +425,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 			
 			@Override
 			public void run() {
-				if (isChecked()) {
+				if (!isChecked()) {
 					addElementColumn();
 					if (viewModel.isEnabled()) updateViewer();
 				} else removeElementColumn();
