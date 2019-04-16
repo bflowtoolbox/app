@@ -86,7 +86,6 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 	private WorkbenchModel workbenchModel;
 	private OepcAssestsViewModel viewModel;
 	
-	private Action actionSetAssociationCopy;
 	private Action actionSetViewExtended;
 	private Action actionSetShowSelectedAssociations;
 	
@@ -171,6 +170,9 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 			public void widgetSelected(SelectionEvent event) {
 				File chosenFile = getFileFromFileDialog();
 				if (chosenFile == null) return;
+				
+				boolean isOk = updateFileOperation(container);
+				if (!isOk) return;
 				
 				try {
 					Associations associations = viewModel.getAssociations();
@@ -285,6 +287,8 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 			}
 			
 			private void associateFiles(TransferData data) {
+				updateFileOperation(container);
+		
 				Object o = fileTransfer.nativeToJava(data);
 				String[] paths = (String[]) o;
 				
@@ -406,32 +410,6 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 	
 	
 	private void createViewActions() {
-		actionSetAssociationCopy = new Action() {
-			@Override
-			public ImageDescriptor getImageDescriptor() {
-				InputStream is = OepcAssetsViewPart.class.getResourceAsStream("/icons/Document-Move-16.png");
-				if (is == null) return null;
-				
-				Image img = new Image(Display.getCurrent(), is);
-				return ImageDescriptor.createFromImage(img);
-			}
-			
-			@Override
-			public int getStyle() {
-				return Action.AS_CHECK_BOX;
-			}
-			
-			@Override
-			public void run() {
-				viewModel.setCopy(isChecked());
-			}
-			
-			@Override
-			public String getToolTipText() {
-				return "Dateien kopieren anstatt zu verlinken";
-			}
-			
-		};
 		actionSetViewExtended = new Action() {
 			@Override
 			public ImageDescriptor getImageDescriptor() {
@@ -487,14 +465,12 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 		
 		};
 		
-		actionSetAssociationCopy.setChecked(true);
 		actionSetViewExtended.setChecked(true);
 		actionSetShowSelectedAssociations.setChecked(false);
 		
 		IActionBars actionBars = getViewSite().getActionBars();
 		IToolBarManager toolBar = actionBars.getToolBarManager();
 		
-		toolBar.add(actionSetAssociationCopy);
 		toolBar.add(actionSetViewExtended);
 		toolBar.add(actionSetShowSelectedAssociations);
 	}
@@ -585,8 +561,8 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 	 */
 	private Association createAssociationForFile(File file) throws IOException {
 		String elementId = viewModel.getSelectedElementId();
-		File associatedFile = viewModel.isCopy() ? copyFileToFolder(viewModel.getFolder(), file) : file;
-		Type type = viewModel.isCopy() ? Type.FILE : Type.SYMLINK;
+		File associatedFile = FileOperationDialog.isCopy ? copyFileToFolder(viewModel.getFolder(), file) : file;
+		Type type = FileOperationDialog.isCopy ? Type.FILE : Type.SYMLINK;
 		
 		return new Association(elementId, associatedFile, type);
 	}
@@ -602,7 +578,19 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 		return file.exists() ? file : null;
 	}	
 
-	
+	/**
+	 * Updates the file operation to be performed via a dialog.
+	 * @param container The container used for centering the dialog
+	 * @return {@code true} if OK was pressed and {@code false} otherwise
+	 */
+	private static boolean updateFileOperation(Composite container) {
+		if (!FileOperationDialog.isNotAskAgain) {
+			FileOperationDialog fod = new FileOperationDialog(container.getShell());
+			return fod.open() == FileOperationDialog.OK;
+		}
+		return true;
+	}
+
 	/**
 	 * Tries to delete the supplied file and returns {@code true} if successful.
 	 * Note that supplying a file that doesn't exist will deemed a successful deletion.

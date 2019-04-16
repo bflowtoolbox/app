@@ -6,7 +6,6 @@ import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 
 public class OepcAssestsViewModel extends ViewModel {
 	private boolean isEnabled;
-	private boolean isCopy;
 	
 	private String selectedElementId;
 	
@@ -22,17 +21,12 @@ public class OepcAssestsViewModel extends ViewModel {
 	
 	public OepcAssestsViewModel(WorkbenchModel workbenchModel) {
 		this.isEnabled = false;
-		this.isCopy = true;
 		
 		this.workbenchModel = workbenchModel;
 		this.workbenchModel.setViewModel(this);
 	}
 
 
-	public void setCopy(boolean isCopy) {
-		firePropertyChanged("isCopy", this.isCopy, this.isCopy = isCopy);
-	}
-	
 	public void setSelectedElementId(String selectedElementId) {
 		if (isSafeToIgnore(selectedElementId)) return;
 		
@@ -69,10 +63,6 @@ public class OepcAssestsViewModel extends ViewModel {
 	
 	public boolean isEnabled() {
 		return isEnabled;
-	}
-	
-	public boolean isCopy() {
-		return isCopy;
 	}
 	
 	public String getSelectedElementId() {
