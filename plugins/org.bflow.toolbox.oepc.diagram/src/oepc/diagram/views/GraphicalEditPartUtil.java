@@ -7,8 +7,18 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 
 public class GraphicalEditPartUtil {
+	
+	public static DiagramEditor getDiagramEditor() {
+		IEditorPart editorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if (editorPart instanceof DiagramEditor)
+			return (DiagramEditor) editorPart;
+		
+		return null;
+	}
 
 	/**
 	 * Returns the GraphicalEditPart that is a child of {@code editor}

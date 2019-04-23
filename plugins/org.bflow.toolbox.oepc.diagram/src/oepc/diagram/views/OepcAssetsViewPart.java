@@ -21,6 +21,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -44,8 +45,10 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -348,7 +351,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 		urlColumn = new TableViewerColumn(viewer, SWT.NONE);
 		urlColumn.getColumn().setText("Assoziierte Datei");
 		urlColumn.getColumn().setWidth(180);
-		urlColumn.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_TWO));
+		urlColumn.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_URL));
 		urlColumn.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -477,7 +480,7 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 		elementColumn = new TableViewerColumn(viewer, SWT.NONE);
 		elementColumn.getColumn().setText("Diagrammelement");
 		elementColumn.getColumn().setWidth(120);
-		elementColumn.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_ONE));
+		elementColumn.setLabelProvider(new AssociationLabelProvider(AssociationLabelProvider.COLUMN_ICON));
 		elementColumn.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -539,8 +542,9 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 		viewer.setItemCount(0);
 		if (associations == null) return;
 		
-		if (!showSelected) viewer.add(associations.toArray());
-		else {
+		if (!showSelected) {
+			viewer.add(associations.toArray());
+		} else {
 			String elementId = viewModel.getSelectedElementId();
 			Association[] filteredAssociations = associations.getAssociationsForElementId(elementId);
 			viewer.add(filteredAssociations);
@@ -665,41 +669,90 @@ public class OepcAssetsViewPart extends ViewPart implements PropertyChangeListen
 		}
 	}
 	
-	private class AssociationLabelProvider extends ColumnLabelProvider {
-		public static final int COLUMN_ONE = 0;
-		public static final int COLUMN_TWO = 1;		
+	/**
+	 * Implements {@link ColumnLabelProvider} to provide the labels 
+	 * of the association table.
+	 */
+	private static class AssociationLabelProvider extends ColumnLabelProvider {
+		private static final Image DefaultImage = new Image(Display.getCurrent(), AssociationLabelProvider.class.getResourceAsStream("/icons/File-16.png"));
+		private static ImageRegistry ImageRegistry = new ImageRegistry();
 		
-		private int column;
+		private static final int COLUMN_ICON = 0;
+		private static final int COLUMN_URL = 1;		
 		
+		private int _column;
+		
+		/** Initializes the new instance for the specified {@code column}. */
 		public AssociationLabelProvider(int column) {
-			this.column = column;
+			_column = column;
 		}
 		
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
+		 */
 		@Override
 		public String getText(Object object) {
-			Association association = (Association) object;
-			DiagramEditor diagramEditor = viewModel.getDiagramEditor();
+			Association association = (Association) object; 
+			DiagramEditor diagramEditor = GraphicalEditPartUtil.getDiagramEditor();
 			IGraphicalEditPart element = GraphicalEditPartUtil.getViewPart(diagramEditor, association.elementId);
 			
-			return column == COLUMN_ONE ? 
+			return _column == COLUMN_ICON ? 
 					GraphicalEditPartUtil.getElementName(element) : 
 					association.associatedURL;
 		}		
 		
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getImage(java.lang.Object)
+		 */
 		@Override
 		public Image getImage(Object object) {
-			if (column != COLUMN_TWO) return null;
-			
+			if (_column != COLUMN_URL) return null;
+
 			Association association = (Association) object;
-			String extension = null;
+			String extension = getFileExtension(association);
+			Image icon = getIcon(extension);
+
+			return icon;
+		}
+		
+		/**
+		 * Returns the file extension of the given {@code association}. 
+		 * Note, this method may return NULL.
+		 */
+		private String getFileExtension(Association association) {
+			if (association == null) return null;
 			
-			switch (association.type) {
-			case URL: extension = IconProvider.getExtension(IconProvider.BROWSER_EXTENSION); break;
-			case SYMLINK:
-			case FILE: extension = IconProvider.getExtension(association.associatedURL);
-			}
+			Type assType = association.type;
+			if (assType == Type.URL) return getFileExtension("html");
+			if (assType == Type.FILE) return getFileExtension(association.associatedURL);
 			
-			return IconProvider.getIcon(extension);
+			return null;
+		}
+		
+		/** Returns the file extension of a file with the specified {@code path}. */
+		private String getFileExtension(String path) {
+			String[] parts = path.split("\\.");
+			String extension = parts[parts.length - 1];			
+			return extension;
+		}
+		
+		/** Returns an icon for the specified {@code fileExtension}. */
+		private Image getIcon(String fileExtension) {
+			Image image = ImageRegistry.get(fileExtension);
+			if (image != null) return image;
+
+			Program program = Program.findProgram(fileExtension);
+			if (program == null) return DefaultImage;
+			
+			ImageData imageData = program.getImageData();
+			if (imageData == null) return DefaultImage;
+			
+			image = new Image(Display.getCurrent(), imageData);
+			ImageRegistry.put(fileExtension, image);
+
+			return image;
 		}
 	}
 }
