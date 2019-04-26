@@ -81,13 +81,18 @@ public class AssetsViewPart extends ViewPart {
 		sc.setExpandHorizontal(true);
 		sc.setExpandVertical(true);
 			
-		_workbenchPartListener.addCompatibleEditorListener(isCompatible -> {
+		ICompatibleEditorListener editorListener = isCompatible -> {
 			Control[] children = parent.getChildren();
 			for (int i = -1; ++i != children.length;) {
 				Control child = children[i];
 				child.setEnabled(isCompatible);
 			}
-		});
+		};
+		
+		_workbenchPartListener.addCompatibleEditorListener(editorListener);
+		
+		// Disable view initially
+		editorListener.onEditorChanged(false);
 	}
 
 	/*

@@ -3,23 +3,39 @@ package org.bflow.toolbox.hive.assets;
 import java.util.ArrayList;
 
 import org.bflow.toolbox.hive.libs.aprogu.lang.Cast;
+import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 
+/**
+ * Implements {@link IPartListener} to listen to workbench part changes and
+ * notifies the associated {@link AssetLinkCollection}.
+ * 
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2019-04-26
+ *
+ */
 public class WorkbenchPartListener implements IPartListener {
 	private final ArrayList<ICompatibleEditorListener> _listenerSet = new ArrayList<>(5);
 	private final AssetLinkCollection _assetLinkCollection;
+	private int _diagramEditorCount;
 	
+	/**
+	 * Initializes the new instance that notifies the given
+	 * {@code assetLinkCollection} when a new editor part has been opened or closed.
+	 */
 	public WorkbenchPartListener(AssetLinkCollection assetLinkCollection) {
 		_assetLinkCollection = assetLinkCollection;
 	}
 	
+	/** Adds the given {@code listener}. */
 	public void addCompatibleEditorListener(ICompatibleEditorListener listener) {
 		if (listener == null) return;
 		_listenerSet.add(listener);
 	}
 	
+	/** Removes the given {@code listener}. */
 	public void removeCompatibleEditorListener(ICompatibleEditorListener listener) {
 		if (listener == null) return;
 		_listenerSet.remove(listener);
@@ -48,7 +64,7 @@ public class WorkbenchPartListener implements IPartListener {
 	 */
 	@Override
 	public void partDeactivated(IWorkbenchPart part) {
-		
+		// Nothing to do here
 	}
 
 	/*
@@ -57,7 +73,14 @@ public class WorkbenchPartListener implements IPartListener {
 	 */
 	@Override
 	public void partOpened(IWorkbenchPart part) {
-		// Nothing to do here		
+		IEditorPart editorPart = Cast.as(IEditorPart.class, part);
+		if (editorPart == null) return;
+		
+		DiagramEditor diagramEditor = Cast.as(DiagramEditor.class, editorPart);
+		if (diagramEditor == null) return;
+		
+		_diagramEditorCount++;
+		raiseEditorChangedEvent();
 	}
 	
 	/*
@@ -66,8 +89,17 @@ public class WorkbenchPartListener implements IPartListener {
 	 */
 	@Override
 	public void partClosed(IWorkbenchPart part) {
-		// TODO Auto-generated method stub
+		IEditorPart editorPart = Cast.as(IEditorPart.class, part);
+		if (editorPart == null) return;
 		
+		DiagramEditor diagramEditor = Cast.as(DiagramEditor.class, editorPart);
+		if (diagramEditor == null) return;
+		
+		_diagramEditorCount--;
+		raiseEditorChangedEvent();
+		
+		if (_diagramEditorCount == 0)
+			_assetLinkCollection.onActiveEditorPartChanged(null);
 	}	
 	
 	/*
@@ -79,11 +111,9 @@ public class WorkbenchPartListener implements IPartListener {
 		// Nothing to do here
 	}
 	
-	/**
-	 * Raises {@link ICompatibleEditorListener#onEditorChanged(boolean)} with the 
-	 * specified {@code isCompatible} value.
-	 */
-	protected void raiseEditorChangedEvent(boolean isCompatible) {
+	/** Raises {@link ICompatibleEditorListener#onEditorChanged(boolean)}. */
+	protected void raiseEditorChangedEvent() {
+		boolean isCompatible = _diagramEditorCount != 0;
 		for (int i = -1; ++i != _listenerSet.size();) {
 			ICompatibleEditorListener listener = _listenerSet.get(i);
 			listener.onEditorChanged(isCompatible);
