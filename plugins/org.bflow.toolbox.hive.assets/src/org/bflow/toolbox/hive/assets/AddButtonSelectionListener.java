@@ -42,7 +42,6 @@ public class AddButtonSelectionListener extends SelectionAdapter {
 		File file = new File(path);
 		if (!file.exists() || file.isDirectory()) return;
 		
-		boolean isSymlink = true; // TODO
-		_assetLinkCollection.addLink(file, isSymlink);
+		AssetLinkOperation.addAssetLinkToCollection(_assetLinkCollection, new String[] { path });
 	}
 }
