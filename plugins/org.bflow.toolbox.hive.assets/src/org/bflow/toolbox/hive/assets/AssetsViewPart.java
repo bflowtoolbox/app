@@ -1,5 +1,8 @@
 package org.bflow.toolbox.hive.assets;
 
+import java.util.ArrayList;
+import java.util.function.Consumer;
+
 import org.bflow.toolbox.hive.libs.aprogu.lang.Cast;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -10,8 +13,10 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.URLTransfer;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IViewSite;
@@ -32,6 +37,8 @@ public class AssetsViewPart extends ViewPart {
 	private final AssetLinkCollection _assetLinkCollection = new AssetLinkCollection();
 	private final WorkbenchPartListener _workbenchPartListener = new WorkbenchPartListener(_assetLinkCollection);
 	private final WorkbenchSelectionListener _workbenchSelectionListener = new WorkbenchSelectionListener(_assetLinkCollection);
+	
+	private final ArrayList<Consumer<AssetLink>> _selectionChangedListener = new ArrayList<>(5);
 	
 	/*
 	 * (non-Javadoc)
@@ -58,6 +65,8 @@ public class AssetsViewPart extends ViewPart {
 		
 		getSite().getPage().removePartListener(_workbenchPartListener);
 		getSite().getPage().removeSelectionListener(_workbenchSelectionListener);
+		
+		_selectionChangedListener.clear();
 		
 		super.dispose();
 	}
@@ -107,7 +116,26 @@ public class AssetsViewPart extends ViewPart {
 	/** Creates the button panel as child of the given {@code parent}. */
 	private void createButtonPanel(Composite parent) {
 		Composite controlPane = new Composite(parent, SWT.BORDER);
+		controlPane.setLayout(new GridLayout(2, false));
 		controlPane.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		
+		Button btnAddLink = new Button(controlPane, SWT.NONE);
+		btnAddLink.setImage(new Image(btnAddLink.getDisplay(), getClass().getResourceAsStream("/icons/Add-16.png")));
+		btnAddLink.setText("Hinzufügen");
+		btnAddLink.setToolTipText("Asset-Verknüpfung hinzufügen");
+		btnAddLink.addSelectionListener(new AddButtonSelectionListener(_assetLinkCollection));
+		
+		Button btnRemLink = new Button(controlPane, SWT.NONE);
+		btnRemLink.setImage(new Image(btnRemLink.getDisplay(), getClass().getResourceAsStream("/icons/Remove-16.png")));
+		btnRemLink.setText("Entfernen");
+		btnRemLink.setToolTipText("Asset-Verknüpfung entfernen");
+		btnRemLink.addSelectionListener(new RemoveButtonSelectionListener(_assetLinkCollection));
+		btnRemLink.setEnabled(false);
+		
+		_selectionChangedListener.add(assetLink -> {
+			btnRemLink.setData(assetLink);
+			btnRemLink.setEnabled(assetLink != null);			
+		});
 	}
 	
 	/** Creates the table viewer as child of the given {@code parent}. */
@@ -119,6 +147,10 @@ public class AssetsViewPart extends ViewPart {
 				new Transfer[] {URLTransfer.getInstance(), FileTransfer.getInstance()}, 
 				new TableViewerDropTargetListener(FileTransfer.getInstance(), URLTransfer.getInstance(), _assetLinkCollection)
 				);
+		viewer.addSelectionChangedListener(e -> {
+			Object selectedObject = e.getStructuredSelection().getFirstElement();
+			raiseSelectionChangedEvent((AssetLink) selectedObject);
+		});
 				
 		TableViewerColumn linkColumn = new TableViewerColumn(viewer, SWT.NONE);
 		linkColumn.getColumn().setText("Assets");
@@ -140,5 +172,13 @@ public class AssetsViewPart extends ViewPart {
 		
 		// Always update the viewer the asset link collection changes
 		_assetLinkCollection.addCollectionChangedListener(() -> viewer.refresh());
+	}
+	
+	/** Raises the selection changed event for the given {@code assetLink}. */
+	protected void raiseSelectionChangedEvent(AssetLink assetLink) {
+		for (int i = -1; ++i != _selectionChangedListener.size();) {
+			Consumer<AssetLink> listener = _selectionChangedListener.get(i);
+			listener.accept(assetLink);
+		}
 	}
 }
