@@ -3,7 +3,6 @@ package org.bflow.toolbox.hive.assets;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import org.bflow.toolbox.hive.libs.aprogu.lang.Cast;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -132,6 +131,7 @@ public class AssetsViewPart extends ViewPart {
 		btnRemLink.addSelectionListener(new RemoveButtonSelectionListener(_assetLinkCollection));
 		btnRemLink.setEnabled(false);
 		
+		// Tell the remove button which element is currently selected
 		_selectionChangedListener.add(assetLink -> {
 			btnRemLink.setData(assetLink);
 			btnRemLink.setEnabled(assetLink != null);			
@@ -160,18 +160,19 @@ public class AssetsViewPart extends ViewPart {
 		viewer.getTable().setLinesVisible(true);
 		viewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
-		viewer.getTable().addKeyListener(new TableViewerKeyListener(() -> {
-			Object selectedObj = viewer.getStructuredSelection().getFirstElement();
-			AssetLink assetLink = Cast.as(AssetLink.class, selectedObj);
-			_assetLinkCollection.removeLink(assetLink);
-		}));
-		
+		viewer.getTable().addKeyListener(new TableViewerKeyListener(_assetLinkCollection));
+			
 		viewer.setLabelProvider(new TableViewerLabelProvider());
 		viewer.setContentProvider(new TableViewerContentProvider());
 		viewer.setInput(_assetLinkCollection);
 		
 		// Always update the viewer the asset link collection changes
 		_assetLinkCollection.addCollectionChangedListener(() -> viewer.refresh());
+		
+		// Tell the table which element is currently selected
+		_selectionChangedListener.add(assetLink -> {
+			viewer.getTable().setData(assetLink);
+		});
 	}
 	
 	/** Raises the selection changed event for the given {@code assetLink}. */

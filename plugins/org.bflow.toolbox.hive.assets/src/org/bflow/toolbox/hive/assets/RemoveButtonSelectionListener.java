@@ -27,10 +27,7 @@ public class RemoveButtonSelectionListener extends SelectionAdapter {
 	 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
 	 */
 	@Override
-	public void widgetSelected(SelectionEvent e) {
-		AssetLink assetLink = (AssetLink) e.widget.getData();
-		
-		// TODO Add confirmation dialog
-		_assetLinkCollection.remove(assetLink);
+	public void widgetSelected(SelectionEvent e) {		
+		AssetLinkOperation.removeAssetLinkFromCollection(_assetLinkCollection, (AssetLink) e.widget.getData());
 	}
 }
