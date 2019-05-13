@@ -3,6 +3,7 @@ package org.bflow.toolbox.hive.assets;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import org.bflow.toolbox.hive.nls.NLSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -115,21 +116,21 @@ public class AssetsViewPart extends ViewPart {
 	/** Creates the button panel as child of the given {@code parent}. */
 	private void createButtonPanel(Composite parent) {
 		Composite controlPane = new Composite(parent, SWT.BORDER);
-		controlPane.setLayout(new GridLayout(2, false));
+		controlPane.setLayout(new GridLayout(2, true));
 		controlPane.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		
+			
 		Button btnAddLink = new Button(controlPane, SWT.NONE);
-		btnAddLink.setImage(new Image(btnAddLink.getDisplay(), getClass().getResourceAsStream("/icons/Add-16.png")));
-		btnAddLink.setText("Hinzufügen");
-		btnAddLink.setToolTipText("Asset-Verknüpfung hinzufügen");
+		btnAddLink.setImage(new Image(btnAddLink.getDisplay(), getClass().getResourceAsStream("/icons/Add-16.png"))); //$NON-NLS-1$
+		btnAddLink.setText(NLSupport.AssetsViewPart_AddButtonText);
+		btnAddLink.setToolTipText(NLSupport.AssetsViewPart_AddButtonTooltip);
 		btnAddLink.addSelectionListener(new AddButtonSelectionListener(_assetLinkCollection));
 		
 		Button btnRemLink = new Button(controlPane, SWT.NONE);
-		btnRemLink.setImage(new Image(btnRemLink.getDisplay(), getClass().getResourceAsStream("/icons/Remove-16.png")));
-		btnRemLink.setText("Entfernen");
-		btnRemLink.setToolTipText("Asset-Verknüpfung entfernen");
+		btnRemLink.setImage(new Image(btnRemLink.getDisplay(), getClass().getResourceAsStream("/icons/Remove-16.png"))); //$NON-NLS-1$
+		btnRemLink.setText(NLSupport.AssetsViewPart_DeleteButtonText);
+		btnRemLink.setToolTipText(NLSupport.AssetsViewPart_DeleteButtonTooltip);
 		btnRemLink.addSelectionListener(new RemoveButtonSelectionListener(_assetLinkCollection));
-		btnRemLink.setEnabled(false);
+		btnRemLink.setEnabled(false);		
 		
 		// Tell the remove button which element is currently selected
 		_selectionChangedListener.add(assetLink -> {
@@ -153,7 +154,7 @@ public class AssetsViewPart extends ViewPart {
 		});
 				
 		TableViewerColumn linkColumn = new TableViewerColumn(viewer, SWT.NONE);
-		linkColumn.getColumn().setText("Assets");
+		linkColumn.getColumn().setText(NLSupport.AssetsViewPart_LinkColumnText);
 		linkColumn.getColumn().setWidth(320);
 		
 		viewer.getTable().setHeaderVisible(true);
