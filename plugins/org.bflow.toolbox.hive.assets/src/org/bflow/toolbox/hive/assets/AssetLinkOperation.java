@@ -2,6 +2,7 @@ package org.bflow.toolbox.hive.assets;
 
 import java.io.File;
 
+import org.bflow.toolbox.hive.nls.NLSupport;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -24,19 +25,19 @@ public class AssetLinkOperation {
 	 * of linkage. If the user cancels the question dialog, nothing happens.
 	 */
 	public static void addAssetLinkToCollection(AssetLinkCollection assetLinkCollection, String[] paths) {
-		String keyRemember = "assetlink.dialog.remember";
-		String keyValue    = "assetlink.dialog.decision"; 
+		String keyRemember = "assetlink.dialog.remember"; //$NON-NLS-1$
+		String keyValue    = "assetlink.dialog.decision";  //$NON-NLS-1$
 		IPreferenceStore prefStore = AssetsViewPlugin.getDefault().getPreferenceStore();
 		String value = prefStore.getString(keyRemember);
 		int rc = IDialogConstants.CANCEL_ID;
 		
-		if (value != null && value.equals("always")) {
+		if (value != null && value.equals("always")) { //$NON-NLS-1$
 			rc = prefStore.getInt(keyValue);
 		} else {
 			MessageDialogWithToggle dlg = MessageDialogWithToggle.openYesNoCancelQuestion(
 					Display.getCurrent().getActiveShell(), 
-					"Asset-Verknüpfung anlegen", // Title
-					"Wollen Sie nur eine symbolische Verknüpfung anlegen?", 
+					NLSupport.AssetLinkOperation_CreateLinkMessageDialog_Title, // Title
+					NLSupport.AssetLinkOperation_CreateLinkMessageDialog_Text, 
 					null,      // "Nicht mehr Fragen", 
 					false,     // Initial state
 					prefStore, // IPreferencesStore
@@ -71,8 +72,8 @@ public class AssetLinkOperation {
 	public static void removeAssetLinkFromCollection(AssetLinkCollection assetLinkCollection, AssetLink assetLink) {
 		if (!MessageDialog.openConfirm(
 				Display.getCurrent().getActiveShell(), 
-				"Asset-Verknüpfung löschen", 
-				"Sind Sie sicher, dass Sie diese Verknüpfung löschen möchten?")
+				NLSupport.AssetLinkOperation_DeleteLinkMessageDialog_Title, 
+				NLSupport.AssetLinkOperation_DeleteLinkMessageDialog_Text)
 				) return;
 		
 		assetLinkCollection.removeLink(assetLink);

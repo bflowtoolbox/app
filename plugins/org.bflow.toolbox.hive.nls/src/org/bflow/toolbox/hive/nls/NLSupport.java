@@ -64,6 +64,10 @@ public class NLSupport extends NLS {
 	public static String AnnotationViewPart_Annotation_Button_VisibilityToggle_Text_Hide;
 	public static String AnnotationViewPart_Annotation_Button_VisibilityToggle_Tooltip;
 	public static String AnnotationViewPart_Annotation_ButtonAddTooltip;
+	public static String AssetLinkOperation_CreateLinkMessageDialog_Text;
+	public static String AssetLinkOperation_CreateLinkMessageDialog_Title;
+	public static String AssetLinkOperation_DeleteLinkMessageDialog_Text;
+	public static String AssetLinkOperation_DeleteLinkMessageDialog_Title;
 	public static String AttributeFilterViewPart_ButtonAddText;
 	public static String AttributeFilterViewPart_ButtonAddTooltip;
 	public static String AttributeFilterViewPart_ButtonDelText;
