@@ -4,6 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class NLSupport extends NLS {
 	private static final String BUNDLE_NAME = "org.bflow.toolbox.hive.nls.messages"; //$NON-NLS-1$
+	public static String AddButtonSelectionListener_FileDialogTitle;
 	public static String AddonEditDialog_BtnAdd;
 	public static String AddonEditDialog_BtnRemove;
 	public static String AddonEditDialog_ChainComponentNeedsParams;

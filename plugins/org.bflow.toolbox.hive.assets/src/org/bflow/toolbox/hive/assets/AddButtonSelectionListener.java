@@ -2,6 +2,7 @@ package org.bflow.toolbox.hive.assets;
 
 import java.io.File;
 
+import org.bflow.toolbox.hive.nls.NLSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -34,7 +35,7 @@ public class AddButtonSelectionListener extends SelectionAdapter {
 	@Override
 	public void widgetSelected(SelectionEvent e) {
 		FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.OPEN);
-		fd.setText("Asset-Verknüpfung auswählen");
+		fd.setText(NLSupport.AddButtonSelectionListener_FileDialogTitle);
 		
 		String path = fd.open();
 		if (path == null) return;
