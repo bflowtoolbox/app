@@ -309,7 +309,7 @@ public class AssetLinkCollection {
 	
 	/** Returns an instance of {@link AssetLink} deserialized from the given {@code value}. */
 	protected AssetLink deserializeAssetLink(String value) {
-		String[] parts = value.split("::");
+		String[] parts = value.split(SplitToken);
 		EAssetLinkType linkType = EAssetLinkType.valueOf(parts[0]);
 		String elementId = parts[1];
 		String assetUrl = parts[2];
