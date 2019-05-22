@@ -7,6 +7,7 @@
             allowMultiple="false"
             category="org.bflow.toolbox.attributes.category"
             class="org.bflow.toolbox.hive.assets.AssetsViewPart"
+            icon="icons/attach.png"
             id="org.bflow.toolbox.hive.assets.view"
             name="Assets"
             restorable="true">
