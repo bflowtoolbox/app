@@ -43,6 +43,9 @@ public class AssetLinkCollection {
 	public void dispose() {
 		_listenerSet.clear();
 		_assetLinkSet.clear();
+		_assetLinkPool.clear();
+		_activeEditor = null;
+		_selectedEditPart = null;
 	}
 	
 	/** Adds the given {@code listener} as collection listener. */
