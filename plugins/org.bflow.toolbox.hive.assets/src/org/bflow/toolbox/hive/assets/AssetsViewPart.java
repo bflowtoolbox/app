@@ -19,6 +19,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
@@ -49,9 +50,7 @@ public class AssetsViewPart extends ViewPart {
 		super.init(site);
 		
 		site.getPage().addPartListener(_workbenchPartListener);
-		site.getPage().addSelectionListener(_workbenchSelectionListener);
-		
-		_assetLinkCollection.onActiveEditorPartChanged(site.getPage().getActiveEditor());		
+		site.getPage().addSelectionListener(_workbenchSelectionListener);		
 	}
 	
 	/*
@@ -102,6 +101,12 @@ public class AssetsViewPart extends ViewPart {
 		
 		// Disable view initially
 		editorListener.onEditorChanged(false);
+		
+		// If the view is opened later as an editor, the workbench part listener didn't get any chance 
+		// to get notified. So, we have to do it on our own. 
+		IEditorPart editorPart = getSite().getPage().getActiveEditor();
+		_workbenchPartListener.partOpened(editorPart);
+		_workbenchPartListener.partActivated(editorPart);
 	}
 
 	/*
