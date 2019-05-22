@@ -4,6 +4,7 @@
 tbd
 
 ## Development
+
 ### Minimum required
 
 1. Download the "Eclipse IDE for Eclipse Committers" (x86/32 bit required) from eclipse.org. [Eclipse 2018-09 (4.9)](https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2018-09/R/eclipse-committers-2018-09-win32.zip) is the latest version that supports 32 bit (download link may be broken in the future).
@@ -18,6 +19,10 @@ tbd
 
 1. Install "Graphiti (Incubation) 0.15.0.201806050830" (section Modelling) as Eclipse plug-in.
 2. Install "BPMN2 Modeler - Diagram Editor 1.4.3.Final-v20180418-1358-B1" (section Eclipse BPMN2 Modeler) as Eclipse plug-in using "http://download.eclipse.org/bpmn2-modeler/updates/oxygen/1.4.3" as Update Site.
+
+#### Source of BPMN Modeler
+
+* See https://github.com/eclipse/bpmn2-modeler 
 
 ### Add German localization
 
