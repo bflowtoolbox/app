@@ -9,7 +9,7 @@
             class="org.bflow.toolbox.hive.assets.AssetsViewPart"
             icon="icons/attach.png"
             id="org.bflow.toolbox.hive.assets.view"
-            name="Assets"
+            name="%assetsViewName"
             restorable="true">
       </view>
    </extension>
