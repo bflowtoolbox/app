@@ -42,11 +42,9 @@
       </win>
    </launcher>
 
-
    <vm>
       <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
    </vm>
-
 
    <plugins>
       <plugin id="com.google.inject"/>
@@ -106,6 +104,7 @@
       <plugin id="org.bflow.toolbox.hive.actions"/>
       <plugin id="org.bflow.toolbox.hive.addons"/>
       <plugin id="org.bflow.toolbox.hive.annotations"/>
+      <plugin id="org.bflow.toolbox.hive.assets"/>
       <plugin id="org.bflow.toolbox.hive.attributefilter"/>
       <plugin id="org.bflow.toolbox.hive.attributes"/>
       <plugin id="org.bflow.toolbox.hive.eclipse.integration"/>
