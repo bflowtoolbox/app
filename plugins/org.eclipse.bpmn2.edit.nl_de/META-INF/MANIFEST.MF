@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-Name: org.eclipse.bpmn2.edit German NLS Support
+Bundle-SymbolicName: org.eclipse.bpmn2.edit.nl_de;singleton=true
+Bundle-Version: 4.7.0.v20180815042455
+Bundle-ClassPath: org.eclipse.bpmn2.edit.nl_de_4.7.0.v20180815042455.jar
+Bundle-Vendor: Eclipse.org
+Fragment-Host: org.eclipse.bpmn2.edit
