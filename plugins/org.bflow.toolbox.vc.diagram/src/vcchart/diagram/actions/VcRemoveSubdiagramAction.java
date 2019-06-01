@@ -9,12 +9,14 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import vcchart.Activity1;
 import vcchart.Activity2;
 import vcchart.Application;
+import vcchart.Document;
 import vcchart.Objective;
 import vcchart.Participant;
 import vcchart.Product;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
 import vcchart.diagram.edit.parts.ApplicationEditPart;
+import vcchart.diagram.edit.parts.DocumentEditPart;
 import vcchart.diagram.edit.parts.ObjectiveEditPart;
 import vcchart.diagram.edit.parts.ParticipantEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
@@ -35,6 +37,7 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		public Objective _objective;
 		public Application _application;
 		public Participant _participant;
+		public Document _document;
 	}
 	
 	/*
@@ -60,6 +63,8 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 			sd._application = (Application) ((ApplicationEditPart) part).resolveSemanticElement();
 		} else if (part instanceof ParticipantEditPart) {
 			sd._participant = (Participant) ((ParticipantEditPart) part).resolveSemanticElement();
+		} else if (part instanceof DocumentEditPart) {
+			sd._document = (Document) ((DocumentEditPart) part).resolveSemanticElement();
 		}
 		
 		return sd;
@@ -90,6 +95,9 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		if (sd._participant != null)
 			isEnabled &= sd._participant.getSubdiagram() != null;
 		
+		if (sd._document != null)
+			isEnabled &= sd._document.getSubdiagram() != null;
+		
 		return isEnabled;
 	}
 	
@@ -105,5 +113,6 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective,   null, (e, v) -> e.setSubdiagram(null));
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._application, null, (e, v) -> e.setSubdiagram(null));
 		BflowDiagramElementEditUtil.modifyWithTransaction(sd._participant, null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._document,    null, (e, v) -> e.setSubdiagram(null));
 	}
 }

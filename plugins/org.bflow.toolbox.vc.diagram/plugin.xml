@@ -686,6 +686,9 @@
            <objectClass
                  name="vcchart.diagram.edit.parts.ParticipantEditPart">
            </objectClass>
+           <objectClass
+                 name="vcchart.diagram.edit.parts.DocumentEditPart">
+           </objectClass>
         </or>
      </visibility>
      </objectContribution>
