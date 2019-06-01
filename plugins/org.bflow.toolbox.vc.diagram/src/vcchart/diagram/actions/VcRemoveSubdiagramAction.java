@@ -13,6 +13,7 @@ import vcchart.Document;
 import vcchart.Objective;
 import vcchart.Participant;
 import vcchart.Product;
+import vcchart.TechnicalTerm;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
 import vcchart.diagram.edit.parts.ApplicationEditPart;
@@ -20,6 +21,7 @@ import vcchart.diagram.edit.parts.DocumentEditPart;
 import vcchart.diagram.edit.parts.ObjectiveEditPart;
 import vcchart.diagram.edit.parts.ParticipantEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
+import vcchart.diagram.edit.parts.TechnicalTermEditPart;
 
 /**
  * Action for removing a linked diagram from a VC element.
@@ -38,6 +40,7 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		public Application _application;
 		public Participant _participant;
 		public Document _document;
+		public TechnicalTerm _technicalTerm;
 	}
 	
 	/*
@@ -65,6 +68,8 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 			sd._participant = (Participant) ((ParticipantEditPart) part).resolveSemanticElement();
 		} else if (part instanceof DocumentEditPart) {
 			sd._document = (Document) ((DocumentEditPart) part).resolveSemanticElement();
+		} else if (part instanceof TechnicalTermEditPart) {
+			sd._technicalTerm = (TechnicalTerm) ((TechnicalTermEditPart) part).resolveSemanticElement();
 		}
 		
 		return sd;
@@ -98,6 +103,9 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 		if (sd._document != null)
 			isEnabled &= sd._document.getSubdiagram() != null;
 		
+		if (sd._technicalTerm != null)
+			isEnabled &= sd._technicalTerm.getSubdiagram() != null;
+		
 		return isEnabled;
 	}
 	
@@ -107,12 +115,13 @@ public class VcRemoveSubdiagramAction extends AbstractRemoveDiagramLinkAction<Vc
 	 */
 	@Override
 	protected void performModification(SelectionData sd, Void modificationValue) throws Exception {
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1,   null, (e, v) -> e.setSubdiagram(null));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2,   null, (e, v) -> e.setSubdiagram(null));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,     null, (e, v) -> e.setSubdiagram(null));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective,   null, (e, v) -> e.setSubdiagram(null));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._application, null, (e, v) -> e.setSubdiagram(null));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._participant, null, (e, v) -> e.setSubdiagram(null));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._document,    null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1,     null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2,     null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,       null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective,     null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._application,   null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._participant,   null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._document,      null, (e, v) -> e.setSubdiagram(null));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._technicalTerm, null, (e, v) -> e.setSubdiagram(null));
 	}
 }

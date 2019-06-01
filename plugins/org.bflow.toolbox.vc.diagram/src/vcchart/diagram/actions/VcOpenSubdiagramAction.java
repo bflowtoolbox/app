@@ -12,6 +12,7 @@ import vcchart.Document;
 import vcchart.Objective;
 import vcchart.Participant;
 import vcchart.Product;
+import vcchart.TechnicalTerm;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
 import vcchart.diagram.edit.parts.ApplicationEditPart;
@@ -19,6 +20,7 @@ import vcchart.diagram.edit.parts.DocumentEditPart;
 import vcchart.diagram.edit.parts.ObjectiveEditPart;
 import vcchart.diagram.edit.parts.ParticipantEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
+import vcchart.diagram.edit.parts.TechnicalTermEditPart;
 
 /**
  * Action for opening a linked diagram file.
@@ -70,6 +72,11 @@ public class VcOpenSubdiagramAction extends AbstractOpenDiagramLinkAction {
 		if (part instanceof DocumentEditPart) {
 			Document d = (Document) ((DocumentEditPart) part).resolveSemanticElement();
 			return d.getSubdiagram();
+		}
+		
+		if (part instanceof TechnicalTermEditPart) {
+			TechnicalTerm t = (TechnicalTerm) ((TechnicalTermEditPart) part).resolveSemanticElement();
+			return t.getSubdiagram();
 		}
 		
 		return null;

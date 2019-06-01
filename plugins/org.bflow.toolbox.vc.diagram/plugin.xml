@@ -689,6 +689,9 @@
            <objectClass
                  name="vcchart.diagram.edit.parts.DocumentEditPart">
            </objectClass>
+           <objectClass
+                 name="vcchart.diagram.edit.parts.TechnicalTermEditPart">
+           </objectClass>
         </or>
      </visibility>
      </objectContribution>

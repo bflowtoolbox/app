@@ -12,6 +12,7 @@ import vcchart.Document;
 import vcchart.Objective;
 import vcchart.Participant;
 import vcchart.Product;
+import vcchart.TechnicalTerm;
 import vcchart.diagram.edit.parts.Activity1EditPart;
 import vcchart.diagram.edit.parts.Activity2EditPart;
 import vcchart.diagram.edit.parts.ApplicationEditPart;
@@ -19,6 +20,7 @@ import vcchart.diagram.edit.parts.DocumentEditPart;
 import vcchart.diagram.edit.parts.ObjectiveEditPart;
 import vcchart.diagram.edit.parts.ParticipantEditPart;
 import vcchart.diagram.edit.parts.ProductEditPart;
+import vcchart.diagram.edit.parts.TechnicalTermEditPart;
 
 /**
  * Action for creating and linking a new diagram to a VC element.
@@ -52,6 +54,7 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 		public Application _application;
 		public Participant _participant;
 		public Document _document;
+		public TechnicalTerm _technicalTerm;
 	}
 
 	/*
@@ -69,6 +72,7 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 		Application application = null;
 		Participant participant = null;
 		Document document = null;
+		TechnicalTerm technicalTerm = null;
 		
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
@@ -88,6 +92,8 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 				participant = (Participant) ((ParticipantEditPart) selObj).getPrimaryView().getElement();
 			} else if (selObj instanceof DocumentEditPart) {
 				document = (Document) ((DocumentEditPart) selObj).getPrimaryView().getElement();
+			} else if (selObj instanceof TechnicalTermEditPart) {
+				technicalTerm = (TechnicalTerm) ((TechnicalTermEditPart) selObj).getPrimaryView().getElement();
 			}
 		}
 		
@@ -98,6 +104,7 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 		sd._application = application;
 		sd._participant = participant;
 		sd._document = document;
+		sd._technicalTerm = technicalTerm;
 		
 		return sd;
 	}
@@ -111,7 +118,7 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 		return sd._activity1 != null || sd._activity2 != null 
 		      || sd._product != null || sd._objective != null
 		  || sd._application != null || sd._participant != null
-		  || sd._document != null
+		     || sd._document != null || sd._technicalTerm != null
 				;
 	}
 	
@@ -121,12 +128,13 @@ public class VcCreateSubdiagramAction extends AbstractCreateDiagramLinkAction<Vc
 	 */
 	@Override
 	protected void performModification(SelectionData sd, String value) throws Exception {
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1,   value, (e, v) -> e.setSubdiagram(v));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2,   value, (e, v) -> e.setSubdiagram(v));	
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,     value, (e, v) -> e.setSubdiagram(v));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective,   value, (e, v) -> e.setSubdiagram(v));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._application, value, (e, v) -> e.setSubdiagram(v));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._participant, value, (e, v) -> e.setSubdiagram(v));
-		BflowDiagramElementEditUtil.modifyWithTransaction(sd._document,    value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity1,     value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._activity2,     value, (e, v) -> e.setSubdiagram(v));	
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._product,       value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._objective,     value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._application,   value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._participant,   value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._document,      value, (e, v) -> e.setSubdiagram(v));
+		BflowDiagramElementEditUtil.modifyWithTransaction(sd._technicalTerm, value, (e, v) -> e.setSubdiagram(v));
 	}
 }
