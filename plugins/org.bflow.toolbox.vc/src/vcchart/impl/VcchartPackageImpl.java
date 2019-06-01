@@ -492,6 +492,14 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	public EClass getTechnicalTerm() {
 		return technicalTermEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getTechnicalTerm_Subdiagram() {
+		return (EAttribute) technicalTermEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -695,6 +703,7 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		clusterEClass = createEClass(CLUSTER);
 
 		technicalTermEClass = createEClass(TECHNICAL_TERM);
+		createEAttribute(technicalTermEClass, TECHNICAL_TERM__SUBDIAGRAM);
 
 		participantEClass = createEClass(PARTICIPANT);
 		createEAttribute(participantEClass, PARTICIPANT__SUBDIAGRAM);
@@ -792,6 +801,7 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		initEAttribute(getProduct_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Product.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		
 		initEReference(getModel_TechnicalTerms(), this.getTechnicalTerm(), null, "TechnicalTerms", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTechnicalTerm_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, TechnicalTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		
 		initEReference(getModel_Objectives(), this.getObjective(), null, "Objectives", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getObjective_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

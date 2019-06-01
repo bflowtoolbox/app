@@ -592,6 +592,11 @@ public interface VcchartPackage extends EPackage {
 	 * @ordered
 	 */
 	int TECHNICAL_TERM__NAME = NAMED_ELEMENT__NAME;
+	
+	/**
+	 * @generated NOT
+	 */
+	int TECHNICAL_TERM__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Technical Term</em>' class.
@@ -600,7 +605,7 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TECHNICAL_TERM_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int TECHNICAL_TERM_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Technical Term</em>' class.
@@ -1168,6 +1173,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getTechnicalTerm();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getTechnicalTerm_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Participant <em>Participant</em>}'.
@@ -1587,6 +1597,11 @@ public interface VcchartPackage extends EPackage {
 		 */
 		EClass TECHNICAL_TERM = eINSTANCE.getTechnicalTerm();
 
+		/**
+		 * @generated NOT
+		 */
+		EAttribute TECHNICAL_TERM__SUBDIAGRAM = eINSTANCE.getTechnicalTerm_Subdiagram();
+		
 		/**
 		 * The meta object literal for the '{@link vcchart.impl.ParticipantImpl <em>Participant</em>}' class.
 		 * <!-- begin-user-doc -->

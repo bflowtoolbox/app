@@ -14,4 +14,15 @@ package vcchart;
  * @generated
  */
 public interface TechnicalTerm extends NamedElement, All_Rel_3, RelationsObject {
+	
+	/**
+	 * @generated NOT
+	 */
+	public String getSubdiagram();
+	
+	/**
+	 * @generated NOT
+	 */
+	public void setSubdiagram(String value);
+	
 } // TechnicalTerm
