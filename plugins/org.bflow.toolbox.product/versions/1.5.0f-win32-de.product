@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="bflow* Toolbox 1.5.4" uid="org.bflow.toolbox.application.product" id="org.bflow.toolbox.application.product" application="org.eclipse.ui.ide.workbench" version="1.5.4.qualifier" useFeatures="false" includeLaunchers="true">
+<product name="bflow* Toolbox 1.5.5" uid="org.bflow.toolbox.application.product" id="org.bflow.toolbox.epc.diagram.product" application="org.eclipse.ui.ide.workbench" version="1.5.5.qualifier" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.bflow.toolbox.product/icons/professional/bee128.png"/>
@@ -42,9 +42,11 @@
       </win>
    </launcher>
 
+
    <vm>
       <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
    </vm>
+
 
    <plugins>
       <plugin id="com.google.inject"/>
