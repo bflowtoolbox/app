@@ -713,6 +713,11 @@ public interface VcchartPackage extends EPackage {
 	 * @ordered
 	 */
 	int DOCUMENT__NAME = NAMED_ELEMENT__NAME;
+	
+	/**
+	 * @generated NOT
+	 */
+	int DOCUMENT__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Document</em>' class.
@@ -721,7 +726,7 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DOCUMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int DOCUMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Document</em>' class.
@@ -1203,6 +1208,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getDocument();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getDocument_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Relation1 <em>Relation1</em>}'.
@@ -1616,6 +1626,11 @@ public interface VcchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass DOCUMENT = eINSTANCE.getDocument();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute DOCUMENT__SUBDIAGRAM = eINSTANCE.getDocument_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link vcchart.impl.Relation1Impl <em>Relation1</em>}' class.

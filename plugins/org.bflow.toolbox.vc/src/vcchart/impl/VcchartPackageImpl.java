@@ -535,6 +535,14 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	public EClass getDocument() {
 		return documentEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getDocument_Subdiagram() {
+		return (EAttribute) documentEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -695,6 +703,7 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		createEAttribute(applicationEClass, APPLICATION__SUBDIAGRAM);
 
 		documentEClass = createEClass(DOCUMENT);
+		createEAttribute(documentEClass, DOCUMENT__SUBDIAGRAM);
 
 		relation1EClass = createEClass(RELATION1);
 		createEReference(relation1EClass, RELATION1__SOURCE);
@@ -794,6 +803,8 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		initEAttribute(getApplication_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Application.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		
 		initEReference(getModel_Documents(), this.getDocument(), null, "Documents", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDocument_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Document.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_Relations1(), this.getRelation1(), null, "Relations1", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModel_Relations2(), this.getRelation2(), null, "Relations2", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModel_Relations3(), this.getRelation3(), null, "Relations3", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
