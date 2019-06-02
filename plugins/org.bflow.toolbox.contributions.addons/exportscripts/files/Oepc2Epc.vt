@@ -1,5 +1,6 @@
 @trim
 @prettyprint
+@escapexml
 ##-- Set up common properties --
 #set( $nil = "" )
 #set( $modelName = $model.Name + ".epc" )
