@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -40,6 +41,7 @@ import org.osgi.framework.Bundle;
  * @version 2014-04-22
  * 			2018-10-21 Added VelocityUuidTool to context
  * 			2018-10-21 Added trim prefix support
+ * 			2019-06-02 Added escape XML directive
  */
 public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 	
@@ -51,6 +53,9 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 	
 	/** The pretty print directive */
 	private static final String PrettyPrintDirective = "@prettyprint";
+	
+	/** The escape XML directive */ 
+	private static final String EscapeXmlDirective = "@escapexml";
 	
 	/** The default output file encoding */
 	private static final String DefaultOutputFileEncoding = "UTF-8";
@@ -125,6 +130,12 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 			prettyPrint = true;
 			template = StringUtils.remove(template, PrettyPrintDirective);
 		}
+		
+		boolean escapeXml = false;
+		if (template.contains(EscapeXmlDirective)) {
+			escapeXml = true;
+			template = StringUtils.remove(template, EscapeXmlDirective);
+		}
 
 		// Configure Velocity
 		// Setting additional template path
@@ -168,6 +179,10 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 		
 		if (trimResult) {
 			result = StringUtils.trim(result);
+		}
+		
+		if (escapeXml) {
+			result = escapeXml(result);
 		}
 		
 		if (prettyPrint) {
@@ -314,5 +329,64 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 		}
 		
 		return stringBuilder.toString();
+	}
+	
+	/**
+	 * Returns the given {@code xml} where all XML tokens within 
+	 * an XML attribute value have been escaped.
+	 */
+	private String escapeXml(String xml) {
+		StringBuilder sb = new StringBuilder(xml.length());
+		char[] xmlChars = xml.toCharArray();
+		
+		int quoteCount = 0;
+		int begin = -1;
+		for (int i = -1; ++i != xmlChars.length;) {
+			char c = xmlChars[i];
+			
+			if (c == '"') {
+				if (quoteCount == 0) { // Opening quote
+					quoteCount++;
+					begin = i;
+				} else {
+					boolean closing = false;
+					int i1 = i+1;
+					char c1 = i1 != xmlChars.length ? xmlChars[i1] : 0;
+					if (c1 == ' ' || c1 == '"' || c1 == '?' || c1 == '/' || c1 == '>') { // Final closing quote
+						closing = true;
+					}
+					
+					if (closing) {
+						quoteCount--;
+					} else {
+						quoteCount++;
+					}
+					
+					// All quotes have been closed so far
+					if (quoteCount == 0) {
+						int end = i;
+						String xmlAttrValue = new String(xmlChars, begin, end - begin + 1);
+						String sanValue = xmlAttrValue;
+						
+						// Escape XML tokens
+						if (xmlAttrValue.length() > 2) {
+							String innerVal = xmlAttrValue.substring(1, xmlAttrValue.length() - 1);
+							String escapedValue = StringEscapeUtils.escapeXml(innerVal);
+							sanValue = "\"".concat(escapedValue).concat("\"");
+						}									
+					
+						sb.append(sanValue);
+						begin = -1;
+						continue;
+					}
+				}
+			}
+					
+			if (quoteCount != 0) continue;
+			
+			sb.append(c);
+		}
+		
+		return sb.toString();
 	}
 }
