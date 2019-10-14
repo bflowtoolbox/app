@@ -833,34 +833,34 @@
                      point="org.eclipse.core.runtime.products">
                   <product
                         application="org.eclipse.ui.ide.workbench"
-                        name="%productName">
+                        name="bflow* Toolbox Community 2.0">
                      <property
                            name="windowImages"
-                           value="eclipse.gif,eclipse32.gif,eclipse48.gif,eclipse.png,eclipse32.png">
+                           value="platform:/plugin/org.bflow.toolbox.product/icons/professional/bee16.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee32.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee48.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee64.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee128.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee256.png">
                      </property>
                      <property
                            name="aboutText"
-                           value="%productBlurb">
+                           value="bflow* Toolbox Community 2.0">
                      </property>
                      <property
                            name="aboutImage"
-                           value="eclipse_lg.gif">
+                           value="platform:/plugin/org.bflow.toolbox.product/icons/professional/bee128.png">
                      </property>
                      <property
                            name="startupForegroundColor"
-                           value="C8D5EA">
+                           value="000000">
                      </property>
                      <property
                            name="startupProgressRect"
-                           value="0,280,455,15">
+                           value="2,290,450,10">
                      </property>
                      <property
                            name="startupMessageRect"
-                           value="7,220,441,20">
+                           value="7,265,320,20">
                      </property>
                      <property
                            name="appName"
-                           value="%productName">
+                           value="bflow* Toolbox Community 2.0">
                      </property>
                      <property
                            name="preferenceCustomization"
