@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="bflow* Toolbox 1.5.5" uid="org.bflow.toolbox.application.product" id="org.bflow.toolbox.epc.diagram.product" application="org.eclipse.ui.ide.workbench" version="1.5.5.qualifier" useFeatures="false" includeLaunchers="true">
+<product name="bflow* Toolbox Community 2.0" uid="org.bflow.toolbox.application.product" id="org.bflow.toolbox.epc.diagram.product" application="org.eclipse.ui.ide.workbench" version="1.5.6.qualifier" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.bflow.toolbox.product/icons/professional/bee128.png"/>
       <text>
-         Bflow* Toolbox 1.5.4
+         bflow* Toolbox Community 2.0
       </text>
    </aboutInfo>
 
