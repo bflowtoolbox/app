@@ -774,7 +774,7 @@
       <?gmfgen generated="true"?>
       <objectContribution
             id="org.bflow.toolbox.epc.diagram.InitDiagram"
-            nameFilter="*.epc"
+            nameFilter="*.epcchart"
             objectClass="org.eclipse.core.resources.IFile">
          <action
                label="%initDiagramActionLabel"

@@ -562,7 +562,7 @@
 	<extension point="org.eclipse.ui.popupMenus">
       <?gmfgen generated="true"?>
 		<objectContribution id="org.bflow.toolbox.oepc.diagram.InitDiagram"
-			nameFilter="*.oepc" objectClass="org.eclipse.core.resources.IFile">
+			nameFilter="*.oepcchart" objectClass="org.eclipse.core.resources.IFile">
 			<action label="%initDiagramActionLabel" class="oepc.diagram.part.OepcInitDiagramFileAction"
 				menubarPath="additions" enablesFor="1"
 				id="org.bflow.toolbox.oepc.diagram.InitDiagramAction">
