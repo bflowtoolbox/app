@@ -11,6 +11,8 @@ public class Messages extends NLS {
 	public static String AbstractConvertDiagramAction_Error_ModelConversion;
 	public static String AbstractConvertDiagramAction_Error_RefreshWorkspace;
 	public static String AbstractConvertDiagramAction_ExistingModelDialog_Text;
+	public static String AbstractConvertDiagramAction_QuestionDialog_DirtyEditor_Text;
+	public static String AbstractConvertDiagramAction_QuestionDialog_DirtyEditor_Title;
 	public static String ConvertToBpmnDiagramAction_EpcConversion_Error_Message;
 	public static String ConvertToBpmnDiagramAction_Text;
 	public static String ConvertToBpmnDiagramAction_ToolTipText;

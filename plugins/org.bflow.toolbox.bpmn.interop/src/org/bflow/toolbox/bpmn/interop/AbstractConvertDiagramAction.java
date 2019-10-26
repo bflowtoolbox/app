@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.gef.Request;
 import org.eclipse.gmf.runtime.common.ui.util.IWorkbenchPartDescriptor;
 import org.eclipse.gmf.runtime.diagram.ui.actions.DiagramAction;
@@ -108,6 +109,16 @@ public abstract class AbstractConvertDiagramAction extends DiagramAction {
 		IDiagramWorkbenchPart workbenchPart = getDiagramWorkbenchPart();
 		DiagramEditor diagramEditor = Cast.as(DiagramEditor.class, workbenchPart);
 		if (diagramEditor == null) return;
+		
+		if (diagramEditor.isDirty()) {
+			if (MessageDialog.openQuestion(
+					diagramEditor.getSite().getShell(), 
+					Messages.AbstractConvertDiagramAction_QuestionDialog_DirtyEditor_Title, 
+					Messages.AbstractConvertDiagramAction_QuestionDialog_DirtyEditor_Text
+				)) {
+				diagramEditor.doSave(new NullProgressMonitor());
+			}
+		}
 		
 		IEditorInput editorInput = diagramEditor.getEditorInput();
 		IPathEditorInput pathEditorInput = Cast.as(IPathEditorInput.class, editorInput);
