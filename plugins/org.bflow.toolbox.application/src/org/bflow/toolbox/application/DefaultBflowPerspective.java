@@ -1,5 +1,6 @@
 package org.bflow.toolbox.application;
 
+import org.bflow.toolbox.hive.assets.AssetsViewPart;
 import org.bflow.toolbox.hive.attributes.AttributeViewPart;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
@@ -11,6 +12,7 @@ import org.eclipse.ui.IPerspectiveFactory;
  * 
  * @author Arian Storch<arian.storch@bflow.org>
  * @since 2018-10-11
+ * @version 2019-10-26 Added assets view part
  *
  */
 public class DefaultBflowPerspective implements IPerspectiveFactory {
@@ -44,6 +46,7 @@ public class DefaultBflowPerspective implements IPerspectiveFactory {
 		
 		// Filling the bottom folder
 		bottomFolder.addView(IPageLayout.ID_PROBLEM_VIEW);
+		bottomFolder.addView(AssetsViewPart.VIEW_ID);
 		bottomFolder.addView(AttributeViewPart.VIEW_ID);		
 	}
 }

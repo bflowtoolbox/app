@@ -2,6 +2,7 @@ package org.bflow.toolbox.application;
 
 import org.bflow.toolbox.hive.annotations.AnnotationRuleViewPart;
 import org.bflow.toolbox.hive.annotations.AnnotationViewPart;
+import org.bflow.toolbox.hive.assets.AssetsViewPart;
 import org.bflow.toolbox.hive.attributefilter.AttributeFilterViewPart;
 import org.bflow.toolbox.hive.attributes.AttributeViewPart;
 import org.bflow.toolbox.hive.modelnavigator.ModelNavigatorView;
@@ -19,6 +20,7 @@ import org.eclipse.ui.console.IConsoleConstants;
  * @version 2013-12-30
  * 			2015-08-25 Changed order of view parts at the bottom
  * 			2018-10-11 Renamed from BflowPerspective to FeaturedBflowPerspective
+ * 			2019-10-26 Added assets view part
  *
  */
 public class FeaturedBflowPerspective implements IPerspectiveFactory {
@@ -53,6 +55,7 @@ public class FeaturedBflowPerspective implements IPerspectiveFactory {
 		
 		// Filling the bottom folder
 		bottomFolder.addView(IPageLayout.ID_PROBLEM_VIEW);
+		bottomFolder.addView(AssetsViewPart.VIEW_ID);
 		bottomFolder.addView(IConsoleConstants.ID_CONSOLE_VIEW);
 		bottomFolder.addView(AttributeViewPart.VIEW_ID);
 		bottomFolder.addView(AnnotationRuleViewPart.VIEW_ID);
