@@ -56,16 +56,16 @@ public class ModelDigger {
 	 * @return {@link IModelData}
 	 */
 	public static IModelData resolveModelData(File sourceFile) {
-
-		IFile iFile = CommonInterchangeUtil.toIFile(sourceFile);		
+		IFile iFile = null;		
 		DiagramEditPart offscreenEditPart = null;
 		
 		// Try load resolve the diagram edit part off-screen
 		Shell myShell = new Shell();
 		try {
+			iFile = CommonInterchangeUtil.toIFile(sourceFile);
 			offscreenEditPart = CommonInterchangeUtil.getOffscreenDiagramEditPart(myShell, iFile);
-		} catch (CoreException e) {
-			logger.error("Could not load the diagram via DiagramIOUtil.", e);
+		} catch (CoreException ex) {
+			logger.error("Could not load the diagram via CommonInterchangeUtil.", ex);
 		}
 
 		// Use the off-screen edit part or open the editor as fallback

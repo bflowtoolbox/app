@@ -175,12 +175,13 @@ public class MIFImportWizard extends Wizard implements IImportWizard {
 		if (importOptions == null || importOptions.isEmpty()) return;
 		
 		Shell shell = new Shell();
-		IFile file = CommonInterchangeUtil.toIFile(diagramFile);
+		IFile file = null;
 		
 		DiagramEditPart diagramEditPart = null;
 		Diagram diagram = null;
 		
 		try {
+			file = CommonInterchangeUtil.toIFile(diagramFile);
 			diagramEditPart = CommonInterchangeUtil.getOffscreenDiagramEditPart(shell, file);
 			diagram = (Diagram) diagramEditPart.getDiagramView();
 		} catch (Exception ex) {
