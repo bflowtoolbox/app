@@ -3,7 +3,10 @@ package org.bflow.toolbox.hive.interchange.commons;
 import java.io.File;
 
 import org.bflow.toolbox.hive.gmfbridge.HiveGmfBridge;
+import org.bflow.toolbox.hive.libs.aprogu.lang.Cast;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -30,8 +33,10 @@ import org.eclipse.ui.part.MultiPageEditorPart;
  * Provides various methods that are used in different contexts. 
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 11.08.13
- * @version 27.03.15 Added support of MultiPageEditorPart
+ * @since 2013-08-11
+ * @version 2015-03-27 Added support of MultiPageEditorPart
+ * 			2019-11-03 Method toIFile() - Added fallback for looking up linked files 
+ * 			
  */
 @SuppressWarnings("restriction")
 public class CommonInterchangeUtil {
@@ -43,10 +48,32 @@ public class CommonInterchangeUtil {
 	 *            the file
 	 * @return the instance of {@link IFile}
 	 */
-	public static IFile toIFile(File file) {
+	public static IFile toIFile(File file) throws CoreException {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IPath location = Path.fromOSString(file.getAbsolutePath());
 		IFile iFile = workspace.getRoot().getFileForLocation(location);
+		
+		// 2019-11-03 AST - Fallback
+		// When the file is located outside the workspace (for instance a linked file)
+		// the above code doesn't resolve the IFile instance. So, we have to do the look-up
+		// manually.
+		if (iFile == null) {
+			String fileName = file.getName();
+			IProject[] workspaceProjects = workspace.getRoot().getProjects();
+			for (int i = -1; ++i != workspaceProjects.length;) {
+				IProject workspaceProject = workspaceProjects[i];
+				IResource[] members = workspaceProject.members(IResource.FILE);
+				for (int j = -1; ++j != members.length;) {
+					IFile member = Cast.as(IFile.class, members[j]);
+					if (member == null) continue;
+					if (!member.isLinked()) continue;
+					if (!fileName.equals(member.getName())) continue;
+					
+					return member;
+				}
+			}
+		}
+		
 		return iFile;
 	}
 	
