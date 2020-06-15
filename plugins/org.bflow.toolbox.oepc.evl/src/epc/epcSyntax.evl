@@ -6,7 +6,7 @@ pre
 	var prefRequester := new Native('org.bflow.toolbox.check.PreferencesRequester'); 
 }
 
--- Elements must have names.
+// Elements must have names
 context BflowSymbol {
 	
 	critique HasName {
@@ -33,8 +33,7 @@ context BflowSymbol {
 	}
 }
 
--- Elements needn't to cover other elements
-
+// Elements needn't to cover other elements
 context BflowSymbol
 {
 	constraint IsHidden 
@@ -45,12 +44,12 @@ context BflowSymbol
 	}
 }
 
--- An connector should only be an split or an join.
+// An connector should only be an split or an join.
 context Element {
 	
 	constraint JoinOrSplit {
 	
-		guard : self.isConnector() --and self.out.size <> 1 and self."in".size <> 1
+		guard : self.isConnector() //and self.out.size <> 1 and self."in".size <> 1
 		check : not (self.isSplit() and self.isJoin() ) or not prefRequester.shallCheck('EPCEpsilonElementRule1')
 		message :  prefRequester.getErrorMessage('EPCEpsilonElementRule1', self.eClass().name)  
 	
@@ -86,9 +85,8 @@ context Element {
 }
 
 
--- Redundant connectors, with only one incomming and outgoing controlflow 
--- can be deleted.
-
+// Redundant connectors, with only one incomming and outgoing controlflow 
+// can be deleted.
 context Element {
 	
 	constraint RedundantConnector {
@@ -131,7 +129,7 @@ context Element {
 
 
 
--- an Event followed by an OR/XOR needs a Function between  
+// an Event followed by an OR/XOR needs a Function between  
 context Element {
 	
 	constraint HasFunction {
