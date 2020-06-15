@@ -1,0 +1,7 @@
+public interchange 'EPC' (epc) <> oepc {
+
+description: '%oepc2EpcScript_description'
+
+@script: '/exportscripts/files/Oepc2Epc.vt'
+
+}

@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bflow.toolbox.hive.interchange.mif.core.IInterchangeDescriptor;
 import org.bflow.toolbox.hive.interchange.wizard.EImportOption;
 import org.bflow.toolbox.hive.nls.NLSupport;
+import org.bflow.toolbox.kits.swt.LayoutFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -46,31 +47,29 @@ import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
  * This class implements the import wizard page.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 17.08.09
- * @version 14.12.13
- * 			12.03.15 Changed representation of of a multiple file selection
- * 			07.06.15 Fixed missing source file string when just selecting one element
+ * @since 2009-08-17
+ * @version 2013-12-14
+ * 		    2015-03-12 AST Changed representation of of a multiple file selection
+ * 			2015-06-07 AST Fixed missing source file string when just selecting one element
  *
  */
 public class MIFImportWizardPage extends WizardPage {
-	private List<IInterchangeDescriptor> importDescriptions = new ArrayList<IInterchangeDescriptor>();
-	private String fileExtensions[];
-	private Text textFieldFile;
-	private Combo cbImportDescriptions;
-	private IInterchangeDescriptor selectedImportDescription = null;
-	private Text textFieldDescription;
-	private Text textFieldTarget;
-	private Button chkArrangeAll, chkPackPage, chkAutoSize;
+	private List<IInterchangeDescriptor> _importDescriptions = new ArrayList<IInterchangeDescriptor>();
+	private String _fileExtensions[];
+	private Text _textFieldFile;
+	private Combo _cbImportDescriptions;
+	private IInterchangeDescriptor _selectedImportDescription = null;
+	private Text _textFieldDescription;
+	private Text _textFieldTarget;
+	private Button _chkArrangeAll, _chkPackPage, _chkAutoSize;
 	
-	private String basicPath;
-	private String sourceFileString;
+	private String _basicPath;
+	private String _sourceFileString;
 	
-	private IWorkbench iWorkbench = null;
-	private IStructuredSelection iSelection;
+	private IWorkbench _workbench = null;
+	private IStructuredSelection _selection;
 	
-	/**
-	 * Constructor.
-	 */
+	/** Initializes the new instance. */
 	public MIFImportWizardPage() {
 		super("Add-ons import wizard page"); //$NON-NLS-1$
 		setTitle(NLSupport.MIFImportWizardPage_Title); 
@@ -85,52 +84,49 @@ public class MIFImportWizardPage extends WizardPage {
 	public void createControl(Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
 		
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 		
 		Label lblFormat = new Label(composite, SWT.NONE);
+		lblFormat.setLayoutData(new GridData(SWT.TRAIL, SWT.CENTER, false, false));
 		lblFormat.setText(NLSupport.MIFImportWizardPage_LblFormat); 
 		
-		cbImportDescriptions = new Combo(composite, SWT.READ_ONLY);
+		_cbImportDescriptions = new Combo(composite, SWT.READ_ONLY);
+		_cbImportDescriptions.setLayoutData(LayoutFactory.createGridData().withColumnSpan(2).build());
 		prepareComboBox();
 		
 		Label lblDescription = new Label(composite, SWT.NONE);
+		lblDescription.setLayoutData(new GridData(SWT.TRAIL, SWT.TOP, false, false));
 		lblDescription.setText(NLSupport.MIFImportWizardPage_LblDescription); 
 		
-		textFieldDescription = new Text(composite, SWT.READ_ONLY);
-		
-		GridData txtDescriptionGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		txtDescriptionGridData.widthHint = 200;
-		txtDescriptionGridData.heightHint = 50;
-
-		textFieldDescription.setLayoutData(txtDescriptionGridData);
+		_textFieldDescription = new Text(composite, SWT.READ_ONLY | SWT.WRAP);			
+		_textFieldDescription.setLayoutData(
+				LayoutFactory.createGridData(SWT.FILL, SWT.FILL, true, false)
+							 .withColumnSpan(2)
+							 .withHeight(50)
+							 .build()
+		);
 		
 		Label lblSelectFile = new Label(composite, SWT.NONE);
+		lblSelectFile.setLayoutData(new GridData(SWT.TRAIL, SWT.CENTER, false, false));
 		lblSelectFile.setText(NLSupport.MIFImportWizardPage_LblSelectSrcFile); 
 		
-		textFieldFile = new Text(composite, SWT.BORDER);
-		
-		GridData textFieldFileGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, false);
-		textFieldFileGridData.widthHint = 400;
-		
-		textFieldFile.setLayoutData(textFieldFileGridData);
-		
-		Label nullLbl = new Label(composite, SWT.NONE);
-		nullLbl.setText(StringUtils.EMPTY); //$NON-NLS-1$
+		_textFieldFile = new Text(composite, SWT.BORDER);		
+		_textFieldFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		
 		Button btnBrowse = new Button(composite, SWT.NONE);
-		
-		btnBrowse.setText(NLSupport.MIFImportWizardPage_BtnSelectSrcFile);  //$NON-NLS-2$
+		btnBrowse.setText(NLSupport.MIFImportWizardPage_BtnSelectSrcFile);
+		btnBrowse.setLayoutData(LayoutFactory.createGridData().withLRMargin(btnBrowse, 10).build());		
 		
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e)  {
-				if (selectedImportDescription == null) return;
+				if (_selectedImportDescription == null) return;
 								
 				FileDialog fd = new FileDialog(composite.getShell(), SWT.OPEN | SWT.MULTI);
 				
 				Vector<String> ext = new Vector<String>();
 				
-				for(String s:selectedImportDescription.getFileExtensions()[0].split(";")) //$NON-NLS-1$
+				for(String s:_selectedImportDescription.getFileExtensions()[0].split(";")) //$NON-NLS-1$
 					ext.add("*."+s); //$NON-NLS-1$
 				
 				ext.add("*.*"); //$NON-NLS-1$
@@ -141,18 +137,18 @@ public class MIFImportWizardPage extends WizardPage {
 	            if (ret == null) return;
 	            
 	            String files[] = fd.getFileNames();
-	            basicPath = fd.getFilterPath();
+	            _basicPath = fd.getFilterPath();
 				
 	            boolean isEditable = true;
 	            
 				if (files.length > 1) {					
-					sourceFileString = StringUtils.join(files, "; "); //$NON-NLS-1$
+					_sourceFileString = StringUtils.join(files, "; "); //$NON-NLS-1$
 					
 					final int Limit = 3000;
 					
-					String textString = sourceFileString;
+					String textString = _sourceFileString;
 					if (textString.length() > Limit) {
-						textString = sourceFileString.substring(0, Limit);
+						textString = _sourceFileString.substring(0, Limit);
 						textString = String.format("%s...", textString); //$NON-NLS-1$
 						isEditable = false;
 					}
@@ -163,30 +159,25 @@ public class MIFImportWizardPage extends WizardPage {
 						isEditable = false;
 					}
 					
-					textFieldFile.setText(textString);
+					_textFieldFile.setText(textString);
 				} else {
-					sourceFileString = files[0];
-					textFieldFile.setText(files[0]);
+					_sourceFileString = files[0];
+					_textFieldFile.setText(files[0]);
 				}
 				
-				textFieldFile.setEditable(isEditable);							
+				_textFieldFile.setEditable(isEditable);							
 			}});
 		
 		Label lblTargetDir = new Label(composite, SWT.NONE);
+		lblTargetDir.setLayoutData(new GridData(SWT.TRAIL, SWT.CENTER, false, false));
 		lblTargetDir.setText(NLSupport.MIFImportWizardPage_LblTgtDir); 
 		
-		textFieldTarget = new Text(composite, SWT.BORDER);
-		
-		GridData textFieldTargetGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, false);
-		textFieldTargetGridData.widthHint = 400;
-		
-		textFieldTarget.setLayoutData(textFieldTargetGridData);
-		
-		Label lblNull = new Label(composite, SWT.NONE);
-		lblNull.setText(StringUtils.EMPTY); //$NON-NLS-1$ 
-		
+		_textFieldTarget = new Text(composite, SWT.BORDER);		
+		_textFieldTarget.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
 		Button btnBrowseTarget = new Button(composite, SWT.NONE);
-		btnBrowseTarget.setText(NLSupport.MIFImportWizardPage_BtnTgtDir);  //$NON-NLS-2$
+		btnBrowseTarget.setText(NLSupport.MIFImportWizardPage_BtnTgtDir);
+		btnBrowseTarget.setLayoutData(LayoutFactory.createGridData().withLRMargin(btnBrowseTarget, 10).build());
 		
 		btnBrowseTarget.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -203,26 +194,27 @@ public class MIFImportWizardPage extends WizardPage {
 				IPath target = wsRoot.getLocation().append(selPath);
 				String osFile = target.toFile().getAbsolutePath();
 				
-				textFieldTarget.setText(osFile);
+				_textFieldTarget.setText(osFile);
 			}});
 		
 		// Options Area
 		Group optionsGroup = new Group(composite, SWT.NONE);
 		optionsGroup.setLayout(new GridLayout());
 		optionsGroup.setText(NLSupport.MIFImportWizardPage_Options);
+		optionsGroup.setLayoutData(
+				LayoutFactory.createGridData(SWT.FILL, SWT.FILL, true, true)
+							 .withColumnSpan(3)
+							 .build()
+		);
 		
-		GridData optionsCompositeGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		optionsCompositeGridData.horizontalSpan = 2;
-		optionsGroup.setLayoutData(optionsCompositeGridData);
+		_chkArrangeAll = new Button(optionsGroup, SWT.CHECK);
+		_chkArrangeAll.setText(NLSupport.MIFImportWizardPage_ArrangeAll);
 		
-		chkArrangeAll = new Button(optionsGroup, SWT.CHECK);
-		chkArrangeAll.setText(NLSupport.MIFImportWizardPage_ArrangeAll);
+		_chkPackPage  = new Button(optionsGroup, SWT.CHECK);
+		_chkPackPage.setText(NLSupport.MIFImportWizardPage_PackPage);
 		
-		chkPackPage  = new Button(optionsGroup, SWT.CHECK);
-		chkPackPage.setText(NLSupport.MIFImportWizardPage_PackPage);
-		
-		chkAutoSize = new Button(optionsGroup, SWT.CHECK);
-		chkAutoSize.setText(NLSupport.MIFImportWizardPage_BestSizeElements);
+		_chkAutoSize = new Button(optionsGroup, SWT.CHECK);
+		_chkAutoSize.setText(NLSupport.MIFImportWizardPage_BestSizeElements);
 		
 		// Make a pre-selection if possible
 		setPreferencesOrDefaultSettings();
@@ -231,17 +223,17 @@ public class MIFImportWizardPage extends WizardPage {
 	}
 	
 	private void prepareComboBox() {
-		for (IInterchangeDescriptor impDesc:importDescriptions)
-			cbImportDescriptions.add(""+impDesc.getName()+" (*."+impDesc.getFileExtensions()[0]+")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		for (IInterchangeDescriptor impDesc:_importDescriptions)
+			_cbImportDescriptions.add(""+impDesc.getName()+" (*."+impDesc.getFileExtensions()[0]+")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
-		cbImportDescriptions.addSelectionListener(new SelectionAdapter() {
+		_cbImportDescriptions.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				selectedImportDescription = importDescriptions.get(cbImportDescriptions.getSelectionIndex());
-				textFieldDescription.setText(selectedImportDescription.getDescription().replaceAll("//", "\r\n")); //$NON-NLS-1$ //$NON-NLS-2$
+				_selectedImportDescription = _importDescriptions.get(_cbImportDescriptions.getSelectionIndex());
+				_textFieldDescription.setText(_selectedImportDescription.getDescription().replaceAll("//", "\r\n")); //$NON-NLS-1$ //$NON-NLS-2$
 			}});
 		
-		cbImportDescriptions.setVisibleItemCount(20);
+		_cbImportDescriptions.setVisibleItemCount(20);
 	}
 	
 	/**
@@ -251,7 +243,7 @@ public class MIFImportWizardPage extends WizardPage {
 	 * @return String with semicolon separated file names
 	 */
 	public String getSourceFileString() {
-		return sourceFileString;
+		return _sourceFileString;
 	}
 	
 	/**
@@ -260,7 +252,7 @@ public class MIFImportWizardPage extends WizardPage {
 	 * @return String describing the target path
 	 */
 	public String getTargetFileString() {
-		return textFieldTarget.getText();
+		return _textFieldTarget.getText();
 	}
 	
 	/**
@@ -269,7 +261,7 @@ public class MIFImportWizardPage extends WizardPage {
 	 * @return Selected import descriptor
 	 */
 	public IInterchangeDescriptor getSelectedImportDescription() {
-		return selectedImportDescription;
+		return _selectedImportDescription;
 	}
 	
 	/**
@@ -278,7 +270,7 @@ public class MIFImportWizardPage extends WizardPage {
 	 * @return Collection of import descriptors
 	 */
 	public List<IInterchangeDescriptor> getImportDescriptions() {
-		return importDescriptions;
+		return _importDescriptions;
 	}
 	
 	/**
@@ -290,13 +282,13 @@ public class MIFImportWizardPage extends WizardPage {
 	public EnumSet<EImportOption> getImportOptions() {
 		EnumSet<EImportOption> importOptions = EnumSet.noneOf(EImportOption.class);
 		
-		if (chkArrangeAll.getSelection())
+		if (_chkArrangeAll.getSelection())
 			importOptions.add(EImportOption.ArrangeAll);
 		
-		if (chkPackPage.getSelection())
+		if (_chkPackPage.getSelection())
 			importOptions.add(EImportOption.PackPage);
 		
-		if (chkAutoSize.getSelection())
+		if (_chkAutoSize.getSelection())
 			importOptions.add(EImportOption.AutoSize);
 		
 		return importOptions;
@@ -309,15 +301,15 @@ public class MIFImportWizardPage extends WizardPage {
 	 *            collection of import descriptors
 	 */
 	public void setImportDescriptions(List<IInterchangeDescriptor> importDescriptions) {
-		this.importDescriptions = importDescriptions;
+		this._importDescriptions = importDescriptions;
 		
 		/*
 		 * Updating the file extensions
 		 */
-		fileExtensions = new String[importDescriptions.size()];
+		_fileExtensions = new String[importDescriptions.size()];
 		
-		for (int i = 0; i < fileExtensions.length; i++)
-			fileExtensions[i] = "*."+importDescriptions.get(i).getFileExtensions()[0]; //$NON-NLS-1$
+		for (int i = 0; i < _fileExtensions.length; i++)
+			_fileExtensions[i] = "*."+importDescriptions.get(i).getFileExtensions()[0]; //$NON-NLS-1$
 	}
 	
 	/**
@@ -326,7 +318,7 @@ public class MIFImportWizardPage extends WizardPage {
 	 * @return Base path of the selected files
 	 */
 	public String getBasicPath() {
-		return basicPath;
+		return _basicPath;
 	}
 	
 	/**
@@ -355,25 +347,25 @@ public class MIFImportWizardPage extends WizardPage {
 			}
 
 			// Update controls that are affected by the pre-selection
-			cbImportDescriptions.select(selectedImport);
-			if (selectedImport < importDescriptions.size())
-				selectedImportDescription = importDescriptions.get(selectedImport);
-			if (selectedImportDescription != null)
-				textFieldDescription.setText(selectedImportDescription.getDescription());
+			_cbImportDescriptions.select(selectedImport);
+			if (selectedImport < _importDescriptions.size())
+				_selectedImportDescription = _importDescriptions.get(selectedImport);
+			if (_selectedImportDescription != null)
+				_textFieldDescription.setText(_selectedImportDescription.getDescription());
 			
 			if (selectedFolder != null)
 				pathFile = selectedFolder;
 			
 			// Set options
-			chkArrangeAll.setSelection(dialogSettings.getBoolean(KEY_ARRANGE_ALL));
-			chkPackPage.setSelection(dialogSettings.getBoolean(KEY_PACK_PAGE));
-			chkAutoSize.setSelection(dialogSettings.getBoolean(KEY_AUTOSIZE));
+			_chkArrangeAll.setSelection(dialogSettings.getBoolean(KEY_ARRANGE_ALL));
+			_chkPackPage.setSelection(dialogSettings.getBoolean(KEY_PACK_PAGE));
+			_chkAutoSize.setSelection(dialogSettings.getBoolean(KEY_AUTOSIZE));
 		}
 		
 		// Open create project dialog
 		if (projects.length == 0) {
 			IWorkbenchWizard wizard = new BasicNewProjectResourceWizard();
-			wizard.init(iWorkbench, iSelection);
+			wizard.init(_workbench, _selection);
 			WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 			dialog.open();
 			projects = workspaceRoot.getProjects();
@@ -411,7 +403,7 @@ public class MIFImportWizardPage extends WizardPage {
 		if (!new File(pathFile).exists())
 			pathFile = StringUtils.EMPTY;
 		
-		textFieldTarget.setText(pathFile);
+		_textFieldTarget.setText(pathFile);
 	}
 	
 	/**
@@ -423,15 +415,15 @@ public class MIFImportWizardPage extends WizardPage {
 		if (dialogSettings == null)
 			dialogSettings = getDialogSettings().addNewSection(KEY_SECTION_NAME);
 		
-		String valueFolder = textFieldTarget.getText();
-		int valueImport = cbImportDescriptions.getSelectionIndex();
+		String valueFolder = _textFieldTarget.getText();
+		int valueImport = _cbImportDescriptions.getSelectionIndex();
 		
 		dialogSettings.put(KEY_SELECTED_FOLDER, valueFolder);
 		dialogSettings.put(KEY_SELECTED_IMPORT, valueImport);
 		
-		dialogSettings.put(KEY_ARRANGE_ALL, chkArrangeAll.getSelection());
-		dialogSettings.put(KEY_PACK_PAGE, chkPackPage.getSelection());
-		dialogSettings.put(KEY_AUTOSIZE, chkAutoSize.getSelection());
+		dialogSettings.put(KEY_ARRANGE_ALL, _chkArrangeAll.getSelection());
+		dialogSettings.put(KEY_PACK_PAGE, _chkPackPage.getSelection());
+		dialogSettings.put(KEY_AUTOSIZE, _chkAutoSize.getSelection());
 	}
 	
 	/**
@@ -441,14 +433,14 @@ public class MIFImportWizardPage extends WizardPage {
 	 * @param selection Workbench selection
 	 */
 	public void onInitialize(IWorkbench workbench, IStructuredSelection selection) {
-		iWorkbench = workbench;
-		iSelection = selection;
+		_workbench = workbench;
+		_selection = selection;
 	}
 	
-	private static final String KEY_SECTION_NAME =    "key.bflow.toolbox.addonsinterchange.importwizard.section.name"; //$NON-NLS-1$
+	private static final String KEY_SECTION_NAME    = "key.bflow.toolbox.addonsinterchange.importwizard.section.name"; //$NON-NLS-1$
 	private static final String KEY_SELECTED_IMPORT = "key.bflow.toolbox.addonsinterchange.importwizard.selected.import"; //$NON-NLS-1$
 	private static final String KEY_SELECTED_FOLDER = "key.bflow.toolbox.addonsinterchange.importwizard.selected.folder"; //$NON-NLS-1$
-	private static final String KEY_ARRANGE_ALL = "key.bflow.toolbox.addonsinterchange.importwizard.options.arrangeall"; //$NON-NLS-1$
-	private static final String KEY_PACK_PAGE = "key.bflow.toolbox.addonsinterchange.importwizard.options.packpage"; //$NON-NLS-1$
-	private static final String KEY_AUTOSIZE = "key.bflow.toolbox.addonsinterchange.importwizard.options.autosize"; //$NON-NLS-1$
+	private static final String KEY_ARRANGE_ALL     = "key.bflow.toolbox.addonsinterchange.importwizard.options.arrangeall"; //$NON-NLS-1$
+	private static final String KEY_PACK_PAGE       = "key.bflow.toolbox.addonsinterchange.importwizard.options.packpage"; //$NON-NLS-1$
+	private static final String KEY_AUTOSIZE        = "key.bflow.toolbox.addonsinterchange.importwizard.options.autosize"; //$NON-NLS-1$
 }

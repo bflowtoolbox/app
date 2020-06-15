@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            category="org.bflow.toolbox.attributes.category"
+            class="org.bflow.toolbox.hive.assets.AssetsViewPart"
+            icon="icons/attach.png"
+            id="org.bflow.toolbox.hive.assets.view"
+            name="%assetsViewName"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>

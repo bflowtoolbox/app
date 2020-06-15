@@ -4,7 +4,9 @@ import org.bflow.toolbox.hive.gmfbridge.graphiti.annotations.AnnotationDecoratio
 import org.bflow.toolbox.hive.libs.aprogu.collections.HList;
 import org.eclipse.graphiti.DiagramScrollingBehavior;
 import org.eclipse.graphiti.IExecutionInfo;
+import org.eclipse.graphiti.features.IDirectEditingFeature;
 import org.eclipse.graphiti.features.context.ICustomContext;
+import org.eclipse.graphiti.features.context.IDirectEditingContext;
 import org.eclipse.graphiti.features.context.IDoubleClickContext;
 import org.eclipse.graphiti.features.context.IPictogramElementContext;
 import org.eclipse.graphiti.features.context.ISingleClickContext;
@@ -17,6 +19,7 @@ import org.eclipse.graphiti.mm.pictograms.Connection;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.mm.pictograms.Shape;
+import org.eclipse.graphiti.palette.IConnectionCreationToolEntry;
 import org.eclipse.graphiti.palette.IPaletteCompartmentEntry;
 import org.eclipse.graphiti.tb.IAnchorSelectionInfo;
 import org.eclipse.graphiti.tb.IConnectionSelectionInfo;
@@ -31,13 +34,14 @@ import org.eclipse.graphiti.util.ILocationInfo;
  * Provides an adapter of {@link IToolBehaviorProvider} to deliver custom
  * decorators.
  * 
- * @author Arian Storch
+ * @author Arian Storch<arian.storch@bflow.org>
  * @since 2015-12-23
+ * @version 2018-10-03 Updated to latest API
  * 
  */
 public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 
-	private IToolBehaviorProvider fOriginalToolBehaviorProvider;
+	private IToolBehaviorProvider _originalToolBehaviorProvider;
 
 	/**
 	 * Creates a new instance based on the given original provider.
@@ -47,7 +51,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	public ToolBehaviorProviderAdapter(IToolBehaviorProvider originalToolBehaviorProvider) {
 		super();
-		fOriginalToolBehaviorProvider = originalToolBehaviorProvider;
+		_originalToolBehaviorProvider = originalToolBehaviorProvider;
 	}
 
 	/*
@@ -56,7 +60,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public void dispose() {
-		fOriginalToolBehaviorProvider.dispose();
+		_originalToolBehaviorProvider.dispose();
 	}
 
 	/*
@@ -65,7 +69,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public boolean equalsBusinessObjects(Object arg0, Object arg1) {
-		return fOriginalToolBehaviorProvider.equalsBusinessObjects(arg0, arg1);
+		return _originalToolBehaviorProvider.equalsBusinessObjects(arg0, arg1);
 	}
 
 	/*
@@ -74,7 +78,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public Object getAdapter(Class<?> arg0) {
-		return fOriginalToolBehaviorProvider.getAdapter(arg0);
+		return _originalToolBehaviorProvider.getAdapter(arg0);
 	}
 
 	/*
@@ -83,7 +87,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public GraphicsAlgorithm getChopboxAnchorArea(PictogramElement arg0) {
-		return fOriginalToolBehaviorProvider.getChopboxAnchorArea(arg0);
+		return _originalToolBehaviorProvider.getChopboxAnchorArea(arg0);
 	}
 
 	/*
@@ -92,7 +96,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public GraphicsAlgorithm[] getClickArea(PictogramElement arg0) {
-		return fOriginalToolBehaviorProvider.getClickArea(arg0);
+		return _originalToolBehaviorProvider.getClickArea(arg0);
 	}
 
 	/*
@@ -101,7 +105,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public ICustomFeature getCommandFeature(CustomContext arg0, String arg1) {
-		return fOriginalToolBehaviorProvider.getCommandFeature(arg0, arg1);
+		return _originalToolBehaviorProvider.getCommandFeature(arg0, arg1);
 	}
 
 	/*
@@ -110,7 +114,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public GraphicsAlgorithm getContentArea(ContainerShape arg0) {
-		return fOriginalToolBehaviorProvider.getContentArea(arg0);
+		return _originalToolBehaviorProvider.getContentArea(arg0);
 	}
 
 	/*
@@ -120,7 +124,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	@Override
 	public IContextButtonPadData getContextButtonPad(
 			IPictogramElementContext arg0) {
-		return fOriginalToolBehaviorProvider.getContextButtonPad(arg0);
+		return _originalToolBehaviorProvider.getContextButtonPad(arg0);
 	}
 	
 	/*
@@ -129,7 +133,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public IContextMenuEntry[] getContextMenu(ICustomContext arg0) {
-		return fOriginalToolBehaviorProvider.getContextMenu(arg0);
+		return _originalToolBehaviorProvider.getContextMenu(arg0);
 	}
 
 	/*
@@ -138,7 +142,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public String getContributorId() {
-		return fOriginalToolBehaviorProvider.getContributorId();
+		return _originalToolBehaviorProvider.getContributorId();
 	}
 
 	/*
@@ -147,7 +151,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public IDecorator[] getDecorators(PictogramElement arg0) {
-		IDecorator[] originalDecorators = fOriginalToolBehaviorProvider.getDecorators(arg0);
+		IDecorator[] originalDecorators = _originalToolBehaviorProvider.getDecorators(arg0);
 		IDecorator[] additionalDecorators = new IDecorator[0];
 		
 		AnnotationDecorationSupport annotationDecorationSupport = AnnotationDecorationSupport.Current();
@@ -168,7 +172,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public DiagramScrollingBehavior getDiagramScrollingBehavior() {
-		return fOriginalToolBehaviorProvider.getDiagramScrollingBehavior();
+		return _originalToolBehaviorProvider.getDiagramScrollingBehavior();
 	}
 
 	/*
@@ -177,7 +181,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public ICustomFeature getDoubleClickFeature(IDoubleClickContext arg0) {
-		return fOriginalToolBehaviorProvider.getDoubleClickFeature(arg0);
+		return _originalToolBehaviorProvider.getDoubleClickFeature(arg0);
 	}
 
 	/*
@@ -186,7 +190,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public int getLineSelectionWidth(Polyline arg0) {
-		return fOriginalToolBehaviorProvider.getLineSelectionWidth(arg0);
+		return _originalToolBehaviorProvider.getLineSelectionWidth(arg0);
 	}
 
 	/*
@@ -196,7 +200,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	@Override
 	public ILocationInfo getLocationInfo(PictogramElement arg0,
 			ILocationInfo arg1) {
-		return fOriginalToolBehaviorProvider.getLocationInfo(arg0, arg1);
+		return _originalToolBehaviorProvider.getLocationInfo(arg0, arg1);
 	}
 
 	/*
@@ -205,7 +209,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public IPaletteCompartmentEntry[] getPalette() {
-		return fOriginalToolBehaviorProvider.getPalette();
+		return _originalToolBehaviorProvider.getPalette();
 	}
 
 	/*
@@ -215,7 +219,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	@Override
 	public PictogramElement getSelection(PictogramElement arg0,
 			PictogramElement[] arg1) {
-		return fOriginalToolBehaviorProvider.getSelection(arg0, arg1);
+		return _originalToolBehaviorProvider.getSelection(arg0, arg1);
 	}
 
 	/*
@@ -224,7 +228,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public GraphicsAlgorithm getSelectionBorder(PictogramElement arg0) {
-		return fOriginalToolBehaviorProvider.getSelectionBorder(arg0);
+		return _originalToolBehaviorProvider.getSelectionBorder(arg0);
 	}
 
 	/*
@@ -233,7 +237,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public IAnchorSelectionInfo getSelectionInfoForAnchor(Anchor arg0) {
-		return fOriginalToolBehaviorProvider.getSelectionInfoForAnchor(arg0);
+		return _originalToolBehaviorProvider.getSelectionInfoForAnchor(arg0);
 	}
 
 	/*
@@ -242,7 +246,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public IConnectionSelectionInfo getSelectionInfoForConnection(Connection arg0) {
-		return fOriginalToolBehaviorProvider.getSelectionInfoForConnection(arg0);
+		return _originalToolBehaviorProvider.getSelectionInfoForConnection(arg0);
 	}
 
 	/*
@@ -251,7 +255,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public IShapeSelectionInfo getSelectionInfoForShape(Shape arg0) {
-		return fOriginalToolBehaviorProvider.getSelectionInfoForShape(arg0);
+		return _originalToolBehaviorProvider.getSelectionInfoForShape(arg0);
 	}
 
 	/*
@@ -260,7 +264,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public ICustomFeature getSingleClickFeature(ISingleClickContext arg0) {
-		return fOriginalToolBehaviorProvider.getSingleClickFeature(arg0);
+		return _originalToolBehaviorProvider.getSingleClickFeature(arg0);
 	}
 
 	/*
@@ -269,7 +273,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public String getTitleToolTip() {
-		return fOriginalToolBehaviorProvider.getTitleToolTip();
+		return _originalToolBehaviorProvider.getTitleToolTip();
 	}
 
 	/*
@@ -278,7 +282,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public Object getToolTip(GraphicsAlgorithm arg0) {
-		return fOriginalToolBehaviorProvider.getToolTip(arg0);
+		return _originalToolBehaviorProvider.getToolTip(arg0);
 	}
 
 	/*
@@ -287,7 +291,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public double[] getZoomLevels() {
-		return fOriginalToolBehaviorProvider.getZoomLevels();
+		return _originalToolBehaviorProvider.getZoomLevels();
 	}
 
 	/*
@@ -296,7 +300,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public boolean isConnectionSelectionEnabled() {
-		return fOriginalToolBehaviorProvider.isConnectionSelectionEnabled();
+		return _originalToolBehaviorProvider.isConnectionSelectionEnabled();
 	}
 
 	/*
@@ -305,7 +309,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public boolean isMultiSelectionEnabled() {
-		return fOriginalToolBehaviorProvider.isMultiSelectionEnabled();
+		return _originalToolBehaviorProvider.isMultiSelectionEnabled();
 	}
 	
 	/*
@@ -314,7 +318,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public boolean isShowFlyoutPalette() {
-		return fOriginalToolBehaviorProvider.isShowFlyoutPalette();
+		return _originalToolBehaviorProvider.isShowFlyoutPalette();
 	}
 
 	/*
@@ -323,7 +327,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public boolean isShowGuides() {
-		return fOriginalToolBehaviorProvider.isShowGuides();
+		return _originalToolBehaviorProvider.isShowGuides();
 	}
 
 	/*
@@ -332,7 +336,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public boolean isShowMarqueeTool() {
-		return fOriginalToolBehaviorProvider.isShowMarqueeTool();
+		return _originalToolBehaviorProvider.isShowMarqueeTool();
 	}
 
 	/*
@@ -341,7 +345,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public boolean isShowSelectionTool() {
-		return fOriginalToolBehaviorProvider.isShowSelectionTool();
+		return _originalToolBehaviorProvider.isShowSelectionTool();
 	}
 
 	/*
@@ -350,7 +354,7 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public void postExecute(IExecutionInfo arg0) {
-		fOriginalToolBehaviorProvider.postExecute(arg0);
+		_originalToolBehaviorProvider.postExecute(arg0);
 	}
 
 	/*
@@ -359,6 +363,24 @@ public class ToolBehaviorProviderAdapter implements IToolBehaviorProvider {
 	 */
 	@Override
 	public void preExecute(IExecutionInfo arg0) {
-		fOriginalToolBehaviorProvider.preExecute(arg0);
+		_originalToolBehaviorProvider.preExecute(arg0);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.tb.IToolBehaviorProvider#getDirectEditingInvalidNotificationTitle(org.eclipse.graphiti.features.IDirectEditingFeature, org.eclipse.graphiti.features.context.IDirectEditingContext)
+	 */
+	@Override
+	public String getDirectEditingInvalidNotificationTitle(IDirectEditingFeature var1, IDirectEditingContext var2) {
+		return _originalToolBehaviorProvider.getDirectEditingInvalidNotificationTitle(var1, var2);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.graphiti.tb.IToolBehaviorProvider#isStayActiveAfterExecution(org.eclipse.graphiti.palette.IConnectionCreationToolEntry)
+	 */
+	@Override
+	public boolean isStayActiveAfterExecution(IConnectionCreationToolEntry var1) {
+		return _originalToolBehaviorProvider.isStayActiveAfterExecution(var1);
 	}
 }

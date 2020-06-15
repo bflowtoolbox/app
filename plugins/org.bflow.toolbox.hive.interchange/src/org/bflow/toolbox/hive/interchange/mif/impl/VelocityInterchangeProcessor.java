@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -36,13 +37,25 @@ import org.osgi.framework.Bundle;
  * processing.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 18/10/12
- * @version 22/04/14
+ * @since 2012-10-18
+ * @version 2014-04-22
+ * 			2018-10-21 Added VelocityUuidTool to context
+ * 			2018-10-21 Added trim prefix support
+ * 			2019-06-02 Added escape XML directive
  */
 public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 	
-	/** The preprocess template prefix */
-	private static final String PreprocessPrefix = "@preprocess";
+	/** The preprocess template directive */
+	private static final String PreprocessDirective = "@preprocess";
+	
+	/** The trim template directive */
+	private static final String TrimDirective = "@trim";
+	
+	/** The pretty print directive */
+	private static final String PrettyPrintDirective = "@prettyprint";
+	
+	/** The escape XML directive */ 
+	private static final String EscapeXmlDirective = "@escapexml";
 	
 	/** The default output file encoding */
 	private static final String DefaultOutputFileEncoding = "UTF-8";
@@ -89,24 +102,39 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 		String path = exportDescriptor.getScripts()[0].getPath();
 
 		String template;
-
-		try {
-			InputStream is = resolveScriptInputStream(path);
+		try (InputStream is = resolveScriptInputStream(path)) {
 			template = IOUtils.toString(is); // TODO Check the encoding of the template input
-			is.close();
 		} catch (IOException ex) {
 			throw new InterchangeProcessingException("Could not read template from File " + path, ex);
-		}
-		
+		}		
+
 		// Check for preprocessing and do it
-		if(template.startsWith(PreprocessPrefix)) {
-			template = StringUtils.remove(template, PreprocessPrefix);
+		if (template.startsWith(PreprocessDirective)) {
+			template = StringUtils.remove(template, PreprocessDirective);
 			template = StringUtils.remove(template, CharUtils.CR);
 			template = StringUtils.remove(template, CharUtils.LF);
 			template = StringUtils.remove(template, '\t');
 			
 			template = StringUtils.replace(template, "~nl", System.lineSeparator());
 			template = StringUtils.replace(template, "~t", "\t");
+		}
+		
+		boolean trimResult = false;
+		if (template.contains(TrimDirective)) {
+			trimResult = true;
+			template = StringUtils.remove(template, TrimDirective);
+		}
+		
+		boolean prettyPrint = false;
+		if (template.contains(PrettyPrintDirective)) {
+			prettyPrint = true;
+			template = StringUtils.remove(template, PrettyPrintDirective);
+		}
+		
+		boolean escapeXml = false;
+		if (template.contains(EscapeXmlDirective)) {
+			escapeXml = true;
+			template = StringUtils.remove(template, EscapeXmlDirective);
 		}
 
 		// Configure Velocity
@@ -132,25 +160,33 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 //		ctx.put("params", null); TODO add support for parameters
 		addToolsToContext(ctx);
 
-		StringWriter sw = new StringWriter();
 		String result = null;
 		boolean isValid = false;
-
-		try {
-			isValid = Velocity.evaluate(ctx, sw, "TemplateInterchangeProcessing", template);
-		} catch (Exception ex) {
-			String message = String.format("Could not evaluate the given template: %s", path);
-			throw new InterchangeProcessingException(message, ex);
+		try (StringWriter sw = new StringWriter()) {
+			try {
+				isValid = Velocity.evaluate(ctx, sw, "TemplateInterchangeProcessing", template);
+			} catch (Exception ex) {
+				String message = String.format("Could not evaluate the given template: %s", path);
+				throw new InterchangeProcessingException(message, ex);
+			}
+			
+			if (isValid) {
+				result = sw.toString();
+			}
+		} catch (IOException ex) {
+			// Shouldn't be a problem in common
 		}
-
-		if (isValid) {
-			result = sw.toString();
+		
+		if (trimResult) {
+			result = StringUtils.trim(result);
 		}
-
-		try {
-			sw.close();
-		} catch (IOException e1) {
-			// should be no problem in common
+		
+		if (escapeXml) {
+			result = escapeXml(result);
+		}
+		
+		if (prettyPrint) {
+			result = printPrettyXml(result);
 		}
 
 		try {
@@ -247,9 +283,12 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 		ctx.put("number", new NumberTool());
 		ctx.put("render", new RenderTool());
 		ctx.put("text", new ResourceTool());
-//		ctx.put("lists", new ListTool()); // Deprecated
+		// ctx.put("lists", new ListTool()); // Deprecated
 		ctx.put("sorter", new SortTool());
 		ctx.put("loop", new LoopTool());
+		
+		// Custom tools
+		ctx.put("uuid", new VelocityUuidTool());
 	}
 	
 	/**
@@ -270,5 +309,84 @@ public class VelocityInterchangeProcessor implements IInterchangeProcessor {
 		Velocity.setProperty("resource.loader", "url"); // Or file
 		Velocity.setProperty("url.resource.loader.class", "org.apache.velocity.runtime.resource.loader.URLResourceLoader"); 
 		Velocity.setProperty("url.resource.loader.root", strUrl);
+	}
+	
+	/**
+	 * Returns the given {@code xml} string without tabs and excessive whitespaces.
+	 * 
+	 * @param xml XML string to process
+	 * @return Cleansed XML string
+	 */
+	private String printPrettyXml(String xml) {
+		StringBuilder stringBuilder = new StringBuilder();
+		String[] lines = xml.split("\\r\\n|\\n|\\r");
+		for (int i = -1; ++i != lines.length;) {
+			String line = lines[i];
+			if (StringUtils.isBlank(line)) continue;
+			String tabFreeLine = StringUtils.remove(line, '\t');
+			String trimmedLine = StringUtils.remove(tabFreeLine, "        ");
+			stringBuilder.append(trimmedLine).append(System.lineSeparator());
+		}
+		
+		return stringBuilder.toString();
+	}
+	
+	/**
+	 * Returns the given {@code xml} where all XML tokens within 
+	 * an XML attribute value have been escaped.
+	 */
+	private String escapeXml(String xml) {
+		StringBuilder sb = new StringBuilder(xml.length());
+		char[] xmlChars = xml.toCharArray();
+		
+		int quoteCount = 0;
+		int begin = -1;
+		for (int i = -1; ++i != xmlChars.length;) {
+			char c = xmlChars[i];
+			
+			if (c == '"') {
+				if (quoteCount == 0) { // Opening quote
+					quoteCount++;
+					begin = i;
+				} else {
+					boolean closing = false;
+					int i1 = i+1;
+					char c1 = i1 != xmlChars.length ? xmlChars[i1] : 0;
+					if (c1 == ' ' || c1 == '"' || c1 == '?' || c1 == '/' || c1 == '>') { // Final closing quote
+						closing = true;
+					}
+					
+					if (closing) {
+						quoteCount--;
+					} else {
+						quoteCount++;
+					}
+					
+					// All quotes have been closed so far
+					if (quoteCount == 0) {
+						int end = i;
+						String xmlAttrValue = new String(xmlChars, begin, end - begin + 1);
+						String sanValue = xmlAttrValue;
+						
+						// Escape XML tokens
+						if (xmlAttrValue.length() > 2) {
+							String innerVal = xmlAttrValue.substring(1, xmlAttrValue.length() - 1);
+							String escapedValue = StringEscapeUtils.escapeXml(innerVal);
+							sanValue = "\"".concat(escapedValue).concat("\"");
+						}									
+					
+						sb.append(sanValue);
+						begin = -1;
+						continue;
+					}
+				}
+			}
+					
+			if (quoteCount != 0) continue;
+			
+			sb.append(c);
+		}
+		
+		return sb.toString();
 	}
 }

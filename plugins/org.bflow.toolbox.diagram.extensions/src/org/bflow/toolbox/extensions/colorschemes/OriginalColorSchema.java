@@ -31,67 +31,54 @@ public class OriginalColorSchema extends GlobalColorSchema {
 		Color background = ColorConstants.white;
 		String className = getSimpleClassName(type);
 		
-		if(className.equals("Event")){
+		if (className.equals("Event")) {
 			background = new Color(null, 248, 0, 248);
-		}
-		else if(className.equals("OrganisationUnit")){
+		} else if(className.equals("OrganisationUnit")) {
 			background = new Color(null, 255, 255, 0);
-		}
-		else if(className.equals("BusinessObject")){
+		} else if(className.equals("BusinessObject")) {
 			background = ColorConstants.white;
-		}
-		else if(className.equals("ITSystem")){
+		} else if(className.equals("ITSystem")) {
 			background = new Color(null, 223, 22, 22);
-		}
-		else if(className.equals("Document")){
+		} else if(className.equals("Document")) {
 			background = ColorConstants.white;	
-		}
-		else if(className.equals("Position")){
+		} else if(className.equals("Position")) {
 			background = new Color(null, 255, 255, 0);
-		}
-		else if(className.equals("Location")){
+		} else if(className.equals("Location")) {
 			background = new Color(null, 255, 255, 0);
-		}
-		else if(className.equals("TechnicalTerm")){
+		} else if(className.equals("TechnicalTerm")) {
 			background = ColorConstants.white;	
-		}
-		else if(className.equals("Group")){
+		} else if(className.equals("Group")) {
 			background = new Color(null, 255, 255, 0);
-		}
-		else if(className.equals("Participant")){
+		} else if(className.equals("Participant")) {
 			background = new Color(null, 255, 255, 0);
-		}
-		else if(className.equals("ProcessInterface")){
+		} else if(className.equals("ProcessInterface")) {
 			background = ColorConstants.white;	
-		}
-		else if(className.equals("Application")){
+		} else if(className.equals("Application")) {
 			background = new Color(null, 0, 255, 255);
-		}
-		else if(className.equals("Objective")){
+		} else if(className.equals("Objective")) {
+			background = new Color(null, 0, 248, 0);
+		} else if(className.equals("Product")) {
+			background = new Color(null, 43, 238, 135);
+		} else if(className.equals("PersonType")) {
+			background = new Color(null, 255, 255, 0);
+		} else if(className.equals("ExternalPerson")) {
+			background = ColorConstants.white;	
+		} else if(className.equals("InternalPerson")) {
+			background = new Color(null, 255, 255, 0);
+		} else if(className.equals("Cluster")) {
+			background = new Color(null, 223, 22, 22);
+		} else if(className.equals("CardFile")) {
+			background = ColorConstants.white;	
+		} else if(className.equals("File")) {
+			background = ColorConstants.white;	
+		} else if(className.equals("Function")) {
 			background = new Color(null, 0, 248, 0);
 		}
-		else if(className.equals("Product")){
-			background = new Color(null, 43, 238, 135);
-		}
-		else if(className.equals("PersonType")){
-			background = new Color(null, 255, 255, 0);
-		}
-		else if(className.equals("ExternalPerson")){
-			background = ColorConstants.white;	
-		}
-		else if(className.equals("InternalPerson")){
-			background = new Color(null, 255, 255, 0);
-		}
-		else if(className.equals("Cluster")){
-			background = new Color(null, 223, 22, 22);
-		}
-		else if(className.equals("CardFile")){
-			background = ColorConstants.white;	
-		}
-		else if(className.equals("File")){
-			background = ColorConstants.white;	
-		}
-		else if(className.equals("Function")){
+		
+		//For VC-Diagram-Nodes
+		else if(className.equals("Activity1")) {
+			background = new Color(null, 0, 248, 0);
+		} else if(className.equals("Activity2")) {
 			background = new Color(null, 0, 248, 0);
 		}
 		
@@ -127,8 +114,7 @@ public class OriginalColorSchema extends GlobalColorSchema {
 		cmd.setElements(editParts);
 		return cmd;
 	}
-	
-	
+		
 	/**
 	 * Returns an description which is used to store the schema in the 
 	 * <code>DiagramStyle</code>.

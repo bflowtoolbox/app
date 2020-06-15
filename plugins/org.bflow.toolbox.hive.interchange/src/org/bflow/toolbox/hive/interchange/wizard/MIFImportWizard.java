@@ -6,6 +6,8 @@ import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bflow.toolbox.hive.actions.BestSizeAction;
 import org.bflow.toolbox.hive.actions.PackPageAction;
 import org.bflow.toolbox.hive.interchange.AddonsInterchangePlugin;
@@ -42,18 +44,15 @@ import org.eclipse.ui.IWorkbench;
  * Implements a wizard for importing diagrams using the MIF.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 17/08/09
- * @version 22/08/13
+ * @since 2009-08-17
+ * @version 2013-08-22
  * 
  */
 public class MIFImportWizard extends Wizard implements IImportWizard {
-	
-	/** The import wizard page. */
+	private Log _log = LogFactory.getLog(MIFImportWizard.class);
 	private MIFImportWizardPage importWizardPage;
 	
-	/**
-	 * Creates a new instance.
-	 */
+	/** Initializes the new instance. */
 	public MIFImportWizard() {
 		IDialogSettings dialogSettings = AddonsInterchangePlugin.getInstance().getDialogSettings();
 		setDialogSettings(dialogSettings);
@@ -103,6 +102,7 @@ public class MIFImportWizard extends Wizard implements IImportWizard {
 		try {
 			performImport(processInfo);
 		} catch(Exception ex) {
+			_log.error("Error on performing import", ex);
 			return false;
 		}
 
@@ -111,14 +111,10 @@ public class MIFImportWizard extends Wizard implements IImportWizard {
 	
 	/**
 	 * Performs the import within an progress monitor dialog.
-	 *
-	 * @param importDescriptor The import descriptor
-	 * @param bPath The basic file path
-	 * @param fileNames The collection of file names
-	 * @param sourceFile The source file
-	 * @param targetFile The target file
-	 * @throws InvocationTargetException the invocation target exception
-	 * @throws InterruptedException the interrupted exception
+	 * 
+	 * @param processInfo Import process information
+	 * @throws InvocationTargetException
+	 * @throws InterruptedException
 	 */
 	private void performImport(final ImportProcessInfo processInfo) 
 			throws InvocationTargetException, InterruptedException {
@@ -151,8 +147,8 @@ public class MIFImportWizard extends Wizard implements IImportWizard {
 						
 						// Process import options
 						processImportOptions(new File(processInfo.TargetFile + "/" + fileName), processInfo.ImportOptions); //$NON-NLS-1$
-					} catch(Exception ex) {
-						AddonsInterchangePlugin.logError(ex.getMessage(), ex);
+					} catch(Exception ex) {						
+						_log.error(ex.getMessage(), ex);
 						EclipseUtil.createErrorDetailsDialog(NLSupport.MIFImportWizard_ExceptionNoFinish, ex, true);
 						throw new InterruptedException();
 					}
@@ -160,7 +156,7 @@ public class MIFImportWizard extends Wizard implements IImportWizard {
 				try {
 					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
 				} catch (CoreException ex) {
-					AddonsInterchangePlugin.logError(ex.getMessage(), ex);
+					_log.error(ex.getMessage(), ex);
 					EclipseUtil.createErrorDetailsDialog(NLSupport.MIFImportWizard_ErrorOnRefresh, ex, false);
 				}
 				
@@ -172,56 +168,53 @@ public class MIFImportWizard extends Wizard implements IImportWizard {
 	/**
 	 * Process the import options.
 	 * 
-	 * @param diagramFile
-	 *            File that is being processed
-	 * @param importOptions
-	 *            Set of import options.
+	 * @param diagramFile   File that is being processed
+	 * @param importOptions Set of import options.
 	 */
 	private void processImportOptions(File diagramFile, EnumSet<EImportOption> importOptions) {
-		if(importOptions == null || importOptions.isEmpty())
-			return;
+		if (importOptions == null || importOptions.isEmpty()) return;
 		
 		Shell shell = new Shell();
-		IFile file = CommonInterchangeUtil.toIFile(diagramFile);
+		IFile file = null;
 		
 		DiagramEditPart diagramEditPart = null;
 		Diagram diagram = null;
 		
 		try {
+			file = CommonInterchangeUtil.toIFile(diagramFile);
 			diagramEditPart = CommonInterchangeUtil.getOffscreenDiagramEditPart(shell, file);
 			diagram = (Diagram) diagramEditPart.getDiagramView();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			_log.error(ex.getMessage(), ex);
 		}
 		
-		if(diagramEditPart == null || diagram == null)
-			return;
+		if (diagramEditPart == null || diagram == null) return;
 		
-		if(importOptions.contains(EImportOption.AutoSize)) {
-				BestSizeAction action = new BestSizeAction();
-				action.selectionChanged(null, new StructuredSelection(diagramEditPart));
-				action.run((IAction)null);		
+		if (importOptions.contains(EImportOption.AutoSize)) {
+			BestSizeAction action = new BestSizeAction();
+			action.selectionChanged(null, new StructuredSelection(diagramEditPart));
+			action.run((IAction) null);
 			try {
 				diagramEditPart = CommonInterchangeUtil.saveAndReload(diagramEditPart, file, shell);
 				diagram = (Diagram) diagramEditPart.getDiagramView();
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}	
+			} catch (CoreException ex) {
+				_log.error(ex.getMessage(), ex);
+			}
 		}
 		
-		if(importOptions.contains(EImportOption.ArrangeAll)) {
+		if (importOptions.contains(EImportOption.ArrangeAll)) {
 			ArrangeRequest request = new ArrangeRequest(ActionIds.ACTION_ARRANGE_ALL);
 			diagramEditPart.performRequest(request);
 			
 			try {
 				diagramEditPart = CommonInterchangeUtil.saveAndReload(diagramEditPart, file, shell);
 				diagram = (Diagram) diagramEditPart.getDiagramView();
-			} catch (CoreException e) {
-				e.printStackTrace();
+			} catch (CoreException ex) {
+				_log.error(ex.getMessage(), ex);
 			}
 		}
 		
-		if(importOptions.contains(EImportOption.PackPage)) {	
+		if (importOptions.contains(EImportOption.PackPage)) {	
 			PackPageAction action = new PackPageAction();
 			action.setDiagramEditPart(diagramEditPart);
 			action.doRun();
@@ -229,8 +222,8 @@ public class MIFImportWizard extends Wizard implements IImportWizard {
 			try {
 				diagramEditPart = CommonInterchangeUtil.saveAndReload(diagramEditPart, file, shell);
 				diagram = (Diagram) diagramEditPart.getDiagramView();
-			} catch (CoreException e) {
-				e.printStackTrace();
+			} catch (CoreException ex) {
+				_log.error(ex.getMessage(), ex);
 			}
 		}
 		
@@ -264,7 +257,7 @@ public class MIFImportWizard extends Wizard implements IImportWizard {
 	 * Defines properties of an import process.
 	 * 
 	 * @author Arian Storch<arian.storch@bflow.org>
-	 * @since 11/08/13
+	 * @since 2013-08-11
 	 */
 	class ImportProcessInfo {
 		public IInterchangeDescriptor ImportDescriptor;

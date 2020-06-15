@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gmf.runtime.common.core.command.CommandResult;
+import org.eclipse.gmf.runtime.draw2d.ui.figures.FigureUtilities;
 import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand;
 import org.eclipse.gmf.runtime.notation.DiagramStyle;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
@@ -27,8 +28,9 @@ import org.eclipse.swt.graphics.Color;
  * elements.
  * This command is also redoable.
  * 
- * @author Joerg Hartmann
+ * @author Joerg Hartmann, Arian Storch<arian.storch@bflow.org>
  * @since 1.0.0
+ * @version 2018-10-04 Updated color to int calculation
  *
  */
 public class GlobalColorCommand extends Command {
@@ -59,9 +61,8 @@ public class GlobalColorCommand extends Command {
 		this.bflowDiagramEditPart = bflowDiagramEditPart;
 		
 		notices = new Vector<ColorNotice>();
-		for(Iterator<ColorChangeable> i = elements.iterator(); 
-			i.hasNext();){
-			ColorChangeable part = i.next();
+		for (Iterator<ColorChangeable> itr = elements.iterator(); itr.hasNext();) {
+			ColorChangeable part = itr.next();
 			notices.add(new ColorNotice(part, 
 					part.getPrimaryFigure().getForegroundColor(), 
 					part.getPrimaryFigure().getBackgroundColor()));
@@ -76,7 +77,7 @@ public class GlobalColorCommand extends Command {
 	 */
 	public boolean switchColorSchema(IGlobalColorSchema nextSchema){
 		boolean success = saveColorSchema(nextSchema);
-		if(success){
+		if (success) {
 			bflowDiagramEditPart.setColorSchema(nextSchema);
 		}
 		
@@ -96,25 +97,17 @@ public class GlobalColorCommand extends Command {
 				bflowDiagramEditPart.getEditingDomain(), "add schema", null){
 
 			@SuppressWarnings("unchecked")
-			protected CommandResult doExecuteWithResult(
-					IProgressMonitor monitor, IAdaptable info)
-					throws ExecutionException {
-				
-				
+			protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 				
 				DiagramStyle diagramStyle = (DiagramStyle) bflowDiagramEditPart
 						.getDiagramView().getStyle(
 						NotationPackage.Literals.DIAGRAM_STYLE);
 			
-				
-				if(diagramStyle != null){
+				if (diagramStyle != null) {
 					diagramStyle.setDescription(schema.toString());
-				}
-				else{
-					List<Style> styles = bflowDiagramEditPart
-						.getDiagramView().getStyles();
-					diagramStyle = 
-						NotationFactory.eINSTANCE.createDiagramStyle();
+				} else {
+					List<Style> styles = bflowDiagramEditPart.getDiagramView().getStyles();
+					diagramStyle = NotationFactory.eINSTANCE.createDiagramStyle();
 					styles.add(diagramStyle);
 					diagramStyle.setDescription(schema.toString());
 				};
@@ -135,34 +128,42 @@ public class GlobalColorCommand extends Command {
 	}
 	
 	
-	/**
-	 * True.
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gef.commands.Command#canExecute()
 	 */
+	@Override
 	public boolean canExecute() {
 		return true;
 	}
 
 	
-	/**
-	 * True.
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gef.commands.Command#canUndo()
 	 */
+	@Override
 	public boolean canUndo() {	
 		return true;
 	}
 
 	
-	/**
-	 * Clears the notices.
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gef.commands.Command#dispose()
 	 */
+	@Override
 	public void dispose() {
 		notices = null;
 	}
 	
-	/**
-	 * Execute me.
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
+	@Override
 	public void execute() {
-		if(switchColorSchema(nextColorSchema)){
+		if (switchColorSchema(nextColorSchema)) {
 			setColorSchema(nextColorSchema);
 		}
 	}
@@ -174,13 +175,15 @@ public class GlobalColorCommand extends Command {
 	 */
 	public void setColorSchema(IGlobalColorSchema schema){
 		Iterator<ColorNotice> elements = notices.iterator();
-		while(elements.hasNext()){
+		while(elements.hasNext()) {
 			ColorNotice notice = elements.next();
 			ColorChangeable editPart = notice.getEditPart();
+			Class<? extends ColorChangeable> editPartCls = editPart.getClass();
 			
-			Color foreground = schema.getForeground(editPart.getClass());
-			Color background = schema.getBackground(editPart.getClass());
-			if(execute(notice.getEditPart(), foreground, background)){
+			Color foreground = schema.getForeground(editPartCls);
+			Color background = schema.getBackground(editPartCls);
+			
+			if (execute(editPart, foreground, background)) {
 				notice.getEditPart().applyColor(foreground, background);
 			}
 		}
@@ -189,30 +192,30 @@ public class GlobalColorCommand extends Command {
 	
 	/**
 	 * Persists the delivered colors in the correspond style.
+	 * 
 	 * @param editPart
 	 * @param foreground
 	 * @param background
 	 * @return the success
 	 */
-	public boolean execute(final ColorChangeable editPart, 
-			final Color foreground, final Color background){
+	public boolean execute(final ColorChangeable editPart, final Color foreground, final Color background) {
 		boolean success = true;
 		
-		AbstractTransactionalCommand command = 
-			new AbstractTransactionalCommand(editPart.getEditingDomain(), 
-					null, null){
+		AbstractTransactionalCommand command = new AbstractTransactionalCommand(editPart.getEditingDomain(), 
+				null, null) {
 
-			protected CommandResult doExecuteWithResult(
-					IProgressMonitor monitor, IAdaptable info)
-					throws ExecutionException {
+			@Override
+			protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+				ShapeStyle style = (ShapeStyle) editPart.getPrimaryView().getStyle(NotationPackage.Literals.SHAPE_STYLE);
 				
-				ShapeStyle style = 
-					(ShapeStyle) editPart.getPrimaryView().getStyle(
-						NotationPackage.Literals.SHAPE_STYLE);
 				if (style != null) {
-					style.setLineColor(foreground.hashCode());
-					style.setFillColor(background.hashCode());
+					int fgClr = FigureUtilities.colorToInteger(foreground);
+					int bgClr = FigureUtilities.colorToInteger(background);
+					
+					style.setLineColor(fgClr);
+					style.setFillColor(bgClr);
 				}
+				
 				return CommandResult.newOKCommandResult();
 			}
 		};
@@ -237,29 +240,33 @@ public class GlobalColorCommand extends Command {
 	}
 
 	
-	/**
-	 * Returns the label which is printed.
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gef.commands.Command#getLabel()
 	 */
+	@Override
 	public String getLabel() {
 		return nextColorSchema.getTitle();
 	}
 
 	
-	/**
-	 * Redo.
-	 * @see execute
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
+	@Override
 	public void redo() {
 		execute();
 	}
 
 	
-	/**
-	 * Undo.
-	 * Applies the stored colors in the notices.
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
+	@Override
 	public void undo() {
-		if(switchColorSchema(oldColorSchema)){
+		if (switchColorSchema(oldColorSchema)) {
 			setColorSchema(oldColorSchema);
 		}
 	}

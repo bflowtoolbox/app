@@ -7,9 +7,10 @@ Bundle-ClassPath: .
 Bundle-Activator: orgchart.provider.OrgcEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: orgchart.provider
 Require-Bundle: org.eclipse.core.runtime,
  org.bflow.toolbox.orgc;visibility:=reexport,
  org.eclipse.emf.edit;visibility:=reexport
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: org.bflow.toolbox.orgc.edit

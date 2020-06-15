@@ -562,7 +562,7 @@
 	<extension point="org.eclipse.ui.popupMenus">
       <?gmfgen generated="true"?>
 		<objectContribution id="org.bflow.toolbox.oepc.diagram.InitDiagram"
-			nameFilter="*.oepc" objectClass="org.eclipse.core.resources.IFile">
+			nameFilter="*.oepcchart" objectClass="org.eclipse.core.resources.IFile">
 			<action label="%initDiagramActionLabel" class="oepc.diagram.part.OepcInitDiagramFileAction"
 				menubarPath="additions" enablesFor="1"
 				id="org.bflow.toolbox.oepc.diagram.InitDiagramAction">
@@ -760,6 +760,56 @@
               tooltip="%newOepcDiagramToolBarItem">
         </action>
      </actionSet>
+  </extension>
+  <extension
+        point="org.eclipse.ui.popupMenus">
+     <objectContribution
+           adaptable="false"
+           id="org.bflow.toolbox.oepc.diagram.link"
+           objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart">
+        <action
+              class="oepc.diagram.actions.OepcInsertSubdiagramAction"
+              icon="icons/Add-16.png"
+              id="org.bflow.toolbox.oepc.diagram.actions.insertSubdiagram"
+              label="%insertOrAddLinkedDiagramActionTitle"
+              menubarPath="org.bflow.toolbox.oepc.diagram.menu.subDiagram/group1">
+        </action>  
+        <action
+              class="oepc.diagram.actions.OepcCreateSubdiagramAction"
+              icon="icons/Applications-16.png"
+              id="org.bflow.toolbox.oepc.diagram.actions.createSubdiagram"
+              label="%createNewLinkedDiagramActionTitle"
+              menubarPath="org.bflow.toolbox.oepc.diagram.menu.subDiagram/group1">
+        </action>         
+        <action
+              class="oepc.diagram.actions.OepcRemoveSubdiagramAction"
+              icon="icons/Remove-16.png"
+              id="org.bflow.toolbox.oepc.diagram.actions.removeSubdiagram"
+              label="%removeLinkedDiagramActionTitle"
+              menubarPath="org.bflow.toolbox.oepc.diagram.menu.subDiagram/group1">
+        </action>
+        <action
+              class="oepc.diagram.actions.OepcOpenSubdiagramAction"
+              icon="icons/Play-16.png"
+              id="org.bflow.toolbox.oepc.diagram.actions.openSubdiagram"
+              label="%openLinkedDiagramActionTitle"
+              menubarPath="org.bflow.toolbox.oepc.diagram.menu.subDiagram/group1">
+        </action>
+        <visibility>
+           <objectClass
+                 name="oepc.diagram.edit.parts.BusinessMethodEditPart">
+           </objectClass>
+        </visibility>
+        <menu
+              icon="icons/Document-Move-16.png"
+              id="org.bflow.toolbox.oepc.diagram.menu.subDiagram"
+              label="%linkDiagramMenuTitle"
+              path="additions">
+           <groupMarker
+                 name="group1">
+           </groupMarker>
+        </menu>
+     </objectContribution>
   </extension>
 	
 	

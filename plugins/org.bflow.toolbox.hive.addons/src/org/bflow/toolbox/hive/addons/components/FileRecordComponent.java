@@ -53,7 +53,7 @@ public class FileRecordComponent implements IFileRecordComponent {
 
 	@Override
 	public String getDisplayName() {
-		return "File record";
+		return "File Record";
 	}
 
 	@Override

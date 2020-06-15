@@ -148,7 +148,7 @@ public class GraphitiGmfEditPartAdapterFactory implements IGmfEditPartAdapterFac
 			// TODO Don't clear all up - some other editors might still be open
 			fDiagramEditorMap.clear();
 			fGraphicalEditPartMap.clear();
-			AdapterFactory.clearCache(); // TODO Think about using dipose or listener pattern
+			AdapterFactory.clearCache(); // TODO Think about using dispose or listener pattern
 		}
 
 		/* (non-Javadoc)

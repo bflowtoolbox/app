@@ -35,7 +35,7 @@ context oepc::BusinessObject if(shallCheck("OEPCSyntaxBusinessObjectRule4"))
 // BusinessObjects should have an ITSystem and an OrganisationUnit
 
 context oepc::BusinessObject if(shallCheck("OEPCSyntaxBusinessObjectRule5"))
-	ERROR getErrorMessage("OEPCSyntaxBusinessObjectRule5", this.name) :
+	WARNING getErrorMessage("OEPCSyntaxBusinessObjectRule5", this.name) :
 	this.hasITSystem();
 
 context oepc::BusinessObject if(shallCheck("OEPCSyntaxBusinessObjectRule6"))

@@ -205,7 +205,7 @@ public class EPCMetricsRunComponent implements IEPCMetricsRunComponent {
 
 	@Override
 	public String getDisplayName() {
-		return "EPC metric run";
+		return "EPC Metric Run";
 	}
 
 	@Override

@@ -16,11 +16,13 @@ import org.eclipse.gef.EditDomain;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.layout.FreeFormLayoutEx;
 import org.eclipse.gmf.runtime.diagram.ui.parts.IDiagramWorkbenchPart;
+import org.eclipse.gmf.runtime.draw2d.ui.figures.FigureUtilities;
 import org.eclipse.gmf.runtime.draw2d.ui.mapmode.IMapMode;
 import org.eclipse.gmf.runtime.notation.DiagramStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.ShapeStyle;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -29,29 +31,24 @@ import org.eclipse.ui.PlatformUI;
  * actions. Each <code>BflowDiagramEditPart</code> allows you to set specific
  * <code>IGlobalColorSchema</code> to switch the look of the elements.
  * 
- * @author Joerg Hartmann
+ * @author Joerg Hartmann, Arian Storch<arian.storch@bflow.org>
  * @since 0.0.7
- * @version 01/11/13
+ * @version 2013-11-01
+ * 			2018-10-04 Updated color to int calculation in apply(...)
  */
 public abstract class BflowDiagramEditPart extends DiagramEditPart {
 
-	/**
-	 * The current used <code>IGlobalColorSchema</code>.
-	 */
-	private IGlobalColorSchema colorSchema;
+	/** The current used <code>IGlobalColorSchema</code>. */
+	private IGlobalColorSchema _colorSchema;
 
-	/**
-	 * Contains all usable <code>IGlobalColorSchema</code>s.
-	 */
+	/** Contains all usable <code>IGlobalColorSchema</code>s. */
 	private Vector<IGlobalColorSchema> installedSchemas;
 
-	/**
-	 * The figure for this edit part.
-	 */
+	/** The figure for this edit part. */
 	private DiagramFormLayer figure;
 
 	/**
-	 * Create me.
+	 * Initializes the new instance.
 	 * 
 	 * @param diagramView
 	 */
@@ -84,10 +81,10 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 	public IGlobalColorSchema getSchema(String schemaId) {
 		IGlobalColorSchema schema = new OriginalColorSchema();
 		Iterator<IGlobalColorSchema> schemeIterator = installedSchemas.iterator();
-		while(schemeIterator.hasNext()) {
-			IGlobalColorSchema s = schemeIterator.next();
-			if (s.toString().equals(schemaId))
-				return s;
+		while (schemeIterator.hasNext()) {
+			IGlobalColorSchema scheme = schemeIterator.next();
+			if (scheme.toString().equals(schemaId))
+				return scheme;
 		}
 		return schema;
 	}
@@ -95,6 +92,7 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 	/**
 	 * Refreshes all diagram visuals.
 	 */
+	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 		refreshColorSchema();
@@ -140,6 +138,7 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 	 * Returns the map mode.
 	 * @return
 	 */
+	@Override
 	public IMapMode getMapMode() {
 		return super.getMapMode();
 	}
@@ -149,6 +148,7 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 	 * 
 	 * @return
 	 */
+	@Override
 	public EditDomain getEditDomain() {
 		return super.getEditDomain();
 	}
@@ -159,7 +159,7 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 	 * @return
 	 */
 	public IGlobalColorSchema getColorSchema() {
-		return colorSchema;
+		return _colorSchema;
 	}
 
 	/**
@@ -168,7 +168,7 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 	 * @param colorSchema
 	 */
 	public void setColorSchema(IGlobalColorSchema colorSchema) {
-		this.colorSchema = colorSchema;
+		_colorSchema = colorSchema;
 	}
 
 	/**
@@ -201,20 +201,30 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 	 * Applies the in the color schema defined colors to the delivered
 	 * <code>ShapeStyle</code>.
 	 * 
-	 * @param type
-	 * @param style
+	 * @param type  Type of model element being modified
+	 * @param style Style to set
 	 */
 	public static void apply(Class<?> type, ShapeStyle style) {
+		Color bgClr;
+		Color fgClr;
+		
 		BflowDiagramEditPart diagramEditPart = BflowDiagramEditPart.getCurrentViewer();
 		if (diagramEditPart != null) {
-			style.setFillColor(diagramEditPart.getColorSchema().getBackground(type).hashCode());
-			style.setLineColor(diagramEditPart.getColorSchema().getForeground(type).hashCode());
+			IGlobalColorSchema clrScheme = diagramEditPart.getColorSchema();
+			bgClr = clrScheme.getBackground(type);
+			fgClr = clrScheme.getForeground(type);
 		} else {
-			style.setFillColor(ColorConstants.white.hashCode());
-			style.setLineColor(ColorConstants.black.hashCode());
+			bgClr = ColorConstants.white;
+			fgClr = ColorConstants.black;
 		}
+		
+		// The style color is expected as int value, so we have to convert it
+		int bgClrVal = FigureUtilities.colorToInteger(bgClr);
+		int fgClrVal = FigureUtilities.colorToInteger(fgClr);
+					
+		style.setFillColor(bgClrVal);
+		style.setLineColor(fgClrVal);
 	}
-
 	
 	/**
 	 * Creates the figure for the diagram.
@@ -254,7 +264,7 @@ public abstract class BflowDiagramEditPart extends DiagramEditPart {
 		return figure;
 	}
 	
-	public DiagramFormLayer getDiagramFormLayer(){
+	public DiagramFormLayer getDiagramFormLayer() {
 		return figure;
 	}
 }

@@ -9,16 +9,16 @@
          point="org.eclipse.ui.exportWizards">
       <category
             id="org.bflow.toolbox.export.category.modellingtoolbox"
-            name="Modeling Toolbox">
+            name="%ExportWizard_Category">
       </category>
       <wizard
             category="org.bflow.toolbox.export.category.modellingtoolbox"
             class="org.bflow.toolbox.hive.interchange.wizard.MIFExportWizard"
             icon="icons/Import-export-32.png"
             id="org.bflow.toolbox.interchange.MIFExportWizard"
-            name="Multi-target export">
+            name="%ExportWizard_MultiTargetExport_Name">
          <description>
-            Export the diagram to several formats.
+            %ExportWizard_MultiTargetExport_Descr
          </description>
       </wizard>
       <wizard
@@ -26,9 +26,9 @@
             class="org.bflow.toolbox.hive.interchange.wizard.ImageExportWizard"
             icon="icons/Jpeg-Image-32.png"
             id="org.bflow.toolbox.interchange.imageExportWizard"
-            name="Export as image">
+            name="%ExportWizard_ImageExport_Name">
          <description>
-            Export the diagram as an image.
+            %ExportWizard_ImageExport_Descr
          </description>
       </wizard>
    </extension>
@@ -36,16 +36,16 @@
          point="org.eclipse.ui.importWizards">
       <category
             id="org.bflow.toolbox.import.category.modellingtoolbox"
-            name="Modeling Toolbox">
+            name="%ImportWizard_Category">
       </category>
       <wizard
             category="org.bflow.toolbox.import.category.modellingtoolbox"
             class="org.bflow.toolbox.hive.interchange.wizard.MIFImportWizard"
             icon="icons/Import-export-32.png"
             id="org.bflow.toolbox.interchange.MIFImportWizard"
-            name="Multi-source import">
+            name="%ImportWizard_MultiSourceImport_Name">
          <description>
-            Import a diagram from several formats.
+            %ImportWizard_MultiSourceImport_Descr
          </description>
       </wizard>
    </extension>

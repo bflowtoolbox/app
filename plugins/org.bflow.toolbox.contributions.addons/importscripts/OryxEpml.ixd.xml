@@ -3,7 +3,7 @@
 	<config>
 		<name>Oryx EPML</name>
 		<fileextension>epml;xml</fileextension>
-		<description>Imports an EPC model that has been created with Oryx.</description>
+		<description>%oryxEpmlImportScript_description</description>
 		<callstack>
 			<script>
 				<file>/importscripts/files/epml2epc-teil1.xslt</file>	

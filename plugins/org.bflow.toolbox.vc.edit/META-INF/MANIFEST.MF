@@ -7,9 +7,10 @@ Bundle-ClassPath: .
 Bundle-Activator: vcchart.provider.VcEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: vcchart.provider
 Require-Bundle: org.eclipse.core.runtime,
  org.bflow.toolbox.vc;visibility:=reexport,
  org.eclipse.emf.edit;visibility:=reexport
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: org.bflow.toolbox.vc.edit

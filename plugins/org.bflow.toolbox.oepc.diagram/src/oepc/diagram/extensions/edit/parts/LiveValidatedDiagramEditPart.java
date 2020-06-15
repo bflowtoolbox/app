@@ -17,7 +17,7 @@ import org.eclipse.gmf.runtime.notation.View;
  * @author Joerg Hartmann
  *
  */
-public abstract class LiveValidatedDiagramEditPart extends BflowDiagramEditPart{
+public abstract class LiveValidatedDiagramEditPart extends BflowDiagramEditPart {
     
 	
 	/**

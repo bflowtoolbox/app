@@ -32,27 +32,21 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-
 /**
  * Implements an action to provide the best size function.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 16.08.13
- * @version 22.08.13
- * 			26.02.15 Added support of figures consisting of multiple children, for instance note
- * 			27.02.15 Using TextFlowEx instead of WrappingLabel to set bounds
- * 			
+ * @since 2013-08-16
+ * @version 2013-08-22
+ * 			2015-02-26 Added support of figures consisting of multiple children, for instance note
+ * 			2015-02-27 Using TextFlowEx instead of WrappingLabel to set bounds 			
  *
  */
 public class BestSizeAction extends DiagramAction implements IObjectActionDelegate {
-	/**
-	 * Unique id for this action.
-	 */
+	/** Unique id for this action */
 	public static final String Id = "bflow.best.size.action"; //$NON-NLS-1$
 	
-	/**
-	 * The diagram edit part.
-	 */
+	/** The diagram edit part */
 	private DiagramEditPart diagramEditPart;
 	
 	/** The selected edit parts. */
@@ -60,7 +54,7 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 	private List selectedEditParts;
 	
 	/**
-	 * Instantiates a new auto size action.
+	 * Initializes the new instance.
 	 *
 	 * @param workbenchPage the workbench page
 	 */
@@ -72,15 +66,11 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.gmf.runtime.diagram.ui.actions", "icons/elcl16/autosize.gif")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/**
-	 * Instantiates a new auto size action.
-	 */
+	/** Initializes the new instance. */
 	public BestSizeAction() {
 		// This constructor is needed by the Pop-up Menu contribution system 
 		super(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage());
 	}
-	
-	
 	
 	/**
 	 * Runs the action by clicking the menu.
@@ -104,7 +94,7 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 	 */
 	public void selectionChanged(IAction action, ISelection selection) {
 		IStructuredSelection iSelection = (IStructuredSelection) selection;
-		if(iSelection.getFirstElement() instanceof DiagramEditPart) {
+		if (iSelection.getFirstElement() instanceof DiagramEditPart) {
 			diagramEditPart = (DiagramEditPart) iSelection.getFirstElement();
 			selectedEditParts = diagramEditPart.getChildren();
 		}
@@ -120,12 +110,12 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 	@SuppressWarnings("unchecked")
 	private Vector<Class<?>> selectClasses(){
 		Vector<Class<?>> classes = new Vector<Class<?>>();
-		if(diagramEditPart != null) {
-			for(Iterator<EditPart> children = diagramEditPart.getChildren().iterator(); children.hasNext();) {
+		if (diagramEditPart != null) {
+			for (Iterator<EditPart> children = diagramEditPart.getChildren().iterator(); children.hasNext();) {
 				EditPart editPart = children.next();
-				if(editPart instanceof ShapeNodeEditPart){
+				if (editPart instanceof ShapeNodeEditPart){
 					Class<?> singleClass = editPart.getClass();
-					if(!classes.contains(singleClass)){
+					if (!classes.contains(singleClass)){
 						classes.add(singleClass);
 					}
 				}
@@ -156,7 +146,7 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 	@SuppressWarnings("unchecked")
 	private Map<EditPart, Dimension> calculateOptimizedSize() {
 		Map<EditPart, Dimension> editPartDimMap = new HashMap<EditPart, Dimension>(50);
-		for(Iterator<EditPart> editParts = selectedEditParts.iterator(); editParts.hasNext(); ) {
+		for (Iterator<EditPart> editParts = selectedEditParts.iterator(); editParts.hasNext(); ) {
 			EditPart nextElement = editParts.next();
 			
 			if(!(nextElement instanceof ShapeNodeEditPart))
@@ -205,7 +195,7 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 		Shell shell = new Shell();
 		GC gc = new GC(shell);
 		gc.setFont(label.getFont());
-		int avgCharWidth = gc.getFontMetrics().getAverageCharWidth();
+		double avgCharWidth = gc.getFontMetrics().getAverageCharacterWidth();
 		int fontHeight = gc.getFontMetrics().getHeight();
 		gc.dispose();
 		shell.dispose();
@@ -213,8 +203,8 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 		int standardWidth = 64; // textBounds.width
 		
 		// Calculate the size metrics
-		int linesOfText = ((text.length() * avgCharWidth) / standardWidth) + 1;
-		int charsPerLine = standardWidth / avgCharWidth;
+		int linesOfText = (int) Math.round(((text.length() * avgCharWidth) / standardWidth) + 1);
+		int charsPerLine = (int) Math.round(standardWidth / avgCharWidth);
 		// int lineBreak = getLineBreakPoint(text, charsPerLine);
 		
 		String betterMax = getMaxSubstring(text, charsPerLine, linesOfText);
@@ -247,19 +237,19 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 	 */
 	private int getLineBreakPoint(String text, int start) {
 		char ws = ' ';
-		if(text.charAt(start) == ws)
+		if (text.charAt(start) == ws)
 			return start;
 		
 		int lengthForward = start;
-		while((lengthForward + 1) < text.length() && text.charAt(++lengthForward) != ws)
+		while ((lengthForward + 1) < text.length() && text.charAt(++lengthForward) != ws)
 			;
 		
 		int lengthBackward = start;
-		while((lengthBackward - 1) >= 0 && text.charAt(--lengthBackward) != ws)
+		while ((lengthBackward - 1) >= 0 && text.charAt(--lengthBackward) != ws)
 			;
 		
 		// Choose the nearest one 
-		if((lengthForward - start) < (start - lengthBackward))
+		if ((lengthForward - start) < (start - lengthBackward))
 			return lengthForward;
 		else
 			return lengthBackward;
@@ -279,7 +269,7 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 	 */
 	private String getMaxSubstring(String text, int charPerLine, int linesOfText) {
 		List<Integer> breakPoints = new ArrayList<Integer>(5);
-		for(int i = 1; i < linesOfText; i++) {
+		for (int i = 1; i < linesOfText; i++) {
 			int start = i * charPerLine;
 			int lineBreakPoint = getLineBreakPoint(text, start);
 			breakPoints.add(lineBreakPoint);
@@ -287,7 +277,7 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 		
 		List<String> subStrings = new ArrayList<String>(10);
 		int lastBreakPoint = 0;
-		for(Integer lbp:breakPoints) {
+		for (Integer lbp:breakPoints) {
 			String substring = text.substring(lastBreakPoint, lbp);
 			subStrings.add(substring);
 			lastBreakPoint = lbp;
@@ -295,7 +285,7 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 		subStrings.add(text.substring(lastBreakPoint));
 		
 		String max = StringUtils.EMPTY;
-		for(String substring:subStrings) {
+		for (String substring:subStrings) {
 			if(substring.length() > max.length())
 				max = substring;
 		}
@@ -338,17 +328,17 @@ public class BestSizeAction extends DiagramAction implements IObjectActionDelega
 		
 		// Find the diagram edit part
 		Object selObject = getSelectedObjects().get(0);
-		if(selObject instanceof DiagramEditPart)
+		if (selObject instanceof DiagramEditPart)
 			diagramEditPart = (DiagramEditPart) selObject;
 		
 		// If only the diagram edit part is selected, then select all children
-		if(selObject == diagramEditPart)
+		if (selObject == diagramEditPart)
 			selectedEditParts = diagramEditPart.getChildren();
 		else
 			selectedEditParts = getSelectedObjects();
 		
 		// Fallback strategy
-		if(diagramEditPart == null)
+		if (diagramEditPart == null)
 			diagramEditPart = getDiagramEditPart();
 		
 		run((IAction)null);

@@ -560,9 +560,6 @@
          defaultHandler="orgchart.diagram.part.LoadResourceAction"/>
    </extension>
 
-   <extension point="org.eclipse.ui.handlers" id="menu-handlers">
-      <?gmfgen generated="true"?>
-   </extension>
    <extension point="org.eclipse.ui.actionSets">
       <?gmfgen generated="false"?>
       <actionSet
@@ -579,6 +576,76 @@
                tooltip="%OrgcCreationWizardTitle">
          </action>
       </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.bflow.toolbox.diagram.orgcSubDiagram"
+            objectClass="org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart">
+         <visibility>
+            <or>
+               <objectClass
+                     name="orgchart.diagram.edit.parts.ParticipantEditPart">
+               </objectClass>
+               <objectClass
+                     name="orgchart.diagram.edit.parts.GroupEditPart">
+               </objectClass>
+               <objectClass
+                     name="orgchart.diagram.edit.parts.LocationEditPart">
+               </objectClass>
+               <objectClass
+                     name="orgchart.diagram.edit.parts.PositionEditPart">
+               </objectClass>
+               <objectClass
+                     name="orgchart.diagram.edit.parts.InternalPersonEditPart">
+               </objectClass>
+               <objectClass
+                     name="orgchart.diagram.edit.parts.ExternalPersonEditPart">
+               </objectClass>
+               <objectClass
+                     name="orgchart.diagram.edit.parts.PersonTypeEditPart">
+               </objectClass>
+            </or>
+         </visibility>
+         <menu
+               icon="icons/move16.png"
+               id="SubDiagramInsert"
+               label="%linkDiagramMenuTitle"
+               path="additions">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               class="orgchart.diagram.actions.OrgcInsertSubdiagramAction"
+               icon="icons/add16.png"
+               id="org.bflow.toolbox.diagram.orgc.insertSubDiagramAction"
+               label="%insertOrAddLinkedDiagramActionTitle"
+               menubarPath="SubDiagramInsert/group1">
+         </action>
+         <action
+               class="orgchart.diagram.actions.OrgcCreateSubdiagramAction"
+               icon="icons/app16.png"
+               id="org.bflow.toolbox.diagram.orgc.createSubDiagramAction"
+               label="%createNewLinkedDiagramActionTitle"
+               menubarPath="SubDiagramInsert/group1">
+         </action>
+         <action
+               class="orgchart.diagram.actions.OrgcRemoveSubdiagramAction"
+               icon="icons/del16.png"
+               id="org.bflow.toolbox.diagram.orgc.removeSubdiagramAction"
+               label="%removeLinkedDiagramActionTitle"
+               menubarPath="SubDiagramInsert/group1">
+         </action>
+         <action
+               class="orgchart.diagram.actions.OrgcOpenSubdiagramAction"
+               icon="icons/play16.png"
+               id="org.bflow.toolbox.diagram.orgc.openSubdiagramAction"
+               label="%openLinkedDiagramActionTitle"
+               menubarPath="SubDiagramInsert/group1">
+         </action>         
+      </objectContribution>
    </extension>
 
    <!-- optionally, specify keybindings -->

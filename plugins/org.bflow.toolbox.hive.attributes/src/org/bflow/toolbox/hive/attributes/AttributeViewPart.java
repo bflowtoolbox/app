@@ -89,9 +89,7 @@ import org.eclipse.ui.part.ViewPart;
 @SuppressWarnings("restriction")
 public class AttributeViewPart extends ViewPart implements ISelectionListener, IAttributeFileRegistryListener {
 	
-	/**
-	 * Extension view id
-	 */
+	/** Extension view id */
 	public static final String VIEW_ID = "org.bflow.toolbox.hive.attributes.view"; //$NON-NLS-1$
 	
 	private AttributeFile attrFile;

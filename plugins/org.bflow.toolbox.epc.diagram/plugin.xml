@@ -76,39 +76,39 @@
         <menu
               icon="icons/Document-Move-16.png"
               id="SubDiagramInsert"
-              label="Diagram partitioning..."
+              label="%linkDiagramMenuTitle"
               path="additions"> 
             <separator name="group1"/>
         </menu>
         <action
-              class="org.bflow.toolbox.epc.extensions.actions.RemoveSubdiagramAction"
-              icon="icons/Remove-16.png"
-              id="org.bflow.toolbox.epc.diagram.RemoveSubdiagramAction"
-              label="Remove partitioned diagram..."
-              menubarPath="SubDiagramInsert/group1">
-        </action>
-        <action
-              class="org.bflow.toolbox.epc.diagram.part.EpcInsertSubdiagramAction"
+              class="org.bflow.toolbox.epc.diagram.actions.EpcInsertSubdiagramAction"
               enablesFor="1"
               icon="icons/Add-16.png"
               id="org.bflow.toolbox.diagram.InsertSubDiagramAction1"
-              label="Insert / Add existing partitioned diagram..."
+              label="%insertOrAddLinkedDiagramActionTitle"
               menubarPath="SubDiagramInsert/group1">
-       </action>
-        <action
-              class="org.bflow.toolbox.epc.extensions.actions.OpenSubdiagramAction"
-              icon="icons/Play-16.png"
-              id="org.bflow.toolbox.epc.diagram.OpenSubdiagramAction"
-              label="&amp;Open partitioned Diagram..."
-              menubarPath="SubDiagramInsert/group1">
-        </action>
-    	<action
-           class="org.bflow.toolbox.epc.diagram.part.EpcCreateSubdiagramAction"
+       </action>       
+       <action
+           class="org.bflow.toolbox.epc.diagram.actions.EpcCreateSubdiagramAction"
            enablesFor="1"
            icon="icons/Applications-16.png"
            id="org.bflow.toolbox.diagram.CreateSubDiagramAction1"
-           label="Create new partitioned diagram..."
+           label="%createNewLinkedDiagramActionTitle"
            menubarPath="SubDiagramInsert/group1">
+        </action>
+        <action
+              class="org.bflow.toolbox.epc.diagram.actions.EpcRemoveSubdiagramAction"
+              icon="icons/Remove-16.png"
+              id="org.bflow.toolbox.epc.diagram.RemoveSubdiagramAction"
+              label="%removeLinkedDiagramActionTitle"
+              menubarPath="SubDiagramInsert/group1">
+        </action>
+        <action
+              class="org.bflow.toolbox.epc.diagram.actions.EpcOpenSubdiagramAction"
+              icon="icons/Play-16.png"
+              id="org.bflow.toolbox.epc.diagram.OpenSubdiagramAction"
+              label="%openLinkedDiagramActionTitle"
+              menubarPath="SubDiagramInsert/group1">
         </action>
      <visibility>
         <or>
@@ -129,56 +129,27 @@
       </objectContribution>
       <objectContribution
             adaptable="false"
-            id="org.bflow.toolbox.diagram.extensions.ModelWizard"
-            objectClass="org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart">
-         <menu
-               id="model.processing.epc.menu"
-               label="Model processing..."
-               path="additions">
-         </menu>
+            id="org.bflow.toolbox.diagram.extensions.modelWizard"
+            objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart">
          <action
-               class="org.bflow.toolbox.epc.extensions.actions.ElementGeneratorAction"
+               class="org.bflow.toolbox.epc.diagram.actions.ElementGeneratorAction"
                definitionId="org.bflow.toolbox.epc.diagram.showModelWizard"
                icon="icons/wizard_16.png"
-               id="org.bflow.toolbox.diagram.extensions.ModelWizardAction"
-               label="Model Wizard..."
-               menubarPath="model.processing.epc.menu">
-         </action>
-      </objectContribution>
-      <objectContribution
-            adaptable="false"
-            id="org.bflow.toolbox.diagram.extensions.FunctionModelWizard"
-            objectClass="org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart">
-         <action
-               class="org.bflow.toolbox.epc.extensions.actions.ElementGeneratorAction"
-               definitionId="org.bflow.toolbox.epc.diagram.showModelWizard"
-               icon="icons/wizard_16.png"
-               id="org.bflow.toolbox.diagram.extensions.FunctionModelWizardAction"
-               label="Model wizard..."
-               menubarPath="model.processing.function.menu">
-         </action>
-         <menu
-               id="model.processing.function.menu"
-               label="Model processing"
-               path="additions">
-         </menu>
-      </objectContribution>
-      <objectContribution
-            adaptable="false"
-            id="org.bflow.toolbox.diagram.extensions.EventModelWizard"
-            objectClass="org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart">
-         <menu
-               id="model.processing.event.menu"
-               label="Model processing"
-               path="additions">
-         </menu>
-         <action
-               class="org.bflow.toolbox.epc.extensions.actions.ElementGeneratorAction"
-               definitionId="org.bflow.toolbox.epc.diagram.showModelWizard"
-               icon="icons/wizard_16.png"
-               id="org.bflow.toolbox.diagram.extensions.EventModelWizardAction"
-               label="Model wizard..."
-               menubarPath="model.processing.event.menu">
+               id="org.bflow.toolbox.diagram.extensions.actions.modelWizard"
+               label="%modelWizardActionTitle">
+            <enablement>
+               <or>
+                  <objectClass
+                        name="org.bflow.toolbox.epc.diagram.edit.parts.FunctionEditPart">
+                  </objectClass>
+                  <objectClass
+                        name="org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart">
+                  </objectClass>
+                  <objectClass
+                        name="org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart">
+                  </objectClass>
+               </or>
+            </enablement>
          </action>
       </objectContribution>
       <objectContribution
@@ -186,7 +157,7 @@
             id="org.bflow.toolbox.diagram.extensions.showAttributeView"
             objectClass="org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart">
          <action
-               class="org.bflow.toolbox.epc.extensions.actions.ShowAttributeViewAction"
+               class="org.bflow.toolbox.epc.diagram.actions.ShowAttributeViewAction"
                icon="platform:/plugin/org.eclipse.ui.views/icons/full/eview16/prop_ps.gif "
                id="org.bflow.toolbox.diagram.extensions.showAttributeView"
                label="Show Attribute View"
@@ -713,16 +684,16 @@
             visible="true"
             id="org.bflow.toolbox.epc.diagram.ActionSet">
          <action
-               class="org.bflow.toolbox.epc.extensions.actions.NewEpcDiagramWizardAction"
+               class="org.bflow.toolbox.epc.diagram.actions.NewEpcDiagramWizardAction"
                icon="icons/obj16/EpcIcon.png"
                id="org.bflow.toolbox.epc.diagram.createNewEpcWizardAction"
                label="%newEpcDiagramToolBarItem"
-               style="push"
+               style="toggle"
                toolbarPath="Normal"
                tooltip="%newEpcDiagramToolBarItem">
          </action>
          <action
-               class="org.bflow.toolbox.epc.extensions.actions.NewProjectAction"
+               class="org.bflow.toolbox.epc.diagram.actions.NewProjectAction"
                icon="icons/folderAlpha.png"
                id="org.bflow.toolbox.epc.diagram.createProjectAction"
                label="%newProjectFolderToolBarItem"
@@ -803,7 +774,7 @@
       <?gmfgen generated="true"?>
       <objectContribution
             id="org.bflow.toolbox.epc.diagram.InitDiagram"
-            nameFilter="*.epc"
+            nameFilter="*.epcchart"
             objectClass="org.eclipse.core.resources.IFile">
          <action
                label="%initDiagramActionLabel"
@@ -862,34 +833,34 @@
                      point="org.eclipse.core.runtime.products">
                   <product
                         application="org.eclipse.ui.ide.workbench"
-                        name="%productName">
+                        name="bflow* Toolbox Community 2.0">
                      <property
                            name="windowImages"
-                           value="eclipse.gif,eclipse32.gif,eclipse48.gif,eclipse.png,eclipse32.png">
+                           value="platform:/plugin/org.bflow.toolbox.product/icons/professional/bee16.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee32.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee48.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee64.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee128.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee256.png">
                      </property>
                      <property
                            name="aboutText"
-                           value="%productBlurb">
+                           value="bflow* Toolbox Community 2.0">
                      </property>
                      <property
                            name="aboutImage"
-                           value="eclipse_lg.gif">
+                           value="platform:/plugin/org.bflow.toolbox.product/icons/professional/bee128.png">
                      </property>
                      <property
                            name="startupForegroundColor"
-                           value="C8D5EA">
+                           value="000000">
                      </property>
                      <property
                            name="startupProgressRect"
-                           value="0,280,455,15">
+                           value="2,290,450,10">
                      </property>
                      <property
                            name="startupMessageRect"
-                           value="7,220,441,20">
+                           value="7,265,320,20">
                      </property>
                      <property
                            name="appName"
-                           value="%productName">
+                           value="bflow* Toolbox Community 2.0">
                      </property>
                      <property
                            name="preferenceCustomization"
@@ -905,7 +876,7 @@
 		<objectContribution adaptable="true" id="live.validation"
 			objectClass="org.bflow.toolbox.epc.diagram.edit.parts.EpcEditPart">
 			<action
-         class="org.bflow.toolbox.epc.extensions.actions.LiveValidationAction"
+         class="org.bflow.toolbox.epc.diagram.actions.LiveValidationAction"
          definitionId="org.bflow.toolbox.epc.diagram.enableLiveValidation"
          enablesFor="1"
          id="live.validation.action"
@@ -971,14 +942,15 @@
            id="org.bflow.toolbox.epc.diagram.ObjectPartOutSwapping"
            objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.INodeEditPart">
         <action
-              class="org.bflow.toolbox.epc.extensions.actions.SwapOutDiagrampartToNewAction"
-              id="org.bflow.toolbox.epc.diagram.action1"
-              label="&amp;New Diagram"
+              class="org.bflow.toolbox.epc.diagram.actions.SwapOutDiagrampartToNewAction"
+              id="org.bflow.toolbox.epc.diagram.actions.partoutswapping"
+              label="%outsourceSelectionActionTitle"
               menubarPath="PartOutSwapping/group1">
         </action>
         <menu
+              icon="icons/extract_16.png"
               id="PartOutSwapping"
-              label="&amp;Swap out to..."
+              label="%outsourceSelectionMenuTitle"
               path="additions">
         </menu>
      </objectContribution>

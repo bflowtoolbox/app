@@ -1,7 +1,7 @@
 package org.bflow.toolbox.epc.extensions.edit.parts;
 
+import org.bflow.toolbox.epc.diagram.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;
-import org.bflow.toolbox.epc.extensions.actions.DiagramLiveValidator;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.eclipse.gmf.runtime.notation.View;
 

@@ -3,7 +3,7 @@
 	<config>
 		<name>Semtalk EPML</name>
 		<fileextension>epml</fileextension>
-		<description>Imports an EPC model that has been created with Semtalk.</description>
+		<description>%semtalkEpmlImportScript_description</description>
 		<callstack>
 			<script>
 				<file>/importscripts/files/epml2epc-teil1.xslt</file>	

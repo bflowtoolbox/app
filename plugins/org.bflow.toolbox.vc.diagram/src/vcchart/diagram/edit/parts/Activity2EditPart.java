@@ -1,26 +1,19 @@
-/*
- * 
- */
 package vcchart.diagram.edit.parts;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.bflow.toolbox.extensions.LinkContext;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
-import org.eclipse.draw2d.Graphics;
+import org.bflow.toolbox.extensions.figures.LinkImageFigure;
+import org.bflow.toolbox.extensions.layouts.CentralizingLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.MouseEvent;
-import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.ScalablePolygonShape;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -32,13 +25,11 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
-import org.eclipse.gmf.runtime.emf.core.resources.GMFResource;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.PartInitException;
 
 import vcchart.Activity2;
 import vcchart.diagram.edit.policies.Activity2ItemSemanticEditPolicy;
@@ -63,10 +54,6 @@ public class Activity2EditPart extends BflowNodeEditPart {
 	 * @generated
 	 */
 	protected IFigure primaryShape;
-	
-	/** The log instance for this class */
-	private static final Log logger = LogFactory.getLog(Activity2.class);
-
 
 	/**
 	 * @generated
@@ -80,8 +67,7 @@ public class Activity2EditPart extends BflowNodeEditPart {
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
-		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
-				new Activity2ItemSemanticEditPolicy());
+		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE, new Activity2ItemSemanticEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
 		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
@@ -94,8 +80,7 @@ public class Activity2EditPart extends BflowNodeEditPart {
 		org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy lep = new org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy() {
 
 			protected EditPolicy createChildEditPolicy(EditPart child) {
-				EditPolicy result = child
-						.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
+				EditPolicy result = child.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
 				if (result == null) {
 					result = new NonResizableEditPolicy();
 				}
@@ -230,8 +215,7 @@ public class Activity2EditPart extends BflowNodeEditPart {
 	 * @generated
 	 */
 	public EditPart getPrimaryChildEditPart() {
-		return getChildBySemanticHint(VcVisualIDRegistry
-				.getType(Activity2NameEditPart.VISUAL_ID));
+		return getChildBySemanticHint(VcVisualIDRegistry.getType(Activity2NameEditPart.VISUAL_ID));
 	}
 
 	/**
@@ -239,8 +223,7 @@ public class Activity2EditPart extends BflowNodeEditPart {
 	 */
 	protected void handleNotificationEvent(Notification event) {
 		if (event.getNotifier() == getModel()
-				&& EcorePackage.eINSTANCE.getEModelElement_EAnnotations()
-						.equals(event.getFeature())) {
+		&& EcorePackage.eINSTANCE.getEModelElement_EAnnotations().equals(event.getFeature())) {
 			handleMajorSemanticChange();
 		} else {
 			super.handleNotificationEvent(event);
@@ -256,66 +239,34 @@ public class Activity2EditPart extends BflowNodeEditPart {
 		 * @generated
 		 */
 		private WrappingLabel fFigureActivity2LabelFigure;
-		private ScalablePolygonShape subdiagram_icon;
 
 		/**
-		 * @generated
+		 * @generated NOT
 		 */
 		public Activity2Figure() {
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(0)));
-			this.addPoint(new Point(getMapMode().DPtoLP(15), getMapMode()
-					.DPtoLP(25)));
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(50)));
-			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode()
-					.DPtoLP(50)));
-			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode()
-					.DPtoLP(25)));
-			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode()
-					.DPtoLP(0)));
-			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode()
-					.DPtoLP(0)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(0)));
+			this.addPoint(new Point(getMapMode().DPtoLP(15), getMapMode().DPtoLP(25)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(50)));
+			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode().DPtoLP(50)));
+			this.addPoint(new Point(getMapMode().DPtoLP(100), getMapMode().DPtoLP(25)));
+			this.addPoint(new Point(getMapMode().DPtoLP(85), getMapMode().DPtoLP(0)));
+			this.addPoint(new Point(getMapMode().DPtoLP(0), getMapMode().DPtoLP(0)));
 			this.setFill(true);
-			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100),
-					getMapMode().DPtoLP(50)));
+			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(100), getMapMode().DPtoLP(50)));
 			this.setBorder(new MarginBorder(getMapMode().DPtoLP(1),
 					getMapMode().DPtoLP(5), getMapMode().DPtoLP(5),
 					getMapMode().DPtoLP(5)));
 			this.setLayoutManager(new StackLayout());
 			createContents();
+			
+			// 2019-02-17 AST Required by the link image figure
+			setLayoutManager(new CentralizingLayout());
 		}
 
 		/**
-		 * @generated
+		 * @generated NOT
 		 */
 		private void createContents() {
-			subdiagram_icon = new ScalablePolygonShape(){
-				@Override
-				protected void fillShape(Graphics graphics) {
-					//Somit is dieses Shape nicht sichtbar
-					graphics.setForegroundColor(getCurentColorShemaBackgroundColor());
-					super.fillShape(graphics);
-				}
-			};
-			
-			subdiagram_icon.addPoint(new Point(getMapMode().DPtoLP(80), getMapMode().DPtoLP(0)));
-			subdiagram_icon.addPoint(new Point(getMapMode().DPtoLP(95), getMapMode().DPtoLP(15)));
-			subdiagram_icon.addPoint(new Point(getMapMode().DPtoLP(80), getMapMode().DPtoLP(30)));
-			subdiagram_icon.setPreferredSize(new Dimension(getMapMode().DPtoLP(6),getMapMode().DPtoLP(12)));
-			subdiagram_icon.addMouseListener(new MouseListener.Stub() {
-				
-				@Override
-				public void mouseDoubleClicked(final MouseEvent me) {
-					openSubdiagram();
-				}
-				
-				@Override
-				public void mousePressed(final MouseEvent me){
-					me.consume();
-				}
-			});
-
 			fFigureActivity2LabelFigure = new WrappingLabel();
 			fFigureActivity2LabelFigure.setAlignment(PositionConstants.CENTER);
 			fFigureActivity2LabelFigure.setTextJustification(PositionConstants.CENTER);
@@ -325,8 +276,11 @@ public class Activity2EditPart extends BflowNodeEditPart {
 					.DPtoLP(15)));
 			
 			this.add(fFigureActivity2LabelFigure);
-			this.add(subdiagram_icon);
-
+			
+			Image playImage = new Image(null, this.getClass().getResourceAsStream("/icons/link-16.png"));
+			LinkContext linkContext = new LinkContext(() -> ((Activity2) Activity2EditPart.this.getPrimaryView().getElement()).getSubdiagram());
+			LinkImageFigure linkImage = new LinkImageFigure(playImage, linkContext);			
+			this.add(linkImage);
 		}
 
 		/**
@@ -334,26 +288,6 @@ public class Activity2EditPart extends BflowNodeEditPart {
 		 */
 		public WrappingLabel getFigureActivity2LabelFigure() {
 			return fFigureActivity2LabelFigure;
-		}
-		
-		@Override
-		protected void paintClientArea(Graphics graphics) {
-
-			super.paintClientArea(graphics);
-			Activity2 a2 = (Activity2) Activity2EditPart.this.getPrimaryView().getElement();
-
-			if (a2.getSubdiagram() != null && !a2.getSubdiagram().isEmpty()) {
-				subdiagram_icon.setEnabled(true);
-				subdiagram_icon.setVisible(true);
-				Point p = fFigureActivity2LabelFigure.getLocation();
-				Dimension d = fFigureActivity2LabelFigure.getSize();
-				Image img = new Image(null, this.getClass().getResourceAsStream("/icons/play10.png"));
-				Point nPoint = new Point(p.x + d.width - 16, p.y + d.height/2-16);
-				graphics.drawImage(img, nPoint);
-			}else {
-				subdiagram_icon.setEnabled(false);
-				subdiagram_icon.setVisible(false);
-			}
 		}
 	}
 
@@ -375,24 +309,4 @@ public class Activity2EditPart extends BflowNodeEditPart {
 			return new Color(null, 0, 248, 0);
 		}
 	}
-	
-	/**
-	 * Opens the subdiagram if this edit part is connected with one.
-	 */
-	private void openSubdiagram() {
-		Activity2 a2 = (Activity2) Activity2EditPart.this.getPrimaryView().getElement();
-
-		if (a2.getSubdiagram() != null && !a2.getSubdiagram().isEmpty()) {
-			URI fileURI = URI.createPlatformResourceURI(a2.getSubdiagram(), true);
-			Resource res = new GMFResource(fileURI);
-
-			try {
-				org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorUtil.openDiagram(res);
-			} catch (PartInitException e) {
-				logger.error("Could not open linked subdiagram", e);
-			}
-
-		}
-	}
-
 }

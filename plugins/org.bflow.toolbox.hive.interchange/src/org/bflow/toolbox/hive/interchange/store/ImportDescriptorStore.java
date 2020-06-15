@@ -13,54 +13,37 @@ import org.osgi.framework.Bundle;
  * Provides a store for import scripts.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 13/07/11
- * @version 17/06/14
+ * @since 2011-07-13
+ * @version 2014-06-17
+ * 			2019-02-17 AST Added localization support via plugin.properties
  * 
  */
 public class ImportDescriptorStore {
-
-	/**
-	 * Static collection instances
-	 */
 	private static List<IInterchangeDescriptor> depository = new LinkedList<IInterchangeDescriptor>();
 	private static Map<IInterchangeDescriptor, Bundle> bundleMap = new HashMap<IInterchangeDescriptor, Bundle>();
 	private static Map<IInterchangeDescriptor, String> locationMap = new HashMap<IInterchangeDescriptor, String>();
 
 	/**
-	 * Registers the import description to the store that is provided by an
-	 * bundle.
+	 * Registers the import description to the store that is provided by an bundle.
 	 * 
-	 * @param exp
-	 *            import description
-	 * @param bundle
-	 *            the bundle which holds the export descriptor and its files
+	 * @param desc   Import description
+	 * @param bundle Bundle which holds the import descriptor and its files
 	 */
-	public static void register(IInterchangeDescriptor exp, Bundle bundle) {
+	public static void register(IInterchangeDescriptor desc, Bundle bundle) {
 		if (bundle == null) throw new NullPointerException("Bundle cannot be null!");
 
-		depository.add(exp);
-		bundleMap.put(exp, bundle);
+		// 2019-02-16 AST Add localization support
+		LocalizationKit.localizeDescription(desc, bundle);
+		
+		depository.add(desc);
+		bundleMap.put(desc, bundle);
 	}
 	
 	/**
-	 * Registers the import descriptor to the store.
+	 * Registers the import descriptor that is provided by a local file.
 	 * 
-	 * @param importDescriptor
-	 *            import description
-	 * @deprecated Use register(exp, bundle) instead!
-	 */
-	public static void register(IInterchangeDescriptor importDescriptor) {
-		depository.add(importDescriptor);
-	}
-	
-	/**
-	 * Registers the import descriptor that is provided by a local
-	 * file.
-	 * 
-	 * @param importDescriptor
-	 *            import descriptor
-	 * @param path
-	 *            absolute path to the import descriptor file
+	 * @param importDescriptor Import descriptor
+	 * @param path             Absolute path to the import descriptor file
 	 */
 	public static void register(IInterchangeDescriptor importDescriptor, String path) {
 		if (StringUtils.isBlank(path)) throw new NullPointerException("Absolute path cannot be null or empty!");
@@ -81,11 +64,10 @@ public class ImportDescriptorStore {
 	/**
 	 * Returns the import descriptor matching for the given name.
 	 * 
-	 * @param name
-	 *            name of the import descriptor
+	 * @param name Name of the import descriptor
 	 * @return import descriptor or null
 	 */
-	public static IInterchangeDescriptor getExportDescription(String name) {
+	public static IInterchangeDescriptor getImportDescription(String name) {
 		for (IInterchangeDescriptor exd : depository)
 			if (exd.getName().equalsIgnoreCase(name))
 				return exd;
@@ -94,22 +76,20 @@ public class ImportDescriptorStore {
 	}
 	
 	/**
-	 * Returns the bundle for the given export descriptor.
+	 * Returns the bundle for the given import descriptor.
 	 * 
-	 * @param exportDescriptor
-	 *            the export descriptor
-	 * @return the bundle for the export descriptor or null
+	 * @param desc Import descriptor
+	 * @return Bundle for import descriptor or null
 	 */
-	public static Bundle getBundleFor(IInterchangeDescriptor exportDescriptor) {
-		return bundleMap.get(exportDescriptor);
+	public static Bundle getBundleFor(IInterchangeDescriptor desc) {
+		return bundleMap.get(desc);
 	}
 
 	/**
 	 * Returns the path for the given import descriptor.
 	 * 
-	 * @param importDescriptor
-	 *            the import descriptor
-	 * @return the absolute path for the export descriptor or null
+	 * @param importDescriptor Import descriptor
+	 * @return Absolute path for the import descriptor or null
 	 */
 	public static String getPathFor(IInterchangeDescriptor importDescriptor) {
 		return locationMap.get(importDescriptor);

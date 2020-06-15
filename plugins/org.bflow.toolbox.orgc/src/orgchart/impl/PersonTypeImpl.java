@@ -16,7 +16,7 @@ import orgchart.PersonType;
  *
  * @generated
  */
-public class PersonTypeImpl extends NamedElementImpl implements PersonType {
+public class PersonTypeImpl extends LinkableElementImpl implements PersonType {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -34,6 +34,15 @@ public class PersonTypeImpl extends NamedElementImpl implements PersonType {
 	@Override
 	protected EClass eStaticClass() {
 		return OrgchartPackage.Literals.PERSON_TYPE;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see orgchart.impl.LinkableElementImpl#getSubdiagramFeatureId()
+	 */
+	@Override
+	protected int getSubdiagramFeatureId() {
+		return OrgchartPackage.PERSON_TYPE__SUBDIAGRAM;
 	}
 
 } //PersonTypeImpl

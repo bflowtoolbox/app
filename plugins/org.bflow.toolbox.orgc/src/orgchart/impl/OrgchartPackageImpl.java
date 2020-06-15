@@ -352,6 +352,14 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 	public EClass getParticipant() {
 		return participantEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getParticipant_Subdiagram() {
+		return (EAttribute) participantEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -360,6 +368,14 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 	 */
 	public EClass getLocation() {
 		return locationEClass;
+	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getLocation_Subdiagram() {
+		return (EAttribute) locationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -370,6 +386,14 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 	public EClass getGroup() {
 		return groupEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getGroup_Subdiagram() {
+		return (EAttribute) groupEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -378,6 +402,14 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 	 */
 	public EClass getPosition() {
 		return positionEClass;
+	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getPosition_Subdiagram() {
+		return (EAttribute) positionEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -388,6 +420,14 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 	public EClass getInternalPerson() {
 		return internalPersonEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getInternalPerson_Subdiagram() {
+		return (EAttribute) internalPersonEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -397,6 +437,14 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 	public EClass getExternalPerson() {
 		return externalPersonEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getExternalPerson_Subdiagram() {
+		return (EAttribute) externalPersonEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -405,6 +453,14 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 	 */
 	public EClass getPersonType() {
 		return personTypeEClass;
+	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getPersonType_Subdiagram() {
+		return (EAttribute) personTypeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -512,18 +568,25 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 		personEClass = createEClass(PERSON);
 
 		participantEClass = createEClass(PARTICIPANT);
+		createEAttribute(participantEClass, PARTICIPANT__SUBDIAGRAM);
 
 		locationEClass = createEClass(LOCATION);
+		createEAttribute(locationEClass, LOCATION__SUBDIAGRAM);
 
 		groupEClass = createEClass(GROUP);
+		createEAttribute(groupEClass, GROUP__SUBDIAGRAM);
 
 		positionEClass = createEClass(POSITION);
+		createEAttribute(positionEClass, POSITION__SUBDIAGRAM);
 
 		internalPersonEClass = createEClass(INTERNAL_PERSON);
+		createEAttribute(internalPersonEClass, INTERNAL_PERSON__SUBDIAGRAM);
 
 		externalPersonEClass = createEClass(EXTERNAL_PERSON);
-
+		createEAttribute(externalPersonEClass, EXTERNAL_PERSON__SUBDIAGRAM);
+		
 		personTypeEClass = createEClass(PERSON_TYPE);
+		createEAttribute(personTypeEClass, PERSON_TYPE__SUBDIAGRAM);
 
 		relation1EClass = createEClass(RELATION1);
 		createEReference(relation1EClass, RELATION1__SOURCE);
@@ -606,19 +669,26 @@ public class OrgchartPackageImpl extends EPackageImpl implements OrgchartPackage
 		initEClass(personEClass, Person.class, "Person", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(participantEClass, Participant.class, "Participant", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getParticipant_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(locationEClass, Location.class, "Location", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
+		initEAttribute(getLocation_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Location.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEClass(groupEClass, Group.class, "Group", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
+		initEAttribute(getGroup_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEClass(positionEClass, Position.class, "Position", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
+		initEAttribute(getPosition_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Position.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEClass(internalPersonEClass, InternalPerson.class, "InternalPerson", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
+		initEAttribute(getInternalPerson_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, InternalPerson.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEClass(externalPersonEClass, ExternalPerson.class, "ExternalPerson", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
+		initEAttribute(getExternalPerson_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, ExternalPerson.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEClass(personTypeEClass, PersonType.class, "PersonType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
+		initEAttribute(getPersonType_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, PersonType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEClass(relation1EClass, Relation1.class, "Relation1", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRelation1_Source(), this.getAll_Rel_1(), null, "source", null, 0, 1, Relation1.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRelation1_Target(), this.getAll_Rel_1(), null, "target", null, 0, 1, Relation1.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

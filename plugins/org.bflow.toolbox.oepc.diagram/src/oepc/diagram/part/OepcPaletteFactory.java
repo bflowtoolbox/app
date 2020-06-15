@@ -3,6 +3,7 @@ package oepc.diagram.part;
 import java.util.ArrayList;
 import java.util.List;
 
+import oepc.diagram.Messages;
 import oepc.diagram.providers.OepcElementTypes;
 
 import org.eclipse.gef.Tool;

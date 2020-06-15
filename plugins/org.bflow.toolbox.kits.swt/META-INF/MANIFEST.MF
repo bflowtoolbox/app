@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Bflow Toolbox SWT Kit
+Bundle-SymbolicName: org.bflow.toolbox.kits.swt
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.bflow.toolbox.kits.swt.internal.Activator
+Bundle-Vendor: Bflow Dev Team
+Require-Bundle: org.eclipse.ui,
+  org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.bflow.toolbox.kits.swt
+Bundle-ActivationPolicy: lazy
+Export-Package: org.bflow.toolbox.kits.swt

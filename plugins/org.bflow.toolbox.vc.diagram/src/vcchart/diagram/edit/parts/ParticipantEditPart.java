@@ -1,15 +1,14 @@
-/*
- * 
- */
 package vcchart.diagram.edit.parts;
 
 import java.util.List;
 
+import org.bflow.toolbox.extensions.LinkContext;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
+import org.bflow.toolbox.extensions.figures.LinkImageFigure;
+import org.bflow.toolbox.extensions.layouts.CentralizingLayout;
 import org.eclipse.draw2d.Ellipse;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
@@ -26,20 +25,21 @@ import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 
+import vcchart.Participant;
 import vcchart.diagram.edit.policies.ParticipantItemSemanticEditPolicy;
 import vcchart.diagram.part.VcVisualIDRegistry;
 
 /**
  * @generated NOT
+ * @version 2019-03-11 AST Added link icon
  */
 public class ParticipantEditPart extends BflowNodeEditPart {
 
@@ -70,8 +70,7 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
-		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
-				new ParticipantItemSemanticEditPolicy());
+		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE, new ParticipantItemSemanticEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
 		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
@@ -84,8 +83,7 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 		org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy lep = new org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy() {
 
 			protected EditPolicy createChildEditPolicy(EditPart child) {
-				EditPolicy result = child
-						.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
+				EditPolicy result = child.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
 				if (result == null) {
 					result = new NonResizableEditPolicy();
 				}
@@ -123,8 +121,7 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 	protected boolean addFixedChild(EditPart childEditPart) {
 		if (childEditPart instanceof ParticipantNameEditPart) {
 			((ParticipantNameEditPart) childEditPart)
-					.setLabel(getPrimaryShape()
-							.getFigureParticipantLabelFigure());
+					.setLabel(getPrimaryShape().getFigureParticipantLabelFigure());
 			return true;
 		}
 		return false;
@@ -222,8 +219,7 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 	 * @generated
 	 */
 	public EditPart getPrimaryChildEditPart() {
-		return getChildBySemanticHint(VcVisualIDRegistry
-				.getType(ParticipantNameEditPart.VISUAL_ID));
+		return getChildBySemanticHint(VcVisualIDRegistry.getType(ParticipantNameEditPart.VISUAL_ID));
 	}
 
 	/**
@@ -231,8 +227,7 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 	 */
 	protected void handleNotificationEvent(Notification event) {
 		if (event.getNotifier() == getModel()
-				&& EcorePackage.eINSTANCE.getEModelElement_EAnnotations()
-						.equals(event.getFeature())) {
+				&& EcorePackage.eINSTANCE.getEModelElement_EAnnotations().equals(event.getFeature())) {
 			handleMajorSemanticChange();
 		} else {
 			super.handleNotificationEvent(event);
@@ -269,6 +264,9 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 			this.tWidth = this.getPreferredSize().width;
 			this.tHeight = this.getPreferredSize().height;
 			createContents();
+			
+			// 2019-03-11 AST Required by the link image figure
+			setLayoutManager(new CentralizingLayout());
 		}
 
 		/**
@@ -291,6 +289,11 @@ public class ParticipantEditPart extends BflowNodeEditPart {
 
 			nameContainer = nameContainer0;
 			nameContainer0.add(fFigureParticipantLabelFigure);
+			
+			Image playImage = new Image(null, this.getClass().getResourceAsStream("/icons/link-16.png"));
+			LinkContext linkContext = new LinkContext(() -> ((Participant) ParticipantEditPart.this.getPrimaryView().getElement()).getSubdiagram());
+			LinkImageFigure linkImage = new LinkImageFigure(playImage, linkContext);			
+			this.add(linkImage);
 		}
 
 		/**

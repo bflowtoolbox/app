@@ -14,4 +14,15 @@ package vcchart;
  * @generated
  */
 public interface Objective extends NamedElement, All_Rel_1_EndPoint, All_Rel_3 {
+	
+	/**
+	 * @generated NOT
+	 */
+	public String getSubdiagram();
+	
+	/**
+	 * @generated NOT
+	 */
+	public void setSubdiagram(String value);
+	
 } // Objective

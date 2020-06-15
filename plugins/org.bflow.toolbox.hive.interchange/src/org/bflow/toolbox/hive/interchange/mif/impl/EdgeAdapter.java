@@ -9,60 +9,67 @@ import org.bflow.toolbox.hive.interchange.mif.core.IShape;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionEditPart;
-import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
 
 /**
  * Implements {@link IEdge}.
  * 
- * @author Arian Storch
- * @since 01/10/12
- * @version 02/05/13
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2012-10-01
+ * @version 2013-05-02
+ * 			2018-10-31 Id and semantic element are now passed via ctor
  */
 public class EdgeAdapter implements IEdge {
 	
-	/** The connection edit part. */
-	private ConnectionEditPart connectionEditPart;	
+	/** Element id */
+	private String _id;
 	
-	/** The eobject. */
-	private EObject eObject;
+	/** Semantic element */
+	private EObject _semanticElement;
+
+	/** Connection edit part. */
+	private ConnectionEditPart _connectionEditPart;	
 	
-	/** The figure. */
+	/** Figure */
 	@SuppressWarnings("unused")
-	private IFigure figure;
+	private IFigure _figure;
 	
-	/** The attribute map. */
-	private Map<String, String> attributeMap;
+	/** Attribute map */
+	private Map<String, String> _attributeMap;
 	
-	/** The source shape. */
-	private IShape sourceShape;
+	/** Source shape */
+	private IShape _sourceShape;
 	
-	/** The target shape. */
-	private IShape targetShape;
+	/** Target shape */
+	private IShape _targetShape;
 	
-	private IInterchangePropertyProvider propertyProvider;
+	/** Property provider */
+	private IInterchangePropertyProvider _propertyProvider;
 
 	/**
 	 * Instantiates a new edge adapter.
 	 * 
-	 * @param connectionEditPart
-	 *            the connection edit part
-	 * @param source
-	 *            the source
-	 * @param target
-	 *            the target
-	 * @param attributes
-	 *            the attributes
+	 * @param id                 Id
+	 * 
+	 * @param semanticElement    Semantic element
+	 * 
+	 * @param connectionEditPart Connection edit part
+	 * @param source             Source shape
+	 * @param target             Target shape
+	 * @param attributes         Attributes
 	 */
-	public EdgeAdapter(ConnectionEditPart connectionEditPart, IShape source, IShape target,
+	public EdgeAdapter(String id, EObject semanticElement, 
+			ConnectionEditPart connectionEditPart, 
+			IShape source, IShape target,
 			Map<String, String> attributes, IInterchangePropertyProvider propertyProvider) {
 		super();
-		this.connectionEditPart = connectionEditPart;
-		this.eObject = connectionEditPart.resolveSemanticElement();
-		this.figure = connectionEditPart.getFigure();
-		this.attributeMap = (attributes == null ? new HashMap<String, String>() : attributes);
-		this.sourceShape = source;
-		this.targetShape = target;
-		this.propertyProvider = propertyProvider;
+		_id = id;
+		_semanticElement = semanticElement;
+		_connectionEditPart = connectionEditPart;
+		_figure = connectionEditPart.getFigure();
+		_attributeMap = (attributes == null ? new HashMap<String, String>() : attributes);
+		_sourceShape = source;
+		_targetShape = target;
+		_propertyProvider = propertyProvider;
 	}
 
 	/* (non-Javadoc)
@@ -70,7 +77,7 @@ public class EdgeAdapter implements IEdge {
 	 */
 	@Override
 	public Map<String, String> getAttributes() {
-		return attributeMap;
+		return _attributeMap;
 	}
 
 	/* (non-Javadoc)
@@ -78,8 +85,7 @@ public class EdgeAdapter implements IEdge {
 	 */
 	@Override
 	public String getId() {
-		String proxyId = EMFCoreUtil.getProxyID(eObject);
-		return proxyId;
+		return _id;
 	}
 
 	/* (non-Javadoc)
@@ -88,7 +94,7 @@ public class EdgeAdapter implements IEdge {
 	@Override
 	public Object getType() {
 		// this is a string at the moment but can change it the future
-		Object obj = eObject.eClass().getInstanceTypeName(); 
+		Object obj = _semanticElement.eClass().getInstanceTypeName(); 
 		return obj;
 	}
 
@@ -109,7 +115,7 @@ public class EdgeAdapter implements IEdge {
 	 */
 	@Override
 	public IShape getSource() {
-		return sourceShape;
+		return _sourceShape;
 	}
 
 	/* (non-Javadoc)
@@ -117,16 +123,20 @@ public class EdgeAdapter implements IEdge {
 	 */
 	@Override
 	public IShape getTarget() {
-		return targetShape;
+		return _targetShape;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.interchange.mif.core.IVelocityValueProvider#get(java.lang.String)
+	 */
 	@Override
 	public Object get(String propertyName) {
-		if(propertyProvider == null) {
+		if (_propertyProvider == null) {
 			return null;
 		}
 		
-		Object value = propertyProvider.getPropertyValue(propertyName, eObject, connectionEditPart, null);
+		Object value = _propertyProvider.getPropertyValue(propertyName, _semanticElement, _connectionEditPart, null);
 		return value;
 	}
 }

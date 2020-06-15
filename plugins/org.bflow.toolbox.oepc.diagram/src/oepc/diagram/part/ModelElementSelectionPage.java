@@ -17,6 +17,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import oepc.diagram.Messages;
+
 /**
  * Wizard page that allows to select element from model.
  * @generated

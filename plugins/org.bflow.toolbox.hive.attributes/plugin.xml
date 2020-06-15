@@ -13,7 +13,7 @@
             class="org.bflow.toolbox.hive.attributes.AttributeViewPart"
             icon="platform:/plugin/org.eclipse.ui.views/icons/full/eview16/prop_ps.gif"
             id="org.bflow.toolbox.hive.attributes.view"
-            name="Attributes"
+            name="%hiveAttributesViewName"
             restorable="true">
       </view>
    </extension>

@@ -4,9 +4,10 @@
 package orgchart.diagram.edit.parts;
 
 import org.bflow.toolbox.epc.extensions.edit.parts.PersonTypeBorder;
-import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
+import org.bflow.toolbox.extensions.LinkContext;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
-import org.eclipse.draw2d.ColorConstants;
+import org.bflow.toolbox.extensions.figures.LinkImageFigure;
+import org.bflow.toolbox.extensions.layouts.CentralizingLayout;
 import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MarginBorder;
@@ -30,8 +31,9 @@ import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 
+import orgchart.PersonType;
 import orgchart.diagram.edit.policies.PersonTypeItemSemanticEditPolicy;
 import orgchart.diagram.part.OrgcVisualIDRegistry;
 
@@ -67,8 +69,7 @@ public class PersonTypeEditPart extends BflowNodeEditPart {
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
-		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
-				new PersonTypeItemSemanticEditPolicy());
+		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE, new PersonTypeItemSemanticEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
 		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
@@ -81,8 +82,7 @@ public class PersonTypeEditPart extends BflowNodeEditPart {
 		org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy lep = new org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy() {
 
 			protected EditPolicy createChildEditPolicy(EditPart child) {
-				EditPolicy result = child
-						.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
+				EditPolicy result = child.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
 				if (result == null) {
 					result = new NonResizableEditPolicy();
 				}
@@ -254,6 +254,9 @@ public class PersonTypeEditPart extends BflowNodeEditPart {
 			this.setBorder(new CompoundBorder(
 					new MarginBorder(getMapMode().DPtoLP(0), getMapMode().DPtoLP(10), getMapMode().DPtoLP(0), getMapMode().DPtoLP(0)), new PersonTypeBorder()));
 			createContents();
+			
+			// 2019-02-17 AST Required by the link image figure
+			setLayoutManager(new CentralizingLayout());
 		}
 
 		/**
@@ -263,14 +266,18 @@ public class PersonTypeEditPart extends BflowNodeEditPart {
 			fFigurePersonTypeLabelFigure = new WrappingLabel();
 			fFigurePersonTypeLabelFigure.setText("");
 			fFigurePersonTypeLabelFigure.setAlignment(PositionConstants.CENTER);
-			fFigurePersonTypeLabelFigure
-					.setTextJustification(PositionConstants.CENTER);
+			fFigurePersonTypeLabelFigure.setTextJustification(PositionConstants.CENTER);
 			fFigurePersonTypeLabelFigure.setTextWrap(true);
 			fFigurePersonTypeLabelFigure.setBorder(new MarginBorder(getMapMode()
 					.DPtoLP(4), getMapMode().DPtoLP(4), getMapMode().DPtoLP(4),
 					getMapMode().DPtoLP(4)));
 
 			this.add(fFigurePersonTypeLabelFigure);
+			
+			Image playImage = new Image(null, this.getClass().getResourceAsStream("/icons/link-16.png"));
+			LinkContext linkContext = new LinkContext(() -> ((PersonType) PersonTypeEditPart.this.getPrimaryView().getElement()).getSubdiagram());
+			LinkImageFigure linkImage = new LinkImageFigure(playImage, linkContext);			
+			this.add(linkImage);	
 		}
 
 		/**

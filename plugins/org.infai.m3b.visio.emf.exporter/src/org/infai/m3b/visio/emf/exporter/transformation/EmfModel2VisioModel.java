@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.infai.m3b.visio.emf.emfutil.EmfShapeSheetUtil;
 import org.infai.m3b.visio.emf.emfutil.EmfUtil;
-import org.infai.m3b.visio.emf.emfutil.EmfVisioMetamodel;
 import org.infai.m3b.visio.emf.visiostub.IVApplication;
 import org.infai.m3b.visio.emf.visiostub.IVDocument;
 import org.infai.m3b.visio.emf.visiostub.IVMaster;

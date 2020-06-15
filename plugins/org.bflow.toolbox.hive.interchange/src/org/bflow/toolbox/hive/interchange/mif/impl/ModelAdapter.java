@@ -3,18 +3,21 @@ package org.bflow.toolbox.hive.interchange.mif.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
 import org.bflow.toolbox.hive.interchange.mif.core.IInterchangePropertyProvider;
 import org.bflow.toolbox.hive.interchange.mif.core.IModel;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
+import org.eclipse.gmf.runtime.notation.Diagram;
 
 /**
  * Implements {@link IModel}.
  * 
- * @author Arian Storch
- * @since 01/10/12
- * @version 02/05/13
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2012-10-01
+ * @version 2013-05-02
+ * 			2018-10-21 Updated implementation of {@link IModel}
  */
 public class ModelAdapter implements IModel {
 	
@@ -58,8 +61,22 @@ public class ModelAdapter implements IModel {
 	 */
 	@Override
 	public String getId() {
-		String proxyId = EMFCoreUtil.getProxyID(eObject);
+		String proxyId = EMFCoreUtil.getProxyID(eObject);		
 		return proxyId;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.interchange.mif.core.INameable#getName()
+	 */
+	@Override
+	public String getName() {
+		// Though there is EMFCoreUtil.getName(...) this method does not provide the correct value
+		// String name = EMFCoreUtil.getName(eObject);
+		Diagram diagramModel = (Diagram) diagramEditPart.getModel();
+		String name = diagramModel.getName();
+		String unexName = FilenameUtils.getBaseName(name);
+		return unexName;
 	}
 
 	/* (non-Javadoc)
@@ -77,7 +94,7 @@ public class ModelAdapter implements IModel {
 	 */
 	@Override
 	public Object get(String propertyName) {
-		if(propertyProvider == null) {
+		if (propertyProvider == null) {
 			return null;
 		}
 		

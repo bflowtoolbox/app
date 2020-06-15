@@ -1,64 +1,68 @@
 package org.bflow.toolbox.hive.interchange.mif.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bflow.toolbox.hive.interchange.mif.core.IInterchangePropertyProvider;
 import org.bflow.toolbox.hive.interchange.mif.core.IShape;
+import org.bflow.toolbox.hive.libs.aprogu.lang.Cast;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
+import org.eclipse.gmf.runtime.notation.Node;
 import org.eclipse.gmf.runtime.notation.Shape;
+import org.eclipse.gmf.runtime.notation.ShapeStyle;
 import org.eclipse.swt.graphics.Image;
 
 /**
  * Implements {@link IShape}.
  * 
- * @author Arian Storch
- * @since 01/10/12
- * @version 02/09/14
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2012-10-01
+ * @version 2014-09-02
+ * 			2018-10-31 Id and semantic element are now passed via ctor
  */
 public class ShapeAdapter implements IShape {
 	
-	/** The graphical edit part. */
-	private IGraphicalEditPart graphicalEditPart;
+	/** Element id */
+	private String _id;
 	
-	/** The e object. */
-	private EObject eObject;
+	/** Semantic element */
+	private EObject _semanticElement;
 	
-	/** The figure. */
-	private IFigure figure;
+	/** Graphical edit part. */
+	private IGraphicalEditPart _graphicalEditPart;	
 	
-	/** The attribute map. */
-	private Map<String, String> attributeMap;
-
-	/** The id. */
-	private String id;
+	/** Figure */
+	private IFigure _figure;
+	
+	/** Attribute map */
+	private Map<String, String> _attributeMap;
 	
 	/** The property provider. */
-	private IInterchangePropertyProvider propertyProvider;
+	private IInterchangePropertyProvider _propertyProvider;
 	
 	/**
 	 * Instantiates a new shape adapter.
 	 *
-	 * @param editPart the edit part
-	 * @param attributes the attributes
-	 * @param propertyProvider the property provider
+	 * @param id               Element id
+	 * @param semanticElement  Semantic element
+	 * @param editPart         Edit part
+	 * @param attributes       Attributes
+	 * @param propertyProvider Property provider
 	 */
-	public ShapeAdapter(IGraphicalEditPart editPart, Map<String, String> attributes, IInterchangePropertyProvider propertyProvider) {
+	public ShapeAdapter(String id, EObject semanticElement, 
+			IGraphicalEditPart editPart, 
+			Map<String, String> attributes, IInterchangePropertyProvider propertyProvider) {
 		super();
-		this.graphicalEditPart = editPart;
-		this.eObject = graphicalEditPart.resolveSemanticElement();
-		
-		// EditParts provided by GMF don't ever have semantic elements
-		if (this.eObject == null) {
-			this.eObject = (EObject) editPart.getModel();
-		}
-		
-		this.figure = graphicalEditPart.getFigure();
-		this.attributeMap = (attributes == null ? new HashMap<String, String>() : attributes);
-		this.propertyProvider = propertyProvider;
+		_id = id;
+		_semanticElement = semanticElement;
+		_graphicalEditPart = editPart;		
+		_figure = _graphicalEditPart.getFigure();
+		_attributeMap = (attributes == null ? new HashMap<String, String>() : attributes);
+		_propertyProvider = propertyProvider;
 	}
 
 	/* (non-Javadoc)
@@ -66,7 +70,7 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public Map<String, String> getAttributes() {
-		return attributeMap;
+		return _attributeMap;
 	}
 
 	/* (non-Javadoc)
@@ -74,7 +78,7 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public int getHeight() {
-		return figure.getBounds().height;
+		return _figure.getBounds().height;
 	}
 
 	/* (non-Javadoc)
@@ -92,12 +96,26 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public String getName() {
-		String name = EMFCoreUtil.getName(eObject);
+		String name = EMFCoreUtil.getName(_semanticElement);
 		
 		// If the eObject is a raw GMF shape then we use the description 
-		if (eObject instanceof Shape) {
-			Shape shape = (Shape) eObject;
+		if (_semanticElement instanceof Shape) {
+			Shape shape = (Shape) _semanticElement;
 			name = shape.getDescription();
+		}
+		
+		// Absolute(?) fallback, try to get the name from the internal shape style
+		if (_semanticElement instanceof Node) {
+			Node node = (Node) _semanticElement;
+			List<?> styles = node.getStyles();
+			for (int i = -1; ++i != styles.size();) {
+				Object style = styles.get(i);
+				ShapeStyle shapeStyle = Cast.as(ShapeStyle.class, style);
+				if (shapeStyle != null) {
+					name = shapeStyle.getDescription();
+					break;
+				}
+			}
 		}
 		
 		return name;
@@ -108,7 +126,7 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public int getWidth() {
-		return figure.getBounds().width;
+		return _figure.getBounds().width;
 	}
 
 	/* (non-Javadoc)
@@ -116,7 +134,7 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public int getX() {
-		return figure.getBounds().x;
+		return _figure.getBounds().x;
 	}
 
 	/* (non-Javadoc)
@@ -124,7 +142,7 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public int getY() {
-		return figure.getBounds().y;
+		return _figure.getBounds().y;
 	}
 
 	/* (non-Javadoc)
@@ -132,11 +150,7 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public String getId() {
-		if(id == null) {
-			id = EMFCoreUtil.getProxyID(eObject);
-		}
-		
-		return id;
+		return _id;
 	}
 
 	/* (non-Javadoc)
@@ -145,11 +159,11 @@ public class ShapeAdapter implements IShape {
 	@Override
 	public Object getType() {
 		// this is a string at the moment but can change it the future
-		Object obj = eObject.eClass().getInstanceTypeName(); 
+		Object obj = _semanticElement.eClass().getInstanceTypeName(); 
 		
 		// If the eObject is a raw GMF shape then we add the concrete type
-		if (eObject instanceof Shape) {
-			obj = ((String)obj).concat(String.format("+%s", ((Shape) eObject).getType()));
+		if (_semanticElement instanceof Shape) {
+			obj = ((String)obj).concat(String.format("+%s", ((Shape) _semanticElement).getType()));
 		}
 		
 		return obj;
@@ -160,11 +174,11 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public Object get(String propertyName) {
-		if(propertyProvider == null) {
+		if (_propertyProvider == null) {
 			return null;
 		}
 		
-		Object value = propertyProvider.getPropertyValue(propertyName, eObject, graphicalEditPart, id);
+		Object value = _propertyProvider.getPropertyValue(propertyName, _semanticElement, _graphicalEditPart, _id);
 		return value;
 	}
 
@@ -188,11 +202,11 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof ShapeAdapter)) {
+		if (!(obj instanceof ShapeAdapter)) {
 			return false;
 		}
-		ShapeAdapter other = (ShapeAdapter)obj;
-		return other.eObject.equals(eObject);
+		ShapeAdapter other = (ShapeAdapter) obj;
+		return other._semanticElement.equals(_semanticElement);
 	}
 	
 	/*
@@ -201,6 +215,6 @@ public class ShapeAdapter implements IShape {
 	 */
 	@Override
 	public int hashCode() {
-		return eObject.hashCode();
+		return _semanticElement.hashCode();
 	}
 }

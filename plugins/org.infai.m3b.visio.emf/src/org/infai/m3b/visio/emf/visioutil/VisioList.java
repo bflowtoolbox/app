@@ -25,10 +25,9 @@ import org.jawin.DispatchPtr;
  */
 public class VisioList<T extends DispatchPtr> implements Collection<T>{
 	
-	private static final long serialVersionUID = 9219791950343374081L;
 	private ArrayList<T> javaList;
 	
-	public VisioList(DispatchPtr visioList, Class visioClazz) {
+	public VisioList(DispatchPtr visioList, Class<T> visioClazz) {
 	
 		try {
 			int count;
@@ -44,7 +43,7 @@ public class VisioList<T extends DispatchPtr> implements Collection<T>{
 				DispatchPtr gPointer = (DispatchPtr)visioList.get("Item", new Integer(i+1));
 				T sPointer;
 				try {
-					sPointer = (T)visioClazz.newInstance();
+					sPointer = (T) visioClazz.newInstance();
 					sPointer.stealUnknown(gPointer);
 			        javaList.add(sPointer);
 				} catch (InstantiationException e) {
@@ -118,7 +117,7 @@ public class VisioList<T extends DispatchPtr> implements Collection<T>{
 		return this.javaList.retainAll(c);
 	}
 	
-	public <T> T[] toArray(T[] a) {	
+	public <E> E[] toArray(E[] a) {	
 		return this.javaList.toArray(a);
 	}
 }

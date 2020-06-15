@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -18,8 +19,10 @@ import org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil;
  * Listens to the changes of a diagram edit part to provide various features.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 07.03.2015
- * @version	27.10.2016 AST - Deactivated German localization
+ * @since 2015-03-07
+ * @version 2016-10-27 AST - Deactivated German localization
+ * 			2019-02-16 AST - Reactivated German localization
+ * 			
  *
  */
 public class ActiveDiagramEditPartListener implements EditPartListener {
@@ -158,13 +161,8 @@ public class ActiveDiagramEditPartListener implements EditPartListener {
 	 * @return String
 	 */
 	private static String getLocalisedCopyPrefixPattern() {
-		/*
-		 * 27.10.2016 - AST
-		 * Currently GEF creates elements always starting with the English prefix, even if 
-		 * the German language is active. Therefore, the localization is deactivated.
-		 */
-//		String platformNL = Platform.getNL();
-//		if (platformNL.toLowerCase().startsWith("de".toLowerCase())) return "Kopieren_\\d_";
+		String platformNL = Platform.getNL();
+		if (platformNL.toLowerCase().startsWith("de".toLowerCase())) return "Kopieren_\\d_";
 		return "Copy_\\d_"; // default
 	}
 }

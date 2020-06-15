@@ -11,7 +11,8 @@ import org.eclipse.swt.graphics.Color;
  * all elements with enhanced colors for a presentation mode.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 01/11/13
+ * @since 2013-11-01
+ * @version 2019-01-27 AST Brightened color about 15%
  */
 public class PresentationColorSchema extends OriginalColorSchema {
 	
@@ -52,32 +53,33 @@ public class PresentationColorSchema extends OriginalColorSchema {
 		Color bgColor = null;
 		String className = getSimpleClassName(type);
 		
-		if(className.equals("Event"))
+		if (className.equals("Event")) {
 			bgColor = ClrEvent;
-		else if(className.equals("Function") || className.equals("Objective") || className.equals("Activity1") || className.equals("Activity2"))
+		} else if(className.equals("Function") || className.equals("Objective") || className.equals("Activity1") || className.equals("Activity2")) {
 			bgColor = ClrFunction;
-		else if(className.equals("Application"))
+		} else if(className.equals("Application")) {
 			bgColor = ClrApplication;
-		else if(className.equals("Participant") || className.equals("Group") || className.equals("InternalPerson") ||
+		} else if(className.equals("Participant") || className.equals("Group") || className.equals("InternalPerson") ||
 				className.equals("Location") || className.equals("Position") || className.equals("PersonType") ||
-				className.equals("OrganisationUnit") )
+				className.equals("OrganisationUnit") ) {
 			bgColor = ClrParticipant;
-		else if(className.equals("Cluster") || className.equals("ITSystem"))
+		} else if(className.equals("Cluster") || className.equals("ITSystem")) {
 			bgColor = ClrCluster;
-		else if(className.equals("Product"))
+		} else if(className.equals("Product")) {
 			bgColor = ClrProduct;
+		}
 
-		if(bgColor != null)
+		if (bgColor != null)
 			return bgColor;
 		
 		return super.getBackground(type);
 	}
 
-	private static final Color ClrEvent = new Color(null, 255, 127, 255);
-	private static final Color ClrFunction = new Color(null, 127, 255, 127);
-	private static final Color ClrApplication = new Color(null, 127, 255, 255);
-	private static final Color ClrParticipant = new Color(null, 255, 255, 127);
-	private static final Color ClrCluster = new Color(null, 255, 124, 124);
-	private static final Color ClrProduct = new Color(null, 106, 255, 192);
+	private static final Color ClrEvent       = new Color(null, 255, 146, 255);
+	private static final Color ClrFunction    = new Color(null, 146, 255, 146);
+	private static final Color ClrApplication = new Color(null, 146, 255, 255);
+	private static final Color ClrParticipant = new Color(null, 255, 255, 146);
+	private static final Color ClrCluster     = new Color(null, 255, 142, 142);
+	private static final Color ClrProduct     = new Color(null, 121, 255, 220);
 
 }

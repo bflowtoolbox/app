@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Activator: org.bflow.toolbox.epc.provider.EpcEditPlugin$Implementation
 Bundle-Vendor: Bflow Dev Team
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.bflow.toolbox.epc.provider
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.edit;visibility:=reexport,
@@ -15,3 +15,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.bflow.toolbox.epc.model;bundle-version="1.0.0",
  org.bflow.toolbox.bflow.edit;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: org.bflow.toolbox.epc.edit

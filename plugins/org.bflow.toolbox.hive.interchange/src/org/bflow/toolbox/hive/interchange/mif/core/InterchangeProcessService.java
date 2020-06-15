@@ -18,6 +18,23 @@ import org.bflow.toolbox.hive.interchange.utils.ModelDigger;
  * @version 14/12/13
  */
 public class InterchangeProcessService {
+	/**
+	 * Selects the {@link IInterchangeProcessor} for the specified
+	 * {@code descriptor} and processes the export. Note, this is a convenience
+	 * method for
+	 * {@link #processExport(File, File, IInterchangeProcessor, IInterchangeDescriptor)}.
+	 * 
+	 * @param sourceFile Source file to process
+	 * @param targetFile Process target file
+	 * @param descriptor Export process descriptor
+	 * @throws InterchangeProcessingException
+	 */
+	public static void processExport(File sourceFile, File targetFile, IInterchangeDescriptor descriptor)
+			throws InterchangeProcessingException {
+		
+		IInterchangeProcessor processor = InterchangeProcessorStore.getExportProcessorFor(descriptor);
+		processExport(sourceFile, targetFile, processor, descriptor);
+	}
 	
 	/**
 	 * Processes the export interchange.

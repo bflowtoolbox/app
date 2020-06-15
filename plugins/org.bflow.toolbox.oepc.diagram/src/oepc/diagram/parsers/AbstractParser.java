@@ -2,7 +2,7 @@ package oepc.diagram.parsers;
 
 import java.util.Arrays;
 
-import oepc.diagram.part.Messages;
+import oepc.diagram.Messages;
 import oepc.diagram.part.OepcDiagramEditorPlugin;
 
 import org.eclipse.core.runtime.IAdaptable;

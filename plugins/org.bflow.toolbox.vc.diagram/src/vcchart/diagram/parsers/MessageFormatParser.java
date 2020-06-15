@@ -16,7 +16,7 @@ import org.eclipse.gmf.runtime.common.ui.services.parser.ParserEditStatus;
 import org.eclipse.gmf.tooling.runtime.parsers.AbstractAttributeParser;
 import org.eclipse.osgi.util.NLS;
 
-import vcchart.diagram.part.Messages;
+import vcchart.diagram.Messages;
 import vcchart.diagram.part.VcDiagramEditorPlugin;
 
 /**

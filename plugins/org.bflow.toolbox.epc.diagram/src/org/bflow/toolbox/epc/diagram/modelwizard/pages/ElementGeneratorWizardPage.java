@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bflow.toolbox.epc.diagram.Messages;
 import org.bflow.toolbox.epc.diagram.edit.parts.EventEditPart;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.ColumnConnectorLabelProvider;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.ColumnImageLabelProvider;
@@ -20,7 +21,6 @@ import org.bflow.toolbox.epc.diagram.modelwizard.utils.Connector.ConnectorType;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.Element.Kind;
 import org.bflow.toolbox.epc.diagram.modelwizard.utils.listener.SelectionListenerXOR;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
-import org.bflow.toolbox.extensions.internationalisation.MessageProvider;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -63,45 +63,34 @@ import org.eclipse.swt.widgets.Table;
  * Implements the wizard page to generate and add numerous elements to the
  * diagram.
  * 
- * @author Arian Storch
- * @since 24/11/09
- * @version 28/08/10
+ * @author Arian Storch<arian.storch@bflow.org>
+ * @since 2009-11-24
+ * @version 2010-08-28
+ * 			2019-01-26 AST Add localization
  * 
  */
 public class ElementGeneratorWizardPage extends WizardPage {
-	/**
-	 * Holds the processStep steps.
-	 */
+	private final String EmptyName = ""; //$NON-NLS-1$
+	
+	/** Holds the processStep steps. */
 	private Vector<ProcessStep> processSteps = new Vector<ProcessStep>();
 
-	/**
-	 * Holds all installed labels and images for the connectors.
-	 */
+	/** Holds all installed labels and images for the connectors. */
 	private Vector<ConnectorLabel> connectorLabels = new Vector<ConnectorLabel>();
 
-	/**
-	 * counts the parallel processes during the input phase
-	 */
+	/** counts the parallel processes during the input phase */
 	private int parallelProcesses = 0;
 
-	/**
-	 * counts the visible table columns
-	 */
+	/** counts the visible table columns */
 	private int visibleColumns = 0;
 
-	/**
-	 * selected edit part that is used as anchor
-	 */
+	/** selected edit part that is used as anchor */
 	private BflowNodeEditPart anchor;
 
-	/**
-	 * Tells if a connector is recently open.
-	 */
+	/** Tells if a connector is recently open. */
 	private boolean connectorOpen = false;
 	
-	/**
-	 * For storing the last visited cell by interruption of a other program
-	 */
+	/** For storing the last visited cell by interruption of a other program */
 	protected ViewerCell currentcell;
 
 	private TableViewerFocusCellManager focusCellManager;
@@ -109,17 +98,15 @@ public class ElementGeneratorWizardPage extends WizardPage {
 	private Method setFocusCell;
 
 	/** The log instance for this class */
-	private static final Log logger = LogFactory.getLog(ElementGeneratorWizardPage.class);
+	private Log _log = LogFactory.getLog(ElementGeneratorWizardPage.class);
 
 	/**
 	 * Default constructor.
 	 */
 	public ElementGeneratorWizardPage(BflowNodeEditPart anchor) {
-		super(MessageProvider.getMessage("ElementGeneratorWizardPage#msg1"));
-		this.setTitle(MessageProvider
-				.getMessage("ElementGeneratorWizardPage#msg2"));
-		this.setMessage(MessageProvider
-				.getMessage("ElementGeneratorWizardPage#msg3"));
+		super(Messages.ElementGeneratorWizardPage_Id);
+		this.setTitle(Messages.ElementGeneratorWizardPage_Title);
+		this.setMessage(Messages.ElementGeneratorWizardPage_Message);
 
 		this.anchor = anchor;
 		initSetFocusCellMethod();
@@ -130,39 +117,38 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		// Reflection for access to the setFocusCell-Methode of TableViewerFocusCellManager
 		// Bugreport: --> https://bugs.eclipse.org/bugs/show_bug.cgi?id=198260
 		try {
-			setFocusCell = TableViewerFocusCellManager.class.getSuperclass().getDeclaredMethod("setFocusCell", 
+			setFocusCell = TableViewerFocusCellManager.class.getSuperclass().getDeclaredMethod("setFocusCell",  //$NON-NLS-1$
 					new Class[] { ViewerCell.class });
 			setFocusCell.setAccessible(true);
 		} catch (IllegalArgumentException | NoSuchMethodException | SecurityException e1) {
-			logger.error("Reflection does not work, focus to a cell cannot programmatically set.",e1);
+			_log.error("Reflection does not work, focus to a cell cannot programmatically set.", e1); //$NON-NLS-1$
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
+	 */
 	@Override
 	public void createControl(Composite parent) {
 		composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout());
-		composite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL
-				| GridData.HORIZONTAL_ALIGN_FILL));
+		composite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
 
 		/*
 		 * header
 		 */
-
 		Group imgGroup = new Group(composite, SWT.SHADOW_IN);
-		imgGroup.setText(MessageProvider
-				.getMessage("ElementGeneratorWizardPage#msg4"));
+		imgGroup.setText(Messages.ElementGeneratorWizardPage_Connector);
 		imgGroup.setLayout(new RowLayout(SWT.HORIZONTAL));
 
 		for (ConnectorType type : ConnectorType.values())
 			if (type != ConnectorType.NONE)
-				connectorLabels.add(new ConnectorLabel(type, imgGroup,
-						new ImageLabelMouseListener()));
+				connectorLabels.add(new ConnectorLabel(type, imgGroup,	new ImageLabelMouseListener()));
 
 		/*
 		 * table panel
 		 */
-
 		Composite tablePanel = new Composite(composite, SWT.NONE);
 		tablePanel.setLayout(new GridLayout(1, false));
 
@@ -175,8 +161,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 			@Override
 			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
-				
-				if(event.stateMask == SWT.ALT){
+				if (event.stateMask == SWT.ALT){
 					return false;
 				}
 				
@@ -218,6 +203,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 			/**
 			 * Returns true if the given keycode has no special function in the modelwizard
+			 * 
 			 * @param keyCode
 			 * @return boolean
 			 */
@@ -268,11 +254,9 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			
 			@Override
 			public void keyTraversed(TraverseEvent e) {
-				if ( e.detail == SWT.TRAVERSE_RETURN )
-		        {
+				if (e.detail == SWT.TRAVERSE_RETURN ) {
 		            e.doit = false;
-		        }
-				
+		        }				
 			}
 		});
 		
@@ -288,13 +272,12 @@ public class ElementGeneratorWizardPage extends WizardPage {
 					if (currentcell != null) {
 						setFocusCell.invoke(focusCellManager, currentcell);
 						currentcell.getItem();
-
 					} else {
 						ViewerCell thirdColumn = focusCellManager.getFocusCell().getNeighbor(ViewerCell.RIGHT,true).getNeighbor(ViewerCell.RIGHT, true);
 						setFocusCell.invoke(focusCellManager, thirdColumn);
 					}
 				} catch ( IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-					logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.",e1);
+					_log.error("Something went wrong  with programmatically set the focus cell by using reflection.",e1); //$NON-NLS-1$
 				}
 			}
 		});
@@ -302,12 +285,10 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		// table pop-up menu
 		setUpPopUpMenu(table);
 
-		TableViewerColumn conColumn = new TableViewerColumn(tableViewer,
-				SWT.NONE);
-		conColumn.getColumn().setText("C");
+		TableViewerColumn conColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		conColumn.getColumn().setText("C"); //$NON-NLS-1$
 		conColumn.getColumn().setWidth(25);
-		conColumn.setLabelProvider(new ColumnConnectorLabelProvider(composite,
-				processSteps));
+		conColumn.setLabelProvider(new ColumnConnectorLabelProvider(composite, processSteps));
 
 		addParallelProcess(1);
 
@@ -317,11 +298,13 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 		ProcessStep step = new ProcessStep(new Connector(ConnectorType.NONE));
 
-		if (anchor != null)
-			step.add((anchor.getClass() == EventEditPart.class ? new Element(
-					"", Kind.Function) : new Element("", Kind.Event)));
-		else
-			step.add(new Element("", Kind.Event));
+		if (anchor != null) {
+			step.add((anchor.getClass() == EventEditPart.class 
+					? new Element(EmptyName, Kind.Function) 
+					: new Element(EmptyName, Kind.Event)));
+		} else {
+			step.add(new Element(EmptyName, Kind.Event));
+		}
 
 		tableViewer.add(step);
 
@@ -344,14 +327,22 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		tableViewer.editElement(step, 2);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.WizardPage#canFlipToNextPage()
+	 */
 	@Override
 	public boolean canFlipToNextPage() {
 		return true;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.DialogPage#setVisible(boolean)
+	 */
 	@Override
-	public void setVisible(boolean f) {
-		super.setVisible(f);
+	public void setVisible(boolean value) {
+		super.setVisible(value);
 		table.setFocus();
 	}
 
@@ -374,27 +365,17 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		// ConnectorType.NONE)
 		// return ;
 		if (pp > visibleColumns) {
-			TableViewerColumn typColumn = new TableViewerColumn(tableViewer,
-					SWT.NONE);
-			typColumn.getColumn().setText(
-					MessageProvider
-							.getMessage("ElementGeneratorWizardPage#msg5"));
+			TableViewerColumn typColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+			typColumn.getColumn().setText(Messages.ElementGeneratorWizardPage_Type);
 			typColumn.getColumn().setWidth(60);
-			typColumn.setLabelProvider(new ColumnImageLabelProvider(composite,
-					parallelProcesses));
-			typColumn.setEditingSupport(new KindEditingSupport(tableViewer,
-					parallelProcesses, processSteps));
+			typColumn.setLabelProvider(new ColumnImageLabelProvider(composite, parallelProcesses));
+			typColumn.setEditingSupport(new KindEditingSupport(tableViewer, parallelProcesses, processSteps));
 
-			TableViewerColumn txtColumn = new TableViewerColumn(tableViewer,
-					SWT.NONE);
-			txtColumn.getColumn().setText(
-					MessageProvider
-							.getMessage("ElementGeneratorWizardPage#msg6"));
+			TableViewerColumn txtColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+			txtColumn.getColumn().setText(Messages.ElementGeneratorWizardPage_Name);
 			txtColumn.getColumn().setWidth(120);
-			txtColumn.setLabelProvider(new ColumnTextLabelProvider(
-					parallelProcesses));
-			txtColumn.setEditingSupport(new NameEditingSupport(tableViewer,
-					parallelProcesses, processSteps));
+			txtColumn.setLabelProvider(new ColumnTextLabelProvider(parallelProcesses));
+			txtColumn.setEditingSupport(new NameEditingSupport(tableViewer,	parallelProcesses, processSteps));
 
 			visibleColumns++;
 		}
@@ -405,8 +386,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			int lastIndex = processSteps.size() - 1;
 			ProcessStep step = processSteps.get(lastIndex - 1);
 			boolean event = (step.get(0).getKind() == Kind.Event ? true : false);
-			processSteps.lastElement().add(
-					new Element("", (event ? Kind.Function : Kind.Event)));
+			processSteps.lastElement().add(new Element(EmptyName, (event ? Kind.Function : Kind.Event)));
 		}
 	}
 
@@ -423,15 +403,17 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		int n = 1;
 
 		// n parallel processes
-		if (type == ConnectorType.AND_N || type == ConnectorType.OR_N
-				|| type == ConnectorType.XOR_N) {
-			InputDialog dlg = new InputDialog(null, "Input dialog",
-					"Number of outgoing arcs: ", "3", new InputValidator());
+		if (type == ConnectorType.AND_N || type == ConnectorType.OR_N || type == ConnectorType.XOR_N) {
+			InputDialog dlg = new InputDialog(null, 
+					Messages.ElementGeneratorWizardPage_InputDialogTitle,
+					Messages.ElementGeneratorWizardPage_InputDialogText, 
+					Messages.ElementGeneratorWizardPage_InputDialogValue, 
+					new InputValidator()
+					);
 
-			if (dlg.open() == InputDialog.OK)
+			if (dlg.open() == InputDialog.OK) {
 				n = Integer.parseInt(dlg.getValue());
-			else // cancel
-			{
+			} else { // cancel
 				deselectConnectors();
 				return;
 			}
@@ -452,7 +434,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		newStep.setConnector(newConnector);
 
 		for (int i = newStep.size(); i < n; i++)
-			newStep.add(new Element("", oldElement.getKind()));
+			newStep.add(new Element(EmptyName, oldElement.getKind()));
 
 		newStep.setSize(n);
 
@@ -473,14 +455,12 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				}	
 			}
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-			logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.", e1);
+			_log.error("Something went wrong  with programmatically set the foucus cell by using reflection.", e1); //$NON-NLS-1$
 		}
 		
 	}
 
-	/**
-	 * Deselects all connectors.
-	 */
+	/** Deselects all connectors. */
 	private void deselectConnectors() {
 		for (ConnectorLabel label : connectorLabels)
 			label.setSelected(false);
@@ -521,13 +501,14 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			if (connectorType == ConnectorType.AND_SINGLE || connectorType == ConnectorType.OR_SINGLE || connectorType == ConnectorType.XOR_SINGLE) {
 				return true;
 			}
-			MessageDialog.openError(null, MessageProvider
-					.getMessage("ElementGeneratorWizardPage#msg7"),
-					MessageProvider
-							.getMessage("ElementGeneratorWizardPage#msg8"));
+			MessageDialog.openError(null, 
+					Messages.ElementGeneratorWizardPage_ErrorDialogTitle,
+					Messages.ElementGeneratorWizardPage_ErrorDialogMessage
+					);
 
 			return false;
 		}
+		
 		return true;
 	}
 
@@ -554,28 +535,29 @@ public class ElementGeneratorWizardPage extends WizardPage {
 		popUpMenu = new Menu(table);
 
 		MenuItem mItemRemCon = new MenuItem(popUpMenu, SWT.NONE);
-		mItemRemCon.setText("Remove connector");
+		mItemRemCon.setText(Messages.ElementGeneratorWizardPage_RemoveConnector);
 
 		MenuItem mItemChCon = new MenuItem(popUpMenu, SWT.NONE);
-		mItemChCon.setText("Change connector");
+		mItemChCon.setText(Messages.ElementGeneratorWizardPage_ChangeConnector);
 
 		new MenuItem(popUpMenu, SWT.SEPARATOR);
 
 		MenuItem mItemRedCC = new MenuItem(popUpMenu, SWT.NONE);
-		mItemRedCC.setText("Reduce column count");
+		mItemRedCC.setText(Messages.ElementGeneratorWizardPage_ReduceColumnCount);
 
 		SelectionListener listener = new SelectionListener() {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
-
 			}
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MessageDialog.openInformation(null, "Not implemented",
-						"Not implemented yet");
+				MessageDialog.openInformation(null, 
+						"Not implemented", //$NON-NLS-1$
+						"Not implemented yet" //$NON-NLS-1$
+						);
 
 			}
 		};
@@ -605,13 +587,13 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			int elementIndex = getProcessElementIndexByColumnIndex(index);
 
 			if (type == ConnectorType.XOR_SINGLE) {
-				currentStep.set(new Element("XOR", Kind.XOR_Single), elementIndex);
+				currentStep.set(new Element("XOR", Kind.XOR_Single), elementIndex); //$NON-NLS-1$
 			}
 			if (type == ConnectorType.OR_SINGLE) {
-				currentStep.set(new Element("OR", Kind.OR_Single), elementIndex);
+				currentStep.set(new Element("OR", Kind.OR_Single), elementIndex); //$NON-NLS-1$
 			}
 			if (type == ConnectorType.AND_SINGLE) {
-				currentStep.set(new Element("AND", Kind.AND_Single), elementIndex);
+				currentStep.set(new Element("AND", Kind.AND_Single), elementIndex); //$NON-NLS-1$
 			}
 
 			tableViewer.update(currentStep, null);
@@ -621,7 +603,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				ProcessStep newStep = new ProcessStep(newConn);
 				Kind nextKind = getNextKind(currentStep, elementIndex);
 				for (int i = 0; i < currentStep.size(); i++) {
-					newStep.add(new Element("", nextKind));
+					newStep.add(new Element(EmptyName, nextKind));
 				}
 				processSteps.add(newStep);
 				tableViewer.add(newStep);
@@ -631,7 +613,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			} else if (isLastElementInColumn(processSteps, currentStep, elementIndex)) {
 				ProcessStep nextStep = processSteps.get(processSteps.indexOf(currentStep) + 1);
 				Kind nextKind = getNextKind(currentStep, elementIndex);
-				nextStep.set(new Element("", nextKind), elementIndex);
+				nextStep.set(new Element(EmptyName, nextKind), elementIndex);
 			}
 			
 			try {
@@ -645,7 +627,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 					tableViewer.editElement(nextCell.getElement(), 2);
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-				logger.error("Something went wrong  with programmatically set the foucus cell by using reflection.", e1);
+				_log.error("Something went wrong  with programmatically set the focus cell by using reflection.", e1); //$NON-NLS-1$
 			}
 		}
 	}
@@ -673,7 +655,8 @@ public class ElementGeneratorWizardPage extends WizardPage {
 	}
 		
 	/**
-	 * Returns the position of an element within of a process step 
+	 * Returns the position of an element within of a process step
+	 * 
 	 * @param index of the table column
 	 * @return index of the element
 	 */
@@ -684,9 +667,10 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			if (stepPosition < 0) {
 				stepPosition = 0;
 			}
-		}else{ 
+		} else {
 			stepPosition = index - (index + 1)/2;
 		}
+		
 		return stepPosition;
 	}
 
@@ -762,14 +746,11 @@ public class ElementGeneratorWizardPage extends WizardPage {
 				selectConnector(newConn);
 				progressTable(newConn);
 			}
-		}
-
-		
+		}		
 
 		@Override
 		public void keyReleased(KeyEvent e) {
 		}
-
 	}
 
 	/**
@@ -813,7 +794,6 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			Connector newConn = new Connector(type);
 			
 			if (type == ConnectorType.AND_SINGLE || type == ConnectorType.OR_SINGLE || type == ConnectorType.XOR_SINGLE) {
-				
 				addSingleConnector(type);
 			}else {
 				deselectConnectors();
@@ -839,7 +819,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 
 		@Override
 		public String isValid(String newText) {
-			String msg = "Please insert a number between 2-10.";
+			String msg = Messages.ElementGeneratorWizardPage_ValidationHint;
 
 			try {
 				int n = Integer.parseInt(newText);
@@ -881,7 +861,7 @@ public class ElementGeneratorWizardPage extends WizardPage {
 			mItemConnectTo.dispose();
 
 			mItemConnectTo = new MenuItem(popUpMenu, SWT.CASCADE);
-			mItemConnectTo.setText("Connect to...");
+			mItemConnectTo.setText(Messages.ElementGeneratorWizardPage_ConnectTo);
 
 			Menu targetMenu = new Menu(mItemConnectTo);
 			mItemConnectTo.setMenu(targetMenu);
@@ -892,13 +872,10 @@ public class ElementGeneratorWizardPage extends WizardPage {
 							&& prevStep != step) {
 						MenuItem item = new MenuItem(targetMenu, SWT.NONE);
 						item.setText(prevStep.get(0).getName());
-						item.addSelectionListener(new SelectionListenerXOR(
-								step, prevStep, tableViewer));
+						item.addSelectionListener(new SelectionListenerXOR(step, prevStep, tableViewer));
 					}
 			}
-
 		}
-
 	}
 	
 	/**

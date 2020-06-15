@@ -1,5 +1,5 @@
 
--- Returns a new instance of the connectors eClass 
+// Returns a new instance of the connectors eClass 
 operation IConnector newInstance() : IConnector {
 	if(self.isTypeOf(XOR)){
 		return new XOR;

@@ -2,6 +2,7 @@ package oepc.diagram.part;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.bflow.toolbox.extensions.IDiagramCreationWizard;
 import org.bflow.toolbox.extensions.wizards.DiagramPageSetupWizardPage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -15,11 +16,14 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
+import oepc.diagram.Messages;
+
 /**
  * @generated
- * @version 22/07/13 modified by Arian Storch<arian.storch@bflow.org>
+ * @version 2013-07-22 AST
+ * 			2019-01-27 AST Added IDiagramCreationWizard implementation
  */
-public class OepcCreationWizard extends Wizard implements INewWizard {
+public class OepcCreationWizard extends Wizard implements INewWizard, IDiagramCreationWizard {
 
 	/**
 	 * @generated
@@ -70,14 +74,14 @@ public class OepcCreationWizard extends Wizard implements INewWizard {
 	/**
 	 * @generated
 	 */
-	public final Resource getDiagram() {
+	public Resource getDiagram() {
 		return diagram;
 	}
 
 	/**
 	 * @generated
 	 */
-	public final boolean isOpenNewlyCreatedDiagramEditor() {
+	public boolean isOpenNewlyCreatedDiagramEditor() {
 		return openNewlyCreatedDiagramEditor;
 	}
 
@@ -97,6 +101,15 @@ public class OepcCreationWizard extends Wizard implements INewWizard {
 		setWindowTitle(Messages.OepcCreationWizardTitle);
 		setDefaultPageImageDescriptor(OepcDiagramEditorPlugin.getBundledImageDescriptor("icons/wizban/NewOepcWizard.gif")); //$NON-NLS-1$
 		setNeedsProgressMonitor(true);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.IDiagramCreationWizard#getShortHint()
+	 */
+	@Override
+	public String getShortHint() {
+		return Messages.OepcCreationWizardTitle;
 	}
 
 	/**

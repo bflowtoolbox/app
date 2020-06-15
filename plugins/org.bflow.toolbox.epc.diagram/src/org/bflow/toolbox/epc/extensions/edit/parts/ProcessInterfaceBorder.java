@@ -48,6 +48,10 @@ public class ProcessInterfaceBorder implements Border{
 		graphics.pushState();
 		graphics.translate(bounds.x, bounds.y);
 		
+		// 28.05.2019 - AST
+		// Increase line width to get a higher contrast
+		graphics.setLineWidth(1);
+		
 		graphics.setBackgroundColor(figure.getBackgroundColor());
 		graphics.setForegroundColor(figure.getForegroundColor());
 		

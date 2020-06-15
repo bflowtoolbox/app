@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+import vcchart.diagram.Messages;
 import vcchart.diagram.edit.parts.ModelEditPart;
 
 /**

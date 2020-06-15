@@ -1,7 +1,0 @@
-public interchange 'BPMN' (bpmn) <> epc {
-
-description: 'Exports a bflow* EPC diagram to BPMN (can be opened for example by camumda BPMN 2.0 Modeler)'
-
-@script: '/exportscripts/files/bpmn.vt', insertAttributes=true
-
-}

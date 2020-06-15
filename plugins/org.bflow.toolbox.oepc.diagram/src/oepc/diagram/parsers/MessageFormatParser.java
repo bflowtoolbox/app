@@ -4,7 +4,7 @@ import java.text.FieldPosition;
 import java.text.MessageFormat;
 import java.text.ParsePosition;
 
-import oepc.diagram.part.Messages;
+import oepc.diagram.Messages;
 import oepc.diagram.part.OepcDiagramEditorPlugin;
 
 import org.eclipse.core.runtime.IAdaptable;

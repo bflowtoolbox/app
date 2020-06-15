@@ -3,7 +3,7 @@
 	<config>
 		<name>EPCTools EPML</name>
 		<fileextension>epml</fileextension>
-		<description>Exports a bflow* EPC diagram to EPCTools EPML.</description>
+		<description>%epcToolsExportScript_description</description>
 		<diagram>epc</diagram>
 		<callstack>
 			<script>

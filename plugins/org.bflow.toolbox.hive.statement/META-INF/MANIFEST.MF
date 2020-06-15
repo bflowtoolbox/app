@@ -10,6 +10,7 @@ Require-Bundle: org.eclipse.gmf.runtime.diagram.ui,
  org.bflow.toolbox.hive.nls,
  org.bflow.toolbox.hive.addons;bundle-version="1.3.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.bflow.toolbox.hive.statement.views
-Bundle-Vendor: Markus Schnädelbach
+Bundle-Vendor: Bflow Dev Team
+Automatic-Module-Name: org.bflow.toolbox.hive.statement

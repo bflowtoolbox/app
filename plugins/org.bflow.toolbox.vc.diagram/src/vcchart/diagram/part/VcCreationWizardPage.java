@@ -19,6 +19,8 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
+import vcchart.diagram.Messages;
+
 /**
  * @generated
  */

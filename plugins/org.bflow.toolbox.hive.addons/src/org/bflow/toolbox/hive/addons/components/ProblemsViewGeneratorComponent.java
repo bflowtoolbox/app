@@ -143,7 +143,7 @@ public class ProblemsViewGeneratorComponent implements IProblemsViewGeneratorCom
 
 	@Override
 	public String getDisplayName() {
-		return "Problems view display";
+		return "Problems View Display";
 	}
 
 	@Override

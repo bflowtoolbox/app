@@ -389,13 +389,18 @@ public interface VcchartPackage extends EPackage {
 	int ACTIVITY1__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int ACTIVITY1__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Activity1</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY1_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ACTIVITY1_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Activity1</em>' class.
@@ -406,11 +411,6 @@ public interface VcchartPackage extends EPackage {
 	 */
 	int ACTIVITY1_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
 	
-	/**
-	 * @generated NOT
-	 */
-	int ACTIVITY1__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
-
 	/**
 	 * The meta object id for the '{@link vcchart.impl.Activity2Impl <em>Activity2</em>}' class.
 	 * <!-- begin-user-doc -->
@@ -431,13 +431,18 @@ public interface VcchartPackage extends EPackage {
 	int ACTIVITY2__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int ACTIVITY2__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Activity2</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY2_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ACTIVITY2_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Activity2</em>' class.
@@ -446,12 +451,7 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY2_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
-	
-	/**
-	 * @generated NOT
-	 */
-	int ACTIVITY2__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ACTIVITY2_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;	
 
 	/**
 	 * The meta object id for the '{@link vcchart.impl.ProductImpl <em>Product</em>}' class.
@@ -471,7 +471,12 @@ public interface VcchartPackage extends EPackage {
 	 * @ordered
 	 */
 	int PRODUCT__NAME = NAMED_ELEMENT__NAME;
-
+	
+	/**
+	 * @generated NOT
+	 */
+	int PRODUCT__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
 	/**
 	 * The number of structural features of the '<em>Product</em>' class.
 	 * <!-- begin-user-doc -->
@@ -479,7 +484,7 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PRODUCT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int PRODUCT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Product</em>' class.
@@ -510,13 +515,18 @@ public interface VcchartPackage extends EPackage {
 	int OBJECTIVE__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int OBJECTIVE__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Objective</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECTIVE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int OBJECTIVE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Objective</em>' class.
@@ -582,6 +592,11 @@ public interface VcchartPackage extends EPackage {
 	 * @ordered
 	 */
 	int TECHNICAL_TERM__NAME = NAMED_ELEMENT__NAME;
+	
+	/**
+	 * @generated NOT
+	 */
+	int TECHNICAL_TERM__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Technical Term</em>' class.
@@ -590,7 +605,7 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TECHNICAL_TERM_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int TECHNICAL_TERM_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Technical Term</em>' class.
@@ -621,13 +636,18 @@ public interface VcchartPackage extends EPackage {
 	int PARTICIPANT__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int PARTICIPANT__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Participant</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int PARTICIPANT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Participant</em>' class.
@@ -658,13 +678,18 @@ public interface VcchartPackage extends EPackage {
 	int APPLICATION__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int APPLICATION__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Application</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int APPLICATION_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int APPLICATION_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Application</em>' class.
@@ -693,6 +718,11 @@ public interface VcchartPackage extends EPackage {
 	 * @ordered
 	 */
 	int DOCUMENT__NAME = NAMED_ELEMENT__NAME;
+	
+	/**
+	 * @generated NOT
+	 */
+	int DOCUMENT__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Document</em>' class.
@@ -701,7 +731,7 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DOCUMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int DOCUMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Document</em>' class.
@@ -1103,6 +1133,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getProduct();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getProduct_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Objective <em>Objective</em>}'.
@@ -1113,6 +1148,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getObjective();
+	
+	/** 
+	 * @generated NOT
+	 */
+	EAttribute getObjective_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Cluster <em>Cluster</em>}'.
@@ -1133,6 +1173,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getTechnicalTerm();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getTechnicalTerm_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Participant <em>Participant</em>}'.
@@ -1143,6 +1188,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getParticipant();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getParticipant_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Application <em>Application</em>}'.
@@ -1153,6 +1203,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getApplication();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getApplication_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Document <em>Document</em>}'.
@@ -1163,6 +1218,11 @@ public interface VcchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getDocument();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getDocument_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link vcchart.Relation1 <em>Relation1</em>}'.
@@ -1496,6 +1556,11 @@ public interface VcchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PRODUCT = eINSTANCE.getProduct();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute PRODUCT__SUBDIAGRAM = eINSTANCE.getProduct_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link vcchart.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -1506,6 +1571,11 @@ public interface VcchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass OBJECTIVE = eINSTANCE.getObjective();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute OBJECTIVE__SUBDIAGRAM = eINSTANCE.getObjective_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link vcchart.impl.ClusterImpl <em>Cluster</em>}' class.
@@ -1528,6 +1598,11 @@ public interface VcchartPackage extends EPackage {
 		EClass TECHNICAL_TERM = eINSTANCE.getTechnicalTerm();
 
 		/**
+		 * @generated NOT
+		 */
+		EAttribute TECHNICAL_TERM__SUBDIAGRAM = eINSTANCE.getTechnicalTerm_Subdiagram();
+		
+		/**
 		 * The meta object literal for the '{@link vcchart.impl.ParticipantImpl <em>Participant</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1536,6 +1611,11 @@ public interface VcchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PARTICIPANT = eINSTANCE.getParticipant();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute PARTICIPANT__SUBDIAGRAM = eINSTANCE.getParticipant_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link vcchart.impl.ApplicationImpl <em>Application</em>}' class.
@@ -1546,6 +1626,11 @@ public interface VcchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass APPLICATION = eINSTANCE.getApplication();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute APPLICATION__SUBDIAGRAM = eINSTANCE.getApplication_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link vcchart.impl.DocumentImpl <em>Document</em>}' class.
@@ -1556,6 +1641,11 @@ public interface VcchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass DOCUMENT = eINSTANCE.getDocument();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute DOCUMENT__SUBDIAGRAM = eINSTANCE.getDocument_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link vcchart.impl.Relation1Impl <em>Relation1</em>}' class.

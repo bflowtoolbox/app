@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 
@@ -16,8 +15,8 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -29,7 +28,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * @author Christian Boehme
+ * @author Christian Boehme, Arian Storch<arian.storch@bflow.org>
+ * @version 2019-01-21 AST Fixed URL encoding of whitespaces
  * 
  */
 
@@ -103,8 +103,7 @@ public class WizardPageVisioSelect extends WizardPage {
 		}
 
 		Label visioAnnotationLabel = new Label(composite, SWT.LEFT);
-		visioAnnotationLabel
-				.setText("Please model your Visio document with the standard stencil.");
+		visioAnnotationLabel.setText("Please model your Visio document with the standard stencil.");
 		{
 			FormData formData = new FormData();
 			formData.left = new FormAttachment(0, 10);
@@ -112,67 +111,56 @@ public class WizardPageVisioSelect extends WizardPage {
 			formData.bottom = new FormAttachment(100, 0);
 			visioAnnotationLabel.setLayoutData(formData);
 		}
-
 		
 		try {
-			URL url = FileLocator.find(activator.getDefault().getBundle(),
-					new Path(stencilPath), null);
+			URL url = FileLocator.find(VisioActivator.getDefault().getBundle(), new Path(stencilPath), null);
 			URL stencilURL = FileLocator.toFileURL(url);
-			visioStencilFile = new File(stencilURL.toURI());
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
+			
+			// Fix whitespaces
+			String urlStr = stencilURL.toString();
+			String fixedUrlStr = urlStr.replace(" ", "%20");
+			URL fixedStencilUrl = new URL(fixedUrlStr);
+			
+			visioStencilFile = new File(fixedStencilUrl.toURI());
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
 		// browse File-Event
-		browseVisioFileButton.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-
+		browseVisioFileButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				FileDialog dialog = new FileDialog(composite.getShell(),
-						SWT.OPEN);
+				FileDialog dialog = new FileDialog(composite.getShell(), SWT.OPEN);
 				dialog.setFilterExtensions(new String[] { "*.vsd" });
 				visioSourceFileText.setText(dialog.open());
 			}
 		});
 
 		// Save Visio Stencil Event
-		visioDownloadButton.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-
+		visioDownloadButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				DirectoryDialog dd = new DirectoryDialog(composite.getShell(),
-						SWT.OPEN);
+				DirectoryDialog dd = new DirectoryDialog(composite.getShell(), SWT.OPEN);
 				dd.setMessage("Select your destination folder:");
 				String stencilCopyPath = dd.open();
-				if (!stencilCopyPath.isEmpty()) {
-					try {
-						File copyOfVisioStencilFile = new File(stencilCopyPath
-								+ "/" + stencilFileName);
-						// copy file using filechannels
-						FileChannel inChannel = new FileInputStream(
-								visioStencilFile).getChannel();
-						FileChannel outChannel = new FileOutputStream(
-								copyOfVisioStencilFile).getChannel();
-						try {
-							inChannel.transferTo(0, inChannel.size(),
-									outChannel);
-						} catch (IOException e1) {
-							throw e1;
-						} finally {
-							if (inChannel != null)
-								inChannel.close();
-							if (outChannel != null)
-								outChannel.close();
+				if (stencilCopyPath.isEmpty()) return;
+				
+				try {
+					File copyOfVisioStencilFile = new File(stencilCopyPath + "/" + stencilFileName);
+					// copy file using filechannels
+					
+					try (FileInputStream fis = new FileInputStream(visioStencilFile)) {
+						try (FileChannel inChannel = fis.getChannel()) {
+							
+							try(FileOutputStream fos = new FileOutputStream(copyOfVisioStencilFile)) {
+								try (FileChannel outChannel = fos.getChannel()) {
+									inChannel.transferTo(0, inChannel.size(), outChannel);
+								}
+							}
+							
 						}
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+					}						
+				} catch (IOException e1) {
+					e1.printStackTrace();
 				}
-
 			}
 		});
 

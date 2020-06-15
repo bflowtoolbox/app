@@ -603,9 +603,6 @@
          defaultHandler="vcchart.diagram.part.LoadResourceAction"/>
    </extension>
 
-   <extension point="org.eclipse.ui.handlers" id="menu-handlers">
-      <?gmfgen generated="true"?>
-   </extension>
    <extension point="org.eclipse.ui.actionSets">
       <?gmfgen generated="false"?>
       <actionSet 
@@ -630,44 +627,44 @@
       <?gmfgen generated="false"?>
       <objectContribution
             adaptable="false"
-            id="org.bflow.toolbox.diagram.ActivitySubDiagram"
+            id="org.bflow.toolbox.diagram.vcSubDiagram"
             objectClass="org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart">
         <menu
               icon="icons/move16.png"
               id="SubDiagramInsert"
-              label="Diagram partitioning..."
+              label="%linkDiagramMenuTitle"
               path="additions"> 
             <separator name="group1"/>
         </menu>
         <action
-              class="vcchart.diagram.actions.RemoveSubdiagramAction"
-              icon="icons/del16.png"
-              id="org.bflow.toolbox.epc.diagram.RemoveSubdiagramAction"
-              label="Remove partitioned diagram..."
-              menubarPath="SubDiagramInsert/group1">
-        </action>
-        <action
-              class="vcchart.diagram.actions.InsertSubdiagramAction"
+              class="vcchart.diagram.actions.VcInsertSubdiagramAction"
               enablesFor="1"
               icon="icons/add16.png"
-              id="org.bflow.toolbox.diagram.InsertSubDiagramAction1"
-              label="Insert / Add existing partitioned diagram..."
+              id="org.bflow.toolbox.diagram.vc.insertSubDiagramAction"
+              label="%insertOrAddLinkedDiagramActionTitle"
               menubarPath="SubDiagramInsert/group1">
-       </action>
-        <action
-              class="vcchart.diagram.actions.OpenSubdiagramAction"
-              icon="icons/play16.png"
-              id="org.bflow.toolbox.epc.diagram.OpenSubdiagramAction"
-              label="&amp;Open partitioned Diagram..."
-              menubarPath="SubDiagramInsert/group1">
-        </action>
+       </action>        
     	<action
-           class="vcchart.diagram.actions.CreateSubdiagramAction"
+           class="vcchart.diagram.actions.VcCreateSubdiagramAction"
            enablesFor="1"
            icon="icons/app16.png"
-           id="org.bflow.toolbox.diagram.CreateSubDiagramAction1"
-           label="Create new partitioned diagram..."
+           id="org.bflow.toolbox.diagram.vc.createSubDiagramAction"
+           label="%createNewLinkedDiagramActionTitle"
            menubarPath="SubDiagramInsert/group1">
+        </action>
+        <action
+              class="vcchart.diagram.actions.VcRemoveSubdiagramAction"
+              icon="icons/del16.png"
+              id="org.bflow.toolbox.diagram.vc.removeSubdiagramAction"
+              label="%removeLinkedDiagramActionTitle"
+              menubarPath="SubDiagramInsert/group1">
+        </action>
+        <action
+              class="vcchart.diagram.actions.VcOpenSubdiagramAction"
+              icon="icons/play16.png"
+              id="org.bflow.toolbox.diagram.vc.openSubdiagramAction"
+              label="%openLinkedDiagramActionTitle"
+              menubarPath="SubDiagramInsert/group1">
         </action>
      <visibility>
         <or>
@@ -676,6 +673,24 @@
            </objectClass>
            <objectClass
                  name="vcchart.diagram.edit.parts.Activity2EditPart">
+           </objectClass>
+           <objectClass
+                 name="vcchart.diagram.edit.parts.ProductEditPart">
+           </objectClass>
+           <objectClass
+                 name="vcchart.diagram.edit.parts.ObjectiveEditPart">
+           </objectClass>
+           <objectClass
+                 name="vcchart.diagram.edit.parts.ApplicationEditPart">
+           </objectClass>
+           <objectClass
+                 name="vcchart.diagram.edit.parts.ParticipantEditPart">
+           </objectClass>
+           <objectClass
+                 name="vcchart.diagram.edit.parts.DocumentEditPart">
+           </objectClass>
+           <objectClass
+                 name="vcchart.diagram.edit.parts.TechnicalTermEditPart">
            </objectClass>
         </or>
      </visibility>

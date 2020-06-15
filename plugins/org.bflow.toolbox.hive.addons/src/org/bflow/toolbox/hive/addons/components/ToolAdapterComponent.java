@@ -80,7 +80,7 @@ public class ToolAdapterComponent implements IToolAdapterComponent {
 	 */
 	@Override
 	public String getDisplayName() {
-		return "Tool adapter";
+		return "Tool Adapter";
 	}
 
 	/*

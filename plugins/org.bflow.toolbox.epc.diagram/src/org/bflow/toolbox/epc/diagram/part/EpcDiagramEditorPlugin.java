@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bflow.toolbox.bflow.provider.BflowItemProviderAdapterFactory;
+import org.bflow.toolbox.epc.diagram.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.diagram.expressions.EpcOCLFactory;
 import org.bflow.toolbox.epc.diagram.providers.EpcMarkerNavigationProvider;
-import org.bflow.toolbox.epc.extensions.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.provider.EpcItemProviderAdapterFactory;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.eclipse.core.resources.IResource;
@@ -49,15 +49,11 @@ public class EpcDiagramEditorPlugin extends AbstractUIPlugin {
 	 */
 	private static EpcDiagramEditorPlugin instance;
 	
-	/**
-	 * contains the diagram live validator
-	 */
-	private DiagramLiveValidator diagramLiveValidator;
+	/** contains the diagram live validator */
+	private DiagramLiveValidator _diagramLiveValidator;
 	
-	/**
-	 * contains the bflowDiagramEditPart
-	 */
-	private BflowDiagramEditPart bflowDiagramEditPart;
+	/** contains the bflowDiagramEditPart */
+	private BflowDiagramEditPart _bflowDiagramEditPart;
 
 	/**
 	 * @generated
@@ -72,14 +68,12 @@ public class EpcDiagramEditorPlugin extends AbstractUIPlugin {
 	/**
 	 * @generated NOT
 	 */
-	private EpcOCLFactory oclFactory;
+	private EpcOCLFactory _epcOclFactory;
 
 	/**
 	 * @generated
 	 */
-	public EpcDiagramEditorPlugin() 
-	{
-		
+	public EpcDiagramEditorPlugin() {
 		
 	}
 
@@ -89,8 +83,7 @@ public class EpcDiagramEditorPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		instance = this;
-		PreferencesHint.registerPreferenceStore(DIAGRAM_PREFERENCES_HINT,
-				getPreferenceStore());
+		PreferencesHint.registerPreferenceStore(DIAGRAM_PREFERENCES_HINT, getPreferenceStore());
 		adapterFactory = createAdapterFactory();
 		
 		EpcMarkerNavigationProvider.getInstance().deleteMarkers(ResourcesPlugin.getWorkspace().getRoot(), IResource.DEPTH_INFINITE);
@@ -117,44 +110,43 @@ public class EpcDiagramEditorPlugin extends AbstractUIPlugin {
 	 * returns the DiagramLiveValidator
 	 * @return DiagramLiveValidator
 	 */
-	public DiagramLiveValidator getDiagramLiveValidator()
-	{
-		return this.diagramLiveValidator;
+	public DiagramLiveValidator getDiagramLiveValidator() {
+		return _diagramLiveValidator;
 	}
 	
 	/**
-	 * sets the DiagramLiveValidator
+	 * Sets the DiagramLiveValidator.
+	 * 
 	 * @param diagramLiveValidator
 	 */
-	public void setDiagramLiveValidator(DiagramLiveValidator diagramLiveValidator)
-	{
-		this.diagramLiveValidator = diagramLiveValidator;
+	public void setDiagramLiveValidator(DiagramLiveValidator diagramLiveValidator) 	{
+		_diagramLiveValidator = diagramLiveValidator;
 	}
 	
 	/**
-	 * sets the bflowDiagramEditPart
+	 * Sets the bflowDiagramEditPart.
+	 * 
 	 * @param bflowDiagramEditPart
 	 */
-	public void setBflowDiagramEditPart(
-			BflowDiagramEditPart bflowDiagramEditPart) {
-		this.bflowDiagramEditPart = bflowDiagramEditPart;
+	public void setBflowDiagramEditPart(BflowDiagramEditPart bflowDiagramEditPart) {
+		_bflowDiagramEditPart = bflowDiagramEditPart;
 	}
 	
 	/**
 	 * returns the bflowDiagramEditPart
+	 * 
 	 * @return bflowDiagramEditPart
 	 */
 	public BflowDiagramEditPart getBflowDiagramEditPart() {
-		return bflowDiagramEditPart;
+		return _bflowDiagramEditPart;
 	}
 	
 	/**
-	 * forces the DiagramLiveValidator to validate the diagram
+	 * Forces the DiagramLiveValidator to validate the diagram.
 	 */
-	public void forceValidation()
-	{
-		diagramLiveValidator.doValidate(true);
-		diagramLiveValidator.runValidation();
+	public void forceValidation() 	{
+		_diagramLiveValidator.doValidate(true);
+		_diagramLiveValidator.runValidation();
 	}
 	
 
@@ -280,9 +272,8 @@ public class EpcDiagramEditorPlugin extends AbstractUIPlugin {
 		if (error == null && throwable != null) {
 			error = throwable.getMessage();
 		}
-		getLog().log(
-				new Status(IStatus.ERROR, EpcDiagramEditorPlugin.ID,
-						IStatus.OK, error, throwable));
+		
+		getLog().log(new Status(IStatus.ERROR, ID, IStatus.OK, error, throwable));
 		debug(error, throwable);
 	}
 
@@ -325,13 +316,13 @@ public class EpcDiagramEditorPlugin extends AbstractUIPlugin {
 	 * @generated NOT
 	 */
 	public EpcOCLFactory getEpcOCLFactory() {
-		return oclFactory;
+		return _epcOclFactory;
 	}
 
 	/**
 	 * @generated NOT
 	 */
-	public void setEpcOCLFactory(EpcOCLFactory f) {
-		this.oclFactory = f;
+	public void setEpcOCLFactory(EpcOCLFactory epcOclFactory) {
+		_epcOclFactory = epcOclFactory;
 	}
 }

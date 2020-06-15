@@ -38,6 +38,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyDelegatingOperation;
 
+import vcchart.diagram.Messages;
 import vcchart.diagram.providers.VcMarkerNavigationProvider;
 import vcchart.diagram.providers.VcValidationProvider;
 

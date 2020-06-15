@@ -31,6 +31,7 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
+import vcchart.diagram.Messages;
 import vcchart.diagram.edit.parts.ModelEditPart;
 
 /**

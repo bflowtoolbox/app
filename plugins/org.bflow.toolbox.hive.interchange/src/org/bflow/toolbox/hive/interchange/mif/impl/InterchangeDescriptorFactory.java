@@ -13,33 +13,31 @@ import org.bflow.toolbox.hive.interchange.mif.core.InterchangeValidationExceptio
 import org.bflow.toolbox.hive.interchange.mif.sdk.InterchangeDescriptorValidator;
 
 /**
- * A factory for creating InterchangeDescriptor objects.
+ * A factory for creating {@link IInterchangeDescriptor} instances.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 03/10/12
- * @version 18/07/13
+ * @since 2012-10-03
+ * @version 2013-07-18
  */
 public class InterchangeDescriptorFactory {
 	
 	/** The factory. */
 	private static InterchangeDescriptorFactory factory = new InterchangeDescriptorFactory();
 	
-	/**
-	 * Instantiates a new interchange descriptor factory.
-	 */
+	/** Instantiates a new interchange descriptor factory. */
 	private InterchangeDescriptorFactory() {
+		// Keep private
 	}
 	
 	/**
-	 * Parses the given input stream and returns an instance of {@link IInterchangeDescriptor}. This process also
-	 * contains the validation of the input stream. So if the input isn't valid an {@link InterchangeValidationException}
-	 * is thrown.
+	 * Parses the given input stream and returns an instance of
+	 * {@link IInterchangeDescriptor}. This process also contains the validation of
+	 * the input stream. So if the input isn't valid an
+	 * {@link InterchangeValidationException} is thrown.
 	 * 
-	 * @param inputStream
-	 *            the input stream to parse
+	 * @param inputStream Input stream to parse
 	 * @return new instance of {@link IInterchangeDescriptor}
-	 * @throws InterchangeValidationException
-	 *             Is thrown when validation fails
+	 * @throws InterchangeValidationException Is thrown when validation fails
 	 */
 	public static IInterchangeDescriptor parse(InputStream inputStream) throws InterchangeValidationException {
 		return InterchangeDescriptorValidator.validate(inputStream);
@@ -48,25 +46,19 @@ public class InterchangeDescriptorFactory {
 	/**
 	 * Creates a new instance of {@link IInterchangeDescriptor}.
 	 * 
-	 * @param applDiagramEditorTypes
-	 *            the applicable diagram editor types
-	 * @param description
-	 *            the description
-	 * @param fileExtensions
-	 *            the file extensions
-	 * @param name
-	 *            the name
-	 * @param scripts
-	 *            the scripts
-	 * @param isPublic
-	 *            the is public
+	 * @param applDiagramEditorTypes Applicable diagram editor types
+	 * @param description            Description
+	 * @param fileExtensions         File extensions
+	 * @param name                   Name
+	 * @param scripts                Scripts
+	 * @param isPublic               Flag isPublic
 	 * @return an instance of {@link IInterchangeDescriptor}
 	 */
 	public static IInterchangeDescriptor createExportDescriptor(List<String> applDiagramEditorTypes,
 			String description, List<String> fileExtensions, String name, List<IScriptDescriptor> scripts,
 			boolean isPublic) {
 		
-		if(applDiagramEditorTypes == null) {
+		if (applDiagramEditorTypes == null) {
 			applDiagramEditorTypes = new ArrayList<String>();
 		}
 		
@@ -79,10 +71,8 @@ public class InterchangeDescriptorFactory {
 	/**
 	 * Creates a new instance of {@link IScriptDescriptor}.
 	 * 
-	 * @param path
-	 *            the path
-	 * @param parameters
-	 *            the parameters
+	 * @param path       Path
+	 * @param parameters Parameters
 	 * @return the new instance of {@link IScriptDescriptor}
 	 */
 	public static IScriptDescriptor createScriptDescriptor(String path, Map<String, Object> parameters) {
@@ -93,7 +83,7 @@ public class InterchangeDescriptorFactory {
 	 * Implements {@link IInterchangeDescriptor}.
 	 * 
 	 * @author Arian Storch<arian.storch@bflow.org>
-	 * @since 03/10/12
+	 * @since 2012-10-03
 	 */
 	public class InterchangeDescriptorImpl implements IInterchangeDescriptor {
 		
@@ -121,18 +111,12 @@ public class InterchangeDescriptorFactory {
 		/**
 		 * Instantiates a new interchange descriptor implementation.
 		 * 
-		 * @param applicableDiagramEditorTypes
-		 *            the applicable diagram editor types
-		 * @param description
-		 *            the description
-		 * @param fileExtensions
-		 *            the file extensions
-		 * @param name
-		 *            the name
-		 * @param scripts
-		 *            the scripts
-		 * @param public1
-		 *            the public1
+		 * @param applicableDiagramEditorTypes Applicable diagram editor types
+		 * @param description                  Description
+		 * @param fileExtensions               File extensions
+		 * @param name                         Name
+		 * @param scripts                      Scripts
+		 * @param public1                      Flag public
 		 */
 		public InterchangeDescriptorImpl(String[] applicableDiagramEditorTypes,
 				String description, String[] fileExtensions, String name,
@@ -209,7 +193,7 @@ public class InterchangeDescriptorFactory {
 	 * Implements {@link IScriptDescriptor}.
 	 * 
 	 * @author Arian Storch
-	 * @since 03/10/12
+	 * @since 2012-10-03
 	 */
 	private class ScriptDescriptorImpl implements IScriptDescriptor {
 
@@ -222,10 +206,8 @@ public class InterchangeDescriptorFactory {
 		/**
 		 * Instantiates a new script descriptor implementation.
 		 * 
-		 * @param path
-		 *            the path
-		 * @param parameters
-		 *            the parameters
+		 * @param path       Path
+		 * @param parameters Parameters
 		 */
 		public ScriptDescriptorImpl(String path, Map<String, Object> parameters) {
 			super();
@@ -247,7 +229,6 @@ public class InterchangeDescriptorFactory {
 		@Override
 		public String getPath() {
 			return path;
-		}
-		
+		}		
 	}
 }

@@ -2,6 +2,7 @@ package org.bflow.toolbox.epc.diagram.part;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.bflow.toolbox.extensions.IDiagramCreationWizard;
 import org.bflow.toolbox.extensions.wizards.DiagramPageSetupWizardPage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -16,15 +17,15 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 /**
- * 
  * @generated
- * 
+ * @version 2013-07-22 AST
+ * 			2019-01-27 AST Added IDiagramCreationWizard implementation
+ * 			
  */
-public class EpcCreationWizard extends Wizard implements INewWizard {
+public class EpcCreationWizard extends Wizard implements INewWizard, IDiagramCreationWizard {
 
 	/**
 	 * @generated
-     * @version 22/07/13 modified by Arian Storch<arian.storch@bflow.org>
 	 */
 	private IWorkbench workbench;
 
@@ -71,22 +72,21 @@ public class EpcCreationWizard extends Wizard implements INewWizard {
 	/**
 	 * @generated
 	 */
-	public final Resource getDiagram() {
+	public Resource getDiagram() {
 		return diagram;
 	}
 
 	/**
 	 * @generated
 	 */
-	public final boolean isOpenNewlyCreatedDiagramEditor() {
+	public boolean isOpenNewlyCreatedDiagramEditor() {
 		return openNewlyCreatedDiagramEditor;
 	}
 
 	/**
 	 * @generated
 	 */
-	public void setOpenNewlyCreatedDiagramEditor(
-			boolean openNewlyCreatedDiagramEditor) {
+	public void setOpenNewlyCreatedDiagramEditor(boolean openNewlyCreatedDiagramEditor) {
 		this.openNewlyCreatedDiagramEditor = openNewlyCreatedDiagramEditor;
 	}
 
@@ -101,6 +101,15 @@ public class EpcCreationWizard extends Wizard implements INewWizard {
 				.getBundledImageDescriptor("icons/wizban/NewEpcWizard.gif")); //$NON-NLS-1$
 		setNeedsProgressMonitor(true);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.IDiagramCreationWizard#getShortHint()
+	 */
+	@Override
+	public String getShortHint() {
+		return Messages.EpcCreationWizardTitle;
+	}
 
 	/**
 	 * @generated NOT
@@ -108,10 +117,8 @@ public class EpcCreationWizard extends Wizard implements INewWizard {
 	public void addPages() {
 		diagramModelFilePage = new EpcCreationWizardPage(
 				"DiagramModelFile", getWorkbench(), getSelection(), "epc"); //$NON-NLS-1$ //$NON-NLS-2$
-		diagramModelFilePage
-				.setTitle(Messages.EpcCreationWizard_DiagramModelFilePageTitle);
-		diagramModelFilePage
-				.setDescription(Messages.EpcCreationWizard_DiagramModelFilePageDescription);
+		diagramModelFilePage.setTitle(Messages.EpcCreationWizard_DiagramModelFilePageTitle);
+		diagramModelFilePage.setDescription(Messages.EpcCreationWizard_DiagramModelFilePageDescription);
 		addPage(diagramModelFilePage);
 		
 		pageSetupWizardPage = new DiagramPageSetupWizardPage();

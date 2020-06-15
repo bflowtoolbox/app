@@ -4,6 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class NLSupport extends NLS {
 	private static final String BUNDLE_NAME = "org.bflow.toolbox.hive.nls.messages"; //$NON-NLS-1$
+	public static String AddButtonSelectionListener_FileDialogTitle;
 	public static String AddonEditDialog_BtnAdd;
 	public static String AddonEditDialog_BtnRemove;
 	public static String AddonEditDialog_ChainComponentNeedsParams;
@@ -63,6 +64,15 @@ public class NLSupport extends NLS {
 	public static String AnnotationViewPart_Annotation_Button_VisibilityToggle_Text_Hide;
 	public static String AnnotationViewPart_Annotation_Button_VisibilityToggle_Tooltip;
 	public static String AnnotationViewPart_Annotation_ButtonAddTooltip;
+	public static String AssetLinkOperation_CreateLinkMessageDialog_Text;
+	public static String AssetLinkOperation_CreateLinkMessageDialog_Title;
+	public static String AssetLinkOperation_DeleteLinkMessageDialog_Text;
+	public static String AssetLinkOperation_DeleteLinkMessageDialog_Title;
+	public static String AssetsViewPart_AddButtonText;
+	public static String AssetsViewPart_AddButtonTooltip;
+	public static String AssetsViewPart_DeleteButtonText;
+	public static String AssetsViewPart_DeleteButtonTooltip;
+	public static String AssetsViewPart_LinkColumnText;
 	public static String AttributeFilterViewPart_ButtonAddText;
 	public static String AttributeFilterViewPart_ButtonAddTooltip;
 	public static String AttributeFilterViewPart_ButtonDelText;
@@ -91,6 +101,7 @@ public class NLSupport extends NLS {
 	public static String ImageExportWizardPage_LblLine2;
 	public static String ImageExportWizardPage_LblLine3;
 	public static String ImageExportWizardPage_Title;
+	public static String ImageFileChooserUtils_FilterNames;
 	public static String InstalledProtocolsPage_BtnAdd;
 	public static String InstalledProtocolsPage_BtnDialogConfirmDescription;
 	public static String InstalledProtocolsPage_BtnDialogConfirmTitle;

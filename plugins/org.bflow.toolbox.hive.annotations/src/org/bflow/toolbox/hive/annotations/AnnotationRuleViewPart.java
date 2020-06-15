@@ -55,11 +55,12 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.ViewPart;
 
 /**
- * Implements the view part to support the annotation rule view. Code based on
- * {@link AttributeViewPart}
+ * Implements the view part to support the annotation rule view. 
+ * Code based on {@link AttributeViewPart}.
  * 
- * @author Felix Hoess <fhoess@users.sf.net>
- * @since 11.06.2015
+ * @author Felix Hoess <fhoess@users.sf.net>, Arian Storch<arian.storch@bflow.org>
+ * @since 2015-06-11
+ * @version 2019-02-16 AST Changed filter names of import dialog
  *
  */
 public class AnnotationRuleViewPart extends ViewPart implements
@@ -72,32 +73,23 @@ public class AnnotationRuleViewPart extends ViewPart implements
 	
 	private static Log log = LogFactory.getLog(AnnotationRuleViewPart.class);
 
-	private AnnotationRuleController annotationRuleController = AnnotationRuleController
-			.getInstance();
-
-	/**
-	 * Selection of rows in the table
-	 */
+	private static AnnotationRuleViewPart instance;
+	
+	private AnnotationRuleController annotationRuleController = AnnotationRuleController.getInstance();
+	
+	/** Selection of rows in the table */
 	private IStructuredSelection selection;
 
-	private static AnnotationRuleViewPart instance;
-
-	/**
-	 * The editor in which the annotations should be shown
-	 */
+	/** The editor in which the annotations should be shown */
 	private DiagramEditor diagramEditor;
 
-	/**
-	 * Saves which column is used for the sorting
-	 */
+	/** Saves which column is used for the sorting */
 	private int sortBy = 0;
-	/**
-	 * saves if {@link #sortBy} has changed (if an other column was clicked)
-	 */
+	
+	/** Saves if {@link #sortBy} has changed (if an other column was clicked) */
 	private boolean sortColumnChanged = false;
-	/**
-	 * saves if it should be sorted as- or descending
-	 */
+	
+	/** Saves if it should be sorted as- or descending */
 	private boolean sortASC = false;
 
 	// Layout components
@@ -107,7 +99,6 @@ public class AnnotationRuleViewPart extends ViewPart implements
 	private Button btnImport;
 	private Button btnDel;
 	private Button btnEdit;
-
 
 	/*
 	 * (non-Javadoc)
@@ -120,11 +111,13 @@ public class AnnotationRuleViewPart extends ViewPart implements
 		site.getPage().addSelectionListener(this);
 		AttributeFileRegistry.getInstance().addRegistryListener(this);
 
-
 		instance = this;
-
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.part.WorkbenchPart#dispose()
+	 */
 	@Override
 	public void dispose() {
 		getSite().getPage().removeSelectionListener(this);
@@ -133,13 +126,13 @@ public class AnnotationRuleViewPart extends ViewPart implements
 		super.dispose();
 	}
 
-	/**
-	 * creates the gui
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
 	public void createPartControl(Composite container) {
-		ScrolledComposite sc = new ScrolledComposite(container, SWT.V_SCROLL
-				| SWT.H_SCROLL);
+		ScrolledComposite sc = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
 
 		final Composite parent = new Composite(sc, SWT.BORDER);
 		GridLayout parLayout = new GridLayout(1, false);
@@ -182,20 +175,16 @@ public class AnnotationRuleViewPart extends ViewPart implements
 			}
 		});
 
-		
-
 		btnImport = new Button(mainPane, SWT.NONE);
 		btnImport.setImage(new Image(mainPane.getDisplay(), this.getClass()
 				.getResourceAsStream("/icons/add8.png"))); //$NON-NLS-1$ 
-		btnImport
-				.setText(NLSupport.AnnotationRuleViewPart_Annotation_ButtonImportText);
+		btnImport.setText(NLSupport.AnnotationRuleViewPart_Annotation_ButtonImportText);
 
 		btnImport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				onButtonImportIconClick(mainPane);
 			}
-
 		});
 
 		btnEdit = new Button(mainPane, SWT.NONE);
@@ -217,21 +206,15 @@ public class AnnotationRuleViewPart extends ViewPart implements
 
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 
-		viewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI
-				| SWT.BORDER);
+		viewer = new TableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER);
 		viewer.setComparator(new AttributeFilterViewerComparator());
 
-		TableViewerColumn viewColCategory = new TableViewerColumn(viewer,
-				SWT.NONE);
-		viewColCategory.getColumn().setText(
-				NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_Category);
+		TableViewerColumn viewColCategory = new TableViewerColumn(viewer, SWT.NONE);
+		viewColCategory.getColumn().setText(NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_Category);
 		viewColCategory.getColumn().setWidth(120);
-		viewColCategory.setLabelProvider(new MyColumnLabelProvider(
-				RuleEntry.ColumnCATEGORY));
-		viewColCategory.setEditingSupport(new MyColumnViewerEditor(viewer,
-				RuleEntry.ColumnCATEGORY));
-		viewColCategory.getColumn().addSelectionListener(
-				new SelectionAdapter() {
+		viewColCategory.setLabelProvider(new MyColumnLabelProvider(RuleEntry.ColumnCATEGORY));
+		viewColCategory.setEditingSupport(new MyColumnViewerEditor(viewer, RuleEntry.ColumnCATEGORY));
+		viewColCategory.getColumn().addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						sortColumnChanged = (sortBy != RuleEntry.ColumnCATEGORY);
@@ -242,13 +225,10 @@ public class AnnotationRuleViewPart extends ViewPart implements
 				});
 
 		TableViewerColumn viewColAttr = new TableViewerColumn(viewer, SWT.NONE);
-		viewColAttr.getColumn().setText(
-				NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_AttributeName);
+		viewColAttr.getColumn().setText(NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_AttributeName);
 		viewColAttr.getColumn().setWidth(120);
-		viewColAttr.setLabelProvider(new MyColumnLabelProvider(
-				RuleEntry.ColumnATTRIBUTE_NAME));
-		viewColAttr.setEditingSupport(new MyColumnViewerEditor(viewer,
-				RuleEntry.ColumnATTRIBUTE_NAME));
+		viewColAttr.setLabelProvider(new MyColumnLabelProvider(RuleEntry.ColumnATTRIBUTE_NAME));
+		viewColAttr.setEditingSupport(new MyColumnViewerEditor(viewer, RuleEntry.ColumnATTRIBUTE_NAME));
 		viewColAttr.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -259,15 +239,12 @@ public class AnnotationRuleViewPart extends ViewPart implements
 			}
 		});
 
-		TableViewerColumn viewColOperator = new TableViewerColumn(viewer,
-				SWT.CENTER);
+		TableViewerColumn viewColOperator = new TableViewerColumn(viewer, SWT.CENTER);
 		viewColOperator.getColumn().setText(
 				NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_Operator);
 		viewColOperator.getColumn().setWidth(60);
-		viewColOperator.setEditingSupport(new MyColumnViewerEditor(viewer,
-				RuleEntry.ColumnOPERATOR));
-		viewColOperator.setLabelProvider(new MyColumnLabelProvider(
-				RuleEntry.ColumnOPERATOR));
+		viewColOperator.setEditingSupport(new MyColumnViewerEditor(viewer, RuleEntry.ColumnOPERATOR));
+		viewColOperator.setLabelProvider(new MyColumnLabelProvider(RuleEntry.ColumnOPERATOR));
 		viewColOperator.getColumn().setResizable(false);
 		viewColOperator.getColumn().addSelectionListener(
 				new SelectionAdapter() {
@@ -281,13 +258,10 @@ public class AnnotationRuleViewPart extends ViewPart implements
 				});
 
 		TableViewerColumn viewColVal = new TableViewerColumn(viewer, SWT.NONE);
-		viewColVal.getColumn().setText(
-				NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_Value);
+		viewColVal.getColumn().setText(NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_Value);
 		viewColVal.getColumn().setWidth(180);
-		viewColVal.setEditingSupport(new MyColumnViewerEditor(viewer,
-				RuleEntry.ColumnVALUE));
-		viewColVal.setLabelProvider(new MyColumnLabelProvider(
-				RuleEntry.ColumnVALUE));
+		viewColVal.setEditingSupport(new MyColumnViewerEditor(viewer, RuleEntry.ColumnVALUE));
+		viewColVal.setLabelProvider(new MyColumnLabelProvider(RuleEntry.ColumnVALUE));
 		viewColVal.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -298,17 +272,13 @@ public class AnnotationRuleViewPart extends ViewPart implements
 			}
 		});
 
-		TableViewerColumn viewColDirection = new TableViewerColumn(viewer,
-				SWT.NONE);
+		TableViewerColumn viewColDirection = new TableViewerColumn(viewer, SWT.NONE);
 		viewColDirection.getColumn().setText(
 				NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_Direction);
 		viewColDirection.getColumn().setWidth(180);
-		viewColDirection.setEditingSupport(new MyColumnViewerEditor(viewer,
-				RuleEntry.ColumnDIRECTION));
-		viewColDirection.setLabelProvider(new MyColumnLabelProvider(
-				RuleEntry.ColumnDIRECTION));
-		viewColDirection.getColumn().addSelectionListener(
-				new SelectionAdapter() {
+		viewColDirection.setEditingSupport(new MyColumnViewerEditor(viewer,	RuleEntry.ColumnDIRECTION));
+		viewColDirection.setLabelProvider(new MyColumnLabelProvider(RuleEntry.ColumnDIRECTION));
+		viewColDirection.getColumn().addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						sortColumnChanged = (sortBy != RuleEntry.ColumnDIRECTION);
@@ -318,17 +288,12 @@ public class AnnotationRuleViewPart extends ViewPart implements
 					}
 				});
 
-		TableViewerColumn viewColFilename = new TableViewerColumn(viewer,
-				SWT.NONE);
-		viewColFilename.getColumn().setText(
-				NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_Filename);
+		TableViewerColumn viewColFilename = new TableViewerColumn(viewer, SWT.NONE);
+		viewColFilename.getColumn().setText(NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_Filename);
 		viewColFilename.getColumn().setWidth(180);
-		viewColFilename.setEditingSupport(new MyColumnViewerEditor(viewer,
-				RuleEntry.ColumnFILENAME));
-		viewColFilename.setLabelProvider(new MyColumnLabelProvider(
-				RuleEntry.ColumnFILENAME));
-		viewColFilename.getColumn().addSelectionListener(
-				new SelectionAdapter() {
+		viewColFilename.setEditingSupport(new MyColumnViewerEditor(viewer, RuleEntry.ColumnFILENAME));
+		viewColFilename.setLabelProvider(new MyColumnLabelProvider(RuleEntry.ColumnFILENAME));
+		viewColFilename.getColumn().addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						sortColumnChanged = (sortBy != RuleEntry.ColumnFILENAME);
@@ -338,15 +303,11 @@ public class AnnotationRuleViewPart extends ViewPart implements
 					}
 				});
 
-		TableViewerColumn viewColActive = new TableViewerColumn(viewer,
-				SWT.NONE);
-		viewColActive.getColumn().setText(
-				NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_Active);
+		TableViewerColumn viewColActive = new TableViewerColumn(viewer, SWT.NONE);
+		viewColActive.getColumn().setText(NLSupport.AnnotationRuleViewPart_AnnotationKeyWord_Active);
 		viewColActive.getColumn().setWidth(180);
-		viewColActive.setEditingSupport(new MyColumnViewerEditor(viewer,
-				RuleEntry.ColumnACTIVE));
-		viewColActive.setLabelProvider(new MyColumnLabelProvider(
-				RuleEntry.ColumnACTIVE));
+		viewColActive.setEditingSupport(new MyColumnViewerEditor(viewer, RuleEntry.ColumnACTIVE));
+		viewColActive.setLabelProvider(new MyColumnLabelProvider(RuleEntry.ColumnACTIVE));
 		viewColActive.getColumn().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -391,7 +352,6 @@ public class AnnotationRuleViewPart extends ViewPart implements
 		viewer.setItemCount(0);
 		List<RuleEntry> list = annotationRuleController.getRules(); //?? maybe listener concept too?? look comment above and init()method of AttributeViewPart.java
 
-
 		if (list == null) {
 			viewer.getTable().setRedraw(true);
 			return;
@@ -430,14 +390,12 @@ public class AnnotationRuleViewPart extends ViewPart implements
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		// Check if the active editor is a diagram editor. If not deactivate the
 		// view
-		IEditorPart activeEditorPart = part.getSite().getPage()
-				.getActiveEditor();
+		IEditorPart activeEditorPart = part.getSite().getPage().getActiveEditor();
 
 		// Handling MultiPageEditorPart
 		if (activeEditorPart instanceof MultiPageEditorPart) {
 			MultiPageEditorPart multiPageEditorPart = (MultiPageEditorPart) activeEditorPart;
-			activeEditorPart = (IEditorPart) multiPageEditorPart
-					.getSelectedPage();
+			activeEditorPart = (IEditorPart) multiPageEditorPart.getSelectedPage();
 		}
 
 		// Ensure that is a graphical editor
@@ -479,25 +437,8 @@ public class AnnotationRuleViewPart extends ViewPart implements
 				.adaptSelection(selectedObjectsArray);
 
 		this.selection = new StructuredSelection(adaptedObjectsArray);
-//		Object selectedObject = ((StructuredSelection) this.selection).getFirstElement();
-
-		// isAssignable &= isAttributable(selectedObject);
-
 		setUpControls(isAssignable);
-
-		if (isAssignable) {
-			// selectedEditPart = (IGraphicalEditPart) selectedObject;
-			// if (selectedObject instanceof ShapeNodeEditPart
-			// || selectedObject instanceof ConnectionNodeEditPart) {
-			// btnAddAll.setEnabled(true);
-			// btnDelAll.setEnabled(true);
-		}
-
 		updateView();
-		// } else {
-		// selectedEditPart = null;
-		// viewer.setItemCount(0);
-		// }
 	}
 
 	/**
@@ -541,8 +482,7 @@ public class AnnotationRuleViewPart extends ViewPart implements
 	 */
 	public static AnnotationRuleViewPart getInstance() {
 		if (instance == null) {
-			IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow();
+			IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 
 			if (workbenchPage != null) {
@@ -564,9 +504,7 @@ public class AnnotationRuleViewPart extends ViewPart implements
 	 * Handles the click on the add button.
 	 */
 	private void onButtonAddClick() {
-
-		AnnotationRuleCreateDialog dialog = new AnnotationRuleCreateDialog(
-				null, annotationRuleController);
+		AnnotationRuleCreateDialog dialog = new AnnotationRuleCreateDialog(null, annotationRuleController);
 		dialog.create();
 		dialog.open();
 
@@ -602,13 +540,13 @@ public class AnnotationRuleViewPart extends ViewPart implements
 	private void onButtonImportIconClick(Composite parent) {
 		FileDialog fileDialog = new FileDialog(parent.getShell(), SWT.OPEN);
 		fileDialog.setText(NLSupport.ValidationPage_ButtonImportText);
-		fileDialog.setFilterExtensions(ImageFileChooserUtils.WildcardFileExtensions);
+		fileDialog.setFilterExtensions(ImageFileChooserUtils.FilterExtensions);
+		fileDialog.setFilterNames(ImageFileChooserUtils.FilterNames);
 		
 		String filePath = fileDialog.open();
 		if (filePath == null) return;
 		
-		File file = new File(filePath);
-		
+		File file = new File(filePath);		
 		String filename = file.getName();
 		
 		try {
@@ -616,7 +554,7 @@ public class AnnotationRuleViewPart extends ViewPart implements
 			newFile.mkdirs();
 			Files.copy(file.toPath(), newFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Error on copying file to import", e);
 		}
 	}
 
@@ -688,14 +626,10 @@ public class AnnotationRuleViewPart extends ViewPart implements
 			RuleEntry entry = (RuleEntry) element;
 			//TODO currently only used for isActive column
 
-			AnnotationRuleController.getInstance().updateRule(entry,
-					!entry.isActive());
-			AttributeFileRegistry.getInstance()
-					.dispatchAttributeFileChangedEvent();
+			AnnotationRuleController.getInstance().updateRule(entry, !entry.isActive());
+			AttributeFileRegistry.getInstance().dispatchAttributeFileChangedEvent();
 			updateView();
 		}
-		
-
 	}
 
 

@@ -451,6 +451,13 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	public EClass getProduct() {
 		return productEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	public EAttribute getProduct_Subdiagram() {
+		return (EAttribute)productEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -459,6 +466,13 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	 */
 	public EClass getObjective() {
 		return objectiveEClass;
+	}
+	
+	/**
+	 * @generated NOT
+	 */
+	public EAttribute getObjective_Subdiagram() {
+		return (EAttribute) objectiveEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -478,6 +492,14 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	public EClass getTechnicalTerm() {
 		return technicalTermEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getTechnicalTerm_Subdiagram() {
+		return (EAttribute) technicalTermEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -486,6 +508,14 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	 */
 	public EClass getParticipant() {
 		return participantEClass;
+	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getParticipant_Subdiagram() {
+		return (EAttribute) participantEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -496,6 +526,14 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	public EClass getApplication() {
 		return applicationEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getApplication_Subdiagram() {
+		return (EAttribute) applicationEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -504,6 +542,14 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	 */
 	public EClass getDocument() {
 		return documentEClass;
+	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public EAttribute getDocument_Subdiagram() {
+		return (EAttribute) documentEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -608,7 +654,7 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated Not
+	 * @generated NOT
 	 */
 	public void createPackageContents() {
 		if (isCreated) return;
@@ -649,18 +695,24 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		createEAttribute(activity2EClass, ACTIVITY2__SUBDIAGRAM);
 
 		productEClass = createEClass(PRODUCT);
+		createEAttribute(productEClass, PRODUCT__SUBDIAGRAM);
 
 		objectiveEClass = createEClass(OBJECTIVE);
+		createEAttribute(objectiveEClass, OBJECTIVE__SUBDIAGRAM);
 
 		clusterEClass = createEClass(CLUSTER);
 
 		technicalTermEClass = createEClass(TECHNICAL_TERM);
+		createEAttribute(technicalTermEClass, TECHNICAL_TERM__SUBDIAGRAM);
 
 		participantEClass = createEClass(PARTICIPANT);
+		createEAttribute(participantEClass, PARTICIPANT__SUBDIAGRAM);
 
 		applicationEClass = createEClass(APPLICATION);
+		createEAttribute(applicationEClass, APPLICATION__SUBDIAGRAM);
 
 		documentEClass = createEClass(DOCUMENT);
+		createEAttribute(documentEClass, DOCUMENT__SUBDIAGRAM);
 
 		relation1EClass = createEClass(RELATION1);
 		createEReference(relation1EClass, RELATION1__SOURCE);
@@ -744,12 +796,25 @@ public class VcchartPackageImpl extends EPackageImpl implements VcchartPackage {
 		initEAttribute(getActivity2_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Activity2.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		
 		initEReference(getModel_Clusters(), this.getCluster(), null, "Clusters", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_Products(), this.getProduct(), null, "Products", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProduct_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Product.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_TechnicalTerms(), this.getTechnicalTerm(), null, "TechnicalTerms", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTechnicalTerm_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, TechnicalTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_Objectives(), this.getObjective(), null, "Objectives", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getObjective_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_Participants(), this.getParticipant(), null, "Participants", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getParticipant_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_Applications(), this.getApplication(), null, "Applications", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getApplication_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Application.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_Documents(), this.getDocument(), null, "Documents", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDocument_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, Document.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEReference(getModel_Relations1(), this.getRelation1(), null, "Relations1", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModel_Relations2(), this.getRelation2(), null, "Relations2", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModel_Relations3(), this.getRelation3(), null, "Relations3", null, 0, -1, Model.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

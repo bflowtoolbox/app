@@ -8,6 +8,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.bflow.toolbox.hive.libs;bundle-version="1.0.0",
  org.eclipse.core.resources;bundle-version="3.5.2"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.bflow.toolbox.hive.swiprolog
 Bundle-Vendor: Bflow Dev Team
+Automatic-Module-Name: org.bflow.toolbox.hive.swiprolog

@@ -391,7 +391,7 @@ public class PrologRunComponent implements IPrologRunComponent {
 
 	@Override
 	public String getDisplayName() {
-		return "Prolog run";
+		return "Prolog Run";
 	}
 
 	@Override

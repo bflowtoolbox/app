@@ -368,6 +368,13 @@ public class OepcPackageImpl extends EPackageImpl implements OepcPackage {
 	public EClass getBusinessMethod() {
 		return businessMethodEClass;
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	public EAttribute getBusinessMethod_Subdiagram() {
+		return (EAttribute) businessMethodEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -399,7 +406,7 @@ public class OepcPackageImpl extends EPackageImpl implements OepcPackage {
 	 * guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public void createPackageContents() {
 		if (isCreated) return;
@@ -436,6 +443,7 @@ public class OepcPackageImpl extends EPackageImpl implements OepcPackage {
 		businessAttributeEClass = createEClass(BUSINESS_ATTRIBUTE);
 
 		businessMethodEClass = createEClass(BUSINESS_METHOD);
+		createEAttribute(businessMethodEClass, BUSINESS_METHOD__SUBDIAGRAM);
 
 		documentEClass = createEClass(DOCUMENT);
 	}
@@ -452,7 +460,7 @@ public class OepcPackageImpl extends EPackageImpl implements OepcPackage {
 	 * method is guarded to have no affect on any invocation but its first.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public void initializePackageContents() {
 		if (isInitialized) return;
@@ -523,7 +531,8 @@ public class OepcPackageImpl extends EPackageImpl implements OepcPackage {
 		initEClass(businessAttributeEClass, BusinessAttribute.class, "BusinessAttribute", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(businessMethodEClass, BusinessMethod.class, "BusinessMethod", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
+		initEAttribute(getBusinessMethod_Subdiagram(), ecorePackage.getEString(), "Subdiagram", null, 0, 1, BusinessMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		
 		initEClass(documentEClass, Document.class, "Document", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource

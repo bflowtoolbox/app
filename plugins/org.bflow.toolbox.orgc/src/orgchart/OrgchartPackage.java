@@ -332,6 +332,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @ordered
 	 */
 	int PARTICIPANT__NAME = NAMED_ELEMENT__NAME;
+	
+	/**
+	 * @generated NOT
+	 */
+	int PARTICIPANT__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Participant</em>' class.
@@ -340,7 +345,7 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int PARTICIPANT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Participant</em>' class.
@@ -371,13 +376,18 @@ public interface OrgchartPackage extends EPackage {
 	int LOCATION__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int LOCATION__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Location</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOCATION_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int LOCATION_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Location</em>' class.
@@ -406,6 +416,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @ordered
 	 */
 	int GROUP__NAME = NAMED_ELEMENT__NAME;
+	
+	/** 
+	 * @generated NOT 
+	 */
+	int GROUP__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Group</em>' class.
@@ -414,7 +429,7 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GROUP_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int GROUP_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Group</em>' class.
@@ -445,13 +460,18 @@ public interface OrgchartPackage extends EPackage {
 	int POSITION__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int POSITION__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Position</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int POSITION_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int POSITION_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Position</em>' class.
@@ -482,13 +502,18 @@ public interface OrgchartPackage extends EPackage {
 	int INTERNAL_PERSON__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int INTERNAL_PERSON__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>Internal Person</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INTERNAL_PERSON_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int INTERNAL_PERSON_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Internal Person</em>' class.
@@ -519,13 +544,18 @@ public interface OrgchartPackage extends EPackage {
 	int EXTERNAL_PERSON__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * @generated NOT
+	 */
+	int EXTERNAL_PERSON__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	
+	/**
 	 * The number of structural features of the '<em>External Person</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXTERNAL_PERSON_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int EXTERNAL_PERSON_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>External Person</em>' class.
@@ -554,6 +584,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @ordered
 	 */
 	int PERSON_TYPE__NAME = NAMED_ELEMENT__NAME;
+	
+	/**
+	 * @generated NOT
+	 */
+	int PERSON_TYPE__SUBDIAGRAM = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Person Type</em>' class.
@@ -562,7 +597,7 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PERSON_TYPE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int PERSON_TYPE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Person Type</em>' class.
@@ -845,6 +880,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getParticipant();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getParticipant_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link orgchart.Location <em>Location</em>}'.
@@ -855,6 +895,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getLocation();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getLocation_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link orgchart.Group <em>Group</em>}'.
@@ -865,6 +910,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getGroup();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getGroup_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link orgchart.Position <em>Position</em>}'.
@@ -875,6 +925,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPosition();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getPosition_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link orgchart.InternalPerson <em>Internal Person</em>}'.
@@ -885,6 +940,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getInternalPerson();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getInternalPerson_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link orgchart.ExternalPerson <em>External Person</em>}'.
@@ -895,6 +955,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getExternalPerson();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getExternalPerson_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link orgchart.PersonType <em>Person Type</em>}'.
@@ -905,6 +970,11 @@ public interface OrgchartPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPersonType();
+	
+	/**
+	 * @generated NOT
+	 */
+	EAttribute getPersonType_Subdiagram();
 
 	/**
 	 * Returns the meta object for class '{@link orgchart.Relation1 <em>Relation1</em>}'.
@@ -1142,6 +1212,11 @@ public interface OrgchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PARTICIPANT = eINSTANCE.getParticipant();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute PARTICIPANT__SUBDIAGRAM = eINSTANCE.getParticipant_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link orgchart.impl.LocationImpl <em>Location</em>}' class.
@@ -1152,6 +1227,11 @@ public interface OrgchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass LOCATION = eINSTANCE.getLocation();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute LOCATION__SUBDIAGRAM = eINSTANCE.getLocation_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link orgchart.impl.GroupImpl <em>Group</em>}' class.
@@ -1162,6 +1242,11 @@ public interface OrgchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass GROUP = eINSTANCE.getGroup();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute GROUP__SUBDIAGRAM = eINSTANCE.getGroup_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link orgchart.impl.PositionImpl <em>Position</em>}' class.
@@ -1172,6 +1257,11 @@ public interface OrgchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass POSITION = eINSTANCE.getPosition();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute POSITION__SUBDIAGRAM = eINSTANCE.getPosition_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link orgchart.impl.InternalPersonImpl <em>Internal Person</em>}' class.
@@ -1182,6 +1272,11 @@ public interface OrgchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass INTERNAL_PERSON = eINSTANCE.getInternalPerson();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute INTERNAL_PERSON__SUBDIAGRAM = eINSTANCE.getInternalPerson_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link orgchart.impl.ExternalPersonImpl <em>External Person</em>}' class.
@@ -1194,6 +1289,11 @@ public interface OrgchartPackage extends EPackage {
 		EClass EXTERNAL_PERSON = eINSTANCE.getExternalPerson();
 
 		/**
+		 * @generated NOT
+		 */
+		EAttribute EXTERNAL_PERSON__SUBDIAGRAM = eINSTANCE.getExternalPerson_Subdiagram();
+		
+		/**
 		 * The meta object literal for the '{@link orgchart.impl.PersonTypeImpl <em>Person Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1202,6 +1302,11 @@ public interface OrgchartPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PERSON_TYPE = eINSTANCE.getPersonType();
+		
+		/**
+		 * @generated NOT
+		 */
+		EAttribute PERSON_TYPE__SUBDIAGRAM = eINSTANCE.getPersonType_Subdiagram();
 
 		/**
 		 * The meta object literal for the '{@link orgchart.impl.Relation1Impl <em>Relation1</em>}' class.

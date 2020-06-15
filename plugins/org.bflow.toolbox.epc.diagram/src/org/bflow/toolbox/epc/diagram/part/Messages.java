@@ -6,12 +6,14 @@ import org.eclipse.osgi.util.NLS;
  * @generated
  */
 public class Messages extends NLS {
-
+	private static final String BUNDLE_NAME = "org.bflow.toolbox.epc.diagram.part.messages"; //$NON-NLS-1$
+	
+	
 	/**
 	 * @generated
 	 */
 	static {
-		NLS.initializeMessages("messages", Messages.class); //$NON-NLS-1$
+		NLS.initializeMessages(BUNDLE_NAME, Messages.class); //$NON-NLS-1$
 	}
 
 	/**

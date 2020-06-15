@@ -5,19 +5,18 @@ Bundle-SymbolicName: org.bflow.toolbox.contributions.addons;singleton:=true
 Bundle-Version: 1.3.0.qualifier
 Bundle-Activator: org.bflow.toolbox.contributions.addons.internal.PluginActivator
 Bundle-Vendor: Bflow Dev Team
-Require-Bundle: org.bflow.toolbox.hive.addons;bundle-version="1.0.0",
+Require-Bundle: org.eclipse.gmf.runtime.diagram.ui;bundle-version="1.3.0",
+ org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide;bundle-version="1.2.0",
+ org.bflow.toolbox.hive.libs;bundle-version="1.0.0",
+ org.bflow.toolbox.hive.addons;bundle-version="1.0.0",
  org.bflow.toolbox.hive.attributes;bundle-version="1.0.0",
  org.bflow.toolbox.hive.interchange;bundle-version="1.0.0",
- org.eclipse.gmf.runtime.diagram.ui;bundle-version="1.3.0",
- org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide;bundle-version="1.2.0",
- org.eclipse.emf.ecore.editor;bundle-version="2.5.0",
- org.bflow.toolbox.epc.diagram;bundle-version="1.1.0",
  org.bflow.toolbox.hive.modelnavigator;bundle-version="1.0.0",
- org.bflow.toolbox.oepc.diagram;bundle-version="1.2.0",
  org.bflow.toolbox.diagram.extensions;bundle-version="1.1.0",
- org.bflow.toolbox.hive.libs;bundle-version="1.0.0",
- org.bflow.toolbox.vc.diagram;bundle-version="1.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+ org.bflow.toolbox.epc.diagram;bundle-version="1.1.0",
+ org.bflow.toolbox.vc.diagram;bundle-version="1.0.0",
+ org.bflow.toolbox.oepc.diagram;bundle-version="1.3.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,
  libs/commons-beanutils-1.8.3.jar,
  libs/commons-beanutils-bean-collections-1.8.3.jar,
@@ -27,3 +26,4 @@ Bundle-ClassPath: .,
  libs/xom-1.2.10.jar,
  libs/commons-lang-2.6.jar
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: org.bflow.toolbox.contributions.addons

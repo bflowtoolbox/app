@@ -33,7 +33,8 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.part.DrillDownComposite;
 
 /**
- * @author Christian Boehme
+ * @author Christian Boehme, Arian Storch
+ * @version 2019-01-21 AST Removed setLayoutData() call because the surrounding wizard page sets the layout
  * 
  * Workbench-level composite for choosing a container.
  */
@@ -58,12 +59,10 @@ public class ContainerSelectionGroup extends Composite {
 
 	// the message to display at the top of this dialog
 	private static final String DEFAULT_MSG_NEW_ALLOWED = IDEWorkbenchMessages.ContainerGroup_message;
-
 	private static final String DEFAULT_MSG_SELECT_ONLY = IDEWorkbenchMessages.ContainerGroup_selectFolder;
 
 	// sizing constants
 	private static final int SIZING_SELECTION_PANE_WIDTH = 320;
-
 	private static final int SIZING_SELECTION_PANE_HEIGHT = 300;
 
 	/**
@@ -78,8 +77,7 @@ public class ContainerSelectionGroup extends Composite {
 	 *            Enable the user to type in a new container name instead of
 	 *            just selecting from the existing ones.
 	 */
-	public ContainerSelectionGroup(Composite parent, Listener listener,
-			boolean allowNewContainerName) {
+	public ContainerSelectionGroup(Composite parent, Listener listener, boolean allowNewContainerName) {
 		this(parent, listener, allowNewContainerName, null);
 	}
 
@@ -97,8 +95,7 @@ public class ContainerSelectionGroup extends Composite {
 	 * @param message
 	 *            The text to present to the user.
 	 */
-	public ContainerSelectionGroup(Composite parent, Listener listener,
-			boolean allowNewContainerName, String message) {
+	public ContainerSelectionGroup(Composite parent, Listener listener, boolean allowNewContainerName, String message) {
 		this(parent, listener, allowNewContainerName, message, true);
 	}
 
@@ -198,8 +195,7 @@ public class ContainerSelectionGroup extends Composite {
 	 * @param message
 	 */
 	public void createContents(String message) {
-		createContents(message, SIZING_SELECTION_PANE_HEIGHT,
-				SIZING_SELECTION_PANE_WIDTH);
+		createContents(message, SIZING_SELECTION_PANE_HEIGHT, SIZING_SELECTION_PANE_WIDTH);
 	}
 
 	/**
@@ -213,7 +209,6 @@ public class ContainerSelectionGroup extends Composite {
 		GridLayout layout = new GridLayout();
 		layout.marginWidth = 0;
 		setLayout(layout);
-		setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		Label label = new Label(this, SWT.WRAP);
 		label.setText(message);
@@ -256,24 +251,20 @@ public class ContainerSelectionGroup extends Composite {
 		ContainerContentProvider cp = new ContainerContentProvider();
 		cp.showClosedProjects(showClosedProjects);
 		treeViewer.setContentProvider(cp);
-		treeViewer.setLabelProvider(WorkbenchLabelProvider
-				.getDecoratingWorkbenchLabelProvider());
+		treeViewer.setLabelProvider(WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider());
 		treeViewer.setComparator(new ViewerComparator());
 		treeViewer.setUseHashlookup(true);
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
-				IStructuredSelection selection = (IStructuredSelection) event
-						.getSelection();
-				containerSelectionChanged((IContainer) selection
-						.getFirstElement()); // allow null
+				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+				containerSelectionChanged((IContainer) selection.getFirstElement()); // allow null
 			}
 		});
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				ISelection selection = event.getSelection();
 				if (selection instanceof IStructuredSelection) {
-					Object item = ((IStructuredSelection) selection)
-							.getFirstElement();
+					Object item = ((IStructuredSelection) selection).getFirstElement();
 					if (item == null) {
 						return;
 					}
@@ -334,12 +325,11 @@ public class ContainerSelectionGroup extends Composite {
 	 * 
 	 * @param container
 	 */
-	@SuppressWarnings("unchecked")
 	public void setSelectedContainer(IContainer container) {
 		selectedContainer = container;
 
 		// expand to and select the specified container
-		List itemsToExpand = new ArrayList();
+		List<IContainer> itemsToExpand = new ArrayList<>();
 		IContainer parent = container.getParent();
 		while (parent != null) {
 			itemsToExpand.add(0, parent);

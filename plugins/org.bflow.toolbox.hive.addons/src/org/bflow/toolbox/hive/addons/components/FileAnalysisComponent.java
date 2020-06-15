@@ -166,7 +166,7 @@ public class FileAnalysisComponent implements IFileAnalysisComponent {
 
 	@Override
 	public String getDisplayName() {
-		return "File analysis";
+		return "File Analysis";
 	}
 
 	@Override

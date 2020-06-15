@@ -20,8 +20,10 @@ import org.bflow.toolbox.hive.interchange.mif.core.PropertyProviderRegistry;
 import org.bflow.toolbox.hive.interchange.mif.impl.EdgeAdapter;
 import org.bflow.toolbox.hive.interchange.mif.impl.ModelAdapter;
 import org.bflow.toolbox.hive.interchange.mif.impl.ShapeAdapter;
+import org.bflow.toolbox.hive.libs.aprogu.lang.Cast;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
@@ -38,8 +40,9 @@ import org.eclipse.swt.widgets.Shell;
  * export process.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 03/10/12
- * @version 01/05/14
+ * @since 2012-10-03
+ * @version 2014-05-01
+ * 			2018-10-31 Enhanced semantic element and element id resolving
  */
 public class ModelDigger {
 	
@@ -49,21 +52,20 @@ public class ModelDigger {
 	/**
 	 * Resolves the model data for the given source file.
 	 * 
-	 * @param sourceFile
-	 *            the source file
-	 * @return the {@link IModelData}
+	 * @param sourceFile Source file
+	 * @return {@link IModelData}
 	 */
 	public static IModelData resolveModelData(File sourceFile) {
-
-		IFile iFile = CommonInterchangeUtil.toIFile(sourceFile);		
+		IFile iFile = null;		
 		DiagramEditPart offscreenEditPart = null;
 		
 		// Try load resolve the diagram edit part off-screen
 		Shell myShell = new Shell();
 		try {
+			iFile = CommonInterchangeUtil.toIFile(sourceFile);
 			offscreenEditPart = CommonInterchangeUtil.getOffscreenDiagramEditPart(myShell, iFile);
-		} catch (CoreException e) {
-			logger.error("Could not load the diagram via DiagramIOUtil.", e);
+		} catch (CoreException ex) {
+			logger.error("Could not load the diagram via CommonInterchangeUtil.", ex);
 		}
 
 		// Use the off-screen edit part or open the editor as fallback
@@ -103,12 +105,12 @@ public class ModelDigger {
 	/**
 	 * Resolves the edges informations.
 	 *
-	 * @param listEdges the list edges
-	 * @param shapes the shapes
-	 * @param diagramEditPart the diagram edit part
-	 * @param providers the providers
-	 * @param propertyProviders the property providers
-	 * @return the i edge[]
+	 * @param listEdges         List of edges to process
+	 * @param shapes            Shapes
+	 * @param diagramEditPart   Diagram edit part
+	 * @param providers         Providers
+	 * @param propertyProviders Property providers
+	 * @return Resolved edges
 	 */
 	private static IEdge[] resolveEdges(List<?> listEdges, IShape[] shapes, DiagramEditPart diagramEditPart, 
 			IAttributeProvider[] providers, IInterchangePropertyProvider[] propertyProviders) {
@@ -116,14 +118,18 @@ public class ModelDigger {
 
 		for (int i = 0; i < edges.length; i++) {
 			ConnectionEditPart connectionEditPart = (ConnectionEditPart) listEdges.get(i);
-
-			String id = EMFCoreUtil.getProxyID(connectionEditPart.resolveSemanticElement());
-			Map<String, String> attributes = resolveAttributesFor(id, diagramEditPart, providers);
+			EObject semanticElement = getSemanticElement(connectionEditPart);
+			String elementId = getModelId(semanticElement);					
+						
+			Map<String, String> attributes = resolveAttributesFor(elementId, diagramEditPart, providers);
 			IShape[] associatedShapes = findShapes(connectionEditPart, shapes);
 			IShape sourceShape = associatedShapes[0];
 			IShape targetShape = associatedShapes[1];
 			IInterchangePropertyProvider propertyProviderHub = PropertyProviderHub.getInstance(propertyProviders);
-			edges[i] = new EdgeAdapter(connectionEditPart, sourceShape,	targetShape, attributes, propertyProviderHub);
+			edges[i] = new EdgeAdapter(elementId, semanticElement, 
+					connectionEditPart, 
+					sourceShape, targetShape, 
+					attributes, propertyProviderHub);
 		}
 
 		return edges;
@@ -132,14 +138,10 @@ public class ModelDigger {
 	/**
 	 * Resolves the shape informations.
 	 * 
-	 * @param listShapes
-	 *            the list of shapes to process
-	 * @param diagramEditPart
-	 *            the diagram edit part
-	 * @param providers
-	 *            the providers
-	 * @param propertyProviders
-	 *            the property providers
+	 * @param listShapes        List of shapes to process
+	 * @param diagramEditPart   Diagram edit part
+	 * @param providers         Providers
+	 * @param propertyProviders Property providers
 	 * @return Resolved shapes
 	 */
 	private static IShape[] resolveShapes(List<?> listShapes, DiagramEditPart diagramEditPart, 
@@ -157,10 +159,11 @@ public class ModelDigger {
 			IShape[] subShapes = resolveShapes(shapeChildren, diagramEditPart, providers, propertyProviders);
 			if (resolveChildren) for(IShape subShape : subShapes) resolvedShapes.add(subShape);
 			
-			String id = EMFCoreUtil.getProxyID(shape.resolveSemanticElement());
-			Map<String, String> attributes = resolveAttributesFor(id, diagramEditPart, providers);
+			EObject semanticElement = getSemanticElement(shape);
+			String elementId = getModelId(semanticElement);
+			Map<String, String> attributes = resolveAttributesFor(elementId, diagramEditPart, providers);
 			IInterchangePropertyProvider propertyProviderHub = PropertyProviderHub.getInstance(propertyProviders);
-			IShape shapeAdapter = new ShapeAdapter(shape, attributes, propertyProviderHub);
+			IShape shapeAdapter = new ShapeAdapter(elementId, semanticElement, shape, attributes, propertyProviderHub);
 			resolvedShapes.add(shapeAdapter);
 		}
 		IShape[] shapes = resolvedShapes.toArray(new IShape[0]);
@@ -170,10 +173,10 @@ public class ModelDigger {
 	/**
 	 * Resolves the model information.
 	 *
-	 * @param diagramEditPart the diagram edit part
-	 * @param providers the providers
-	 * @param propertyProviders the property providers
-	 * @return the i model
+	 * @param diagramEditPart   Diagram edit part
+	 * @param providers         Providers
+	 * @param propertyProviders Property providers
+	 * @return Resolved model
 	 */
 	private static IModel resolveModel(DiagramEditPart diagramEditPart,	IAttributeProvider[] providers, 
 			IInterchangePropertyProvider[] propertyProviders) {
@@ -186,9 +189,8 @@ public class ModelDigger {
 	/**
 	 * Resolves the associated diagram edit part.
 	 * 
-	 * @param file
-	 *            the file
-	 * @return the diagram edit part
+	 * @param file File
+	 * @return Diagram edit part
 	 */
 	private static DiagramEditPart resolveDiagramEditPart(IFile file) {
 		/* [Arian Storch]
@@ -202,13 +204,10 @@ public class ModelDigger {
 	/**
 	 * Resolves the attributes for the given id and diagram edit part.
 	 * 
-	 * @param id
-	 *            the id
-	 * @param diagramEditPart
-	 *            the diagram edit part
-	 * @param providers
-	 *            the providers
-	 * @return the map
+	 * @param id              Id
+	 * @param diagramEditPart Diagram edit part
+	 * @param providers       Providers
+	 * @return Attributes
 	 */
 	private static Map<String, String> resolveAttributesFor(String id,
 			DiagramEditPart diagramEditPart, IAttributeProvider[] providers) {
@@ -228,21 +227,19 @@ public class ModelDigger {
 	/**
 	 * Finds the source and target shape for the given connection.
 	 * 
-	 * @param connection
-	 *            the connection
-	 * @param shapes
-	 *            the shapes
-	 * @return the i shape[]
+	 * @param connection Connection
+	 * @param shapes     Set of shapes to iterate
+	 * @return Resolved shapes
 	 */
-	private static IShape[] findShapes(ConnectionEditPart connection,
-			IShape[] shapes) {
+	private static IShape[] findShapes(ConnectionEditPart connection, IShape[] shapes) {
 		IShape source = null;
 		IShape target = null;
 
 		IGraphicalEditPart srcEditPart = (IGraphicalEditPart) connection.getSource();
 		IGraphicalEditPart tgtEditPart = (IGraphicalEditPart) connection.getTarget();
-		String srcId = EMFCoreUtil.getProxyID(srcEditPart.resolveSemanticElement());
-		String tgtId = EMFCoreUtil.getProxyID(tgtEditPart.resolveSemanticElement());
+		
+		String srcId = getModelId(srcEditPart);
+		String tgtId = getModelId(tgtEditPart);
 
 		for (int i = 0; i < shapes.length; i++) {
 			IShape shape = shapes[i];
@@ -262,4 +259,45 @@ public class ModelDigger {
 
 		return new IShape[] { source, target };
 	}
+	
+	/**
+	 * Returns the semantic element of the given {@code editPart}.
+	 * 
+	 * @param editPart Edit part the semantic element has to be resolved
+	 * @return Semantic element or NULL
+	 */
+	private static EObject getSemanticElement(IGraphicalEditPart editPart) {
+		EObject semanticElement = editPart.resolveSemanticElement();
+		
+		// It might happen that the semantic element is null, for instance NoteAttachmentEditPart
+		if (semanticElement == null) {
+			Object model = editPart.getModel();
+			semanticElement = Cast.as(EObject.class, model);
+		}
+		
+		return semanticElement;
+	}
+	
+	/**
+	 * Returns the model id that is assigned to the semantic element of the given
+	 * {@code editPart}. Note, this method resolves the edit part via
+	 * {@link #getSemanticElement(IGraphicalEditPart)}.
+	 * 
+	 * @param editPart Edit part the get the model id for
+	 * @return Model id or NULL
+	 */
+	private static String getModelId(IGraphicalEditPart editPart) {		
+		EObject semanticElement = getSemanticElement(editPart);
+		return getModelId(semanticElement);
+	}
+	
+	/**
+	 * Returns the model id that is assigned to the {@code semanticElement}.
+	 * 
+	 * @param semanticElement Semantic element
+	 * @return Model id or NULL
+	 */
+	private static String getModelId(EObject semanticElement) {
+		return EMFCoreUtil.getProxyID(semanticElement);
+	}	
 }

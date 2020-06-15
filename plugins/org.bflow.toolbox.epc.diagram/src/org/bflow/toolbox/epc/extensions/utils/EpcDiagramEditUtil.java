@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.bflow.toolbox.bflow.BflowPackage;
+import org.bflow.toolbox.epc.diagram.actions.DiagramLiveValidator;
 import org.bflow.toolbox.epc.diagram.edit.parts.ArcEditPart;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditor;
 import org.bflow.toolbox.epc.diagram.part.EpcDiagramEditorPlugin;

@@ -408,6 +408,11 @@ public class AditusProcessor {
 			}
 			
 			@Override
+			public String getName() {
+				throw new NotImplementedException();
+			}
+			
+			@Override
 			public Object getType() {
 				return valueType;
 			}

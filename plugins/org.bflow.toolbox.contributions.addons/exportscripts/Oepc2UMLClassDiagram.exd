@@ -1,6 +1,6 @@
 public interchange 'UML  Class Diagram' (uml) <> oepc {
 
-description: 'Transforms a bflow* oEPC diagram into a UML class diagram (XMI)'
+description: '%oepc2UmlScript_description'
 
 @script: '/exportscripts/files/Oepc2UMLClassDiagram.vt', insertAttributes=true
 

@@ -12,53 +12,45 @@ import org.osgi.framework.Bundle;
  * Provides a store for export scripts.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 07/06/11
- * @version 18/07/13
+ * @since 2011-06-07
+ * @version 2013-07-18
+ * 			2019-02-16 AST Added localization support via plugin.properties
  */
 public class ExportDescriptorStore {
-
-	// Static collection instances	 
-	private static List<IInterchangeDescriptor> depository = new ArrayList<IInterchangeDescriptor>();
-	private static Map<IInterchangeDescriptor, Bundle> bundleMap = new HashMap<IInterchangeDescriptor, Bundle>();
-	private static Map<IInterchangeDescriptor, String> locationMap = new HashMap<IInterchangeDescriptor, String>();
-
+	private static List<IInterchangeDescriptor> depository = new ArrayList<>();
+	private static Map<IInterchangeDescriptor, Bundle> bundleMap = new HashMap<>();
+	private static Map<IInterchangeDescriptor, String> locationMap = new HashMap<>();
+	
 	/**
-	 * Registers the export description to the store that is provided by an
-	 * bundle.
+	 * Registers the export description to the store that is provided by an bundle.
 	 * 
-	 * @param exp
-	 *            export description
-	 * @param bundle
-	 *            the bundle which holds the export descriptor and its files
+	 * @param desc   Export description
+	 * @param bundle The bundle which holds the export descriptor and its files
 	 */
-	public static void register(IInterchangeDescriptor exp, Bundle bundle) {
-
-		if (bundle == null) {
-			throw new NullPointerException("Bundle cannot be null!");
-		}
-
-		depository.add(exp);
-		bundleMap.put(exp, bundle);
+	public static void register(IInterchangeDescriptor desc, Bundle bundle) {
+		if (bundle == null) throw new NullPointerException("Bundle cannot be null!");
+		
+		// 2019-02-16 AST Add localization support
+		LocalizationKit.localizeDescription(desc, bundle);
+		
+		depository.add(desc);
+		bundleMap.put(desc, bundle);
 	}
 
 	/**
 	 * Registers the export description to the store that is provided by a local
 	 * file.
 	 * 
-	 * @param exp
-	 *            export description
-	 * @param path
-	 *            absolute path to the export description file
+	 * @param desc Export description
+	 * @param path Absolute path to the export description file
 	 */
-	public static void register(IInterchangeDescriptor exp, String path) {
-
+	public static void register(IInterchangeDescriptor desc, String path) {
 		if (path == null || path.isEmpty()) {
-			throw new NullPointerException(
-					"Absolute path cannot be null or empty!");
+			throw new NullPointerException("Absolute path cannot be null or empty!");
 		}
 
-		depository.add(exp);
-		locationMap.put(exp, path);
+		depository.add(desc);
+		locationMap.put(desc, path);
 	}
 
 	/**
@@ -71,13 +63,13 @@ public class ExportDescriptorStore {
 	}
 
 	/**
-	 * Returns the depository. The result depends on the given parameter.
-	 * Including non public will also return those export descriptions which has
-	 * been marked as non public. The result set will contain all export
-	 * descriptions independent of their diagram editor file extension.
+	 * Returns the depository. The result depends on the given parameter. Including
+	 * non public will also return those export descriptions which has been marked
+	 * as non public. The result set will contain all export descriptions
+	 * independent of their diagram editor file extension.
 	 * 
-	 * @param includeNonPublic
-	 *            Setting true will return all installed export descriptions
+	 * @param includeNonPublic Set TRUE will return all installed export
+	 *                         descriptions
 	 * @return List of export descriptions depending on the given parameter
 	 */
 	public static List<IInterchangeDescriptor> getDepository(boolean includeNonPublic) {
@@ -101,10 +93,8 @@ public class ExportDescriptorStore {
 	/**
 	 * Returns the depository that is matching the given parameters.
 	 * 
-	 * @param diagramEditorFileExtension
-	 *            the diagram editor file extension
-	 * @param includeNonPublic
-	 *            include non public
+	 * @param diagramEditorFileExtension Diagram editor file extension
+	 * @param includeNonPublic           Include non public flag
 	 * @return Collection of ExportDescriptions matching the parameters
 	 */
 	public static List<IInterchangeDescriptor> getDepository(
@@ -132,8 +122,7 @@ public class ExportDescriptorStore {
 	/**
 	 * Returns the export description fitting to the given name.
 	 * 
-	 * @param name
-	 *            name of the export description
+	 * @param name Name of the export description
 	 * @return export description or null
 	 */
 	public static IInterchangeDescriptor getExportDescription(String name) {
@@ -147,8 +136,7 @@ public class ExportDescriptorStore {
 	/**
 	 * Returns the bundle for the given export descriptor.
 	 * 
-	 * @param exportDescriptor
-	 *            the export descriptor
+	 * @param exportDescriptor Export descriptor
 	 * @return the bundle for the export descriptor or null
 	 */
 	public static Bundle getBundleFor(IInterchangeDescriptor exportDescriptor) {
@@ -158,9 +146,8 @@ public class ExportDescriptorStore {
 	/**
 	 * Returns the path for the given export descriptor.
 	 * 
-	 * @param exportDescriptor
-	 *            the export descriptor
-	 * @return the absolute path for the export descriptor or null
+	 * @param exportDescriptor Export descriptor
+	 * @return Absolute path for the export descriptor or null
 	 */
 	public static String getPathFor(IInterchangeDescriptor exportDescriptor) {
 		return locationMap.get(exportDescriptor);

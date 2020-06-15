@@ -45,22 +45,23 @@ import org.eclipse.ui.services.IServiceLocator;
  * valid protocols to the add-on menu.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 17.04.10
- * @version 30.12.13
- * 			27.02.15 Added more reliable dispose checks 
+ * @since 2010-04-17
+ * @version 2013-12-30
+ * 			2015-02-27 Added more reliable dispose checks
+ * 			2018-10-03 Added NULL check in dispose method 			
  * 
  */
 public class MenuContributionProvider extends ContributionItem implements IWorkbenchContribution, ProtocolStoreListener, ToolStoreListener {
 
-	private Menu addonMenu;
-	private MenuItem menuContainer;
+	private Menu _addonMenu;
+	private MenuItem _menuContainer;
 	
-	private InternalPageListener internalPageListener = new InternalPageListener();
-	private InternalPartListener internalPartListener = new InternalPartListener();
+	private InternalPageListener _pageListener = new InternalPageListener();
+	private InternalPartListener _partListener = new InternalPartListener();
 	
-	private Map<ProtocolDescriptor, MenuItem> protocolDescriptor2MenuItemMap = new HashMap<ProtocolDescriptor, MenuItem>();
+	private Map<ProtocolDescriptor, MenuItem> _pd2miMap = new HashMap<ProtocolDescriptor, MenuItem>();
 	
-	private IWorkbenchPage activeWorkbenchPage;
+	private IWorkbenchPage _activeWorkbenchPage;
 
 	/**
 	 * Constructor.
@@ -71,35 +72,58 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 		ToolStore.addStoreListener(this);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.action.ContributionItem#isDynamic()
+	 */
 	@Override
 	public boolean isDynamic() {
 		return true;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.action.ContributionItem#isDirty()
+	 */
 	@Override
 	public boolean isDirty() {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.ui.menus.IWorkbenchContribution#initialize(org.eclipse.ui.services.IServiceLocator)
+	 */
 	@Override
 	public void initialize(IServiceLocator serviceLocator) {
-		IWorkbenchWindow wnd = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		wnd.addPageListener(internalPageListener);
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		window.addPageListener(_pageListener);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.action.ContributionItem#dispose()
+	 */
 	@Override
 	public void dispose() {
 		AddonStore.removeStoreListener(this);
 		ToolStore.removeStoreListener(this);
-		IWorkbenchWindow wnd = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		wnd.removePageListener(internalPageListener);
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (window != null) {
+			window.removePageListener(_pageListener);
+		}			
+		
 		super.dispose();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.action.ContributionItem#fill(org.eclipse.swt.widgets.Menu, int)
+	 */
 	@Override
 	public void fill(Menu menu, int index) {	
 		MenuItem addonsMenuItem = new MenuItem(menu, SWT.CASCADE, index);
-		menuContainer = addonsMenuItem;
+		_menuContainer = addonsMenuItem;
 		addonsMenuItem.setText("&Add-ons"); //$NON-NLS-1$
 
 		addonsMenuItem.setImage(new Image(menu.getDisplay(), this.getClass()
@@ -113,12 +137,12 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 		addonsMenu.addMenuListener(new MenuAdapter() {
 			@Override
 			public void menuShown(MenuEvent e) {
-				checkAndApplyMenuState(activeWorkbenchPage);
+				checkAndApplyMenuState(_activeWorkbenchPage);
 			}
 		});
 		
 		addonsMenuItem.setMenu(addonsMenu);
-		addonMenu = addonsMenu;
+		_addonMenu = addonsMenu;
 
 		for (ProtocolDescriptor descriptor : AddonStore.getInstalledAddons()) {
 			addMenuItem(descriptor);
@@ -132,18 +156,19 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 	 *            the protocol descriptor
 	 */
 	private void addMenuItem(final ProtocolDescriptor protocolDescriptor) {
-		if(addonMenu == null) return;
-		MenuItem sItem = new MenuItem(addonMenu, SWT.NONE);
-		sItem.setText(((Standardprotocol) protocolDescriptor.getProtocol()).getName());
-		sItem.setData(protocolDescriptor);
+		if(_addonMenu == null) return;
+		
+		MenuItem menuItem = new MenuItem(_addonMenu, SWT.NONE);
+		menuItem.setText(((Standardprotocol) protocolDescriptor.getProtocol()).getName());
+		menuItem.setData(protocolDescriptor);
 
 		boolean isEnabled = protocolDescriptor.isValid();
-		sItem.setEnabled(isEnabled);
+		menuItem.setEnabled(isEnabled);
 		
 		// Mapping the created item
-		protocolDescriptor2MenuItemMap.put(protocolDescriptor, sItem);
+		_pd2miMap.put(protocolDescriptor, menuItem);
 
-		sItem.addSelectionListener(new SelectionAdapter() {
+		menuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				executeAddon(protocolDescriptor);
@@ -151,29 +176,41 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 		});
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.events.ProtocolStoreListener#protocolAdded(org.bflow.toolbox.hive.addons.utils.ProtocolDescriptor)
+	 */
 	@Override
 	public void protocolAdded(final ProtocolDescriptor pd) {
 		if (!canOperate()) return;
 		addMenuItem(pd);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.events.ProtocolStoreListener#protocolRemoved(org.bflow.toolbox.hive.addons.utils.ProtocolDescriptor)
+	 */
 	@Override
 	public void protocolRemoved(ProtocolDescriptor pd) {
 		if (!canOperate()) return;
-		for (MenuItem item : addonMenu.getItems()) {
+		for (MenuItem item : _addonMenu.getItems()) {
 			if (item.getText().equalsIgnoreCase(((Standardprotocol) pd.getProtocol()).getName())) {
-				protocolDescriptor2MenuItemMap.remove(pd);
+				_pd2miMap.remove(pd);
 				item.dispose();
 				return;
 			}
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.hive.addons.events.ToolStoreListener#storeUpdate()
+	 */
 	@Override
 	public void storeUpdate() {
 		if (!canOperate()) return;
 		
-		for (MenuItem item : addonMenu.getItems()) {
+		for (MenuItem item : _addonMenu.getItems()) {
 			if (item.isDisposed()) continue;
 			ProtocolDescriptor pd = (ProtocolDescriptor) item.getData();
 
@@ -188,7 +225,7 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 	 * @return TRUE if this instance is still alive
 	 */
 	private boolean canOperate() {
-		boolean isAlive = !addonMenu.isDisposed();
+		boolean isAlive = !_addonMenu.isDisposed();
 		if (isAlive) return true;
 		dispose();
 		return false;
@@ -206,18 +243,18 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 		IEditorPart activeEditor = page.getActiveEditor();
 		boolean enabled = activeEditor != null && (activeEditor instanceof DiagramEditor);
 		
-		if (!menuContainer.isDisposed())
-			menuContainer.setEnabled(enabled);
+		if (!_menuContainer.isDisposed())
+			_menuContainer.setEnabled(enabled);
 		
 		// Check menu items separately
 		if (enabled) {
 			String extension = getDiagramEditorFileExtension(activeEditor);
 			
 			if (extension != null && !extension.isEmpty()) {
-				for (ProtocolDescriptor protocolDescriptor:protocolDescriptor2MenuItemMap.keySet()) {
+				for (ProtocolDescriptor protocolDescriptor:_pd2miMap.keySet()) {
 					Protocol protocol = protocolDescriptor.getProtocol();
 					boolean isEnabled = protocol.isValid() && protocol.isApplicableFor(extension);
-					protocolDescriptor2MenuItemMap.get(protocolDescriptor).setEnabled(isEnabled);	
+					_pd2miMap.get(protocolDescriptor).setEnabled(isEnabled);	
 				}
 			}
 		}
@@ -299,22 +336,33 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 	 *
 	 */
 	private class InternalPageListener implements IPageListener {
-
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.ui.IPageListener#pageActivated(org.eclipse.ui.IWorkbenchPage)
+		 */
 		@Override
 		public void pageActivated(IWorkbenchPage page) {
-			activeWorkbenchPage = page;
+			_activeWorkbenchPage = page;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.ui.IPageListener#pageClosed(org.eclipse.ui.IWorkbenchPage)
+		 */
 		@Override
 		public void pageClosed(IWorkbenchPage page) {
 			checkAndApplyMenuState(page);
-			page.removePartListener(internalPartListener);
+			page.removePartListener(_partListener);
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.ui.IPageListener#pageOpened(org.eclipse.ui.IWorkbenchPage)
+		 */
 		@Override
 		public void pageOpened(IWorkbenchPage page) {
 			checkAndApplyMenuState(page);
-			page.addPartListener(internalPartListener);
+			page.addPartListener(_partListener);
 		}
 		
 	}
@@ -327,15 +375,26 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 	 *
 	 */
 	private class InternalPartListener implements IPartListener2 {
-
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener2#partActivated(org.eclipse.ui.IWorkbenchPartReference)
+		 */
 		@Override
 		public void partActivated(IWorkbenchPartReference partRef) { }
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener2#partBroughtToTop(org.eclipse.ui.IWorkbenchPartReference)
+		 */
 		@Override
 		public void partBroughtToTop(IWorkbenchPartReference partRef) {
 			partOpened(partRef);
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener2#partClosed(org.eclipse.ui.IWorkbenchPartReference)
+		 */
 		@Override
 		public void partClosed(IWorkbenchPartReference partRef) {	
 			if (partRef.getPart(false) instanceof DiagramEditor) {
@@ -343,15 +402,31 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 			}
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener2#partDeactivated(org.eclipse.ui.IWorkbenchPartReference)
+		 */
 		@Override
 		public void partDeactivated(IWorkbenchPartReference partRef) { }
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener2#partHidden(org.eclipse.ui.IWorkbenchPartReference)
+		 */
 		@Override
 		public void partHidden(IWorkbenchPartReference partRef) { }
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener2#partInputChanged(org.eclipse.ui.IWorkbenchPartReference)
+		 */
 		@Override
 		public void partInputChanged(IWorkbenchPartReference partRef) {	}
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener2#partOpened(org.eclipse.ui.IWorkbenchPartReference)
+		 */
 		@Override
 		public void partOpened(IWorkbenchPartReference partRef) {
 			if (partRef.getPart(false) instanceof DiagramEditor) {
@@ -359,6 +434,10 @@ public class MenuContributionProvider extends ContributionItem implements IWorkb
 			}
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.ui.IPartListener2#partVisible(org.eclipse.ui.IWorkbenchPartReference)
+		 */
 		@Override
 		public void partVisible(IWorkbenchPartReference partRef) {
 			if (partRef.getPart(false) instanceof DiagramEditor) {

@@ -1,10 +1,8 @@
-/*
- * 
- */
 package vcchart.diagram.part;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.bflow.toolbox.extensions.IDiagramCreationWizard;
 import org.bflow.toolbox.extensions.wizards.DiagramPageSetupWizardPage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -18,10 +16,13 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
+import vcchart.diagram.Messages;
+
 /**
  * @generated
+ * @version 2019-01-27 AST Added IDiagramCreationWizard implementation
  */
-public class VcCreationWizard extends Wizard implements INewWizard {
+public class VcCreationWizard extends Wizard implements INewWizard, IDiagramCreationWizard {
 
 	/**
 	 * @generated
@@ -65,14 +66,14 @@ public class VcCreationWizard extends Wizard implements INewWizard {
 	/**
 	 * @generated
 	 */
-	public final Resource getDiagram() {
+	public Resource getDiagram() {
 		return diagram;
 	}
 
 	/**
 	 * @generated
 	 */
-	public final boolean isOpenNewlyCreatedDiagramEditor() {
+	public boolean isOpenNewlyCreatedDiagramEditor() {
 		return openNewlyCreatedDiagramEditor;
 	}
 	
@@ -85,8 +86,7 @@ public class VcCreationWizard extends Wizard implements INewWizard {
 	/**
 	 * @generated
 	 */
-	public void setOpenNewlyCreatedDiagramEditor(
-			boolean openNewlyCreatedDiagramEditor) {
+	public void setOpenNewlyCreatedDiagramEditor(boolean openNewlyCreatedDiagramEditor) {
 		this.openNewlyCreatedDiagramEditor = openNewlyCreatedDiagramEditor;
 	}
 
@@ -100,6 +100,15 @@ public class VcCreationWizard extends Wizard implements INewWizard {
 		setDefaultPageImageDescriptor(VcDiagramEditorPlugin
 				.getBundledImageDescriptor("icons/wizban/NewVcchartWizard.gif")); //$NON-NLS-1$
 		setNeedsProgressMonitor(true);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.bflow.toolbox.extensions.IDiagramCreationWizard#getShortHint()
+	 */
+	@Override
+	public String getShortHint() {
+		return Messages.VcCreationWizardTitle;
 	}
 
 	/**

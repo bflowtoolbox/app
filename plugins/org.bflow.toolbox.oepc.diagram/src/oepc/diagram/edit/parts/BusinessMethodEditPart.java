@@ -3,25 +3,16 @@ package oepc.diagram.edit.parts;
 import java.util.Collections;
 import java.util.List;
 
-import oepc.diagram.edit.policies.BusinessMethodItemSemanticEditPolicy;
-import oepc.diagram.edit.policies.OepcTextNonResizableEditPolicy;
-import oepc.diagram.edit.policies.OepcTextSelectionEditPolicy;
-import oepc.diagram.providers.OepcElementTypes;
-import oepc.diagram.providers.OepcParserProvider;
-
 import org.bflow.toolbox.extensions.trackers.BusinessElementDragEditPartsTracker;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.RunnableWithResult;
 import org.eclipse.gef.AccessibleEditPart;
 import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.requests.DirectEditRequest;
@@ -35,13 +26,11 @@ import org.eclipse.gmf.runtime.common.ui.services.parser.ParserService;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.CompartmentEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DragDropEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.LabelDirectEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.ListItemComponentEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.l10n.DiagramColorRegistry;
 import org.eclipse.gmf.runtime.diagram.ui.requests.RequestConstants;
-import org.eclipse.gmf.runtime.diagram.ui.tools.DragEditPartsTrackerEx;
 import org.eclipse.gmf.runtime.diagram.ui.tools.TextDirectEditManager;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
@@ -57,8 +46,17 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 
+import oepc.BusinessMethod;
+import oepc.OepcPackage;
+import oepc.diagram.edit.policies.BusinessMethodItemSemanticEditPolicy;
+import oepc.diagram.edit.policies.OepcTextNonResizableEditPolicy;
+import oepc.diagram.edit.policies.OepcTextSelectionEditPolicy;
+import oepc.diagram.providers.OepcElementTypes;
+import oepc.diagram.providers.OepcParserProvider;
+
 /**
- * @generated
+ * @generated NOT
+ * @version 2019-02-16 AST Set font style to bold if the method is linked with another diagram
  */
 public class BusinessMethodEditPart extends CompartmentEditPart implements
 		ITextAwareEditPart {
@@ -100,9 +98,10 @@ public class BusinessMethodEditPart extends CompartmentEditPart implements
 	 */
 	public DragTracker getDragTracker(Request request) {
 		if (request instanceof SelectionRequest
-				&& ((SelectionRequest) request).getLastButtonPressed() == 3) {
+	    && ((SelectionRequest) request).getLastButtonPressed() == 3) {
 			return null;
 		}
+		
 		return new BusinessElementDragEditPartsTracker(this);
 	}
 
@@ -111,14 +110,10 @@ public class BusinessMethodEditPart extends CompartmentEditPart implements
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
-		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
-				new BusinessMethodItemSemanticEditPolicy());
-		installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE,
-				new OepcTextNonResizableEditPolicy());
-		installEditPolicy(EditPolicy.COMPONENT_ROLE,
-				new ListItemComponentEditPolicy());
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,
-				new LabelDirectEditPolicy());
+		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE, new BusinessMethodItemSemanticEditPolicy());
+		installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new OepcTextNonResizableEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ListItemComponentEditPolicy());
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new LabelDirectEditPolicy());
 	}
 
 	/**
@@ -445,17 +440,27 @@ public class BusinessMethodEditPart extends CompartmentEditPart implements
 	}
 
 	/**
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void refreshFont() {
-		FontStyle style = (FontStyle) getFontStyleOwnerView().getStyle(
-				NotationPackage.eINSTANCE.getFontStyle());
-		if (style != null) {
-			FontData fontData = new FontData(style.getFontName(), style
-					.getFontHeight(), (style.isBold() ? SWT.BOLD : SWT.NORMAL)
-					| (style.isItalic() ? SWT.ITALIC : SWT.NORMAL));
-			setFont(fontData);
-		}
+		FontStyle style = (FontStyle) getFontStyleOwnerView()
+				.getStyle(NotationPackage.eINSTANCE.getFontStyle());
+		if (style == null) return;
+		
+		boolean isBold = style.isBold();
+		
+		// If the method is linked with a diagram, we set its font style to bold
+		Object modelElement = resolveSemanticElement();
+		if (modelElement instanceof BusinessMethod) {
+			BusinessMethod businessMethod = (BusinessMethod) modelElement;
+			isBold = businessMethod.getSubdiagram() != null;
+		}		
+		
+		FontData fontData = new FontData(
+				style.getFontName(), style.getFontHeight(), 
+				(isBold ? SWT.BOLD : SWT.NORMAL) | (style.isItalic() ? SWT.ITALIC : SWT.NORMAL));
+		
+		setFont(fontData);
 	}
 
 	/**
@@ -541,25 +546,19 @@ public class BusinessMethodEditPart extends CompartmentEditPart implements
 		if (NotationPackage.eINSTANCE.getFontStyle_FontColor().equals(feature)) {
 			Integer c = (Integer) event.getNewValue();
 			setFontColor(DiagramColorRegistry.getInstance().getColor(c));
-		} else if (NotationPackage.eINSTANCE.getFontStyle_Underline().equals(
-				feature)) {
+		} else if (NotationPackage.eINSTANCE.getFontStyle_Underline().equals(feature)) {
 			refreshUnderline();
-		} else if (NotationPackage.eINSTANCE.getFontStyle_StrikeThrough()
-				.equals(feature)) {
+		} else if (NotationPackage.eINSTANCE.getFontStyle_StrikeThrough().equals(feature)) {
 			refreshStrikeThrough();
-		} else if (NotationPackage.eINSTANCE.getFontStyle_FontHeight().equals(
-				feature)
-				|| NotationPackage.eINSTANCE.getFontStyle_FontName().equals(
-						feature)
-				|| NotationPackage.eINSTANCE.getFontStyle_Bold()
-						.equals(feature)
-				|| NotationPackage.eINSTANCE.getFontStyle_Italic().equals(
-						feature)) {
+		} else if (NotationPackage.eINSTANCE.getFontStyle_FontHeight().equals(feature)
+				|| NotationPackage.eINSTANCE.getFontStyle_FontName().equals(feature)
+				|| NotationPackage.eINSTANCE.getFontStyle_Bold().equals(feature)
+				|| NotationPackage.eINSTANCE.getFontStyle_Italic().equals(feature)) {
+			refreshFont();
+		} else if(OepcPackage.eINSTANCE.getBusinessMethod_Subdiagram().equals(feature)) {
 			refreshFont();
 		} else {
-			if (getParser() != null
-					&& getParser().isAffectingEvent(event,
-							getParserOptions().intValue())) {
+			if (getParser() != null	&& getParser().isAffectingEvent(event, getParserOptions().intValue())) {
 				refreshLabel();
 			}
 			if (getParser() instanceof ISemanticParser) {
@@ -581,7 +580,7 @@ public class BusinessMethodEditPart extends CompartmentEditPart implements
 	 */
 	protected IFigure createFigure() {
 		IFigure label = createFigurePrim();
-		defaultText = getLabelTextHelper(label);
+		defaultText = getLabelTextHelper(label);		
 		return label;
 	}
 
@@ -590,6 +589,5 @@ public class BusinessMethodEditPart extends CompartmentEditPart implements
 	 */
 	protected IFigure createFigurePrim() {
 		return new WrappingLabel();
-	}
-
+	}	
 }

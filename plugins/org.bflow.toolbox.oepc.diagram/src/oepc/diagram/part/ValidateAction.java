@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import oepc.diagram.Messages;
 import oepc.diagram.providers.OepcMarkerNavigationProvider;
 import oepc.diagram.providers.OepcValidationDecoratorProvider;
 import oepc.diagram.providers.OepcValidationProvider;

@@ -16,7 +16,7 @@ import orgchart.OrgchartPackage;
  *
  * @generated
  */
-public class LocationImpl extends NamedElementImpl implements Location {
+public class LocationImpl extends LinkableElementImpl implements Location {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -34,6 +34,15 @@ public class LocationImpl extends NamedElementImpl implements Location {
 	@Override
 	protected EClass eStaticClass() {
 		return OrgchartPackage.Literals.LOCATION;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see orgchart.impl.LinkableElementImpl#getSubdiagramFeatureId()
+	 */
+	@Override
+	protected int getSubdiagramFeatureId() {
+		return OrgchartPackage.LOCATION__SUBDIAGRAM;
 	}
 
 } //LocationImpl

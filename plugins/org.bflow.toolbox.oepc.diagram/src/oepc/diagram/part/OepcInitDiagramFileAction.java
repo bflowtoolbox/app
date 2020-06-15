@@ -1,5 +1,6 @@
 package oepc.diagram.part;
 
+import oepc.diagram.Messages;
 import oepc.diagram.edit.parts.OEPCEditPart;
 
 import org.eclipse.core.resources.IFile;
@@ -20,8 +21,6 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
 /**
  * @generated
@@ -50,14 +49,11 @@ public class OepcInitDiagramFileAction implements IObjectActionDelegate {
 	public void selectionChanged(IAction action, ISelection selection) {
 		domainModelURI = null;
 		action.setEnabled(false);
-		if (selection instanceof IStructuredSelection == false
-				|| selection.isEmpty()) {
+		if (selection instanceof IStructuredSelection == false || selection.isEmpty()) {
 			return;
 		}
-		IFile file = (IFile) ((IStructuredSelection) selection)
-				.getFirstElement();
-		domainModelURI = URI.createPlatformResourceURI(file.getFullPath()
-				.toString(), true);
+		IFile file = (IFile) ((IStructuredSelection) selection).getFirstElement();
+		domainModelURI = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 		action.setEnabled(true);
 	}
 
@@ -84,15 +80,12 @@ public class OepcInitDiagramFileAction implements IObjectActionDelegate {
 					"Unable to load resource: " + domainModelURI, ex); //$NON-NLS-1$
 		}
 		if (diagramRoot == null) {
-			MessageDialog
-					.openError(
-							getShell(),
+			MessageDialog.openError(getShell(),
 							Messages.OepcInitDiagramFileAction_InitDiagramFileResourceErrorDialogTitle,
 							Messages.OepcInitDiagramFileAction_InitDiagramFileResourceErrorDialogMessage);
 			return;
 		}
-		Wizard wizard = new OepcNewDiagramFileWizard(domainModelURI,
-				diagramRoot, editingDomain);
+		Wizard wizard = new OepcNewDiagramFileWizard(domainModelURI, diagramRoot, editingDomain);
 		wizard.setWindowTitle(NLS.bind(
 				Messages.OepcInitDiagramFileAction_InitDiagramFileWizardTitle,
 				OEPCEditPart.MODEL_ID));

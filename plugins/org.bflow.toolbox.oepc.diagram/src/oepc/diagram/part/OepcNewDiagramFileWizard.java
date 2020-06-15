@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import oepc.diagram.Messages;
 import oepc.diagram.edit.parts.OEPCEditPart;
 
 import org.eclipse.core.commands.ExecutionException;

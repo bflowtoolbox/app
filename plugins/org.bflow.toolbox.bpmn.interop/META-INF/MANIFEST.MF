@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Bflow BPMN Interoperation Plug-in
+Bundle-SymbolicName: org.bflow.toolbox.bpmn.interop;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.bflow.toolbox.bpmn.interop.BpmnInteropPlugin
+Bundle-Vendor: Bflow Dev Team
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.gmf.runtime.common.ui.action;bundle-version="1.7.0",
+ org.eclipse.gmf.runtime.common.ui;bundle-version="1.8.1",
+ org.eclipse.gmf.runtime.diagram.ui;bundle-version="1.8.0",
+ org.bflow.toolbox.diagram.extensions;bundle-version="1.3.0",
+ org.bflow.toolbox.hive.libs;bundle-version="1.3.0",
+ org.bflow.toolbox.epc.diagram;bundle-version="1.3.0",
+ org.bflow.toolbox.oepc.diagram;bundle-version="1.3.0",
+ org.bflow.toolbox.hive.interchange;bundle-version="1.3.0",
+ org.eclipse.ui.ide;bundle-version="3.7.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.bflow.toolbox.bpmn.interop
+Bundle-ActivationPolicy: lazy
+Export-Package: org.bflow.toolbox.bpmn.interop

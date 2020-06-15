@@ -3,10 +3,11 @@
 <plugin>
 
    <extension
-         id="application"
+         id="org.bflow.toolbox.application"
          point="org.eclipse.core.runtime.applications">
       <application
             cardinality="singleton-global"
+            icon="icons/bee16.png"
             thread="main">
          <run
                class="org.bflow.toolbox.application.Application">
@@ -16,25 +17,55 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="org.bflow.toolbox.application.BflowPerspective"
-            icon="icons/bee16a.png"
-            id="org.bflow.toolbox.application.perspective"
-            name="Bflow Perspective">
+            class="org.bflow.toolbox.application.FeaturedBflowPerspective"
+            icon="icons/bee16.png"
+            id="org.bflow.toolbox.application.perspective.featured"
+            name="Bflow Perspective (Featured)">
+      </perspective>
+      <perspective
+            class="org.bflow.toolbox.application.DefaultBflowPerspective"
+            icon="icons/bee16.png"
+            id="org.bflow.toolbox.application.perspective.default"
+            name="Bflow Perspective (Default)">
       </perspective>
    </extension>
    <extension
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            application="org.bflow.toolbox.application.application"
-            name="Bflow* Toolbox">
+            application="org.eclipse.ui.ide.workbench"
+            name="bflow* Toolbox 1.5.4">
          <property
                name="windowImages"
-               value="icons/alt_window_16.gif,icons/alt_window_32.gif">
+               value="platform:/plugin/org.bflow.toolbox.product/icons/professional/bee16.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee32.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee48.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee64.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee128.png,platform:/plugin/org.bflow.toolbox.product/icons/professional/bee256.png">
          </property>
          <property
                name="appName"
-               value="Bflow* Toolbox">
+               value="bflow* Toolbox 1.5.4">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="000000">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="7,265,320,20">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="2,290,450,10">
+         </property>
+         <property
+               name="aboutImage"
+               value="platform:/plugin/org.bflow.toolbox.product/icons/professional/bee128.png">
+         </property>
+         <property
+               name="aboutText"
+               value="Bflow* Toolbox 1.5.4">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
          </property>
       </product>
    </extension>

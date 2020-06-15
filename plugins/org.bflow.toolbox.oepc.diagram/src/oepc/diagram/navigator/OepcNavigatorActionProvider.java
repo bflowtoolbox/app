@@ -2,8 +2,8 @@ package oepc.diagram.navigator;
 
 import java.util.Iterator;
 
+import oepc.diagram.Messages;
 import oepc.diagram.edit.parts.OEPCEditPart;
-import oepc.diagram.part.Messages;
 import oepc.diagram.part.OepcDiagramEditor;
 import oepc.diagram.part.OepcDiagramEditorPlugin;
 import oepc.diagram.part.OepcVisualIDRegistry;

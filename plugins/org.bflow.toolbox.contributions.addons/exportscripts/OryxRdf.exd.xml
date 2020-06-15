@@ -3,7 +3,7 @@
 	<config>
 		<name>Oryx RDF</name>
 		<fileextension>xml</fileextension>
-		<description>Exports a bflow* EPC diagram to Oryx RDF.</description>
+		<description>%oryxRdfExportScript_description</description>
 		<diagram>epc</diagram>
 		<callstack>
 			<script>

@@ -81,7 +81,7 @@ public class AttributeAdjustComponent implements IAttributeAdjustComponent {
 	 */
 	@Override
 	public String getDisplayName() {
-		return "Attribute adjust";
+		return "Attribute Adjust";
 	}
 
 	/*

@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: BPMN2 Modeler German Localization
+Bundle-SymbolicName: org.eclipse.bpmn2.modeler.ui.nl_de
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: org.eclipse.bpmn2.modeler.ui;bundle-version="1.4.3"
+Automatic-Module-Name: org.eclipse.bpmn2.modeler.ui.nl_de
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

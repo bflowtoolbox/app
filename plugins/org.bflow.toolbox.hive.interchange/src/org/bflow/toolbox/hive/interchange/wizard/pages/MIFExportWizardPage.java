@@ -18,6 +18,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -33,9 +34,10 @@ import org.eclipse.swt.widgets.Text;
  * Defines the export wizard page used by the export wizard.
  * 
  * @author Arian Storch<arian.storch@bflow.org>
- * @since 14.08.09
- * @version 28.12.13
- * 			27.02.15 Removed readonly flag from text control
+ * @since 2009-08-14
+ * @version 2013-12-28
+ * 			2015-02-27 Removed read-only flag from text control
+ * 			2018-10-05 Modernized layout
  * @see MIFExportWizard
  * 
  */
@@ -69,59 +71,63 @@ public class MIFExportWizardPage extends WizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		final Composite composite = new Composite(parent, SWT.NONE);
+		final Composite pageComposite = new Composite(parent, SWT.NONE);
 
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
+		pageComposite.setLayout(new GridLayout(3, false));
+		pageComposite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
 
-		Label lblSelDiagram = new Label(composite, SWT.NONE);
+		//- First row (selected diagrams)
+		Label lblSelDiagram = new Label(pageComposite, SWT.NONE);
+		lblSelDiagram.setLayoutData(new GridData(SWT.RIGHT, SWT.DEFAULT, false, false));
 		lblSelDiagram.setText(NLSupport.MIFExportWizardPage_LabelSelectDiagramText);
 
-		textFieldSourceFile = new Text(composite, SWT.BORDER);
+		textFieldSourceFile = new Text(pageComposite, SWT.BORDER);
 
 		String selectionString = StringUtils.EMPTY;
 
-		for (Object f : selectedFiles.toArray())
-			selectionString += ((IFile) f).getName() + " "; //$NON-NLS-1$
+		for (Object file : selectedFiles.toArray())
+			selectionString += ((IFile) file).getName() + " "; //$NON-NLS-1$
 
 		textFieldSourceFile.setText(selectionString);
 		textFieldSourceFile.setEditable(false);
 
 		GridData txtSelFileGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		txtSelFileGridData.horizontalSpan = 2;
 		txtSelFileGridData.widthHint = 150;
 		textFieldSourceFile.setLayoutData(txtSelFileGridData);
 
-		Label lblSelExportType = new Label(composite, SWT.NONE);
+		//- Second row (export type)
+		Label lblSelExportType = new Label(pageComposite, SWT.NONE);
+		lblSelExportType.setLayoutData(new GridData(SWT.RIGHT, SWT.DEFAULT, false, false));
 		lblSelExportType.setText(NLSupport.MIFExportWizardPage_LabelSelectExportTypeText);
 
-		cbExportTypes = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
+		cbExportTypes = new Combo(pageComposite, SWT.BORDER | SWT.READ_ONLY);
+		GridData cbExpTypGridData = new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false);
+		cbExpTypGridData.horizontalSpan = 2;
+		cbExportTypes.setLayoutData(cbExpTypGridData);
 		prepareComboBox();
 
-		Label lblDescription = new Label(composite, SWT.NONE);
+		//- Third row (export description)
+		Label lblDescription = new Label(pageComposite, SWT.NONE);
+		lblDescription.setLayoutData(new GridData(SWT.RIGHT, SWT.DEFAULT, false, false));
 		lblDescription.setText(NLSupport.MIFExportWizardPage_LabelDescriptionText);
 
-		txtDescription = new Text(composite, SWT.WRAP | SWT.READ_ONLY);
+		txtDescription = new Text(pageComposite, SWT.WRAP | SWT.READ_ONLY);
 		txtDescription.setText(StringUtils.EMPTY);
 
 		GridData txtDescriptionGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		txtDescriptionGridData.horizontalSpan = 2;
 		txtDescriptionGridData.widthHint = 200;
 		txtDescriptionGridData.heightHint = 50;
 
 		txtDescription.setLayoutData(txtDescriptionGridData);
 
-		Label lblTargetFile = new Label(composite, SWT.NONE);
+		//- Fourth row (export target)
+		Label lblTargetFile = new Label(pageComposite, SWT.NONE);
+		lblTargetFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 		lblTargetFile.setText(NLSupport.MIFExportWizardPage_LabelTargetFileText);
 
-		Composite fileSelection = new Composite(composite, SWT.NONE);
-
-		GridLayout fileSelectionLayout = new GridLayout(2, false);
-		fileSelectionLayout.marginLeft = 0;
-		fileSelectionLayout.horizontalSpacing = 0;
-
-		fileSelection.setLayout(fileSelectionLayout);
-		fileSelection.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
-
-		textFieldTargetFile = new Text(fileSelection, SWT.BORDER);
+		textFieldTargetFile = new Text(pageComposite, SWT.BORDER);
 		textFieldTargetFile.setText(StringUtils.EMPTY);
 		textFieldTargetFile.addModifyListener(new ModifyListener() {
 			@Override
@@ -130,13 +136,17 @@ public class MIFExportWizardPage extends WizardPage {
 			}
 		});
 
-		GridData txtTargetFileGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-
-		txtTargetFileGridData.widthHint = 200;
+		GridData txtTargetFileGridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		textFieldTargetFile.setLayoutData(txtTargetFileGridData);
-
-		Button btnBrowse = new Button(fileSelection, SWT.NONE);
+		
+		Button btnBrowse = new Button(pageComposite, SWT.NONE);
 		btnBrowse.setText(NLSupport.MIFExportWizardPage_ButtonBrowseText);
+		
+		Point pt = btnBrowse.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+		GridData btnBrowseGrdDt = new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false);
+		btnBrowseGrdDt.widthHint = pt.x + 20; // Add some nice margin
+		btnBrowse.setLayoutData(btnBrowseGrdDt);
+		
 		btnBrowse.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -145,7 +155,7 @@ public class MIFExportWizardPage extends WizardPage {
 		});
 
 		applyPreferencesSettings();
-		setControl(composite);
+		setControl(pageComposite);
 	}
 	
 	/**

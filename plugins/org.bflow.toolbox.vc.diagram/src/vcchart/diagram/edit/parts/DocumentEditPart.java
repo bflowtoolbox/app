@@ -5,8 +5,11 @@ package vcchart.diagram.edit.parts;
 
 import java.util.List;
 
+import org.bflow.toolbox.extensions.LinkContext;
 import org.bflow.toolbox.extensions.edit.parts.BflowDiagramEditPart;
 import org.bflow.toolbox.extensions.edit.parts.BflowNodeEditPart;
+import org.bflow.toolbox.extensions.figures.LinkImageFigure;
+import org.bflow.toolbox.extensions.layouts.CentralizingLayout;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
@@ -29,15 +32,15 @@ import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 
+import vcchart.Document;
 import vcchart.diagram.edit.policies.DocumentItemSemanticEditPolicy;
 import vcchart.diagram.part.VcVisualIDRegistry;
 
@@ -73,8 +76,7 @@ public class DocumentEditPart extends BflowNodeEditPart {
 	 */
 	protected void createDefaultEditPolicies() {
 		super.createDefaultEditPolicies();
-		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE,
-				new DocumentItemSemanticEditPolicy());
+		installEditPolicy(EditPolicyRoles.SEMANTIC_ROLE, new DocumentItemSemanticEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy());
 		// XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
 		// removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
@@ -87,8 +89,7 @@ public class DocumentEditPart extends BflowNodeEditPart {
 		org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy lep = new org.eclipse.gmf.runtime.diagram.ui.editpolicies.LayoutEditPolicy() {
 
 			protected EditPolicy createChildEditPolicy(EditPart child) {
-				EditPolicy result = child
-						.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
+				EditPolicy result = child.getEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE);
 				if (result == null) {
 					result = new NonResizableEditPolicy();
 				}
@@ -223,8 +224,7 @@ public class DocumentEditPart extends BflowNodeEditPart {
 	 * @generated
 	 */
 	public EditPart getPrimaryChildEditPart() {
-		return getChildBySemanticHint(VcVisualIDRegistry
-				.getType(DocumentNameEditPart.VISUAL_ID));
+		return getChildBySemanticHint(VcVisualIDRegistry.getType(DocumentNameEditPart.VISUAL_ID));
 	}
 
 	/**
@@ -265,6 +265,9 @@ public class DocumentEditPart extends BflowNodeEditPart {
 			this.setOutline(false);
 			this.setPreferredSize(new Dimension(getMapMode().DPtoLP(101),getMapMode().DPtoLP(61)));
 			createContents();
+			
+			// 2019-02-17 AST Required by the link image figure
+			setLayoutManager(new CentralizingLayout());
 		}
 
 		/**
@@ -395,29 +398,31 @@ public class DocumentEditPart extends BflowNodeEditPart {
 			fFigureDocumentLabelFigure = new WrappingLabel();
 			fFigureDocumentLabelFigure.setText("");
 			fFigureDocumentLabelFigure.setAlignment(PositionConstants.CENTER);
-			fFigureDocumentLabelFigure
-					.setTextJustification(PositionConstants.CENTER);
+			fFigureDocumentLabelFigure.setTextJustification(PositionConstants.CENTER);
 			fFigureDocumentLabelFigure.setTextWrap(true);
 			fFigureDocumentLabelFigure.setBorder(new MarginBorder(getMapMode()
 					.DPtoLP(4), getMapMode().DPtoLP(4), getMapMode().DPtoLP(4),
 					getMapMode().DPtoLP(4)));
 
 			documentPolygonFigure0.add(fFigureDocumentLabelFigure);
+			
+			Image playImage = new Image(null, this.getClass().getResourceAsStream("/icons/link-16.png"));
+			LinkContext linkContext = new LinkContext(() -> ((Document) DocumentEditPart.this.getPrimaryView().getElement()).getSubdiagram());
+			LinkImageFigure linkImage = new LinkImageFigure(playImage, linkContext);			
+			this.add(linkImage);
 		}
 		
 		private void layoutLabelContainer(Shape figure, final int height) {
 			final int insets = 4;
 			StackLayout layoutDocumentPolygonFigure0 = new StackLayout() {
-				@SuppressWarnings("unchecked")
 				@Override
 				public void layout(IFigure figure) {
-					// TODO Auto-generated method stub
 					Rectangle r = new Rectangle(figure.getBounds().x + insets,
 							figure.getBounds().y + insets,
 							figure.getBounds().width - 2 * insets, figure
 									.getBounds().height
 									- height - 2 * insets);
-					List children = figure.getChildren();
+					List<?> children = figure.getChildren();
 					IFigure child;
 					for (int i = 0; i < children.size(); i++) {
 						child = (IFigure) children.get(i);
